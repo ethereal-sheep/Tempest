@@ -1,4 +1,4 @@
-0<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -128,7 +128,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-
       <AdditionalDependencies>
       </AdditionalDependencies>
     </Lib>
@@ -170,7 +169,17 @@ xcopy /y /d "..\Dep\glfw\glfw3.dll" "$(TargetDir)" /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Tempest\Application\AppHandler.cpp" />
     <ClCompile Include="src\Tempest\Application\Application.cpp" />
+    <ClCompile Include="src\Tempest\Application\Context.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Tempest\Application\AppHandler.h" />
+    <ClInclude Include="src\Tempest\Application\Application.h" />
+    <ClInclude Include="src\Tempest\Application\Context.h" />
+    <ClInclude Include="src\Tempest\Application\EntryPoint.h" />
+    <ClInclude Include="src\Tempest\Core\Core.h" />
+    <ClInclude Include="src\Tempest\Math\Math.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
