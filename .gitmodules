@@ -1,0 +1,21 @@
+[submodule "Libraries/glm"]
+	path = Libraries/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "Libraries/rapidjson"]
+	path = Libraries/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
+[submodule "Libraries/imgui"]
+	path = Libraries/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "Libraries/imgui-node-editor"]
+	path = Libraries/imgui-node-editor
+	url = https://github.com/thedmd/imgui-node-editor.git
+[submodule "Libraries/implot"]
+	path = Libraries/implot
+	url = https://github.com/epezent/implot.git
+[submodule "Libraries/ImTerm"]
+	path = Libraries/ImTerm
+	url = https://github.com/Organic-Code/ImTerm.git
+[submodule "Libraries/assimp"]
+	path = Libraries/assimp
+	url = https://github.com/assimp/assimp.git
