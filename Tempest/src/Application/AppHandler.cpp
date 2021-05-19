@@ -2,7 +2,7 @@
 
 namespace Tempest
 {
-	int AppHandler::Run(std::unique_ptr<Application>&& pApp, HINSTANCE hInstance, LPWSTR lpCmdList, int nCmdShow)
+	int AppHandler::Run(std::unique_ptr<Application>&& pApp, HINSTANCE hInstance, [[maybe_unused]] LPWSTR lpCmdList, int nCmdShow)
 	{
 		s_pApp = std::move(pApp);
 

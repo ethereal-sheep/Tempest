@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\..\Math.h"
+#include "..\..\TMath.h"
 #include "..\Entity.h"
 
 namespace Tempest::Systems

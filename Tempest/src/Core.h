@@ -7,6 +7,7 @@
 #include <deque>
 
 #include <memory>
+#include <algorithm>
 
 
 namespace Tempest

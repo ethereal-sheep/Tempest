@@ -1,16 +1,12 @@
 #pragma once
 
+#include "type_traits.h"
+
 namespace Tempest
 {
 
-	template<typename... Type>
-	struct type_list {
-		using type = type_list;
-		static constexpr auto size = sizeof...(Type);
-	};
+	using vmap_ref = const tmap<size_t, tuptr<sparse_set>>&;
 
-	template<typename... Type>
-	struct exclude_t : type_list<Type...> {};
 
 	template<typename...>
 	class view;
@@ -19,5 +15,22 @@ namespace Tempest
 	class view<exclude_t<Excludes...>, Components...>
 	{
 
+
+	public:
+		view(vmap_ref pools) {
+
+		}
 	};
+
+	template<typename Component>
+	class view<exclude_t<>, Component>
+	{
+
+	public:
+	};
+
+
+	
+
+	
 }

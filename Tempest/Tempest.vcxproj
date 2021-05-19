@@ -188,7 +188,9 @@
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Systems\Systems.h" />
     <ClInclude Include="src\ECS\Util\registry.h" />
+    <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
+    <ClInclude Include="src\ECS\Util\type_traits.h" />
     <ClInclude Include="src\ECS\Util\view.h" />
     <ClInclude Include="src\TMath.h" />
     <ClInclude Include="src\Math\elsCompare.h" />

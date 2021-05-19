@@ -16,7 +16,6 @@ int main()
 	test.register_component<tc::Relationship>();
 
 	auto id1 = test.create();
-	test.emplace<tc::Transform>(id1);
 	auto meta = test.emplace<tc::Meta>(id1);
 	meta->name = "id1";
 
@@ -32,14 +31,12 @@ int main()
 	test.emplace<tc::Relationship>(id3);
 	meta = test.replace<tc::Meta>(id3, "123");
 
+	auto a = test.view<tc::Transform>();
 
+	auto lambda = [&](auto id) {
+		cout << test.get<tc::Meta>(id)->name << endl;
+	};
 
-	cout << test.get<tc::Meta>(id1)->name << endl;
-	cout << test.get<tc::Meta>(id2)->name << endl;
-	cout << test.get<tc::Meta>(id3)->name << endl;
-
-
-
-
+	a.each(lambda);
 
 }

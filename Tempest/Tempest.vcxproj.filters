@@ -125,5 +125,11 @@
     <ClInclude Include="src\ECS\ECS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ECS\Util\runtime_view.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Util\type_traits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

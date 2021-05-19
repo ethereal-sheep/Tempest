@@ -2,12 +2,12 @@
 
 #include "Util/registry.h"
 #include "Util/sparse_set.h"
+#include "Util/type_traits.h"
+#include "Util/runtime_view.h"
 #include "Entity.h"
 
 namespace Tempest
 {
-	class view;
-
 	template <typename T>
 	size_t t_hash()
 	{
@@ -16,7 +16,6 @@ namespace Tempest
 
 	class ECS
 	{
-
 		template<typename Component>
 		sparse_set_t<Component>* get_sparse()
 		{
@@ -37,6 +36,12 @@ namespace Tempest
 				component_pools.at(t_hash<Component>()).get());
 		}
 
+		template<typename... Components>
+		constexpr void package(tvector<size_t>& v) const
+		{
+			(v.push_back(t_hash<Components>()), ...);
+		}
+
 	public:
 		template <typename Component>
 		void register_component()
@@ -54,7 +59,7 @@ namespace Tempest
 		}
 
 		template <typename Component>
-		bool has(Entity entity) const
+		[[nodiscard]] bool has(Entity entity) const
 		{
 			// check if component pool exist
 			if (!component_exist<Component>())
@@ -64,7 +69,7 @@ namespace Tempest
 		}
 
 		template <typename Component>
-		Component* get(Entity entity)
+		[[nodiscard]] Component* get(Entity entity)
 		{
 			if (!component_exist<Component>())
 				return nullptr;
@@ -106,28 +111,33 @@ namespace Tempest
 		}
 
 		template<typename Component>
-		bool component_exist() const
+		[[nodiscard]] bool component_exist() const
 		{
 			return component_pools.count(t_hash<Component>());
 		}
 
-		template <typename Component>
-		view all()
+
+		template<typename... Components, typename... Exclude>
+		[[nodiscard]] runtime_view view(exclude_t<Exclude...> = {}) const
 		{
+			// check if types are unique
+			unique_types<Components..., Exclude...>();
+			static_assert(type_list<Components...>::size != 0, "No empty set");
 
+			tvector<size_t> inc, exc;
+			package<Components...>(inc);
+			package<Exclude...>(exc);
+
+			return runtime_view(std::move(inc), std::move(exc), component_pools);
 		}
-		template <typename... Components>
-		view all()
-		{
 
-		}
 
-		bool valid(Entity entity) const
+		[[nodiscard]] bool valid(Entity entity) const
 		{
 			return entity_registry.valid(entity);
 		}
 
-		Entity create()
+		[[nodiscard]] Entity create()
 		{
 			return entity_registry.create();
 		}

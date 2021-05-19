@@ -25,7 +25,4 @@ namespace Tempest
 	{
 		return els::rad_to_deg(radians);
 	}
-
-
-
 }
