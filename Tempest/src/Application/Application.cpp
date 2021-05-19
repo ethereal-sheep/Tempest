@@ -2,7 +2,7 @@
 
 namespace Tempest
 {
-	Application::Application(uint32_t width, uint32_t height, std::string name)
+	Application::Application(uint32_t width, uint32_t height, std::wstring name)
 		: m_width{ width }
 		, m_height{ height }
 		, m_title{ std::move(name) }

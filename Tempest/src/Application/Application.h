@@ -1,12 +1,13 @@
 #pragma once
 #include <string>
+#include <memory>
 
 namespace Tempest
 {
 	class Application
 	{
 	public:
-		Application(uint32_t width, uint32_t height, std::string name);
+		Application(uint32_t width, uint32_t height, std::wstring name);
 
 		void OnEngineInit();
 		void OnEngineUpdate();
@@ -21,7 +22,7 @@ namespace Tempest
 		uint32_t GetWidth() const { return m_width; }
 		uint32_t GetHeight() const { return m_height; }
 		float GetAspectRatio() const { return static_cast<float>(m_width) / static_cast<float>(m_height); }
-		const char* GetTitle() const { return m_title.c_str(); }
+		const wchar_t* GetTitle() const { return m_title.c_str(); }
 		void Resize(uint32_t width, uint32_t height) 
 		{
 			m_width = width;
@@ -31,10 +32,9 @@ namespace Tempest
 	private:
 		uint32_t m_width;
 		uint32_t m_height;
-		std::string m_title;
+		std::wstring m_title;
 
-		// linus add here
 	};
 
-
+	std::unique_ptr<Application> CreateApplication();
 }

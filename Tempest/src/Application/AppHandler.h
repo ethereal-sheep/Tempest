@@ -1,6 +1,5 @@
 #pragma once
 #include "Context.h"
-#include <memory>
 
 namespace Tempest
 {
@@ -21,7 +20,12 @@ namespace Tempest
 		static bool InitInstance(HINSTANCE hInstance, int nCmdShow);
 
 		inline static std::unique_ptr<Application> s_pApp = nullptr;
+		inline static std::unique_ptr<Context> s_pContext = nullptr;
 
 		inline static bool s_IsFullscreen = false;
+		inline static WINDOWPLACEMENT s_WPC;
+		inline static LONG s_HWNDStyle = 0;
+		inline static LONG s_HWNDStyleEx = 0;
+
 	};
 }
