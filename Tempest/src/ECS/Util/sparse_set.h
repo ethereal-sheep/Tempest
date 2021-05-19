@@ -1,47 +1,133 @@
 #pragma once
 
-#include "../../Core.h"
-#include <vector>
+#include "../Entity.h"
 
 namespace Tempest
 {
-	template <typename T>
-	class sparse_set
+	struct sparse_set
 	{
-		std::vector<T> sparse;
-		std::vector<T> dense;
+		sparse_set() = default;
+		virtual ~sparse_set() = default;
+	};
+
+	template <typename Component>
+	class sparse_set_t : public sparse_set
+	{
+		template<typename T>
+		using dense_type = std::vector<T>;
+
+		using dense_el = dense_type<Entity>;
+		using dense_cl = dense_type<Component>;
+		using sparse_l = std::array<Entity, MAX_ENTITY>;
 
 	protected:
+		void swap(Entity lhs, Entity rhs)
+		{
+			auto from = sparse[lhs];
+			auto to = sparse[rhs];
 
-		class sparse_set_iterator final {
-			friend class sparse_set<T>;
+			std::swap(sparse[lhs], sparse[rhs]);
+			std::swap(entityList[from], entityList[to]);
+			std::swap(componentList[from], componentList[to]);
+		}
 
-			using packed_type = std::vector<T>;
-			using index_type = id_t;
-
-			sparse_set_iterator(const packed_type& ref, const index_type idx) ENTT_NOEXCEPT
-				: packed{ &ref }, index{ idx }
-			{}
+    public:
+		sparse_set_t() = default;
+		~sparse_set_t() = default;
 
 
-	public:
+        using component_type = Component;
 
-		size_t size() const { return dense.size(); }
-		bool empty() const { return dense.empty(); }
+		size_t size() const 
+		{ 
+			return entityList.size(); 
+		}
+
+		bool empty() const 
+		{ 
+			return entityList.empty();
+		}
+
+		bool contains(Entity entity) const
+		{
+			if (empty())
+				return false;
+			return entityList[sparse[entity]] == entity;
+		}
+
+		void insert(Entity entity)
+		{
+			// warn here
+			if (!contains(entity))
+			{
+				sparse[entity] = static_cast<Entity>(entityList.size());
+				entityList.push_back(entity);
+				componentList.push_back(Component());
+			}
+		}
+
+		template <typename... TArgs>
+		void emplace(Entity entity, TArgs&&... args)
+		{
+			// warn here
+			if (!contains(entity))
+			{
+				sparse[entity] = static_cast<Entity>(entityList.size());
+				entityList.push_back(entity);
+				componentList.emplace_back(std::forward<TArgs>(args)...);
+			}
+		}
+
+
+		void clear() 
+		{
+			entityList.clear();
+			componentList.clear();
+		}
+
+		void erase(Entity entity)
+		{
+			// warn here
+			if (contains(entity))
+			{
+				auto other = entityList.back();
+				swap(entity, other);
+
+				sparse[entity] = INVALID;
+
+				entityList.pop_back();
+				componentList.pop_back();
+			}
+		}
+
+		bool remove(Entity entity)
+		{
+			return contains(entity) ? (erase(entity), true) : false;
+		}
+
+		component_type* get(Entity entity)
+		{
+			if (!contains(entity))
+				return nullptr;
+
+			return &componentList[sparse[entity]];
+		}
+
 		void sort() {/*TODO*/ }
-		void sort() {/*TODO*/ }
-		void sort() {/*TODO*/ }
-		void sort() {/*TODO*/ }
-		void sort() {/*TODO*/ }
-		void sort() {/*TODO*/ }
 
 
+	private:
+		dense_el entityList;
+		dense_cl componentList;
+		sparse_l sparse = { 0 };
 	};
+
+
 
 	template<typename SysCall>
 	void for_entities(SysCall process)
 	{
-		for (auto id : dense)
-			process(id);
+		/*for (auto id : dense)
+			process(id);*/
 	}
 }
