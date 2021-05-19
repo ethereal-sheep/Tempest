@@ -1,10 +1,15 @@
 #pragma once
 
-#include "..\..\Math.h"
+#include "..\..\TMath.h"
 #include "..\Entity.h"
 
 namespace Tempest::Components
 {
+	/*
+	ALL COMPONENTS MUST BE DEFAULT AND COPY CONSTRUCTABLE
+	(therefore please use ids instead of pointers)
+	*/
+
 	struct Transform
 	{
 		els::vec3 position;
@@ -15,6 +20,9 @@ namespace Tempest::Components
 	struct Meta
 	{
 		string name;
+
+		//Meta() = default;
+		//Meta(string s) : name{s}{}
 	};
 
 	struct Relationship

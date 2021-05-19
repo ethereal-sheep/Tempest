@@ -172,6 +172,7 @@
     <ClCompile Include="src\Application\AppHandler.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Application\Context.cpp" />
+    <ClCompile Include="src\ECS\ECS.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -183,12 +184,13 @@
     <ClInclude Include="src\Application\EntryPoint.h" />
     <ClInclude Include="src\Core.h" />
     <ClInclude Include="src\ECS\Components\Components.h" />
+    <ClInclude Include="src\ECS\ECS.h" />
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Systems\Systems.h" />
-    <ClInclude Include="src\ECS\Util\group.h" />
     <ClInclude Include="src\ECS\Util\registry.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
-    <ClInclude Include="src\Math.h" />
+    <ClInclude Include="src\ECS\Util\view.h" />
+    <ClInclude Include="src\TMath.h" />
     <ClInclude Include="src\Math\elsCompare.h" />
     <ClInclude Include="src\Math\elsHeader.h" />
     <ClInclude Include="src\Math\elsMath.h" />

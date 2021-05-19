@@ -4,9 +4,9 @@
 
 namespace Tempest
 {
-	using Entity = std::uint32_t;
-	using EntityType = std::uint32_t;
+	using Entity = uint32_t;
 	using EnVector = tvector<Entity>;
 
-	static constexpr size_t MAX_ENTITY = 10001;
+	static constexpr uint32_t MAX_ENTITY = 16384u;
+	static constexpr Entity INVALID = NULL;
 }
