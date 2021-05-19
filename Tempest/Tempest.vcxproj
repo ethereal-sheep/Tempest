@@ -80,6 +80,8 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\Dep\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)\Dep\$(ProjectName)-int\</IntDir>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <SourcePath>$(SolutionDir);$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -121,7 +123,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glfw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glfw;S$(SolutionDir)\Tempest\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,8 +137,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\glew;$(SolutionDir)Dep\glfw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
-xcopy /y /d "..\Dep\glfw\glfw3.dll" "$(TargetDir)" /q</Command>
+      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,7 +149,7 @@ xcopy /y /d "..\Dep\glfw\glfw3.dll" "$(TargetDir)" /q</Command>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glfw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glfw;S$(SolutionDir)\Tempest\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,22 +165,48 @@ xcopy /y /d "..\Dep\glfw\glfw3.dll" "$(TargetDir)" /q</Command>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\glew;$(SolutionDir)Dep\glfw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
-xcopy /y /d "..\Dep\glfw\glfw3.dll" "$(TargetDir)" /q</Command>
+      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Tempest\Application\AppHandler.cpp" />
-    <ClCompile Include="src\Tempest\Application\Application.cpp" />
-    <ClCompile Include="src\Tempest\Application\Context.cpp" />
+    <ClCompile Include="src\Application\AppHandler.cpp" />
+    <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\Application\Context.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Tempest\Application\AppHandler.h" />
-    <ClInclude Include="src\Tempest\Application\Application.h" />
-    <ClInclude Include="src\Tempest\Application\Context.h" />
-    <ClInclude Include="src\Tempest\Application\EntryPoint.h" />
-    <ClInclude Include="src\Tempest\Core\Core.h" />
-    <ClInclude Include="src\Tempest\Math\Math.h" />
+    <ClInclude Include="src\Application\AppHandler.h" />
+    <ClInclude Include="src\Application\Application.h" />
+    <ClInclude Include="src\Application\Context.h" />
+    <ClInclude Include="src\Application\EntryPoint.h" />
+    <ClInclude Include="src\Core.h" />
+    <ClInclude Include="src\ECS\Components\Components.h" />
+    <ClInclude Include="src\ECS\Entity.h" />
+    <ClInclude Include="src\ECS\Systems\Systems.h" />
+    <ClInclude Include="src\ECS\Util\group.h" />
+    <ClInclude Include="src\ECS\Util\registry.h" />
+    <ClInclude Include="src\ECS\Util\sparse_set.h" />
+    <ClInclude Include="src\Math.h" />
+    <ClInclude Include="src\Math\elsCompare.h" />
+    <ClInclude Include="src\Math\elsHeader.h" />
+    <ClInclude Include="src\Math\elsMath.h" />
+    <ClInclude Include="src\Math\elsMatrix2.h" />
+    <ClInclude Include="src\Math\elsMatrix3.h" />
+    <ClInclude Include="src\Math\elsMatrix4.h" />
+    <ClInclude Include="src\Math\elsNoise.h" />
+    <ClInclude Include="src\Math\elsQuaternion.h" />
+    <ClInclude Include="src\Math\elsRandom.h" />
+    <ClInclude Include="src\Math\elsTest.h" />
+    <ClInclude Include="src\Math\elsTransform2.h" />
+    <ClInclude Include="src\Math\elsTransform3.h" />
+    <ClInclude Include="src\Math\elsValue.h" />
+    <ClInclude Include="src\Math\elsVector2.h" />
+    <ClInclude Include="src\Math\elsVector3.h" />
+    <ClInclude Include="src\Math\elsVector4.h" />
+    <ClInclude Include="src\Math\elsVectorGeneric.h" />
+    <ClInclude Include="src\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
