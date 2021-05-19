@@ -90,7 +90,7 @@ namespace Tempest
 			if (!valid(entity) || !component_exist<Component>() || !has<Component>(entity))
 				return nullptr; // warn here
 
-			return *(get_sparse<Component>()->get(entity)) = Component{ args... };
+			return &(*(get_sparse<Component>()->get(entity)) = Component{ args... });
 		}
 
 		template <typename Component, typename... TArgs>
