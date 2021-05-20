@@ -51,7 +51,6 @@ int main()
 		cout << test.get<tc::Transform>(id)->position.x << endl;
 	};
 
-	int t = 1000;
 
 	auto test1 = [&]()
 	{
