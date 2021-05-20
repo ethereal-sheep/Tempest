@@ -172,11 +172,15 @@
     <ClCompile Include="src\Application\AppHandler.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Application\Context.cpp" />
+    <ClCompile Include="src\Memory\MemoryManager.cpp" />
+    <ClCompile Include="src\Memory\test_mem_res.cpp" />
+    <ClCompile Include="src\Memory\Resource\debug_resource.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\MemoryManager\MemoryManager\Include\test_resource.h" />
     <ClInclude Include="src\Application\AppHandler.h" />
     <ClInclude Include="src\Application\Application.h" />
     <ClInclude Include="src\Application\Context.h" />
@@ -190,7 +194,16 @@
     <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
     <ClInclude Include="src\ECS\Util\type_traits.h" />
-    <ClInclude Include="src\ECS\Util\view.h" />
+    <ClInclude Include="src\GSM.h" />
+    <ClInclude Include="src\Memory.h" />
+    <ClInclude Include="src\Memory\MemoryManager.h" />
+    <ClInclude Include="src\Memory\Resource.h" />
+    <ClInclude Include="src\Memory\Test\lousy_string_1.h" />
+    <ClInclude Include="src\Memory\Test\lousy_string_2.h" />
+    <ClInclude Include="src\Memory\Test\mem_test.h" />
+    <ClInclude Include="src\Memory\test_mem_res.h" />
+    <ClInclude Include="src\Memory\Resource\debug_resource.h" />
+    <ClInclude Include="src\Memory\Resource\malloc_resource.h" />
     <ClInclude Include="src\TMath.h" />
     <ClInclude Include="src\Math\elsCompare.h" />
     <ClInclude Include="src\Math\elsHeader.h" />
@@ -210,6 +223,9 @@
     <ClInclude Include="src\Math\elsVector4.h" />
     <ClInclude Include="src\Math\elsVectorGeneric.h" />
     <ClInclude Include="src\stdafx.h" />
+    <ClInclude Include="src\Util.h" />
+    <ClInclude Include="src\Util\magic_enum.hpp" />
+    <ClInclude Include="src\Util\Service.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../Entity.h"
+#include "../../Memory.h"
+
 
 namespace Tempest
 {
@@ -14,10 +16,12 @@ namespace Tempest
     public:
     
 		/**
-		 * @brief Default Constructor: fills the available pool with new 
-         * entities
+		 * @brief Constructs the registry object; fills the available pool with 
+         * new entities
+         * @param mem Pointer to a polymorphic memory resource; defaults to
+		 * default resource provided by the standard library
 		 */
-        registry()
+        registry(memres* mem = std::pmr::get_default_resource()) : entities(mem), available_pool(mem)
         {
             for (int i = 1; i < MAX_ENTITY; ++i) available_pool.push_back(i);
         }

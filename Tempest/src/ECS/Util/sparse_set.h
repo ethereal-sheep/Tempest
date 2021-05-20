@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Memory.h"
 #include "../Entity.h"
 
 namespace Tempest
@@ -19,14 +20,69 @@ namespace Tempest
 		sparse_set() = default;
 		virtual ~sparse_set() = default;
 
+		/**
+		 * @return Number of entities in the sparse set
+		 */
 		[[nodiscard]] virtual size_t size() const = 0;
-		[[nodiscard]] virtual bool empty() const = 0;
-		[[nodiscard]] virtual bool contains(Entity entity) const = 0;
-		virtual const EnVector* extent() const = 0;
-		virtual EnVector::const_iterator find(Entity entity) const = 0;
-		virtual void clear() = 0;
-	};
 
+		/**
+		 * @return True if the sparse set is empty
+		 */
+		[[nodiscard]] virtual bool empty() const = 0;
+
+		/**
+		 * @brief Checks if the entity exist in the dense array. With sparse
+		 * sets, this operation takes constant time.
+		 * @param entity An entity identifier, either valid or not
+		 * @return True if entity exists in the sparse set
+		 */
+		[[nodiscard]] virtual bool contains(Entity entity) const = 0;
+
+		/**
+		 * @brief Returns the extent (range of dense array) of the sparse set
+		 * @return Pointer to underlying dense array container
+		 */
+		virtual const EnVector* extent() const = 0;
+
+		/**
+		 * @brief Finds the entity in the sparse set and returns an iterator
+		 * to it. With sparse sets, this operation takes constant time.
+		 * @param entity An entity identifier, either valid or not
+		 * @return Iterator to the entity; end() is returned if it cannot be
+		 * found
+		 */
+		virtual EnVector::const_iterator find(Entity entity) const = 0;
+
+		/**
+		 * @brief Copy a component from an existing entity. If the entity
+		 * doesn't exists, or the new entity is already contained in the set,
+		 *  nothing happens.
+		 * @param old_e An entity identifier to clone from
+		 * @param new_e An entity identifier to clone to
+		 */
+		virtual void clone(Entity old_e, Entity new_e) = 0;
+
+		/**
+		 * @brief Clears all entities in the sparse set
+		 */
+		virtual void clear() = 0;
+
+
+		/**
+		 * @brief Erases an entity from the sparse set. If it doesn't exist,
+		 * nothing happens.
+		 * @param entity An entity identifier, either valid or not
+		 */
+		virtual void erase(Entity entity) = 0;
+
+		/**
+		 * @brief Removes an entity from the sparse set and returns the success
+		 * state
+		 * @param entity An entity identifier, either valid or not
+		 * @return Success state of the removal.
+		 */
+		virtual bool remove(Entity entity) = 0;
+	};
 	/**
 	 * @brief Sparse Set data structure specifically for Entity type. Provides 
 	 * Contant time insert, remove, and lookup, while providing locality of 
@@ -39,7 +95,8 @@ namespace Tempest
 		/** @brief typedefs for regularly used types */
 		using dense_el = dense_type<Entity>;
 		using dense_cl = dense_type<Component>;
-		using sparse_l = std::array<Entity, MAX_ENTITY>;
+		//using sparse_l = std::array<Entity, MAX_ENTITY>;
+		using sparse_l = dense_type<Entity>;
 
 	protected:
 		void swap(Entity lhs, Entity rhs)
@@ -53,7 +110,16 @@ namespace Tempest
 		}
 
     public:
-		sparse_set_t() = default;
+		/**
+		 * @brief Constructs the sparse set
+		 * @param mem Pointer to a polymorphic memory resource; defaults to
+		 * default resource provided by the standard library
+		 */
+		sparse_set_t(memres* mem = std::pmr::get_default_resource()) : entityList(mem), componentList(mem), sparse(MAX_ENTITY, 0, mem){}
+
+		/**
+		 * @brief Clears the sparse set before destructing
+		 */
 		~sparse_set_t() { clear(); }
 
         using component_type = Component;
@@ -112,6 +178,24 @@ namespace Tempest
 		}
 
 		/**
+		 * @brief Copy a component from an existing entity. If the entity
+		 * doesn't exists, or the new entity is already contained in the set,
+		 *  nothing happens.
+		 * @param old_e An entity identifier to clone from
+		 * @param new_e An entity identifier to clone to
+		 */
+		void clone(Entity old_e, Entity new_e) override
+		{
+			// warn here
+			if (contains(old_e) && !contains(new_e))
+			{
+				sparse[new_e] = static_cast<Entity>(entityList.size());
+				entityList.push_back(new_e);
+				componentList.push_back(componentList[sparse[old_e]]);
+			}
+		}
+
+		/**
 		 * @brief Clears all entities in the sparse set
 		 */
 		void clear() override
@@ -121,7 +205,6 @@ namespace Tempest
 			// destroy the entities
 			entityList.clear();
 		}
-
 		/**
 		 * @brief Inserts an entity into the sparse set. If the entity already
 		 * exists, nothing happens.
@@ -163,7 +246,7 @@ namespace Tempest
 		 * nothing happens.
 		 * @param entity An entity identifier, either valid or not
 		 */
-		void erase(Entity entity)
+		void erase(Entity entity) override
 		{
 			// warn here
 			if (contains(entity))
@@ -184,7 +267,7 @@ namespace Tempest
 		 * @param entity An entity identifier, either valid or not
 		 * @return Success state of the removal.
 		 */
-		bool remove(Entity entity)
+		bool remove(Entity entity) override
 		{
 			return contains(entity) ? (erase(entity), true) : false;
 		}

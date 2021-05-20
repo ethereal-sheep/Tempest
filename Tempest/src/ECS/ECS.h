@@ -1,9 +1,12 @@
 #pragma once
 
+#include "Components/Components.h"
+
 #include "Util/registry.h"
 #include "Util/sparse_set.h"
 #include "Util/type_traits.h"
 #include "Util/runtime_view.h"
+
 #include "Entity.h"
 
 namespace Tempest
@@ -49,7 +52,12 @@ namespace Tempest
 		}
 
 	public:
-
+		/**
+		 * @brief Constructs an ECS object
+		 * @param mem Pointer to a polymorphic memory resource; defaults to
+		 * default resource provided by the standard library
+		 */
+		ECS(memres* mem = std::pmr::get_default_resource()) : memory_resource(mem), component_pools(mem), entity_registry(mem){}
 
 		/**
 		 * @brief Registers a component to the ECS
@@ -68,7 +76,7 @@ namespace Tempest
 			if (component_exist<Component>()) return;
 				// warning here
 
-			component_pools.insert({ t_hash<Component>(), make_ptr<sparse_set_t<Component>>()});
+			component_pools.insert({ t_hash<Component>(), make_ptr<sparse_set_t<Component>>(memory_resource)});
 		}
 
 		/**
@@ -264,6 +272,39 @@ namespace Tempest
 		}
 
 		/**
+		 * @brief Clones a new entity given an existing entity, with some 
+		 * exclusion if needed
+		 * @warning USE SPARINGLY IF YOU HAVE A LOT OF COMPONENT TYPES
+		 * @tparam Exclude... Valid component types
+		 * @param entity An entity identifier, either valid or not
+		 * @param exclude_t<Exclude...> excludes types from entity
+		 * @return New cloned entity identifier
+		 */
+		template<typename... Exclude>
+		[[nodiscard]] Entity clone(Entity entity, exclude_t<Exclude...> = {})
+		{
+			// make sure unique
+			unique_types<Exclude...>();
+			// create new entity
+			Entity new_e = entity_registry.create();
+			// package exclude components
+			tvector<size_t> exc;
+			package<Exclude...>(exc);
+
+			// clone for each component type registered
+			for (auto& [hash, sparse] : component_pools)
+				sparse->clone(entity, new_e);
+
+			// remove at every component type specified
+			// we check to make sure the pool exist first
+			for (auto i : exc)
+				if(component_pools.count(i))
+					component_pools.at(i)->erase(new_e);
+
+			return new_e;
+		}
+
+		/**
 		 * @brief Destroys the entity and returns the success state
 		 * @param entity An entity identifier, either valid or not
 		 * @return Success state of the destruction
@@ -300,6 +341,9 @@ namespace Tempest
 		}
 
 	private:
+
+		memres* memory_resource;
+
 		tmap<size_t, tuptr<sparse_set>> component_pools;
 		registry entity_registry;
 	};

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "..\..\Core.h"
+#include "../../Core.h"
+#include "../../Memory.h"
 #include "sparse_set.h"
 
 namespace Tempest

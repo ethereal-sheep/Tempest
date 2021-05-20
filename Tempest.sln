@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tempest", "Tempest\Tempest.vcxproj", "{3DFCC228-6442-4ECF-A665-CAF9E34053A9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Editor\Editor.vcxproj", "{2B5F71A6-4FDE-44B8-94B0-97283D223E1B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3DFCC228-6442-4ECF-A665-CAF9E34053A9} = {3DFCC228-6442-4ECF-A665-CAF9E34053A9}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

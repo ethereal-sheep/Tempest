@@ -15,6 +15,7 @@
         "xstring": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "atomic": "cpp"
     }
 }

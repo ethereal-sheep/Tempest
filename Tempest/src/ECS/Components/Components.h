@@ -6,7 +6,7 @@
 namespace Tempest::Components
 {
 	/*
-	ALL COMPONENTS MUST BE DEFAULT AND COPY CONSTRUCTABLE
+	ALL COMPONENTS MUST BE DEFAULT, COPY, AND MOVE CONSTRUCTABLE
 	(therefore please use ids instead of pointers)
 	*/
 
@@ -19,15 +19,12 @@ namespace Tempest::Components
 
 	struct Meta
 	{
-		string name;
-
-		//Meta() = default;
-		//Meta(string s) : name{s}{}
+		string name{};
 	};
 
 	struct Relationship
 	{
-		Entity parent;
+		Entity parent{INVALID};
 		EnVector children;
 	};
 
