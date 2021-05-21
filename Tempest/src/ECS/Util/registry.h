@@ -21,7 +21,7 @@ namespace Tempest
          * @param mem Pointer to a polymorphic memory resource; defaults to
 		 * default resource provided by the standard library
 		 */
-        registry(memres* mem = std::pmr::get_default_resource()) : entities(mem), available_pool(mem)
+        registry(m_resource* mem = std::pmr::get_default_resource()) : entities(mem), available_pool(mem)
         {
             for (int i = 1; i < MAX_ENTITY; ++i) available_pool.push_back(i);
         }

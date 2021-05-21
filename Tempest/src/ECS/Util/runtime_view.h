@@ -12,8 +12,36 @@ namespace Tempest
 	 */
 	class runtime_view
 	{
-		using map_ref = const tmap<size_t, tuptr<sparse_set>>&;
-	
+		using map_ref = tmap<size_t, tuptr<sparse_set>>&;
+
+		template <typename T>
+		size_t t_hash()
+		{
+			return typeid(T).hash_code();
+		}
+
+		template<typename Component>
+		sparse_set_t<Component>* get_sparse()
+		{
+			if (!component_exist<Component>())
+				return nullptr;
+
+			return static_cast<sparse_set_t<Component>*>(
+				pools.at(typeid(Component).hash_code()).get());
+		}
+
+		template<typename Component>
+		const sparse_set_t<Component>* get_sparse() const
+		{
+			if (!component_exist<Component>())
+				return nullptr;
+
+			return static_cast<sparse_set_t<Component>*>(
+				pools.at(typeid(Component).hash_code()).get());
+		}
+
+
+
 	public:
 		/**
 		 * @brief Constructs a runtime view object with include, exclude lists
@@ -299,6 +327,48 @@ namespace Tempest
 			for (auto i : *this)
 				func(i);
 		}
+
+		/**
+		 * @brief Checks if the component is registered in the ECS and thus
+		 * in the view
+		 * @tparam Component Valid component type
+		 * @return True if component has been registered; False if not
+		 */
+		template<typename Component>
+		[[nodiscard]] bool component_exist() const
+		{
+			return pools.count(typeid(Component).hash_code());
+		}
+
+		/**
+		 * @brief Returns the component owned by entity
+		 * @tparam Component Valid component type
+		 * @param entity An entity identifier, either valid or not
+		 * @return Pointer to the component; nullptr if it doesn't exist
+		 */
+		template <typename Component>
+		[[nodiscard]] Component* get(Entity entity)
+		{
+			// we can check if it exists in the pool but doesnt matter
+			if (!component_exist<Component>())
+				return nullptr;
+
+			return get_sparse<Component>()->get(entity);
+		}
+
+		/**
+		 * @brief Checks if the entity exists in the view
+		 * @param entity An entity identifier, either valid or not
+		 * @return True if entity exists in the view
+		 */
+		[[nodiscard]] bool contains(Entity entity)
+		{
+			for (auto i : exclude) if (pools.at(i)->contains(entity)) return false;
+			for (auto i : include) if (!pools.at(i)->contains(entity)) return false;
+			return true;
+		}
+
+
 
 	private:
 		tvector<size_t> include;

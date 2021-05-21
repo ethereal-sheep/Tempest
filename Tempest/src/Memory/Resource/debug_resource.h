@@ -79,11 +79,7 @@ namespace Tempest
 
 		debug_resource(
 			std::string name = std::string{ "debug_memory_resource" },
-			memres* upstream = std::pmr::get_default_resource())
-			: m_name{ name },
-			m_blocks(upstream),
-			m_upstream(upstream)
-		{}
+			m_resource* upstream = std::pmr::get_default_resource());
 
 		~debug_resource();
 
@@ -91,7 +87,7 @@ namespace Tempest
 		debug_resource& operator=(const debug_resource&) = delete;
 
 		// get upstream resource
-		memres* upstream_resource() const { return m_upstream; }
+		m_resource* upstream_resource() const { return m_upstream; }
 
 		// get/set for meta data
 		std::string get_name() const noexcept { return m_name; }
@@ -174,7 +170,7 @@ namespace Tempest
 		std::atomic_size_t m_bad_deallocations{ 0 };
 
 		std::pmr::vector<allocation_rec> m_blocks;
-		memres* m_upstream; // the upstream memory resource
+		m_resource* m_upstream; // the upstream memory resource
 
 		static std::atomic_size_t s_leaked_bytes;
 		static std::atomic_size_t s_leaked_blocks;

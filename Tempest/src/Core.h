@@ -41,7 +41,7 @@ namespace Tempest
 
 	using id_t = std::uint32_t;
 
-	using memres = std::pmr::memory_resource;
+	using m_resource = std::pmr::memory_resource;
 
 	constexpr static id_t UNDEFINED = static_cast<id_t>(-1);
 }

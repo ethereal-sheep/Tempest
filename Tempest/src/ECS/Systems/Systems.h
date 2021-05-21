@@ -1,7 +1,7 @@
 #pragma once
 
 #include "..\..\TMath.h"
-#include "..\Entity.h"
+#include "..\ECS.h"
 
 namespace Tempest::Systems
 {
@@ -14,6 +14,16 @@ namespace Tempest::Systems
 				{
 					// do something here
 				});
+		}
+	};
+
+
+	struct test_system
+	{
+		template <typename Func>
+		void operator()(Tempest::runtime_view view, Func func)
+		{
+			view.each(func);
 		}
 	};
 

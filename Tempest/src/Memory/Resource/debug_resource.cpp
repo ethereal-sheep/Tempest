@@ -51,6 +51,15 @@ namespace Tempest
 
 	constexpr size_t blockSize(size_t bytes) { return sizeof(Header) + bytes + paddingSize; }
 
+
+	debug_resource::debug_resource(
+		std::string name,
+		m_resource* upstream)
+		: m_name{ name },
+		m_blocks(upstream),
+		m_upstream(upstream)
+	{}
+
 	debug_resource::~debug_resource()
 	{
 		// If any blocks have not been released, report them as leaked

@@ -54,10 +54,10 @@ namespace Tempest
 	public:
 		/**
 		 * @brief Constructs an ECS object
-		 * @param mem Pointer to a polymorphic memory resource; defaults to
-		 * default resource provided by the standard library
+		 * @param mem Pointer to a polymorphic memory resource; default gets
+		 * the default memory resource
 		 */
-		ECS(memres* mem = std::pmr::get_default_resource()) : memory_resource(mem), component_pools(mem), entity_registry(mem){}
+		ECS(m_resource* mem = std::pmr::get_default_resource()) : memory_resource(mem), component_pools(mem), entity_registry(mem){}
 
 		/**
 		 * @brief Registers a component to the ECS
@@ -108,7 +108,6 @@ namespace Tempest
 				return nullptr;
 
 			return get_sparse<Component>()->get(entity);
-
 		}
 
 		/**
@@ -223,7 +222,7 @@ namespace Tempest
 		 * @return Constructed runtime_view Object
 		 */
 		template<typename... Components, typename... Exclude>
-		[[nodiscard]] runtime_view view(exclude_t<Exclude...> = {}) const
+		[[nodiscard]] runtime_view view(exclude_t<Exclude...> = {})
 		{
 			// check if types are unique
 			unique_types<Components..., Exclude...>();
@@ -342,7 +341,7 @@ namespace Tempest
 
 	private:
 
-		memres* memory_resource;
+		m_resource* memory_resource;
 
 		tmap<size_t, tuptr<sparse_set>> component_pools;
 		registry entity_registry;

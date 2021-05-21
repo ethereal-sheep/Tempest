@@ -30,10 +30,10 @@
     <ClCompile Include="src\Memory\MemoryManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Memory\test_mem_res.cpp">
+    <ClCompile Include="src\Memory\Resource\debug_resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Memory\Resource\debug_resource.cpp">
+    <ClCompile Include="src\Memory\Resource\malloc_resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -150,9 +150,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\MemoryManager\MemoryManager\Include\test_resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\test_mem_res.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Memory\Resource\debug_resource.h">
