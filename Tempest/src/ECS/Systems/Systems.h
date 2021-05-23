@@ -5,20 +5,7 @@
 
 namespace Tempest::Systems
 {
-	struct TestSystem
-	{
-		template <typename TData>
-		static void update(float dt, TData& data)
-		{
-			data.for_entities([&](auto id)
-				{
-					// do something here
-				});
-		}
-	};
-
-
-	struct test_system
+	struct dynamic_system
 	{
 		template <typename Func>
 		void operator()(Tempest::runtime_view view, Func func)

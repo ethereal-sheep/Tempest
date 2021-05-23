@@ -54,7 +54,7 @@ namespace Tempest::Memory
 			else
 				return malloc_resource();
 		case ResourceStrategy::MONOTONIC:
-			memory = make_ptr<std::pmr::monotonic_buffer_resource>(strat.block_size);
+			memory = make_ptr<std::pmr::monotonic_buffer_resource>(strat.block_size, std::pmr::new_delete_resource());
 			if (debug_flag)
 			{
 				debug_memory_wrapper = make_ptr<debug_resource>("Debug Monotonic Memory", memory.get());
@@ -99,10 +99,9 @@ namespace Tempest::Memory
 		// warn here: no memory to reclaim
 
 		active_flag = false;
-
-		if (memory)
-			memory.reset();
 		if (debug_memory_wrapper)
 			debug_memory_wrapper.reset();
+		if (memory)
+			memory.reset();
 	}
 }
