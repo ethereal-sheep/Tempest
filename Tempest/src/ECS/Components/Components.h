@@ -21,11 +21,24 @@
 *		d. (MUST) Define operator& to serialize the Component members
 * 
 * Step 4. Add Component case to deserialize_helper function
+*		a. COMPONENT_CASE(ComponentName)
 * 
 * @warning 
-		ALL COMPONENTS MUST BE DEFAULT, COPY, AND MOVE CONSTRUCTABLE
-		(therefore please use ids instead of pointers)
-* 
+*		ALL COMPONENTS MUST BE DEFAULT, COPY, AND MOVE CONSTRUCTABLE
+*		(therefore please use ids instead of pointers)
+* @notes
+*		if Component is not serializing/deserializing correctly, 
+*			1. check if you have followed all steps
+*			2. check if all the names are correct (get_type, enum, component case)
+*           3. check if members are being serialized by archiver
+*			4. check if component case is added
+*		
+*		if solution not compiling after adding new component
+*			1. check if one of the members are non-trivial type
+*				but using trivial ar.Member() call
+*			2. check if component is default, copy, and move constructable
+*			3. check if get_type function is declared and defined
+*		
 */
 
 
@@ -43,8 +56,8 @@
 
 		// define friend operator to take in a template archive reference object
 		// and a reference to the component (not const)
-		template <typename Archive>
-		friend Archive& operator&(Archive& ar, Example& component)
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, Example& component)
 		{
 			// must start with ar.StartObject()
 			ar.StartObject();
@@ -79,7 +92,7 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Transform, Meta, Example,
+		Example, Transform, Meta,
 		END
 	};
 
@@ -96,8 +109,8 @@ namespace Tempest
 		{
 			static const char* get_type() { return "Example"; }
 
-			template <typename Archive>
-			friend Archive& operator&(Archive& ar, Example& component)
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Example& component)
 			{
 				ar.StartObject();
 				ar.Member("Member1", component.member1);
@@ -112,8 +125,8 @@ namespace Tempest
 		{
 			static string get_type() { return "Transform"; }
 
-			template <typename Archive>
-			friend Archive& operator&(Archive& ar, Transform& component)
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Transform& component)
 			{
 				ar.StartObject();
 				ar.vec3("Position", component.position);
@@ -131,8 +144,8 @@ namespace Tempest
 		{
 			static string get_type() { return "Meta"; }
 
-			template <typename Archive>
-			friend Archive& operator&(Archive& ar, Meta& component)
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Meta& component)
 			{
 				ar.StartObject();
 				ar.Member("Name", component.name);

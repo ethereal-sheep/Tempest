@@ -259,11 +259,15 @@ void test2()
 		// init
 		{
 			// create 10 entities
-			int entity_num = 100;
+			int entity_num = 10;
 			for (int i = 0; i < entity_num; ++i)
 			{
 				auto id = ecs.create();
-				ecs.emplace<tc::Transform>(id);
+				ecs.emplace<tc::Meta>(id);
+				if(i % 2 == 0)
+					ecs.emplace<tc::Example>(id);
+				if (i % 3 == 0)
+					ecs.emplace<tc::Transform>(id);
 			}
 		}
 
@@ -317,12 +321,32 @@ void test3()
 		// gameloop
 
 		{
+			auto all_view = ecs.view<tc::Meta, tc::Example, tc::Transform>();
+			auto meta_view = ecs.view<tc::Meta>();
 			auto example_view = ecs.view<tc::Example>();
-			for (auto entity : example_view)
-			{
-				if(auto example = ecs.get<tc::Example>(entity))
-					printf_s("%u {%d , %d}\n", entity, example->member1, example->member2);
-			}
+			auto transform_view = ecs.view<tc::Transform>();
+
+
+			auto print = [](auto entity) {
+				printf_s("%u, ", entity);
+			};
+
+			cout << "All Component" << endl;
+			all_view.each(print);
+			cout << endl;
+
+			cout << "Meta" << endl;
+			meta_view.each(print);
+			cout << endl;
+
+			cout << "Example" << endl;
+			example_view.each(print);
+			cout << endl;
+
+			cout << "Transform" << endl;
+			transform_view.each(print);
+			cout << endl;
+
 		}
 
 		{
@@ -338,5 +362,5 @@ void test3()
 
 int main()
 {
-	test1();
+	test3();
 }
