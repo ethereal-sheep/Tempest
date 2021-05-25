@@ -1,16 +1,20 @@
 #pragma once
 
-#include "Components/Components.h"
-
 #include "Util/registry.h"
 #include "Util/sparse_set.h"
 #include "Util/type_traits.h"
 #include "Util/runtime_view.h"
 
+#include "Components/Components.h"
 #include "Entity.h"
+
+#include "Util.h"
 
 namespace Tempest
 {
+	static const char* components_folder = "Components";
+
+
 	template <typename T>
 	size_t t_hash()
 	{
@@ -123,8 +127,14 @@ namespace Tempest
 		template <typename Component, typename... TArgs>
 		Component* emplace(Entity entity, TArgs... args)
 		{
-			if (!valid(entity) || !component_exist<Component>() || has<Component>(entity))
+			if (!valid(entity))
 				return nullptr; // warn here
+
+			// register component if it doesn't exist
+			register_component<Component>();
+
+			if (has<Component>(entity))
+				return nullptr;
 
 			auto sparse = get_sparse<Component>();
 			sparse->emplace(entity, std::forward<TArgs>(args)...);
@@ -143,8 +153,14 @@ namespace Tempest
 		template <typename Component, typename... TArgs>
 		Component* replace(Entity entity, TArgs... args)
 		{
-			if (!valid(entity) || !component_exist<Component>() || !has<Component>(entity))
+			if (!valid(entity))
 				return nullptr; // warn here
+
+			// register component if it doesn't exist
+			register_component<Component>();
+
+			if (!has<Component>(entity))
+				return nullptr;
 
 			return &(*(get_sparse<Component>()->get(entity)) = Component{ args... });
 		}
@@ -163,8 +179,11 @@ namespace Tempest
 		template <typename Component, typename... TArgs>
 		Component* replace_else_emplace(Entity entity, TArgs... args)
 		{
-			if (!valid(entity) || !component_exist<Component>())
+			if (!valid(entity))
 				return nullptr; // warn here
+
+			// register component if it doesn't exist
+			register_component<Component>();
 
 			if (has<Component>(entity))
 				return replace(entity, std::forward<TArgs>(args)...);
@@ -338,6 +357,78 @@ namespace Tempest
 			// destroy entities
 			entity_registry.clear();
 		}
+
+
+		/**
+		 * @brief Force creates an entity in the registry
+		 * @warning Registry must be cleaned after to maintain safe id!
+		 * @return New entity identifier
+		 */
+		Entity force_create(Entity entity)
+		{
+			return entity_registry.force_create(entity);
+		}
+
+
+		/**
+		 * @brief Cleans the available pool to maintain safe id
+		 * @warning Registry must be cleaned after any force_create!
+		 */
+		void clean_registry()
+		{
+			entity_registry.clean();
+		}
+
+		/**
+		 * @brief Saves the ECS to a components folder in the filepath 
+		 * provided. 
+		 * If folder doesn't exist, a folder is created. 
+		 * If it exists, the folder's contents will be overwritten.
+		 */
+		void save(const tpath& root_filepath) const
+		{
+			tpath folder = root_filepath / components_folder;
+
+			// if directory doesn't exist, create new_directory
+			if(!std::filesystem::exists(folder))
+				std::filesystem::create_directory(folder);
+			
+			// delete everything in components
+			for(auto file : std::filesystem::directory_iterator(folder))
+				std::filesystem::remove_all(file.path());
+
+
+			for (auto& [hash, sparse] : component_pools)
+			{
+				sparse->serialize(folder);
+			}
+		}
+
+		/**
+		 * @brief Loads the ECS from an components folder. 
+		 * If folder doesn't exist, a folder is created.
+		 * If it exists, the folder's contents will be overwritten.
+		 */
+		void load(const tpath& root_filepath)
+		{
+			tpath folder = root_filepath / components_folder;
+
+			// check if file path exists
+			if (!std::filesystem::exists(folder))
+				return; // warn here
+
+			// else, we make sure ECS is empty first
+			clear();
+
+			// for each file in the folder, we try to deserialize
+			for (auto file : std::filesystem::directory_iterator(folder))
+			{
+				deserialize_component(file, *this);
+			}
+			// cleans registry since some entities have been forced created
+			clean_registry();
+		}
+
 
 	private:
 

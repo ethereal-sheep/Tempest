@@ -23,7 +23,6 @@ namespace Tempest
 		void LinkProgram(GLuint vertexShader, GLuint fragmentShader);
 
 	public:
-
 		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		~Shader();
 

@@ -110,6 +110,34 @@ namespace Tempest
             hard_clear();
         }
 
+        /**
+         * @brief Force creates an entity in the registry
+         * @warning Registry must be cleaned after to maintain safe id!
+         * @return New entity identifier
+         */
+        Entity force_create(Entity entity)
+        {
+            // assert not invalid
+            if (entity == INVALID) return INVALID;
+
+            if (!entities.count(entity))
+                entities.insert(entity);
+
+            return entity;
+        }
+
+        /**
+         * @brief Cleans the available pool to maintain safe id
+         * @warning Registry must be cleaned after any force_create!
+         */
+        void clean()
+        {
+            available_pool.clear();
+            for (int i = 1; i < MAX_ENTITY; ++i) 
+                if(!entities.count(i))
+                    available_pool.push_back(i);
+        }
+
     private:
 
         tset<Entity> entities;

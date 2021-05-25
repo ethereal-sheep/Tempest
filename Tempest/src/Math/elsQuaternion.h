@@ -20,13 +20,11 @@ namespace els
 	public:
 		using Scalar = T;
 
-	private:
 		Scalar x;
 		Scalar y;
 		Scalar z;
 		Scalar w;
 
-	public:
 		constexpr Quaternion()
 			: Quaternion{ static_cast<Scalar>(1), static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<Scalar>(0) } {}
 		constexpr Quaternion(const Scalar& i, const Scalar& j, const Scalar& k, const Scalar& s) : x{ i }, y{ j }, z{ k }, w{ s } {}
@@ -61,6 +59,7 @@ namespace els
 			return Vector4<T>{ x, y, z, w };
 		}
 
+		constexpr const Scalar* data() const;
 		constexpr Quaternion normalized() const;
 		constexpr Quaternion conjugate() const;
 		constexpr Quaternion inverse() const;
@@ -218,6 +217,11 @@ namespace els
 	constexpr Quaternion<T> Quaternion<T>::operator-() const
 	{
 		return Quaternion<T>{ -w, -x, -y, -z };
+	}
+	template <typename T>
+	constexpr const T* Quaternion<T>::data() const
+	{
+		return &x;
 	}
 	template <typename T>
 	constexpr Quaternion<T> Quaternion<T>::normalized() const

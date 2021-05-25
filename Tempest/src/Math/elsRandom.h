@@ -100,7 +100,7 @@ namespace els
 			if (radius <= static_cast<T>(0))
 				return vec::zero;
 
-			T rad2 = radius * radius;
+			T radius2 = radius * radius;
 			T len2 = 0;
 			vec ret{ 0 };
 
@@ -108,7 +108,7 @@ namespace els
 			{
 				ret = uniform_rand(vec{ -radius }, vec{ radius });
 				len2 = ret.length2();
-			} while (len2 > rad2);
+			} while (len2 > radius2);
 
 			return ret;
 		}
@@ -147,7 +147,7 @@ namespace els
 			if (radius <= static_cast<T>(0))
 				return vec::zero;
 
-			T rad2 = radius * radius;
+			T radius2 = radius * radius;
 			T len2 = 0;
 			vec ret{ 0 };
 
@@ -155,7 +155,7 @@ namespace els
 			{
 				ret = uniform_rand(vec{ -radius }, vec{ radius });
 				len2 = ret.length2();
-			} while (len2 > rad2);
+			} while (len2 > radius2);
 
 			return ret;
 

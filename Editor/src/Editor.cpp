@@ -12,25 +12,24 @@
 #include <iostream>
 #include <thread>
 
+
+
 using namespace std;
 using namespace Tempest;
 
 
-int main()
+void test1()
 {
 	tmem::MemoryManager mm;
-	m_resource* mr = mm.request({true, tmem::ResourceStrategy::MONOTONIC});
+	m_resource* mr = mm.request({ true, tmem::ResourceStrategy::MONOTONIC });
 
 	{
 		Tempest::ECS ecs(mr);
 		// init
 		{
-			ecs.register_component<tc::Transform>();
+			/*ecs.register_component<tc::Transform>();
 			ecs.register_component<tc::Meta>();
-			ecs.register_component<tc::Relationship>();
-			ecs.register_component<int>();
-			ecs.register_component<double>();
-			ecs.register_component<unsigned>();
+			ecs.register_component<tc::Relationship>();*/
 
 			// create 10 entities
 			int entity_num = 10000;
@@ -40,15 +39,22 @@ int main()
 			for (int i = 0; i < entity_num; ++i)
 			{
 				auto id = ecs.create();
-				auto meta = ecs.emplace<tc::Meta>(id);
-				meta->name = std::to_string(i) + " indexed";
-				auto transform = ecs.emplace<tc::Transform>(id);
-				transform->position = els::vec3f(1.f, 0.f, 1.f);
+				ecs.emplace<tc::Example>(id);
 			}
 		}
 
 		// gameloop
+
 		{
+			auto change_member1 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member1;
+			};
+			auto change_member2 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member2;
+			};
+
 			auto change_name1 = [&](auto id) {
 				if (auto meta = ecs.get<tc::Meta>(id))
 					meta->name = "Hello";
@@ -60,7 +66,7 @@ int main()
 
 			auto change_pos1 = [&](auto id) {
 				if (auto transform = ecs.get<tc::Transform>(id))
-					transform->position += els::vec3f::i + els::vec3f::k;
+					transform->position += els::random::ball_rand(1);
 			};
 			auto change_pos2 = [&](auto id) {
 				if (auto transform = ecs.get<tc::Transform>(id))
@@ -71,6 +77,15 @@ int main()
 				if (auto meta = ecs.get<tc::Meta>(id))
 				{
 					cout << meta->name << endl;
+				}
+				else
+					cout << "INVALID" << endl;
+			};
+			auto print_eg = [&](auto id) {
+				cout << id << ": ";
+				if (auto eg = ecs.get<tc::Example>(id))
+				{
+					cout << eg->member1 << "," << eg->member2 << endl;
 				}
 				else
 					cout << "INVALID" << endl;
@@ -96,11 +111,11 @@ int main()
 				if (meta && transform)
 				{
 					printf_s(
-						"%s %lu: { %.2f, %.2f, %.2f }\n", 
-						meta->name.c_str(), 
-						id, 
-						transform->position.x, 
-						transform->position.y, 
+						"%s %lu: { %.2f, %.2f, %.2f }\n",
+						meta->name.c_str(),
+						id,
+						transform->position.x,
+						transform->position.y,
 						transform->position.z);
 
 					/*cout << meta->name << " " << id << ": ";
@@ -113,11 +128,12 @@ int main()
 				else
 					cout << "INVALID" << endl;
 			};
-			std::pmr::vector<int> c(1,0, mr);
-			auto count = [&](auto id) {
+			std::pmr::vector<int> c(1, 0, mr);
+			auto count = [&](auto) {
 				++c[0];
 			};
 
+			auto example_view = ecs.view<tc::Example>();
 			auto meta_view = ecs.view<tc::Meta>();
 			auto transform_view = ecs.view<tc::Transform>();
 			auto transform_meta_view = ecs.view<tc::Transform, tc::Meta>();
@@ -135,6 +151,38 @@ int main()
 				t2.join();
 
 				cout << "Count: " << c[0] << endl;
+			};
+
+			auto data_race2 = [&]()
+			{
+				// check data race
+
+				std::thread t1;
+				std::thread t2;
+				auto duration = std::chrono::high_resolution_clock().now().time_since_epoch();
+
+				int t = 10;
+				while(t--)
+				{
+					auto test_1 = [&]() {
+						for (auto entity : example_view)
+							change_member1(entity);
+					};
+					auto test_2 = [&]() {
+						for (auto entity : example_view)
+							change_member2(entity);
+					};
+
+					//t1 = std::thread(test_1);
+					test_1();
+					test_2();
+					//t1.join();
+				}
+
+				cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock().now().time_since_epoch() - duration).count() << endl;
+
+				//ts::dynamic_system{}(example_view, print_eg);
+
 			};
 
 			auto test_thread_1 = [&]()
@@ -180,11 +228,12 @@ int main()
 
 				cout << "Count: " << c[0] << endl;
 			};
-			
+
 
 			//data_race();
+			data_race2();
 			//test_thread_1();
-			test_thread_2();
+			//test_thread_2();
 
 		}
 
@@ -197,4 +246,97 @@ int main()
 		output_debug_mr(debug_mr);
 
 	mm.reclaim();
+}
+
+
+void test2()
+{
+	tmem::MemoryManager mm;
+	m_resource* mr = mm.request({ true, tmem::ResourceStrategy::MONOTONIC });
+
+	{
+		Tempest::ECS ecs(mr);
+		// init
+		{
+			// create 10 entities
+			int entity_num = 100;
+			for (int i = 0; i < entity_num; ++i)
+			{
+				auto id = ecs.create();
+				ecs.emplace<tc::Transform>(id);
+			}
+		}
+
+		// gameloop
+
+		{
+			auto change_pos = [&](auto id) {
+				if (auto transform = ecs.get<tc::Transform>(id))
+					transform->position += els::random::ball_rand(1);
+			};
+
+
+			auto transform_view = ecs.view<tc::Transform>();
+
+			ts::dynamic_system{}(transform_view, change_pos);
+
+
+			const char* s = R"(S:\Development\Projects)";
+			tpath path(s);
+			if (std::filesystem::exists(path))
+			{
+				ecs.save(path);
+			}
+		}
+
+		{
+			// exit
+		}
+	}
+
+	if (auto debug_mr = mm.get_debug_resource())
+		output_debug_mr(debug_mr);
+
+	mm.reclaim();
+}
+
+void test3()
+{
+	tmem::MemoryManager mm;
+	m_resource* mr = mm.request({ true, tmem::ResourceStrategy::MONOTONIC });
+
+	{
+		Tempest::ECS ecs(mr);
+		// init
+		{
+			const char* s = R"(S:\Development\Projects)";
+			tpath path(s);
+			ecs.load(path);
+		}
+
+		// gameloop
+
+		{
+			auto example_view = ecs.view<tc::Example>();
+			for (auto entity : example_view)
+			{
+				if(auto example = ecs.get<tc::Example>(entity))
+					printf_s("%u {%d , %d}\n", entity, example->member1, example->member2);
+			}
+		}
+
+		{
+			// exit
+		}
+	}
+
+	if (auto debug_mr = mm.get_debug_resource())
+		output_debug_mr(debug_mr);
+
+	mm.reclaim();
+}
+
+int main()
+{
+	test1();
 }

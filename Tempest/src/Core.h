@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <unordered_set>
 #include <unordered_map>
 #include <array>
@@ -11,6 +12,8 @@
 #include <atomic>
 #include <memory_resource>
 #include <iostream>
+
+#include <filesystem>
 
 
 namespace Tempest
@@ -44,4 +47,7 @@ namespace Tempest
 	using m_resource = std::pmr::memory_resource;
 
 	constexpr static id_t UNDEFINED = static_cast<id_t>(-1);
+
+	using tpath = std::filesystem::path;
+	using tentry = std::filesystem::directory_entry;
 }

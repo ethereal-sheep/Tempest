@@ -31,7 +31,7 @@ namespace Tempest
 		std::cout << "-------------------------------------------" << std::endl;
 	}
 
-	void test1()
+	void mem_test1()
 	{
 		debug_resource mr("Test 1");
 		std::cout << std::endl;
@@ -39,7 +39,7 @@ namespace Tempest
 		lousy_string_1 hello{ "Hello", &mr };
 	}
 
-	void test2()
+	void mem_test2()
 	{
 		debug_resource mr("Test 1");
 		std::cout << std::endl;
@@ -47,12 +47,12 @@ namespace Tempest
 		lousy_string_1 hello{ "Hello", &mr };
 	}
 
-	void test3()
+	void mem_test3()
 	{
 		debug_resource mr("Test 3");
 	}
 
-	void test4()
+	void mem_test4()
 	{
 		debug_resource mr("Test 4");
 	}

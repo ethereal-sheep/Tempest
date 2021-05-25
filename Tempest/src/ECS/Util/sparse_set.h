@@ -2,6 +2,7 @@
 
 #include "../../Memory.h"
 #include "../Entity.h"
+#include "Util.h"
 
 namespace Tempest
 {
@@ -17,7 +18,8 @@ namespace Tempest
 		template<typename T>
 		using dense_type = tvector<T>;
 
-		sparse_set() = default;
+		sparse_set() = delete;
+		sparse_set(const string& type) : type_info{ type } {}
 		virtual ~sparse_set() = default;
 
 		/**
@@ -82,6 +84,16 @@ namespace Tempest
 		 * @return Success state of the removal.
 		 */
 		virtual bool remove(Entity entity) = 0;
+
+		/**
+		 * @brief Serializes the sparse set into a json file at given path
+		 * @param components_folder Folder to save the json file
+		 * @return Success state of the saving
+		 */
+		virtual bool serialize(const tpath& components_folder) const = 0;
+
+
+		string type_info;
 	};
 	/**
 	 * @brief Sparse Set data structure specifically for Entity type. Provides 
@@ -115,7 +127,7 @@ namespace Tempest
 		 * @param mem Pointer to a polymorphic memory resource; defaults to
 		 * default resource provided by the standard library
 		 */
-		sparse_set_t(m_resource* mem = std::pmr::get_default_resource()) : entityList(mem), componentList(mem), sparse(MAX_ENTITY, 0, mem){}
+		sparse_set_t(m_resource* mem = std::pmr::get_default_resource()) : sparse_set(Component::get_type()), entityList(mem), componentList(mem), sparse(MAX_ENTITY, 0, mem){}
 
 		/**
 		 * @brief Clears the sparse set before destructing
@@ -205,6 +217,8 @@ namespace Tempest
 			// destroy the entities
 			entityList.clear();
 		}
+
+
 		/**
 		 * @brief Inserts an entity into the sparse set. If the entity already
 		 * exists, nothing happens.
@@ -272,6 +286,8 @@ namespace Tempest
 			return contains(entity) ? (erase(entity), true) : false;
 		}
 
+
+
 		/**
 		 * @brief Gets the component that belongs to the entity
 		 * @param entity An entity identifier, either valid or not
@@ -292,6 +308,43 @@ namespace Tempest
 		template<typename Pred>
 		void sort(Pred pred = std::less<Entity>()) {/*TODO*/ }
 
+
+
+		/**
+		 * @brief Serializes the sparse set into a json file at given path
+		 * @param components_folder Folder to save the json file
+		 * @return Success state of the saving
+		 */
+		bool serialize(const tpath& folder) const override
+		{
+			if (!entityList.size())
+				return false;
+
+			Writer writer;
+			writer.StartObject();
+			writer.StartMeta();
+			writer.Member("Type", sparse_set::type_info);
+			writer.EndMeta();
+
+			writer.StartArray("Components");
+			for (size_t i = 0; i < entityList.size(); ++i)
+			{
+				writer.StartObject();
+				writer.Member("Entity", entityList[i]);
+				using namespace Components;
+				auto c = componentList[i];
+				writer.Member("Component", c);
+				writer.EndObject();
+			}
+
+			writer.EndArray();
+			
+			writer.EndObject();
+			Serializer serializer;
+			serializer.SaveJson(folder / (sparse_set::type_info + ".json"), writer.GetString());
+
+			return true;
+		}
 
 	private:
 		dense_el entityList;
