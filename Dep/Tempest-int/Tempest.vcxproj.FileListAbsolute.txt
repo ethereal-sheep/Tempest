@@ -1,2 +1,0 @@
-S:\Development\Tempest\Dep\Tempest\Tempest.pdb
-S:\Development\Tempest\Dep\Tempest-int\Tempest.pdb

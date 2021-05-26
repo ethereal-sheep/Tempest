@@ -174,13 +174,19 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="src\Application\AppHandler.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Application\Context.cpp" />
     <ClCompile Include="src\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\Audio\AudioManager.cpp" />
     <ClCompile Include="src\ECS\Components\Components.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\BufferLayout.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Renderer.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Shader.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Texture.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\VertexArray.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\MemoryObject.cpp" />
@@ -191,8 +197,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MemoryManager\MemoryManager\Include\test_resource.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="src\Application\AppHandler.h" />
     <ClInclude Include="src\Application\Application.h" />
     <ClInclude Include="src\Application\Context.h" />
@@ -210,6 +214,14 @@
     <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
     <ClInclude Include="src\ECS\Util\type_traits.h" />
+    <ClInclude Include="src\Graphics\OpenGL\BufferLayout.h" />
+    <ClInclude Include="src\Graphics\OpenGL\IndexBuffer.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Shader.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Texture.h" />
+    <ClInclude Include="src\Graphics\OpenGL\VertexArray.h" />
+    <ClInclude Include="src\Graphics\OpenGL\VertexBuffer.h" />
+    <ClInclude Include="src\GSM.h" />
     <ClInclude Include="src\Instance\Instance.h" />
     <ClInclude Include="src\Logger\InstanceLogger.h" />
     <ClInclude Include="src\Logger\Log.h" />

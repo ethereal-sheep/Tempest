@@ -351,3 +351,6 @@ MigrationBackup/
 *.tlog
 
 .vscode
+
+Dep/Tempest/**
+Dep/Tempest-int/**
