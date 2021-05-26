@@ -66,7 +66,7 @@ namespace Tempest
 		s_leaked_blocks += blocks_outstanding();
 
 		// Reclaim blocks that would have been leaked
-		for (auto& record : m_blocks)
+		for (auto& [ptr, record] : m_blocks)
 		{
 			// logging here
 			AlignedHeader* head = static_cast<AlignedHeader*>(record.m_ptr) - 1;
@@ -99,9 +99,12 @@ namespace Tempest
 
 		head->m_object.m_magic_number = allocatedMemoryPattern;
 
+		// memory has been assigned previously
+		if(m_blocks.count(user))
+			throw std::bad_alloc();
 
 		// record the allocation
-		m_blocks.push_back(allocation_rec{ user, m_blocks_allocated++, bytes, alignment });
+		m_blocks.emplace(user, allocation_rec{ user, m_blocks_allocated++, bytes, alignment });
 
 		// increments
 		m_bytes_allocated += bytes;
@@ -136,17 +139,13 @@ namespace Tempest
 		AlignedHeader* head = static_cast<AlignedHeader*>(ptr) - 1;
 
 		// find allocation record of ptr
-		auto i = std::find_if(m_blocks.begin(), m_blocks.end(),
-			[ptr](const allocation_rec& r)
-			{
-				return r.m_ptr == ptr;
-			});
+		auto i = m_blocks.find(ptr);
 
 		if (i == m_blocks.end())
 			throw std::invalid_argument("Deallocating invalid pointer"); // check if block exist
-		if (i->m_bytes != bytes)
+		if (i->second.m_bytes != bytes)
 			throw std::invalid_argument("Deallocating pointer size mismatch");
-		if (i->m_alignment != alignment)
+		if (i->second.m_alignment != alignment)
 			throw std::invalid_argument("Deallocating pointer alignment mismatch");
 
 		bool miscError = false;
@@ -182,7 +181,7 @@ namespace Tempest
 			if (!underrunBy)
 			{
 				// Check the padding after the segment.
-				std::byte* tail = static_cast<std::byte*>(ptr) + i->m_bytes;
+				std::byte* tail = static_cast<std::byte*>(ptr) + i->second.m_bytes;
 				pcBegin = tail;
 				pcEnd = tail + paddingSize;
 				for (std::byte* pc = pcBegin; pc < pcEnd; ++pc)
@@ -223,7 +222,7 @@ namespace Tempest
 		if (m_verbose_flag)
 		{
 			//logging
-			std::cout << m_name << "[" << (i->m_index) << "]"
+			std::cout << m_name << "[" << (i->second.m_index) << "]"
 				<< ": Deallocating " << bytes << " bytes at 0x" << ptr << std::endl;
 		}
 
@@ -235,7 +234,7 @@ namespace Tempest
 		m_last_deallocated_alignment = alignment;
 		m_last_deallocated_address = ptr;
 
-		m_upstream->deallocate(head, sizeof(AlignedHeader) + i->m_bytes + paddingSize, i->m_alignment);
+		m_upstream->deallocate(head, sizeof(AlignedHeader) + i->second.m_bytes + paddingSize, i->second.m_alignment);
 		m_blocks.erase(i);
 		m_bytes_outstanding -= bytes;
 	}

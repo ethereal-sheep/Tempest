@@ -124,6 +124,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,7 +140,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\fmod;$(SolutionDir)Dep\glew;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -165,7 +169,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\glew;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -176,12 +181,10 @@
     <ClCompile Include="src\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\Audio\AudioManager.cpp" />
     <ClCompile Include="src\ECS\Components\Components.cpp" />
+    <ClCompile Include="src\Log\Logger.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\Memory\Resource\debug_resource.cpp" />
     <ClCompile Include="src\Memory\Resource\malloc_resource.cpp" />
-    <ClCompile Include="src\stdafx.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="src\Serializer\Reader.cpp" />
     <ClCompile Include="src\Serializer\Writer.cpp" />
   </ItemGroup>
@@ -206,7 +209,8 @@
     <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
     <ClInclude Include="src\ECS\Util\type_traits.h" />
-    <ClInclude Include="src\GSM.h" />
+    <ClInclude Include="src\Log\Log.h" />
+    <ClInclude Include="src\Log\Logger.h" />
     <ClInclude Include="src\Memory.h" />
     <ClInclude Include="src\Memory\MemoryManager.h" />
     <ClInclude Include="src\Memory\Resource.h" />
@@ -235,7 +239,6 @@
     <ClInclude Include="src\Math\elsVector3.h" />
     <ClInclude Include="src\Math\elsVector4.h" />
     <ClInclude Include="src\Math\elsVectorGeneric.h" />
-    <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\Util.h" />
     <ClInclude Include="src\Util\magic_enum.hpp" />
     <ClInclude Include="src\Util\Serializer\Public\Reader.h" />

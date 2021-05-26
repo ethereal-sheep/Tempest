@@ -7,7 +7,7 @@
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
-#include "stdafx.h"
+#include "Core.h"
 #include "AudioEngine.h"
 #include "fmod/fmod.hpp"
 

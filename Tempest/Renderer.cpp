@@ -1,3 +1,4 @@
+#include "TMath.h"
 #include "Renderer.h"
 
 namespace Tempest

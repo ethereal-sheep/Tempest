@@ -1,72 +1,4 @@
 
-/******************************************************************************
- * class    MemoryManager
- *
- * Done
- * 1. Basic Memory Statistics
- * 		- Current allocated bytes
- * 		- Current allocated blocks
- * 		- total allocated bytes
- * 		- total dellcated bytes
- * 2. Basic Memory Leak checks
- *      - address and number of bytes leaked
- * 3. Basic Settings
- * 		- Set Manager Instance name
- * 		- Set verbose mode
- * 4. Basic History
- * 		- last allocation
- *      	- number of bytes
- *      	- address
- *      	- alignment
- * 		- last deallocation
- *      	- number of bytes
- *      	- address
- *      	- alignment
- * 5. Basic check for corrupted memory
- * 		- buffer overrun/underrun
- *
- *
- * Backlog Functionality
- * 1. Defragmentation X
- * 2. Setting Policy(?) X // changing default memory resource in runtime
- *                        // can cause errors. customizing an allocation
- *                        // strategy should be the approach
- *
- *                        // memory resource should differ for both
- *                        // debugging(within editor) and game (release)
- *      - multiple allocation pools
- *          - Pool Allocator
- *          - Monotonic Allocator
- *
- * 3. Check Memory leaks
- *          - location in code X
- *
- * 5. throw exceptions(?) X (debug break)
- * 9. setting allocation limit X ()
- * 10.
- *
- * Notes:
- * Current solution is slower than test_resource impl due to the find in
- * deallocate. Storing meta data in header might be a better solution but
- * still requires a record storing mechanism for memory leaks
- *
- * Alternatively can use a set to store the record. But records will no longer
- * be indexed.
- *
- * Decision on overloading global new/delete to use MemMan
- * - overloading global new/delete means all allocations passes through MemMan
- * - Good to see every single allocation
- * - Good for checking every single aspect of Cardinal
- * - Will be slower due to additional checks per alloc/deallocation
- * - Memory Footprint will be larger due to padding of Memory Blocks
- *
- * Or only use MemMan for specific containers that concern game
- *  (entities, prefabs, particles,...)
- * - Slightly faster as only game related stuff will use it
- * - Leaks caused by non-game stuff will not be caught
- *   (editor, UI)
- *
-******************************************************************************/
 #pragma once
 #include "..\..\Core.h"
 
@@ -169,7 +101,10 @@ namespace Tempest
 		std::atomic_size_t m_misc_errors{ 0 };
 		std::atomic_size_t m_bad_deallocations{ 0 };
 
-		std::pmr::vector<allocation_rec> m_blocks;
+		// deprecated
+		//std::pmr::vector<allocation_rec> m_blocks;
+
+		std::pmr::unordered_map<void*, allocation_rec, std::hash<void*>> m_blocks;
 		m_resource* m_upstream; // the upstream memory resource
 
 		static std::atomic_size_t s_leaked_bytes;

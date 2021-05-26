@@ -12,10 +12,21 @@
 #include <iostream>
 #include <thread>
 
-
+#include "Log/Log.h"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/async.h"
+#include "spdlog/sinks/msvc_sink.h"
+#include "spdlog/async.h"
+#include "spdlog/sinks/dist_sink.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 using namespace std;
 using namespace Tempest;
+
+
+
 
 
 void test1()
@@ -27,10 +38,6 @@ void test1()
 		Tempest::ECS ecs(mr);
 		// init
 		{
-			/*ecs.register_component<tc::Transform>();
-			ecs.register_component<tc::Meta>();
-			ecs.register_component<tc::Relationship>();*/
-
 			// create 10 entities
 			int entity_num = 10000;
 
@@ -53,6 +60,14 @@ void test1()
 			auto change_member2 = [&](auto id) {
 				if (auto eg = ecs.get<tc::Example>(id))
 					++eg->member2;
+			};
+			auto change_member3 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member3;
+			};
+			auto change_member4 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member4;
 			};
 
 			auto change_name1 = [&](auto id) {
@@ -128,6 +143,8 @@ void test1()
 				else
 					cout << "INVALID" << endl;
 			};
+
+
 			std::pmr::vector<int> c(1, 0, mr);
 			auto count = [&](auto) {
 				++c[0];
@@ -248,7 +265,6 @@ void test1()
 	mm.reclaim();
 }
 
-
 void test2()
 {
 	tmem::MemoryManager mm;
@@ -360,7 +376,152 @@ void test3()
 	mm.reclaim();
 }
 
+void test4()
+{
+	tmem::MemoryManager mm;
+	m_resource* mr = mm.request({ false, tmem::ResourceStrategy::MONOTONIC, 1048576 });
+
+	{
+		Tempest::ECS ecs(mr);
+		// init
+		{
+			// create 10 entities
+			int entity_num = MAX_ENTITY-1;
+			for (int i = 0; i < entity_num; ++i)
+			{
+				auto id = ecs.create();
+				ecs.emplace<tc::Example>(id);
+			}
+		}
+
+		// gameloop
+
+		{
+
+			auto change_member1 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member1;
+			};
+			auto change_member2 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member2;
+			};
+			auto change_member3 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member3;
+			};
+			auto change_member4 = [&](auto id) {
+				if (auto eg = ecs.get<tc::Example>(id))
+					++eg->member4;
+			};
+
+			auto example_view = ecs.view<tc::Example>();
+
+			auto change1 = [&]() {
+				for (auto entity : example_view)
+					change_member1(entity);
+			};
+			auto change2 = [&]() {
+				for (auto entity : example_view)
+					change_member2(entity);
+			};
+			auto change3 = [&]() {
+				for (auto entity : example_view)
+					change_member3(entity);
+			};
+			auto change4 = [&]() {
+				for (auto entity : example_view)
+					change_member4(entity);
+			};
+
+			const int thread_count = 4;
+			std::thread threads[thread_count];
+
+			int t = 1;
+			auto duration = std::chrono::high_resolution_clock().now().time_since_epoch();
+			while (t--)
+			{
+				// for test aggregation
+				/*for (auto entity : example_view)
+				{
+					change_member1(entity);
+					change_member2(entity);
+					change_member3(entity);
+					change_member4(entity);
+				}*/
+
+				// for test exclusive
+				/*for (auto entity : example_view)
+					change_member1(entity);
+				for (auto entity : example_view)
+					change_member2(entity);
+				for (auto entity : example_view)
+					change_member3(entity);
+				for (auto entity : example_view)
+					change_member4(entity);*/
+
+				// dynamic system
+				/*ts::dynamic_system{}(example_view, change_member1);
+				ts::dynamic_system{}(example_view, change_member2);
+				ts::dynamic_system{}(example_view, change_member3);
+				ts::dynamic_system{}(example_view, change_member4);*/
+
+				// lambda
+				/*change1();
+				change2();
+				change3();
+				change4();*/
+
+				// multithreading dynamic system
+				/*threads[0] = std::thread(ts::dynamic_system{}, example_view, change_member1);
+				threads[1] = std::thread(ts::dynamic_system{}, example_view, change_member2);
+				threads[2] = std::thread(ts::dynamic_system{}, example_view, change_member3);
+				threads[3] = std::thread(ts::dynamic_system{}, example_view, change_member4);
+				for (int i = 0; i < thread_count; ++i)
+					threads[i].join();*/
+
+
+				// multithreading lambda
+				threads[0] = std::thread(change1);
+				threads[1] = std::thread(change2);
+				threads[2] = std::thread(change3);
+				threads[3] = std::thread(change4);
+				for (int i = 0; i < thread_count; ++i)
+					threads[i].join();
+
+
+			}
+			cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock().now().time_since_epoch() - duration).count() << endl;
+			cout << thread::hardware_concurrency() << endl;
+		}
+
+		{
+			// exit
+		}
+	}
+
+	if (auto debug_mr = mm.get_debug_resource())
+		output_debug_mr(debug_mr);
+
+	mm.reclaim();
+}
+
 int main()
 {
-	test3();
+	spdlog::init_thread_pool(1024, 2);
+
+	auto dist_sink = make_shared<spdlog::sinks::dist_sink_st>();
+	auto sink1 = make_shared<spdlog::sinks::stdout_color_sink_mt>();
+	auto sink2 = make_shared<spdlog::sinks::basic_file_sink_mt>("mylog.log");
+
+	std::vector<spdlog::sink_ptr> sinks;
+	sinks.push_back(sink1);
+	sinks.push_back(sink2);
+
+	auto async_file = spdlog::create_async<spdlog::sinks::dist_sink_mt>("Instance 1", sinks);
+	spdlog::set_pattern("[%Y-%m-%d %T][%n][%^%l%$] %v");
+	spdlog::set_level(spdlog::level::trace);
+	async_file->info("123");
+	async_file->info("123"); 
+	async_file->flush();
 }

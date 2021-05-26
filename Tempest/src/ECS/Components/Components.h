@@ -115,15 +115,19 @@ namespace Tempest
 				ar.StartObject();
 				ar.Member("Member1", component.member1);
 				ar.Member("Member2", component.member2);
+				ar.Member("Member3", component.member3);
+				ar.Member("Member4", component.member4);
 				return ar.EndObject();
 			}
 			int member1;
 			int member2;
+			int member3;
+			int member4;
 		};
 
 		struct Transform
 		{
-			static string get_type() { return "Transform"; }
+			static const char* get_type() { return "Transform"; }
 
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, Transform& component)
@@ -142,7 +146,7 @@ namespace Tempest
 
 		struct Meta
 		{
-			static string get_type() { return "Meta"; }
+			static const char* get_type() { return "Meta"; }
 
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, Meta& component)

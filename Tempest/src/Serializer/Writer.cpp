@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "Core.h"
 #include "Writer.h"
 #include "rapidjson/prettyWriter.h"
 #include "rapidjson/stringbuffer.h"
