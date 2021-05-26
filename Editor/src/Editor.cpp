@@ -23,7 +23,7 @@ int main()
 	LOG("Initializing Tempest");
 
 	
-	Instance i;
+	Instance i(MemoryStrategy{DebugFlag::DEBUG_STRICT});
 
 
 }
