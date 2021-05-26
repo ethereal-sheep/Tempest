@@ -7,6 +7,8 @@
 #include <vec4.hpp>
 #include <mat4x4.hpp>
 #include <gtc\type_ptr.hpp>
+#include "Graphics/OpenGL/IndexBuffer.h"
+#include "Graphics/OpenGL/VertexArray.h"
 
 namespace Tempest
 {
@@ -78,18 +80,18 @@ namespace Tempest
 		ALWAYS
 	};
 
-	struct IndexBuffer
-	{
-		unsigned int GetCount() { return 0; }
-		void Bind() {}
-		void Unbind() {}
-	};
-
-	struct VertexArray
-	{
-		void Bind() {}
-		void Unbind() {}
-	};
+	//struct IndexBuffer
+	//{
+	//	unsigned int GetCount() { return 0; }
+	//	void Bind() {}
+	//	void Unbind() {}
+	//};
+	//
+	//struct VertexArray
+	//{
+	//	void Bind() {}
+	//	void Unbind() {}
+	//};
 
 	class Renderer
 	{
