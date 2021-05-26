@@ -80,7 +80,7 @@ namespace Tempest
 			if (component_exist<Component>()) return;
 				// warning here
 
-			component_pools.insert({ t_hash<Component>(), make_ptr<sparse_set_t<Component>>(memory_resource)});
+			component_pools.insert({ t_hash<Component>(), make_uptr<sparse_set_t<Component>>(memory_resource)});
 		}
 
 		/**
@@ -94,7 +94,7 @@ namespace Tempest
 		{
 			// check if component pool exist
 			if (!component_exist<Component>())
-				return false; // warn here
+				return false;
 
 			return get_sparse<Component>()->contains(entity);
 		}
@@ -244,7 +244,7 @@ namespace Tempest
 		[[nodiscard]] runtime_view view(exclude_t<Exclude...> = {})
 		{
 			// check if types are unique
-			unique_types<Components..., Exclude...>();
+			[[maybe_unused]] unique_types<Components..., Exclude...> useless;
 			static_assert(type_list<Components...>::size != 0, "No empty set");
 
 			tvector<size_t> inc, exc;
@@ -302,7 +302,7 @@ namespace Tempest
 		[[nodiscard]] Entity clone(Entity entity, exclude_t<Exclude...> = {})
 		{
 			// make sure unique
-			unique_types<Exclude...>();
+			[[maybe_unused]] unique_types<Exclude...> useless;
 			// create new entity
 			Entity new_e = entity_registry.create();
 			// package exclude components

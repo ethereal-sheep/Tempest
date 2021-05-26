@@ -19,13 +19,15 @@ namespace Tempest
 		debug_resource& operator=(const debug_resource&) = delete;
 
 		// get upstream resource
-		m_resource* upstream_resource() const { return m_upstream; }
+		const m_resource* upstream_resource() const { return m_upstream; }
 
 		// get/set for meta data
 		std::string get_name() const noexcept { return m_name; }
 		void set_name(const std::string& name) noexcept { m_name = name; }
 		bool is_verbose() const noexcept { return m_verbose_flag; }
+		bool is_strict() const noexcept { return m_strict_flag; }
 		void set_verbose(bool is_verbose) noexcept { m_verbose_flag = is_verbose; }
+		void set_strict(bool is_strict) noexcept { m_strict_flag = is_strict; }
 		bool is_no_abort() const noexcept { return m_no_abort_flag; }
 		void set_no_abort(bool no_abort) noexcept { m_no_abort_flag = no_abort; }
 
@@ -80,6 +82,7 @@ namespace Tempest
 
 		// flags
 		std::atomic_int m_verbose_flag{ false };
+		std::atomic_int m_strict_flag{ false };
 		std::atomic_int m_no_abort_flag{ false };
 
 		// statistics

@@ -27,7 +27,6 @@ namespace Tempest
 			
 			return true;
 		}
-
 		//CDN_CORE_WARN("Reader::Member - Unable to find member {0} when loading {1}", identifier, typeid(TData).name());
 		return false;
 	}

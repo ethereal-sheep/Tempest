@@ -1,6 +1,6 @@
 #include "MemoryManager.h"
 
-namespace Tempest::Memory
+namespace Tempest
 {
 	[[nodiscard]] const MemoryStrategy& MemoryManager::current_strategy() const
 	{
@@ -34,13 +34,15 @@ namespace Tempest::Memory
 		// set active to true
 		active_flag = true;
 
-		debug_flag = strat.debug;
+		debug_flag = strat.debug != DebugFlag::NONE;
 		switch (strat.resource_strategy)
 		{
 		case ResourceStrategy::NEW_DELETE:
 			if (debug_flag)
 			{
-				debug_memory_wrapper = make_ptr<debug_resource>("Debug New/Delete Memory", std::pmr::new_delete_resource());
+				debug_memory_wrapper = make_uptr<debug_resource>("Debug New/Delete Memory", std::pmr::new_delete_resource());
+				debug_memory_wrapper->set_verbose(strat.debug == DebugFlag::DEBUG_VERBOSE);
+				debug_memory_wrapper->set_strict(strat.debug == DebugFlag::DEBUG_STRICT);
 				return debug_memory_wrapper.get();
 			}
 			else
@@ -48,34 +50,42 @@ namespace Tempest::Memory
 		case ResourceStrategy::MALLOC:
 			if (debug_flag)
 			{
-				debug_memory_wrapper = make_ptr<debug_resource>("Debug Malloc Memory", malloc_resource());
+				debug_memory_wrapper = make_uptr<debug_resource>("Debug Malloc Memory", malloc_resource());
+				debug_memory_wrapper->set_verbose(strat.debug == DebugFlag::DEBUG_VERBOSE);
+				debug_memory_wrapper->set_strict(strat.debug == DebugFlag::DEBUG_STRICT);
 				return debug_memory_wrapper.get();
 			}
 			else
 				return malloc_resource();
 		case ResourceStrategy::MONOTONIC:
-			memory = make_ptr<std::pmr::monotonic_buffer_resource>(strat.block_size, std::pmr::new_delete_resource());
+			memory = make_uptr<std::pmr::monotonic_buffer_resource>(strat.block_size, std::pmr::new_delete_resource());
 			if (debug_flag)
 			{
-				debug_memory_wrapper = make_ptr<debug_resource>("Debug Monotonic Memory", memory.get());
+				debug_memory_wrapper = make_uptr<debug_resource>("Debug Monotonic Memory", memory.get());
+				debug_memory_wrapper->set_verbose(strat.debug == DebugFlag::DEBUG_VERBOSE);
+				debug_memory_wrapper->set_strict(strat.debug == DebugFlag::DEBUG_STRICT);
 				return debug_memory_wrapper.get();
 			}
 			else
 				return memory.get();
 		case ResourceStrategy::UNSYNC_POOL:
-			memory = make_ptr<std::pmr::unsynchronized_pool_resource>();
+			memory = make_uptr<std::pmr::unsynchronized_pool_resource>();
 			if (debug_flag)
 			{
-				debug_memory_wrapper = make_ptr<debug_resource>("Debug Unsynchronized Pool Memory", memory.get());
+				debug_memory_wrapper = make_uptr<debug_resource>("Debug Unsynchronized Pool Memory", memory.get());
+				debug_memory_wrapper->set_verbose(strat.debug == DebugFlag::DEBUG_VERBOSE);
+				debug_memory_wrapper->set_strict(strat.debug == DebugFlag::DEBUG_STRICT);
 				return debug_memory_wrapper.get();
 			}
 			else
 				return memory.get();
 		case ResourceStrategy::SYNC_POOL:
-			memory = make_ptr<std::pmr::synchronized_pool_resource>();
+			memory = make_uptr<std::pmr::synchronized_pool_resource>();
 			if (debug_flag)
 			{
-				debug_memory_wrapper = make_ptr<debug_resource>("Debug Synchronized Pool Memory", memory.get());
+				debug_memory_wrapper = make_uptr<debug_resource>("Debug Synchronized Pool Memory", memory.get());
+				debug_memory_wrapper->set_verbose(strat.debug == DebugFlag::DEBUG_VERBOSE);
+				debug_memory_wrapper->set_strict(strat.debug == DebugFlag::DEBUG_STRICT);
 				return debug_memory_wrapper.get();
 			}
 			else
@@ -84,7 +94,9 @@ namespace Tempest::Memory
 		case ResourceStrategy::DEFAULT:
 			if (debug_flag)
 			{
-				debug_memory_wrapper = make_ptr<debug_resource>("Debug Default Memory", std::pmr::get_default_resource());
+				debug_memory_wrapper = make_uptr<debug_resource>("Debug Default Memory", std::pmr::get_default_resource());
+				debug_memory_wrapper->set_verbose(strat.debug == DebugFlag::DEBUG_VERBOSE);
+				debug_memory_wrapper->set_strict(strat.debug == DebugFlag::DEBUG_STRICT);
 				return debug_memory_wrapper.get();
 			}
 			else

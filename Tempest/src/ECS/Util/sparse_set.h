@@ -2,6 +2,7 @@
 
 #include "../../Memory.h"
 #include "../Entity.h"
+#include "ECS/Components/Components.h"
 #include "Util.h"
 
 namespace Tempest

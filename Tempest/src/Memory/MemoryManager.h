@@ -2,24 +2,10 @@
 #pragma once
 #include "../Core.h"
 #include "Resource.h"
+#include "MemoryObject.h"
 
-namespace Tempest::Memory
+namespace Tempest
 {
-	enum class ResourceStrategy
-	{
-		DEFAULT, NEW_DELETE, MALLOC, MONOTONIC, UNSYNC_POOL, SYNC_POOL
-	};
-	struct MemoryStrategy
-	{
-		bool debug = false;
-		ResourceStrategy resource_strategy;
-		size_t block_size;
-
-		MemoryStrategy(bool debug_f = false, ResourceStrategy strategy = ResourceStrategy::DEFAULT, size_t block_s = (size_t)1e6) 
-			: debug(debug_f), resource_strategy(strategy), block_size(block_s) {}
-
-	};
-
 	class MemoryManager
 	{
 
@@ -48,5 +34,3 @@ namespace Tempest::Memory
 
 
 }
-
-namespace tmem = Tempest::Memory;

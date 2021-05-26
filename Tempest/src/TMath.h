@@ -41,8 +41,6 @@ namespace Tempest
 		return els::rad_to_deg(radians);
 	}
 
-
-
 	template <typename T>
 	glm::vec3 to_glvec2(const T& v)
 	{

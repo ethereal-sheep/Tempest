@@ -51,7 +51,10 @@
     <ClCompile Include="src\Serializer\Writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Log\Logger.cpp">
+    <ClCompile Include="src\Logger\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Memory\MemoryObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,10 +224,22 @@
     <ClInclude Include="src\Serializer\Serializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Log\Log.h">
+    <ClInclude Include="src\Logger\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Log\Logger.h">
+    <ClInclude Include="src\Logger\Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logger\InstanceLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Instance\Instance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Memory\Resource\wrapper_resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Memory\MemoryObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

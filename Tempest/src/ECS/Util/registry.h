@@ -23,7 +23,8 @@ namespace Tempest
 		 */
         registry(m_resource* mem = std::pmr::get_default_resource()) : entities(mem), available_pool(mem)
         {
-            for (int i = 1; i < MAX_ENTITY; ++i) available_pool.push_back(i);
+            available_pool.reserve(MAX_ENTITY);
+            for (int i = MAX_ENTITY; i > 0 ; --i) available_pool.push_back(i);
         }
 
 		/**
@@ -61,9 +62,9 @@ namespace Tempest
             // assert here
             // assert(available() != 0)
 
-            auto id = available_pool.front();
+            auto id = available_pool.back();
             entities.insert(id);
-            available_pool.pop_front();
+            available_pool.pop_back();
             return id;
         }
 
@@ -99,7 +100,7 @@ namespace Tempest
         {
             entities.clear();
             available_pool.clear();
-            for (int i = 1; i < MAX_ENTITY; ++i) available_pool.push_back(i);
+            for (int i = MAX_ENTITY; i > 0; --i) available_pool.push_back(i);
         }
         
 		/**
@@ -133,7 +134,7 @@ namespace Tempest
         void clean()
         {
             available_pool.clear();
-            for (int i = 1; i < MAX_ENTITY; ++i) 
+            for (int i = MAX_ENTITY; i > 0; --i) 
                 if(!entities.count(i))
                     available_pool.push_back(i);
         }
@@ -141,7 +142,7 @@ namespace Tempest
     private:
 
         tset<Entity> entities;
-        tqueue<Entity> available_pool;
+        EnVector available_pool;
 
     };
 }

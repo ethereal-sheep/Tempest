@@ -25,8 +25,12 @@ namespace Tempest
 
 
 	template <typename T, typename ... Args>
-	constexpr tuptr<T> make_ptr(Args&& ... args) {
+	constexpr tuptr<T> make_uptr(Args&& ... args) {
 		return std::make_unique<T>(std::forward<Args>(args)...);
+	}
+	template <typename T, typename ... Args>
+	constexpr tsptr<T> make_sptr(Args&& ... args) {
+		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 
 	template <typename T>

@@ -1,5 +1,6 @@
 
 #include "debug_resource.h"
+#include "Util.h"
 
 namespace Tempest
 {
@@ -71,11 +72,38 @@ namespace Tempest
 			// logging here
 			AlignedHeader* head = static_cast<AlignedHeader*>(record.m_ptr) - 1;
 
-			std::cout << "*** Memory Leak at 0x" << record.m_ptr << ": " << record.m_bytes << " bytes leaked ***" <<
-				std::endl;
+			/*std::cout << "*** Memory Leak at 0x" <<  << ": " <<  << " bytes leaked ***" <<
+				std::endl;*/
+			LOG_WARN("Memory Leak at {0}: {1} bytes leaked", record.m_ptr, record.m_bytes);
+
 			s_leaked_bytes += record.m_bytes;
 			m_upstream->deallocate(head, sizeof(AlignedHeader) + record.m_bytes + paddingSize,
 				record.m_alignment);
+		}
+
+		if (m_strict_flag || m_verbose_flag)
+		{
+			LOG_INFO("Resource: {}", m_name);
+			LOG_INFO("");
+			LOG_INFO("History");
+			LOG_INFO(" Total bytes allocated:             {}", bytes_allocated());
+			LOG_INFO(" Total bytes deallocated:           {}", bytes_deallocated());
+			LOG_INFO(" Highest memory usage:              {}", bytes_highwater());
+			LOG_INFO(" Outstanding Bytes:                 {}", bytes_outstanding());
+			LOG_INFO(" Outstanding Blocks:                {}", blocks_outstanding());
+			LOG_INFO("");
+			LOG_INFO("Statistics");
+			LOG_INFO(" Last allocated address:            {}", last_allocated_address());
+			LOG_INFO(" Last allocated bytes:              {}", last_allocated_num_bytes());
+			LOG_INFO(" Last allocated alignment:          {}", last_allocated_alignment());
+			LOG_INFO(" Last deallocated address:          {}", last_deallocated_address());
+			LOG_INFO(" Last deallocated bytes:            {}", last_deallocated_num_bytes());
+			LOG_INFO(" Last deallocated alignment:        {}", last_deallocated_alignment());
+			LOG_INFO("");
+			LOG_INFO("Errors");
+			LOG_INFO(" Misc Errors:                       {}", misc_errors());
+			LOG_INFO(" Bad Deallocations:                 {}", bad_deallocations());
+			LOG_INFO("");
 		}
 	}
 
@@ -120,8 +148,14 @@ namespace Tempest
 		if (m_verbose_flag)
 		{
 			//logging ()
-			std::cout << m_name << "[" << (m_blocks_allocated - 1) << "]"
-				<< ": Allocating " << bytes << " bytes at 0x" << user << std::endl;
+			/*std::cout << m_name << "[" <<  << "]"
+				<< ": Allocating " << bytes << " bytes at 0x" << user << std::endl;*/
+
+			LOG_INFO("{0}[{1}]: Allocating {2} bytes at {3}", 
+				m_name, 
+				(m_blocks_allocated - 1), 
+				bytes, 
+				user);
 		}
 
 		return user;
@@ -202,28 +236,45 @@ namespace Tempest
 			// doesn't currently work as a double delete is at basic checking caught earlier 
 			if (deallocatedMemoryPattern == head->m_object.m_magic_number)
 			{
-				std::cout << "*** Deallocating already deallocated memory at " << ptr << " ***" << std::endl;
+				//std::cout << "*** Deallocating already deallocated memory at " << ptr << " ***" << std::endl;
+				LOG_WARN("Deallocating already deallocated memory at {0}", ptr);
 
 				++m_bad_deallocations;
 				return;
 			}
-			std::cout << "*** Corrupted Memory at 0x" << ptr << ": Invalid Magic Number "
-					<< std::hex << head->m_object.m_magic_number << " ***" << std::endl;
+
+			/*std::cout << "*** Corrupted Memory at 0x" << ptr << ": Invalid Magic Number "
+					<< std::hex << head->m_object.m_magic_number << " ***" << std::endl;*/
+
+			LOG_WARN("Corrupted Memory at {0}: Invalid Magic Number {1:x}", 
+				ptr, 
+				head->m_object.m_magic_number);
 		}
 		if (overrunBy || underrunBy)
 		{
 			++m_misc_errors;
 			//logging
-			std::cout << "*** Corrupted Memory at 0x" << ptr << ": Buffer " <<
+			/*std::cout << "*** Corrupted Memory at 0x" << ptr << ": Buffer " <<
 				((underrunBy) ? "underrun" : "overrun") << " by "
-				<< overrunBy + underrunBy << " ***" << std::endl;
+				<< overrunBy + underrunBy << " ***" << std::endl;*/
+
+			LOG_WARN("Corrupted Memory at {0}: Buffer {1} by {2}", 
+				ptr, 
+				((underrunBy) ? "underrun" : "overrun"), 
+				overrunBy + underrunBy);
 		}
 
 		if (m_verbose_flag)
 		{
 			//logging
-			std::cout << m_name << "[" << (i->second.m_index) << "]"
-				<< ": Deallocating " << bytes << " bytes at 0x" << ptr << std::endl;
+			/*std::cout << m_name << "[" << (i->second.m_index) << "]"
+				<< ": Deallocating " << bytes << " bytes at 0x" << ptr << std::endl;*/
+			
+			LOG_INFO("{0}[{1}]: Deallocating {2} bytes at {3}",
+				m_name,
+				(i->second.m_index),
+				bytes,
+				ptr);
 		}
 
 		// set as dead

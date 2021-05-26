@@ -16,7 +16,7 @@ namespace Tempest
 		template <typename ... Args>
 		static void Register(Args&& ... args)
 		{
-			service = make_ptr<T>(std::forward<Args>(args)...);
+			service = make_uptr<T>(std::forward<Args>(args)...);
 		}
 
 		static void Release()
