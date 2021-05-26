@@ -43,7 +43,7 @@ namespace Tempest
 		for (const auto& attrib : layout)
 		{
 			glEnableVertexArrayAttrib(m_ID, m_AttributeIndex);
-			glVertexArrayVertexBuffer(m_ID, m_AttributeIndex, vbo.GetID(), attrib.offset * n	Vertices, attrib.stride);
+			glVertexArrayVertexBuffer(m_ID, m_AttributeIndex, vbo.GetID(), attrib.offset * nVertices, attrib.stride);
 			switch (GLType(attrib.type))
 			{
 			case GL_FLOAT:
