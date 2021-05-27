@@ -83,27 +83,28 @@ namespace Tempest
 
 		if (m_strict_flag || m_verbose_flag)
 		{
+			LOG_INFO("=====================================");
 			LOG_INFO("Resource: {}", m_name);
-			LOG_INFO("");
-			LOG_INFO("-History------");
+			LOG_INFO("=====================================");
+			LOG_INFO("-- History ------");
 			LOG_INFO(" Total bytes allocated:        {}", bytes_allocated());
 			LOG_INFO(" Total bytes deallocated:      {}", bytes_deallocated());
 			LOG_INFO(" Highest memory usage:         {}", bytes_highwater());
 			LOG_INFO(" Outstanding Bytes:            {}", bytes_outstanding());
 			LOG_INFO(" Outstanding Blocks:           {}", blocks_outstanding());
-			LOG_INFO("");						     
-			LOG_INFO("-Statistics---");			     
+			LOG_INFO("=====================================");						     
+			LOG_INFO("-- Statistics ---");			     
 			LOG_INFO(" Last allocated address:       {}", last_allocated_address());
 			LOG_INFO(" Last allocated bytes:         {}", last_allocated_num_bytes());
 			LOG_INFO(" Last allocated alignment:     {}", last_allocated_alignment());
 			LOG_INFO(" Last deallocated address:     {}", last_deallocated_address());
 			LOG_INFO(" Last deallocated bytes:       {}", last_deallocated_num_bytes());
 			LOG_INFO(" Last deallocated alignment:   {}", last_deallocated_alignment());
-			LOG_INFO("");						     
-			LOG_INFO("-Errors-------");			     
+			LOG_INFO("=====================================");						     
+			LOG_INFO("-- Errors -------");			     
 			LOG_INFO(" Misc Errors:                  {}", misc_errors());
 			LOG_INFO(" Bad Deallocations:            {}", bad_deallocations());
-			LOG_INFO("");
+			LOG_INFO("=====================================");
 		}
 	}
 

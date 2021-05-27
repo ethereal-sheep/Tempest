@@ -61,7 +61,10 @@ namespace Tempest
 		 * @param mem Pointer to a polymorphic memory resource; default gets
 		 * the default memory resource
 		 */
-		ECS(m_resource* mem = std::pmr::get_default_resource()) : memory_resource(mem), component_pools(mem), entity_registry(mem){}
+		ECS(m_resource* mem = std::pmr::get_default_resource()) : 
+			memory_resource(mem),
+			entity_registry(mem),
+			component_pools(mem) {}
 
 		/**
 		 * @brief Registers a component to the ECS
@@ -433,9 +436,8 @@ namespace Tempest
 	private:
 
 		m_resource* memory_resource;
-
-		tmap<size_t, tuptr<sparse_set>> component_pools;
 		registry entity_registry;
+		tmap<size_t, tuptr<sparse_set>> component_pools;
 	};
 
 
