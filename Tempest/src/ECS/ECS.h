@@ -15,11 +15,11 @@ namespace Tempest
 	static const char* components_folder = "Components";
 
 
-	template <typename T>
-	size_t t_hash()
-	{
-		return typeid(T).hash_code();
-	}
+	/**
+	 * @brief Specific type for view exclusion
+	 */
+	template<typename... type>
+	struct exclude_t : type_list<type...> {};
 
 	/**
 	 * @brief Entity Component System to manage all components in a certain 
@@ -29,6 +29,12 @@ namespace Tempest
 	 */
 	class ECS final
 	{
+		template <typename T>
+		size_t t_hash() const
+		{
+			return typeid(T).hash_code();
+		}
+
 		template<typename Component>
 		sparse_set_t<Component>* get_sparse()
 		{
@@ -247,7 +253,9 @@ namespace Tempest
 		[[nodiscard]] runtime_view view(exclude_t<Exclude...> = {})
 		{
 			// check if types are unique
-			[[maybe_unused]] unique_types<Components..., Exclude...> useless;
+			//[[maybe_unused]] unique_types<> useless;
+
+			static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
 			static_assert(type_list<Components...>::size != 0, "No empty set");
 
 			tvector<size_t> inc, exc;
@@ -305,7 +313,7 @@ namespace Tempest
 		[[nodiscard]] Entity clone(Entity entity, exclude_t<Exclude...> = {})
 		{
 			// make sure unique
-			[[maybe_unused]] unique_types<Exclude...> useless;
+			static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
 			// create new entity
 			Entity new_e = entity_registry.create();
 			// package exclude components

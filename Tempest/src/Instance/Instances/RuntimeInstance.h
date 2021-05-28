@@ -21,7 +21,7 @@ namespace Tempest
 		{
 
 		}
-		virtual void OnUpdate(float dt) override
+		virtual void OnUpdate([[maybe_unused]] float dt) override
 		{
 
 		}

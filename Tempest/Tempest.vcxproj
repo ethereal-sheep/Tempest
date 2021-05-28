@@ -216,8 +216,13 @@
     <ClInclude Include="src\ECS\Util\registry.h" />
     <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
-    <ClInclude Include="src\ECS\Util\type_traits.h" />
-    <ClInclude Include="src\Events\Event.h" />
+    <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
+    <ClInclude Include="src\Events\Test\event_test.h" />
+    <ClInclude Include="src\Util\type_traits.h" />
+    <ClInclude Include="src\Events\EventManager.h" />
+    <ClInclude Include="src\Events\Events.h" />
+    <ClInclude Include="src\Events\Events\IEvent.h" />
+    <ClInclude Include="src\Events\Util\event_queue.h" />
     <ClInclude Include="src\Graphics\OpenGL\BufferLayout.h" />
     <ClInclude Include="src\Graphics\OpenGL\IndexBuffer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />

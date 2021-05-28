@@ -8,6 +8,7 @@
 #include <deque>
 
 #include <memory>
+#include <functional>
 #include <algorithm>
 #include <atomic>
 #include <memory_resource>

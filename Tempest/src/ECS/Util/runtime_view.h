@@ -14,12 +14,6 @@ namespace Tempest
 	{
 		using map_ref = tmap<size_t, tuptr<sparse_set>>&;
 
-		template <typename T>
-		size_t t_hash()
-		{
-			return typeid(T).hash_code();
-		}
-
 		template<typename Component>
 		sparse_set_t<Component>* get_sparse()
 		{

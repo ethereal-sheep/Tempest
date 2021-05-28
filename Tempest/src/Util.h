@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Util/type_traits.h"
+
 #include "Util/Service.h"
 #include "Util/magic_enum.hpp"
 

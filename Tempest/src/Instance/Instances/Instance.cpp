@@ -7,12 +7,12 @@ namespace Tempest
 	 */
 	void Instance::OnInit()
 	{
-
+		auto view = ecs.view<float, int>();
 	}
 	/**
 	 * @brief Update loop. Update any required stuff here.
 	 */
-	void Instance::OnUpdate(float dt)
+	void Instance::OnUpdate([[maybe_unused]] float dt)
 	{
 	}
 	/**
