@@ -1,17 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <glm.hpp>
-#include <vec2.hpp>
-#include <vec3.hpp>
-#include <mat4x4.hpp>
-#include <vec4.hpp>
-#include <gtc/epsilon.hpp>
-#include <gtc/type_ptr.hpp>
-#include <gtc/quaternion.hpp>
-#include <gtx/transform.hpp>
-#include <gtx/quaternion.hpp>
-#include <ext/scalar_constants.hpp>
+
+#include "TMath.h"
 
 #include "Graphics/OpenGL/BufferLayout.h"
 #include "Graphics/OpenGL/IndexBuffer.h"
