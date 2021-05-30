@@ -1,4 +1,6 @@
 #include "Context.h"
+#include "Application.h"
+#include <wglew.h>
 #pragma warning( disable : 4706)
 
 using wglprocCreateContextAttribsARB = HGLRC(*)(HDC, HGLRC, const int*);

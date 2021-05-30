@@ -2,12 +2,10 @@
 #include <glew.h>
 #include <memory>
 #include <Windows.h>
-#include <wglew.h>
-#include "Application.h"
 
 namespace Tempest
 {
-	//class Application;
+	class Application;
 
 	class Context
 	{

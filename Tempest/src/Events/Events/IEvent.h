@@ -47,6 +47,8 @@ struct x : public Event {}	\
 		catch (...)
 		{
 			LOG_CRITICAL("Bad Event Cast");
+			//suppress warning
+			return dynamic_cast<const T&>(e);
 		}
 	}
 	/**

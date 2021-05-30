@@ -1,54 +1,44 @@
 
-#define _CRT_SECURE_NO_WARNINGS
 #include "Application/EntryPoint.h"
-#include "Util.h"
-#include "Instance/Instances/RuntimeInstance.h"
-#include "Events/Test/event_test.h"
 
 #include <iostream>
 #include <thread>
 
-using namespace std;
-using namespace Tempest;
-
-class Editor : public Application
+namespace Tempest
 {
-public:
-
-	Editor()
-		: Application(1080, 960, L"Editor") {}
-
-	void OnInit() override
+	class Editor : public Application
 	{
-		Logger::Init();
-		LOG("Initializing Tempest");
-		const char* s = R"(S:\Development\Projects)";
-		tpath path(s);
+	public:
 
-		RuntimeInstance i(path, MemoryStrategy{ DebugFlag::NONE });
-		LOG("{}", i.has_debug());
-	}
+		Editor()
+			: Application(1080, 960, L"Editor") {}
 
-	void OnUpdate() override
+		void OnInit() override
+		{
+		}
+
+		void OnUpdate() override
+		{
+
+		}
+
+		void OnRender() override
+		{
+
+		}
+
+		void OnExit() override
+		{
+
+		}
+	};
+
+	std::unique_ptr<Tempest::Application> CreateApplication()
 	{
-
+		return std::make_unique<Editor>();
 	}
-
-	void OnRender() override
-	{
-
-	}
-
-	void OnExit() override
-	{
-
-	}
-};
-
-std::unique_ptr<Tempest::Application> CreateApplication()
-{
-	return std::make_unique<Editor>();
 }
+
 //int main()
 //{
 //	// always call this first

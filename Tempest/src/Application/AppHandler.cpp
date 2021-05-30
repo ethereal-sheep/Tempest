@@ -1,4 +1,5 @@
 #include "AppHandler.h"
+#include "Application.h"
 
 namespace Tempest
 {
