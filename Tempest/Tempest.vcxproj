@@ -137,11 +137,11 @@
       </AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dep\fmod;$(SolutionDir)Dep\glew;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -166,11 +166,11 @@
       </AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dep\fmod;$(SolutionDir)Dep\glew;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
