@@ -17,6 +17,7 @@
 
 #include <glm.hpp>
 #include <gtc/type_ptr.hpp>
+#include <gtx/transform.hpp>
 
 
 namespace Tempest

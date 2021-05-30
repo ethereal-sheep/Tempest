@@ -1,4 +1,5 @@
 #include "VertexArray.h"
+#include <vector>
 
 namespace Tempest
 {

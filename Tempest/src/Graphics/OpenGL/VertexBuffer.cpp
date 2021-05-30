@@ -1,4 +1,5 @@
 #include "VertexBuffer.h"
+#include "TMath.h"
 
 namespace Tempest
 {

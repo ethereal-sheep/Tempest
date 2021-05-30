@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include "Graphics/OpenGL/IndexBuffer.h"
 #include "Graphics/OpenGL/VertexBuffer.h"
 #include "Graphics/OpenGL/BufferLayout.h"
