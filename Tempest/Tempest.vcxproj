@@ -200,7 +200,6 @@
     <ClCompile Include="src\Serializer\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\MemoryManager\MemoryManager\Include\test_resource.h" />
     <ClInclude Include="src\Application\AppHandler.h" />
     <ClInclude Include="src\Application\Application.h" />
     <ClInclude Include="src\Application\Context.h" />
