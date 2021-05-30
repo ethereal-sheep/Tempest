@@ -141,7 +141,8 @@
       </AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,7 +171,8 @@
       </AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
