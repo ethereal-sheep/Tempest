@@ -21,7 +21,7 @@ namespace Tempest
 		if (!wglGetCurrentContext())			// Check for Proper Context Creation
 			return false;
 
-		if (!glewInit())						// Check for GLEW Initialization
+		if (glewInit() != GLEW_OK)						// Check for GLEW Initialization
 			return false;
 
 		SetWindowLong(m_WND, GWL_STYLE, GetWindowLong(m_WND, GWL_STYLE));

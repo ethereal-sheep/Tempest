@@ -23,10 +23,10 @@ namespace Tempest
 
 		void OnUpdate() override
 		{
-			do
-			{
-
-			} while (true);
+			//do
+			//{
+			//
+			//} while (true);
 		}
 
 		void OnRender() override

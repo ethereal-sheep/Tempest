@@ -84,6 +84,9 @@
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\OpenGL\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\AppHandler.h">
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\OpenGL\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\OpenGL\Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

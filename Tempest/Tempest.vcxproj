@@ -178,6 +178,7 @@
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Skybox.cpp" />
     <ClCompile Include="src\Instance\Instances\Instance.cpp" />
     <ClCompile Include="src\Application\AppHandler.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
     <ClInclude Include="src\Events\Test\event_test.h" />
     <ClInclude Include="src\Graphics\OpenGL\Mesh.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Skybox.h" />
     <ClInclude Include="src\Util\type_traits.h" />
     <ClInclude Include="src\Events\EventManager.h" />
     <ClInclude Include="src\Events\Events.h" />
