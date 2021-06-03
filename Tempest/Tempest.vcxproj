@@ -176,6 +176,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp" />
     <ClCompile Include="src\Instance\Instances\Instance.cpp" />
     <ClCompile Include="src\Application\AppHandler.cpp" />

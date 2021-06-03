@@ -1,8 +1,12 @@
 
+#include "Core.h"
+#include "Tracy.hpp"
+
 #include "Application/EntryPoint.h"
 
 #include <iostream>
 #include <thread>
+
 
 namespace Tempest
 {
@@ -19,7 +23,10 @@ namespace Tempest
 
 		void OnUpdate() override
 		{
+			do
+			{
 
+			} while (true);
 		}
 
 		void OnRender() override

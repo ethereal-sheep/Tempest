@@ -1,5 +1,7 @@
 #pragma once
 
+#define TRACY_ENABLE
+
 #include <vector>
 #include <string>
 #include <unordered_set>
