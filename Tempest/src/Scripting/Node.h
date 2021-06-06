@@ -63,8 +63,8 @@ namespace Tempest
 		category_type get_category() const { return category; }
 
 	protected:
-		pin_id_t add_input(const string& _name, pin_type _type);
-		pin_id_t add_output(const string& _name, pin_type _type);
+		pin_id_t add_input(pin_type _type, const string& _name);
+		pin_id_t add_output(pin_type _type, const string& _name);
 		void set_name(const string& _name) { name = _name; }
 		Writer& serialize_parent(Writer& writer);
 

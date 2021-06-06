@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "Graphics/OpenGL/RenderSystem.h"
+#include <Windows.h>
 
 namespace Tempest
 {
@@ -15,10 +15,11 @@ namespace Tempest
 		void OnEngineRender();
 		void OnEngineExit();
 
-		virtual void OnInit() {};
-		virtual void OnUpdate() {};
-		virtual void OnRender() {};
-		virtual void OnExit() {};
+		virtual void OnInit() {}
+		virtual void OnUpdate() {}
+		virtual void OnRender() {}
+		virtual void OnExit() {}
+		virtual LRESULT WndProcHandler(HWND, UINT, WPARAM, LPARAM) { return 0; }
 
 		uint32_t GetWidth() const { return m_width; }
 		uint32_t GetHeight() const { return m_height; }
@@ -29,6 +30,7 @@ namespace Tempest
 			m_width = width;
 			m_height = height;
 		};
+
 
 	private:
 		uint32_t m_width;

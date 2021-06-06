@@ -4,6 +4,8 @@
 #include "Instance/Instances/RuntimeInstance.h"
 #include "Events/Test/event_test.h"
 
+#include "Graphics/OpenGL/RenderSystem.h"
+
 namespace Tempest
 {
 	Application::Application(uint32_t width, uint32_t height, std::wstring name)
@@ -40,7 +42,7 @@ namespace Tempest
 	{
 		// render engine stuff first
 		RenderSystem ren;
-		ren.TestRender(m_width, m_height);
+		//ren.TestRender(m_width, m_height);
 		OnRender();
 	}
 

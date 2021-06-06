@@ -22,10 +22,11 @@ namespace Tempest
 		pin(pin_id_t _id, pin_type _type, string _name) :
 			id{ _id }, type{ _type }, name{ std::move(_name) } {}
 
-		pin(const pin&) = delete;
+		// comment out for now only until i fix the issue
+		/*pin(const pin&) = delete;
 		pin& operator=(const pin&) = delete;
 		pin(pin&&) = delete;
-		pin& operator=(pin&&) = delete;
+		pin& operator=(pin&&) = delete;*/
 
 
 		static constexpr bool value = input;

@@ -8,6 +8,7 @@ namespace Tempest
 	public:
 		static int Run(std::unique_ptr<Application>&& pApp, HINSTANCE hInstance, LPWSTR lpCmdList, int nCmdShow);
 		static std::unique_ptr<Application>& GetApp() { return s_pApp; }
+		static std::unique_ptr<Context>& GetContext() { return s_pContext; }
 
 		static void ToggleFullscreen();
 		static void SetFullscreen(bool val);

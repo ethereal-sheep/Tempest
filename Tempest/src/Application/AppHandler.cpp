@@ -89,6 +89,9 @@ namespace Tempest
 
 	LRESULT CALLBACK AppHandler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		if (s_pApp->WndProcHandler(hWnd, message, wParam, lParam))
+			return 0;
+
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
