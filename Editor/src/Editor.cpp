@@ -7,8 +7,8 @@
 #include <iostream>
 #include <thread>
 
-#include "imgui/backends/imgui_impl_opengl3.h"
-#include "imgui/backends/imgui_impl_win32.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_win32.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -27,6 +27,18 @@ namespace Tempest
 			ImGui::CreateContext();
 			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
 			ImGui_ImplOpenGL3_Init("#version 460");
+			ImGui::StyleColorsDark();
+			ImGuiIO& io = ImGui::GetIO();
+
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+			ImGuiStyle& style = ImGui::GetStyle();
+
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			{
+				style.WindowRounding = 0.0f;
+				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+			}
 		}
 
 		void OnUpdate() override

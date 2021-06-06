@@ -7,6 +7,11 @@ namespace Tempest
 	{
 		s_pApp = std::move(pApp);
 
+#ifdef _DEBUG
+		// enable console
+		AllocConsole();
+#endif
+
 		// Initialize application
 		RegisterWindow(hInstance);
 		if (!InitInstance(hInstance, nCmdShow))
