@@ -73,4 +73,45 @@ namespace Tempest
 		return glm::make_quat(v.data());
 	}
 
+
+	template <typename Archive>
+	constexpr Archive& operator& (Archive& ar, vec2& vec2)
+	{
+		ar.StartArray();
+		ar& vec2.x;
+		ar& vec2.y;
+		return ar.EndArray();
+	}
+
+	template <typename Archive>
+	constexpr Archive& operator& (Archive& ar, vec3& vec3)
+	{
+		ar.StartArray();
+		ar& vec3.x;
+		ar& vec3.y;
+		ar& vec3.z;
+		return ar.EndArray();
+	}
+
+	template <typename Archive>
+	constexpr Archive& operator& (Archive& ar, vec4& vec4)
+	{
+		ar.StartArray();
+		ar& vec4.x;
+		ar& vec4.y;
+		ar& vec4.z;
+		ar& vec4.w;
+		return ar.EndArray();
+	}
+	template <typename Archive>
+	constexpr Archive& operator& (Archive& ar, quat& quat)
+	{
+		ar.StartArray();
+		ar& quat.x;
+		ar& quat.y;
+		ar& quat.z;
+		ar& quat.w;
+		return ar.EndArray();
+	}
+
 }

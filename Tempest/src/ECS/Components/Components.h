@@ -133,9 +133,9 @@ namespace Tempest
 			friend Archiver& operator&(Archiver& ar, Transform& component)
 			{
 				ar.StartObject();
-				ar.vec3("Position", component.position);
-				ar.vec4("Rotation", component.rotation);
-				ar.vec3("Scale", component.scale);
+				ar.Member("Position", component.position);
+				ar.Member("Rotation", component.rotation);
+				ar.Member("Scale", component.scale);
 				return ar.EndObject();
 			}
 
