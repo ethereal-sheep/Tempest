@@ -177,7 +177,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Material.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\RenderSystem.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Skybox.cpp" />
     <ClCompile Include="src\Instance\Instances\Instance.cpp" />
     <ClCompile Include="src\Application\AppHandler.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
@@ -222,7 +226,12 @@
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
     <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
     <ClInclude Include="src\Events\Test\event_test.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Material.h" />
     <ClInclude Include="src\Graphics\OpenGL\Mesh.h" />
+    <ClInclude Include="src\Graphics\OpenGL\RenderPipeline.h" />
+    <ClInclude Include="src\Graphics\OpenGL\RenderSystem.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Skybox.h" />
     <ClInclude Include="src\Scripting\Node.h" />
     <ClInclude Include="src\Scripting\Util\link.h" />
     <ClInclude Include="src\Scripting\Util\pin.h" />
@@ -283,6 +292,7 @@
     <ClInclude Include="src\Util\Service.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Scripting\Util\static_id_generator.h" />
     <None Include="src\Util\Serializer\Private\Reader.inl" />
     <None Include="src\Util\Serializer\Private\Writer.inl" />
     <None Include="src\Serializer\Reader.inl" />

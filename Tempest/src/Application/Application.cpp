@@ -17,7 +17,6 @@ namespace Tempest
 	void Application::OnEngineInit()
 	{
 		// init Engine stuff first
-
 		Logger::Init();
 		LOG("Initializing Tempest");
 		const char* s = R"(S:\Development\Projects)";
@@ -40,7 +39,8 @@ namespace Tempest
 	void Application::OnEngineRender()
 	{
 		// render engine stuff first
-
+		RenderSystem ren;
+		ren.TestRender(m_width, m_height);
 		OnRender();
 	}
 

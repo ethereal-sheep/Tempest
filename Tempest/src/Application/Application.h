@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
+#include "Graphics/OpenGL/RenderSystem.h"
 
 namespace Tempest
 {
