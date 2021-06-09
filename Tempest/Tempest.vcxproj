@@ -201,7 +201,11 @@
     <ClCompile Include="src\Memory\MemoryObject.cpp" />
     <ClCompile Include="src\Memory\Resource\debug_resource.cpp" />
     <ClCompile Include="src\Memory\Resource\malloc_resource.cpp" />
-    <ClCompile Include="src\Scripting\Node.cpp" />
+    <ClCompile Include="src\Scripting\Graph\graph.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_graph.cpp" />
+    <ClCompile Include="src\Scripting\Util\node.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_node.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_node_functions.cpp" />
     <ClCompile Include="src\Serializer\Reader.cpp" />
     <ClCompile Include="src\Serializer\Writer.cpp" />
   </ItemGroup>
@@ -232,9 +236,18 @@
     <ClInclude Include="src\Graphics\OpenGL\RenderPipeline.h" />
     <ClInclude Include="src\Graphics\OpenGL\RenderSystem.h" />
     <ClInclude Include="src\Graphics\OpenGL\Skybox.h" />
-    <ClInclude Include="src\Scripting\Node.h" />
+    <ClInclude Include="src\Scripting\GMS.h" />
+    <ClInclude Include="src\Scripting\Graph\graph.h" />
+    <ClInclude Include="src\Scripting\Util\split_view.h" />
+    <ClInclude Include="src\Scripting\Util\node.h" />
+    <ClInclude Include="src\Scripting\Test\test_scripting.h" />
+    <ClInclude Include="src\Scripting\Util\internal.h" />
     <ClInclude Include="src\Scripting\Util\link.h" />
     <ClInclude Include="src\Scripting\Util\pin.h" />
+    <ClInclude Include="src\Scripting\Util\script.h" />
+    <ClInclude Include="src\Scripting\Util\var_data.h" />
+    <ClInclude Include="src\Util\algorithm.h" />
+    <ClInclude Include="src\Util\range.h" />
     <ClInclude Include="src\Util\type_traits.h" />
     <ClInclude Include="src\Events\EventManager.h" />
     <ClInclude Include="src\Events\Events.h" />

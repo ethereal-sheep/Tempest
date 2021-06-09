@@ -1,4 +1,5 @@
 #include "Reader.h"
+#include <variant>
 
 namespace Tempest
 {
@@ -100,7 +101,7 @@ namespace Tempest
 		return EndArray();
 	}
 
-	/*template<typename TVariant>
+	template<typename TVariant>
 	Reader& Reader::Variant(const char* identifier, TVariant& var)
 	{
 		Member(identifier);
@@ -119,7 +120,7 @@ namespace Tempest
 			[&](auto& obj) { *this & obj; }
 		), var);
 		return *this;
-	}*/
+	}
 
 	template <typename T, typename std::enable_if_t<std::is_default_constructible_v<T>>>
 	Reader& Reader::operator& (std::unique_ptr<T>& ptr)

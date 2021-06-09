@@ -1,4 +1,5 @@
 #include "Writer.h"
+#include <variant>
 
 namespace Tempest
 {
@@ -44,19 +45,19 @@ namespace Tempest
 		return EndArray();
 	}
 
-	/*ttemplate <typename TVariant>
+	template <typename TVariant>
 	Writer& Writer::Variant(const char* identifier, TVariant& var)
 	{
 		Key(identifier);
 		return Variant(var);
 	}
 
-	emplate<typename TVariant>
+	template<typename TVariant>
 	Writer& Writer::Variant(TVariant& var)
 	{
 		std::visit([&](auto& obj) { *this & obj; }, var);
 		return *this;
-	}*/
+	}
 
 	template <typename T, typename std::enable_if_t<std::is_default_constructible_v<T>>>
 	Writer& Writer::operator& (std::unique_ptr<T>& ptr)

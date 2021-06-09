@@ -1,52 +1,50 @@
 #pragma once
 
-#include "link.h"
+#include "var_data.h"
+#include "internal.h"
 #include "Util.h"
+
 
 namespace Tempest
 {
-
-	enum struct pin_type
-	{
-		Flow,
-		Bool, Byte, Int, Int64, Float, String, Vec2, Vec3, Vec4,
-		END,
-		Entity, Vector
-	};
-
+	/**
+	 * @brief Pin object owned by a parent node
+	 */
 	template <bool input>
 	class pin
 	{
 	public:
+		friend class graph;
 
 		pin(pin_id_t _id, pin_type _type, string _name) :
 			id{ _id }, type{ _type }, name{ std::move(_name) } {}
 
-		// comment out for now only until i fix the issue
-		/*pin(const pin&) = delete;
+		pin(const pin&) = delete;
 		pin& operator=(const pin&) = delete;
-		pin(pin&&) = delete;
-		pin& operator=(pin&&) = delete;*/
+		pin(pin&&) = default;
+		pin& operator=(pin&&) = default;
 
 
 		static constexpr bool value = input;
 		static constexpr bool is_input = input;
 		static constexpr bool is_output = !input;
 
-		template <typename Archive>
-		friend Archive& operator&(Archive& ar, pin& pin)
-		{
-			string type = Archive::IsLoading() ? "" : magic_enum::enum_name(pin.type).data();
-			ar.StartObject();
-			ar.Member("id", pin.id);
-			ar.Member("type", type);
-			ar.Member("name", pin.name);
-			return ar.EndObject();
-		}
-
+		/**
+		 * @brief Gets pin id.
+		 */
 		pin_id_t get_id() const { return id; }
+		/**
+		 * @brief Gets pin type.
+		 */
 		pin_type get_type() const { return type; }
+		/**
+		 * @brief Gets name of pin.
+		 */
 		const string& get_name() const { return name; }
+		/**
+		 * @brief Returns true if pin is linked.
+		 */
+		bool is_linked() const { return linked; }
 
 		operator pin_id_t() const { return id; }
 
@@ -54,7 +52,11 @@ namespace Tempest
 		pin_id_t id;
 		pin_type type;
 		string name;
+		mutable bool linked = false;
 
+	public:
+
+		mutable var_data default_var;
 	};
 
 	using input_pin = pin<true>;

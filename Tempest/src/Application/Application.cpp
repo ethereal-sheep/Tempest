@@ -6,6 +6,9 @@
 
 #include "Graphics/OpenGL/RenderSystem.h"
 
+#include "Scripting/Test/test_scripting.h"
+#include "Scripting/GMS.h"
+
 namespace Tempest
 {
 	Application::Application(uint32_t width, uint32_t height, std::wstring name)
@@ -22,12 +25,13 @@ namespace Tempest
 		Logger::Init();
 		LOG("Initializing Tempest Engine");
 
-		LOG("Initializing Tempest Engine");
 
-		const char* s = R"(S:\Development\Projects)";
-		tpath path(s);
+		//RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
+		//EventManager em;
 
-		RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
+		
+
+		testing_graph();
 
 		OnInit();
 	}

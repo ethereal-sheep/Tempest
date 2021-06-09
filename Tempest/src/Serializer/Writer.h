@@ -37,11 +37,10 @@ namespace Tempest
         template <typename TMap>
         Writer& Map(const char* identifier, const char* key_identifier, const char* value_identifier, TMap& map);
         
-        // Deprecate
-        /*template <typename TVariant>
+        template <typename TVariant>
         Writer& Variant(const char* identifier, TVariant& var);
         template <typename TVariant>
-        Writer& Variant(TVariant& var);*/
+        Writer& Variant(TVariant& var);
 
         Writer& operator& (const int b);
         Writer& operator& (const bool b);

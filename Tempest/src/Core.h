@@ -46,6 +46,13 @@ namespace Tempest
 	using tset = std::pmr::unordered_set<T>;
 	template <typename Key, typename Val>
 	using tmap = std::pmr::unordered_map<Key, Val>;
+	template <typename T1, typename T2>
+	using tpair = std::pair<T1, T2>;
+
+	template <typename T1, typename T2>
+	constexpr tpair<T1, T2> make_tpair(T1&& arg1, T2&& arg2) {
+		return std::make_pair<T1, T2>(std::forward<T1>(arg1), std::forward<T2>(arg2));
+	}
 
 	using string = std::string;
 

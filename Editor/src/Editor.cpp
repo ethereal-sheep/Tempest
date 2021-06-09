@@ -10,6 +10,9 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
 
+
+
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace Tempest
@@ -39,6 +42,7 @@ namespace Tempest
 				style.WindowRounding = 0.0f;
 				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 			}
+
 		}
 
 		void OnUpdate() override
@@ -47,6 +51,7 @@ namespace Tempest
 			//{
 			//
 			//} while (true);
+
 		}
 
 		void OnRender() override
@@ -82,9 +87,18 @@ namespace Tempest
 
 				if (ImGui::BeginMenuBar())
 				{
-					if (ImGui::MenuItem("File"));
-					if (ImGui::MenuItem("Edit"));
-					if (ImGui::MenuItem("Help"));
+					if (ImGui::MenuItem("File"))
+					{
+
+					}
+					if (ImGui::MenuItem("Edit"))
+					{
+
+					}
+					if (ImGui::MenuItem("Help"))
+					{
+
+					}
 					ImGui::EndMenuBar();
 				}
 

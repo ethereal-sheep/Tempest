@@ -10,8 +10,6 @@ namespace Tempest
 			static id_t gen = 1;
 			return gen++;
 		}
-
-		
 	};
 
 	using idgen = static_id_generator;

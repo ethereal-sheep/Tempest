@@ -36,11 +36,10 @@ namespace Tempest
 		template <typename TMap>
 		Reader& Map(const char* identifier, const char* key_identifier, const char* value_identifier, TMap& map);
 		
-		//Deprecate
-		/*template <typename TVariant>
+		template <typename TVariant>
 		Reader& Variant(const char* identifier, TVariant& var);
 		template <typename TVariant>
-		Reader& Variant(TVariant& var);*/
+		Reader& Variant(TVariant& var);
 
 		Reader& operator& (int& i);
 		Reader& operator& (bool& b);
