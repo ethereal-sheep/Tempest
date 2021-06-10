@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "var_data.h"
 #include "Util/range.h"
+#include "Util.h"
 
 namespace Tempest
 {
@@ -38,6 +39,16 @@ namespace Tempest
 		{
 			return std::move(element);
 		}
+	};
+
+
+	class var_set_exception : public std::exception
+	{
+	public:
+		var_set_exception(const string& err_msg = "variable set exception thrown!") : msg(err_msg) {}
+		const char* what() const noexcept override { return msg.c_str(); }
+	private:
+		string msg;
 	};
 
 	/**
@@ -416,6 +427,55 @@ namespace Tempest
 		{
 			return const_iterator{ vars.find(key) };
 		}
+
+		bool deserialize(Reader& reader)
+		{
+
+		}
+
+		bool serialize(const tpath& folder, const string& name) const
+		{
+			if (!Serializer::SaveJson(folder / (name + ".json"), ""))
+				throw var_set_exception(name + ".json" + ": Invalid filename!");
+
+			Writer writer;
+			if (!serialize(writer)) return false;
+
+			return Serializer::SaveJson(folder / (name + ".json"), writer.GetString());
+
+		}
+
+		bool serialize(Writer& writer) const
+		{
+			writer.StartObject();
+			{
+				// meta part
+				{
+					writer.StartMeta();
+					{
+						writer.Member("Type", "Variables");
+					}
+					writer.EndMeta();
+				}
+				// variables part
+				{
+					writer.StartArray("Variables");
+					for (auto& [key, var] : vars)
+					{
+						writer.StartObject();
+						{
+							string key_string = serializer()(key);
+							writer.Member("Key", key_string);
+							writer.Member("Data", var);
+						}
+						writer.EndObject();
+					}
+					writer.EndArray();
+				}
+			}
+			writer.EndObject();
+		}
+
 
 	private:
 		set_type vars;
