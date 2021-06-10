@@ -77,7 +77,7 @@ namespace els
 		}
 
 		template <typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>
-		inline static Vector2<T> circular_rand(T radius)
+		inline static Vector2<T> circle_rand(T radius)
 		{
 			if (radius <= static_cast<T>(0))
 				return Vector2<T>::zero;
@@ -87,7 +87,7 @@ namespace els
 
 		}
 		template <typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
-		inline static Vector2<defaultType> circular_rand(T radius)
+		inline static Vector2<defaultType> circle_rand(T radius)
 		{
 			return circular_rand(static_cast<defaultType>(radius));
 		}
@@ -119,7 +119,7 @@ namespace els
 		}
 
 		template <typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>
-		inline static Vector3<T> spherical_rand(T radius)
+		inline static Vector3<T> sphere_rand(T radius)
 		{
 			if (radius <= static_cast<T>(0))
 				return Vector3<T>::zero;
@@ -136,7 +136,7 @@ namespace els
 		template <typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
 		inline static Vector3<defaultType> spherical_rand(T radius)
 		{
-			return spherical_rand(static_cast<defaultType>(radius));
+			return sphere_rand(static_cast<defaultType>(radius));
 		}
 
 		template <typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>

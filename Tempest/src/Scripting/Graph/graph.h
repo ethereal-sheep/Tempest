@@ -33,7 +33,7 @@ namespace Tempest
 
         graph(const graph&) = delete;
         graph& operator=(const graph&) = delete;
-        graph(graph&&) = default;
+        graph(graph&&) noexcept = default;
         graph& operator=(graph&&) = default;
 
         /**

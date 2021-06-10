@@ -90,13 +90,14 @@ namespace Tempest
 		tset<uint64_t> test2;
 		for (uint32_t i = 1; i < 100; ++i)
 		{
-			test.push_back(concatenate_id_t(i, i));
-			test2.insert(concatenate_id_t(i, i));
+			test.push_back(concatenate_id_t(i, els::random::uniform_rand(0, 1000)));
+			test2.insert(concatenate_id_t(i, els::random::uniform_rand(0, 1000)));
 		}
 
 		split_view v(test);
 		split_view a(test2);
 		tri_split_view b(test);
+		tri_split_view c(test2);
 
 		for (auto [start, end] : v)
 		{
@@ -106,19 +107,22 @@ namespace Tempest
 		{
 			LOG("{0}, {1}", start, end);
 		}
-		for (auto [id, start, end] : b)
+		
+		auto t = [](auto id, auto start, auto end)
 		{
 			LOG("{0:b}, {1:b}, {2:b}", id, start, end);
-		}
+			LOG_ASSERT(id == concatenate_id_t(start, end));
+		};
+		c.each(t);
 	}
 
 	void testing_graph()
 	{
-		/*testing_graph_1();
+		testing_graph_1();
 		testing_graph_2();
 		testing_graph_3();
 		testing_graph_4();
-		testing_graph_5();*/
+		testing_graph_5();
 		testing_algo();
 	}
 }

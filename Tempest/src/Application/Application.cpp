@@ -31,7 +31,7 @@ namespace Tempest
 
 		
 
-		testing_graph();
+		testing_data();
 
 		OnInit();
 	}

@@ -375,8 +375,8 @@ namespace Tempest
 		template<typename Func>
 		[[nodiscard]] void each(Func func) const
 		{
-			for (auto [a, b] : *this)
-				func(a, b);
+			for (auto [a, b, c] : *this)
+				func(a, b, c);
 		}
 
 	private:
