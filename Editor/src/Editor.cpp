@@ -10,7 +10,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
 
-
+#include "Window/Docking.h"
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -19,7 +19,7 @@ namespace Tempest
 {
 	class Editor : public Application
 	{
-
+		UI::DockingWindow docking;
 	public:
 		Editor()
 			: Application(1600, 900, L"Editor") {}
@@ -64,54 +64,55 @@ namespace Tempest
 			/*--------------------------------------------------------------------*/
 
 
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->WorkPos);
-			ImGui::SetNextWindowSize(viewport->WorkSize);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			window_flags |= ImGuiWindowFlags_NoTitleBar |
-				ImGuiWindowFlags_NoCollapse |
-				ImGuiWindowFlags_NoResize |
-				ImGuiWindowFlags_NoMove |
-				ImGuiWindowFlags_NoBringToFrontOnFocus |
-				ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
+			//ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+			//ImGuiViewport* viewport = ImGui::GetMainViewport();
+			//ImGui::SetNextWindowPos(viewport->WorkPos);
+			//ImGui::SetNextWindowSize(viewport->WorkSize);
+			//ImGui::SetNextWindowViewport(viewport->ID);
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			//window_flags |= ImGuiWindowFlags_NoTitleBar |
+			//	ImGuiWindowFlags_NoCollapse |
+			//	ImGuiWindowFlags_NoResize |
+			//	ImGuiWindowFlags_NoMove |
+			//	ImGuiWindowFlags_NoBringToFrontOnFocus |
+			//	ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
 
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			if (ImGui::Begin("Main", nullptr, window_flags))
-			{
-				ImGui::PopStyleVar();
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+			//if (ImGui::Begin("Main", nullptr, window_flags))
+			//{
+			//	ImGui::PopStyleVar();
 
-				ImGui::PopStyleVar(2);
+			//	ImGui::PopStyleVar(2);
 
-				if (ImGui::BeginMenuBar())
-				{
-					if (ImGui::MenuItem("File"))
-					{
+			//	if (ImGui::BeginMenuBar())
+			//	{
+			//		if (ImGui::MenuItem("File"))
+			//		{
 
-					}
-					if (ImGui::MenuItem("Edit"))
-					{
+			//		}
+			//		if (ImGui::MenuItem("Edit"))
+			//		{
 
-					}
-					if (ImGui::MenuItem("Help"))
-					{
+			//		}
+			//		if (ImGui::MenuItem("Help"))
+			//		{
 
-					}
-					ImGui::EndMenuBar();
-				}
+			//		}
+			//		ImGui::EndMenuBar();
+			//	}
 
-				// DockSpace
-				ImGuiIO& io = ImGui::GetIO();
-				if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-				{
-					ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-					ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_AutoHideTabBar);
-				}
-			}
+			//	// DockSpace
+			//	/*ImGuiIO& io = ImGui::GetIO();
+			//	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			//	{
+			//		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			//		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_AutoHideTabBar);
+			//	}*/
+			//	//docking.Show();
+			//}
 
-			ImGui::End();
+			//ImGui::End();
 
 
 			ImGui::ShowDemoWindow();

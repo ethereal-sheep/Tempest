@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Window">
-      <UniqueIdentifier>{fa509d77-133d-4566-90e9-aae52c4554f2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor.cpp">
@@ -42,11 +39,11 @@
     <ClCompile Include="src\imgui\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowManager.cpp">
-      <Filter>Source Files\Window</Filter>
+    <ClCompile Include="src\Window\Docking.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Docking.cpp">
-      <Filter>Source Files\Window</Filter>
+    <ClCompile Include="src\Window\WindowManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,11 +71,11 @@
     <ClInclude Include="src\imgui\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindowManager.h">
-      <Filter>Source Files\Window</Filter>
+    <ClInclude Include="src\Window\Docking.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Docking.h">
-      <Filter>Source Files\Window</Filter>
+    <ClInclude Include="src\Window\WindowManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
