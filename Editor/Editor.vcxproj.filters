@@ -42,9 +42,6 @@
     <ClCompile Include="src\imgui\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files\Window</Filter>
-    </ClCompile>
     <ClCompile Include="WindowManager.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
@@ -76,9 +73,6 @@
     </ClInclude>
     <ClInclude Include="src\imgui\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Source Files\Window</Filter>
     </ClInclude>
     <ClInclude Include="WindowManager.h">
       <Filter>Source Files\Window</Filter>

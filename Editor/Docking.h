@@ -5,6 +5,6 @@ namespace UI
 	class DockingWindow
 	{
 	public:
-		void Show() const;
+		void Show();
 	};
 }
