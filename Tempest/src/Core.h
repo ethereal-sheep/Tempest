@@ -4,6 +4,8 @@
 
 #include <vector>
 #include <string>
+#include <set>
+#include <map>
 #include <unordered_set>
 #include <unordered_map>
 #include <array>
@@ -69,6 +71,14 @@ namespace Tempest
 	template <typename T>
 	using tqueue = std::pmr::deque<T>;
 	/**
+	 * @brief Alias for map
+	 */
+	template <
+		typename Key,
+		typename Comp = std::less<Key>
+	>
+		using toset = std::pmr::set<Key, Comp>;
+	/**
 	 * @brief Alias for unordered_set
 	 */
 	template <
@@ -78,6 +88,15 @@ namespace Tempest
 	>
 	using tset = std::pmr::unordered_set<Key, Hash, Pred>;
 	/**
+	 * @brief Alias for map
+	 */
+	template <
+		typename Key,
+		typename Val,
+		typename Comp = std::less<Key>
+	>
+		using tomap = std::pmr::map<Key, Val, Comp>;
+	/**
 	 * @brief Alias for unordered_map
 	 */
 	template <
@@ -86,7 +105,7 @@ namespace Tempest
 		typename Hash = std::hash<Key>,
 		typename Pred = std::equal_to<Key>
 	>
-	using tmap = std::pmr::unordered_map<Key, Val, Hash, Pred>;
+		using tmap = std::pmr::unordered_map<Key, Val, Hash, Pred>;
 	/**
 	 * @brief Alias for pair
 	 */

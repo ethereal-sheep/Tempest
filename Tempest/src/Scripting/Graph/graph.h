@@ -4,6 +4,7 @@
 #include "Util/range.h"
 #include "../Util/node.h"
 #include "../Util/split_view.h"
+#include "../Util/var_set.h"
 
 namespace Tempest
 {
@@ -37,17 +38,17 @@ namespace Tempest
         graph& operator=(graph&&) = default;
 
         /**
+         * @brief Regular construction for a new graph.
+         */
+        graph(const string & _name = "Default", m_resource * mem = std::pmr::get_default_resource()) :
+            name{ _name }, nodes{ mem }, links{ mem } {}
+
+        /**
          * @brief Constructor from a graph file path.
          * @throw Throws graph_exception when the graph is not constructed properly
          */
         graph(const tpath& graph_file, m_resource* mem = std::pmr::get_default_resource());
         
-
-        /**
-         * @brief Regular construction for a new graph. 
-         */
-        graph(const string& _name = "Default", m_resource* mem = std::pmr::get_default_resource()) : 
-            name{ _name }, nodes{ mem }, links{ mem } {}
 
         /**
          * @brief Adds a node to the graph. Returns a pointer to the created
@@ -202,6 +203,7 @@ namespace Tempest
 
         Nodes nodes;
         Links links;
+        
 	};
 
 }

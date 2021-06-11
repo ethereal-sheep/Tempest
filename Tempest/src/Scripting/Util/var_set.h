@@ -3,6 +3,7 @@
 #include "var_data.h"
 #include "Util/range.h"
 #include "Util.h"
+#include <map>
 
 namespace Tempest
 {
@@ -51,6 +52,7 @@ namespace Tempest
 		string msg;
 	};
 
+
 	/**
 	 * @brief Variable Set that stores variables. Uses an unordered_map as
 	 * underlying container type.
@@ -61,21 +63,33 @@ namespace Tempest
 	 */
 	template <
 		typename Key, 
-		typename Hash = std::hash<Key>,
-		typename Serial = serial<Key>,
-		typename Pred = std::equal_to<Key>
+		bool Ordered,
+		typename Hash_Or_Comp,
+		typename Serial
 	>
 	class var_set
 	{
+		/** @brief type traits to deduce ordered or unordered */
+		template<bool Ordered, typename...>
+		struct set_ordered;
+
+		template <typename Key, typename Hash_Or_Comp>
+		struct set_ordered<true, Key, Hash_Or_Comp> { using type = tomap<Key, var_data, Hash_Or_Comp>; };
+		template <typename Key, typename Hash_Or_Comp>
+		struct set_ordered<false, Key, Hash_Or_Comp> { using type = tmap<Key, var_data, Hash_Or_Comp>; };
+
+		template <typename Key, bool Ordered, typename Hash_Or_Comp>
+		using set_ordered_t = typename set_ordered<Ordered, Key, Hash_Or_Comp>::type;
+
 	public:
-		using set_type = tmap<Key, var_data, Hash, Pred>;
+		using set_type = set_ordered_t<Key, Ordered, Hash_Or_Comp>;
 
 		/** @brief type traits for container */
 		using key_type = Key;
 		using mapped_type = var_data;
 		using value_type = std::tuple<key_type, pin_type, mapped_type>;
-		using hasher = Hash;
-		using key_equal = Pred;
+		using hasher = Hash_Or_Comp;
+		using key_compare = Hash_Or_Comp;
 		using serializer = Serial;
 
 		using size_type = typename set_type::size_type;
@@ -226,6 +240,163 @@ namespace Tempest
 		using const_iterator = const_var_iterator;
 		using iterator_category = std::forward_iterator_tag;
 
+		/** @brief Default constructor */
+		var_set(m_resource* mem = std::pmr::get_default_resource()) : vars{ mem } {}
+
+		/**
+		 * @brief Constructor from a variable file path.
+		 * @throw Throws var_set_exception when the variable_set is not constructed properly
+		 */
+		var_set(const tpath& var_file, m_resource* mem = std::pmr::get_default_resource()) : var_set{ mem }
+		{
+			deserialize(var_file);
+		}
+
+		bool deserialize(const tpath& var_file)
+		{
+			Serializer serializer;
+			string json = serializer.GetJson(var_file);
+
+			Reader reader(json.c_str());
+			if (reader.HasError())
+				throw var_set_exception(var_file.filename().string() + ": File cannot be opened!");
+
+			return deserialize(reader);
+		}
+
+		bool deserialize(Reader& reader)
+		{
+			clear(); // make sure set is cleared
+
+			bool check = true;
+			reader.StartObject();
+			{
+				// meta part
+				{
+					reader.StartMeta();
+					{
+						string meta;
+						reader.Member("Type", meta);
+						if (meta != "Variables")
+							throw var_set_exception("var_set: Bad Meta Member!");
+					}
+					reader.EndMeta();
+				}
+				// variables part
+				{
+					size_t size = 0;
+					reader.StartArray("Variables", &size);
+					for (size_t i = 0; i < size; ++i)
+					{
+						reader.StartObject();
+						{
+							try
+							{
+								string key_string;
+								reader.Member("Key", key_string);
+								Key key = serializer()[key_string];
+								var_data new_var;
+								reader.Member("Data", new_var);
+
+								if(!insert(key, std::move(new_var)))
+									throw var_set_exception("var_set: Bad Variable Key! Key has already been loaded!");
+
+								
+							}
+							catch (const std::exception& a)
+							{
+								LOG_ERROR("{}", a.what());
+								check = false;
+							}
+							catch (...)
+							{
+								LOG_ERROR("{}", "var_set: Unknown exception occured!");
+								check = false;
+							}
+
+						}
+						reader.EndObject();
+					}
+					reader.EndArray();
+				}
+			}
+			reader.EndObject();
+
+			return check;
+		}
+
+		bool serialize(const tpath& folder, const string& name) const
+		{
+			if (!Serializer::SaveJson(folder / (name + ".json"), ""))
+				throw var_set_exception(name + ".json" + ": Invalid filename!");
+
+			bool check = true;
+			Writer writer;
+			if (!serialize(writer)) check = false;
+
+			if (!Serializer::SaveJson(folder / (name + ".json"), writer.GetString()))
+				throw var_set_exception(name + ".json" + ": Invalid filename!");
+
+			return check;
+		}
+
+		bool serialize(Writer& writer) const
+		{
+			bool check = true;
+
+			writer.StartObject();
+			{
+				// meta part
+				{
+					writer.StartMeta();
+					{
+						writer.Member("Type", "Variables");
+					}
+					writer.EndMeta();
+				}
+				// variables part
+				{
+					writer.StartArray("Variables");
+					for (auto& [key, var] : vars)
+					{
+						writer.StartObject();
+						{
+							try
+							{
+								string key_string = serializer()(key);
+								writer.Member("Key", key_string);
+								var_data temp = var;
+								writer.Member("Data", temp);
+
+							}
+							catch (const std::exception& a)
+							{
+								LOG_ERROR("{}", a.what());
+								check = false;
+							}
+							catch (...)
+							{
+								LOG_ERROR("{}", "var_set: Unknown exception occured!");
+								check = false;
+							}
+						}
+						writer.EndObject();
+					}
+					writer.EndArray();
+				}
+			}
+			writer.EndObject();
+
+			return check;
+		}
+
+		/**
+		 * @brief Return true if set is empty.
+		 */
+		void clear()
+		{
+			vars.clear();
+		}
 
 		/**
 		 * @brief Return true if set is empty.
@@ -331,19 +502,33 @@ namespace Tempest
 		}
 
 		/**
+		 * @brief Inserts var_data at key and returns a pointer to the initialized
+		 * value
+		 * @param key Key of variable
+		 * @param data Data to pass in
+		 * @return True if insert successfully.
+		 */
+		bool insert(const Key& key, var_data data)
+		{
+			auto ret = vars.emplace(key, std::move(data));
+
+			return ret.second;
+		}
+
+		/**
 		 * @brief Creates a variable of type T, initializes by data.
 		 * @tparam T type of variable
 		 * @param key Key of variable
 		 * @param data Data to pass in
-		 * @return Pointer to created variable if successful
+		 * @return Pointer to created variable if successful. Returns nullptr if fail.
 		 */
 		template <typename T>
 		T* create(const Key& key, T data = T{})
 		{
-			if(count(key)) return nullptr;
+			auto ret = vars.emplace(key, var_data{ data });
+			if (!ret.second) return nullptr;
 
-			vars.emplace(key, var_data{ data });
-			return get_if_at<T>(key);
+			return ret.first->second.get_if<T>();
 		}
 
 		/**
@@ -351,14 +536,12 @@ namespace Tempest
 		 * variable.
 		 * @param key Key of variable
 		 * @param t Pin type
-		 * @return True if varaible created successfully
+		 * @return True if variable created successfully.
 		 */
 		bool create(const Key& key, pin_type t)
 		{
-			if (count(key)) return false;
-
-			vars.emplace(key, var_data{ t });
-			return true;
+			auto ret = vars.emplace(key, var_data{ t });
+			return ret.second;
 		}
 
 		/**
@@ -367,7 +550,6 @@ namespace Tempest
 		 */
 		void erase(const Key& key)
 		{
-			if (!count(key)) return;
 			vars.erase(key);
 		}
 
@@ -427,57 +609,25 @@ namespace Tempest
 		{
 			return const_iterator{ vars.find(key) };
 		}
-
-		bool deserialize(Reader& reader)
-		{
-
-		}
-
-		bool serialize(const tpath& folder, const string& name) const
-		{
-			if (!Serializer::SaveJson(folder / (name + ".json"), ""))
-				throw var_set_exception(name + ".json" + ": Invalid filename!");
-
-			Writer writer;
-			if (!serialize(writer)) return false;
-
-			return Serializer::SaveJson(folder / (name + ".json"), writer.GetString());
-
-		}
-
-		bool serialize(Writer& writer) const
-		{
-			writer.StartObject();
-			{
-				// meta part
-				{
-					writer.StartMeta();
-					{
-						writer.Member("Type", "Variables");
-					}
-					writer.EndMeta();
-				}
-				// variables part
-				{
-					writer.StartArray("Variables");
-					for (auto& [key, var] : vars)
-					{
-						writer.StartObject();
-						{
-							string key_string = serializer()(key);
-							writer.Member("Key", key_string);
-							writer.Member("Data", var);
-						}
-						writer.EndObject();
-					}
-					writer.EndArray();
-				}
-			}
-			writer.EndObject();
-		}
+		
 
 
 	private:
 		set_type vars;
 	};
+
+
+	template <
+		typename Key,
+		typename Comp = std::less<Key>,
+		typename Serial = serial<Key>
+	>
+	using ordered_var_set = var_set<Key, true, Comp, Serial>;
+
+	template <
+		typename Key,
+		typename Hash = std::hash<Key>,
+		typename Serial = serial<Key>
+	>
+		using unordered_var_set = var_set<Key, false, Hash, Serial>;
 }

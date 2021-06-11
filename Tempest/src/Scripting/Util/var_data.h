@@ -207,7 +207,9 @@ namespace Tempest
 				case pin_type::Vec3:	var.variable_data = vec3{}; break;
 				case pin_type::Vec4:	var.variable_data = vec4{}; break;
 				default:
-					var.variable_data = bool{}; break;
+					var.variable_data = bool{};
+					var.type = pin_type::Bool;
+					break;
 				}
 			}
 
