@@ -89,5 +89,8 @@
     <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\AssetManager\AssetInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
