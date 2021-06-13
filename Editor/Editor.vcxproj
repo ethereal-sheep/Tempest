@@ -163,6 +163,7 @@ xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q</Command>
   <ItemGroup>
     <ClCompile Include="src\Editor.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
+    <ClCompile Include="src\imgui\ImGuiFileBrowser.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
@@ -177,6 +178,7 @@ xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q</Command>
   <ItemGroup>
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui.h" />
+    <ClInclude Include="src\imgui\ImGuiFileBrowser.h" />
     <ClInclude Include="src\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="src\imgui\imgui_impl_win32.h" />
     <ClInclude Include="src\imgui\imgui_internal.h" />

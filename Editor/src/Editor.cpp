@@ -10,6 +10,7 @@
 
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/ImGuiFileBrowser.h"
 #include "Window/WindowManager.h"
 
 
@@ -20,6 +21,7 @@ namespace Tempest
 	class Editor : public Application
 	{
 		UI::WindowManager m_WindowManager;
+		imgui_addons::ImGuiFileBrowser m_FileExplorer{};
 	public:
 		Editor()
 			: Application(1600, 900, L"Editor") {}
@@ -80,6 +82,9 @@ namespace Tempest
 				ImGuiWindowFlags_NoBringToFrontOnFocus |
 				ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
 
+			bool popupImport = false;
+			bool popupImportSuccess = false;
+
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			if (ImGui::Begin("Main", nullptr, window_flags))
 			{
@@ -89,9 +94,12 @@ namespace Tempest
 
 				if (ImGui::BeginMenuBar())
 				{
-					if (ImGui::MenuItem("File"))
+					if (ImGui::BeginMenu("File"))
 					{
+						if (ImGui::MenuItem("Import", "", nullptr))
+							popupImport = true;
 
+						ImGui::EndMenu();
 					}
 					if (ImGui::MenuItem("Edit"))
 					{
@@ -102,6 +110,38 @@ namespace Tempest
 
 					}
 					ImGui::EndMenuBar();
+				}
+
+				if (popupImport)
+					ImGui::OpenPopup("Select Asset");
+
+				if (m_FileExplorer.showFileDialog("Select Asset",
+					imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(0, 0)))
+				{
+					// add verfication (failure/success)
+					// load resource (need asset context and texture loader - can be used by asset manager window)
+					popupImportSuccess = true;
+				}
+
+				// import success message
+				if (popupImportSuccess)
+					ImGui::OpenPopup("Asset Import Success");
+
+				ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+				if (ImGui::BeginPopupModal("Asset Import Success", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+				{
+					std::size_t found = m_FileExplorer.selected_path.find_last_of("/\\");
+					std::string file = m_FileExplorer.selected_path.substr(found + 1) + " successfully imported!";
+
+					ImGui::Text("%s", file.c_str());
+					ImGui::Separator();
+
+					if (ImGui::Button("OK", ImVec2(120, 0)))
+						ImGui::CloseCurrentPopup();
+
+					ImGui::SetItemDefaultFocus();
+					ImGui::SameLine();
+					ImGui::EndPopup();
 				}
 				
 				// DockSpace
