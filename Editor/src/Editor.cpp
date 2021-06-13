@@ -10,6 +10,7 @@
 
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/ImGuiFileBrowser.h"
 #include "Window/WindowManager.h"
 #include "Window/MenuBar.h"
 
@@ -21,6 +22,7 @@ namespace Tempest
 	class Editor : public Application
 	{
 		UI::WindowManager m_WindowManager;
+		imgui_addons::ImGuiFileBrowser m_FileExplorer{};
 		UI::MenuBar m_MenuBar;
 	public:
 		Editor()
@@ -82,6 +84,9 @@ namespace Tempest
 				ImGuiWindowFlags_NoBringToFrontOnFocus |
 				ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
 
+			bool popupImport = false;
+			bool popupImportSuccess = false;
+
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			if (ImGui::Begin("Main", nullptr, window_flags))
 			{
@@ -89,6 +94,22 @@ namespace Tempest
 
 				ImGui::PopStyleVar(2);
 
+				if (ImGui::BeginMenuBar())
+				{
+					if (ImGui::MenuItem("File"))
+					{
+
+					}
+					if (ImGui::MenuItem("Edit"))
+					{
+
+					}
+					if (ImGui::MenuItem("Help"))
+					{
+
+					}
+					ImGui::EndMenuBar();
+				}
 				
 				// DockSpace
 				ImGuiIO& io = ImGui::GetIO();
