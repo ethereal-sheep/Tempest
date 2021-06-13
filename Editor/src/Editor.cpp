@@ -11,6 +11,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
 #include "Window/WindowManager.h"
+#include "Window/MenuBar.h"
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -20,6 +21,7 @@ namespace Tempest
 	class Editor : public Application
 	{
 		UI::WindowManager m_WindowManager;
+		UI::MenuBar m_MenuBar;
 	public:
 		Editor()
 			: Application(1600, 900, L"Editor") {}
@@ -87,22 +89,6 @@ namespace Tempest
 
 				ImGui::PopStyleVar(2);
 
-				if (ImGui::BeginMenuBar())
-				{
-					if (ImGui::MenuItem("File"))
-					{
-
-					}
-					if (ImGui::MenuItem("Edit"))
-					{
-
-					}
-					if (ImGui::MenuItem("Help"))
-					{
-
-					}
-					ImGui::EndMenuBar();
-				}
 				
 				// DockSpace
 				ImGuiIO& io = ImGui::GetIO();
@@ -114,9 +100,9 @@ namespace Tempest
 				
 			}
 			ImGui::End();
-			
+			m_WindowManager.InitMenuBar(m_MenuBar);
 			m_WindowManager.DisplayWindows();
-			ImGui::ShowDemoWindow();
+			m_MenuBar.Show();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();

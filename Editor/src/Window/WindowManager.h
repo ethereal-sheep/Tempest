@@ -2,7 +2,7 @@
 #include <string>
 #include <memory>
 #include "Window.h"
-
+#include "MenuBar.h"
 namespace UI
 {
 	class WindowManager
@@ -11,7 +11,7 @@ namespace UI
 		void Initialize();
 		void StartupWindows();
 		void RegisterWindow(std::string name, std::unique_ptr<Window> window);
-		//void InitMenuBar(MenuBar& menuBar);
+		void InitMenuBar(MenuBar& menuBar);
 		void DisplayWindows();
 		void ShowAllWindow();
 		void ShutdownWindows();

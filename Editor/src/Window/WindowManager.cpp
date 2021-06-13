@@ -22,6 +22,14 @@ namespace UI
 		m_WindowItems.emplace(std::move(name), std::move(window));
 	}
 
+	void WindowManager::InitMenuBar(MenuBar& menuBar)
+	{
+		for (auto& [name, window] : m_WindowItems)
+		{
+			menuBar.UpdateWindowItems(window->GetName(), window->GetToggle(), &m_LockWindow);
+		}
+	}
+
 	void WindowManager::DisplayWindows()
 	{
 		// Display windows

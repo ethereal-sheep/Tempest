@@ -171,6 +171,7 @@ xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Window\AssetManager\AssetManagerWindow.cpp" />
     <ClCompile Include="src\Window\Docking.cpp" />
+    <ClCompile Include="src\Window\MenuBar.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Window\WindowManager.cpp" />
   </ItemGroup>
@@ -186,6 +187,7 @@ xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\AssetManager\AssetInfo.h" />
     <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h" />
     <ClInclude Include="src\Window\Docking.h" />
+    <ClInclude Include="src\Window\MenuBar.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Window\WindowManager.h" />
   </ItemGroup>
