@@ -11,6 +11,8 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
 
+#include "Font.h"
+
 #include "ECS/ECS.h"
 
 
@@ -30,9 +32,9 @@ namespace Tempest
 		{
 			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
+			ImGui::StyleColorsDark();
 			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
 			ImGui_ImplOpenGL3_Init("#version 460");
-			ImGui::StyleColorsDark();
 			ImGuiIO& io = ImGui::GetIO();
 
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -45,7 +47,8 @@ namespace Tempest
 				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 			}
 
-			auto& ecs = Service<ECS>::Get();
+			init_font();
+
 		}
 
 		void OnUpdate() override
@@ -90,18 +93,34 @@ namespace Tempest
 
 				if (ImGui::BeginMenuBar())
 				{
-					if (ImGui::MenuItem("File"))
+					if (ImGui::MenuItem(ICON_FA_MAP_PIN " Font Awesome"))
 					{
 
 					}
-					if (ImGui::MenuItem("Edit"))
+					ImGui::PushFont(FONT_FAD);
+					if (ImGui::MenuItem(ICON_FAD_RANDOM_1DICE " Font Audio"))
 					{
 
 					}
-					if (ImGui::MenuItem("Help"))
+					ImGui::PopFont();
+					ImGui::PushFont(FONT_FK);
+					if (ImGui::MenuItem(ICON_FK_MAP_PIN " Fork Awesome"))
 					{
 
 					}
+					ImGui::PopFont();
+					ImGui::PushFont(FONT_KI);
+					if (ImGui::MenuItem(ICON_KI_ARROW_BOTTOM " Kenny"))
+					{
+
+					}
+					ImGui::PopFont();
+					ImGui::PushFont(FONT_BOLD);
+					if (ImGui::MenuItem("HELLO"))
+					{
+
+					}
+					ImGui::PopFont();
 					ImGui::EndMenuBar();
 				}
 
