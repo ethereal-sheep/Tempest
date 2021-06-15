@@ -57,10 +57,6 @@ namespace Tempest
 
 		void OnUpdate() override
 		{
-			//do
-			//{
-			//
-			//} while (true);
 
 		}
 
