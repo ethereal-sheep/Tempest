@@ -137,7 +137,7 @@ namespace Tempest
 		{
 			gms.load(path / "Graphs" / "Untitled.json");
 		}
-		catch (const std::exception& a)
+		catch (const std::exception&)
 		{
 			LOG_CRITICAL("fail");
 		}

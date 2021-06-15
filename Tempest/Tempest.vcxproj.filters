@@ -126,6 +126,9 @@
     <ClCompile Include="src\Instance\RuntimeInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Memory\Resource\aligned_malloc_resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\AppHandler.h">
@@ -411,6 +414,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Instance\Instance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Util\px_allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Memory\Util\aligned_malloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Memory\Resource\aligned_malloc_resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Util\px_err_callback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

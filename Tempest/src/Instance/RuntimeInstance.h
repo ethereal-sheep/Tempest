@@ -33,7 +33,6 @@ namespace Tempest
 		}
 		void _render() override
 		{
-
 		}
 		void _exit() override
 		{

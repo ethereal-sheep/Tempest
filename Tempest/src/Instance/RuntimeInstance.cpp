@@ -16,9 +16,9 @@ namespace Tempest
 			return;
 		}
 		
-		for (auto id : ecs.view<tc::Script>())
+		//for (auto id : ecs.view<tc::Script>())
 		{
-			auto& s = ecs.get<tc::Script>(id);
+			//auto& s = ecs.get<tc::Script>(id);
 			// build scripts here
 
 		}

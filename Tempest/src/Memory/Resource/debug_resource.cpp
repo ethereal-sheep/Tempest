@@ -178,10 +178,12 @@ namespace Tempest
 
 		if (i == m_blocks.end())
 			throw std::invalid_argument("Deallocating invalid pointer"); // check if block exist
-		if (i->second.m_bytes != bytes)
+		
+		// suppress these checks
+		/*if (i->second.m_bytes != bytes)
 			throw std::invalid_argument("Deallocating pointer size mismatch");
 		if (i->second.m_alignment != alignment)
-			throw std::invalid_argument("Deallocating pointer alignment mismatch");
+			throw std::invalid_argument("Deallocating pointer alignment mismatch");*/
 
 		bool miscError = false;
 
