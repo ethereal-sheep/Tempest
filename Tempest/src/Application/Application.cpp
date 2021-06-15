@@ -9,6 +9,9 @@
 #include "Scripting/Test/test_scripting.h"
 #include "Scripting/GMS.h"
 
+#include "ECS/ECS.h"
+#include "Util/view.h"
+
 namespace Tempest
 {
 	Application::Application(uint32_t width, uint32_t height, std::wstring name)
@@ -29,9 +32,9 @@ namespace Tempest
 		//RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
 		//EventManager em;
 
-		
 
-		testing_data();
+		testing_graph();
+
 
 		OnInit();
 	}

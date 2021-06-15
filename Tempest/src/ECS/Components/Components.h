@@ -92,7 +92,7 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Transform, Meta,
+		Example, Transform, Meta, Script,
 		END
 	};
 
@@ -157,6 +157,22 @@ namespace Tempest
 			}
 
 			string name{};
+		};
+
+		struct Script
+		{
+			static const char* get_type() { return "Script"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Script& component)
+			{
+				ar.StartObject();
+				ar.Member("Script", component.script);
+				return ar.EndObject();
+			}
+
+			string script{};
+			bool built = false;
 		};
 
 	}

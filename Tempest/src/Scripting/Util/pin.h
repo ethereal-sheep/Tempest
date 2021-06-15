@@ -16,38 +16,8 @@ namespace Tempest
 		friend class graph;
 
 		input_pin(pin_id_t _id, pin_type _type, string _name) :
-			id{ _id }, type{ _type }, name{ std::move(_name) } 
+			id{ _id }, type{ _type }, name{ std::move(_name) }, default_var{ _type }
 		{
-			// set var_data
-			switch (type)
-			{
-			case Tempest::pin_type::Bool:
-				break;
-			case Tempest::pin_type::Byte:
-				break;
-			case Tempest::pin_type::Int:
-				break;
-			case Tempest::pin_type::Int64:
-				break;
-			case Tempest::pin_type::Float:
-				break;
-			case Tempest::pin_type::String:
-				break;
-			case Tempest::pin_type::Vec2:
-				break;
-			case Tempest::pin_type::Vec3:
-				break;
-			case Tempest::pin_type::Vec4:
-				break;
-			case Tempest::pin_type::Entity:
-				break;
-			case Tempest::pin_type::Flow: [[fallthrough]];
-			case Tempest::pin_type::Vector: [[fallthrough]];
-			case Tempest::pin_type::END: [[fallthrough]];
-			default:
-				LOG_CRITICAL("Bad Pin Type!");
-				break;
-			}
 		}
 
 		input_pin(const input_pin&) = delete;

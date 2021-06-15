@@ -252,7 +252,11 @@ namespace Tempest
 			deserialize(var_file);
 		}
 
-		bool deserialize(const tpath& var_file)
+		/**
+		 * @brief Constructor from a variable file path.
+		 * @throw Throws var_set_exception when the var_set is not constructed properly
+		 */
+		void deserialize(const tpath& var_file)
 		{
 			Serializer serializer;
 			string json = serializer.GetJson(var_file);
@@ -261,15 +265,18 @@ namespace Tempest
 			if (reader.HasError())
 				throw var_set_exception(var_file.filename().string() + ": File cannot be opened!");
 
-			return deserialize(reader);
+			deserialize(reader);
 		}
 
-		bool deserialize(Reader& reader)
+		/**
+		 * @brief Deserializes var_set data from a reader object.
+ 		 * @throw Throws var_set_exception when the var_set is not loaded properly
+		 */
+		void deserialize(Reader& reader)
 		{
 			clear(); // make sure set is cleared
 
-			bool check = true;
-			reader.StartObject();
+			reader.StartObject("var_set");
 			{
 				// meta part
 				{
@@ -290,29 +297,15 @@ namespace Tempest
 					{
 						reader.StartObject();
 						{
-							try
-							{
-								string key_string;
-								reader.Member("Key", key_string);
-								Key key = serializer()[key_string];
-								var_data new_var;
-								reader.Member("Data", new_var);
+							string key_string;
+							reader.Member("Key", key_string);
+							Key key = serializer()[key_string];
+							var_data new_var;
+							reader.Member("Data", new_var);
 
-								if(!insert(key, std::move(new_var)))
-									throw var_set_exception("var_set: Bad Variable Key! Key has already been loaded!");
+							if(!insert(key, std::move(new_var)))
+								throw var_set_exception("var_set: Bad Variable Key! Key has already been loaded!");
 
-								
-							}
-							catch (const std::exception& a)
-							{
-								LOG_ERROR("{}", a.what());
-								check = false;
-							}
-							catch (...)
-							{
-								LOG_ERROR("{}", "var_set: Unknown exception occured!");
-								check = false;
-							}
 
 						}
 						reader.EndObject();
@@ -321,30 +314,31 @@ namespace Tempest
 				}
 			}
 			reader.EndObject();
-
-			return check;
 		}
 
-		bool serialize(const tpath& folder, const string& name) const
+		/**
+		 * @brief Serializes the var_set to a given path
+		 * @throw Throws var_set_exception when the var_set is not constructed properly
+		 */
+		void serialize(const tpath& folder, const string& name) const
 		{
 			if (!Serializer::SaveJson(folder / (name + ".json"), ""))
 				throw var_set_exception(name + ".json" + ": Invalid filename!");
 
-			bool check = true;
 			Writer writer;
-			if (!serialize(writer)) check = false;
+			serialize(writer);
 
 			if (!Serializer::SaveJson(folder / (name + ".json"), writer.GetString()))
-				throw var_set_exception(name + ".json" + ": Invalid filename!");
-
-			return check;
+				throw var_set_exception(name + ".json" + ": Failed to save!");
 		}
 
-		bool serialize(Writer& writer) const
+		/**
+		 * @brief Serializes the var_set to a writer object.
+		 * @throw Throws var_set_exception when the var_set is not constructed properly
+		 */
+		void serialize(Writer& writer) const
 		{
-			bool check = true;
-
-			writer.StartObject();
+			writer.StartObject("var_set");
 			{
 				// meta part
 				{
@@ -361,24 +355,10 @@ namespace Tempest
 					{
 						writer.StartObject();
 						{
-							try
-							{
-								string key_string = serializer()(key);
-								writer.Member("Key", key_string);
-								var_data temp = var;
-								writer.Member("Data", temp);
-
-							}
-							catch (const std::exception& a)
-							{
-								LOG_ERROR("{}", a.what());
-								check = false;
-							}
-							catch (...)
-							{
-								LOG_ERROR("{}", "var_set: Unknown exception occured!");
-								check = false;
-							}
+							string key_string = serializer()(key);
+							writer.Member("Key", key_string);
+							var_data temp = var;
+							writer.Member("Data", temp);
 						}
 						writer.EndObject();
 					}
@@ -386,8 +366,6 @@ namespace Tempest
 				}
 			}
 			writer.EndObject();
-
-			return check;
 		}
 
 		/**
@@ -490,15 +468,27 @@ namespace Tempest
 		 */
 		[[nodiscard]] var_data* at_if(const Key& key)
 		{
-			if (count(key)) return nullptr;
-
+			if (!count(key)) return nullptr;
+			
 			return &vars.at(key);
 		}
 		[[nodiscard]] const var_data* at_if(const Key& key) const
 		{
-			if (count(key)) return nullptr;
+			if (!count(key)) return nullptr;
 
 			return &vars.at(key);
+		}
+
+		[[nodiscard]] bool rekey(const Key& old_key, const Key& new_key)
+		{
+			if (!count(old_key)) return false;
+			if (count(new_key)) return false;
+
+			auto node = vars.extract(old_key);
+			node.key() = new_key;
+			vars.insert(std::move(node));
+
+			return true;
 		}
 
 		/**
@@ -508,11 +498,13 @@ namespace Tempest
 		 * @param data Data to pass in
 		 * @return True if insert successfully.
 		 */
-		bool insert(const Key& key, var_data data)
+		var_data* insert(const Key& key, var_data data)
 		{
 			auto ret = vars.emplace(key, std::move(data));
+			if (ret.second)
+				return nullptr;
 
-			return ret.second;
+			return &ret.first->second;
 		}
 
 		/**
@@ -629,5 +621,5 @@ namespace Tempest
 		typename Hash = std::hash<Key>,
 		typename Serial = serial<Key>
 	>
-		using unordered_var_set = var_set<Key, false, Hash, Serial>;
+	using unordered_var_set = var_set<Key, false, Hash, Serial>;
 }

@@ -1,10 +1,19 @@
 #pragma once
 #include "Core.h"
 #include "Util.h"
+#include "Events/Events.h"
 #include <any>
 
 namespace Tempest
 {
+	class script_exception : public std::exception
+	{
+	public:
+		script_exception(const string& err_msg = "sparse set exception thrown!") : msg(err_msg) {}
+		const char* what() const noexcept override { return msg.c_str(); }
+	private:
+		string msg;
+	};
 
 	/**
 	 * @brief Pure virtual interface class for scripts.
@@ -12,12 +21,19 @@ namespace Tempest
 	class script
 	{
 	public:
+
 		virtual ~script() = default;
 
 		/**
 		 * @brief Operator() overload. Calls the underlying function.
 		 */
 		virtual void operator()() = 0;
+
+		/**
+		 * @brief function to call to invoke underlying event script. If none is overriden, 
+		 * throws script_exception
+		 */
+		virtual void event_call(const Event&) { throw script_exception("Bad Event call!"); }
 
 		/**
 		 * @brief Operator[] overload. Gets the output value at the function's
@@ -418,7 +434,7 @@ namespace Tempest
 				callback();
 
 			for (auto s : arr)
-				if(s) (*s)();
+				if (s) (*s)();
 		}
 
 		std::any operator[](size_t index [[maybe_unused]] ) override
@@ -439,6 +455,58 @@ namespace Tempest
 
 			arr[index] = input;
 			return this;
+		}
+	};
+	
+	/**
+	 * @brief Event Script. Calls a set of output scripts in order.
+	 */
+	template<typename Func, typename Ret>
+	class event_script : public script
+	{
+		Func func;
+		script_output<Ret> outputs;
+
+		script* next = nullptr;
+
+	public:
+		event_script(Func f) : func(f) {}
+
+		void operator()() override
+		{
+			// does nothing
+		}
+
+		std::any operator[](size_t index [[maybe_unused]] ) override
+		{
+			return false;
+		}
+
+		script* set_input(size_t, script*, size_t) override
+		{
+			// do ntohing
+			return this;
+		}
+
+		script* set_next(script* input, size_t ) override
+		{
+			next = input;
+			return this;
+		}
+
+		// specially for events only
+		void event_call(const Event& e) override
+		{
+			if (callback)
+				callback();
+
+			if constexpr (!std::is_same_v<Ret, void>)
+				outputs = func(e);
+			else
+				func(e);
+
+			if (next)
+				(*next)();
 		}
 	};
 
@@ -506,7 +574,7 @@ namespace Tempest
 	}
 	/**
 	 * @brief Creates a
-	 * 
+	 *
 	 * Sequence Script. Calls a set of output scripts in order.
 	 */
 	template<size_t NOutputs>
@@ -514,5 +582,17 @@ namespace Tempest
 	{
 		return make_uptr<sequence_script<NOutputs>>();
 	}
+	
+	/**
+	 * @brief Creates a
+	 *
+	 * Event Script. Entry point to a bunch of scripts.
+	 */
+	template<typename Func>
+	[[nodiscard]] auto CreateEventScript(Func f)
+	{
+		return make_uptr<event_script<Func, std::invoke_result_t<Func, Event>>>(f);
+	}
 
+	using script_ptr = tuptr<script>;
 }

@@ -92,7 +92,7 @@ namespace Tempest
 		 * @param func Callable object
 		 */
 		template<typename Func>
-		[[nodiscard]] void each(Func func)
+		void each(Func func)
 		{
 			for (value_type& i : *this)
 				func(i);
@@ -104,7 +104,7 @@ namespace Tempest
 		 * @param func Callable object
 		 */
 		template<typename Func>
-		[[nodiscard]] void each(Func func) const
+		void each(Func func) const
 		{
 			for (const value_type& i : *this)
 				func(i);
@@ -196,7 +196,7 @@ namespace Tempest
 		 * @param func Callable object
 		 */
 		template<typename Func>
-		[[nodiscard]] void each(Func func) const
+		void each(Func func) const
 		{
 			for (reference i : *this)
 				func(i);

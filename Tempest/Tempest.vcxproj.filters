@@ -75,9 +75,6 @@
     <ClCompile Include="src\Logger\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Instance\Instances\Instance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -112,6 +109,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripting\Test\test_data.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\Nodes\CastNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\Test\test_script_events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Instance\Instance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Instance\RuntimeInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,9 +311,6 @@
     <ClInclude Include="src\Logger\InstanceLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Memory\Resource\wrapper_resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Memory\MemoryObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -312,12 +321,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Asset\Util\importer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\Instances\Instance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\Instances\RuntimeInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Events\Util\event_queue.h">
@@ -345,9 +348,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scripting\Util\pin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\link.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\OpenGL\Skybox.h">
@@ -396,6 +396,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scripting\Util\var_set.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\view.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\SRM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\Util\sparse_scripts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Instance\RuntimeInstance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Instance\Instance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,6 +7,17 @@
 
 namespace Tempest
 {
+
+	class sparse_set_exception : public std::exception
+	{
+	public:
+		sparse_set_exception(const string& err_msg = "sparse set exception thrown!") : msg(err_msg) {}
+		const char* what() const noexcept override { return msg.c_str(); }
+	private:
+		string msg;
+	};
+
+
 	/**
 	 * @brief Sparse Set data structure specifically for Entity type. Provides 
 	 * Contant time insert, remove, and lookup, while providing locality of 
@@ -128,11 +139,11 @@ namespace Tempest
 		 * @param mem Pointer to a polymorphic memory resource; defaults to
 		 * default resource provided by the standard library
 		 */
-		sparse_set_t(m_resource* mem = std::pmr::get_default_resource()) : 
-			sparse_set(Component::get_type()), 
-			entityList(mem), 
-			componentList(mem), 
-			sparse(MAX_ENTITY, 0, mem){}
+		sparse_set_t(m_resource* mem = std::pmr::get_default_resource()) :
+			sparse_set(Component::get_type()),
+			entityList(mem),
+			componentList(mem),
+			sparse(MAX_ENTITY, 0, mem) {}
 
 		/**
 		 * @brief Clears the sparse set before destructing
@@ -292,19 +303,35 @@ namespace Tempest
 		}
 
 
+		/**
+		 * @brief Gets the component that belongs to the entity
+		 * @param entity An entity identifier, either valid or not
+		 * @throw sparse_set_exception if entity doesn't own component
+		 * @return Pointer to the component; nullptr if entity doesn't exist
+		 */
+		component_type& get(Entity entity)
+		{
+			if (!contains(entity))
+				throw sparse_set_exception(
+					string("sparse_set: Failed to get component at entity ") + 
+					std::to_string(entity));
+
+			return componentList[sparse[entity]];
+		}
 
 		/**
 		 * @brief Gets the component that belongs to the entity
 		 * @param entity An entity identifier, either valid or not
 		 * @return Pointer to the component; nullptr if entity doesn't exist
 		 */
-		component_type* get(Entity entity)
+		component_type* get_if(Entity entity)
 		{
 			if (!contains(entity))
 				return nullptr;
 
 			return &componentList[sparse[entity]];
 		}
+
 		/**
 		 * @brief TODO: Sorts the sparse set. Default ascending.
 		 * @tparam Pred Predicate function type
@@ -312,8 +339,6 @@ namespace Tempest
 		 */
 		template<typename Pred>
 		void sort(Pred pred = std::less<Entity>()) {/*TODO*/ }
-
-
 
 		/**
 		 * @brief Serializes the sparse set into a json file at given path

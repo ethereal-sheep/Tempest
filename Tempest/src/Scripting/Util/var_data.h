@@ -22,7 +22,7 @@ namespace Tempest
 		 * @brief Template constructor
 		 */
 		template <typename T = bool>
-		var_data(T data) { set(data); }
+		var_data(T data) { set<T>(data); }
 
 
 		/**
@@ -82,7 +82,7 @@ namespace Tempest
 		 * @brief Tries to get the variable of type T. Returns true
 		 * if variable of type T is stored in the variable data class.
 		 */
-		template <typename T, typename = std::enable_if_t<is_member<T>>>
+		template <typename T>
 		bool try_get() const
 		{
 			try
@@ -106,77 +106,112 @@ namespace Tempest
 		 */
 		pin_type get_type() const { return type; }
 
-		var_data& set(bool _data)
+		template <typename T>
+		var_data& set(T _data)
 		{
 			type = pin_type::Bool;
-			variable_data = _data;
+			variable_data = static_cast<bool>(_data);
 
 			return *this;
 		}
-		var_data& set(uint8_t _data)
+		template <>
+		var_data& set<uint8_t>(uint8_t _data)
 		{
 			type = pin_type::Byte;
 			variable_data = _data;
 
 			return *this;
 		}
-		var_data& set(int _data)
+		template <>
+		var_data& set<char>(char _data)
+		{
+			type = pin_type::Byte;
+			variable_data = _data;
+
+			return *this;
+		}
+		template <>
+		var_data& set<int>(int _data)
 		{
 			type = pin_type::Int;
 			variable_data = _data;
 
 			return *this;
 		}
-		var_data& set(int64_t _data)
+		template <>
+		var_data& set<int64_t>(int64_t _data)
 		{
 			type = pin_type::Int64;
 			variable_data = _data;
 
 			return *this;
 		}
-		var_data& set(float _data)
+		template <>
+		var_data& set<float>(float _data)
 		{
 			type = pin_type::Float;
 			variable_data = _data;
 
 			return *this;
 		}
-		var_data& set(double _data)
+		template <>
+		var_data& set<double>(double _data)
 		{
 			type = pin_type::Float;
 			variable_data = static_cast<float>(_data);
 
 			return *this;
 		}
-		var_data& set(std::string _data)
+		template <>
+		var_data& set<string>(std::string _data)
 		{
 			type = pin_type::String;
 			variable_data = std::move(_data);
 
 			return *this;
 		}
-		var_data& set(uint32_t _data)
+		template <>
+		var_data& set<const char*>(const char* _data)
+		{
+			type = pin_type::String;
+			variable_data = string(_data);
+
+			return *this;
+		}
+		template <>
+		var_data& set<uint32_t>(uint32_t _data)
 		{
 			type = pin_type::Entity;
 			variable_data = _data;
 
 			return *this;
 		}
-		var_data& set(vec2 _data)
+		template <>
+		var_data& set<size_t>(size_t _data)
+		{
+			type = pin_type::Entity;
+			variable_data = static_cast<uint32_t>(_data);
+
+			return *this;
+		}
+		template <>
+		var_data& set<vec2>(vec2 _data)
 		{
 			type = pin_type::Vec2;
 			variable_data = _data;
 
 			return *this;
 		}
-		var_data& set(vec3 _data)
+		template <>
+		var_data& set<vec3>(vec3 _data)
 		{
-			type = pin_type::Vec2;
+			type = pin_type::Vec3;
 			variable_data = _data;
 
 			return *this;
 		}
-		var_data& set(vec4 _data)
+		template <>
+		var_data& set<vec4>(vec4 _data)
 		{
 			type = pin_type::Vec4;
 			variable_data = _data;

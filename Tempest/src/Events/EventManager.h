@@ -8,8 +8,7 @@ namespace Tempest
 	using EventCallback = std::function<void(const Event&)>;
 	class EventManager
 	{
-		using listener_map = tmap<size_t, tvector<EventCallback>>;
-
+		using Listeners = tmap<size_t, tvector<EventCallback>>;
 	public:
 		template <typename TEvent, typename TFunc, typename... TArgs>
 		void register_listener(TFunc&& func, TArgs&&... args)
@@ -47,6 +46,6 @@ namespace Tempest
 		}
 
 	private:
-		listener_map listeners;
+		Listeners listeners;
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "Memory.h"
 #include "ECS/ECS.h"
-
+#include "Graphics/OpenGL/Camera.h"
 
 
 namespace Tempest
@@ -23,48 +23,6 @@ namespace Tempest
 			ecs.load(root_directory);
 		}
 
-
-		/**
-		 * @brief Virtual hook for derived class. Add behaviour to the
-		 * virtual function if the behavior desired is applied to all
-		 * instances.
-		 * 
-		 * @warning Must always be called by derived class
-		 * 
-		 */
-		virtual void OnInit();
-
-		/**
-		 * @brief Virtual hook for derived class. Add behaviour to the
-		 * virtual function if the behavior desired is applied to all
-		 * instances.
-		 * 
-		 * @warning Must always be called by derived class
-		 * 
-		 */
-		virtual void OnUpdate(float dt);
-
-		/**
-		 * @brief Virtual hook for derived class. Add behaviour to the
-		 * virtual function if the behavior desired is applied to all
-		 * instances.
-		 * 
-		 * @warning Must always be called by derived class
-		 * 
-		 */
-		virtual void OnRender();
-
-		/**
-		 * @brief Virtual hook for derived class. Add behaviour to the
-		 * virtual function if the behavior desired is applied to all
-		 * instances.
-		 * 
-		 * @warning Must always be called by derived class
-		 * 
-		 */
-		virtual void OnExit();
-
-
 		[[nodiscard]] const m_resource* get_debug() const
 		{
 			return memory_object.get_debug();
@@ -75,11 +33,67 @@ namespace Tempest
 			return memory_object.has_debug();
 		}
 
+		/**
+		 * @brief Virtual hook for derived class. Add behaviour to the
+		 * virtual function if the behavior desired is applied to all
+		 * instances.
+		 */
+		void OnInit()
+		{
+			internal_init();
+			_init();
+		}
+
+		/**
+		 * @brief Virtual hook for derived class. Add behaviour to the
+		 * virtual function if the behavior desired is applied to all
+		 * instances.
+		 */
+		virtual void OnUpdate(float dt)
+		{
+			internal_update();
+			_update(dt);
+		}
+
+		/**
+		 * @brief Virtual hook for derived class. Add behaviour to the
+		 * virtual function if the behavior desired is applied to all
+		 * instances.
+		 */
+		virtual void OnRender()
+		{
+			internal_render();
+			_render();
+		}
+
+		/**
+		 * @brief Virtual hook for derived class. Add behaviour to the
+		 * virtual function if the behavior desired is applied to all
+		 * instances.
+		 */
+		virtual void OnExit()
+		{
+			internal_exit();
+			_exit();
+		}
 
 	private:
-		MemoryObject memory_object;
+
+		void internal_init();
+		void internal_update();
+		void internal_render();
+		void internal_exit();
+
+		virtual void _init() = 0;
+		virtual void _update(float dt) = 0;
+		virtual void _render() = 0;
+		virtual void _exit() = 0;
 
 	protected:
+		MemoryObject memory_object;
+
+	public:
+		Camera cam;
 		ECS ecs;
 	};
 }

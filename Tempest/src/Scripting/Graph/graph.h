@@ -8,6 +8,7 @@
 
 namespace Tempest
 {
+    static const char* graphs_folder = "Graphs";
 
     using link = uint64_t;
 
@@ -31,6 +32,7 @@ namespace Tempest
 
         using Nodes = tmap<node_id_t, node_ptr>;
         using Links = tset<link>;
+        using Variables = ordered_var_set<string>;
 
         graph(const graph&) = delete;
         graph& operator=(const graph&) = delete;
@@ -69,7 +71,7 @@ namespace Tempest
         }
 
         /**
-         * @brief Adds a link to the graph. Returns reference to the added link.
+         * @brief Adds a link to the graph. Returns true if link is added.
          */
         bool add_link(pin_id_t start, pin_id_t end)
         {
@@ -108,6 +110,28 @@ namespace Tempest
         }
 
         /**
+         * @brief Adds a variable to the graph based on type;
+         * @tparam T Type of variable to be added to the graph.
+         * @param key Key of variable
+         * @param data Data of variable
+         */
+        template <typename T>
+        T* add_var(const string& key, T data = {})
+        {
+            return variables.create<T>(key, std::move(data));
+        }
+        /**
+         * @brief Adds a variable to the graph based on type;
+         * @param key Key of variable
+         * @param t Type of variable to be added to the graph.
+         */
+        var_data* add_var(const string& key, pin_type t)
+        {
+            if (!variables.create(key, t)) return nullptr;
+            return variables.at_if(key);
+        }
+
+        /**
          * @brief Removes a node, and all connected links, from the graph.
          */
         void remove_node(node_id_t id)
@@ -130,6 +154,22 @@ namespace Tempest
             // remove node
             nodes.erase(id);
         }
+        /**
+         * @brief Removes a all nodes, and all connected links, with given name
+         */
+        void remove_nodes_by_name(const string& node_name)
+        {
+            tvector<node_id_t> to_delete;
+            for (auto& [id, node] : nodes)
+            {
+                if (node->get_name() == node_name)
+                    to_delete.push_back(id);
+            }
+
+            for (auto id : to_delete)
+                remove_node(id);
+        }
+
         /**
          * @brief Gets name of graph
          */
@@ -156,15 +196,55 @@ namespace Tempest
         }
 
         /**
+         * @brief Removes a variable from the graph
+         */
+        void remove_var(const string& key)
+        {
+            // if key doesn't exist
+            if (!variables.count(key)) return;
+
+            // find every node with this name
+            string actual = "Local:";
+            actual += key;
+            remove_nodes_by_name(actual);
+        }
+        /**
+         * @brief Removes a variable from the graph
+         */
+        bool rename_var(const string& old_name, const string& new_name)
+        {
+            // if trying to rename the same shit
+            if (old_name == new_name) return false;
+            // we try to rename the var name, else we return false
+            if (!variables.rekey(old_name, new_name)) return false;
+
+            // find every node with this name
+            string suffix = "Local:";
+
+            for (auto& [id, node] : nodes)
+                if (node->get_name() == suffix + old_name)
+                    node->set_name(suffix + new_name);
+
+            return true;
+        }
+        /**
          * @brief Gets name of graph
          */
         const string& get_name() const { return name; }
+        /**
+         * @brief Gets filepath of graph
+         */
+        const tpath& get_path() const { return filepath; }
+
+        /**
+         * @brief Gets full path of graph
+         */
+        tpath get_full_path() const { return filepath / name; }
 
         /**
          * @brief Get all nodes in the graph
          */
-        auto get_nodes() const { return make_range(nodes); }
-
+        auto get_nodes() const { return make_const_range(nodes); }
         /**
          * @brief Gets all links
          */
@@ -177,6 +257,10 @@ namespace Tempest
          * @brief Gets all links in the graph as a tri split
          */
         auto get_links_as_tri() const { return tri_split_view(links); }
+        /**
+         * @brief Gets all links in the graph as a tri split
+         */
+        auto get_variables() const { return make_const_range(variables); }
 
         /**
          * @brief Gets a node via the node_id. If node doesn't exist, returns nullptr.
@@ -194,15 +278,37 @@ namespace Tempest
 
 
     private:
-        bool serialize(
-            const tpath& folder, 
-            bool save_as = false, 
-            const string& filename = "") const;
+
+        /**
+         * @brief Serialize to current path
+         */
+        void serialize() const;
+
+        /**
+         * @brief Serialize to current path with new name
+         */
+        void serialize(const string& new_name) const;
+
+        /**
+         * @brief Serialize to new path with current name
+         */
+        void serialize(const tpath& new_folder) const;
+
+        /**
+         * @brief Serialize to current path with new name
+         */
+        void serialize(const tpath& new_folder, const string& new_name) const;
+
+
+
+        Writer& _serialize(Writer& writer) const;
 
         mutable string name;
+        mutable tpath filepath;
 
         Nodes nodes;
         Links links;
+        Variables variables;
         
 	};
 

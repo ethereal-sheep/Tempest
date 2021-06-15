@@ -1,5 +1,6 @@
 
 #include "../Util/node.h"
+#include "Instance/RuntimeInstance.h"
 
 namespace Tempest
 {
@@ -39,16 +40,39 @@ namespace Tempest
 			node.add_output(pin_type::Float, "float output");
 			node.add_output(pin_type::String, "string output");
 			break;
-		case Tempest::test_node::inner_type::END:
+
+		case Tempest::test_node::inner_type::all:
+			node.set_name("all");
+			node.add_input(pin_type::Flow, "");
+			node.add_input(pin_type::Bool, "Bool input");
+			node.add_input(pin_type::Byte, "Byte input");
+			node.add_input(pin_type::Int, "Int input");
+			node.add_input(pin_type::Int64, "Int64 input");
+			node.add_input(pin_type::Float, "Float input");
+			node.add_input(pin_type::String, "String input");
+			node.add_input(pin_type::Vec2, "Vec2 input");
+			node.add_input(pin_type::Vec3, "Vec3 input");
+			node.add_input(pin_type::Vec4, "Vec4 input");
+
+			node.add_output(pin_type::Flow, "");
+			node.add_output(pin_type::Byte, "Byte output");
+			node.add_output(pin_type::Int, "Int output");
+			node.add_output(pin_type::Int64, "Int64 output");
+			node.add_output(pin_type::Float, "Float output");
+			node.add_output(pin_type::String, "String output");
+			node.add_output(pin_type::Vec2, "Vec2 output");
+			node.add_output(pin_type::Vec3, "Vec3 output");
+			node.add_output(pin_type::Vec4, "Vec4 output");
 			break;
 		default:
+			return nullptr;
 			break;
 		}
 
 		return make_uptr<test_node>(std::move(node));
 	}
 
-	script* test_node::create_script(Entity entity [[maybe_unused]])
+	script* test_node::create_script(Entity entity [[maybe_unused]], RuntimeInstance& srm [[maybe_unused]] )
 	{
 		return nullptr;
 	}

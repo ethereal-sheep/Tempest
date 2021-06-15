@@ -3,6 +3,7 @@
 #include "../Util/var_data.h"
 #include "../Util/var_set.h"
 #include "Util.h"
+#include "Util/view.h"
 
 namespace Tempest
 {
@@ -244,6 +245,28 @@ namespace Tempest
 			LOG_ASSERT(o.count(key));
 		}
 	}
+	void testing_data_11()
+	{
+		tvector<int> test(10, 0);
+		simple_view v(test.begin(), test.end());
+
+		for (auto i : v)
+			LOG("{0}", i);
+
+	}
+	void testing_data_12()
+	{
+		tvector<int> test(10, 1);
+		for (int i = 0; i < test.size(); ++i)
+		{
+			test[i] = i;
+		}
+		skipable_view v(test.cbegin(), test.cend(), [](auto i) { return i < 5; });
+
+		for (auto i : v)
+			LOG("{0}", i);
+
+	}
 
 	void testing_data()
 	{
@@ -253,9 +276,11 @@ namespace Tempest
 		testing_data_4();
 		testing_data_5();
 		testing_data_6();
-		testing_data_7();*/
+		testing_data_7();
 		testing_data_8();
 		testing_data_9();
 		testing_data_10();
+		testing_data_11();*/
+		testing_data_12();
 	}
 }

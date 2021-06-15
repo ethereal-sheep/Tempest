@@ -5,13 +5,13 @@
 #include "TMath.h"
 #include "Util.h"
 #include "ECS/Entity.h"
+#include "Util/algorithm.h"
 
 
 /**
 * @brief See line 200 for maintanance instructions
 *
 */
-
 namespace Tempest
 {
 	/**
@@ -25,6 +25,18 @@ namespace Tempest
 		END, test
 	};
 
+	//forward declare
+	class RuntimeInstance;
+
+	class node_exception : public std::exception
+	{
+	public:
+		node_exception(const string& err_msg = "node exception thrown!") : msg(err_msg) {}
+		const char* what() const noexcept override { return msg.c_str(); }
+	private:
+		string msg;
+	};
+
 	/**
 	 * @brief Node object owned by a graph. Contains information
 	 * on how to build an underlying script.
@@ -32,6 +44,8 @@ namespace Tempest
 	class node
 	{
 	public:
+		friend class graph;
+
 		node(category_type _category) :
 			id{ idgen::generate() }, category{ _category } {}
 
@@ -47,10 +61,16 @@ namespace Tempest
 		 */
 		virtual string get_type_string() = 0;
 
+
 		/**
 		 * @brief Creates a script based on the node's type information.
 		 */
-		virtual script* create_script(Entity entity) = 0;
+		virtual script* create_script(Entity entity, RuntimeInstance& srm) = 0;
+
+		/**
+		 * @brief Creates a script based on the node's type information.
+		 */
+		script* create_script_pack(Entity entity, RuntimeInstance& srm);
 
 		/**
 		 * @brief Serializing function. Writes to the writer object.
@@ -160,7 +180,7 @@ public:																		\
 	void set_type(inner_type _type) { type = _type; }						\
 	static node_ptr create_node(const std::string& info);					\
 	string get_type_string() override;										\
-	script* create_script(Entity entity) override;							\
+	script* create_script(Entity entity, RuntimeInstance& srm) override;	\
 private:																	\
 	inner_type type;														\
 
@@ -185,7 +205,7 @@ case category_type::NodeCategory:											\
 
 
 #define NODE_SWITCH_START \
-		static inline std::unique_ptr<node> create_helper(		\
+		static inline std::unique_ptr<node> create_helper(					\
 	category_type t, const string& type) {									\
 	switch (t)																\
 	{																		\
@@ -207,7 +227,9 @@ case category_type::NodeCategory:											\
 	*
 	*/
 
-	DEFINE_NODE(test_node, test, testing1, testing2);
+	DEFINE_NODE(test_node, test, testing1, testing2, all);
+	DEFINE_NODE(CastNode, Cast, _cannot_be_empty);
+	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
 
 	NODE_SWITCH_START
 
@@ -219,5 +241,21 @@ case category_type::NodeCategory:											\
 
 	NODE_SWITCH_END
 
-		std::unique_ptr<node> CreateNode(const string& category, const string& type);
+
+
+	/**
+		* @brief Factory function for creating nodes. Takes in a category string
+		* and inner type string and creates a node.
+		* @throw node_exception if node is badly created
+		* @return node_ptr Node as a unique pointer.
+		*/
+	node_ptr CreateNode(const string& category, const string& type);
+
+	/**
+	 * @brief Factory function for creating nodes. Takes in a category type
+	 * and inner type string and creates a node.
+	 * @throw node_exception if node is badly created
+	 * @return node_ptr Node as a unique pointer.
+	 */
+	node_ptr CreateNode(category_type category, const string& type);
 }

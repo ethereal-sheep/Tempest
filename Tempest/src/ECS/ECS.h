@@ -15,6 +15,15 @@ namespace Tempest
 	static const char* components_folder = "Components";
 
 
+	class ECS_exception : public std::exception
+	{
+	public:
+		ECS_exception(const string& err_msg = "ECS exception thrown!") : msg(err_msg) {}
+		const char* what() const noexcept override { return msg.c_str(); }
+	private:
+		string msg;
+	};
+
 	/**
 	 * @brief Specific type for view exclusion
 	 */
@@ -111,16 +120,30 @@ namespace Tempest
 		/**
 		 * @brief Returns the component owned by entity
 		 * @tparam Component Valid component type
+		 * @throw sparse_set_exception if entity doesn't own component
+		 * @throw index_out_of_range_exception if component sparse_set doesn't exist
+		 * @param entity An entity identifier, either valid or not
+		 * @return Reference to entity component
+		 */
+		template <typename Component>
+		[[nodiscard]] Component& get(Entity entity)
+		{
+			return get_sparse<Component>()->get(entity);
+		}
+
+		/**
+		 * @brief Returns the component owned by entity
+		 * @tparam Component Valid component type
 		 * @param entity An entity identifier, either valid or not
 		 * @return Pointer to the component; nullptr if it doesn't exist
 		 */
 		template <typename Component>
-		[[nodiscard]] Component* get(Entity entity)
+		[[nodiscard]] Component* get_if(Entity entity)
 		{
 			if (!component_exist<Component>())
 				return nullptr;
 
-			return get_sparse<Component>()->get(entity);
+			return get_sparse<Component>()->get_if(entity);
 		}
 
 		/**
@@ -147,7 +170,7 @@ namespace Tempest
 
 			auto sparse = get_sparse<Component>();
 			sparse->emplace(entity, std::forward<TArgs>(args)...);
-			return sparse->get(entity);
+			return sparse->get_if(entity);
 		}
 		/**
 		 * @brief Replaces an entity's component; entity must currently own

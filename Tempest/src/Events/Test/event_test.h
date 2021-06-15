@@ -43,6 +43,8 @@ namespace Tempest
 			em.register_listener<test_event>(koo, i);
 
 			i = 1;
+
+			em.instant_dispatch<test_event>();
 		}
 
 		void foo([[maybe_unused]] const Event& e)

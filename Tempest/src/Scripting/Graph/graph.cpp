@@ -14,6 +14,9 @@ namespace Tempest
 		if (reader.HasError())
 			throw graph_exception(graph_file.filename().string() + ": File cannot be opened!");
 
+		filepath = graph_file;
+		filepath.remove_filename();
+
 		// used to map old ids to new ids
 		tmap<node_id_t, node_id_t> old_new_ids;
 
@@ -29,6 +32,19 @@ namespace Tempest
 						throw graph_exception(graph_file.filename().string() + ": Bad Meta Member!");
 				}
 				reader.EndMeta();
+			}
+
+			// variables part
+			// since var_set is multipurpose, all serializations are done within the set itself
+			{
+				try
+				{
+					variables.deserialize(reader);
+				}
+				catch (const std::exception& a)
+				{
+					throw graph_exception(graph_file.filename().string() + ": Exception thrown from var_set! " + a.what());
+				}
 			}
 
 			// nodes part
@@ -48,7 +64,12 @@ namespace Tempest
 						reader.EndMeta();
 
 						auto node = add_node(CreateNode(metacategory, metatype));
-						if (!node) continue; // warn here
+						if (!node)
+							throw graph_exception(
+								graph_file.filename().string() + 
+								": Node creation failed! " + 
+								"Category: " + metacategory + 
+								", Type:" + metatype);
 
 
 						reader.StartObject("Node");
@@ -57,6 +78,29 @@ namespace Tempest
 							reader.Member("Id", old_id);
 							reader.Member("Size", node->size);
 							reader.Member("Position", node->position);
+
+							size_t pins_size;
+							reader.StartArray("PinInfo", &pins_size);
+							for (size_t idx = 0; idx < pins_size; ++idx)
+							{
+								reader.StartObject();
+
+								size_t id;
+								var_data var;
+								reader.Member("Index", id);
+								reader.Member("Var", var);
+
+								reader.EndObject();
+
+								if (node->get_input_pin(id) &&
+									var.get_type() == node->get_input_pin(id)->get_type())
+								{
+									node->get_input_pin(id)->default_var = var;
+								}
+							}
+							reader.EndArray();
+
+
 
 							// add the new id into 
 							old_new_ids[old_id] = node->get_id();
@@ -85,7 +129,10 @@ namespace Tempest
 					auto [x, s_index, s_parent] = pin_to_component(old_start);
 					auto [y, e_index, e_parent] = pin_to_component(old_end);
 
-					if (x == y) continue; // warn here
+					if (x == y)
+						throw graph_exception(
+							graph_file.filename().string() +
+							": Link creation failed! Linking two input/output pins!");
 
 					// check if parents exists both in old_new
 					if (old_new_ids.count(s_parent) &&
@@ -93,7 +140,12 @@ namespace Tempest
 					{
 						auto start_pin = create_pin_id(x, s_index, old_new_ids[old_start]);
 						auto end_pin = create_pin_id(y, e_index, old_new_ids[old_end]);
-						add_link(start_pin, end_pin); // warn here if fail
+						if(add_link(start_pin, end_pin))
+							throw graph_exception(
+								graph_file.filename().string() +
+								": Linking failed between " + 
+								std::to_string(start_pin) + " and " + 
+								std::to_string(end_pin));
 					}
 				}
 				reader.EndArray();
@@ -103,19 +155,83 @@ namespace Tempest
 
 	}
 
-	bool graph::serialize(const tpath& folder, bool save_as, const string& filename) const
+	void graph::serialize() const
 	{
-		string actual_name;
-		if (save_as)
-			actual_name = filename;
-		else
-			actual_name = name;
+		if(filepath.empty())
+			throw graph_exception(name + ": Graph not saved before!");
+
+		auto new_path = get_full_path();
+		new_path.replace_extension(".json");
 
 		// check if filename is valid to save
-		if (!Serializer::SaveJson(folder / (actual_name + ".json"), ""))
-			throw graph_exception(actual_name + ".json" + ": Invalid filename!");
+		if (!Serializer::SaveJson(new_path, ""))
+			throw graph_exception(new_path.string() + ": Invalid filename!");
 
 		Writer writer;
+		_serialize(writer);
+
+		if (!Serializer::SaveJson(new_path, writer.GetString()))
+			throw graph_exception(new_path.string() + ": File cannot be saved!");
+	}
+
+	void graph::serialize(const string& new_name) const
+	{
+		auto new_path = filepath / new_name;
+		new_path.replace_extension(".json");
+
+		// check if filename is valid to save
+		if (!Serializer::SaveJson(new_path, ""))
+			throw graph_exception(new_path.string() + ": Invalid filename!");
+
+		Writer writer;
+		_serialize(writer);
+
+		if (!Serializer::SaveJson(new_path, writer.GetString()))
+			throw graph_exception(new_path.string() + ": File cannot be saved!");
+
+		name = new_name;
+	}
+
+	void graph::serialize(const tpath& new_folder) const
+	{
+
+		auto new_path = new_folder / name;
+		new_path.replace_extension(".json");
+
+		// check if filename is valid to save
+		if (!Serializer::SaveJson(new_path, ""))
+			throw graph_exception(new_path.string() + ": Invalid filename!");
+
+		Writer writer;
+		_serialize(writer);
+
+		if (!Serializer::SaveJson(new_path, writer.GetString()))
+			throw graph_exception(new_path.string() + ": File cannot be saved!");
+
+		filepath = new_folder;
+	}
+
+	void graph::serialize(const tpath& new_folder, const string& new_name) const
+	{
+		auto new_path = new_folder / new_name;
+		new_path.replace_extension(".json");
+
+		// check if filename is valid to save
+		if (!Serializer::SaveJson(new_path, ""))
+			throw graph_exception(new_path.string() + ": Invalid filename!");
+
+		Writer writer;
+		_serialize(writer);
+
+		if (!Serializer::SaveJson(new_path, writer.GetString()))
+			throw graph_exception(new_path.string() + ": File cannot be saved!");
+
+		name = new_name;
+		filepath = new_folder;
+	}
+
+	Writer& graph::_serialize(Writer& writer) const
+	{
 		writer.StartObject();
 		{
 			// meta part
@@ -125,6 +241,12 @@ namespace Tempest
 					writer.Member("Type", "Graph");
 				}
 				writer.EndMeta();
+			}
+
+			// variables part
+			// since var_set is multipurpose, all serializations are done within the set itself
+			{
+				variables.serialize(writer);
 			}
 
 			// nodes part
@@ -167,12 +289,7 @@ namespace Tempest
 				writer.EndArray();
 			}
 		}
-		writer.EndObject();
-
-		// if we are saving as, we rename the current graph
-		if (save_as) name = actual_name;
-
-		return Serializer::SaveJson(folder / (actual_name + ".json"), writer.GetString());
+		return writer.EndObject();
 	}
 	void graph::clear()
 	{

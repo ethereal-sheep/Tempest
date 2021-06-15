@@ -68,6 +68,50 @@ namespace Tempest::algo
 		}
 		return newName;
 	}
+	/**
+	 * @brief Splits a string or string_view into a vector of strings delimited by a delimiter
+	 * @tparam TString a string type template
+	 * @param s Copy of string to split
+	 * @param delim Delimiter
+	 * @return Vector of strings
+	 */
+	template< typename TString>
+	tvector<string> delimited_split(TString s, const string& delim)
+	{
+		tvector<string> temp;
+		size_t pos = 0;
+		string token;
+		while ((pos = s.find(delim)) != string::npos) {
+			token = s.substr(0, pos);
+			temp.emplace_back(std::move(token));
+			s.erase(0, pos + delim.length());
+		}
+		temp.emplace_back(std::move(s));
+
+		return std::move(temp);
+	}
+	/**
+	 * @brief Splits a string or string_view into a vector of strings delimited by a delimiter
+	 * @tparam TString a string type template
+	 * @param s Copy of string to split
+	 * @param delim Delimiter
+	 * @return Vector of strings
+	 */
+	template< typename TString>
+	tvector<string> delimited_split(TString s, char delim)
+	{
+		tvector<string> temp;
+		size_t pos = 0;
+		string token;
+		while ((pos = s.find(delim)) != string::npos) {
+			token = s.substr(0, pos);
+			temp.emplace_back(std::move(token));
+			s.erase(0, pos + delim.length());
+		}
+		temp.emplace_back(std::move(s));
+
+		return std::move(temp);
+	}
 
 	/**
 	 * @brief Erases elements from the vector using the erase-remove idiom.
@@ -133,5 +177,4 @@ namespace Tempest::algo
 				++it;
 		}
 	}
-
 }

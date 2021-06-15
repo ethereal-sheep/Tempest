@@ -161,28 +161,6 @@ namespace Tempest
 		}
 	}
 
-	void test_script()
-	{
-		auto test1 = CreateConstexprScript<std::tuple<int>(int, int)>(
-			[](int x, int y) { return x + y; },
-			std::placeholders::_1, std::placeholders::_2);
-
-		auto test2 = CreateSequenceScript<3>();
-
-		auto test3 = CreateDataScript<string>("string");
-
-		auto test4 = CreateBranchScript<int(int), 2 + 1>(
-			[](const auto& x) { return std::make_tuple(x); },
-			std::placeholders::_1);
-
-		auto test5 = CreateRuntimeScript<void(std::string)>(
-			[](const auto& x) { LOG("{0}", x); },
-			std::placeholders::_1);
-
-		test5->set_input(0, test3->set_next(nullptr, 0), 0);
-		(*test5)();
-	}
-
 	void testing_node_fn()
 	{
 		testing_node_fn_1();

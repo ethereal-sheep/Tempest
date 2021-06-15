@@ -1,5 +1,6 @@
 
 #include "Core.h"
+#include "Util.h"
 #include "Tracy.hpp"
 
 #include "Application/EntryPoint.h"
@@ -9,6 +10,8 @@
 
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
+
+#include "ECS/ECS.h"
 
 
 
@@ -42,6 +45,7 @@ namespace Tempest
 				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 			}
 
+			auto& ecs = Service<ECS>::Get();
 		}
 
 		void OnUpdate() override

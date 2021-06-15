@@ -1,5 +1,7 @@
 #pragma once
 #include "Instance.h"
+#include "Scripting/SRM.h"
+#include "Scripting/GMS.h"
 
 namespace Tempest
 {
@@ -15,25 +17,36 @@ namespace Tempest
 		 * @brief Requires root directory
 		 */
 		RuntimeInstance(const tpath& root_directory, MemoryStrategy strategy = {}) :
-			Instance(root_directory, strategy) {}
+			Instance(root_directory, strategy), srm{memory_object.get()}
+		{
+			build_scripts(root_directory);
+		}
 
-		virtual void OnInit() override
+		void _init() override
+		{
+
+
+		}
+		void _update([[maybe_unused]] float dt) override
 		{
 
 		}
-		virtual void OnUpdate([[maybe_unused]] float dt) override
+		void _render() override
 		{
 
 		}
-		virtual void OnRender() override
-		{
-
-		}
-		virtual void OnExit() override
+		void _exit() override
 		{
 
 		}
 
+	private:
+		void build_scripts(const tpath& root_directory);
+
+
+
+	public:
+		SRM srm;
 	};
 }
 
