@@ -6,6 +6,9 @@
 #include "imgui/imgui.h"
 #include "Core.h"
 
+//static const char* default_font = "FiraMono-Regular.ttf";
+//static const char* bold_font = "FiraMono-Bold.ttf";
+
 // make sure these files are in Resource/Fonts/
 static const char* default_font = "FiraMono-Regular.ttf";
 static const char* bold_font = "FiraMono-Bold.ttf";
