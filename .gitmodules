@@ -22,3 +22,6 @@
 [submodule "Libraries/tracy"]
 	path = Libraries/tracy
 	url = https://github.com/wolfpld/tracy.git
+[submodule "Libraries/PhysX"]
+	path = Libraries/PhysX
+	url = https://github.com/NVIDIAGameWorks/PhysX.git
