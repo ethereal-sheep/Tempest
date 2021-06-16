@@ -36,7 +36,7 @@ namespace Tempest
 		//RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
 		//EventManager em;
 
-		testing_ecs();
+		//testing_ecs();
 		testing_physics();
 
 

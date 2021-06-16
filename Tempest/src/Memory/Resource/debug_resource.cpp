@@ -115,8 +115,8 @@ namespace Tempest
 			// Over-aligned allocations are by-right not supported since new_delete cannot achieve this
 			// we can throw std::bad_alloc() here
 			// but we do it anyway cause underlying maybe aligned malloc
-			if(m_strict_flag) // warn here so we know
-				LOG_WARN("Allocating overaligned block: Block size {0} , Alignment {1}", bytes, alignment);
+			if(m_strict_flag || m_verbose_flag) // warn here so we know
+				LOG_WARN("Allocating overaligned block: Block size {0}, Alignment {1}", bytes, alignment);
 		}
 
 		// allocates extra bytes for header and padding
@@ -282,7 +282,7 @@ namespace Tempest
 			LOG_INFO("{0}[{1}]: Deallocating {2} bytes at {3}",
 				m_name,
 				(i->second.m_index),
-				bytes,
+				i->second.m_bytes,
 				ptr);
 		}
 

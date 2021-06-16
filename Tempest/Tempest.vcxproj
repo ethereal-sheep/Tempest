@@ -258,6 +258,7 @@
     <ClInclude Include="src\Physics\Util\px_include.h" />
     <ClInclude Include="src\Physics\Util\px_make.h" />
     <ClInclude Include="src\Physics\Util\px_malloc_allocator.h" />
+    <ClInclude Include="src\Physics\Util\px_math.h" />
     <ClInclude Include="src\Scripting\GMS.h" />
     <ClInclude Include="src\Scripting\Graph\graph.h" />
     <ClInclude Include="src\Scripting\SRM.h" />

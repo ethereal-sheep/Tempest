@@ -464,6 +464,9 @@
     <ClInclude Include="src\Physics\Util\px_cpu_dispatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Physics\Util\px_math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Util\Serializer\Private\Reader.inl">
