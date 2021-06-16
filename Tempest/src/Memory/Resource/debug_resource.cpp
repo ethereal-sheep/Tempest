@@ -112,8 +112,11 @@ namespace Tempest
 	{
 		if (alignment > alignof(max_align_t))
 		{
-			// Over-aligned allocations not supported.
-			throw std::bad_alloc();
+			// Over-aligned allocations are by-right not supported since new_delete cannot achieve this
+			// we can throw std::bad_alloc() here
+			// but we do it anyway cause underlying maybe aligned malloc
+			if(m_strict_flag) // warn here so we know
+				LOG_WARN("Allocating overaligned block: Block size {0} , Alignment {1}", bytes, alignment);
 		}
 		// allocates extra bytes for header and padding
 		AlignedHeader* head = static_cast<AlignedHeader*>(m_upstream->allocate(

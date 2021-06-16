@@ -34,8 +34,7 @@ namespace Tempest
 		}
 	};
 
-
-	static px_malloc_allocator_t& px_malloc_allocator()
+	px_malloc_allocator_t& px_malloc_allocator()
 	{
 		static px_malloc_allocator_t alloc;
 		return alloc;

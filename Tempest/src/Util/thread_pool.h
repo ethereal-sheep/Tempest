@@ -60,6 +60,11 @@ namespace Tempest
 			return thread_count;
 		}
 
+		uint32_t available_thread_count() const
+		{
+			return thread_count - running_task_count();
+		}
+
 		template <typename Func, typename... Args>
 		void push_task(Func task, Args&&...args)
 		{

@@ -252,6 +252,7 @@
     <ClInclude Include="src\Physics\Physics.h" />
     <ClInclude Include="src\Physics\Test\test_physics.h" />
     <ClInclude Include="src\Physics\Util\px_allocator.h" />
+    <ClInclude Include="src\Physics\Util\px_cpu_dispatcher.h" />
     <ClInclude Include="src\Physics\Util\px_deleter.h" />
     <ClInclude Include="src\Physics\Util\px_err_callback.h" />
     <ClInclude Include="src\Physics\Util\px_include.h" />

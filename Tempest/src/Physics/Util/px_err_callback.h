@@ -15,7 +15,7 @@ namespace Tempest
         }
     };
 
-    static px_err_callback_t& px_err_callback()
+    px_err_callback_t& px_err_callback()
     {
         static px_err_callback_t callback;
         return callback;

@@ -9,7 +9,8 @@ namespace Tempest
 	{
 		void operator()(Tpx* px_item)
 		{
-			px_item->release();
+			if(px_item)
+				px_item->release();
 		}
 	};
 }
