@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include "Util.h"
-#include "Instance/Instances/RuntimeInstance.h"
+#include "Instance/RuntimeInstance.h"
 #include "Events/Test/event_test.h"
 
 #include "Graphics/OpenGL/RenderSystem.h"
@@ -10,6 +10,7 @@
 #include "Scripting/GMS.h"
 
 #include "ECS/ECS.h"
+#include "ECS/Test/test_entity.h"
 #include "Util/view.h"
 
 namespace Tempest
@@ -32,8 +33,7 @@ namespace Tempest
 		//RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
 		//EventManager em;
 
-
-		testing_graph();
+		testing_ecs();
 
 
 		OnInit();
