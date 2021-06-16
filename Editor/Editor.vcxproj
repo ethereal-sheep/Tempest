@@ -124,12 +124,13 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\tracy\;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
@@ -147,6 +148,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\tracy\;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,7 +156,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q

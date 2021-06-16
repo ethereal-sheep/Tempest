@@ -1,6 +1,7 @@
 
 #pragma once
 #include "..\..\Core.h"
+#include <mutex>
 
 namespace Tempest
 {
@@ -77,6 +78,8 @@ namespace Tempest
 			size_t m_alignment;
 		};
 
+		mutable std::mutex res_mutex;
+
 		// metadata
 		std::string m_name;
 
@@ -112,6 +115,7 @@ namespace Tempest
 
 		static std::atomic_size_t s_leaked_bytes;
 		static std::atomic_size_t s_leaked_blocks;
+
 	};
 
 	using debug_mr = debug_resource;

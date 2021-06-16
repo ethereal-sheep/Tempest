@@ -132,8 +132,6 @@ namespace Tempest
 		if(m_blocks.count(user))
 			throw std::bad_alloc();
 
-		// record the allocation
-		m_blocks.emplace(user, allocation_rec{ user, m_blocks_allocated++, bytes, alignment });
 
 		// increments
 		m_bytes_allocated += bytes;
@@ -145,6 +143,12 @@ namespace Tempest
 		m_last_allocated_num_bytes = bytes;
 		m_last_allocated_alignment = alignment;
 		m_last_allocated_address = user;
+
+		// record the allocation
+		{
+			const std::scoped_lock lock(res_mutex);
+			m_blocks.emplace(user, allocation_rec{ user, m_blocks_allocated++, bytes, alignment });
+		}
 
 		if (m_verbose_flag)
 		{
@@ -186,7 +190,6 @@ namespace Tempest
 			throw std::invalid_argument("Deallocating pointer alignment mismatch");*/
 
 		bool miscError = false;
-
 		if (allocatedMemoryPattern != head->m_object.m_magic_number)
 		{
 			miscError = true;
@@ -289,7 +292,10 @@ namespace Tempest
 		m_last_deallocated_address = ptr;
 
 		m_upstream->deallocate(head, sizeof(AlignedHeader) + i->second.m_bytes + paddingSize, i->second.m_alignment);
-		m_blocks.erase(i);
+		{
+			const std::scoped_lock lock(res_mutex);
+			m_blocks.erase(i);
+		}
 		m_bytes_outstanding -= bytes;
 	}
 

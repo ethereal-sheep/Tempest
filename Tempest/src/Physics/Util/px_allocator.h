@@ -2,9 +2,10 @@
 #include "Core.h"
 #include "Memory.h"
 
+#include "px_include.h"
+
 namespace Tempest
 {
-
 	class px_bad_alloc : public std::exception
 	{
 	public:
@@ -14,18 +15,18 @@ namespace Tempest
 		string msg;
 	};
 
-	class px_allocator // : PxAllocatorCallback
+	class px_allocator : public physx::PxAllocatorCallback
 	{
+	public:
 		px_allocator(m_resource* mem_res = aligned_malloc_resource()) : mem{ mem_res } {}
 
 		void* allocate(size_t size, [[maybe_unused]]const char* typeName, [[maybe_unused]] const char* filename, [[maybe_unused]] int line) //override
 		{
-			const static size_t platform_dependent_alignment = 16;
 			try
 			{
-				return mem->allocate(size, platform_dependent_alignment);
+				return mem->allocate(size, platform_dependent_alignment); 
 			}
-			catch (const std::bad_alloc& a)
+			catch (const std::bad_alloc&)
 			{
 				// should be bad alloc, anything else don't catch
 				std::string s;
@@ -48,6 +49,7 @@ namespace Tempest
 	private:
 		m_resource* mem;
 	};
+
 
 
 }

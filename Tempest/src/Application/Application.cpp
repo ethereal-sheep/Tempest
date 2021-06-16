@@ -11,6 +11,7 @@
 
 #include "ECS/ECS.h"
 #include "ECS/Test/test_entity.h"
+#include "Physics/Test/test_physics.h"
 #include "Util/view.h"
 
 namespace Tempest
@@ -33,7 +34,7 @@ namespace Tempest
 		//RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
 		//EventManager em;
 
-		testing_ecs();
+		testing_physics();
 
 
 		OnInit();
