@@ -16,21 +16,21 @@
 
 namespace els
 {
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T sqrt2 = static_cast<T>(1.4142135623730950488016887242);
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T ln2 = static_cast<T>(0.6931471805599453094172321215);
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T pi = static_cast<T>(3.1415926535897932384626433833);
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T tau = 2 * pi<T>;
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T e = static_cast<T>(2.7182818284590452353602874714);
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T phi = static_cast<T>(1.6180339887498948482045868343);
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T epsilon = static_cast<T>(0.00001);
-	template<typename T>
+	template<typename T = defaultType>
 	constexpr T epsilon2 = epsilon<T> *epsilon<T>;
 
 	template<size_t I, size_t E>

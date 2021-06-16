@@ -108,6 +108,7 @@ namespace Tempest
 			}
 
 		}
+		// testing
 		float accumulator = 0.0f;
 		float step_size = 1.0f / 60.0f;
 		bool advance(float dt)
@@ -144,13 +145,17 @@ namespace Tempest
 	}
 	void testing_physics_3()
 	{
+		// fking works
 		physx::PxMat44 a(1.f);
 		glm::mat4& b = *reinterpret_cast<glm::mat4*>(&a);
+		physx::PxQuat c(els::pi<float>, PxVec3{0,0,1});
+		glm::quat& d = *reinterpret_cast<glm::quat*>(&c);
 	}
 
 	void testing_physics()
 	{
 		testing_physics_1();
 		testing_physics_2();
+		testing_physics_3();
 	}
 }
