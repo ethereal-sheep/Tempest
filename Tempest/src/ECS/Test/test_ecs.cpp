@@ -2,6 +2,7 @@
 #include "ECS/ECS.h"
 #include "Util/thread_pool.h"
 #include "Util/timer.h"
+#include "Util/Service.h"
 
 namespace Tempest
 {
@@ -9,7 +10,8 @@ namespace Tempest
 	{
 		debug_mr dg;
 		ECS ecs(&dg);
-		thread_pool tp(std::thread::hardware_concurrency());
+
+		auto& tp = Service<thread_pool>::Get();
 		tp.sleep_duration = 0;
 
 		auto a = 0.;
@@ -51,7 +53,9 @@ namespace Tempest
 		tp.push_task(single_task, 1);
 		tp.push_task(single_task, 2);
 		tp.push_task(single_task, 3);
-		single_task(4);
+		auto future = tp.submit_task(single_task, 4);
+
+		while (future.wait_for(time::mcs(100)) == std::future_status::timeout);
 
 		tp.wait_for_tasks();
 

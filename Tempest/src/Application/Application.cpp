@@ -13,6 +13,7 @@
 #include "ECS/Test/test_entity.h"
 #include "Physics/Test/test_physics.h"
 #include "Util/view.h"
+#include "Util/thread_pool.h"
 
 namespace Tempest
 {
@@ -30,10 +31,12 @@ namespace Tempest
 		Logger::Init();
 		LOG("Initializing Tempest Engine");
 
+		Service<thread_pool>::Register(thread::hardware_concurrency());
 
 		//RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
 		//EventManager em;
 
+		testing_ecs();
 		testing_physics();
 
 

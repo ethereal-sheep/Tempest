@@ -6,6 +6,9 @@
 
 namespace Tempest
 {
+	/**
+	 * @brief Used for PhysX. Bad alloc exception for physx allocations.
+	 */
 	class px_bad_alloc : public std::exception
 	{
 	public:
@@ -15,12 +18,28 @@ namespace Tempest
 		string msg;
 	};
 
+	/**
+	 * @brief Used for PhysX. Allocator adapter for PxAllocatorCallback using
+	 * pmr resources. 
+	 */
 	class px_allocator : public physx::PxAllocatorCallback
 	{
 	public:
+		/**
+		 * @brief Constructor. Stores a polymorphic resource and allocate from it.
+		 * Default to aligned_malloc_resource as we need to align all allocations
+		 * to 16 bytes.
+		 */
 		px_allocator(m_resource* mem_res = aligned_malloc_resource()) : mem{ mem_res } {}
 
-		void* allocate(size_t size, [[maybe_unused]]const char* typeName, [[maybe_unused]] const char* filename, [[maybe_unused]] int line) //override
+		/**
+		 * @brief Allocates some number of bytes, aligned to 16 bytes. and returns a pointer to it.
+		 */
+		void* allocate(
+			size_t size, 
+			[[maybe_unused]]const char* typeName, 
+			[[maybe_unused]] const char* filename, 
+			[[maybe_unused]] int line) override
 		{
 			try
 			{
@@ -41,7 +60,10 @@ namespace Tempest
 			}
 
 		}
-		void deallocate(void* ptr) //override
+		/**
+		 * @brief Deallocates a pointer.
+		 */
+		void deallocate(void* ptr) override
 		{
 			mem->deallocate(ptr, 0);
 		}

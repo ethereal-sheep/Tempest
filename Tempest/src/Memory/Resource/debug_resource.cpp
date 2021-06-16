@@ -118,6 +118,7 @@ namespace Tempest
 			if(m_strict_flag) // warn here so we know
 				LOG_WARN("Allocating overaligned block: Block size {0} , Alignment {1}", bytes, alignment);
 		}
+
 		// allocates extra bytes for header and padding
 		AlignedHeader* head = static_cast<AlignedHeader*>(m_upstream->allocate(
 			sizeof(AlignedHeader) + bytes + paddingSize, alignment));
@@ -134,7 +135,6 @@ namespace Tempest
 		// memory has been assigned previously
 		if(m_blocks.count(user))
 			throw std::bad_alloc();
-
 
 		// increments
 		m_bytes_allocated += bytes;

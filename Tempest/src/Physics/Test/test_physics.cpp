@@ -33,7 +33,7 @@ namespace Tempest
 		if (!mCooking)
 			LOG_CRITICAL("PxCreateCooking failed!");
 
-		thread_pool tp;
+		thread_pool& tp = Service<thread_pool>::Get();
 		px_cpu_dispatcher pcd(tp);
 
 		PxSceneDesc sceneDesc(mPhysics->getTolerancesScale());
@@ -44,6 +44,10 @@ namespace Tempest
 		auto mScene = px_make(mPhysics->createScene(sceneDesc));
 		if (!mScene)
 			LOG_CRITICAL("createScene failed!");
+	}
+	void testing_physics_2()
+	{
+
 	}
 
 
