@@ -46,94 +46,6 @@ namespace Tempest
 			LOG_CRITICAL("createScene failed!");
 	}
 
-	struct PhysicsConfig
-	{
-		vec3 gravity = { 0.0f, -9.81f, 0.0f };
-		bool pvd_enabled = false;
-		// bunch of other shit
-	};
-
-
-	class PhysicsObject
-	{
-	public:
-		PhysicsObject(m_resource* mem_res = aligned_malloc_resource()) :
-			allocator{ mem_res }, pcd{ Service<thread_pool>::Get() }
-		{
-			// might want to change LOG_CRITICAL to exception
-			// init foundation
-			{
-				foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
-				if (!foundation)
-					LOG_CRITICAL("PxCreateFoundation failed!");
-			}
-
-			// init pvd (OPTIONAL)
-			{
-				pvd = px_make(PxCreatePvd(*foundation));
-				if (!pvd)
-					LOG_CRITICAL("PxCreatePvd failed!");
-				transport = px_make(PxDefaultPvdSocketTransportCreate(pvd_host_ip, port, timeout));
-				if (!transport)
-					LOG_CRITICAL("PxPvdTransport failed!");
-				pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
-			}
-
-			// init physics
-			{
-				bool recordMemoryAllocations = true;
-				physics = px_make(PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
-					PxTolerancesScale(), recordMemoryAllocations));
-				if (!physics)
-					LOG_CRITICAL("PxCreatePhysics failed!");
-			}
-
-			// init cooking
-			{
-				cooking = px_make(PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(physics->getTolerancesScale())));
-				if (!cooking)
-					LOG_CRITICAL("PxCreateCooking failed!");
-			}
-
-			// init scene
-			{
-				PxSceneDesc sceneDesc(physics->getTolerancesScale());
-				sceneDesc.cpuDispatcher = &pcd;
-				sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-				sceneDesc.filterShader = PxDefaultSimulationFilterShader;
-
-				scene = px_make(physics->createScene(sceneDesc));
-				if (!scene)
-					LOG_CRITICAL("createScene failed!");
-			}
-
-		}
-		// testing
-		float accumulator = 0.0f;
-		float step_size = 1.0f / 60.0f;
-		bool advance(float dt)
-		{
-			accumulator += dt;
-			if (accumulator < step_size)
-				return false;
-
-			accumulator -= step_size;
-
-			scene->simulate(step_size);
-		}
-
-
-	private:
-		px_allocator allocator;
-		px_cpu_dispatcher pcd;
-
-		tsptr<physx::PxFoundation> foundation;
-		tsptr<physx::PxPvd> pvd;
-		tsptr<physx::PxPvdTransport> transport;
-		tsptr<physx::PxPhysics> physics;
-		tsptr<physx::PxCooking> cooking;
-		tsptr<physx::PxScene> scene;
-	};
 
 	void testing_physics_2()
 	{
@@ -146,10 +58,117 @@ namespace Tempest
 	void testing_physics_3()
 	{
 		// fking works
-		physx::PxMat44 a(1.f);
-		glm::mat4& b = *reinterpret_cast<glm::mat4*>(&a);
-		physx::PxQuat c(els::pi<float>, PxVec3{0,0,1});
-		glm::quat& d = *reinterpret_cast<glm::quat*>(&c);
+		{
+			/*
+			physx::PxMat44 a(1.f);
+			glm::mat4& b = *reinterpret_cast<glm::mat4*>(&a);
+			physx::PxQuat c(els::pi<>, PxVec3{ 0, 0, 1 });
+			glm::quat& d = *reinterpret_cast<glm::quat*>(&c);
+			*/
+
+		}
+
+		//actual tests
+		auto test = [](auto& a)
+		{
+			auto& b = math_cast(a);
+			auto& c = math_cast(b);
+			LOG_ASSERT(a == c);
+		};
+		auto test_const = [](const auto& a)
+		{
+			auto& b = math_cast(a);
+			auto& c = math_cast(b);
+			LOG_ASSERT(a == c);
+		};
+
+		{
+			physx::PxVec3 a(els::random::uniform_rand(0.f, 1.f));
+			test(a);
+			test_const(a);
+		}
+		{
+			physx::PxQuat a(els::random::uniform_rand(0.f, 1.f));
+			test(a);
+			test_const(a);
+		}
+		{
+			physx::PxMat44 a(els::random::uniform_rand(0.f, 1.f));
+			test(a);
+			test_const(a);
+		}
+		{
+			vec3 a(els::random::uniform_rand(0.f, 1.f));
+			test(a);
+			test_const(a);
+		}
+		{
+
+			quat a{
+				els::random::uniform_rand(0.f, 1.f),
+				els::random::uniform_rand(0.f, 1.f),
+				els::random::uniform_rand(0.f, 1.f),
+				els::random::uniform_rand(0.f, 1.f) };
+			test(a);
+			test_const(a);
+		}
+		{
+			mat4 a(els::random::uniform_rand(0.f, 1.f));
+			test(a);
+			test_const(a);
+		}
+
+	}
+	void testing_physics_4()
+	{
+		auto test = [](auto& a, auto& b)
+		{
+			auto& c = math_cast(a);
+			LOG_ASSERT(b == c);
+		};
+		auto test_const = [](const auto& a, const auto& b)
+		{
+			auto& c = math_cast(a);
+			LOG_ASSERT(b == c);
+		};
+
+		{
+			auto rand = els::random::uniform_rand(0.f, 1.f);
+			physx::PxVec3 a(rand);
+			vec3 b(rand);
+			test(a, b);
+			test_const(a, b);
+			test(b, a);
+			test_const(b, a);
+		}
+		{
+			auto r1 = els::random::uniform_rand(0.f, 1.f);
+			auto r2 = els::random::uniform_rand(0.f, 1.f);
+			auto r3 = els::random::uniform_rand(0.f, 1.f);
+			auto r4 = els::random::uniform_rand(0.f, 1.f);
+			physx::PxQuat a(r1,r2,r3,r4);
+			quat b(r1, r2, r3, r4);
+
+			test(a, b);
+			test_const(a, b);
+			test(b, a);
+			test_const(b, a);
+		}
+		{
+			auto rand = els::random::uniform_rand(0.f, 1.f);
+			physx::PxMat44 a(rand);
+			mat4 b(rand);
+			test(a, b);
+			test_const(a, b);
+			test(b, a);
+			test_const(b, a);
+		}
+		
+	}
+
+	void testing_physics_5()
+	{
+
 	}
 
 	void testing_physics()
@@ -157,5 +176,6 @@ namespace Tempest
 		testing_physics_1();
 		testing_physics_2();
 		testing_physics_3();
+		testing_physics_4();
 	}
 }
