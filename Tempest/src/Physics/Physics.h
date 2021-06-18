@@ -7,3 +7,4 @@
 #include "Util/px_make.h"
 #include "Util/px_cpu_dispatcher.h"
 #include "Util/px_math.h"
+#include "PhysicsObject.h"

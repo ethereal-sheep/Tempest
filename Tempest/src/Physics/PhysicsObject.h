@@ -4,6 +4,9 @@
 #include "Core.h"
 #include "Memory.h"
 #include "Util/px_include.h"
+#include "Util/px_allocator.h"
+#include "Util/px_malloc_allocator.h"
+#include "Util/px_cpu_dispatcher.h"
 
 namespace Tempest
 {
@@ -161,18 +164,19 @@ namespace Tempest
 		 *
 		 */
 
-		tsptr<physx::PxRigidBody> createActor(vec3 pos, quat rotation, rigidbody_config config) // some other stuff for configuration)
-		{
-			float h_extents = 0.5f;
-			auto material = physics->createMaterial(0.5f, 0.5f, 0.6f);
-			PxBoxGeometry a(h_extents, h_extents, h_extents);
-			auto shape = physics->createShape(a, *material);
-		}
+		//tsptr<physx::PxRigidBody> createActor(vec3 pos, quat rotation, rigidbody_config config) // some other stuff for configuration)
+		//{
+		//	/*float h_extents = 0.5f;
+		//	auto material = physics->createMaterial(0.5f, 0.5f, 0.6f);
+		//	PxBoxGeometry a(h_extents, h_extents, h_extents);
+		//	auto shape = physics->createShape(a, *material);*/
+		//	return nullptr;
+		//}
 
-		tvector<tsptr<physx::PxRigidBody>> createParticles() // some stuff for configuration)
-		{
-
-		}
+		//tvector<tsptr<physx::PxRigidBody>> createParticles() // some stuff for configuration)
+		//{
+		//	return tvector<tsptr<physx::PxRigidBody>>{};
+		//}
 
 	private:
 		px_allocator allocator;

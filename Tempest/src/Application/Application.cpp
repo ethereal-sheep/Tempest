@@ -1,7 +1,6 @@
 #include "Application.h"
 
 #include "Util.h"
-#include "Instance/RuntimeInstance.h"
 #include "Events/Test/event_test.h"
 
 #include "Graphics/OpenGL/RenderSystem.h"
@@ -32,13 +31,6 @@ namespace Tempest
 		LOG("Initializing Tempest Engine");
 
 		Service<thread_pool>::Register(thread::hardware_concurrency());
-
-		//RuntimeInstance i(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT });
-		//EventManager em;
-
-		//testing_ecs();
-		testing_physics();
-
 
 		OnInit();
 	}

@@ -1,7 +1,6 @@
 #pragma once
 #include "Core.h"
 #include "Memory.h"
-
 #include "px_allocator.h"
 
 namespace Tempest
@@ -46,11 +45,7 @@ namespace Tempest
 	 * @brief Used for PhysX. Allocator adapter for PxAllocatorCallback using explicit
 	 * aligned malloc.
 	 */
-	px_malloc_allocator_t& px_malloc_allocator()
-	{
-		static px_malloc_allocator_t alloc;
-		return alloc;
-	}
+	px_malloc_allocator_t& px_malloc_allocator();
 
 
 }
