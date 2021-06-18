@@ -206,6 +206,7 @@ namespace Tempest
 			COMPONENT_CASE(Example);
 			COMPONENT_CASE(Transform);
 			COMPONENT_CASE(Meta);
+			COMPONENT_CASE(Script);
 
 		/* ABOVE THIS PLEASE */
 
