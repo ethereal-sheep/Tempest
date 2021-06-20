@@ -17,6 +17,45 @@ namespace Tempest
 		// bunch of other shit
 	};
 
+	enum struct SHAPE_TYPE
+	{
+		NONE,
+		SPHERE,
+		BOX,
+		CAPSULE
+	};
+
+	struct Shape
+	{
+		SHAPE_TYPE type = SHAPE_TYPE::NONE;
+	};
+
+	struct Sphere : public Shape
+	{
+		Sphere() : Shape{ SHAPE_TYPE::SPHERE }, radius{ 1.f } {}
+
+		virtual ~Sphere() {}
+		float radius;
+	};
+
+	struct Box : public Shape
+	{
+		Box() : Shape{ SHAPE_TYPE::BOX }, halfX{ 1.f }, halfY{ 1.f }, halfZ{ 1.f }{}
+		virtual ~Box() {}
+		float halfX;
+		float halfY;
+		float halfZ;
+		float 
+	};
+
+	struct Capsule : Shape
+	{
+		Capsule() : Shape{ SHAPE_TYPE::CAPSULE }, radius{ 1.f }, halfHeight{ 1.f }{}
+		virtual ~Capsule() {}
+		float radius;
+		float halfHeight;
+	};
+
 	/* three main type for collision i think
 	*
 	* 1. trigger (no collision at all, only triggers events)
@@ -25,7 +64,7 @@ namespace Tempest
 	*		lmk what yall think
 	* 2. static
 	*		doesn't move, collides with all dynamic types
-	* 3. dynamic
+	* 3. dynamicasdsada
 	*		is simulated by physx, collides with everything
 	* 4. particles (dk if this is here anot) //
 			might be some special type
@@ -46,6 +85,21 @@ namespace Tempest
 		vec3 angular_velocity;		// Rotational velocity
 		vec3 material;				// staticFriction, dynamicFriction, restitution (typedef float PxReal)
 
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, sample_rigidbody& component)
+		{
+			ar.StartObject();
+			ar.Member("Mass", component.mass);
+			ar.Member("Density", component.density);
+			ar.Member("Linear_Damping", component.linear_damping);
+			ar.Member("Angular_Damping", component.angular_damping);
+			ar.Member("Is_Static", component.is_static);
+			ar.Member("Gravity", component.gravity);
+			ar.Member("Linear_Velocity", component.linear_velocity);
+			ar.Member("Angular_Velocity", component.angular_velocity);
+			ar.Member("Physics Material", component.material);
+			return ar.EndObject();
+		}
 		// just reference for you
 		/*
 		* PxMaterial needs this three things to be created
@@ -104,10 +158,21 @@ namespace Tempest
 			[1, 2, 11]
 
 		*/
-
+		
 		rigidbody_config rb_config;
 
-		tsptr<physx::PxRigidActor> internal_rb;
+		Shape shape_config;
+		tsptr<physx::PxRigidActor> internal_rb = nullptr;
+
+
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, sample_rigidbody& component)
+		{
+			ar.StartObject();
+			ar.Member("RigidBody_Config", component.rb_config);
+			ar.Member("Shape_Config", component.shape_config);
+			return ar.EndObject();
+		}
 	};
 
 	// TODO: create shape factory so can reuse shape
