@@ -8,14 +8,14 @@
 #include <iostream>
 #include <thread>
 
+
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/ImGuiFileBrowser.h"
+#include "Window/WindowManager.h"
+#include "Window/MenuBar.h"
 
 #include "Font.h"
-
-#include "ECS/ECS.h"
-
-
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -26,11 +26,13 @@ namespace Tempest
 
 	class Editor : public Application
 	{
-
+		UI::WindowManager m_WindowManager;
+		imgui_addons::ImGuiFileBrowser m_FileExplorer{};
+		UI::MenuBar m_MenuBar;
 	public:
 		Editor()
 			: Application(1600, 900, L"Editor") {}
-
+		
 		void OnInit() override
 		{
 			IMGUI_CHECKVERSION();
@@ -53,6 +55,8 @@ namespace Tempest
 			init_font();
 			init_style();
 
+			m_WindowManager.Initialize();
+			m_WindowManager.StartupWindows();
 		}
 
 		void OnUpdate() override
@@ -83,6 +87,9 @@ namespace Tempest
 				ImGuiWindowFlags_NoMove |
 				ImGuiWindowFlags_NoBringToFrontOnFocus |
 				ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
+
+			bool popupImport = false;
+			bool popupImportSuccess = false;
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			if (ImGui::Begin("Main", nullptr, window_flags))
@@ -124,7 +131,7 @@ namespace Tempest
 					ImGui::PopFont();
 					ImGui::EndMenuBar();
 				}
-
+				
 				// DockSpace
 				ImGuiIO& io = ImGui::GetIO();
 				if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
@@ -132,12 +139,12 @@ namespace Tempest
 					ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 					ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
 				}
+				
 			}
-
 			ImGui::End();
-
-
-			ImGui::ShowDemoWindow();
+			m_WindowManager.InitMenuBar(m_MenuBar);
+			m_WindowManager.DisplayWindows();
+			m_MenuBar.Show();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();
