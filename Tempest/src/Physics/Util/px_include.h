@@ -1,6 +1,7 @@
 #pragma once
 
-#include <PxConfig.h>
+#define PX_PHYSX_STATIC_LIB
+
 #include <PxPhysicsAPI.h>
 
 namespace Tempest

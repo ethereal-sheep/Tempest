@@ -17,7 +17,7 @@ namespace Tempest
 			static_assert(!std::is_same_v<Event, TEvent>, "Event type cannot be IEvent");
 
 			// if error C2440 is thrown here, your callback function is bad
-			// see Events.h
+			// see IEvent.h
 			EventCallback callback = std::bind(func, args..., std::placeholders::_1);
 
 			LOG("Registered listener of Event {}", typeid(TEvent).name());

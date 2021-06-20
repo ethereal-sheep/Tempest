@@ -2,7 +2,7 @@
 #include "Memory.h"
 #include "ECS/ECS.h"
 #include "Graphics/OpenGL/Camera.h"
-
+#include "WindowManager.h"
 
 namespace Tempest
 {
@@ -15,7 +15,8 @@ namespace Tempest
 		virtual ~Instance() = 0 {}
 		Instance(MemoryStrategy strategy = {}) : 
 			memory_object( strategy ), 
-			ecs(memory_object.get()) {}
+			ecs(memory_object.get()),
+			window_manager(memory_object.get()){}
 
 		Instance(const tpath& root_directory, MemoryStrategy strategy = {}) :
 			Instance(strategy)
@@ -31,6 +32,12 @@ namespace Tempest
 		[[nodiscard]] bool has_debug() const
 		{
 			return memory_object.has_debug();
+		}
+
+		template <typename TWindow, typename... Args>
+		[[nodiscard]] TWindow* register_window(Args&&... args)
+		{
+
 		}
 
 		/**
@@ -93,7 +100,8 @@ namespace Tempest
 		MemoryObject memory_object;
 
 	public:
-		Camera cam;
 		ECS ecs;
+		WindowManager window_manager;
+		Camera cam;
 	};
 }

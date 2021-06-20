@@ -10,20 +10,6 @@ namespace Tempest
 		RUN_TIME,
 	};
 
-	class window
-	{
-		virtual void show(Instance& ) = 0;
-	};
-
-	class test_window : public window
-	{
-		void show(Instance& a) override
-		{
-
-		}
-	};
-
-
 	class InstanceConfig
 	{
 		MemoryStrategy memory_strategy;
@@ -32,23 +18,34 @@ namespace Tempest
 
 	class InstanceManager
 	{
-
 		void update()
 		{
-
+			if (!instance) return;
 		}
 		void render()
 		{
-
+			if (!instance) return;
 		}
 
-		void load_new_instance()
+		void load_new_instance([[maybe_unused]]const tpath& project_path, [[maybe_unused]] InstanceConfig config)
 		{
-
 		}
-
 
 	private:
-		tuptr<Instance> current_instance;
+		void init_runtime()
+		{
+			// register windows here
+			// assume instance is valid now
+
+			// 
+		}
+		void init_edittime()
+		{
+			// register windows here
+			// assume instance is valid now
+		}
+
+
+		tuptr<Instance> instance;
 	};
 }

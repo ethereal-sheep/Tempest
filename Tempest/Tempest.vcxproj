@@ -200,6 +200,7 @@
     <ClCompile Include="src\Graphics\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="src\Instance\EditTimeInstance.cpp" />
     <ClCompile Include="src\Instance\Instance.cpp" />
+    <ClCompile Include="src\Instance\InstanceManager.cpp" />
     <ClCompile Include="src\Instance\RuntimeInstance.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
@@ -255,6 +256,8 @@
     <ClInclude Include="src\Instance\Instance.h" />
     <ClInclude Include="src\Instance\InstanceManager.h" />
     <ClInclude Include="src\Instance\RuntimeInstance.h" />
+    <ClInclude Include="src\Instance\Window.h" />
+    <ClInclude Include="src\Instance\WindowManager.h" />
     <ClInclude Include="src\Memory\Resource\aligned_malloc_resource.h" />
     <ClInclude Include="src\Memory\Util\aligned_malloc.h" />
     <ClInclude Include="src\Physics\Filters\Filters.h" />
