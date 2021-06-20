@@ -43,14 +43,14 @@ namespace Tempest
 	 * @brief Forwarding for make_unique
 	 */
 	template <typename T, typename ... Args>
-	static inline constexpr [[nodiscard]] tuptr<T> make_uptr(Args&& ... args) {
+	[[nodiscard]] static inline constexpr tuptr<T> make_uptr(Args&& ... args) {
 		return std::make_unique<T>(std::forward<Args>(args)...);
 	}
 	/**
 	 * @brief Forwarding for make_shared
 	 */
 	template <typename T, typename ... Args>
-	static inline constexpr [[nodiscard]] tsptr<T> make_sptr(Args&& ... args) {
+	[[nodiscard]] static inline constexpr tsptr<T> make_sptr(Args&& ... args) {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 

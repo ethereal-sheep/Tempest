@@ -217,12 +217,12 @@ namespace Tempest
 
 
 	template <typename Cont>
-	static inline constexpr [[nodiscard]] simple_range<Cont> make_range(Cont& _container)
+	[[nodiscard]] static inline constexpr simple_range<Cont> make_range(Cont& _container)
 	{
 		return simple_range(_container);
 	}
 	template <typename Cont>
-	static inline constexpr [[nodiscard]] const_range<Cont> make_const_range(const Cont& _container)
+	[[nodiscard]] static inline constexpr const_range<Cont> make_const_range(const Cont& _container)
 	{
 		return const_range(_container);
 	}

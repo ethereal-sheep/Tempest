@@ -24,6 +24,7 @@
     <ProjectGuid>{3dfcc228-6442-4ecf-a665-caf9e34053a9}</ProjectGuid>
     <RootNamespace>Tempest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

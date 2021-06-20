@@ -24,6 +24,7 @@
     <ProjectGuid>{2b5f71a6-4fde-44b8-94b0-97283d223e1b}</ProjectGuid>
     <RootNamespace>Editor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -81,12 +82,16 @@
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Build-int\$(Configuration)\</IntDir>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Build-int\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

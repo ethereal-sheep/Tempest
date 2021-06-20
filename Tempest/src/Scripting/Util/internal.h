@@ -31,7 +31,7 @@ namespace Tempest
 	* 3. 24 bits:	NODE id of parent
 	*/
 
-	inline constexpr [[nodiscard]] std::tuple<bool, size_t, node_id_t> pin_to_component(pin_id_t pin)
+	[[nodiscard]] inline constexpr std::tuple<bool, size_t, node_id_t> pin_to_component(pin_id_t pin)
 	{
 		return std::make_tuple(
 			static_cast<bool>((pin >> 31) & 0x01),
@@ -39,7 +39,7 @@ namespace Tempest
 			static_cast<node_id_t>(pin & 0xFFFFFF));
 	}
 
-	inline constexpr [[nodiscard]] pin_id_t create_pin_id(bool input, size_t index, node_id_t parent)
+	[[nodiscard]] inline constexpr pin_id_t create_pin_id(bool input, size_t index, node_id_t parent)
 	{
 		pin_id_t id = 0;
 		id |= parent;
@@ -49,11 +49,11 @@ namespace Tempest
 		return id;
 	}
 
-	inline constexpr [[nodiscard]] uint64_t concatenate_id_t(id_t id1, id_t id2)
+	[[nodiscard]] inline constexpr uint64_t concatenate_id_t(id_t id1, id_t id2)
 	{
 		return (static_cast<uint64_t>(id1) << 32) + id2;
 	}
-	inline constexpr [[nodiscard]] tpair<id_t, id_t> split_uint64_t(uint64_t id)
+	[[nodiscard]] inline constexpr tpair<id_t, id_t> split_uint64_t(uint64_t id)
 	{
 		return std::make_pair(
 			static_cast<id_t>((id & 0xFFFFFFFF00000000LL) >> 32),

@@ -42,8 +42,6 @@ namespace Tempest
 			ImGui_ImplOpenGL3_Init("#version 460");
 			ImGuiIO& io = ImGui::GetIO();
 
-
-
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 			ImGuiStyle& style = ImGui::GetStyle();
