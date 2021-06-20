@@ -411,7 +411,7 @@ namespace imgui_addons
     {
         std::string label = (dialog_mode == DialogMode::SAVE) ? "Save As:" : "Open:";
         ImGuiStyle& style = ImGui::GetStyle();
-        ImGuiIO& io = ImGui::GetIO();
+        [[maybe_unused]] ImGuiIO& io = ImGui::GetIO();
 
         ImVec2 pw_pos = ImGui::GetWindowPos();
         ImVec2 pw_content_sz = ImGui::GetWindowSize() - style.WindowPadding * 2.0;
@@ -920,7 +920,7 @@ namespace imgui_addons
         bool ret_val = false;
         if (ImGui::BeginPopupModal(repfile_modal_id.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize))
         {
-            float frame_height = ImGui::GetFrameHeightWithSpacing();
+            [[maybe_unused]] float frame_height = ImGui::GetFrameHeightWithSpacing();
 
             std::string text = "A file with the following filename already exists. Are you sure you want to replace the existing file?";
             ImGui::TextWrapped("%s", text.c_str());

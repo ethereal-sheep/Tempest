@@ -90,8 +90,8 @@ namespace Tempest
 				ImGuiWindowFlags_NoBringToFrontOnFocus |
 				ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
 
-			bool popupImport = false;
-			bool popupImportSuccess = false;
+			[[maybe_unused]] bool popupImport = false;
+			[[maybe_unused]] bool popupImportSuccess = false;
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			if (ImGui::Begin("Main", nullptr, window_flags))
