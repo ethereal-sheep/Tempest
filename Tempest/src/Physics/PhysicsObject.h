@@ -18,27 +18,33 @@ namespace Tempest
 	};
 
 	/* three main type for collision i think
-	* 
+	*
 	* 1. trigger (no collision at all, only triggers events)
 	*		actually might not need this since everything is grid based in software
 	*		and for 300 we are just doing random demos
 	*		lmk what yall think
-	* 2. static 
+	* 2. static
 	*		doesn't move, collides with all dynamic types
 	* 3. dynamic
 	*		is simulated by physx, collides with everything
-	* 4. particles (dk if this is here anot) // 
+	* 4. particles (dk if this is here anot) //
 			might be some special type
 	*		that we define outside
-	*		
-	*			
+	*
+	*
 	*/
-	struct rigidbody_config
+	struct rigidbody_config // for creation of rigidbody object
 	{
 		float mass;
-		float density;
-		bool static_or_dynamic; // can make enum if you envision future types
-		bool gravity; // explicit or implicit with the static/dynamic type
+		float density;				// Only for dynamic
+		float linear_damping;		// Rate of decay overtime for linear velocty
+		float angular_damping;		// Rate of decay overtime for angular velocty
+		bool is_static;				// Static or Dynamic rigidbody
+		bool gravity;				// explicit or implicit with the static/dynamic type
+
+		vec3 linear_velocity;		// Velocity in a straight line
+		vec3 angular_velocity;		// Rotational velocity
+		vec3 material;				// staticFriction, dynamicFriction, restitution (typedef float PxReal)
 
 		// just reference for you
 		/*
@@ -47,7 +53,7 @@ namespace Tempest
 		*/
 	};
 
-	
+
 
 	struct sample_rigidbody
 	{
@@ -75,7 +81,7 @@ namespace Tempest
 		// d12 (dodecahedron)
 		// d20 icosahedron
 		/*
-		* 
+		*
 		*	[0, 2, 3],
 			[0, 3, 4],
 			[0, 4, 5],
@@ -96,13 +102,15 @@ namespace Tempest
 			[1, 10, 9],
 			[1, 11, 10],
 			[1, 2, 11]
-		
-		*/
-		 // default 
-		tsptr<physx::PxActor> actor;
 
+		*/
+
+		rigidbody_config rb_config;
+
+		tsptr<physx::PxRigidActor> internal_rb;
 	};
 
+	// TODO: create shape factory so can reuse shape
 
 	class PhysicsObject
 	{
@@ -114,6 +122,7 @@ namespace Tempest
 		bool advance(float dt);
 		bool fetch();
 
+		tsptr<sample_rigidbody> createRigidbody(rigidbody_config rb_config, vec3 pos, tsptr<physx::PxShape> shape) const;
 		// what other functions here?
 
 		/**
@@ -122,13 +131,13 @@ namespace Tempest
 		 * #notes
 		 * PxTriangleMesh, PxHeightField, PxConvexMesh, PxMaterial, and PxShape can auto deleted
 		 * so no need px_make, unless no references (actually not sure need db check)
-		 *  
+		 *
 		 * 0. do we want dedicate system to handle shapes? reusing shapes are good way of
 		 *	saving memory but because we cannot change the size of a shape after creation time
 		 *  this may be a bad idea. this is the same for materials.
 		 *		since we are using grids for many software, we can configure shapes to be exactly
 		 *		1x1. But this defeats the purpose of having physics simulation in the first place.
-		 *      
+		 *
 		 *
 		 * 1. add actors to the scene?
 		 *		can we use shared_ptr?
@@ -164,19 +173,25 @@ namespace Tempest
 		 *
 		 */
 
-		//tsptr<physx::PxRigidBody> createActor(vec3 pos, quat rotation, rigidbody_config config) // some other stuff for configuration)
-		//{
-		//	/*float h_extents = 0.5f;
-		//	auto material = physics->createMaterial(0.5f, 0.5f, 0.6f);
-		//	PxBoxGeometry a(h_extents, h_extents, h_extents);
-		//	auto shape = physics->createShape(a, *material);*/
-		//	return nullptr;
-		//}
+		 //tsptr<physx::PxRigidBody> createActor(vec3 pos, quat rotation, rigidbody_config config) // some other stuff for configuration)
+		 //{
+		 //	/*float h_extents = 0.5f;
+		 //	auto material = physics->createMaterial(0.5f, 0.5f, 0.6f);
+		 //	PxBoxGeometry a(h_extents, h_extents, h_extents);
+		 //	auto shape = physics->createShape(a, *material);*/
+		 //	return nullptr;
+		 //}
 
-		//tvector<tsptr<physx::PxRigidBody>> createParticles() // some stuff for configuration)
-		//{
-		//	return tvector<tsptr<physx::PxRigidBody>>{};
-		//}
+		 //tvector<tsptr<physx::PxRigidBody>> createParticles() // some stuff for configuration)
+		 //{
+		 //	return tvector<tsptr<physx::PxRigidBody>>{};
+		 //}
+
+
+		/* sample of creating and adding rigidbody to scene
+		* tsptr<sample_rigidbody> rb = createRigidbody(config, pos, shape);
+		* scene->addActor(*rb->internal_rb);
+		*/
 
 	private:
 		px_allocator allocator;

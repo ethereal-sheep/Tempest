@@ -1,4 +1,4 @@
-#include "PhysicsObject.h"
+ #include "PhysicsObject.h"
 
 /* might want to clean this up*/
 
@@ -89,7 +89,30 @@ namespace Tempest
 		return scene->fetchResults(true);
 	}
 
-	
+	tsptr<sample_rigidbody> PhysicsObject::createRigidbody(rigidbody_config rb_config, vec3 pos, tsptr<physx::PxShape> shape) const
+	{
+		tsptr<sample_rigidbody> rb;
+		rb->rb_config = rb_config;
+
+		if (rb->rb_config.is_static)
+			rb->internal_rb = px_make(physx::PxCreateStatic(*physics, PxTransform(PxVec3{ pos }), *shape));
+		else
+		{
+			tsptr<PxRigidBody> dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *shape, rb->rb_config.density));
+			dynamicBody->setLinearDamping(rb_config.linear_damping);
+			dynamicBody->setAngularDamping(rb_config.angular_damping);
+			dynamicBody->setLinearVelocity(PxVec3{rb_config.linear_velocity });
+			dynamicBody->setAngularVelocity(PxVec3{rb_config.angular_velocity });
+			rb->internal_rb = dynamicBody;
+		}
+		
+		assert(!rb->internal_rb);
+
+		rb->internal_rb->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, rb->rb_config.gravity);
+		
+		return rb;
+	}
+
 }
 
 
