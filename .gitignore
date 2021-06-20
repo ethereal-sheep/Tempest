@@ -354,3 +354,5 @@ MigrationBackup/
 
 Dep/Tempest/**
 Dep/Tempest-int/**
+
+!Dep/PhysX/**
