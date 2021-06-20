@@ -1,7 +1,9 @@
 #include "test_physics.h"
 #include "../Physics.h"
+#include "../PhysicsObject.h"
 #include "Memory.h"
 #include "TMath.h"
+#include "ECS/ECS.h"
 
 namespace Tempest
 {
@@ -168,14 +170,65 @@ namespace Tempest
 
 	void testing_physics_5()
 	{
+		//edit
+		{
+			debug_mr dg("testing_ecs_2.1");
+			dg.set_strict(true);
 
+			ECS ecs(&dg);
+
+			auto t = 100;
+			for (auto i = 0; i < t; ++i)
+			{
+				auto entity = ecs.create();
+				auto* rb = ecs.emplace<Components::Rigidbody>(entity);
+				if(entity % 3 == 1)
+					rb->shape_data = shape(SHAPE_TYPE::SPHERE, 1);
+				if (entity % 3 == 2)
+					rb->shape_data = shape(SHAPE_TYPE::BOX, 1,2,3 );
+				if (entity % 3 == 0)
+					rb->shape_data = shape(SHAPE_TYPE::CAPSULE, 4,5 );
+				
+				
+			}
+
+			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+		}
+
+		// load
+		{
+			debug_mr dg("testing_ecs_2.2");
+			dg.set_strict(true);
+
+			ECS ecs(&dg);
+
+			ecs.load("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+
+			auto view = ecs.view<Components::Rigidbody>();
+			LOG_ASSERT(view.size_hint() == 100);
+
+			for (auto id : view)
+			{
+				auto rb = ecs.get<Components::Rigidbody>(id);
+				
+				if (id % 3 == 1)
+					LOG_ASSERT(ecs.get<Components::Rigidbody>(id).shape_data.type == SHAPE_TYPE::SPHERE);
+				if (id % 3 == 2)
+					LOG_ASSERT(ecs.get<Components::Rigidbody>(id).shape_data.type == SHAPE_TYPE::BOX);
+				if (id % 3 == 0)
+					LOG_ASSERT(ecs.get<Components::Rigidbody>(id).shape_data.type == SHAPE_TYPE::CAPSULE);
+			
+			}
+
+		}
 	}
 
 	void testing_physics()
 	{
-		testing_physics_1();
+		/*testing_physics_1();
 		testing_physics_2();
 		testing_physics_3();
-		testing_physics_4();
+		testing_physics_4();*/
+		testing_physics_5();
 	}
 }

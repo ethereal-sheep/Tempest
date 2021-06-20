@@ -33,6 +33,7 @@ namespace Tempest
 		Service<thread_pool>::Register(thread::hardware_concurrency());
 
 		OnInit();
+		testing_physics();
 	}
 
 	void Application::OnEngineUpdate()

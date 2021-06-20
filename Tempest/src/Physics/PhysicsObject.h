@@ -8,6 +8,7 @@
 #include "Util/px_malloc_allocator.h"
 #include "Util/px_cpu_dispatcher.h"
 
+
 namespace Tempest
 {
 	struct PhysicsConfig
@@ -27,22 +28,25 @@ namespace Tempest
 
 	struct shape
 	{
-		SHAPE_TYPE type = SHAPE_TYPE::NONE;
-		shape(SHAPE_TYPE shape_type) : type{ shape_type } {}
-		virtual ~shape() {}
+		SHAPE_TYPE type;
+		vec3 shapeData;
 
+		shape(SHAPE_TYPE shape_type = SHAPE_TYPE::NONE, float x = 0.f, float y = 0.f, float z = 0.f) : type{ shape_type }, shapeData{ x,y,z } {}
+	
 		template <typename Archiver>
 		friend Archiver& operator&(Archiver& ar, shape& component)
 		{
 			ar.StartObject();
 			ar.Member("ShapeType", component.type);
+			ar.Member("ShapeData", component.shapeData);
 			return ar.EndObject();
 		}
+		
 	};
 
-	struct sphere : public shape
+	/*struct sphere : public shape
 	{
-		sphere() : shape{ SHAPE_TYPE::SPHERE }, radius{ 1.f } {}
+		sphere(float rad = 1.0f) : shape{ SHAPE_TYPE::SPHERE }, radius{ rad } {}
 
 		virtual ~sphere() {}
 		float radius;
@@ -59,7 +63,7 @@ namespace Tempest
 
 	struct box : public shape
 	{
-		box() : shape{ SHAPE_TYPE::BOX }, halfX{ 1.f }, halfY{ 1.f }, halfZ{ 1.f }{}
+		box(float halfx = 0.5f, float halfy = 0.5f, float halfz = 0.5f) : shape{ SHAPE_TYPE::BOX }, halfX{ halfx }, halfY{ halfy }, halfZ{ halfz }{}
 		virtual ~box() {}
 		float halfX;
 		float halfY;
@@ -79,7 +83,7 @@ namespace Tempest
 
 	struct capsule : public shape
 	{
-		capsule() : shape{ SHAPE_TYPE::CAPSULE }, radius{ 1.f }, halfHeight{ 1.f }{}
+		capsule(float rad = 1.f, float halfht = 0.5f) : shape{ SHAPE_TYPE::CAPSULE }, radius{ rad }, halfHeight{ halfht }{}
 		virtual ~capsule() {}
 		float radius;
 		float halfHeight;
@@ -93,7 +97,7 @@ namespace Tempest
 			ar.Member("ShapeType", component.type);
 			return ar.EndObject();
 		}
-	};
+	};*/
 
 	/* three main type for collision i think
 	*
@@ -147,75 +151,6 @@ namespace Tempest
 	};
 
 
-
-	struct sample_rigidbody
-	{
-		// maybe? implementation
-
-		/**
-		 * @brief MUST BE CREATED WITH px_make!
-		 * We can possibly make it only initializable with PhysicsObject.
-		 */
-
-		 // gravity yes:no
-		 // masss
-		 // density 
-		 // material -> default/preset donnid to be adjusted by designer
-		 // resolve collision yes:no () 
-
-		 // shape (capsule, sphere, box, )
-		// mentioned earlier, complex shapes need cooking and we said we don't need
-		// however, if we want to simulate dice roll (we need complex shapes)
-		// so just do all the standard dice first ()
-		// d4 (tetrahedron, tetrapyramid, 4 triangles glued-tgt)
-		// d6 (cube)
-		// d8 (octahedron (2 tetrahedron))
-		// d10 (no fking idea what shape is this but is
-		// d12 (dodecahedron)
-		// d20 icosahedron
-		/*
-		*
-		*	[0, 2, 3],
-			[0, 3, 4],
-			[0, 4, 5],
-			[0, 5, 6],
-			[0, 6, 7],
-			[0, 7, 8],
-			[0, 8, 9],
-			[0, 9, 10],
-			[0, 10, 11],
-			[0, 11, 2],
-			[1, 3, 2],
-			[1, 4, 3],
-			[1, 5, 4],
-			[1, 6, 5],
-			[1, 7, 6],
-			[1, 8, 7],
-			[1, 9, 8],
-			[1, 10, 9],
-			[1, 11, 10],
-			[1, 2, 11]
-
-		*/
-		
-		rigidbody_config rb_config;
-		shape shape_data = sphere{};
-		//shape* newShape = new sphere{5.0f};
-		//sample_rigidbody newbody {config, newShape};
-
-		tsptr<physx::PxRigidActor> internal_rb = nullptr;
-
-
-		template <typename Archiver>
-		friend Archiver& operator&(Archiver& ar, sample_rigidbody& component)
-		{
-			ar.StartObject();
-			ar.Member("RigidBody_Config", component.rb_config);
-			ar.Member("Shape_Data", component.shape_data);
-			return ar.EndObject();
-		}
-	};
-
 	// TODO: create shape factory so can reuse shape
 
 	class PhysicsObject
@@ -228,7 +163,8 @@ namespace Tempest
 		bool advance(float dt);
 		bool fetch();
 
-		tsptr<sample_rigidbody> createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const;
+		// uesd for loading 
+		tsptr<physx::PxRigidActor> createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const;
 		// what other functions here?
 
 		/**
@@ -299,6 +235,7 @@ namespace Tempest
 		* scene->addActor(*rb->internal_rb);
 		*/
 
+		void AddActorToScene(physx::PxRigidActor* actor) {scene->addActor(*actor);}
 	private:
 		px_allocator allocator;
 		px_cpu_dispatcher pcd;

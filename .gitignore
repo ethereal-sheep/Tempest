@@ -356,3 +356,4 @@ Dep/Tempest/**
 Dep/Tempest-int/**
 
 !Dep/PhysX/**
+/Build/Components/Rigidbody.json
