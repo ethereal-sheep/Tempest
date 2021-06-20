@@ -16,6 +16,7 @@
 #include <cctype>
 #include <algorithm>
 #include <cmath>
+
 #if defined (WIN32) || defined (_WIN32) || defined (__WIN32)
 #define OSWIN
 #ifndef NOMINMAX
@@ -27,9 +28,16 @@
 #include <dirent.h>
 #endif // defined (WIN32) || defined (_WIN32)
 
+#pragma warning( push )
+#pragma warning( disable : 4505)
+#pragma warning( disable : 4456)
+#pragma warning( disable : 4458)
+
 
 namespace imgui_addons
 {
+
+
     ImGuiFileBrowser::ImGuiFileBrowser()
     {
         filter_mode = FilterMode_Files | FilterMode_Dirs;
@@ -1191,4 +1199,8 @@ namespace imgui_addons
             free(real_path);
     }
     #endif // OSWIN
+
+
 }
+
+#pragma warning( pop )

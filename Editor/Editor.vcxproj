@@ -179,6 +179,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="src\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
     <ClCompile Include="src\Window\AssetManager\AssetManagerWindow.cpp" />
     <ClCompile Include="src\Window\Docking.cpp" />
     <ClCompile Include="src\Window\MenuBar.cpp" />
@@ -200,6 +201,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\imgui\imstb_textedit.h" />
     <ClInclude Include="src\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\InstanceManager\InstanceManager.h" />
     <ClInclude Include="src\Window\AssetManager\AssetInfo.h" />
     <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h" />
     <ClInclude Include="src\Window\Docking.h" />

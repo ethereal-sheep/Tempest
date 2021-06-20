@@ -1,6 +1,6 @@
 #pragma once
-#include "RuntimeInstance.h"
-#include "EditTimeInstance.h"
+#include "Instance/RuntimeInstance.h"
+#include "Instance/EditTimeInstance.h"
 
 namespace Tempest
 {

@@ -147,9 +147,6 @@
     <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Instance\InstanceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\AppHandler.h">
@@ -492,9 +489,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Instance\EditTimeInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\InstanceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Instance\WindowManager.h">

@@ -201,7 +201,6 @@
     <ClCompile Include="src\Graphics\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="src\Instance\EditTimeInstance.cpp" />
     <ClCompile Include="src\Instance\Instance.cpp" />
-    <ClCompile Include="src\Instance\InstanceManager.cpp" />
     <ClCompile Include="src\Instance\RuntimeInstance.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
@@ -255,7 +254,6 @@
     <ClInclude Include="src\Graphics\OpenGL\Skybox.h" />
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
     <ClInclude Include="src\Instance\Instance.h" />
-    <ClInclude Include="src\Instance\InstanceManager.h" />
     <ClInclude Include="src\Instance\RuntimeInstance.h" />
     <ClInclude Include="src\Instance\Window.h" />
     <ClInclude Include="src\Instance\WindowManager.h" />

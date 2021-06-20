@@ -55,7 +55,7 @@ namespace UI
 						}
 
 						////////////////Testing Part
-						for (auto& t : test)
+						/*for (auto& t : test)
 						{
 							if (ImGui::TreeNode(t.c_str()))
 							{
@@ -72,7 +72,7 @@ namespace UI
 								}
 								ImGui::TreePop();
 							}
-						}
+						}*/
 
 						////////////////////////
 						/*for (const auto& str : _FolderNames)
