@@ -116,7 +116,7 @@ namespace Tempest
 	 * @brief Alias for Forwarding for make_pair
 	 */
 	template <typename T1, typename T2>
-	static inline constexpr [[nodiscard]] tpair<T1, T2> make_tpair(T1&& arg1, T2&& arg2) {
+	[[nodiscard]] static inline constexpr tpair<T1, T2> make_tpair(T1&& arg1, T2&& arg2) {
 		return std::make_pair<T1, T2>(std::forward<T1>(arg1), std::forward<T2>(arg2));
 	}
 
