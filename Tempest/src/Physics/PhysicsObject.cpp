@@ -89,16 +89,42 @@ namespace Tempest
 		return scene->fetchResults(true);
 	}
 
-	tsptr<sample_rigidbody> PhysicsObject::createRigidbody(rigidbody_config rb_config, vec3 pos, tsptr<physx::PxShape> shape) const
+	tsptr<sample_rigidbody> PhysicsObject::createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const
 	{
 		tsptr<sample_rigidbody> rb;
 		rb->rb_config = rb_config;
 
+		PxShape* newShape = nullptr;
+		PxMaterial* material = physics->createMaterial(rb_config.material.x, rb_config.material.y, rb_config.material.z);
+
+		switch (shape_data.type)
+		{
+		case SHAPE_TYPE::SPHERE:
+			newShape = physics->createShape(physx::PxSphereGeometry(dynamic_cast<sphere*>(&shape_data)->radius), *material);
+			break;
+		case SHAPE_TYPE::BOX:	
+		{
+			box* pxBox = dynamic_cast<box*>(&shape_data);
+			newShape = physics->createShape(physx::PxBoxGeometry(pxBox->halfX, pxBox->halfY, pxBox->halfZ), *material);
+		}
+			break;
+		case SHAPE_TYPE::CAPSULE:
+		{
+			capsule* cap = dynamic_cast<capsule*>(&shape_data);
+			newShape = physics->createShape(physx::PxCapsuleGeometry(cap->radius, cap->halfHeight), *material);
+		}
+			break;
+
+		case SHAPE_TYPE::NONE:
+			LOG_ERROR("No shape data");
+			break;
+		};
+
 		if (rb->rb_config.is_static)
-			rb->internal_rb = px_make(physx::PxCreateStatic(*physics, PxTransform(PxVec3{ pos }), *shape));
+			rb->internal_rb = px_make(physx::PxCreateStatic(*physics, PxTransform(PxVec3{ pos }), *newShape));
 		else
 		{
-			tsptr<PxRigidBody> dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *shape, rb->rb_config.density));
+			tsptr<PxRigidBody> dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *newShape, rb->rb_config.density));
 			dynamicBody->setLinearDamping(rb_config.linear_damping);
 			dynamicBody->setAngularDamping(rb_config.angular_damping);
 			dynamicBody->setLinearVelocity(PxVec3{rb_config.linear_velocity });
@@ -106,7 +132,7 @@ namespace Tempest
 			rb->internal_rb = dynamicBody;
 		}
 		
-		assert(!rb->internal_rb);
+		LOG_ERROR("Rigidbody cannot be created");
 
 		rb->internal_rb->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, rb->rb_config.gravity);
 		

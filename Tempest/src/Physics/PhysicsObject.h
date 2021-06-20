@@ -25,35 +25,74 @@ namespace Tempest
 		CAPSULE
 	};
 
-	struct Shape
+	struct shape
 	{
 		SHAPE_TYPE type = SHAPE_TYPE::NONE;
+		shape(SHAPE_TYPE shape_type) : type{ shape_type } {}
+		virtual ~shape() {}
+
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, shape& component)
+		{
+			ar.StartObject();
+			ar.Member("ShapeType", component.type);
+			return ar.EndObject();
+		}
 	};
 
-	struct Sphere : public Shape
+	struct sphere : public shape
 	{
-		Sphere() : Shape{ SHAPE_TYPE::SPHERE }, radius{ 1.f } {}
+		sphere() : shape{ SHAPE_TYPE::SPHERE }, radius{ 1.f } {}
 
-		virtual ~Sphere() {}
+		virtual ~sphere() {}
 		float radius;
+
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, sphere& component)
+		{
+			ar.StartObject();
+			ar.Member("SphereRadius", component.radius);
+			ar.Member("ShapeType", component.type);
+			return ar.EndObject();
+		}
 	};
 
-	struct Box : public Shape
+	struct box : public shape
 	{
-		Box() : Shape{ SHAPE_TYPE::BOX }, halfX{ 1.f }, halfY{ 1.f }, halfZ{ 1.f }{}
-		virtual ~Box() {}
+		box() : shape{ SHAPE_TYPE::BOX }, halfX{ 1.f }, halfY{ 1.f }, halfZ{ 1.f }{}
+		virtual ~box() {}
 		float halfX;
 		float halfY;
 		float halfZ;
-		float 
+
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, box& component)
+		{
+			ar.StartObject();
+			ar.Member("BoxHalfX", component.halfX);
+			ar.Member("BoxHalfY", component.halfY);
+			ar.Member("BoxHalfZ", component.halfZ);
+			ar.Member("ShapeType", component.type);
+			return ar.EndObject();
+		}
 	};
 
-	struct Capsule : Shape
+	struct capsule : public shape
 	{
-		Capsule() : Shape{ SHAPE_TYPE::CAPSULE }, radius{ 1.f }, halfHeight{ 1.f }{}
-		virtual ~Capsule() {}
+		capsule() : shape{ SHAPE_TYPE::CAPSULE }, radius{ 1.f }, halfHeight{ 1.f }{}
+		virtual ~capsule() {}
 		float radius;
 		float halfHeight;
+
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, capsule& component)
+		{
+			ar.StartObject();
+			ar.Member("CapsuleRadius", component.radius);
+			ar.Member("CapsuleHalfHeight", component.halfHeight);
+			ar.Member("ShapeType", component.type);
+			return ar.EndObject();
+		}
 	};
 
 	/* three main type for collision i think
@@ -86,7 +125,7 @@ namespace Tempest
 		vec3 material;				// staticFriction, dynamicFriction, restitution (typedef float PxReal)
 
 		template <typename Archiver>
-		friend Archiver& operator&(Archiver& ar, sample_rigidbody& component)
+		friend Archiver& operator&(Archiver& ar, rigidbody_config& component)
 		{
 			ar.StartObject();
 			ar.Member("Mass", component.mass);
@@ -160,8 +199,10 @@ namespace Tempest
 		*/
 		
 		rigidbody_config rb_config;
+		shape shape_data = sphere{};
+		//shape* newShape = new sphere{5.0f};
+		//sample_rigidbody newbody {config, newShape};
 
-		Shape shape_config;
 		tsptr<physx::PxRigidActor> internal_rb = nullptr;
 
 
@@ -170,7 +211,7 @@ namespace Tempest
 		{
 			ar.StartObject();
 			ar.Member("RigidBody_Config", component.rb_config);
-			ar.Member("Shape_Config", component.shape_config);
+			ar.Member("Shape_Data", component.shape_data);
 			return ar.EndObject();
 		}
 	};
@@ -187,7 +228,7 @@ namespace Tempest
 		bool advance(float dt);
 		bool fetch();
 
-		tsptr<sample_rigidbody> createRigidbody(rigidbody_config rb_config, vec3 pos, tsptr<physx::PxShape> shape) const;
+		tsptr<sample_rigidbody> createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const;
 		// what other functions here?
 
 		/**
