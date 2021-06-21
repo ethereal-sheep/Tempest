@@ -35,28 +35,28 @@ namespace Tempest
 		
 		void OnInit() override
 		{
-			IMGUI_CHECKVERSION();
-			ImGui::CreateContext();
-			ImGui::StyleColorsDark();
-			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
-			ImGui_ImplOpenGL3_Init("#version 460");
-			ImGuiIO& io = ImGui::GetIO();
-
-			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-			ImGuiStyle& style = ImGui::GetStyle();
-
-			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-			{
-				style.WindowRounding = 0.0f;
-				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-			}
-
-			init_font();
-			init_style();
-
-			m_WindowManager.Initialize();
-			m_WindowManager.StartupWindows();
+			//IMGUI_CHECKVERSION();
+			//ImGui::CreateContext();
+			//ImGui::StyleColorsDark();
+			//ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
+			//ImGui_ImplOpenGL3_Init("#version 460");
+			//ImGuiIO& io = ImGui::GetIO();
+			//
+			//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+			//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+			//ImGuiStyle& style = ImGui::GetStyle();
+			//
+			//if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			//{
+			//	style.WindowRounding = 0.0f;
+			//	style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+			//}
+			//
+			//init_font();
+			//init_style();
+			//
+			//m_WindowManager.Initialize();
+			//m_WindowManager.StartupWindows();
 		}
 
 		void OnUpdate() override
@@ -68,98 +68,98 @@ namespace Tempest
 		{
 
 			/*! MUST BE AT THE START ---------------------------------------------*/
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplWin32_NewFrame();
-			ImGui::NewFrame();
-			/*--------------------------------------------------------------------*/
-
-
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->WorkPos);
-			ImGui::SetNextWindowSize(viewport->WorkSize);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			window_flags |= ImGuiWindowFlags_NoTitleBar |
-				ImGuiWindowFlags_NoCollapse |
-				ImGuiWindowFlags_NoResize |
-				ImGuiWindowFlags_NoMove |
-				ImGuiWindowFlags_NoBringToFrontOnFocus |
-				ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
-
-			[[maybe_unused]] bool popupImport = false;
-			[[maybe_unused]] bool popupImportSuccess = false;
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			if (ImGui::Begin("Main", nullptr, window_flags))
-			{
-				ImGui::PopStyleVar();
-
-				ImGui::PopStyleVar(2);
-
-				if (ImGui::BeginMenuBar())
-				{
-					if (ImGui::MenuItem(ICON_FA_MAP_PIN " Font Awesome"))
-					{
-
-					}
-					ImGui::PushFont(FONT_FAD);
-					if (ImGui::MenuItem(ICON_FAD_RANDOM_1DICE ICON_FAD_RANDOM_2DICE))
-					{
-
-					}
-
-					ImGui::PopFont();
-					ImGui::PushFont(FONT_FK);
-					if (ImGui::MenuItem(ICON_FK_MAP_PIN " Fork Awesome"))
-					{
-
-					}
-					ImGui::PopFont();
-					ImGui::PushFont(FONT_KI);
-					if (ImGui::MenuItem(ICON_KI_ARROW_BOTTOM " Kenny"))
-					{
-
-					}
-					ImGui::PopFont();
-					ImGui::PushFont(FONT_BOLD);
-					if (ImGui::MenuItem("HELLO"))
-					{
-
-					}
-					ImGui::PopFont();
-					ImGui::EndMenuBar();
-				}
-				
-				// DockSpace
-				ImGuiIO& io = ImGui::GetIO();
-				if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-				{
-					ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-					ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
-				}
-				
-			}
-			ImGui::End();
-			m_WindowManager.InitMenuBar(m_MenuBar);
-			m_WindowManager.DisplayWindows();
-			m_MenuBar.Show();
-
-			/*! MUST BE AT THE END -----------------------------------------------*/
-			ImGui::Render();
-
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			/*--------------------------------------------------------------------*/
+			//ImGui_ImplOpenGL3_NewFrame();
+			//ImGui_ImplWin32_NewFrame();
+			//ImGui::NewFrame();
+			///*--------------------------------------------------------------------*/
+			//
+			//
+			//ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+			//ImGuiViewport* viewport = ImGui::GetMainViewport();
+			//ImGui::SetNextWindowPos(viewport->WorkPos);
+			//ImGui::SetNextWindowSize(viewport->WorkSize);
+			//ImGui::SetNextWindowViewport(viewport->ID);
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			//window_flags |= ImGuiWindowFlags_NoTitleBar |
+			//	ImGuiWindowFlags_NoCollapse |
+			//	ImGuiWindowFlags_NoResize |
+			//	ImGuiWindowFlags_NoMove |
+			//	ImGuiWindowFlags_NoBringToFrontOnFocus |
+			//	ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
+			//
+			//[[maybe_unused]] bool popupImport = false;
+			//[[maybe_unused]] bool popupImportSuccess = false;
+			//
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+			//if (ImGui::Begin("Main", nullptr, window_flags))
+			//{
+			//	ImGui::PopStyleVar();
+			//
+			//	ImGui::PopStyleVar(2);
+			//
+			//	if (ImGui::BeginMenuBar())
+			//	{
+			//		if (ImGui::MenuItem(ICON_FA_MAP_PIN " Font Awesome"))
+			//		{
+			//
+			//		}
+			//		ImGui::PushFont(FONT_FAD);
+			//		if (ImGui::MenuItem(ICON_FAD_RANDOM_1DICE ICON_FAD_RANDOM_2DICE))
+			//		{
+			//
+			//		}
+			//
+			//		ImGui::PopFont();
+			//		ImGui::PushFont(FONT_FK);
+			//		if (ImGui::MenuItem(ICON_FK_MAP_PIN " Fork Awesome"))
+			//		{
+			//
+			//		}
+			//		ImGui::PopFont();
+			//		ImGui::PushFont(FONT_KI);
+			//		if (ImGui::MenuItem(ICON_KI_ARROW_BOTTOM " Kenny"))
+			//		{
+			//
+			//		}
+			//		ImGui::PopFont();
+			//		ImGui::PushFont(FONT_BOLD);
+			//		if (ImGui::MenuItem("HELLO"))
+			//		{
+			//
+			//		}
+			//		ImGui::PopFont();
+			//		ImGui::EndMenuBar();
+			//	}
+			//	
+			//	// DockSpace
+			//	ImGuiIO& io = ImGui::GetIO();
+			//	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			//	{
+			//		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			//		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
+			//	}
+			//	
+			//}
+			//ImGui::End();
+			//m_WindowManager.InitMenuBar(m_MenuBar);
+			//m_WindowManager.DisplayWindows();
+			//m_MenuBar.Show();
+			//
+			///*! MUST BE AT THE END -----------------------------------------------*/
+			//ImGui::Render();
+			//
+			//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			//ImGui::UpdatePlatformWindows();
+			//ImGui::RenderPlatformWindowsDefault();
+			///*--------------------------------------------------------------------*/
 		}
 
 		void OnExit() override
 		{
-			ImGui_ImplOpenGL3_Shutdown();
-			ImGui_ImplWin32_Shutdown();
-			ImGui::DestroyContext();
+			//ImGui_ImplOpenGL3_Shutdown();
+			//ImGui_ImplWin32_Shutdown();
+			//ImGui::DestroyContext();
 		}
 
 		LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

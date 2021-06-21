@@ -6,6 +6,7 @@
 #include "Graphics/OpenGL/Material.h"
 #include "Graphics/OpenGL/IndexBuffer.h"
 #include "Graphics/OpenGL/VertexArray.h"
+#include "Graphics/OpenGL/Camera.h"
 
 namespace Tempest
 {
@@ -13,8 +14,8 @@ namespace Tempest
 	{
 		glm::vec3 viewportPosition;
 		glm::mat4 viewProjectionMatrix;
-		glm::mat4 invViewProjectionMatrix;
-		glm::mat4 staticViewProjectionMatrix;
+		//glm::mat4 invViewProjectionMatrix;
+		//glm::mat4 staticViewProjectionMatrix;
 		glm::mat3 inverseRotation;
 		glm::mat4 orthoProjectionMatrix;
 
@@ -43,6 +44,8 @@ namespace Tempest
 	struct RenderPipeline
 	{
 		std::vector<SpriteUnit> sprites;
+		std::vector<Camera> cameras;
+		std::vector<Mesh> meshes;
 
 		VertexBuffer shaderStorage;
 		VertexBuffer indirect;

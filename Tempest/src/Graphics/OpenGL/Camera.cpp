@@ -38,7 +38,7 @@ namespace Tempest
 
 		ortho = glm::ortho(0.f, (float)window_width, 0.f, (float)window_height);
 		view = mat4_cast(orientation);
-		view = translate(view, -camera_position);
+		view = glm::translate(view, -camera_position);
 		viewProjection = projection * view;
 		viewReverseDepthProjection = reverseDepthProjection * view;
 	}
@@ -229,8 +229,8 @@ namespace Tempest
 	{
 		glm::vec4 vector = { normalized_screenspace.x,
 							normalized_screenspace.y,
-			GetNearClipDist(),
-			1
+							GetNearClipDist(),
+							1
 		};
 		vector = glm::inverse(viewProjection) * vector;
 
@@ -251,5 +251,35 @@ namespace Tempest
 		vector.z /= vector.w;
 
 		return glm::vec2(vector.x, vector.y);
+	}
+
+	void Camera::OnKeyPress(uint8_t key)
+	{
+		switch (key)
+		{
+			case 'W': 
+				Move(CameraDirection::CAMERA_UP, 1000.f);
+				break;
+
+			case 'A':
+				Move(CameraDirection::CAMERA_LEFT);
+				break;
+
+			case 'S':
+				Move(CameraDirection::CAMERA_DOWN);
+				break;
+
+			case 'D':
+				Move(CameraDirection::CAMERA_RIGHT);
+				break;
+
+			case 'O':
+				Move(CameraDirection::CAMERA_FORWARD, 10.f);
+				break;
+
+			case 'P':
+				Move(CameraDirection::CAMERA_BACK);
+				break;
+		}
 	}
 }

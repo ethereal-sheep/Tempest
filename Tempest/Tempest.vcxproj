@@ -343,6 +343,8 @@
     <ClInclude Include="src\Util\view.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
+    <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
     <None Include="src\Scripting\Util\static_id_generator.h" />
     <None Include="src\Util\Serializer\Private\Reader.inl" />
     <None Include="src\Util\Serializer\Private\Writer.inl" />

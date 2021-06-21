@@ -113,8 +113,8 @@ namespace Tempest
 
 		constexpr glm::vec3 translateArray[] =
 		{
-			glm::vec3(+0.0f, +0.0f, +0.5f), // Z+
-			glm::vec3(+0.0f, +0.0f, -0.5f), // Z-
+			glm::vec3(+0.0f, +0.0f, +1.0f), // Z+
+			glm::vec3(+0.0f, +0.0f, -1.0f), // Z-
 			glm::vec3(+0.5f, +0.0f, +0.0f), // X+
 			glm::vec3(-0.5f, +0.0f, +0.0f), // X-
 			glm::vec3(+0.0f, +0.5f, +0.0f), // Y+

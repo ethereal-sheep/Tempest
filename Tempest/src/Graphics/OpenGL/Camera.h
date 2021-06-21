@@ -1,6 +1,7 @@
 #pragma once
 #include <TMath.h>
 
+
 namespace Tempest
 {
 	enum struct CameraType
@@ -88,5 +89,7 @@ namespace Tempest
 
 		glm::vec3 ScreenspaceToWorldspace(const glm::vec2&) const;
 		glm::vec2 WorldspaceToScreenspace(const glm::vec3&) const;
+
+		void OnKeyPress(uint8_t key);
 	};
 }

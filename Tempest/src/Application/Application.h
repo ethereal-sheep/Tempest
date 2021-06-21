@@ -31,6 +31,17 @@ namespace Tempest
 			m_height = height;
 		};
 
+		/*
+		*	I/O Stuff
+		*/
+		//virtual void OnLMouseDrag(POINT pos);
+		//virtual void OnRMouseDrag(POINT pos);
+		//virtual void OnLMousePress(uint8_t key, POINT pos);
+		//virtual void OnLMouseRelease(uint8_t key, POINT pos);
+		//virtual void OnRMousePress(uint8_t key, POINT pos);
+		//virtual void OnRMouseRelease(uint8_t key, POINT pos);
+		virtual void OnKeyPress(uint8_t key, uint8_t repeat);
+		virtual void OnKeyRelease(uint8_t key);
 
 	private:
 		uint32_t m_width;

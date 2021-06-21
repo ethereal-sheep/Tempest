@@ -512,5 +512,7 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="src\Scripting\Util\static_id_generator.h" />
+    <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
+    <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
   </ItemGroup>
 </Project>
