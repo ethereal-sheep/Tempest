@@ -3846,6 +3846,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("DDD", ImGuiTableColumnFlags_WidthStretch);
             ImGui::TableSetupColumn("EEE", ImGuiTableColumnFlags_WidthStretch);
             ImGui::TableSetupColumn("FFF", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultHide);
+
             ImGui::TableHeadersRow();
             for (int row = 0; row < 5; row++)
             {

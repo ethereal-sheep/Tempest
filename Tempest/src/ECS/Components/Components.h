@@ -88,6 +88,8 @@
 	};
 */
 
+
+
 namespace Tempest
 {
 	enum struct ComponentType
@@ -119,6 +121,7 @@ namespace Tempest
 				ar.Member("Member4", component.member4);
 				return ar.EndObject();
 			}
+
 			int member1;
 			int member2;
 			int member3;
@@ -141,7 +144,7 @@ namespace Tempest
 
 			vec3 position;
 			quat rotation;
-			vec3 scale;
+			vec3 scale = {1.f, 1.f, 1.f};
 		};
 
 		struct Meta

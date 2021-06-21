@@ -19,9 +19,7 @@ namespace UI
 			temp += std::to_string(i);
 			test.push_back(temp);
 		}
-		/// </Testing>
-		
-		
+		/// </Testing>		
 
 		if (m_toggle)
 		{

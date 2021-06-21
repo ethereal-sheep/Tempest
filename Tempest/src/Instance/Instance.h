@@ -6,25 +6,41 @@
 
 namespace Tempest
 {
+
+	/**
+	 * @brief SRM_exception.
+	 */
+	class instance_exception : public std::exception
+	{
+	public:
+		instance_exception(const string& err_msg = "Instance exception thrown!") : msg(err_msg) {}
+		const char* what() const noexcept override { return msg.c_str(); }
+	private:
+		string msg;
+	};
+
 	/**
 	 * @brief Base abstract class of an instance. 
 	 */
 	class Instance
 	{
+		Instance(MemoryStrategy strategy = {}) :
+			memory_object(strategy),
+			ecs(memory_object.get()),
+			window_manager(memory_object.get()) {}
 	public:
 		virtual ~Instance() = 0 {}
-		Instance(MemoryStrategy strategy = {}) : 
-			memory_object( strategy ), 
-			ecs(memory_object.get()),
-			window_manager(memory_object.get()){}
 
 		Instance(const tpath& root_directory, MemoryStrategy strategy = {}) :
 			Instance(strategy)
 		{
+			if (!std::filesystem::exists(root_directory))
+				throw instance_exception("Instance: Bad Directory!");
+
 			ecs.load(root_directory);
 		}
 
-		[[nodiscard]] const m_resource* get_debug() const
+		[[nodiscard]] const debug_mr* get_debug() const
 		{
 			return memory_object.get_debug();
 		}
@@ -35,9 +51,15 @@ namespace Tempest
 		}
 
 		template <typename TWindow, typename... Args>
-		[[nodiscard]] TWindow* register_window(Args&&... args)
+		void register_window(Args&&... args)
 		{
+			window_manager.register_window<TWindow>(std::forward<Args>(args)...);
+		}
 
+		template <typename TWindow, typename... Args>
+		void register_always(Args&&... args)
+		{
+			window_manager.register_always<TWindow>(std::forward<Args>(args)...);
 		}
 
 		/**
@@ -97,11 +119,14 @@ namespace Tempest
 		virtual void _exit() = 0;
 
 	protected:
+		tpath root;
 		MemoryObject memory_object;
 
 	public:
 		ECS ecs;
 		WindowManager window_manager;
 		Camera cam;
+
+		Entity selected = INVALID;
 	};
 }

@@ -31,6 +31,7 @@ namespace Tempest
 		LOG("Initializing Tempest Engine");
 
 		Service<thread_pool>::Register(thread::hardware_concurrency());
+		Service<EventManager>::Register();
 
 		OnInit();
 	}

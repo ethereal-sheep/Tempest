@@ -1,7 +1,6 @@
 
 #include "Core.h"
 #include "Util.h"
-#include "Tracy.hpp"
 
 #include "Application/EntryPoint.h"
 
@@ -11,9 +10,12 @@
 
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
-#include "imgui/ImGuiFileBrowser.h"
-#include "Window/WindowManager.h"
-#include "Window/MenuBar.h"
+
+#include "InstanceManager/InstanceManager.h"
+
+//#include "imgui/ImGuiFileBrowser.h"
+//#include "Window/WindowManager.h"
+//#include "Window/MenuBar.h"
 
 #include "Font.h"
 
@@ -26,9 +28,13 @@ namespace Tempest
 
 	class Editor : public Application
 	{
-		UI::WindowManager m_WindowManager;
-		imgui_addons::ImGuiFileBrowser m_FileExplorer{};
-		UI::MenuBar m_MenuBar;
+
+		InstanceManager instance_manager;
+
+		//imgui_addons::ImGuiFileBrowser m_FileExplorer{};
+		//UI::MenuBar m_MenuBar;
+
+		
 	public:
 		Editor()
 			: Application(1600, 900, L"Editor") {}
@@ -55,13 +61,18 @@ namespace Tempest
 			init_font();
 			init_style();
 
-			m_WindowManager.Initialize();
-			m_WindowManager.StartupWindows();
+			const char* s = R"(S:\Development\Projects)";
+			InstanceConfig con = InstanceConfig(tpath(s), MemoryStrategy(DebugFlag::DEBUG_STRICT));
+
+			instance_manager.load_new_instance(con);
+
 		}
 
 		void OnUpdate() override
 		{
-
+			// need to use dt
+			// fps controller can be done in instance manager
+			instance_manager.update(1.f);
 		}
 
 		void OnRender() override
@@ -86,7 +97,7 @@ namespace Tempest
 				ImGuiWindowFlags_NoResize |
 				ImGuiWindowFlags_NoMove |
 				ImGuiWindowFlags_NoBringToFrontOnFocus |
-				ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar;
+				ImGuiWindowFlags_NoNavFocus;
 
 			[[maybe_unused]] bool popupImport = false;
 			[[maybe_unused]] bool popupImportSuccess = false;
@@ -94,44 +105,9 @@ namespace Tempest
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			if (ImGui::Begin("Main", nullptr, window_flags))
 			{
-				ImGui::PopStyleVar();
+				ImGui::PopStyleVar(3);
 
-				ImGui::PopStyleVar(2);
 
-				if (ImGui::BeginMenuBar())
-				{
-					if (ImGui::MenuItem(ICON_FA_MAP_PIN " Font Awesome"))
-					{
-
-					}
-					ImGui::PushFont(FONT_FAD);
-					if (ImGui::MenuItem(ICON_FAD_RANDOM_1DICE ICON_FAD_RANDOM_2DICE))
-					{
-
-					}
-
-					ImGui::PopFont();
-					ImGui::PushFont(FONT_FK);
-					if (ImGui::MenuItem(ICON_FK_MAP_PIN " Fork Awesome"))
-					{
-
-					}
-					ImGui::PopFont();
-					ImGui::PushFont(FONT_KI);
-					if (ImGui::MenuItem(ICON_KI_ARROW_BOTTOM " Kenny"))
-					{
-
-					}
-					ImGui::PopFont();
-					ImGui::PushFont(FONT_BOLD);
-					if (ImGui::MenuItem("HELLO"))
-					{
-
-					}
-					ImGui::PopFont();
-					ImGui::EndMenuBar();
-				}
-				
 				// DockSpace
 				ImGuiIO& io = ImGui::GetIO();
 				if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
@@ -139,12 +115,11 @@ namespace Tempest
 					ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 					ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
 				}
-				
 			}
 			ImGui::End();
-			m_WindowManager.InitMenuBar(m_MenuBar);
-			m_WindowManager.DisplayWindows();
-			m_MenuBar.Show();
+
+			instance_manager.render();
+			instance_manager.menubar();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();
@@ -256,7 +231,7 @@ namespace Tempest
 
 	void init_font()
 	{
-		auto io = ImGui::GetIO();
+		auto& io = ImGui::GetIO();
 		ImFontConfig config;
 		config.MergeMode = true;
 		config.GlyphMinAdvanceX = 13.0f; // Use if you want to make the icon monospaced
@@ -270,10 +245,11 @@ namespace Tempest
 
 		static const ImWchar fa_range[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
 		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size); // change this to change default font
-		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", font_icon_size, &config, fa_range);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", font_icon_size, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", font_icon_size, &config, fa_range);
 
 		io.Fonts->AddFontFromFileTTF(bold_f.string().c_str(), font_text_size);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", font_icon_size, &config, fa_range);
 
 		static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
@@ -289,10 +265,5 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
 		io.Fonts->AddFontFromFileTTF("Fonts/kenney-icon-font.ttf", font_icon_size, &config, ki_range);
 
-		def = io.Fonts->Fonts[0];
-		bold = io.Fonts->Fonts[1];
-		fk = io.Fonts->Fonts[2];
-		fad = io.Fonts->Fonts[3];
-		ki = io.Fonts->Fonts[4];
 	}
 }

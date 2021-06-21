@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\tracy\;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\tracy\Tracy.hpp;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -151,7 +151,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\tracy\;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\tracy\Tracy.hpp;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -177,14 +177,14 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="src\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
-    <ClCompile Include="src\Window\AssetManager\AssetManagerWindow.cpp" />
-    <ClCompile Include="src\Window\Docking.cpp" />
-    <ClCompile Include="src\Window\MenuBar.cpp" />
-    <ClCompile Include="src\Window\Window.cpp" />
-    <ClCompile Include="src\Window\WindowManager.cpp" />
+    <ClCompile Include="src\Util\UIElements.cpp" />
+    <ClCompile Include="src\Window\Diagnostics\DiagnosticsWindow.cpp" />
+    <ClCompile Include="src\Window\Hierarchy\HierarchyWindow.cpp" />
+    <ClCompile Include="src\Window\Inspector\InspectorWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h" />
@@ -198,16 +198,18 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="src\imgui\imgui_impl_win32.h" />
     <ClInclude Include="src\imgui\imgui_internal.h" />
+    <ClInclude Include="src\imgui\imgui_stdlib.h" />
     <ClInclude Include="src\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\imgui\imstb_textedit.h" />
     <ClInclude Include="src\imgui\imstb_truetype.h" />
     <ClInclude Include="src\InstanceManager\InstanceManager.h" />
-    <ClInclude Include="src\Window\AssetManager\AssetInfo.h" />
-    <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h" />
-    <ClInclude Include="src\Window\Docking.h" />
-    <ClInclude Include="src\Window\MenuBar.h" />
-    <ClInclude Include="src\Window\Window.h" />
-    <ClInclude Include="src\Window\WindowManager.h" />
+    <ClInclude Include="src\Util\UIElements.h" />
+    <ClInclude Include="src\Window\Diagnostics\DiagnosticsWindow.h" />
+    <ClInclude Include="src\Window\Error\test_error.h" />
+    <ClInclude Include="src\Window\Menubar\EditTimeMenuBar.h" />
+    <ClInclude Include="src\Window\Hierarchy\HierarchyWindow.h" />
+    <ClInclude Include="src\Window\Inspector\InspectorWindow.h" />
+    <ClInclude Include="src\Window\Menubar\RunTimeMenuBar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

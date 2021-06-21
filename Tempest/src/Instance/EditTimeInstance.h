@@ -17,7 +17,7 @@ namespace Tempest
 		 * @brief Requires root directory
 		 */
 		EditTimeInstance(const tpath& root_directory, MemoryStrategy strategy = {}) :
-			Instance(root_directory, strategy)
+			Instance(root_directory, strategy), graph_manager(memory_object.get())
 		{
 			// 
 		}
@@ -45,6 +45,7 @@ namespace Tempest
 
 	public:
 		// WindowManager here
+		GMS graph_manager;
 	};
 }
 

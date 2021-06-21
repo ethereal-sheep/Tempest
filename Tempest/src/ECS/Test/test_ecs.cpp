@@ -62,6 +62,27 @@ namespace Tempest
 		LOG("Time elapsed: {0}", time.elapsed<float, time::mcs>());
 	}
 
+	void testing_ecs_2()
+	{
+		ECS ecs;
+		int t = 10;
+		while (t--)
+		{
+			auto id = ecs.create();
+			auto t = ecs.emplace<tc::Transform>(id);
+			t->position = {};
+			t->rotation = quat{ glm::vec3{1.f} };
+		}
+
+		auto view = ecs.view<tc::Transform>();
+		for (auto id : view)
+		{
+			auto t = ecs.get<tc::Transform>(id);
+		}
+	}
+
+	
+
 	void testing_ecs()
 	{
 		testing_ecs_1();

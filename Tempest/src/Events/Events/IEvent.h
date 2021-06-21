@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace Tempest
 {
@@ -15,6 +16,7 @@ namespace Tempest
 	{
 		// members here
 	};
+
 	/**
 	 * @brief sample event to copy from
 	 */
@@ -24,6 +26,16 @@ namespace Tempest
 		test_event_with_member(int a) : i(a) {}
 
 		int i;
+	};
+
+	/**
+	 * @brief sample event to copy from
+	 */
+	template <typename T>
+	struct TEvent : public Event
+	{
+		TEvent(T a) : i(a) {}
+		T i;
 	};
 
 	/**

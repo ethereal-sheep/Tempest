@@ -24,7 +24,7 @@ namespace Tempest
 		int window_flags = 0;
 
 	public:
-		bool visible = false;
+		bool visible = true;
 	};
 
 	using Window = IWindow;
