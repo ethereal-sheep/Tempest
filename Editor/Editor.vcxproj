@@ -203,6 +203,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\imgui\imstb_textedit.h" />
     <ClInclude Include="src\imgui\imstb_truetype.h" />
     <ClInclude Include="src\InstanceManager\InstanceManager.h" />
+    <ClInclude Include="src\Triggers\Triggers.h" />
     <ClInclude Include="src\Util\UIElements.h" />
     <ClInclude Include="src\Window\Diagnostics\DiagnosticsWindow.h" />
     <ClInclude Include="src\Window\Error\test_error.h" />
@@ -210,6 +211,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Hierarchy\HierarchyWindow.h" />
     <ClInclude Include="src\Window\Inspector\InspectorWindow.h" />
     <ClInclude Include="src\Window\Menubar\RunTimeMenuBar.h" />
+    <ClInclude Include="src\Window\Overlay\test_overlay_popup.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

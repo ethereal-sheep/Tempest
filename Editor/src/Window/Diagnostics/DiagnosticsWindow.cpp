@@ -1,6 +1,7 @@
 #include "DiagnosticsWindow.h"
 #include "Font.h"
 #include "Events/EventManager.h"
+#include "Triggers/Triggers.h"
 
 namespace Tempest
 {
@@ -45,8 +46,8 @@ namespace Tempest
 		ImGui::Separator();
 		ImGui::Dummy(ImVec2{ 0, 0.25f });
 
-		if (ImGui::Button("Test"))
-			Service<EventManager>::Get().instant_dispatch<TEvent<string>>("From Debug");
+		if (ImGui::Button("Trigger Error"))
+			Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Error triggered by Diagnostics!");
 	}
 
 	void DiagnosticsWindow::ShowFPSGraph()

@@ -5,6 +5,7 @@
 #include "Window/Inspector/InspectorWindow.h"
 #include "Window/Menubar/EditTimeMenuBar.h"
 #include "Window/Error/test_error.h"
+#include "Window/Overlay/test_overlay_popup.h"
 
 namespace Tempest
 {
@@ -17,6 +18,7 @@ namespace Tempest
 
 		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<test_error>();
+		instance->register_always<test_overlay_popup>();
 		
 	}
 	void InstanceManager::register_runtime_windows()
