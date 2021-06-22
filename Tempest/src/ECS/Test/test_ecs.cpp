@@ -69,9 +69,9 @@ namespace Tempest
 		while (t--)
 		{
 			auto id = ecs.create();
-			auto t = ecs.emplace<tc::Transform>(id);
-			t->position = {};
-			t->rotation = quat{ glm::vec3{1.f} };
+			auto trf = ecs.emplace<tc::Transform>(id);
+			trf->position = {};
+			trf->rotation = quat{ glm::vec3{1.f} };
 		}
 
 		auto view = ecs.view<tc::Transform>();

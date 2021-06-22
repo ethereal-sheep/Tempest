@@ -27,7 +27,7 @@ namespace Tempest
      * @brief Used for PhysX. Error callback function. Logs whatever error
      * PhysX returns to us as an error message.
      */
-    static px_err_callback_t& px_err_callback()
+    inline px_err_callback_t& px_err_callback()
     {
         static px_err_callback_t callback;
         return callback;

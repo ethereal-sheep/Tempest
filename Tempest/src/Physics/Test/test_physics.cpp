@@ -290,10 +290,17 @@ namespace Tempest
 
 	void testing_physics_7_1() // initing of physics object
 	{ 
-		RuntimeInstance runtime("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
-		for(int i = 0; i < 15; i++)
+		try
 		{
-			runtime._update(1.f/60.0f);
+			RuntimeInstance runtime("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+			for (int i = 0; i < 15; i++)
+			{
+				runtime._update(1.f / 60.0f);
+			}
+		}
+		catch (const std::exception&)
+		{
+
 		}
 	}
 
@@ -321,7 +328,14 @@ namespace Tempest
 					transform->position = { 3,0,0 };
 				}
 			}
-			ecs.save("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+			try
+			{
+				ecs.save("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+			}
+			catch (const std::exception&)
+			{
+
+			}
 		}
 	}
 
