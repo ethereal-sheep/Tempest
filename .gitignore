@@ -354,6 +354,8 @@ MigrationBackup/
 
 Dep/Tempest/**
 Dep/Tempest-int/**
+Build/**
+Build-int/**
 
 !Dep/PhysX/**
-/Build/Components/Rigidbody.json
+
