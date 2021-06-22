@@ -243,17 +243,16 @@ namespace Tempest
 				transform->position = { 0,1,0 };
 			}
 
-			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+			ecs.save("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
 		}
 
 		{
-			
-			debug_mr dg("testing_ecs_2.2");
+			debug_mr dg("testing_ecs_2.2", aligned_malloc_resource());
 			dg.set_strict(true);
-			PhysicsObject po (&dg);
+			PhysicsObject po(&dg);
 			ECS ecs(&dg);
 
-			ecs.load("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+			ecs.load("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
 
 			auto view = ecs.view<Components::Rigidbody>();
 			LOG_ASSERT(view.size_hint() == 1);
@@ -267,10 +266,9 @@ namespace Tempest
 
 				LOG_ASSERT(rb.shape_data.type == SHAPE_TYPE::SPHERE);
 				LOG_ASSERT(position == testpos);
-				auto actor = po.createRigidbody(rb.rb_config, rb.shape_data, position);
-				po.AddActorToScene(actor.get());
+				rb.internal_rb = po.createRigidbody(rb.rb_config, rb.shape_data, position);
+				po.AddActorToScene(rb.internal_rb.get());
 
-				
 				rb.internal_rb->getShapes(&shapes, 1);
 				shapes->release();
 			}
