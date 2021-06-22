@@ -12,7 +12,7 @@ namespace Tempest
 		{
 			return "EditTimeMenuBar";
 		}
-		void show(Instance& instance) override
+		void show(Instance& ) override
 		{
 			if(ImGui::BeginMainMenuBar())
 			{

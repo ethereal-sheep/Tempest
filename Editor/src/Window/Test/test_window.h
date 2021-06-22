@@ -11,7 +11,7 @@ namespace Tempest
 			return "test_window";
 		}
 		
-		void show(Instance& instance) override
+		void show(Instance& ) override
 		{
 			if(ImGui::Begin(window_name(), &visible, window_flags))
 			{

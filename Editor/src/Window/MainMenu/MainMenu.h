@@ -25,7 +25,7 @@ namespace Tempest
 				ImGuiWindowFlags_MenuBar;
 		}
 
-		void show(Instance& instance) override
+		void show(Instance& ) override
 		{
 			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 			ImVec2 size = ImGui::GetMainViewport()->Size;
