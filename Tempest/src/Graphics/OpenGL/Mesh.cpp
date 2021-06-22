@@ -160,7 +160,7 @@ namespace Tempest
 		for (int stack = 0; stack <= stacks; ++stack)
 		{
 			const float row = static_cast<float>(stack) / static_cast<float>(stacks);
-			const float beta = 0.5f * glm::pi<float>() - row * glm::pi<float>();
+			const float beta = glm::pi<float>() * (row - 0.5f);
 			const float sinBeta = sin(beta);
 			const float cosBeta = cos(beta);
 
