@@ -292,7 +292,9 @@ namespace Tempest
 	{ 
 		try
 		{
-			RuntimeInstance runtime("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+			RuntimeInstance runtime("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+			//runtime.OnInit();
+			//runtime._init();
 			for (int i = 0; i < 15; i++)
 			{
 				runtime._update(1.f / 60.0f);
@@ -330,7 +332,7 @@ namespace Tempest
 			}
 			try
 			{
-				ecs.save("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+				ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
 			}
 			catch (const std::exception&)
 			{
