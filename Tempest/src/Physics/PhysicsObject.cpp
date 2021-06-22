@@ -62,7 +62,7 @@ namespace Tempest
 			sceneDesc.cpuDispatcher = &pcd;
 			sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
 			sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
-			//sceneDesc.simulationEventCallback = &gContactReportCallback;
+			sceneDesc.simulationEventCallback = &gContactReportCallback;
 
 			scene = px_make(physics->createScene(sceneDesc));
 			if (!scene)
@@ -79,17 +79,24 @@ namespace Tempest
 			return false;
 
 		accumulator -= step_size;
-		LOG("DT: {0}", accumulator);
+	//	LOG("DT: {0}", accumulator);
 		// this is threaded
 		scene->simulate(step_size);
+
+
 		// no writes to scene after this
 		return true;
 	}
 
 	bool PhysicsObject::fetch()
 	{
-	//	LOG("{0} contact report ", physx::PxU32(gContactPositions.size()));
-		return scene->fetchResults(true);
+	//	gContactPositions.clear();
+
+		bool fetchResult = scene->fetchResults(true);
+
+		LOG(">>> {0} contact report ", physx::PxU32(gContactPositions.size()));
+
+		return fetchResult;
 	}
 
 	tsptr<physx::PxRigidActor> PhysicsObject::createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const

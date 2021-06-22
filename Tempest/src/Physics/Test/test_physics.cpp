@@ -243,7 +243,7 @@ namespace Tempest
 				auto* transform = ecs.emplace<Components::Transform>(entity);
 				transform->position = { 0,1,0 };
 			}
-			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+			ecs.save("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
 		}
 
 		{
@@ -290,10 +290,10 @@ namespace Tempest
 
 	void testing_physics_7_1() // initing of physics object
 	{ 
-		RuntimeInstance runtime("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
-		for(int i = 0; i < 10; i++)
+		RuntimeInstance runtime("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+		for(int i = 0; i < 15; i++)
 		{
-			runtime._update(1.f);
+			runtime._update(1.f/60.0f);
 		}
 	}
 
@@ -318,10 +318,10 @@ namespace Tempest
 				}
 				else
 				{
-					transform->position = { 5,0,0 };
+					transform->position = { 3,0,0 };
 				}
 			}
-			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+			ecs.save("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
 		}
 	}
 
