@@ -36,12 +36,15 @@ namespace Tempest
 	PhysicsObject::PhysicsObject(m_resource* mem_res)
 		: allocator{ mem_res }, pcd{ Service<thread_pool>::Get() }
 	{
-		// might want to change LOG_CRITICAL to exception
+	}
+
+	void PhysicsObject::init()
+	{
 		// init foundation
 		{
+			//foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
 			foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
-			if (!foundation)
-				LOG_CRITICAL("PxCreateFoundation failed!");
+			LOG_ASSERT_V(foundation, "PxCreateFoundation failed!");
 		}
 
 		// init pvd (OPTIONAL)
@@ -50,12 +53,11 @@ namespace Tempest
 			if (!pvd)
 				LOG_CRITICAL("PxCreatePvd failed!");
 			transport = px_make(physx::PxDefaultPvdSocketTransportCreate(pvd_host_ip, port, timeout));
-			if (!transport)
-				LOG_CRITICAL("PxPvdTransport failed!");
+			LOG_ASSERT_V(transport, "PxPvdTransport failed!");
 			pvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
 		}
 
-		// init physics
+		// init physics (SEE ME FOR GRAVITY SHIT)
 		{
 			physx::PxTolerancesScale scale;
 			scale.length = 100;        // typical length of an object
@@ -64,15 +66,13 @@ namespace Tempest
 			bool recordMemoryAllocations = true;
 			physics = px_make(PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
 				scale, recordMemoryAllocations));
-			if (!physics)
-				LOG_CRITICAL("PxCreatePhysics failed!");
+			LOG_ASSERT_V(physics, "PxCreatePhysics failed!");
 		}
 
 		// init cooking
 		{
 			cooking = px_make(PxCreateCooking(PX_PHYSICS_VERSION, *foundation, physx::PxCookingParams(physics->getTolerancesScale())));
-			if (!cooking)
-				LOG_CRITICAL("PxCreateCooking failed!");
+			LOG_ASSERT_V(cooking, "PxCreateCooking failed!");
 		}
 
 		// init scene
@@ -84,11 +84,11 @@ namespace Tempest
 			sceneDesc.simulationEventCallback = &gContactReportCallback;
 
 			scene = px_make(physics->createScene(sceneDesc));
-			if (!scene)
-				LOG_CRITICAL("createScene failed!");
+			LOG_ASSERT_V(scene, "createScene failed!");
 		}
+
 		// creates an aggregate with no collision, obviously
-		auto agg = px_make(physics->createAggregate(128, false));
+		//auto agg = px_make(physics->createAggregate(128, false));
 	}
 
 	bool PhysicsObject::advance(float dt)

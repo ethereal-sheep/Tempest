@@ -135,6 +135,7 @@ namespace Tempest
 		// create plane in constructor
 		PhysicsObject(m_resource* mem_res = aligned_malloc_resource());
 
+		void init();
 		// testing
 		bool advance(float dt);
 		bool fetch();

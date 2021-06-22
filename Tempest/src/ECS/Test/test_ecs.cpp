@@ -74,11 +74,6 @@ namespace Tempest
 			trf->rotation = quat{ glm::vec3{1.f} };
 		}
 
-		auto view = ecs.view<tc::Transform>();
-		for (auto id : view)
-		{
-			//auto t = ecs.get<tc::Transform>(id);
-		}
 	}
 
 	

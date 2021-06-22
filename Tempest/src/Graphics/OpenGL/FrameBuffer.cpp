@@ -44,7 +44,7 @@ namespace Tempest
 			glDeleteFramebuffers(1, &m_ID);
 	}
 
-	void FrameBuffer::AttachColorBuffer(const Texture& texture)
+	void FrameBuffer::AttachColorBuffer([[maybe_unused]] const Texture& texture)
 	{
 		//const auto attachment = GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount++;
 		//
@@ -63,7 +63,7 @@ namespace Tempest
 		}
 	}
 
-	void FrameBuffer::AttachDepthBuffer(const Texture& texture) const
+	void FrameBuffer::AttachDepthBuffer([[maybe_unused]] const Texture& texture) const
 	{
 		//glNamedFramebufferTexture(m_ID, GL_DEPTH_ATTACHMENT, texture.GetID(), 0);
 	}

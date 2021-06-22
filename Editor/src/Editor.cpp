@@ -1,6 +1,7 @@
 
 #include "Core.h"
 #include "Util.h"
+#include "Util/Suppress.h"
 
 #include "Application/EntryPoint.h"
 
@@ -124,9 +125,9 @@ namespace Tempest
 
 		void OnExit() override
 		{
-			//ImGui_ImplOpenGL3_Shutdown();
-			//ImGui_ImplWin32_Shutdown();
-			//ImGui::DestroyContext();
+			ImGui_ImplOpenGL3_Shutdown();
+			ImGui_ImplWin32_Shutdown();
+			ImGui::DestroyContext();
 		}
 
 		LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

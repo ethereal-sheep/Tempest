@@ -4,6 +4,7 @@ namespace Tempest
 {
 	void Instance::internal_init()
 	{
+		po.init();
 		window_manager.init();
 	}
 	void Instance::internal_update()

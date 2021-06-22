@@ -56,9 +56,9 @@ namespace Tempest
 		// render engine stuff first
 		//RenderSystem ren;
 		//Service<RenderSystem>::Get().TestRender(m_width, m_height);
-		Service<RenderSystem>::Get().StartFrame();
-		Service<RenderSystem>::Get().EndFrame();
-		//OnRender();
+		//Service<RenderSystem>::Get().StartFrame();
+		//Service<RenderSystem>::Get().EndFrame();
+		OnRender();
 	}
 
 	void Application::OnEngineExit()
