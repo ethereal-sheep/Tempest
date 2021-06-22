@@ -34,6 +34,8 @@ namespace Tempest
 		Service<EventManager>::Register();
 
 		OnInit();
+		testing_physics();
+		//testing_physics_7_1();
 	}
 
 	void Application::OnEngineUpdate()
@@ -42,6 +44,8 @@ namespace Tempest
 
 
 		OnUpdate();
+		
+		//testing_physics_7_2();
 	}
 
 	void Application::OnEngineRender()

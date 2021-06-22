@@ -8,6 +8,7 @@
 #include "Util/px_malloc_allocator.h"
 #include "Util/px_cpu_dispatcher.h"
 
+
 namespace Tempest
 {
 	struct PhysicsConfig
@@ -17,29 +18,77 @@ namespace Tempest
 		// bunch of other shit
 	};
 
+	enum struct SHAPE_TYPE
+	{
+		NONE,
+		SPHERE,
+		BOX,
+		CAPSULE
+	};
+
+	struct shape
+	{
+		SHAPE_TYPE type;
+		vec3 shapeData;
+
+		shape(SHAPE_TYPE shape_type = SHAPE_TYPE::NONE, float x = 0.f, float y = 0.f, float z = 0.f) : type{ shape_type }, shapeData{ x,y,z } {}
+	
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, shape& component)
+		{
+			ar.StartObject();
+			ar.Member("ShapeType", component.type);
+			ar.Member("ShapeData", component.shapeData);
+			return ar.EndObject();
+		}
+		
+	};
+
+
 	/* three main type for collision i think
-	* 
+	*
 	* 1. trigger (no collision at all, only triggers events)
 	*		actually might not need this since everything is grid based in software
 	*		and for 300 we are just doing random demos
 	*		lmk what yall think
-	* 2. static 
+	* 2. static
 	*		doesn't move, collides with all dynamic types
-	* 3. dynamic
+	* 3. dynamicasdsada
 	*		is simulated by physx, collides with everything
-	* 4. particles (dk if this is here anot) // 
+	* 4. particles (dk if this is here anot) //
 			might be some special type
 	*		that we define outside
-	*		
-	*			
+	*
+	*
 	*/
-	struct rigidbody_config
+	struct rigidbody_config // for creation of rigidbody object
 	{
-		float mass;
-		float density;
-		bool static_or_dynamic; // can make enum if you envision future types
-		bool gravity; // explicit or implicit with the static/dynamic type
+		float mass = 1.f;
+		float density = 1.f;				// Only for dynamic
+		float linear_damping = 0.5f;		// Rate of decay overtime for linear velocty
+		float angular_damping = 0.5f;		// Rate of decay overtime for angular velocty
+		bool is_static;				// Static or Dynamic rigidbody
+		bool gravity = false;				// explicit or implicit with the static/dynamic type
 
+		vec3 linear_velocity = { 0.f, 0.f, 0.f };		// Velocity in a straight line
+		vec3 angular_velocity = { 0.f, 0.f, 0.f };;		// Rotational velocity
+		vec3 material = { 0.f, 0.f, 0.f };;				// staticFriction, dynamicFriction, restitution (typedef float PxReal)
+
+		template <typename Archiver>
+		friend Archiver& operator&(Archiver& ar, rigidbody_config& component)
+		{
+			ar.StartObject();
+			ar.Member("Mass", component.mass);
+			ar.Member("Density", component.density);
+			ar.Member("Linear_Damping", component.linear_damping);
+			ar.Member("Angular_Damping", component.angular_damping);
+			ar.Member("Is_Static", component.is_static);
+			ar.Member("Gravity", component.gravity);
+			ar.Member("Linear_Velocity", component.linear_velocity);
+			ar.Member("Angular_Velocity", component.angular_velocity);
+			ar.Member("Physics Material", component.material);
+			return ar.EndObject();
+		}
 		// just reference for you
 		/*
 		* PxMaterial needs this three things to be created
@@ -47,62 +96,37 @@ namespace Tempest
 		*/
 	};
 
-	
 
-	struct sample_rigidbody
+	inline std::vector<physx::PxVec3> gContactPositions;
+
+	class ContactReportCallback: public physx::PxSimulationEventCallback
 	{
-		// maybe? implementation
-
-		/**
-		 * @brief MUST BE CREATED WITH px_make!
-		 * We can possibly make it only initializable with PhysicsObject.
-		 */
-
-		 // gravity yes:no
-		 // masss
-		 // density 
-		 // material -> default/preset donnid to be adjusted by designer
-		 // resolve collision yes:no () 
-
-		 // shape (capsule, sphere, box, )
-		// mentioned earlier, complex shapes need cooking and we said we don't need
-		// however, if we want to simulate dice roll (we need complex shapes)
-		// so just do all the standard dice first ()
-		// d4 (tetrahedron, tetrapyramid, 4 triangles glued-tgt)
-		// d6 (cube)
-		// d8 (octahedron (2 tetrahedron))
-		// d10 (no fking idea what shape is this but is
-		// d12 (dodecahedron)
-		// d20 icosahedron
-		/*
-		* 
-		*	[0, 2, 3],
-			[0, 3, 4],
-			[0, 4, 5],
-			[0, 5, 6],
-			[0, 6, 7],
-			[0, 7, 8],
-			[0, 8, 9],
-			[0, 9, 10],
-			[0, 10, 11],
-			[0, 11, 2],
-			[1, 3, 2],
-			[1, 4, 3],
-			[1, 5, 4],
-			[1, 6, 5],
-			[1, 7, 6],
-			[1, 8, 7],
-			[1, 9, 8],
-			[1, 10, 9],
-			[1, 11, 10],
-			[1, 2, 11]
+		void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count) { PX_UNUSED(constraints); PX_UNUSED(count); }
+		void onWake(physx::PxActor** actors, physx::PxU32 count)						{ PX_UNUSED(actors); PX_UNUSED(count); }
+		void onSleep(physx::PxActor** actors, physx::PxU32 count)						{ PX_UNUSED(actors); PX_UNUSED(count); }
+		void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)					{ PX_UNUSED(pairs); PX_UNUSED(count); }
+		void onAdvance(const physx::PxRigidBody*const*, const physx::PxTransform*, const  physx::PxU32) {}
+		void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
+		{
+			PX_UNUSED((pairHeader));
+			std::vector<physx::PxContactPairPoint> contactPoints;
 		
-		*/
-		 // default 
-		tsptr<physx::PxActor> actor;
+			for(physx::PxU32 i=0;i<nbPairs;i++)
+			{
+				physx::PxU32 contactCount = pairs[i].contactCount;
+				if(contactCount)
+				{
+					contactPoints.resize(contactCount);
+					pairs[i].extractContacts(&contactPoints[0], contactCount);
 
+					for(physx::PxU32 j=0;j<contactCount;j++)
+					{
+						gContactPositions.push_back(contactPoints[j].position);
+					}
+				}
+			}
+		}
 	};
-
 
 	class PhysicsObject
 	{
@@ -114,6 +138,8 @@ namespace Tempest
 		bool advance(float dt);
 		bool fetch();
 
+		// uesd for loading 
+		tsptr<physx::PxRigidActor> createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const;
 		// what other functions here?
 
 		/**
@@ -122,13 +148,13 @@ namespace Tempest
 		 * #notes
 		 * PxTriangleMesh, PxHeightField, PxConvexMesh, PxMaterial, and PxShape can auto deleted
 		 * so no need px_make, unless no references (actually not sure need db check)
-		 *  
+		 *
 		 * 0. do we want dedicate system to handle shapes? reusing shapes are good way of
 		 *	saving memory but because we cannot change the size of a shape after creation time
 		 *  this may be a bad idea. this is the same for materials.
 		 *		since we are using grids for many software, we can configure shapes to be exactly
 		 *		1x1. But this defeats the purpose of having physics simulation in the first place.
-		 *      
+		 *
 		 *
 		 * 1. add actors to the scene?
 		 *		can we use shared_ptr?
@@ -164,20 +190,27 @@ namespace Tempest
 		 *
 		 */
 
-		//tsptr<physx::PxRigidBody> createActor(vec3 pos, quat rotation, rigidbody_config config) // some other stuff for configuration)
-		//{
-		//	/*float h_extents = 0.5f;
-		//	auto material = physics->createMaterial(0.5f, 0.5f, 0.6f);
-		//	PxBoxGeometry a(h_extents, h_extents, h_extents);
-		//	auto shape = physics->createShape(a, *material);*/
-		//	return nullptr;
-		//}
+		 //tsptr<physx::PxRigidBody> createActor(vec3 pos, quat rotation, rigidbody_config config) // some other stuff for configuration)
+		 //{
+		 //	/*float h_extents = 0.5f;
+		 //	auto material = physics->createMaterial(0.5f, 0.5f, 0.6f);
+		 //	PxBoxGeometry a(h_extents, h_extents, h_extents);
+		 //	auto shape = physics->createShape(a, *material);*/
+		 //	return nullptr;
+		 //}
 
-		//tvector<tsptr<physx::PxRigidBody>> createParticles() // some stuff for configuration)
-		//{
-		//	return tvector<tsptr<physx::PxRigidBody>>{};
-		//}
+		 //tvector<tsptr<physx::PxRigidBody>> createParticles() // some stuff for configuration)
+		 //{
+		 //	return tvector<tsptr<physx::PxRigidBody>>{};
+		 //}
 
+
+		/* sample of creating and adding rigidbody to scene
+		* tsptr<sample_rigidbody> rb = createRigidbody(config, pos, shape);
+		* scene->addActor(*rb->internal_rb);
+		*/
+
+		void AddActorToScene(physx::PxRigidActor* actor) {scene->addActor(*actor);}
 	private:
 		px_allocator allocator;
 		px_cpu_dispatcher pcd;
@@ -188,6 +221,7 @@ namespace Tempest
 		tsptr<physx::PxPhysics> physics;
 		tsptr<physx::PxCooking> cooking;
 		tsptr<physx::PxScene> scene;
+		ContactReportCallback gContactReportCallback;
 
 		// testing
 		float accumulator = 0.0f;

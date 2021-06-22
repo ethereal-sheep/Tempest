@@ -3,6 +3,7 @@
 #include "Util.h"
 #include "TMath.h"
 #include "ECS\Entity.h"
+#include "Physics/PhysicsObject.h"
 
 /**
 * @brief 
@@ -94,7 +95,7 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Transform, Meta, Script,
+		Example, Transform, Meta, Script, Rigidbody,
 		END
 	};
 
@@ -177,7 +178,25 @@ namespace Tempest
 			string script{};
 			bool built = false;
 		};
+		struct Rigidbody
+		{
+			
+			static const char* get_type() { return "Rigidbody"; }
+			rigidbody_config rb_config;
+			shape shape_data;
 
+			tsptr<physx::PxRigidActor> internal_rb = nullptr;
+
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Rigidbody& component)
+			{
+				ar.StartObject();
+				ar.Member("RigidBody_Config", component.rb_config);
+				ar.Member("Shape_Data", component.shape_data);
+				return ar.EndObject();
+			}
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -210,6 +229,7 @@ namespace Tempest
 			COMPONENT_CASE(Transform);
 			COMPONENT_CASE(Meta);
 			COMPONENT_CASE(Script);
+			COMPONENT_CASE(Rigidbody);
 
 		/* ABOVE THIS PLEASE */
 
