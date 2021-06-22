@@ -62,6 +62,7 @@ namespace Tempest
 			sceneDesc.cpuDispatcher = &pcd;
 			sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
 			sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+			//sceneDesc.simulationEventCallback = &gContactReportCallback;
 
 			scene = px_make(physics->createScene(sceneDesc));
 			if (!scene)
@@ -78,6 +79,7 @@ namespace Tempest
 			return false;
 
 		accumulator -= step_size;
+		LOG("DT: {0}", accumulator);
 		// this is threaded
 		scene->simulate(step_size);
 		// no writes to scene after this
@@ -86,6 +88,7 @@ namespace Tempest
 
 	bool PhysicsObject::fetch()
 	{
+	//	LOG("{0} contact report ", physx::PxU32(gContactPositions.size()));
 		return scene->fetchResults(true);
 	}
 

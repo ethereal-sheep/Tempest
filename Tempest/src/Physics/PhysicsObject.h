@@ -44,60 +44,6 @@ namespace Tempest
 		
 	};
 
-	/*struct sphere : public shape
-	{
-		sphere(float rad = 1.0f) : shape{ SHAPE_TYPE::SPHERE }, radius{ rad } {}
-
-		virtual ~sphere() {}
-		float radius;
-
-		template <typename Archiver>
-		friend Archiver& operator&(Archiver& ar, sphere& component)
-		{
-			ar.StartObject();
-			ar.Member("SphereRadius", component.radius);
-			ar.Member("ShapeType", component.type);
-			return ar.EndObject();
-		}
-	};
-
-	struct box : public shape
-	{
-		box(float halfx = 0.5f, float halfy = 0.5f, float halfz = 0.5f) : shape{ SHAPE_TYPE::BOX }, halfX{ halfx }, halfY{ halfy }, halfZ{ halfz }{}
-		virtual ~box() {}
-		float halfX;
-		float halfY;
-		float halfZ;
-
-		template <typename Archiver>
-		friend Archiver& operator&(Archiver& ar, box& component)
-		{
-			ar.StartObject();
-			ar.Member("BoxHalfX", component.halfX);
-			ar.Member("BoxHalfY", component.halfY);
-			ar.Member("BoxHalfZ", component.halfZ);
-			ar.Member("ShapeType", component.type);
-			return ar.EndObject();
-		}
-	};
-
-	struct capsule : public shape
-	{
-		capsule(float rad = 1.f, float halfht = 0.5f) : shape{ SHAPE_TYPE::CAPSULE }, radius{ rad }, halfHeight{ halfht }{}
-		virtual ~capsule() {}
-		float radius;
-		float halfHeight;
-
-		template <typename Archiver>
-		friend Archiver& operator&(Archiver& ar, capsule& component)
-		{
-			ar.StartObject();
-			ar.Member("CapsuleRadius", component.radius);
-			ar.Member("CapsuleHalfHeight", component.halfHeight);
-			ar.Member("ShapeType", component.type);
-			return ar.EndObject();
-		}
-	};*/
 
 	/* three main type for collision i think
 	*
@@ -151,7 +97,36 @@ namespace Tempest
 	};
 
 
-	// TODO: create shape factory so can reuse shape
+	//inline std::vector<physx::PxVec3> gContactPositions;
+
+	//class ContactReportCallback: public physx::PxSimulationEventCallback
+	//{
+	//	void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count) { PX_UNUSED(constraints); PX_UNUSED(count); }
+	//	void onWake(physx::PxActor** actors, physx::PxU32 count)						{ PX_UNUSED(actors); PX_UNUSED(count); }
+	//	void onSleep(physx::PxActor** actors, physx::PxU32 count)						{ PX_UNUSED(actors); PX_UNUSED(count); }
+	//	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)					{ PX_UNUSED(pairs); PX_UNUSED(count); }
+	//	void onAdvance(const physx::PxRigidBody*const*, const physx::PxTransform*, const  physx::PxU32) {}
+	//	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
+	//	{
+	//		PX_UNUSED((pairHeader));
+	//		std::vector<physx::PxContactPairPoint> contactPoints;
+	//	
+	//		for(physx::PxU32 i=0;i<nbPairs;i++)
+	//		{
+	//			physx::PxU32 contactCount = pairs[i].contactCount;
+	//			if(contactCount)
+	//			{
+	//				contactPoints.resize(contactCount);
+	//				pairs[i].extractContacts(&contactPoints[0], contactCount);
+
+	//				//for(physx::PxU32 j=0;j<contactCount;j++)
+	//				//{
+	//				//	gContactPositions.push_back(contactPoints[j].position);
+	//				//}
+	//			}
+	//		}
+	//	}
+	//};
 
 	class PhysicsObject
 	{
@@ -246,7 +221,7 @@ namespace Tempest
 		tsptr<physx::PxPhysics> physics;
 		tsptr<physx::PxCooking> cooking;
 		tsptr<physx::PxScene> scene;
-
+		//ContactReportCallback gContactReportCallback;
 		// testing
 		float accumulator = 0.0f;
 		float step_size = 1.0f / 60.0f;

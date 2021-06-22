@@ -7,6 +7,8 @@
 
 namespace Tempest
 {
+	
+
 	/**
 	 * @brief Type of Instance that is loaded for runtime
 	 * implementation requires a path to the root folder
@@ -14,6 +16,7 @@ namespace Tempest
 	 */
 	class RuntimeInstance : public Instance
 	{
+
 	public:
 		/**
 		 * @brief Requires root directory
@@ -22,24 +25,7 @@ namespace Tempest
 			Instance(root_directory, strategy), srm{memory_object.get()}
 		{
 			build_scripts(root_directory);
-			auto view = ecs.view<Components::Rigidbody, tc::Transform>();
-			for (auto id : view)
-			{
-				auto& rb = ecs.get<Components::Rigidbody>(id);
-				auto& position = ecs.get<Components::Transform>(id).position;
-				rb.internal_rb = po.createRigidbody(rb.rb_config, rb.shape_data, position);
-				po.AddActorToScene(rb.internal_rb.get());
-				if (!rb.rb_config.is_static)
-				{
-					auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get()); //try this?
-					dynamicRb->setLinearVelocity({ 1,0,0 });
-					
-					LOG("Current Velocity [{0}, {1}, {2}]", dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
-					LOG("Current Position [{0}, {1}, {2}]", position.x, position.y, position.z);
-
-					//LOG_ASSERT(dynamicRb->getLinearVelocity() == physx::PxVec3(1, 0, 0));
-				}
-			}
+			RunPhysxUpdate();
 		}
 
 		void _init() override
@@ -54,12 +40,10 @@ namespace Tempest
 			{
 				auto& rb = ecs.get<Components::Rigidbody>(id);
 				auto& position = ecs.get<Components::Transform>(id).position;
-				auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get()); //try this?
-			//	auto pos = dynamicRb->getGlobalPose().
-				LOG("Current Velocity [{0}, {1}, {2}]", dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
-				LOG("Current Position [{0}, {1}, {2}]", dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z);
+				auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get());
+				LOG("{0} Current Velocity [{1}, {2}, {3}]",id, dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
+				LOG("{0} Current Position [{1}, {2}, {3}]",id, dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z);
 			}
-
 		}
 		void _render() override
 		{
@@ -72,9 +56,7 @@ namespace Tempest
 		
 	private:
 		void build_scripts(const tpath& root_directory);
-
-
-
+		void RunPhysxUpdate();
 	public:
 		SRM srm;
 	};

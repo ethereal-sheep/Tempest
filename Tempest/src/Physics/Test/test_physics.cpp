@@ -304,7 +304,7 @@ namespace Tempest
 			debug_mr dg("testing_ecs_2.1");
 			dg.set_strict(true);
 			ECS ecs(&dg);
-			auto t = 1;
+			auto t = 2; // 2 objects
 			for (auto i = 0; i < t; ++i)
 			{
 				auto entity = ecs.create();
@@ -312,7 +312,14 @@ namespace Tempest
 
 				rb->shape_data = shape(SHAPE_TYPE::SPHERE, 1);
 				auto* transform = ecs.emplace<Components::Transform>(entity);
-				transform->position = { 0,0,0 };
+				if (entity % 2 == 1)
+				{
+					transform->position = { 0,0,0 };
+				}
+				else
+				{
+					transform->position = { 5,0,0 };
+				}
 			}
 			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
 		}
