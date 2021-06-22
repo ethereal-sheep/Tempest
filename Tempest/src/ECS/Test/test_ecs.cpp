@@ -77,7 +77,7 @@ namespace Tempest
 		auto view = ecs.view<tc::Transform>();
 		for (auto id : view)
 		{
-			auto t = ecs.get<tc::Transform>(id);
+			//auto t = ecs.get<tc::Transform>(id);
 		}
 	}
 
