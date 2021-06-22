@@ -14,6 +14,25 @@ namespace Tempest
 {
 	using namespace physx;
 
+	PxFilterFlags contactReportFilterShader(PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+		PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+		PxPairFlags& pairFlags, const void* constantBlock,PxU32 constantBlockSize)
+	{
+		PX_UNUSED(attributes0);
+		PX_UNUSED(attributes1);
+		PX_UNUSED(filterData0);
+		PX_UNUSED(filterData1);
+		PX_UNUSED(constantBlockSize);
+		PX_UNUSED(constantBlock);
+
+		// all initial and persisting reports for everything, with per-point data
+		pairFlags = PxPairFlag::eSOLVE_CONTACT | PxPairFlag::eDETECT_DISCRETE_CONTACT
+			| PxPairFlag::eNOTIFY_TOUCH_FOUND
+			| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
+			| PxPairFlag::eNOTIFY_CONTACT_POINTS;
+		return  PxFilterFlag::eDEFAULT;
+	}
+
 	PhysicsObject::PhysicsObject(m_resource* mem_res)
 		: allocator{ mem_res }, pcd{ Service<thread_pool>::Get() }
 	{
@@ -61,7 +80,7 @@ namespace Tempest
 			physx::PxSceneDesc sceneDesc(physics->getTolerancesScale());
 			sceneDesc.cpuDispatcher = &pcd;
 			sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
-			sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+			sceneDesc.filterShader = contactReportFilterShader;
 			sceneDesc.simulationEventCallback = &gContactReportCallback;
 
 			scene = px_make(physics->createScene(sceneDesc));
@@ -90,7 +109,7 @@ namespace Tempest
 
 	bool PhysicsObject::fetch()
 	{
-	//	gContactPositions.clear();
+		gContactPositions.clear();
 
 		bool fetchResult = scene->fetchResults(true);
 
@@ -144,6 +163,8 @@ namespace Tempest
 		LOG_ASSERT(actor != nullptr, "cannot create actor");
 
 		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY,!rb_config.gravity);
+
+		newShape->release();
 
 		return actor;
 	}
