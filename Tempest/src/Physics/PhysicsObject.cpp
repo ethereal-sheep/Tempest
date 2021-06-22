@@ -133,7 +133,7 @@ namespace Tempest
 		
 		LOG_ASSERT(actor != nullptr, "cannot create actor");
 
-		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, rb_config.gravity);
+		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY,!rb_config.gravity);
 
 		return actor;
 	}

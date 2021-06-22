@@ -4,6 +4,7 @@
 #include "Memory.h"
 #include "TMath.h"
 #include "ECS/ECS.h"
+#include "Instance/RuntimeInstance.h"
 
 namespace Tempest
 {
@@ -224,10 +225,10 @@ namespace Tempest
 		}
 	}
 
-	void testing_physics_6()
+	void testing_physics_6() // creation of rigidbody and adding to scene
 	{
-	
 		//edit, Saving
+		
 		{
 			debug_mr dg("testing_ecs_2.1");
 			dg.set_strict(true);
@@ -242,22 +243,22 @@ namespace Tempest
 				auto* transform = ecs.emplace<Components::Transform>(entity);
 				transform->position = { 0,1,0 };
 			}
-
-			ecs.save("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
 		}
 
 		{
 			debug_mr dg("testing_ecs_2.2", aligned_malloc_resource());
 			dg.set_strict(true);
-			PhysicsObject po(&dg);
+			PhysicsObject po = Service<PhysicsObject>::Get();
 			ECS ecs(&dg);
 
-			ecs.load("C:\\Users\\Lim Ziyi Jean\\Documents\\Tempest\\Build");
+			ecs.load("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
 
 			auto view = ecs.view<Components::Rigidbody>();
 			LOG_ASSERT(view.size_hint() == 1);
 
-			PxShape* shapes = nullptr;
+			
+		//	PxShape* shapes = nullptr;
 			for (auto id : view)
 			{
 				auto rb = ecs.get<Components::Rigidbody>(id);
@@ -268,10 +269,52 @@ namespace Tempest
 				LOG_ASSERT(position == testpos);
 				rb.internal_rb = po.createRigidbody(rb.rb_config, rb.shape_data, position);
 				po.AddActorToScene(rb.internal_rb.get());
+				
+				//need to check if rigidbody is dynamic then cast
+				if (!rb.rb_config.is_static)
+				{
+					// the casting to body oso gives errors
+					auto dynamicRb = static_cast<PxRigidBody*>(rb.internal_rb.get()); //try this?
+					dynamicRb->setLinearVelocity({ 1,0,0 });
+					LOG_TRACE("Current Velocity [{0}, {1}, {2}]", dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
 
-				rb.internal_rb->getShapes(&shapes, 1);
-				shapes->release();
+					LOG_ASSERT(dynamicRb->getLinearVelocity() == physx::PxVec3( 1, 0, 0 ));
+				}
+
+				
+				//rb.internal_rb->getShapes(&shapes, 1);
+				//shapes->release();
 			}
+		}
+	}
+
+	void testing_physics_7_1() // initing of physics object
+	{ 
+		RuntimeInstance runtime("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+		for(int i = 0; i < 10; i++)
+		{
+			runtime._update(1.f);
+		}
+	}
+
+	void testing_physics_Saving() // Saving object
+
+	{
+		{
+			debug_mr dg("testing_ecs_2.1");
+			dg.set_strict(true);
+			ECS ecs(&dg);
+			auto t = 1;
+			for (auto i = 0; i < t; ++i)
+			{
+				auto entity = ecs.create();
+				auto* rb = ecs.emplace<Components::Rigidbody>(entity);
+
+				rb->shape_data = shape(SHAPE_TYPE::SPHERE, 1);
+				auto* transform = ecs.emplace<Components::Transform>(entity);
+				transform->position = { 0,0,0 };
+			}
+			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
 		}
 	}
 
@@ -282,6 +325,8 @@ namespace Tempest
 		testing_physics_3();
 		testing_physics_4();*/
 		//testing_physics_5(); // Serialization Test
-		testing_physics_6();
+		//testing_physics_6();
+		testing_physics_Saving();
+		testing_physics_7_1();
 	}
 }

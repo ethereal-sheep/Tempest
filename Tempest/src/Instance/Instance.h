@@ -15,6 +15,7 @@ namespace Tempest
 		virtual ~Instance() = 0 {}
 		Instance(MemoryStrategy strategy = {}) : 
 			memory_object( strategy ), 
+			po(memory_object.get()),
 			ecs(memory_object.get()),
 			window_manager(memory_object.get()){}
 
@@ -98,8 +99,9 @@ namespace Tempest
 
 	protected:
 		MemoryObject memory_object;
-
+		PhysicsObject po;
 	public:
+		
 		ECS ecs;
 		WindowManager window_manager;
 		Camera cam;

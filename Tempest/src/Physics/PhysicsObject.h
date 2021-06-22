@@ -117,16 +117,16 @@ namespace Tempest
 	*/
 	struct rigidbody_config // for creation of rigidbody object
 	{
-		float mass;
-		float density;				// Only for dynamic
-		float linear_damping;		// Rate of decay overtime for linear velocty
-		float angular_damping;		// Rate of decay overtime for angular velocty
+		float mass = 1.f;
+		float density = 1.f;				// Only for dynamic
+		float linear_damping = 0.5f;		// Rate of decay overtime for linear velocty
+		float angular_damping = 0.5f;		// Rate of decay overtime for angular velocty
 		bool is_static;				// Static or Dynamic rigidbody
-		bool gravity;				// explicit or implicit with the static/dynamic type
+		bool gravity = false;				// explicit or implicit with the static/dynamic type
 
-		vec3 linear_velocity;		// Velocity in a straight line
-		vec3 angular_velocity;		// Rotational velocity
-		vec3 material;				// staticFriction, dynamicFriction, restitution (typedef float PxReal)
+		vec3 linear_velocity = { 0.f, 0.f, 0.f };		// Velocity in a straight line
+		vec3 angular_velocity = { 0.f, 0.f, 0.f };;		// Rotational velocity
+		vec3 material = { 0.f, 0.f, 0.f };;				// staticFriction, dynamicFriction, restitution (typedef float PxReal)
 
 		template <typename Archiver>
 		friend Archiver& operator&(Archiver& ar, rigidbody_config& component)
