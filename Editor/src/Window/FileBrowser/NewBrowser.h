@@ -41,7 +41,7 @@ namespace Tempest
 
             if (ImGui::BeginPopupModal("Confirm?", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
             {
-                ImGui::Text("New project will be created at:");
+                ImGui::Text("New folder for * will be created at:");
                 ImGui::Text(browser.selected_path.c_str());
 
                 if (ImGui::Button("Cancel", { ImGui::GetContentRegionAvailWidth() / 2.f, 0 }))

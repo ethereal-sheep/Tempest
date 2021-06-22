@@ -36,10 +36,6 @@ namespace Tempest
 	PhysicsObject::PhysicsObject(m_resource* mem_res)
 		: allocator{ mem_res }, pcd{ Service<thread_pool>::Get() }
 	{
-	}
-
-	void PhysicsObject::init()
-	{
 		// init foundation
 		{
 			//foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
@@ -89,6 +85,7 @@ namespace Tempest
 
 		// creates an aggregate with no collision, obviously
 		//auto agg = px_make(physics->createAggregate(128, false));
+
 	}
 
 	bool PhysicsObject::advance(float dt)
