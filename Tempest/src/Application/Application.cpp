@@ -30,6 +30,7 @@ namespace Tempest
 		// init Engine stuff first
 		Logger::Init();
 		Service<RenderSystem>::Register();
+		Service<RenderSystem>::Get().SetViewport(m_width, m_height);
 		LOG("Initializing Tempest Engine");
 		LOG(glGetString(GL_VERSION));
 		Service<thread_pool>::Register(thread::hardware_concurrency());
@@ -66,10 +67,16 @@ namespace Tempest
 	void Application::OnKeyPress(uint8_t key, uint8_t repeat)
 	{
 		Service<RenderSystem>::Get().GetCamera().OnKeyPress(key);
+		(void)repeat;
 	}
 
 	void Application::OnKeyRelease(uint8_t key)
 	{
+		(void)key;
+	}
 
+	void Application::Resize(uint32_t width, uint32_t height)
+	{
+		Service<RenderSystem>::Get().Resize(width, height);
 	}
 }

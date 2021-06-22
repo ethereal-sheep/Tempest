@@ -147,6 +147,17 @@ namespace Tempest
 					return 0;
 				}
 			}
+
+			case WM_SIZE:
+			{
+				if (hWnd == s_pContext->GetHWND())
+				{
+					const uint32_t width = ((uint32_t)(short)LOWORD(lParam));
+					const uint32_t height = ((uint32_t)(short)HIWORD(lParam));
+					s_pApp->Resize(width, height);
+					return 0;
+				}
+			}
 		}
 
 		return DefWindowProc(hWnd, message, wParam, lParam);

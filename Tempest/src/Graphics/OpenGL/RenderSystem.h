@@ -23,7 +23,8 @@ namespace Tempest
 
 		RenderSystem();
 		void TestRender(uint32_t width, uint32_t height);
-		Camera& GetCamera();
+		void SetViewport(uint32_t width, uint32_t height);
+		void Resize(uint32_t width, uint32_t height);
 
 		void StartFrame();
 		void EndFrame();
@@ -32,6 +33,8 @@ namespace Tempest
 		void System_Draw();
 		void System_End();
 		void System_Reset();
+
+		Camera& GetCamera();
 
 	};
 }

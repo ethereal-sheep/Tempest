@@ -42,6 +42,16 @@ namespace Tempest
 		quad_Shader.Unbind();
 	}
 
+	void RenderSystem::SetViewport(uint32_t width, uint32_t height)
+	{
+		m_Renderer.SetViewport(0, 0, width, height);
+	}
+
+	void RenderSystem::Resize(uint32_t width, uint32_t height)
+	{
+		m_Renderer.SetViewport(0, 0, width, height);
+	}
+
 	Camera& RenderSystem::GetCamera()
 	{
 		return m_Pipeline.cameras.front();
@@ -61,7 +71,7 @@ namespace Tempest
 
 	void RenderSystem::System_Begin()
 	{
-		m_Renderer.SetViewport(0, 0, 1600, 900);
+		//m_Renderer.SetViewport(0, 0, 1600, 900);
 		m_Renderer.EnableDepthMask(true);
 		m_Renderer.EnableDepthTest(true);
 		m_Renderer.EnableCulling(false, false, false);

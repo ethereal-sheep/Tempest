@@ -25,11 +25,8 @@ namespace Tempest
 		uint32_t GetHeight() const { return m_height; }
 		float GetAspectRatio() const { return static_cast<float>(m_width) / static_cast<float>(m_height); }
 		const wchar_t* GetTitle() const { return m_title.c_str(); }
-		void Resize(uint32_t width, uint32_t height) 
-		{
-			m_width = width;
-			m_height = height;
-		};
+		void Resize(uint32_t width, uint32_t height);
+		
 
 		/*
 		*	I/O Stuff
