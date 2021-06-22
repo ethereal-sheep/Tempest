@@ -24,10 +24,12 @@ namespace Tempest
 	 */
 	class Instance
 	{
+	protected:
 		Instance(MemoryStrategy strategy = {}) :
 			memory_object(strategy),
 			ecs(memory_object.get()),
 			window_manager(memory_object.get()) {}
+
 	public:
 		virtual ~Instance() = 0 {}
 
@@ -127,6 +129,7 @@ namespace Tempest
 		WindowManager window_manager;
 		Camera cam;
 
+		
 		Entity selected = INVALID;
 	};
 }

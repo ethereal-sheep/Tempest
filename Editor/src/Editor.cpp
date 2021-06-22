@@ -13,10 +13,6 @@
 
 #include "InstanceManager/InstanceManager.h"
 
-//#include "imgui/ImGuiFileBrowser.h"
-//#include "Window/WindowManager.h"
-//#include "Window/MenuBar.h"
-
 #include "Font.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -31,7 +27,6 @@ namespace Tempest
 
 		InstanceManager instance_manager;
 
-		//imgui_addons::ImGuiFileBrowser m_FileExplorer{};
 		//UI::MenuBar m_MenuBar;
 
 		
@@ -60,12 +55,6 @@ namespace Tempest
 
 			init_font();
 			init_style();
-
-			const char* s = R"(S:\Development\Projects)";
-			InstanceConfig con = InstanceConfig(tpath(s), MemoryStrategy(DebugFlag::DEBUG_STRICT));
-
-			instance_manager.load_new_instance(con);
-
 		}
 
 		void OnUpdate() override
@@ -117,6 +106,7 @@ namespace Tempest
 				}
 			}
 			ImGui::End();
+
 
 			instance_manager.render();
 			instance_manager.menubar();

@@ -254,6 +254,7 @@
     <ClInclude Include="src\Graphics\OpenGL\Skybox.h" />
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
     <ClInclude Include="src\Instance\Instance.h" />
+    <ClInclude Include="src\Instance\NullTimeInstance.h" />
     <ClInclude Include="src\Instance\RuntimeInstance.h" />
     <ClInclude Include="src\Instance\Window.h" />
     <ClInclude Include="src\Instance\WindowManager.h" />

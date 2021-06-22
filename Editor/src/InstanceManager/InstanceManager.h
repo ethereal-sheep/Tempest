@@ -1,35 +1,11 @@
 #pragma once
-#include "Instance/RuntimeInstance.h"
-#include "Instance/EditTimeInstance.h"
-
+#include "InstanceConfig.h"
+#include "Triggers/Triggers.h"
 #include "imgui/imgui.h"
+#include "Events/EventManager.h"
 
 namespace Tempest
 {
-	enum struct InstanceType
-	{
-		EDIT_TIME,
-		RUN_TIME,
-		NULL_TIME,
-	};
-
-	enum struct InstanceState
-	{
-		LOAD,
-		RUN,
-		UNLOAD,
-		STOPPED,
-	};
-
-	struct InstanceConfig
-	{
-		InstanceConfig(const tpath& _path, MemoryStrategy strategy = MemoryStrategy{}, InstanceType type = InstanceType::EDIT_TIME)
-			: project_path(_path), memory_strategy(strategy), instance_type(type) {}
-
-		tpath project_path;
-		MemoryStrategy memory_strategy;
-		InstanceType instance_type;
-	};
 
 	class InstanceManager
 	{
@@ -51,6 +27,8 @@ namespace Tempest
 						instance->OnExit();
 						// reset instance
 						instance.reset(nullptr);
+						// reset event manager
+						Service<EventManager>::Get().clear();
 					}
 
 					// assign new pointer to instance
@@ -61,16 +39,19 @@ namespace Tempest
 					// call init on new instance
 					instance->OnInit();
 					current_state = InstanceState::RUN;
+
+					// register the one event that instance manager needs
+					Service<EventManager>::Get().register_listener<LoadNewInstance>(
+						&InstanceManager::load_new_instance, this
+					);
 				}
-				catch (const std::exception&)
+				catch (const std::exception& a)
 				{
 					// if we fail, current instance is maintained
 					// but we display an error
 					// dispatch some event
-				}
-				catch (...) // we can catch never save error if we want also
-				{
-
+					current_state = InstanceState::RUN;
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>(a.what());
 				}
 				[[fallthrough]];
 
@@ -79,19 +60,6 @@ namespace Tempest
 					instance->OnUpdate(dt);
 				// if no instance, just don't update
 				break;
-			case Tempest::InstanceState::UNLOAD:
-				// if there is a running instance
-				if (instance)
-				{
-					// call exit on current instance
-					instance->OnExit();
-					// reset instance
-					instance.reset(nullptr);
-				}
-				current_state = InstanceState::STOPPED;
-
-				break;
-			case Tempest::InstanceState::STOPPED: [[fallthrough]];
 			default:
 				break;
 			}
@@ -100,6 +68,7 @@ namespace Tempest
 		{
 			if (instance)
 			{
+				// for debugging only (remove on release)
 				if (demo_visible)
 					ImGui::ShowDemoWindow();
 
@@ -127,6 +96,7 @@ namespace Tempest
 						}
 						ImGui::EndMenu();
 					}
+					// for debugging only (remove on release)
 					if (ImGui::BeginMenu("Demo"))
 					{
 						ImGui::MenuItem("ImGui Demo", nullptr, &demo_visible);
@@ -138,14 +108,11 @@ namespace Tempest
 		}
 
 
-		void load_new_instance([[maybe_unused]] InstanceConfig config)
+		void load_new_instance(const Event& e)
 		{
+			auto& a = event_cast<LoadNewInstance>(e);
 			current_state = InstanceState::LOAD;
-			next_config = config;
-		}
-		void stop_current_instance()
-		{
-			current_state = InstanceState::UNLOAD;
+			next_config = a.config;
 		}
 
 	private:
@@ -153,6 +120,9 @@ namespace Tempest
 		{
 			switch (next_config.instance_type)
 			{
+			case Tempest::InstanceType::NULL_TIME:
+				return make_uptr<NullTimeInstance>(next_config.memory_strategy);
+				break;
 			case Tempest::InstanceType::EDIT_TIME:
 				return make_uptr<EditTimeInstance>(next_config.project_path, next_config.memory_strategy);
 				break;
@@ -160,7 +130,7 @@ namespace Tempest
 				return make_uptr<RuntimeInstance>(next_config.project_path, next_config.memory_strategy);
 				break;
 			default:
-				return make_uptr<EditTimeInstance>(next_config.project_path, next_config.memory_strategy);
+				return make_uptr<NullTimeInstance>(next_config.memory_strategy);
 				break;
 			}
 		}
@@ -168,6 +138,9 @@ namespace Tempest
 		{
 			switch (next_config.instance_type)
 			{
+			case Tempest::InstanceType::NULL_TIME:
+				register_nulltime_windows();
+				break;
 			case Tempest::InstanceType::EDIT_TIME:
 				register_edittime_windows();
 				break;
@@ -175,18 +148,21 @@ namespace Tempest
 				register_runtime_windows();
 				break;
 			default:
-				register_edittime_windows();
+				register_nulltime_windows();
 				break;
 			}
 		}
+
+		void register_nulltime_windows();
 		void register_edittime_windows();
 		void register_runtime_windows();
 
-		InstanceState current_state = InstanceState::STOPPED;
-		InstanceConfig next_config = InstanceConfig("");
+		InstanceState current_state = InstanceState::LOAD;
+		InstanceConfig next_config = {};
 
 		tuptr<Instance> instance = nullptr;
 
+		// for debugging only (remove on release)
 		bool demo_visible = false;
 	};
 }

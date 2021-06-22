@@ -497,6 +497,9 @@
     <ClInclude Include="src\Instance\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Instance\NullTimeInstance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Util\Serializer\Private\Reader.inl">

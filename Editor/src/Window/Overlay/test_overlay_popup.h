@@ -9,7 +9,7 @@ namespace Tempest
 	{
 		const char* window_name() override
 		{
-			return ICON_FA_SHAPES " Entities";
+            return "";
 		}
 		void init() override
 		{
@@ -33,7 +33,7 @@ namespace Tempest
 
 		void show(Instance& ) override
 		{
-            const auto start_visiblity = 0.65f;
+            const auto start_visiblity = 0.95f;
             const auto visible_time = 2.f;
             const auto fade_time = 2.f;
             const auto padding = ImVec2{ 30.f, 10.f };
@@ -66,7 +66,9 @@ namespace Tempest
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
                 if (ImGui::Begin(data.c_str(), nullptr, window_flags))
                 {
+                    ImGui::PushFont(FONT_BOLD);
                     ImGui::Text(data.c_str());
+                    ImGui::PopFont();
                 }
                 ImGui::End();
                 ImGui::PopStyleVar();
@@ -89,7 +91,9 @@ namespace Tempest
                     
                     ImGui::PushStyleColor(ImGuiCol_Text, tx);
                     ImGui::PushStyleColor(ImGuiCol_Separator, sp);
+                    ImGui::PushFont(FONT_BOLD);
                     ImGui::Text(data.c_str());
+                    ImGui::PopFont();
                     ImGui::PopStyleColor(2);
                 }
                 ImGui::End();

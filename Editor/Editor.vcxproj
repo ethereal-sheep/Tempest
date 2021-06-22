@@ -202,11 +202,16 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\imgui\imstb_textedit.h" />
     <ClInclude Include="src\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\InstanceManager\InstanceConfig.h" />
     <ClInclude Include="src\InstanceManager\InstanceManager.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
     <ClInclude Include="src\Util\UIElements.h" />
     <ClInclude Include="src\Window\Diagnostics\DiagnosticsWindow.h" />
     <ClInclude Include="src\Window\Error\test_error.h" />
+    <ClInclude Include="src\Window\FileBrowser\FileBrowser.h" />
+    <ClInclude Include="src\Window\FileBrowser\NewBrowser.h" />
+    <ClInclude Include="src\Window\FileBrowser\SaveBrowser.h" />
+    <ClInclude Include="src\Window\MainMenu\MainMenu.h" />
     <ClInclude Include="src\Window\Menubar\EditTimeMenuBar.h" />
     <ClInclude Include="src\Window\Hierarchy\HierarchyWindow.h" />
     <ClInclude Include="src\Window\Inspector\InspectorWindow.h" />

@@ -13,9 +13,6 @@ namespace Tempest
 		
 		void show(Instance& instance) override
 		{
-			auto& edit_time = dynamic_cast<EditTimeInstance&>(instance);
-
-
 			if(ImGui::Begin(window_name(), &visible, window_flags))
 			{
 				ImGui::Text("HELLO WORLD!");

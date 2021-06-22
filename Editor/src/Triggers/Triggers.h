@@ -15,5 +15,9 @@ namespace Tempest
 		std::string msg;
 	};
 
+	struct NewProjectTrigger : public Event {};
+	struct SaveProjectTrigger : public Event {};
+	struct SaveProjectAsTrigger : public Event {};
+
 
 }

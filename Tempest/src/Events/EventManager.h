@@ -45,6 +45,11 @@ namespace Tempest
 
 		}
 
+		void clear()
+		{
+			listeners.clear();
+		}
+
 	private:
 		Listeners listeners;
 	};
