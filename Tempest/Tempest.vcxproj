@@ -124,7 +124,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\stb</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
@@ -156,7 +156,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\stb</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -182,6 +182,7 @@
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
     <ClCompile Include="src\ECS\Test\test_ecs.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\FrameBuffer.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Material.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\RenderSystem.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
     <ClInclude Include="src\Events\Test\event_test.h" />
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
+    <ClInclude Include="src\Graphics\OpenGL\FrameBuffer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Material.h" />
     <ClInclude Include="src\Graphics\OpenGL\Mesh.h" />
     <ClInclude Include="src\Graphics\OpenGL\RenderPipeline.h" />
