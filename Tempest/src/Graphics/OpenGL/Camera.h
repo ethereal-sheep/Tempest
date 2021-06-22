@@ -1,6 +1,7 @@
 #pragma once
 #include <TMath.h>
 
+
 namespace Tempest
 {
 	enum struct CameraType
@@ -56,7 +57,7 @@ namespace Tempest
 		void Rotate(float radians, const glm::vec3& axis);
 		void Turn(float radians);
 
-		void Move(CameraDirection dir, float amount = 1.f);
+		void Move(CameraDirection dir, float amount = 0.1f);
 
 		void SetMode(CameraType type);
 		void SetPosition(glm::vec3 pos);
@@ -88,5 +89,7 @@ namespace Tempest
 
 		glm::vec3 ScreenspaceToWorldspace(const glm::vec2&) const;
 		glm::vec2 WorldspaceToScreenspace(const glm::vec3&) const;
+
+		void OnKeyPress(uint8_t key);
 	};
 }

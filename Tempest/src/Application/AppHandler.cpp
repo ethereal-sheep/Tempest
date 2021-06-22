@@ -97,6 +97,69 @@ namespace Tempest
 		if (s_pApp->WndProcHandler(hWnd, message, wParam, lParam))
 			return 0;
 
+		switch (message)
+		{
+			/*
+			*	Key Input
+			*/
+			case WM_KEYDOWN:
+			{
+				if (s_pApp)
+				{
+					s_pApp->OnKeyPress(static_cast<UINT8>(wParam), static_cast<UINT8>((lParam >> 30) & 1));
+				}
+				return 0;
+			}
+
+			/*
+			*	Key Release
+			*/
+			case WM_KEYUP:
+			{
+				if (s_pApp)
+				{
+					s_pApp->OnKeyRelease(static_cast<UINT8>(wParam));
+				}
+				return 0;
+			}
+
+			/*
+			*	Press Alt + Enter to change window into full screen
+			*/
+			case WM_SYSKEYDOWN:
+			{
+				if (s_pApp)
+				{
+					if (wParam == VK_RETURN && !((lParam >> 30) & 1))
+						ToggleFullscreen();
+				}
+				return 0;
+			}
+
+			/*
+			*	Pressing the close button
+			*/
+			case WM_DESTROY:
+			{
+				if (hWnd == s_pContext->GetHWND())
+				{
+					PostQuitMessage(0);
+					return 0;
+				}
+			}
+
+			case WM_SIZE:
+			{
+				if (hWnd == s_pContext->GetHWND())
+				{
+					const uint32_t width = ((uint32_t)(short)LOWORD(lParam));
+					const uint32_t height = ((uint32_t)(short)HIWORD(lParam));
+					s_pApp->Resize(width, height);
+					return 0;
+				}
+			}
+		}
+
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 

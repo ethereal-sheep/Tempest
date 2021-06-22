@@ -3,6 +3,7 @@
 #include "Graphics/OpenGL/RenderPipeline.h"
 #include "Graphics/OpenGL/Shader.h"
 #include "Graphics/OpenGL/Camera.h"
+#include <memory>
 
 
 namespace Tempest
@@ -13,12 +14,27 @@ namespace Tempest
 
 		Renderer m_Renderer;
 		RenderPipeline m_Pipeline;
-
-		Shader quad_Shader{ "Graphics/Shaders/Quad_Vert.glsl", "Graphics/Shaders/Quad_Frag.glsl" };
+		//std::vector<std::shared_ptr<Shader>> shaders;
+		Shader quad_Shader{ "Shaders/Quad_Vert.glsl", "Shaders/Quad_Frag.glsl" };
+		std::vector<glm::mat4> transforms;
+		//Shader sphere_Shader{ "Graphics/Shaders/Sphere_Vert.glsl", "Graphics/Shaders/Sphere_Frag.glsl" };
 
 	public:
 
 		RenderSystem();
 		void TestRender(uint32_t width, uint32_t height);
+		void SetViewport(uint32_t width, uint32_t height);
+		void Resize(uint32_t width, uint32_t height);
+
+		void StartFrame();
+		void EndFrame();
+
+		void System_Begin();
+		void System_Draw();
+		void System_End();
+		void System_Reset();
+
+		Camera& GetCamera();
+
 	};
 }

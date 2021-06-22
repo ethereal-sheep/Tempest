@@ -13,6 +13,7 @@
 #include "Physics/Test/test_physics.h"
 #include "Util/view.h"
 #include "Util/thread_pool.h"
+#include "Util/Service.h"
 
 namespace Tempest
 {
@@ -28,8 +29,10 @@ namespace Tempest
 	{
 		// init Engine stuff first
 		Logger::Init();
+		Service<RenderSystem>::Register();
+		Service<RenderSystem>::Get().SetViewport(m_width, m_height);
 		LOG("Initializing Tempest Engine");
-
+		LOG(glGetString(GL_VERSION));
 		Service<thread_pool>::Register(thread::hardware_concurrency());
 		Service<EventManager>::Register();
 
@@ -41,7 +44,7 @@ namespace Tempest
 	void Application::OnEngineUpdate()
 	{
 		// Update Engine stuff first
-
+		Service<RenderSystem>::Get().GetCamera().Update();
 
 		OnUpdate();
 		
@@ -51,9 +54,11 @@ namespace Tempest
 	void Application::OnEngineRender()
 	{
 		// render engine stuff first
-		RenderSystem ren;
-		//ren.TestRender(m_width, m_height);
-		OnRender();
+		//RenderSystem ren;
+		//Service<RenderSystem>::Get().TestRender(m_width, m_height);
+		Service<RenderSystem>::Get().StartFrame();
+		Service<RenderSystem>::Get().EndFrame();
+		//OnRender();
 	}
 
 	void Application::OnEngineExit()
@@ -62,5 +67,21 @@ namespace Tempest
 		OnExit();
 
 		// then exit engine stuff
+	}
+
+	void Application::OnKeyPress(uint8_t key, uint8_t repeat)
+	{
+		Service<RenderSystem>::Get().GetCamera().OnKeyPress(key);
+		(void)repeat;
+	}
+
+	void Application::OnKeyRelease(uint8_t key)
+	{
+		(void)key;
+	}
+
+	void Application::Resize(uint32_t width, uint32_t height)
+	{
+		Service<RenderSystem>::Get().Resize(width, height);
 	}
 }

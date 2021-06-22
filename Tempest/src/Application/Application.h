@@ -25,12 +25,20 @@ namespace Tempest
 		uint32_t GetHeight() const { return m_height; }
 		float GetAspectRatio() const { return static_cast<float>(m_width) / static_cast<float>(m_height); }
 		const wchar_t* GetTitle() const { return m_title.c_str(); }
-		void Resize(uint32_t width, uint32_t height) 
-		{
-			m_width = width;
-			m_height = height;
-		};
+		void Resize(uint32_t width, uint32_t height);
+		
 
+		/*
+		*	I/O Stuff
+		*/
+		//virtual void OnLMouseDrag(POINT pos);
+		//virtual void OnRMouseDrag(POINT pos);
+		//virtual void OnLMousePress(uint8_t key, POINT pos);
+		//virtual void OnLMouseRelease(uint8_t key, POINT pos);
+		//virtual void OnRMousePress(uint8_t key, POINT pos);
+		//virtual void OnRMouseRelease(uint8_t key, POINT pos);
+		virtual void OnKeyPress(uint8_t key, uint8_t repeat);
+		virtual void OnKeyRelease(uint8_t key);
 
 	private:
 		uint32_t m_width;

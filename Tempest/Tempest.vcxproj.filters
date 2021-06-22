@@ -147,6 +147,9 @@
     <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\OpenGL\FrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\AppHandler.h">
@@ -500,6 +503,9 @@
     <ClInclude Include="src\Instance\NullTimeInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\OpenGL\FrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Util\Serializer\Private\Reader.inl">
@@ -515,5 +521,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="src\Scripting\Util\static_id_generator.h" />
+    <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
+    <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
+    <None Include="..\Resource\Shaders\Quad_Frag.glsl" />
+    <None Include="..\Resource\Shaders\Quad_Vert.glsl" />
   </ItemGroup>
 </Project>
