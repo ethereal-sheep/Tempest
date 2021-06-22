@@ -152,5 +152,8 @@
     <ClInclude Include="src\Window\FileBrowser\NewBrowser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Util\Suppress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
