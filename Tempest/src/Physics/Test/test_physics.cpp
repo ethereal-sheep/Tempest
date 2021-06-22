@@ -168,7 +168,7 @@ namespace Tempest
 		
 	}
 
-	void testing_physics_5()
+	void testing_physics_5() // Serialization Test
 	{
 		//edit
 		{
@@ -182,6 +182,7 @@ namespace Tempest
 			{
 				auto entity = ecs.create();
 				auto* rb = ecs.emplace<Components::Rigidbody>(entity);
+				
 				if(entity % 3 == 1)
 					rb->shape_data = shape(SHAPE_TYPE::SPHERE, 1);
 				if (entity % 3 == 2)
@@ -223,12 +224,66 @@ namespace Tempest
 		}
 	}
 
+	void testing_physics_6()
+	{
+	
+		//edit, Saving
+		{
+			debug_mr dg("testing_ecs_2.1");
+			dg.set_strict(true);
+			ECS ecs(&dg);
+			auto t = 1;
+			for (auto i = 0; i < t; ++i)
+			{
+				auto entity = ecs.create();
+				auto* rb = ecs.emplace<Components::Rigidbody>(entity);
+				
+				rb->shape_data = shape(SHAPE_TYPE::SPHERE, 1);
+				auto* transform = ecs.emplace<Components::Transform>(entity);
+				transform->position = { 0,1,0 };
+			}
+
+			ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+		}
+
+		{
+			
+			debug_mr dg("testing_ecs_2.2");
+			dg.set_strict(true);
+			PhysicsObject po (&dg);
+			ECS ecs(&dg);
+
+			ecs.load("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
+
+			auto view = ecs.view<Components::Rigidbody>();
+			LOG_ASSERT(view.size_hint() == 1);
+
+			PxShape* shapes = nullptr;
+			for (auto id : view)
+			{
+				auto rb = ecs.get<Components::Rigidbody>(id);
+				auto position = ecs.get<Components::Transform>(id).position;
+				vec3 testpos{ 0,1,0 };
+
+				LOG_ASSERT(rb.shape_data.type == SHAPE_TYPE::SPHERE);
+				LOG_ASSERT(position == testpos);
+				auto actor = po.createRigidbody(rb.rb_config, rb.shape_data, position);
+				po.AddActorToScene(actor.get());
+
+				
+				rb.internal_rb->getShapes(&shapes, 1);
+				shapes->release();
+			}
+		}
+	}
+
 	void testing_physics()
 	{
 		/*testing_physics_1();
 		testing_physics_2();
 		testing_physics_3();
 		testing_physics_4();*/
-		testing_physics_5();
+		//testing_physics_5(); // Serialization Test
+		testing_physics_6();
 	}
 }

@@ -1,0 +1,28 @@
+{
+    "Metadata": {
+        "Type": "Transform"
+    },
+    "Components": [
+        {
+            "Entity": 1,
+            "Component": {
+                "Position": [
+                    0.0,
+                    1.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Scale": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        }
+    ]
+}

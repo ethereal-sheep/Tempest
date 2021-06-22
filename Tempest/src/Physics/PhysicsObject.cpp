@@ -92,7 +92,6 @@ namespace Tempest
 	tsptr<physx::PxRigidActor> PhysicsObject::createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const
 	{
 		
-
 		PxShape* newShape = nullptr;
 		PxMaterial* material = physics->createMaterial(rb_config.material.x, rb_config.material.y, rb_config.material.z);
 		tsptr<physx::PxRigidActor> actor = nullptr;
@@ -116,6 +115,8 @@ namespace Tempest
 			break;
 		};
 
+		LOG_ASSERT_V(newShape != nullptr, "cannot create shape");
+
 		if (rb_config.is_static)
 			actor = px_make(physx::PxCreateStatic(*physics, PxTransform(PxVec3{ pos }), *newShape));
 		else
@@ -130,10 +131,10 @@ namespace Tempest
 			actor = dynamicBody;
 		}
 		
-		LOG_ERROR("Rigidbody cannot be created");
+		LOG_ASSERT(actor != nullptr, "cannot create actor");
 
 		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, rb_config.gravity);
-		
+
 		return actor;
 	}
 
