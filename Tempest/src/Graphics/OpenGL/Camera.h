@@ -57,7 +57,7 @@ namespace Tempest
 		void Rotate(float radians, const glm::vec3& axis);
 		void Turn(float radians);
 
-		void Move(CameraDirection dir, float amount = 1.f);
+		void Move(CameraDirection dir, float amount = 0.1f);
 
 		void SetMode(CameraType type);
 		void SetPosition(glm::vec3 pos);

@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include <fstream>
+#include "Logger/Log.h"
 
 namespace Tempest
 {
@@ -19,7 +20,7 @@ namespace Tempest
 		}
 		else
 		{
-			assert("File Failed To Open");
+			LOG("FAIL TO OPEN");
 		}
 
 		in_file.close();
@@ -46,6 +47,8 @@ namespace Tempest
 		{
 			glGetShaderInfoLog(shader, 512, NULL, infoLog);
 			assert("Failed To Compile Shader");
+			LOG("FAILED TO COMPILE SHADER");
+			LOG(fileName);
 			//std::cout << "ERROR:[SHADER]:FAILED_TO_COMPILE_SHADER: " << fileName << std::endl;
 			//std::cout << infoLog << std::endl;
 		}
@@ -74,8 +77,7 @@ namespace Tempest
 		{
 			glGetProgramInfoLog(id, 512, NULL, infoLog);
 			assert("Failed To Link Program");
-			//std::cout << "ERROR:[SHADER]:FAILED_TO_LINK_PROGRAM" << std::endl;
-			//std::cout << infoLog << std::endl;
+			LOG("FAILED TO LINK PROGRAM");
 		}
 
 		glUseProgram(0);

@@ -31,7 +31,7 @@ namespace Tempest
 		Logger::Init();
 		Service<RenderSystem>::Register();
 		LOG("Initializing Tempest Engine");
-
+		LOG(glGetString(GL_VERSION));
 		Service<thread_pool>::Register(thread::hardware_concurrency());
 
 		OnInit();

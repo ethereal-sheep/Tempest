@@ -142,6 +142,9 @@
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>del $(TargetDir)RenderSystem.obj</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

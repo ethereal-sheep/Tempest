@@ -258,7 +258,7 @@ namespace Tempest
 		switch (key)
 		{
 			case 'W': 
-				Move(CameraDirection::CAMERA_UP, 1000.f);
+				Move(CameraDirection::CAMERA_UP);
 				break;
 
 			case 'A':
@@ -274,11 +274,23 @@ namespace Tempest
 				break;
 
 			case 'O':
-				Move(CameraDirection::CAMERA_FORWARD, 10.f);
+				Move(CameraDirection::CAMERA_FORWARD);
 				break;
 
 			case 'P':
 				Move(CameraDirection::CAMERA_BACK);
+				break;
+
+			case 'J':
+				Rotate(.01f, glm::vec3(1.f, 0.f, 0.f));
+				break;
+
+			case 'K':
+				Rotate(.01f, glm::vec3(0.f, 1.f, 0.f));
+				break;
+
+			case 'L':
+				Rotate(.01f, glm::vec3(0.f, 0.f, 1.f));
 				break;
 		}
 	}

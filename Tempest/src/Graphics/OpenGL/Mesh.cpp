@@ -113,8 +113,8 @@ namespace Tempest
 
 		constexpr glm::vec3 translateArray[] =
 		{
-			glm::vec3(+0.0f, +0.0f, +1.0f), // Z+
-			glm::vec3(+0.0f, +0.0f, -1.0f), // Z-
+			glm::vec3(+0.0f, +0.0f, +0.5f), // Z+
+			glm::vec3(+0.0f, +0.0f, -0.5f), // Z-
 			glm::vec3(+0.5f, +0.0f, +0.0f), // X+
 			glm::vec3(-0.5f, +0.0f, +0.0f), // X-
 			glm::vec3(+0.0f, +0.5f, +0.0f), // Y+
@@ -160,7 +160,7 @@ namespace Tempest
 		for (int stack = 0; stack <= stacks; ++stack)
 		{
 			const float row = static_cast<float>(stack) / static_cast<float>(stacks);
-			const float beta = glm::pi<float>() * (row - 0.5f);
+			const float beta = 0.5f * glm::pi<float>() - row * glm::pi<float>();
 			const float sinBeta = sin(beta);
 			const float cosBeta = cos(beta);
 
