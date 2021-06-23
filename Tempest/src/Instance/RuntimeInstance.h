@@ -24,12 +24,13 @@ namespace Tempest
 		RuntimeInstance(const tpath& root_directory, MemoryStrategy strategy = {}) :
 			Instance(root_directory, strategy), srm{memory_object.get()}
 		{
-			build_scripts(root_directory);
 			RunPhysxUpdate();
+			build_scripts(root_directory);
 		}
 
 		void _init() override
 		{
+			
 		}
 		void _update([[maybe_unused]] float dt) override
 		{
