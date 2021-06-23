@@ -46,12 +46,12 @@ namespace Tempest
 
 	void FrameBuffer::AttachColorBuffer([[maybe_unused]] const Texture& texture)
 	{
-		//const auto attachment = GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount++;
-		//
-		//glNamedFramebufferTexture(m_ID, attachment, texture.GetNativeHandle(), 0);
-		//
-		//m_Width = texture.GetWidth();
-		//m_Height = texture.GetHeight();
+		const auto attachment = GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount++;
+		
+		glNamedFramebufferTexture(m_ID, attachment, texture.GetID(), 0);
+		
+		m_Width = texture.GetWidth();
+		m_Height = texture.GetHeight();
 	}
 
 	void FrameBuffer::PopColorBuffer()
@@ -65,7 +65,12 @@ namespace Tempest
 
 	void FrameBuffer::AttachDepthBuffer([[maybe_unused]] const Texture& texture) const
 	{
-		//glNamedFramebufferTexture(m_ID, GL_DEPTH_ATTACHMENT, texture.GetID(), 0);
+		glNamedFramebufferTexture(m_ID, GL_DEPTH_ATTACHMENT, texture.GetID(), 0);
+	}
+
+	void FrameBuffer::AttachDepthStencilBuffer(const Texture& texture) const
+	{
+		glNamedFramebufferTexture(m_ID, GL_DEPTH_STENCIL_ATTACHMENT, texture.GetID(), 0);
 	}
 
 	void FrameBuffer::PopDepthBuffer()

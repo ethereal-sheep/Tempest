@@ -74,19 +74,6 @@ namespace Tempest
 		ALWAYS
 	};
 
-	//struct IndexBuffer
-	//{
-	//	unsigned int GetCount() { return 0; }
-	//	void Bind() {}
-	//	void Unbind() {}
-	//};
-	//
-	//struct VertexArray
-	//{
-	//	void Bind() {}
-	//	void Unbind() {}
-	//};
-
 	class Renderer
 	{
 	private:

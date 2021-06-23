@@ -43,6 +43,8 @@ namespace Tempest
 		void AttachDepthBuffer(const Texture& texture) const;
 		void PopDepthBuffer();
 
+		void AttachDepthStencilBuffer(const Texture& texture) const;
+
 		void CopyBufferContents(const FrameBuffer& src, FrameCopyBit copy, FrameCopyFilter filter,
 			uint32_t srcX0, uint32_t srcY0, uint32_t srcX1, uint32_t srcY2,
 			uint32_t dstX0, uint32_t dstY0, uint32_t dstX1, uint32_t dstY2) const;
