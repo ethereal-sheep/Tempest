@@ -38,4 +38,14 @@ namespace Tempest
 
 		InstanceConfig config;
 	};
+
+	struct CreateNewInstance : public Event
+	{
+		CreateNewInstance(const tpath& _path, const string& _name, bool _load) :
+			path(_path), name(_name), load(_load) {}
+
+		tpath path;
+		string name;
+		bool load;
+	};
 }

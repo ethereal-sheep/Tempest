@@ -101,7 +101,6 @@ namespace Tempest
 
 			if (!std::filesystem::exists(path))
 			{
-				//CDN_CORE_WARN("JsonSerialzier::GetJson - path : {0} does not exist!", path.string());
 				return json;
 			}
 

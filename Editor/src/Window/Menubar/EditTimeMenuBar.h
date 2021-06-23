@@ -21,22 +21,18 @@ namespace Tempest
 					if (ImGui::MenuItem(ICON_FA_FILE_MEDICAL " New", "Ctrl+N", false))
 					{
 						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Creating new project...");
+						Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
 					}
 
 					if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "", false))
 					{
 						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Opening...");
+						Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
 					}
 					if (ImGui::BeginMenu(ICON_FA_BOX_OPEN " Open Recent"))
 					{
-						for (auto i = 0; i < 3; ++i)
-						{
-							if (ImGui::MenuItem((string("File") + std::to_string(i)).c_str(), "", false, false))
-							{
 
-							}
-						}
-
+						Service<EventManager>::Get().instant_dispatch<ShowRecentUtil>();
 
 						ImGui::EndMenu();
 
@@ -44,18 +40,25 @@ namespace Tempest
 					if (ImGui::MenuItem(ICON_FA_SAVE " Save", "Ctrl+S", false))
 					{
 						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Saving...");
+						Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
 					}
 
-					if (ImGui::MenuItem(ICON_FA_SAVE " Save As...", "Ctrl+Shift+S", false))
+					/*if (ImGui::MenuItem(ICON_FA_SAVE " Save As...", "Ctrl+Shift+S", false))
 					{
 						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Saving...");
-					}
+						Service<EventManager>::Get().instant_dispatch<SaveProjectAsTrigger>();
+					}*/
 
 					if (ImGui::MenuItem(ICON_FA_FILE_EXCEL " Close", "", false))
 					{
 
 					}
 
+					UI::PaddedSeparator(1.f);
+					if (ImGui::MenuItem(ICON_FA_FILE_EXPORT " Export", "Ctrl+Shift+S", false)) 
+					{
+						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Exporting...");
+					}
 					UI::PaddedSeparator(1.f);
 
 					if (ImGui::MenuItem(ICON_FA_ARROW_LEFT " Back to Main Menu", "", false))

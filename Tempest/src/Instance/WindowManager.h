@@ -13,12 +13,12 @@ namespace Tempest
 			windows(mem_res) {}
 
 		template <typename TWindow, typename... Args>
-		void register_window(Args&&... args)
+		auto& register_window(Args&&... args)
 		{
 			static_assert(std::is_base_of_v<Window, TWindow>, "Must inherit from IWindow!");
 			static_assert(!std::is_same_v<Window, TWindow>, "Window type cannot be IWindow!");
 
-			windows.emplace_back(make_uptr<TWindow>(std::forward<Args>(args)...));
+			return windows.emplace_back(make_uptr<TWindow>(std::forward<Args>(args)...));
 			// not sure if exception will be thrown here
 		}
 

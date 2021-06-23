@@ -16,6 +16,6 @@ namespace Tempest
 	}
 	void Instance::internal_exit()
 	{
-		window_manager.init();
+		window_manager.exit();
 	}
 }

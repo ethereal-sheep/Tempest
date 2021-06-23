@@ -19,13 +19,37 @@ namespace Tempest
 		string msg;
 	};
 
+	
+
 	/**
 	 * @brief Base abstract class of an instance. 
 	 */
 	class Instance
 	{
 	protected:
-		Instance(MemoryStrategy strategy = {}) :
+
+		string get_filename_from_path(const tpath& path) const
+		{
+			if (!std::filesystem::exists(path))
+				throw instance_exception("Instance: Bad Directory!");
+
+			if (!path.has_stem())
+				throw instance_exception("Instance: Bad Filename!");
+
+			return path.stem().string();
+
+		}
+		tpath get_rootpath_from_path(const tpath& path) const
+		{
+			if (!std::filesystem::exists(path))
+				throw instance_exception("Instance: Bad Directory!");
+
+			return path.parent_path();
+		}
+
+		Instance(const string& _name, const tpath& path, MemoryStrategy strategy) :
+			name{ _name },
+			root{ path },
 			memory_object(strategy),
 			po(memory_object.get()),
 			ecs(memory_object.get()),
@@ -33,14 +57,15 @@ namespace Tempest
 
 	public:
 		virtual ~Instance() = 0 {}
-
-		Instance(const tpath& root_directory, MemoryStrategy strategy = {}) :
-			Instance(strategy)
+		
+		Instance(const tpath& project_path, MemoryStrategy strategy = {}) :
+			Instance(
+				get_filename_from_path(project_path),
+				get_rootpath_from_path(project_path),
+				strategy
+			)
 		{
-			if (!std::filesystem::exists(root_directory))
-				throw instance_exception("Instance: Bad Directory!");
-
-			ecs.load(root_directory);
+			ecs.load(root);
 		}
 
 		[[nodiscard]] const debug_mr* get_debug() const
@@ -54,9 +79,9 @@ namespace Tempest
 		}
 
 		template <typename TWindow, typename... Args>
-		void register_window(Args&&... args)
+		auto& register_window(Args&&... args)
 		{
-			window_manager.register_window<TWindow>(std::forward<Args>(args)...);
+			return window_manager.register_window<TWindow>(std::forward<Args>(args)...);
 		}
 
 		template <typename TWindow, typename... Args>
@@ -109,6 +134,9 @@ namespace Tempest
 			_exit();
 		}
 
+		const string& get_name() const { return name; }
+		const tpath& get_path() const { return root; }
+
 	private:
 
 		void internal_init();
@@ -122,7 +150,9 @@ namespace Tempest
 		virtual void _exit() = 0;
 
 	protected:
+		string name;
 		tpath root;
+
 		MemoryObject memory_object;
 		PhysicsObject po;
 	public:

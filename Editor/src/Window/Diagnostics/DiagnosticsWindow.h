@@ -14,7 +14,7 @@ namespace Tempest
 
 		void show(Instance& instance) override;
 
-		void Runtime();
+		void Runtime(Instance& instance);
 		void ShowFPSGraph();
 
 		void ECSUsage(Instance& instance);
