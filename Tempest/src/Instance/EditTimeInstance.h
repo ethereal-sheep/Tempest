@@ -40,11 +40,21 @@ namespace Tempest
 
 		}
 
+		void save()
+		{
+			ecs.save(root);
+			//graph_manager.save_all_to(root);
+		}
+
+		void save_as(const tpath& )
+		{
+
+		}
+
 	private:
 
 
 	public:
-		// WindowManager here
 		GMS graph_manager;
 	};
 }

@@ -18,31 +18,29 @@ namespace Tempest
 
         void open_popup(const Event&)
         {
-            //auto a = event_cast<OverlayTrigger>(e);
-            //data = a.msg;
-            enable_popup = true;
+            enable_popup = true; 
         }
 
         void show(Instance& ) override
         {
             if (enable_popup)
             {
-                ImGui::OpenPopup("Open");
-               //browser.current_path = R"(S:\Development\Projects\)";
+                ifd::FileDialog::Instance().Open(
+                    "TextureOpenDialog",
+                    "Open a texture",
+                    "Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*");
                 enable_popup = false;
             }
-            if (browser.showFileDialog("Open", imgui_addons::ImGuiFileBrowser::DialogMode::SELECT, ImVec2(700, 310), ".json"))
-            {
-                // what do we need to save
-                /*
-                * Project
-                * Graphs 
-                */
+            if (ifd::FileDialog::Instance().IsDone("TextureOpenDialog")) {
+                if (ifd::FileDialog::Instance().HasResult()) {
+                    std::string res = ifd::FileDialog::Instance().GetResult().u8string();
+                    LOG("OPEN[{}]\n", res.c_str());
+                }
+                ifd::FileDialog::Instance().Close();
             }
         }
 
         bool enable_popup = false;
-        imgui_addons::ImGuiFileBrowser browser;
 
 
     };

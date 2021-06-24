@@ -137,7 +137,11 @@ namespace Tempest
 
 
 	/**
-	 * @brief Alias for filesystem patj
+	 * @brief Alias for filesystem
+	 */
+	namespace fs = std::filesystem;
+	/**
+	 * @brief Alias for filesystem path
 	 */
 	using tpath = std::filesystem::path;
 	/**

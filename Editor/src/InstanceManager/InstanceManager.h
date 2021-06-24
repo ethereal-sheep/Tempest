@@ -10,6 +10,17 @@ namespace Tempest
 	class InstanceManager
 	{
 	public:
+		~InstanceManager()
+		{
+			if (instance)
+			{
+				instance->OnExit();
+				// reset instance
+				instance.reset(nullptr);
+			}
+
+		}
+
 		void update(float dt)
 		{
 			switch (current_state)
@@ -37,6 +48,7 @@ namespace Tempest
 				{
 					// assign new pointer to instance
 					instance = create_new_instance();
+					
 				}
 				catch (const std::exception& a)
 				{
@@ -79,13 +91,7 @@ namespace Tempest
 			if (demo_visible)
 				ImGui::ShowDemoWindow();
 
-
 			instance->OnRender();
-		}
-		else
-		{
-			// some other shit for empty
-			// we can do some ui do load the instance
 		}
 	}
 	// global menu bar

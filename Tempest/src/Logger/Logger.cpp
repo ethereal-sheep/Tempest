@@ -15,6 +15,7 @@ void Tempest::Logger::Init()
 {
 	std::vector<spdlog::sink_ptr> sinks;
 	sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
+	// should use env variable getenv("APPDATA/SomeFolder")
 	sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Log/Log.log"));
 
 	logger = spdlog::create_async<spdlog::sinks::dist_sink_mt>("Global Logger", sinks);

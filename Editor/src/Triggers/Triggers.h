@@ -16,8 +16,20 @@ namespace Tempest
 	};
 
 	struct NewProjectTrigger : public Event {};
+	struct OpenProjectTrigger : public Event {};
 	struct SaveProjectTrigger : public Event {};
 	struct SaveProjectAsTrigger : public Event {};
+	struct CloseProjectTrigger : public Event {};
+	struct ExportProjectTrigger : public Event {};
 
+
+	struct SaveCurrentBeforeOpenTrigger : public Event 
+	{
+		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}
+		tpath open_path;
+	};
+
+	struct ShowRecentUtil : public Event {};
+	struct AddRecentUtil : public Event {};
 
 }

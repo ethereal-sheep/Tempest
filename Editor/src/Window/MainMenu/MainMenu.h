@@ -49,24 +49,21 @@ namespace Tempest
 							if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "", false))
 							{
 								Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Opening...");
+								Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
 							}
 							if (ImGui::BeginMenu(ICON_FA_BOX_OPEN " Open Recent"))
 							{
-								for (auto i = 0; i < 3; ++i)
-								{
-									if (ImGui::MenuItem((string("File") + std::to_string(i)).c_str(), "", false, false))
-									{
-
-									}
-								}
-
-
+								Service<EventManager>::Get().instant_dispatch<ShowRecentUtil>();
 								ImGui::EndMenu();
 
 							}
 							if (ImGui::MenuItem(ICON_FA_SAVE " Save", "Ctrl+S", false, false)) {}
-							if (ImGui::MenuItem(ICON_FA_SAVE " Save As...", "Ctrl+Shift+S", false, false)) {}
+							//if (ImGui::MenuItem(ICON_FA_SAVE " Save As...", "Ctrl+Shift+S", false, false)) {}
 							if (ImGui::MenuItem(ICON_FA_FILE_EXCEL " Close", "", false, false)) {}
+
+							UI::PaddedSeparator(1.f);
+
+							if (ImGui::MenuItem(ICON_FA_FILE_EXPORT " Export", "Ctrl+Shift+S", false, false)) {}
 
 							UI::PaddedSeparator(1.f);
 

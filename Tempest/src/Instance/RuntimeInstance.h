@@ -21,11 +21,11 @@ namespace Tempest
 		/**
 		 * @brief Requires root directory
 		 */
-		RuntimeInstance(const tpath& root_directory, MemoryStrategy strategy = {}) :
-			Instance(root_directory, strategy), srm{memory_object.get()}
+		RuntimeInstance(const tpath& project_path, MemoryStrategy strategy = {}) :
+			Instance(project_path, strategy), srm{memory_object.get()}
 		{
 			RunPhysxUpdate();
-			build_scripts(root_directory);
+			build_scripts(root);
 		}
 
 		void _init() override

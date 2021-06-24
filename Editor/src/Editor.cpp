@@ -24,6 +24,7 @@ namespace Tempest
 {
 	void init_font();
 	void init_style();
+	void init_file_dialog();
 
 	class Editor : public Application
 	{
@@ -42,22 +43,20 @@ namespace Tempest
 			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
 			ImGui::StyleColorsDark();
-			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
-			ImGui_ImplOpenGL3_Init("#version 460");
 			ImGuiIO& io = ImGui::GetIO();
 
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-			ImGuiStyle& style = ImGui::GetStyle();
+
+			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
+			ImGui_ImplOpenGL3_Init("#version 460");
 
 			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-			{
-				style.WindowRounding = 0.0f;
-				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-			}
+				ImGui_ImplOpenGL3_Init();
 
 			init_font();
 			init_style();
+			init_file_dialog();
 		}
 
 		void OnUpdate() override
@@ -77,36 +76,34 @@ namespace Tempest
 			/*--------------------------------------------------------------------*/
 
 
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+
+			ImGuiIO& io = ImGui::GetIO();
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->WorkPos);
-			ImGui::SetNextWindowSize(viewport->WorkSize);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			window_flags |= ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags window_flags =
+				ImGuiWindowFlags_NoDocking |
+				ImGuiWindowFlags_NoTitleBar |
 				ImGuiWindowFlags_NoCollapse |
 				ImGuiWindowFlags_NoResize |
 				ImGuiWindowFlags_NoMove |
 				ImGuiWindowFlags_NoBringToFrontOnFocus |
 				ImGuiWindowFlags_NoNavFocus;
-
-			[[maybe_unused]] bool popupImport = false;
-			[[maybe_unused]] bool popupImportSuccess = false;
-
+			
+			ImGui::SetNextWindowPos(viewport->WorkPos);
+			ImGui::SetNextWindowSize(viewport->WorkSize);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			if (ImGui::Begin("Main", nullptr, window_flags))
 			{
 				ImGui::PopStyleVar(3);
-
-
 				// DockSpace
-				ImGuiIO& io = ImGui::GetIO();
 				if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 				{
 					ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 					ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
 				}
+
 			}
 			ImGui::End();
 
@@ -258,5 +255,29 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
 		io.Fonts->AddFontFromFileTTF("Fonts/kenney-icon-font.ttf", font_icon_size, &config, ki_range);
 
+	}
+	void init_file_dialog()
+	{
+		ifd::FileDialog::Instance().CreateTexture = [](uint8_t* data, int w, int h, char fmt) -> void* {
+			
+			GLuint tex;
+			glGenTextures(1, &tex);
+			glBindTexture(GL_TEXTURE_2D, tex);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, (fmt == 0) ? GL_BGRA : GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			return UIntToPtr(tex);
+		};
+
+		ifd::FileDialog::Instance().DeleteTexture = [](void* tex) {
+			
+			GLuint texID = PtrToUint(tex);
+			glDeleteTextures(1, &texID);
+		};
 	}
 }

@@ -13,7 +13,7 @@ namespace Tempest
 			{
 				if (ImGui::BeginTabItem("Runtime"))
 				{
-					Runtime();
+					Runtime(instance);
 					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("ECS Usage"))
@@ -33,8 +33,14 @@ namespace Tempest
 
 	}
 
-	void DiagnosticsWindow::Runtime()
+	void DiagnosticsWindow::Runtime(Instance& instance)
 	{
+		UI::RenderText("Project Name:", 100.f); ImGui::Text(instance.get_name().c_str());
+		UI::RenderText("Project Path:", 100.f); ImGui::Text(instance.get_path().string().c_str());
+		ImGui::Dummy(ImVec2{ 0, 0.25f });
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2{ 0, 0.25f });
+
 		ImGuiIO& io = ImGui::GetIO();
 
 		ImGui::Text("Running FPS: ");
