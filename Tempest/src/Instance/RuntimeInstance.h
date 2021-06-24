@@ -25,7 +25,7 @@ namespace Tempest
 			Instance(project_path, strategy), srm{memory_object.get()}
 		{
 			RunPhysxUpdate();
-			build_scripts(root_directory);
+			build_scripts(root);
 		}
 
 		void _init() override

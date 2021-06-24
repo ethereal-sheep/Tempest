@@ -161,28 +161,28 @@
     <ClInclude Include="src\imgui\ImFileDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window\ProjectPopup\NewProjectPopup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Window\ProjectPopup\OpenProjectPopup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Window\ProjectPopup\SaveProjectPopup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Window\ProjectPopup\ExportProjectPopup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Window\ProjectPopup\CloseProjectPopup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Util\ShowRecent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window\ProjectPopup\SaveCurrentBeforeOpenPopup.h">
+    <ClInclude Include="src\Window\Popup\CloseProjectPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Popup\ExportProjectPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Popup\NewProjectPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Popup\OpenProjectPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Popup\SaveCurrentBeforeOpenPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Popup\SaveProjectPopup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,7 +51,8 @@ namespace Tempest
 
 					if (ImGui::MenuItem(ICON_FA_FILE_EXCEL " Close", "", false))
 					{
-
+						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Closing...");
+						Service<EventManager>::Get().instant_dispatch<CloseProjectTrigger>();
 					}
 
 					UI::PaddedSeparator(1.f);

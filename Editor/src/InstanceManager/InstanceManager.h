@@ -91,13 +91,7 @@ namespace Tempest
 			if (demo_visible)
 				ImGui::ShowDemoWindow();
 
-
 			instance->OnRender();
-		}
-		else
-		{
-			// some other shit for empty
-			// we can do some ui do load the instance
 		}
 	}
 	// global menu bar
@@ -124,8 +118,6 @@ namespace Tempest
 			}
 			ImGui::EndMainMenuBar();
 		}
-
-		
 	}
 
 

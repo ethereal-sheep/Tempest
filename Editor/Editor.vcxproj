@@ -135,7 +135,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
@@ -165,7 +165,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mt.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
@@ -224,12 +224,12 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Inspector\InspectorWindow.h" />
     <ClInclude Include="src\Window\Menubar\RunTimeMenuBar.h" />
     <ClInclude Include="src\Window\Overlay\test_overlay_popup.h" />
-    <ClInclude Include="src\Window\ProjectPopup\CloseProjectPopup.h" />
-    <ClInclude Include="src\Window\ProjectPopup\ExportProjectPopup.h" />
-    <ClInclude Include="src\Window\ProjectPopup\NewProjectPopup.h" />
-    <ClInclude Include="src\Window\ProjectPopup\OpenProjectPopup.h" />
-    <ClInclude Include="src\Window\ProjectPopup\SaveCurrentBeforeOpenPopup.h" />
-    <ClInclude Include="src\Window\ProjectPopup\SaveProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\CloseProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\ExportProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\NewProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\OpenProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\SaveCurrentBeforeOpenPopup.h" />
+    <ClInclude Include="src\Window\Popup\SaveProjectPopup.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>

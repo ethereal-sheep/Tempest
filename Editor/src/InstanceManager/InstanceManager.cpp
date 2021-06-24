@@ -13,12 +13,12 @@
 #include "Window/FileBrowser/NewBrowser.h"
 #include "Window/MainMenu/MainMenu.h"
 
-#include "Window/ProjectPopup/NewProjectPopup.h"
-#include "Window/ProjectPopup/OpenProjectPopup.h"
-#include "Window/ProjectPopup/SaveProjectPopup.h"
-#include "Window/ProjectPopup/ExportProjectPopup.h"
-#include "Window/ProjectPopup/CloseProjectPopup.h"
-#include "Window/ProjectPopup/SaveCurrentBeforeOpenPopup.h"
+#include "Window/Popup/NewProjectPopup.h"
+#include "Window/Popup/OpenProjectPopup.h"
+#include "Window/Popup/SaveProjectPopup.h"
+#include "Window/Popup/ExportProjectPopup.h"
+#include "Window/Popup/CloseProjectPopup.h"
+#include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 
 #include "Window/Util/ShowRecent.h"
 
