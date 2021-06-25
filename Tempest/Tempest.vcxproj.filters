@@ -150,6 +150,12 @@
     <ClCompile Include="src\Graphics\OpenGL\FrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\ShapeFactory\ShapeFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\OpenGL\FBO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\AppHandler.h">
@@ -506,6 +512,12 @@
     <ClInclude Include="src\Graphics\OpenGL\FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Physics\ShapeFactory\ShapeFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\OpenGL\FBO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Util\Serializer\Private\Reader.inl">
@@ -525,5 +537,7 @@
     <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
     <None Include="..\Resource\Shaders\Quad_Frag.glsl" />
     <None Include="..\Resource\Shaders\Quad_Vert.glsl" />
+    <None Include="..\Resource\Shaders\frame_frag.glsl" />
+    <None Include="..\Resource\Shaders\frame_vert.glsl" />
   </ItemGroup>
 </Project>

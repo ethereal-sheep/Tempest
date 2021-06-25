@@ -27,8 +27,8 @@ namespace Tempest
 		CameraType camtype = CameraType::CAMERA_PERSPECTIVE;
 		int viewport_x = 0;
 		int viewport_y = 0;
-		int window_width = 1920;
-		int window_height = 1080;
+		int window_width = 1600;
+		int window_height = 900;
 		
 		float aspect_ratio = static_cast<float>(window_width) / static_cast<float>(window_height);
 		float fov = 60.f;

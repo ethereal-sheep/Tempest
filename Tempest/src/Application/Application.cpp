@@ -22,15 +22,15 @@ namespace Tempest
 		, m_height{ height }
 		, m_title{ std::move(name) }
 	{
-
+		
 	}
 
 	void Application::OnEngineInit()
 	{
 		// init Engine stuff first
 		Logger::Init();
-		Service<RenderSystem>::Register();
-		Service<RenderSystem>::Get().SetViewport(m_width, m_height);
+		Service<RenderSystem>::Register(m_width, m_height);
+		//Service<RenderSystem>::Get().SetViewport(m_width, m_height);
 		LOG("Initializing Tempest Engine");
 		LOG(glGetString(GL_VERSION));
 		Service<thread_pool>::Register(thread::hardware_concurrency());
@@ -56,9 +56,12 @@ namespace Tempest
 		// render engine stuff first
 		//RenderSystem ren;
 		//Service<RenderSystem>::Get().TestRender(m_width, m_height);
-		//Service<RenderSystem>::Get().StartFrame();
-		//Service<RenderSystem>::Get().EndFrame();
-		OnRender();
+		
+		Service<RenderSystem>::Get().StartFrame();
+		//OnRender();
+		Service<RenderSystem>::Get().EndFrame();
+		
+		
 	}
 
 	void Application::OnEngineExit()
@@ -82,6 +85,10 @@ namespace Tempest
 
 	void Application::Resize(uint32_t width, uint32_t height)
 	{
-		Service<RenderSystem>::Get().Resize(width, height);
+		if(Service<RenderSystem>::GetIf())
+			Service<RenderSystem>::Get().Resize(width, height);
+
+		m_width = width;
+		m_height = height;
 	}
 }

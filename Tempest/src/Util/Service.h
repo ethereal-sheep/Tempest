@@ -12,6 +12,10 @@ namespace Tempest
 		{
 			return *service;
 		}
+		[[nodiscard]] static T* GetIf()
+		{
+			return service.get();
+		}
 
 		template <typename ... Args>
 		static void Register(Args&& ... args)

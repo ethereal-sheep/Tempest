@@ -2,54 +2,24 @@
 
 namespace Tempest
 {
-	RenderSystem::RenderSystem()
+	RenderSystem::RenderSystem(uint32_t width, uint32_t height) : m_Framebuffer(width, height)
 	{
-		//std::shared_ptr<Shader> quad_shader = std::make_shared<Shader>("Shaders/Quad_Vert.glsl", "Shaders/Quad_Frag.glsl");
-		//shaders.push_back(quad_shader);
+		m_Renderer.SetViewport(0, 0, width, height);
 		m_Pipeline.cameras.push_back(Camera{});
 		m_Pipeline.meshes.push_back(Mesh::GenerateIndexedSphere(1, 16, 16));
 		m_Pipeline.meshes.push_back(Mesh::GenerateIndexedCube(1, 1));
-	}
-
-	void RenderSystem::TestRender(uint32_t width, uint32_t height)
-	{
-		m_Renderer.SetViewport(0, 0, width, height);
-		m_Renderer.EnableDepthMask(true);
-		m_Renderer.EnableDepthTest(true);
-		m_Renderer.EnableCulling(false, false, false);
-		m_Renderer.EnableBlend(true);
-		m_Renderer.EnableCulling(true, true, true);
 		
-		m_Renderer.ClearColour(0.5f, 0.5f, 0.5f, 0.0f);
-		m_Renderer.Clear();
-		//Camera camera;
-		
-		glm::mat4 transform(1.f);
-		transform = glm::translate(transform, glm::vec3(1.f, 1.f, 1.f));
-		transform = glm::rotate(transform, glm::radians(0.f), glm::vec3(1.f, 0.f, 0.f));
-		transform = glm::rotate(transform, glm::radians(0.f), glm::vec3(0.f, 1.f, 0.f));
-		transform = glm::rotate(transform, glm::radians(0.f), glm::vec3(0.f, 0.f, 1.f));
-		transform = glm::scale(transform, glm::vec3(50.f, 50.f, 0.f));
-		
-		quad_Shader.Bind();
-		quad_Shader.SetMat4fv(transform, "ModelMatrix");
-		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetViewMatrix(), "ViewMatrix");
-		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-		
-		Mesh quad = Tempest::Mesh::GenerateIndexedPlane(1, 1);
-		m_Renderer.DrawElements(DrawMode::TRIANGLES, quad.GetVAO(), quad.GetIBO(), DrawType::UNSIGNED_INT);
-		m_Renderer.Flush();
-		quad_Shader.Unbind();
-	}
-
-	void RenderSystem::SetViewport(uint32_t width, uint32_t height)
-	{
-		m_Renderer.SetViewport(0, 0, width, height);
 	}
 
 	void RenderSystem::Resize(uint32_t width, uint32_t height)
 	{
+		m_Framebuffer.Resize(width, height);
 		m_Renderer.SetViewport(0, 0, width, height);
+
+		for(auto& i : m_Pipeline.cameras)
+		{
+			i.SetViewport(0, 0, width, height);
+		}
 	}
 
 	Camera& RenderSystem::GetCamera()
@@ -59,8 +29,22 @@ namespace Tempest
 
 	void RenderSystem::StartFrame()
 	{
+		//AttachFrameBuffer();
+		m_Framebuffer.Attach();
 		System_Begin();
 		System_Draw();
+		//AttachDefaultBuffer();
+		m_Framebuffer.Detach();
+		glDisable(GL_DEPTH_TEST);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		m_Framebuffer.Draw();
+		//frame_Shader.Bind();
+		
+		//glBindVertexArray(quadVAO);
+		//glBindTexture(GL_TEXTURE_2D, m_FrameText->GetID());	// use the color attachment texture as the texture of the quad plane
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		//DrawFrameBuffer();
 	}
 
 	void RenderSystem::EndFrame()
@@ -80,7 +64,8 @@ namespace Tempest
 		//m_Renderer.SetPolygonMode(PolyMode::FILL);
 
 		m_Renderer.ClearColour(0.5f, 0.5f, 0.5f, 0.0f);
-		m_Renderer.Clear();
+		//m_Renderer.Clear();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void RenderSystem::System_Draw()
@@ -102,13 +87,13 @@ namespace Tempest
 		transforms.push_back(transform);
 		transforms.push_back(transform2);
 
-		auto dir  = m_Pipeline.cameras.front().GetFront();
+		auto dir = m_Pipeline.cameras.front().GetFront();
 
 		quad_Shader.Bind();
-		
+
 		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetViewMatrix(), "ViewMatrix");
 		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-		
+
 		//for(auto& i : m_Pipeline.meshes)
 		//	m_Renderer.DrawElements(DrawMode::TRIANGLES, i.GetVAO(), i.GetIBO(), DrawType::UNSIGNED_INT);
 
@@ -130,4 +115,10 @@ namespace Tempest
 		//m_Pipeline.meshes.clear();
 		m_Pipeline.sprites.clear();
 	}
+
+	uint32_t RenderSystem::GetColourBuffer() const
+	{
+		return m_Framebuffer.ColourBuffer();
+	}
+
 }

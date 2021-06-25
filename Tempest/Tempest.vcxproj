@@ -182,6 +182,7 @@
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
     <ClCompile Include="src\ECS\Test\test_ecs.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\FBO.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\FrameBuffer.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Material.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
     <ClInclude Include="src\Events\Test\event_test.h" />
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
+    <ClInclude Include="src\Graphics\OpenGL\FBO.h" />
     <ClInclude Include="src\Graphics\OpenGL\FrameBuffer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Material.h" />
     <ClInclude Include="src\Graphics\OpenGL\Mesh.h" />
@@ -348,6 +350,8 @@
     <ClInclude Include="src\Util\view.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Resource\Shaders\frame_frag.glsl" />
+    <None Include="..\Resource\Shaders\frame_vert.glsl" />
     <None Include="..\Resource\Shaders\Quad_Frag.glsl" />
     <None Include="..\Resource\Shaders\Quad_Vert.glsl" />
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
