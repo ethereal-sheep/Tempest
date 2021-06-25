@@ -18,7 +18,6 @@ namespace Tempest
 				// reset instance
 				instance.reset(nullptr);
 			}
-
 		}
 
 		void update(float dt)

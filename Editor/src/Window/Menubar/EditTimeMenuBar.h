@@ -20,13 +20,13 @@ namespace Tempest
 				{
 					if (ImGui::MenuItem(ICON_FA_FILE_MEDICAL " New", "Ctrl+N", false))
 					{
-						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Creating new project...");
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Creating new project...");
 						Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
 					}
 
 					if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "", false))
 					{
-						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Opening...");
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
 						Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
 					}
 					if (ImGui::BeginMenu(ICON_FA_BOX_OPEN " Open Recent"))
@@ -39,7 +39,7 @@ namespace Tempest
 					}
 					if (ImGui::MenuItem(ICON_FA_SAVE " Save", "Ctrl+S", false))
 					{
-						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Saving...");
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
 						Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
 					}
 
@@ -51,24 +51,24 @@ namespace Tempest
 
 					if (ImGui::MenuItem(ICON_FA_FILE_EXCEL " Close", "", false))
 					{
-						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Closing...");
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Closing...");
 						Service<EventManager>::Get().instant_dispatch<CloseProjectTrigger>();
 					}
 
 					UI::PaddedSeparator(1.f);
 					if (ImGui::MenuItem(ICON_FA_FILE_EXPORT " Export", "Ctrl+Shift+S", false)) 
 					{
-						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Exporting...");
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Exporting...");
 					}
 					UI::PaddedSeparator(1.f);
 
 					if (ImGui::MenuItem(ICON_FA_ARROW_LEFT " Back to Main Menu", "", false))
 					{
-						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Going back to main menu in 10s...");
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Going back to main menu in 10s...");
 					}
 					if (ImGui::MenuItem(ICON_FA_DOOR_OPEN " Exit", "", false))
 					{
-						Service<EventManager>::Get().instant_dispatch<OverlayTrigger>("Application Exiting in 10s...");
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Application Exiting in 10s...");
 					}
 
 

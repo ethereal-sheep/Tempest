@@ -214,7 +214,6 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Util\Suppress.h" />
     <ClInclude Include="src\Util\UIElements.h" />
     <ClInclude Include="src\Window\Diagnostics\DiagnosticsWindow.h" />
-    <ClInclude Include="src\Window\Error\test_error.h" />
     <ClInclude Include="src\Window\FileBrowser\FileBrowser.h" />
     <ClInclude Include="src\Window\FileBrowser\NewBrowser.h" />
     <ClInclude Include="src\Window\FileBrowser\SaveBrowser.h" />
@@ -223,8 +222,9 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Hierarchy\HierarchyWindow.h" />
     <ClInclude Include="src\Window\Inspector\InspectorWindow.h" />
     <ClInclude Include="src\Window\Menubar\RunTimeMenuBar.h" />
-    <ClInclude Include="src\Window\Overlay\test_overlay_popup.h" />
+    <ClInclude Include="src\Window\Popup\BottomRightOverlayPopup.h" />
     <ClInclude Include="src\Window\Popup\CloseProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\ErrorMsgPopup.h" />
     <ClInclude Include="src\Window\Popup\ExportProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\NewProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\OpenProjectPopup.h" />

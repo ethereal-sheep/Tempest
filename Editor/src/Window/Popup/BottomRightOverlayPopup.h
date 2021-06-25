@@ -5,7 +5,7 @@
 
 namespace Tempest
 {
-	class test_overlay_popup : public Window
+	class BottomRightOverlayPopup : public Window
 	{
 		const char* window_name() override
 		{
@@ -21,12 +21,12 @@ namespace Tempest
                 ImGuiWindowFlags_NoFocusOnAppearing | 
                 ImGuiWindowFlags_NoNav;
 
-            Service<EventManager>::Get().register_listener<OverlayTrigger>(&test_overlay_popup::open_popup, this);
+            Service<EventManager>::Get().register_listener<BottomRightOverlayTrigger>(&BottomRightOverlayPopup::open_popup, this);
 		}
 
 		void open_popup(const Event& e)
 		{
-			auto a = event_cast<OverlayTrigger>(e);
+			auto a = event_cast<BottomRightOverlayTrigger>(e);
 			data = a.msg;
             state = state::APPEAR;
 		}

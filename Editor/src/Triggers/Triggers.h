@@ -3,9 +3,9 @@
 
 namespace Tempest
 {
-	struct OverlayTrigger : public Event
+	struct BottomRightOverlayTrigger : public Event
 	{
-		OverlayTrigger(std::string a) : msg(a) {}
+		BottomRightOverlayTrigger(std::string a) : msg(a) {}
 		std::string msg;
 	};
 
