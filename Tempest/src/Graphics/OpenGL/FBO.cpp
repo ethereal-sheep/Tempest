@@ -20,21 +20,21 @@ namespace Tempest
          1.0f,  1.0f,  1.0f, 1.0f
     	};
 
-        //GLuint indices[6];
-        //GLuint offset = 0;
-        //
-        //for (int i = 0; i < 6; i += 6)
-        //{
-        //    indices[i + 0] = 0 + offset;
-        //    indices[i + 1] = 1 + offset;
-        //    indices[i + 2] = 2 + offset;
-        //
-        //    indices[i + 3] = 2 + offset;
-        //    indices[i + 4] = 3 + offset;
-        //    indices[i + 5] = 0 + offset;
-        //
-        //    offset += 4;
-        //}
+        GLuint indices[6];
+        GLuint offset = 0;
+        
+        for (int i = 0; i < 6; i += 6)
+        {
+            indices[i + 0] = 0 + offset;
+            indices[i + 1] = 1 + offset;
+            indices[i + 2] = 2 + offset;
+        
+            indices[i + 3] = 2 + offset;
+            indices[i + 4] = 3 + offset;
+            indices[i + 5] = 0 + offset;
+        
+            offset += 4;
+        }
 
 		glGenVertexArrays(1, &m_vao);
 		glGenBuffers(1, &m_vbo);
@@ -46,9 +46,9 @@ namespace Tempest
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-        //glCreateBuffers(1, &m_ibo);
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        glCreateBuffers(1, &m_ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
         glGenFramebuffers(1, &m_ID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
@@ -106,10 +106,10 @@ namespace Tempest
     {
 		m_Shader.Bind();
         glBindVertexArray(m_vao);
-       // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
         glBindTexture(GL_TEXTURE_2D, m_ColourBuffer);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     }
 
