@@ -118,7 +118,7 @@ namespace Tempest
 		glClearColor(r, g, b, a);
 	}
 
-	void Renderer::DrawElements(DrawMode mode, VertexArray vao, IndexBuffer ibo, DrawType type)
+	void Renderer::DrawElements(DrawMode mode, const VertexArray& vao, const IndexBuffer& ibo, DrawType type)
 	{
 		if (ibo.GetCount() != 0)
 		{
@@ -130,7 +130,7 @@ namespace Tempest
 		}
 	}
 
-	void Renderer::DrawArrays(DrawMode mode, VertexArray vao, unsigned int vertexCount)
+	void Renderer::DrawArrays(DrawMode mode, const VertexArray& vao, unsigned int vertexCount)
 	{
 		if (vertexCount != 0)
 		{

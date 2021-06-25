@@ -106,10 +106,10 @@ namespace Tempest
     {
 		m_Shader.Bind();
         glBindVertexArray(m_vao);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
         glBindTexture(GL_TEXTURE_2D, m_ColourBuffer);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     }
 

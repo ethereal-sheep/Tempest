@@ -20,7 +20,7 @@ namespace Tempest
 		
 		HWND GetHWND() const 	{ return m_WND; }
 		HDC GetHDC() const 	{ return m_HDC; }
-		HGLRC GeHGLRC() const { return m_RC; }
+		HGLRC GetHGLRC() const { return m_RC; }
 
 	private:
 		

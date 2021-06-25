@@ -22,24 +22,33 @@ namespace Tempest
 		// Main loop.
 		MSG msg = {};
 		bool running = true;
-		while (running)
+
+		try
 		{
-			while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			while (running)
 			{
-				if (msg.message == WM_QUIT)
+				while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 				{
-					running = false;
+					if (msg.message == WM_QUIT)
+					{
+						running = false;
+					}
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
 				}
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			if (s_pApp)
-			{
-				s_pApp->OnEngineUpdate();
-				s_pApp->OnEngineRender();
-				s_pContext->SwapBuffer();
+				if (s_pApp)
+				{
+					s_pApp->OnEngineUpdate();
+					s_pApp->OnEngineRender();
+					s_pContext->SwapBuffer();
+				}
 			}
 		}
+		catch (const std::exception& a)
+		{
+			std::cout << a.what();
+		}
+		
 
 		s_pApp->OnEngineExit();
 		s_pContext->OnShutdown();

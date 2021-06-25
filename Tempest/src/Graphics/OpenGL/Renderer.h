@@ -90,8 +90,8 @@ namespace Tempest
 		void Finish() const;
 
 		void ClearColour(float r, float g, float b, float a);
-		void DrawElements(DrawMode mode,  VertexArray vao,  IndexBuffer ibo, DrawType type = DrawType::UNSIGNED_INT);
-		void DrawArrays(DrawMode mode,  VertexArray vao, unsigned int vertexCount);
+		void DrawElements(DrawMode mode, const VertexArray& vao, const IndexBuffer& ibo, DrawType type = DrawType::UNSIGNED_INT);
+		void DrawArrays(DrawMode mode, const VertexArray& vao, unsigned int vertexCount);
 
 		void SetViewport(unsigned int x, unsigned int y, unsigned int width, unsigned height) const;
 		void SetPolygonMode(PolyMode mode);
