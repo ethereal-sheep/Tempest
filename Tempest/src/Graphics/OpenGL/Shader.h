@@ -21,6 +21,9 @@ namespace Tempest
 		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		~Shader();
 
+		Shader(const Shader&) = delete;
+		Shader& operator=(const Shader&) = delete;
+
 		void Bind();
 		void Unbind();
 		void Set1i(GLint value, const GLchar* name);

@@ -66,6 +66,24 @@ namespace Tempest
 		glBindBuffer(GLType(m_type), m_id);
 	}
 
+	VertexBuffer::VertexBuffer(VertexBuffer&& rhs) noexcept
+		: m_id{ std::move(rhs.m_id)}, 
+		  m_size{std::move(rhs.m_size)}, 
+		  m_type{std::move(rhs.m_type)}
+	{
+		rhs.m_id = 0;
+		rhs.m_size = 0;
+	}
+
+	VertexBuffer& VertexBuffer::operator=(VertexBuffer&& rhs) noexcept
+	{
+		std::swap(m_id, rhs.m_id);
+		std::swap(m_size, rhs.m_size);
+		std::swap(m_type, rhs.m_type);
+
+		return *this;
+	}
+
 	void VertexBuffer::BindBase(unsigned int index) const
 	{
 		glBindBufferBase(GLType(m_type), index, m_id);

@@ -8,8 +8,8 @@ namespace Tempest
 		m_Pipeline.cameras.push_back(Camera{});
 
 		// your meshes are bad (see System_Draw)
-		//m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedCube(1, 1));
-		//m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedSphere(1, 16, 16));
+		m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedCube(1, 1));
+		m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedSphere(1, 16, 16));
 
 		glm::mat4 transform(1.f);
 		transform = glm::translate(transform, glm::vec3(0.f, 0.f, 0.f));
@@ -97,7 +97,7 @@ namespace Tempest
 		// your mesh class is bad, since there is no move constructor, or copy constructor, shallow move/copy is called which destroys
 		// your VBO, IBO, VAO before they can be used, go and change
 
-		/*quad_Shader.Bind();
+		quad_Shader.Bind();
 		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetViewMatrix(), "ViewMatrix");
 		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
 		quad_Shader.SetMat4fv(transforms[0], "ModelMatrix");
@@ -116,7 +116,7 @@ namespace Tempest
 		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
 		quad_Shader.SetMat4fv(transforms[2], "ModelMatrix");
 		m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.meshes[1].GetVAO(), m_Pipeline.meshes[1].GetIBO(), DrawType::UNSIGNED_INT);
-		quad_Shader.Unbind();*/
+		quad_Shader.Unbind();
 
 		/*for (int i = 0; i < m_Pipeline.meshes.size(); ++i)
 		{

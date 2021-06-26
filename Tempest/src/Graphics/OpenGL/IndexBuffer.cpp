@@ -19,6 +19,21 @@ namespace Tempest
 		glDeleteBuffers(1, &id);
 	}
 
+	IndexBuffer::IndexBuffer(IndexBuffer&& rhs) noexcept
+		: id{std::move(rhs.id)}, 
+		  count{std::move(rhs.id)}
+	{
+		rhs.id = 0;
+		rhs.id = 0;
+	}
+
+	IndexBuffer& IndexBuffer::operator=(IndexBuffer&& rhs) noexcept
+	{
+		std::swap(id, rhs.id);
+		std::swap(count, rhs.count);
+		return *this;
+	}
+
 	void IndexBuffer::Bind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);

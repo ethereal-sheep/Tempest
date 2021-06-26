@@ -95,6 +95,9 @@ namespace Tempest
 		explicit Texture(uint32_t width, uint32_t height, Texture_Format format, Texture_Type type);
 		~Texture();
 
+		Texture(const Texture&) = delete;
+		Texture& operator=(const Texture&) = delete;
+
 		void InitStorage(uint32_t width, uint32_t height, Texture_Format format, Texture_Type type);
 		void SetSubData(void* data, uint32_t lod = 0, uint32_t xOffset = 0, uint32_t yOffset = 0) const;
 		void SetSubData(void* data, uint32_t lod, uint32_t xOffset, uint32_t yOffset, uint32_t width, uint32_t height) const;

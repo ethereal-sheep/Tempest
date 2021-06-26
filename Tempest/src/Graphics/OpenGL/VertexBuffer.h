@@ -43,9 +43,15 @@ namespace Tempest
 
 	public:
 
-		VertexBuffer();
-		VertexBuffer(void* data, int size, BufferMode mode, BufferType type = BufferType::ARRAY_BUFFER);
+		explicit VertexBuffer();
+		explicit VertexBuffer(void* data, int size, BufferMode mode, BufferType type = BufferType::ARRAY_BUFFER);
 		~VertexBuffer();
+
+		VertexBuffer(const VertexBuffer&) = delete;
+		VertexBuffer& operator=(const VertexBuffer&) = delete;
+
+		VertexBuffer(VertexBuffer&& rhs) noexcept;
+		VertexBuffer& operator=(VertexBuffer&& rhs) noexcept;
 
 		void Bind() const;
 		void BindBase(unsigned int index) const;

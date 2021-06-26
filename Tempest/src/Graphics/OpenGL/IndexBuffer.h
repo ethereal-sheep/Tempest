@@ -1,5 +1,6 @@
 #pragma once
 #include <glew.h>
+#include <utility>
 
 namespace Tempest
 {
@@ -15,6 +16,12 @@ namespace Tempest
 		IndexBuffer();
 		IndexBuffer(const unsigned int* data, unsigned int size);
 		~IndexBuffer();
+
+		IndexBuffer(const IndexBuffer&) = delete;
+		IndexBuffer& operator=(const IndexBuffer&) = delete;
+
+		IndexBuffer(IndexBuffer&& rhs) noexcept;
+		IndexBuffer& operator=(IndexBuffer&& rhs) noexcept;
 
 		void Bind() const;
 		void Unbind() const;

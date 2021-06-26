@@ -37,6 +37,9 @@ namespace Tempest
 		FrameBuffer();
 		~FrameBuffer();
 
+		FrameBuffer(const FrameBuffer&) = delete;
+		FrameBuffer& operator=(const FrameBuffer&) = delete;
+
 		void AttachColorBuffer(const Texture& texture);
 		void PopColorBuffer();
 

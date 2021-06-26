@@ -33,6 +33,21 @@ namespace Tempest
 			glDeleteBuffers(1, &m_ID);
 	}
 
+	VertexArray::VertexArray(VertexArray&& rhs) noexcept
+		: m_ID{std::move(rhs.m_ID)}, 
+		  m_AttributeIndex{std::move(rhs.m_AttributeIndex)}
+	{
+		rhs.m_ID = 0;
+		rhs.m_AttributeIndex = 0;
+	}
+
+	VertexArray& VertexArray::operator=(VertexArray&& rhs) noexcept
+	{
+		std::swap(m_ID, rhs.m_ID);
+		std::swap(m_AttributeIndex, rhs.m_AttributeIndex);
+		return *this;
+	}
+
 	void VertexArray::AttachVertexBuffer(const VertexBuffer& vbo, const BufferLayout& layout)
 	{
 		uint32_t size_of_one_vertex = 0;

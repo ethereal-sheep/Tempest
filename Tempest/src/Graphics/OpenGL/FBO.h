@@ -24,6 +24,10 @@ namespace Tempest
 
         FBO(uint32_t width, uint32_t height);
         ~FBO();
+
+        FBO(const FBO&) = delete;
+        FBO& operator=(const FBO&) = delete;
+
         void Attach();
         void Detach();
         void Draw(Shader& shader);
