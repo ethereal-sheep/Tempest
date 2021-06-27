@@ -18,7 +18,7 @@ namespace Tempest
 		Renderer m_Renderer;
 		RenderPipeline m_Pipeline;
 		
-		Shader quad_Shader{ "Shaders/Quad_Vert.glsl", "Shaders/Quad_Frag.glsl" };
+		Shader quad_Shader{ "Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl" };
 		std::vector<glm::mat4> transforms;
 
 	public:

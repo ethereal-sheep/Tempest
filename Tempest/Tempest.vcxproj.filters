@@ -535,9 +535,9 @@
     <None Include="src\Scripting\Util\static_id_generator.h" />
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
     <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
-    <None Include="..\Resource\Shaders\Quad_Frag.glsl" />
-    <None Include="..\Resource\Shaders\Quad_Vert.glsl" />
-    <None Include="..\Resource\Shaders\frame_frag.glsl" />
-    <None Include="..\Resource\Shaders\frame_vert.glsl" />
+    <None Include="..\Resource\Shaders\Basic_fragment.glsl" />
+    <None Include="..\Resource\Shaders\Basic_vertex.glsl" />
+    <None Include="..\Resource\Shaders\FrameBuffer_fragment.glsl" />
+    <None Include="..\Resource\Shaders\FrameBuffer_vertex.glsl" />
   </ItemGroup>
 </Project>

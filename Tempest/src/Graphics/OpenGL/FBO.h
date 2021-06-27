@@ -18,7 +18,7 @@ namespace Tempest
         uint32_t m_vbo = 0;
         uint32_t m_ibo = 0;
 
-        Shader m_Shader{ "Shaders/frame_vert.glsl", "Shaders/frame_frag.glsl" };
+        Shader m_Shader{ "Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl" };
 
     public:
 

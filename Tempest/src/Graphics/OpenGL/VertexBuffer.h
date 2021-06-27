@@ -37,8 +37,8 @@ namespace Tempest
 	{
 	private:
 
-		unsigned int m_id;
-		int m_size;
+		unsigned int m_id = 0;
+		int m_size = 0;
 		BufferType m_type;
 
 	public:

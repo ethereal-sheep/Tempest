@@ -8,8 +8,8 @@ namespace Tempest
 	{
 	private:
 
-		unsigned int id;
-		unsigned int count;
+		unsigned int id = 0;
+		unsigned int count = 0;
 
 	public:
 
