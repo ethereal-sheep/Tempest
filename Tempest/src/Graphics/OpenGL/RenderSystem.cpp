@@ -7,7 +7,6 @@ namespace Tempest
 		m_Renderer.SetViewport(0, 0, width, height);
 		m_Pipeline.cameras.push_back(Camera{});
 
-		// your meshes are bad (see System_Draw)
 		m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedCube(1, 1));
 		m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedSphere(1, 16, 16));
 
@@ -55,19 +54,11 @@ namespace Tempest
 
 	void RenderSystem::StartFrame()
 	{
-		//AttachFrameBuffer();
 		m_Framebuffer.Attach();
 		System_Begin();
 		System_Draw();
-		//AttachDefaultBuffer();
 		m_Framebuffer.Detach();
 		m_Framebuffer.Draw();
-		//frame_Shader.Bind();
-		
-		//glBindVertexArray(quadVAO);
-		//glBindTexture(GL_TEXTURE_2D, m_FrameText->GetID());	// use the color attachment texture as the texture of the quad plane
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
-		//DrawFrameBuffer();
 	}
 
 	void RenderSystem::EndFrame()
@@ -78,7 +69,6 @@ namespace Tempest
 
 	void RenderSystem::System_Begin()
 	{
-		//m_Renderer.SetViewport(0, 0, 1600, 900);
 		m_Renderer.EnableDepthMask(true);
 		m_Renderer.EnableDepthTest(true);
 		m_Renderer.EnableCulling(false, false, false);
@@ -87,16 +77,12 @@ namespace Tempest
 		//m_Renderer.SetPolygonMode(PolyMode::FILL);
 
 		m_Renderer.ClearColour(0.5f, 0.5f, 0.5f, 0.0f);
-		//m_Renderer.Clear();
+		m_Renderer.Clear();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void RenderSystem::System_Draw()
 	{
-
-		// your mesh class is bad, since there is no move constructor, or copy constructor, shallow move/copy is called which destroys
-		// your VBO, IBO, VAO before they can be used, go and change
-
 		quad_Shader.Bind();
 		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetViewMatrix(), "ViewMatrix");
 		quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
@@ -117,17 +103,6 @@ namespace Tempest
 		quad_Shader.SetMat4fv(transforms[2], "ModelMatrix");
 		m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.meshes[1].GetVAO(), m_Pipeline.meshes[1].GetIBO(), DrawType::UNSIGNED_INT);
 		quad_Shader.Unbind();
-
-		/*for (int i = 0; i < m_Pipeline.meshes.size(); ++i)
-		{
-			quad_Shader.Bind();
-			quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetViewMatrix(), "ViewMatrix");
-			quad_Shader.SetMat4fv(m_Pipeline.cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-			quad_Shader.SetMat4fv(transforms[i], "ModelMatrix");
-			m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.meshes[i].GetVAO(), m_Pipeline.meshes[i].GetIBO(), DrawType::UNSIGNED_INT);
-			quad_Shader.Unbind();
-			
-		}*/
 	}
 
 	void RenderSystem::System_End()

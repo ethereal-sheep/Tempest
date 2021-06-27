@@ -11,13 +11,10 @@ namespace Tempest
 
 		constexpr float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
         // positions   // texCoords
-        -1.0f,  1.0f,  0.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 0.0f,
          1.0f, -1.0f,  1.0f, 0.0f,
-
+         1.0f,  1.0f,  1.0f, 1.0f,
         -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
     	};
 
         GLuint indices[6];
@@ -49,6 +46,8 @@ namespace Tempest
         glCreateBuffers(1, &m_ibo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        
+        glBindVertexArray(0);
 
         glGenFramebuffers(1, &m_ID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
@@ -106,11 +105,11 @@ namespace Tempest
     {
 		m_Shader.Bind();
         glBindVertexArray(m_vao);
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
         glBindTexture(GL_TEXTURE_2D, m_ColourBuffer);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
     }
 
     void FBO::Resize(uint32_t width, uint32_t height)
