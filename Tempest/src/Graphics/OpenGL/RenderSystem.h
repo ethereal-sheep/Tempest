@@ -7,14 +7,14 @@
 #include "Graphics/OpenGL/FBO.h"
 #include "Graphics/OpenGL/LineRenderer.h"
 #include <memory>
-
+#include <Core.h>
 
 namespace Tempest
 {
 	class RenderSystem
 	{
 	private:
-
+		//tmap<string, Shader>> 
 		LineRenderer m_LineRenderer;
 		Mesh m_Mesh1 = Mesh::GenerateIndexedCube(1, 1);
 		Mesh m_Mesh2 = Mesh::GenerateIndexedSphere(1, 16, 16);
