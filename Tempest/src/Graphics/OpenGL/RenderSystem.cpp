@@ -7,6 +7,7 @@ namespace Tempest
 		m_Renderer.SetViewport(0, 0, width, height);
 		m_Pipeline.cameras.push_back(Camera{});
 
+		//m_Pipeline.meshes.push_back(Mesh::GenerateIndexedCube(1, 1));
 		m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedCube(1, 1));
 		m_Pipeline.meshes.emplace_back(Mesh::GenerateIndexedSphere(1, 16, 16));
 
@@ -54,11 +55,23 @@ namespace Tempest
 
 	void RenderSystem::StartFrame()
 	{
+		m_LineRenderer.SubmitBuffer();
+		m_LineRenderer.ClearBuffer();
+
 		m_Framebuffer.Attach();
 		System_Begin();
 		System_Draw();
 		m_Framebuffer.Detach();
 		m_Framebuffer.Draw();
+
+		//Line test_line{ glm::vec3(1.f, 1.f, 1.f), glm::vec3(0.f, 0.f, 0.f) };
+		//m_LineRenderer.Submit(test_line, glm::vec4(1.f, 0.f, 0.f, 0.f));
+		//line_Shader.Bind();
+		//line_Shader.SetMat4fv(m_Pipeline.cameras[0].GetViewProjectionMatrix(), "viewProjMatrix");
+		//m_Renderer.SetLineWidth(2.f);
+		//m_Renderer.MultiDrawArraysIndirect(DrawMode::LINE, *m_Pipeline.m_Debug.vao, *m_Pipeline.m_Debug.indirect);
+		//m_Renderer.SetLineWidth(1.f);
+		//line_Shader.Unbind();
 	}
 
 	void RenderSystem::EndFrame()
@@ -73,12 +86,11 @@ namespace Tempest
 		m_Renderer.EnableDepthTest(true);
 		m_Renderer.EnableCulling(false, false, false);
 		m_Renderer.EnableBlend(true);
-		m_Renderer.EnableCulling(true, true, true);
+		//m_Renderer.EnableCulling(true, true, true);
 		//m_Renderer.SetPolygonMode(PolyMode::FILL);
 
 		m_Renderer.ClearColour(0.5f, 0.5f, 0.5f, 0.0f);
-		m_Renderer.Clear();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		m_Renderer.ClearColorDepth();
 	}
 
 	void RenderSystem::System_Draw()

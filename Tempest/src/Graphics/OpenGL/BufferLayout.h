@@ -23,6 +23,12 @@ namespace Tempest
 		BYTEPAD
 	};
 
+	enum struct Layout_Format
+	{
+		SOA,
+		AOS
+	};
+
 	class BufferLayout
 	{
 	public:
@@ -36,7 +42,7 @@ namespace Tempest
 		};
 
 		explicit BufferLayout() = default;
-		explicit BufferLayout(std::initializer_list<VertexType> attributes);
+		explicit BufferLayout(Layout_Format format, std::initializer_list<VertexType> attributes);
 
 		size_t GetSize() const;
 
@@ -51,6 +57,7 @@ namespace Tempest
 		auto cend() const	{ return m_Attributes.cend(); }
 
 	private:
+		void CalculateInterleaved(const std::initializer_list<VertexType>& attributes);
 		void CalculateNoninterleaved(const std::initializer_list<VertexType>& attributes);
 
 		std::vector<Attribute> m_Attributes;

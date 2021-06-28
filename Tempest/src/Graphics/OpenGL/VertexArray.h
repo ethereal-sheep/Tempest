@@ -16,11 +16,11 @@ namespace Tempest
 		explicit VertexArray();
 		~VertexArray();
 
-		VertexArray(const VertexArray&) = delete;
-		VertexArray& operator=(const VertexArray&) = delete;
-
+		VertexArray(const VertexArray& other) = delete;
+		VertexArray& operator=(const VertexArray& other) = delete;
 		VertexArray(VertexArray&& rhs) noexcept;
 		VertexArray& operator=(VertexArray&& rhs) noexcept;
+
 		void AttachVertexBuffer(const VertexBuffer& vbo, const BufferLayout& layout);
 		void AttachVertexBufferInstanced(const VertexBuffer& vbo, const BufferLayout& layout);
 		void AttachIndexBuffer(const IndexBuffer& ibo) const;

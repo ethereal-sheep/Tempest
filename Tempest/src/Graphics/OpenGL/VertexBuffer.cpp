@@ -45,85 +45,88 @@ namespace Tempest
 
 	VertexBuffer::VertexBuffer()
 	{
-		glCreateBuffers(1, &m_id);
+		glCreateBuffers(1, &m_ID);
 	}
 
 	VertexBuffer::VertexBuffer(void* data, int size, BufferMode mode, BufferType type)
 	{
-		m_size = size;
-		m_type = type;
-		glCreateBuffers(1, &m_id);
-		glNamedBufferData(m_id, size, data, GLMode(mode));
+		m_Size = size;
+		m_Type = type;
+		glCreateBuffers(1, &m_ID);
+		glNamedBufferData(m_ID, size, data, GLMode(mode));
 	}
 
 	VertexBuffer::~VertexBuffer()
 	{
-		glDeleteBuffers(1, &m_id);
+		glDeleteBuffers(1, &m_ID);
 	}
 
 	void VertexBuffer::Bind() const
 	{
-		glBindBuffer(GLType(m_type), m_id);
+		glBindBuffer(GLType(m_Type), m_ID);
 	}
 
 	VertexBuffer::VertexBuffer(VertexBuffer&& rhs) noexcept
-		: m_id{ std::move(rhs.m_id)}, 
-		  m_size{std::move(rhs.m_size)}, 
-		  m_type{std::move(rhs.m_type)}
+	: 	m_ID{ std::move(rhs.m_ID)}, 
+		m_Size{std::move(rhs.m_Size)}, 
+		m_Type{std::move(rhs.m_Type)}
 	{
-		rhs.m_id = 0;
-		rhs.m_size = 0;
+	
+		rhs.m_ID = 0;
+		rhs.m_Size = 0;
 	}
-
 	VertexBuffer& VertexBuffer::operator=(VertexBuffer&& rhs) noexcept
 	{
-		std::swap(m_id, rhs.m_id);
-		std::swap(m_size, rhs.m_size);
-		std::swap(m_type, rhs.m_type);
-
+		std::swap(m_ID, rhs.m_ID);
+		std::swap(m_Size, rhs.m_Size);
+		std::swap(m_Type, rhs.m_Type);
+	
 		return *this;
 	}
 
 	void VertexBuffer::BindBase(unsigned int index) const
 	{
-		glBindBufferBase(GLType(m_type), index, m_id);
+		glBindBufferBase(GLType(m_Type), index, m_ID);
 	}
 
 	void VertexBuffer::Unbind() const
 	{
-		glBindBuffer(GLType(m_type), 0);
+		glBindBuffer(GLType(m_Type), 0);
 	}
 
-	void VertexBuffer::SetData(void* data, int size, BufferMode mode)
+	void VertexBuffer::SetData(void* data, int size, BufferMode mode, BufferType type)
 	{
-		glNamedBufferData(m_id, size, data, GLMode(mode));
+		glNamedBufferData(m_ID, size, data, GLMode(mode));
+		m_Type = type;
+		m_Size = size;
 	}
 
 	void VertexBuffer::SetSubData(void* data, int size, int offset)
 	{
-		if (m_size < size)
-		{
-			m_size = size;
-			glNamedBufferData(m_id, size, data, GLMode(BufferMode::DYNAMIC_DRAW));
-		}
+		glNamedBufferSubData(m_ID, offset, size, data);
+	}
 
+	void VertexBuffer::SetSubDataResize(void* data, int size)
+	{
+		if (GetSize() < size)
+			SetData(data, size, BufferMode::DYNAMIC_DRAW, m_Type);
 		else
-			glNamedBufferSubData(m_id, offset, size, data);
+			SetSubData(data, size);
 	}
 
 	unsigned int VertexBuffer::GetID() const
 	{
-		return m_id;
+		return m_ID;
 	}
 
 	int VertexBuffer::GetSize() const
 	{
-		return m_size;
+		return m_Size;
 	}
 
 	BufferType VertexBuffer::GetBufferType() const
 	{
-		return m_type;
+		return m_Type;
 	}
 
 }

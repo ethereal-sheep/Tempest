@@ -72,7 +72,7 @@ namespace Tempest
 		Service<RenderSystem>::Get().StartFrame();
 		Service<RenderSystem>::Get().EndFrame();
 
-		OnRender();
+		//OnRender();
 	}
 
 	void Application::OnEngineExit()

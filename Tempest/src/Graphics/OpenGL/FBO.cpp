@@ -80,6 +80,57 @@ namespace Tempest
         glDeleteTextures(1, &m_RenderBuffer);
     }
 
+    //FBO::FBO(const FBO& other) 
+    //    : FBO(other.m_Width, other.m_Height)
+    //{
+    //
+    //}
+
+    //FBO& FBO::operator=(const FBO& other)
+    //{
+    //    glDeleteVertexArrays(1, &m_vao);
+    //    glDeleteBuffers(1, &m_vbo);
+    //    glDeleteFramebuffers(1, &m_ID);
+    //    glDeleteTextures(1, &m_ColourBuffer);
+    //    glDeleteTextures(1, &m_RenderBuffer);
+    //
+    //    *this = FBO(other.m_Width, other.m_Height);
+    //}
+
+    FBO::FBO(FBO&& other) noexcept 
+        :   m_ID{ other.m_ID },
+            m_ColourBuffer{ other.m_ColourBuffer },
+            m_RenderBuffer{ other.m_RenderBuffer },
+            m_Width{ other.m_Width },
+            m_Height{ other.m_Height },
+            m_vao{ other.m_vao },
+            m_vbo{ other.m_vbo },
+            m_ibo{ other.m_ibo }
+    {
+        other.m_ID = 0;
+        other.m_ColourBuffer = 0;
+        other.m_RenderBuffer = 0;
+        other.m_Width;
+        other.m_Height;
+        other.m_vao = 0;
+        other.m_vbo = 0;
+        other.m_ibo = 0;
+    }
+
+    FBO& FBO::operator=(FBO&& other) noexcept
+    {
+        std::swap(m_ID, other.m_ID);
+        std::swap(m_ColourBuffer, other.m_ColourBuffer);
+        std::swap(m_RenderBuffer, other.m_RenderBuffer);
+        std::swap(m_Width, other.m_Width);
+        std::swap(m_Height, other.m_Height);
+        std::swap(m_vao, other.m_vao);
+        std::swap(m_vbo, other.m_vbo);
+        std::swap(m_ibo, other.m_ibo);
+
+        return *this;
+    }
+
     void FBO::Attach()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, m_ID);

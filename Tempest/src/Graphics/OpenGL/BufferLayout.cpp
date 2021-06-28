@@ -2,9 +2,18 @@
 
 namespace Tempest
 {
-	BufferLayout::BufferLayout(std::initializer_list<VertexType> attributes)
+	BufferLayout::BufferLayout(Layout_Format format, std::initializer_list<VertexType> attributes)
 	{
-		CalculateNoninterleaved(attributes);
+		switch (format)
+		{
+		case Layout_Format::SOA:
+			CalculateNoninterleaved(attributes);
+			break;
+
+		case Layout_Format::AOS:
+			CalculateInterleaved(attributes);
+			break;
+		}	
 	}
 
 	size_t BufferLayout::GetSize() const
@@ -96,4 +105,47 @@ namespace Tempest
 			offset += SizeOf(_type);
 		}
 	}
+	void BufferLayout::CalculateInterleaved(const std::initializer_list<VertexType>& attributes)
+	{
+		uint32_t offset = 0;
+		for (const auto& _type : attributes)
+		{
+			if (_type != VertexType::Mat3 && _type != VertexType::Mat4 && _type != VertexType::BYTEPAD)
+			{
+				auto& attribute = m_Attributes.emplace_back();
+
+				attribute.type = _type;
+				attribute.normalized = false;
+				attribute.relative_offset = offset;
+			}
+			else if (_type == VertexType::Mat3)
+			{
+				for (uint32_t i = 0; i < 3; ++i)
+				{
+					auto& attribute = m_Attributes.emplace_back();
+
+					attribute.type = VertexType::Float3;
+					attribute.normalized = false;
+					attribute.relative_offset = offset + i * SizeOf(VertexType::Float3);
+				}
+			}
+			else if (_type == VertexType::Mat4)
+			{
+				for (uint32_t i = 0; i < 4; ++i)
+				{
+					auto& attribute = m_Attributes.emplace_back();
+
+					attribute.type = VertexType::Float4;
+					attribute.normalized = false;
+					attribute.relative_offset = offset + i * SizeOf(VertexType::Float4);
+				}
+			}
+			offset += SizeOf(_type);
+		}
+		for (auto& attrib : m_Attributes)
+		{
+			attrib.stride = offset;
+		}
+	}
+
 }

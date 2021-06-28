@@ -58,7 +58,7 @@ namespace Tempest
 
 		BufferLayout vbol
 		{
-			VertexType::Float3
+			Layout_Format::SOA, {VertexType::Float3}
 		};
 		m_VAO.AttachVertexBuffer(m_VBO, vbol);
 

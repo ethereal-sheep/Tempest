@@ -8,17 +8,14 @@ namespace Tempest
 	{
 	private:
 
-		unsigned int id = 0;
-		unsigned int count = 0;
+		unsigned int m_ID = 0;
+		unsigned int m_Count = 0;
 
 	public:
 
 		IndexBuffer();
 		IndexBuffer(const unsigned int* data, unsigned int size);
 		~IndexBuffer();
-
-		IndexBuffer(const IndexBuffer&) = delete;
-		IndexBuffer& operator=(const IndexBuffer&) = delete;
 
 		IndexBuffer(IndexBuffer&& rhs) noexcept;
 		IndexBuffer& operator=(IndexBuffer&& rhs) noexcept;

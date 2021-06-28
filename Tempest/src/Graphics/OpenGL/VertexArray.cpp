@@ -40,7 +40,7 @@ namespace Tempest
 		rhs.m_ID = 0;
 		rhs.m_AttributeIndex = 0;
 	}
-
+	
 	VertexArray& VertexArray::operator=(VertexArray&& rhs) noexcept
 	{
 		std::swap(m_ID, rhs.m_ID);

@@ -21,11 +21,14 @@ namespace Tempest
 	{
 		return  BufferLayout
 		{
-			VertexType::Float3,
-			VertexType::Float2,
-			VertexType::Float3,
-			VertexType::Float3,
-			VertexType::Float3
+			Layout_Format::SOA,
+			{
+				VertexType::Float3,
+				VertexType::Float2,
+				VertexType::Float3,
+				VertexType::Float3,
+				VertexType::Float3
+			}
 		};
 	}
 

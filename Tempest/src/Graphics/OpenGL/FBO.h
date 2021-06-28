@@ -25,8 +25,11 @@ namespace Tempest
         FBO(uint32_t width, uint32_t height);
         ~FBO();
 
-        FBO(const FBO&) = delete;
-        FBO& operator=(const FBO&) = delete;
+        //FBO(const FBO& other);
+        //FBO& operator=(const FBO& other);
+
+        FBO(FBO&& other) noexcept;
+        FBO& operator=(FBO&& other) noexcept;
 
         void Attach();
         void Detach();

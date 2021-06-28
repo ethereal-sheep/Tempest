@@ -5,6 +5,7 @@
 #include "Graphics/OpenGL/Camera.h"
 #include "Graphics/OpenGL/FrameBuffer.h"
 #include "Graphics/OpenGL/FBO.h"
+#include "Graphics/OpenGL/LineRenderer.h"
 #include <memory>
 
 
@@ -14,11 +15,15 @@ namespace Tempest
 	{
 	private:
 
+		LineRenderer m_LineRenderer;
+		Mesh m_Mesh1 = Mesh::GenerateIndexedCube(1, 1);
+		Mesh m_Mesh2 = Mesh::GenerateIndexedSphere(1, 16, 16);
 		FBO m_Framebuffer;
 		Renderer m_Renderer;
 		RenderPipeline m_Pipeline;
 		
 		Shader quad_Shader{ "Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl" };
+		Shader line_Shader{ "Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl" };
 		std::vector<glm::mat4> transforms;
 
 	public:

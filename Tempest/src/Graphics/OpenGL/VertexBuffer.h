@@ -1,8 +1,26 @@
 #pragma once
 #include <glew.h>
+#include <cstdint>
 
 namespace Tempest
 {
+	struct DrawArraysIndirectCommand
+	{
+		uint32_t vertexCount = 0;
+		uint32_t instanceCount = 0;
+		uint32_t baseVertex = 0;
+		uint32_t baseInstance = 0;
+	};
+
+	struct DrawElementsIndirectCommand
+	{
+		uint32_t vertexCount = 0;
+		uint32_t instanceCount = 0;
+		uint32_t firstIndex = 0;
+		uint32_t baseVertex = 0;
+		uint32_t baseInstance = 0;
+	};
+
 	enum struct BufferType
 	{
 		ARRAY_BUFFER,
@@ -37,9 +55,9 @@ namespace Tempest
 	{
 	private:
 
-		unsigned int m_id = 0;
-		int m_size = 0;
-		BufferType m_type;
+		unsigned int m_ID = 0;
+		int m_Size = 0;
+		BufferType m_Type;
 
 	public:
 
@@ -56,8 +74,9 @@ namespace Tempest
 		void Bind() const;
 		void BindBase(unsigned int index) const;
 		void Unbind() const;
-		void SetData(void* data, int size, BufferMode mode);
+		void SetData(void* data, int size, BufferMode mode, BufferType type = BufferType::ARRAY_BUFFER);
 		void SetSubData(void* data, int size, int offset = 0);
+		void SetSubDataResize(void* data, int size);
 
 		unsigned int GetID() const;
 		int GetSize() const;

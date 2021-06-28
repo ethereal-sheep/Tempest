@@ -184,6 +184,7 @@
     <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\FBO.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\FrameBuffer.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\LineRenderer.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Material.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\RenderSystem.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
     <ClInclude Include="src\Graphics\OpenGL\FBO.h" />
     <ClInclude Include="src\Graphics\OpenGL\FrameBuffer.h" />
+    <ClInclude Include="src\Graphics\OpenGL\LineRenderer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Material.h" />
     <ClInclude Include="src\Graphics\OpenGL\Mesh.h" />
     <ClInclude Include="src\Graphics\OpenGL\RenderPipeline.h" />
@@ -354,6 +356,8 @@
     <None Include="..\Resource\Shaders\FrameBuffer_vertex.glsl" />
     <None Include="..\Resource\Shaders\Basic_fragment.glsl" />
     <None Include="..\Resource\Shaders\Basic_vertex.glsl" />
+    <None Include="..\Resource\Shaders\Line_fragment.glsl" />
+    <None Include="..\Resource\Shaders\Line_vertex.glsl" />
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
     <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
     <None Include="src\Scripting\Util\static_id_generator.h" />

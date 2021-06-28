@@ -21,6 +21,12 @@ namespace Tempest
 
 	};
 
+	struct DebugBufferMesh
+	{
+		VertexArray* vao = nullptr;
+		VertexBuffer* indirect = nullptr;
+	};
+
 	struct SpriteMesh
 	{
 		Mesh cube = Mesh::GenerateIndexedCube(1, 1);
@@ -43,6 +49,7 @@ namespace Tempest
 
 	struct RenderPipeline
 	{
+		DebugBufferMesh m_Debug;
 		std::vector<SpriteUnit> sprites;
 		std::vector<Camera> cameras;
 		std::vector<Mesh> meshes;
