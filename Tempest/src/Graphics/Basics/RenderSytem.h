@@ -14,6 +14,7 @@ namespace Tempest
 	class RenderSystem
     {   
         using ShaderLibrary = tvector<Shader>;
+        using MeshLibrary = tvector<Shader>;
 
         FontRenderer m_FontR;
         LineRenderer m_LineR 
@@ -33,7 +34,7 @@ namespace Tempest
         // nvm we go with current first then we reassess on wed
         // current rendering maintain since we can render our shapes le
         // yeah okay, you can commit but exclude ver 2 from the project first
-        tsptr<Mesh> CreateShape()
+        
 
 
         enum struct ShaderCode
@@ -47,6 +48,25 @@ namespace Tempest
             CUBE,
             CIRCLE,
             blabla
+        }
+        
+        
+        Mesh CreateShape(MeshCode code)
+        {
+            switch(code)
+            {
+                case CUBE: 
+                {
+                    if(some check) // if cube has been created before
+                        return mesh;
+                    else
+                        createCubeMesh()
+                        {
+                            
+                        }
+                    break;
+                }
+            }
         }
 
     public:

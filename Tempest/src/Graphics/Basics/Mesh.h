@@ -4,15 +4,19 @@
 
 namespace Tempest
 {
-    class Mesh : public std::enable_shared_from_this<Mesh>
+    class Mesh
     {
-        VAO m_VAO;
-
+        tsptr<VertexArray> m_VAO;
+        MeshCode m_Code;
     public:
-        tsptr<Mesh> GetShared()
+        void Bind() const
         {
-            return shared_from_this();
-        };
+            m_VAO.Bind();
+        }
+        void Unind() const
+        {
+            m_VAO.Unbind();
+        }
 
 
     };

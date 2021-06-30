@@ -5,7 +5,7 @@
 
 namespace Tempest
 {
-    class VertexArray
+    class VertexArray : std::enable_shared_from_this<VertexArray>
     {
         uint32_t m_ID;
         tsptr<IndexBuffer> m_IBO;
@@ -45,6 +45,11 @@ namespace Tempest
             // m_IBO->Unbind();
             // glunbind(m_ID)
         }
+        
+        tsptr<VertexArray> GetShared()
+        {
+            return shared_from_this();
+        };
 
 
     };
