@@ -46,7 +46,11 @@ namespace Tempest
 		}
 		catch (const std::exception& a)
 		{
-			std::cout << a.what();
+			__debugbreak();
+		}
+		catch (...)
+		{
+			__debugbreak();
 		}
 		
 

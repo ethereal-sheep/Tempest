@@ -36,11 +36,6 @@ namespace Tempest
                 ImVec2 center = ImGui::GetMainViewport()->GetCenter();
                 ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
                 enable_popup = false;
-
-                for (const auto& entry : std::filesystem::directory_iterator("S:")) {
-                    if (std::filesystem::is_directory(entry))
-                        auto p = entry.path();
-                }
             }
 
             if (ImGui::BeginPopupModal(popup_1_name.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
