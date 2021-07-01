@@ -163,7 +163,8 @@ namespace Tempest
 				{
 					const uint32_t width = ((uint32_t)(short)LOWORD(lParam));
 					const uint32_t height = ((uint32_t)(short)HIWORD(lParam));
-					s_pApp->Resize(width, height);
+					if (wParam != SIZE_MINIMIZED)
+						s_pApp->Resize(width, height);
 					return 0;
 				}
 			}
