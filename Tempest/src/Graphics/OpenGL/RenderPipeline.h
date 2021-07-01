@@ -47,12 +47,20 @@ namespace Tempest
 		float transparency;
 	};
 
+	enum struct Shape
+	{
+		SHAPE_SPHERE,
+		SHAPE_CUBE,
+		SHAPE_PLANE
+	};
+
 	struct RenderPipeline
 	{
 		DebugBufferMesh m_Debug;
 		std::vector<SpriteUnit> sprites;
 		std::vector<Camera> cameras;
-		std::vector<Mesh> meshes;
+		std::vector<Shape> shapes;
+		std::vector<glm::mat4> transforms;
 
 		VertexBuffer shaderStorage;
 		VertexBuffer indirect;

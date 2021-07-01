@@ -64,6 +64,13 @@ namespace Tempest
 		m_VertexCount = static_cast<uint32_t>(indices.size());
 	}
 
+	//Mesh& Mesh::operator=(Mesh&& mesh)
+	//{
+	//	std::swap(m_VAO, mesh.m_VAO);
+	//	std::swap(m_VBO, mesh.m_VBO);
+	//	std::swap(m_VAO, mesh.m_VAO);
+	//}
+
 	VertexArray& Mesh::GetVAO()
 	{
 		return m_VAO;

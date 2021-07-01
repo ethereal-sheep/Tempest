@@ -40,8 +40,12 @@ namespace Tempest
 
 	public:
 
-		Mesh() = default;
 		Mesh(const std::pair<Vertices, Indices>&data);
+		Mesh() = delete;
+		Mesh(const Mesh&) = delete;
+		Mesh& operator=(const Mesh&) = delete;
+		Mesh(Mesh&&) = default;
+		Mesh& operator=(Mesh&& mesh) noexcept = default;
 
 		VertexArray& GetVAO();
 		VertexBuffer& GetVBO();
