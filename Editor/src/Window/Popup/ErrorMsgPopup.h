@@ -6,16 +6,16 @@
 
 namespace Tempest
 {
-	class test_error : public Window
-	{
+    class ErrorMsgPopup : public Window
+    {
         const char* window_name() override
         {
-            return "test_error";
+            return "";
         }
 
         void init() override
         {
-            Service<EventManager>::Get().register_listener<ErrorTrigger>(&test_error::open_popup, this);
+            Service<EventManager>::Get().register_listener<ErrorTrigger>(&ErrorMsgPopup::open_popup, this);
         }
 
         void open_popup(const Event& e)
@@ -25,8 +25,8 @@ namespace Tempest
             enable_popup = true;
         }
 
-		void show(Instance&) override
-		{
+        void show(Instance&) override
+        {
             const auto wrap_width = 200.f;
 
             if (enable_popup)
@@ -53,9 +53,9 @@ namespace Tempest
                 if (ImGui::Button("OK", ImVec2(200, 0))) { ImGui::CloseCurrentPopup(); }
                 ImGui::EndPopup();
             }
-		}
-        
+        }
+
         string data;
         bool enable_popup = false;
-	};
+    };
 }

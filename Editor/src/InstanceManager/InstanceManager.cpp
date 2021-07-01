@@ -1,25 +1,28 @@
 #include "InstanceManager.h"
-#include "Window/Test/test_window.h"
+
+// windows
 #include "Window/Diagnostics/DiagnosticsWindow.h"
 #include "Window/Hierarchy/HierarchyWindow.h"
 #include "Window/Inspector/InspectorWindow.h"
 #include "Window/Menubar/EditTimeMenuBar.h"
 #include "Window/Viewport/ViewportWindow.h"
-
-#include "Window/Error/test_error.h"
-#include "Window/Overlay/test_overlay_popup.h"
-
-#include "Window/FileBrowser/SaveBrowser.h"
-#include "Window/FileBrowser/NewBrowser.h"
 #include "Window/MainMenu/MainMenu.h"
 
+// filebrowsers (maybe dn)
+#include "Window/FileBrowser/SaveBrowser.h"
+#include "Window/FileBrowser/NewBrowser.h"
+
+// popup utils
 #include "Window/Popup/NewProjectPopup.h"
 #include "Window/Popup/OpenProjectPopup.h"
 #include "Window/Popup/SaveProjectPopup.h"
 #include "Window/Popup/ExportProjectPopup.h"
 #include "Window/Popup/CloseProjectPopup.h"
+#include "Window/Popup/ErrorMsgPopup.h"
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
+#include "Window/Popup/BottomRightOverlayPopup.h"
 
+// show recent projects
 #include "Window/Util/ShowRecent.h"
 
 namespace Tempest
@@ -30,12 +33,12 @@ namespace Tempest
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 
 		instance->register_always<MainMenuWindow>();
+
 		instance->register_always<NewProjectPopup>();
 		instance->register_always<OpenProjectPopup>();
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
-
-		instance->register_always<test_error>();
-		instance->register_always<test_overlay_popup>();
+		instance->register_always<ErrorMsgPopup>();
+		instance->register_always<BottomRightOverlayPopup>();
 
 		instance->register_always<ShowRecent>();
 	}
@@ -55,18 +58,17 @@ namespace Tempest
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 
 		instance->register_always<SaveBrowser>();
-		instance->register_always<test_error>();
-		instance->register_always<test_overlay_popup>();
+		instance->register_always<ErrorMsgPopup>();
+		instance->register_always<BottomRightOverlayPopup>();
 
 		instance->register_always<ShowRecent>();
-		
 	}
 	void InstanceManager::register_runtime_windows()
 	{
 		// assume instance is valid here
 		instance->register_window<DiagnosticsWindow>()->visible = false;;
-		instance->register_always<test_error>();
-		instance->register_always<test_overlay_popup>();
+		instance->register_always<ErrorMsgPopup>();
+		instance->register_always<BottomRightOverlayPopup>();
 	}
 
 }
