@@ -54,6 +54,9 @@ namespace Tempest
 
 	void RenderSystem::Resize(uint32_t width, uint32_t height)
 	{
+		if (width == 0 || height == 0)
+			return;
+
 		m_Framebuffer.Resize(width, height);
 		m_Renderer.SetViewport(0, 0, width, height);
 

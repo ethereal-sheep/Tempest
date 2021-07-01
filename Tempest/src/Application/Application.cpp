@@ -26,23 +26,11 @@ namespace Tempest
 		
 	}
 
-	struct Test
-	{
-		Camera cam;
-		Renderer renderer;
-		Shader quad_shader{ "Shaders/Quad_Vert.glsl", "Shaders/Quad_Frag.glsl" };
-		FBO fbo{ 1600,900 };
-		Mesh mesh = Mesh::GenerateIndexedCube(1, 1);
-		glm::mat4 transform;
-	};
-
 	void Application::OnEngineInit()
 	{
 		// init Engine stuff first
 		Logger::Init();
 		Service<RenderSystem>::Register(m_width, m_height);
-		Service<Test>::Register();
-		//Service<RenderSystem>::Get().SetViewport(m_width, m_height);
 		LOG("Initializing Tempest Engine");
 		LOG(glGetString(GL_VERSION));
 		Service<thread_pool>::Register(thread::hardware_concurrency());
@@ -60,7 +48,6 @@ namespace Tempest
 	{
 		// Update Engine stuff first
 		Service<RenderSystem>::Get().GetCamera().Update();
-		Service<Test>::Get().cam.Update();
 		OnUpdate();
 		
 		//testing_physics_7_2();
@@ -96,6 +83,9 @@ namespace Tempest
 
 	void Application::Resize(uint32_t width, uint32_t height)
 	{
+		if (width == 0 || height == 0)
+			return;
+
 		if(Service<RenderSystem>::GetIf())
 			Service<RenderSystem>::Get().Resize(width, height);
 
