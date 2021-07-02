@@ -72,23 +72,27 @@ namespace Tempest
 			/*--------------------------------------------------------------------*/
 
 
-			//ImGuiIO& io = ImGui::GetIO();
-			//ImGuiViewport* viewport = ImGui::GetMainViewport();
-			//ImGuiWindowFlags window_flags =
-			//	ImGuiWindowFlags_NoDocking |
-			//	ImGuiWindowFlags_NoTitleBar |
-			//	ImGuiWindowFlags_NoCollapse |
-			//	ImGuiWindowFlags_NoResize |
-			//	ImGuiWindowFlags_NoMove |
-			//	ImGuiWindowFlags_NoBringToFrontOnFocus |
-			//	ImGuiWindowFlags_NoNavFocus;
-			//
-			//ImGui::SetNextWindowPos(viewport->WorkPos);
-			//ImGui::SetNextWindowSize(viewport->WorkSize);
-			//ImGui::SetNextWindowViewport(viewport->ID);
-			//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+			ImGuiIO& io = ImGui::GetIO();
+			ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGuiWindowFlags window_flags =
+				ImGuiWindowFlags_NoDocking |
+				ImGuiWindowFlags_NoTitleBar |
+				ImGuiWindowFlags_NoCollapse |
+				ImGuiWindowFlags_NoResize |
+				ImGuiWindowFlags_NoMove |
+				ImGuiWindowFlags_NoBringToFrontOnFocus |
+				ImGuiWindowFlags_NoBackground |
+				ImGuiWindowFlags_NoNavFocus;
+
+			//auto id = ImGui::DockSpaceOverViewport(viewport, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_KeepAliveOnly);
+			
+
+			/*ImGui::SetNextWindowPos(viewport->WorkPos);
+			ImGui::SetNextWindowSize(viewport->WorkSize);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));*/
 			//if (ImGui::Begin("Main", nullptr, window_flags))
 			//{
 			//	ImGui::PopStyleVar(3);
@@ -96,7 +100,7 @@ namespace Tempest
 			//	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 			//	{
 			//		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-			//		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
+			//		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f),0);
 			//	}
 			//	//ImGui::Image((ImTextureID)Service<RenderSystem>::Get().GetColourBuffer(), {1600, 900});
 
@@ -105,7 +109,7 @@ namespace Tempest
 
 
 			instance_manager.render();
-			//instance_manager.menubar();
+			instance_manager.menubar();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();

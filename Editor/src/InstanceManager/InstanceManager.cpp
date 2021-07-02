@@ -45,10 +45,10 @@ namespace Tempest
 	void InstanceManager::register_edittime_windows()
 	{
 		// assume instance is valid here
+		instance->register_window<ViewportWindow>();
 		instance->register_window<DiagnosticsWindow>();
 		instance->register_window<HierarchyWindow>();
 		instance->register_window<InspectorWindow>();
-		instance->register_window<ViewportWindow>();
 
 		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();

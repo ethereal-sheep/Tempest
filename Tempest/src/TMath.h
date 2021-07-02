@@ -42,6 +42,26 @@ namespace Tempest
 		return els::rad_to_deg(radians);
 	}
 
+	template <>
+	constexpr vec3 to_rad<vec3>(vec3 degree)
+	{
+		return vec3{
+			els::deg_to_rad(degree.x),
+			els::deg_to_rad(degree.y),
+			els::deg_to_rad(degree.z)
+		};
+	}
+
+	template <>
+	constexpr vec3 to_deg<vec3>(vec3 radians)
+	{
+		return vec3{
+			els::rad_to_deg(radians.x),
+			els::rad_to_deg(radians.y),
+			els::rad_to_deg(radians.z)
+		};
+	}
+
 	template <typename T>
 	glm::vec3 to_glvec2(const T& v)
 	{
