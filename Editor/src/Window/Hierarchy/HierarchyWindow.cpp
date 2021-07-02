@@ -30,6 +30,7 @@ namespace Tempest
 						meta->name = "Cube";
 
 						instance.ecs.emplace<tc::Transform>(entity);
+						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
 					}
 					if (ImGui::MenuItem("Add Sphere"))
 					{
@@ -37,6 +38,7 @@ namespace Tempest
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Sphere";
 						instance.ecs.emplace<tc::Transform>(entity);
+						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_SPHERE);
 					}
 					if (ImGui::MenuItem("Add Capsule"))
 					{
@@ -44,6 +46,7 @@ namespace Tempest
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Capsule";
 						instance.ecs.emplace<tc::Transform>(entity);
+						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
 					}
 
 					ImGui::EndMenu();

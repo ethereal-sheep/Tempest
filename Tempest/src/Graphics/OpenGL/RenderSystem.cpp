@@ -14,7 +14,7 @@ namespace Tempest
 		transform.position = vec3(-0.5f, 0.f, 0.f);
 		transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
 		transform.scale = vec3(0.1f, 0.1f, 0.1f);
-		Submit(Shape::SHAPE_SPHERE, transform);
+		//Submit(Shape::SHAPE_SPHERE, transform);
 
 		Transform transform2;
 		transform2.position = vec3(0.5f, 0.f, 0.f);
@@ -97,6 +97,8 @@ namespace Tempest
 	void RenderSystem::EndFrame()
 	{
 		glFlush();
+		m_Pipeline.shapes.clear();
+		m_Pipeline.transforms.clear();
 		//System_End();
 		//System_Reset();
 	}

@@ -50,11 +50,13 @@ namespace Tempest
 				{
 					UI::DragFloat3ColorBox("Position", "##TransformPosDrag", ImVec2{ padding , 0.f }, transform->position.data(), 0.f, 0.1f);
 
-					{
-						auto vec = glm::eulerAngles(transform->rotation);
+					/*{
+						auto vec = glm::degrees(glm::eulerAngles(transform->rotation));
 						if (UI::DragFloat3ColorBox("Rotation", "##TransformRotDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 0.f, 0.1f))
-							transform->rotation = glm::quat(vec);
-					}
+							transform->rotation = glm::quat(glm::radians(vec));
+					}*/
+
+
 
 
 					static bool uniformScale = false;

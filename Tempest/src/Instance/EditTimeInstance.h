@@ -22,23 +22,13 @@ namespace Tempest
 			// 
 		}
 
-		void _init() override
-		{
-			// init windows here
-		}
-		void _update([[maybe_unused]] float dt) override
-		{
-			// update windows here
-		}
-		void _render() override
-		{
-			// render extra stuff here
-			// windows are auto rendered here
-		}
-		void _exit() override
-		{
+		void _init() override;
 
-		}
+		void _update([[maybe_unused]] float dt) override;
+
+		void _render() override;
+
+		void _exit() override;
 
 		void save()
 		{

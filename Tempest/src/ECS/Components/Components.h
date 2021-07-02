@@ -4,6 +4,7 @@
 #include "TMath.h"
 #include "ECS\Entity.h"
 #include "Physics/PhysicsObject.h"
+#include "Graphics/OpenGL/RenderPipeline.h"
 
 /**
 * @brief 
@@ -95,8 +96,8 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Transform, Meta, Script, Rigidbody,
-		END
+		Example, Transform, Meta, Script, Rigidbody, Mesh
+		,END
 	};
 
 	namespace Components
@@ -197,6 +198,23 @@ namespace Tempest
 				return ar.EndObject();
 			}
 		};
+
+		struct Mesh
+		{
+			static const char* get_type() { return "Mesh"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Mesh& component)
+			{
+				ar.StartObject();
+				ar.Member("Shape", component.shape);
+				return ar.EndObject();
+			}
+
+			Mesh(Shape _shape = Shape::SHAPE_SPHERE) : shape(_shape) {}
+
+			Shape shape;
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -230,6 +248,7 @@ namespace Tempest
 			COMPONENT_CASE(Meta);
 			COMPONENT_CASE(Script);
 			COMPONENT_CASE(Rigidbody);
+			COMPONENT_CASE(Mesh);
 
 		/* ABOVE THIS PLEASE */
 
