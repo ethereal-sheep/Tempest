@@ -30,6 +30,14 @@ namespace Tempest
 						meta->name = "Cube";
 
 						instance.ecs.emplace<tc::Transform>(entity);
+						instance.ecs.emplace<tc::Rigidbody>(entity);
+
+						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
+						auto& position = instance.ecs.get<Components::Transform>(entity).position;
+						rb.shape_data = SHAPE_TYPE::BOX;
+						rb.shape_data.shapeData = { 1, 1, 1 };
+						rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
+						instance.po.AddActorToScene(rb.internal_rb.get());
 					}
 					if (ImGui::MenuItem("Add Sphere"))
 					{

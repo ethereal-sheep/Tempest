@@ -62,7 +62,19 @@ namespace Tempest
 				}
 			}
 
+			if (auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected))
+			{
+				auto& rbConfig = rb->rb_config;
+				ImGui::PushFont(FONT_BOLD);
+				bool header = ImGui::CollapsingHeader("RigidBody##RigidBody", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+				ImGui::PopFont();
+				ImGui::Dummy({ 0.f, 1.f });
 
+				if (header)
+				{
+					UI::DragFloat3ColorBox("Lvel", "##RigidBodyVel", ImVec2{ padding , 0.f }, rbConfig.linear_velocity.data(), 0.f, 0.1f);
+				}
+			}
 		}
 
 		ImGui::End();
