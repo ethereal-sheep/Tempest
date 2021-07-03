@@ -180,6 +180,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\Asset\Asset.cpp" />
     <ClCompile Include="src\Asset\Audio\AudioAsset.cpp" />
     <ClCompile Include="src\Asset\Model\ModelAsset.cpp" />
     <ClCompile Include="src\Asset\Texture\TextureAsset.cpp" />
