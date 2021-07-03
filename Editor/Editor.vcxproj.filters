@@ -185,5 +185,8 @@
     <ClInclude Include="src\Window\Popup\BottomRightOverlayPopup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\Popup\ImportAssetPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

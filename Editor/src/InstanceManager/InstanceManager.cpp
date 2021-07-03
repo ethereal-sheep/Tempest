@@ -18,6 +18,7 @@
 #include "Window/Popup/SaveProjectPopup.h"
 #include "Window/Popup/ExportProjectPopup.h"
 #include "Window/Popup/CloseProjectPopup.h"
+#include "Window/Popup/ImportAssetPopup.h"
 #include "Window/Popup/ErrorMsgPopup.h"
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
@@ -55,6 +56,7 @@ namespace Tempest
 		instance->register_always<OpenProjectPopup>();
 		instance->register_always<SaveProjectPopup>();
 		instance->register_always<CloseProjectPopup>();
+		instance->register_always<ImportAssetPopup>();
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 
 		instance->register_always<SaveBrowser>();
