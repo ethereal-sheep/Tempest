@@ -63,6 +63,9 @@
     <ClCompile Include="src\imgui\ImFileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\AssetManager\AssetManagerWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\imgui\imconfig.h">
@@ -186,6 +189,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Popup\ImportAssetPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

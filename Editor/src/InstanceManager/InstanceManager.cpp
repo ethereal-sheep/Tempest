@@ -7,6 +7,7 @@
 #include "Window/Menubar/EditTimeMenuBar.h"
 #include "Window/Viewport/ViewportWindow.h"
 #include "Window/MainMenu/MainMenu.h"
+#include "Window/AssetManager/AssetManagerWindow.h"
 
 // filebrowsers (maybe dn)
 #include "Window/FileBrowser/SaveBrowser.h"
@@ -50,6 +51,7 @@ namespace Tempest
 		instance->register_window<DiagnosticsWindow>();
 		instance->register_window<HierarchyWindow>();
 		instance->register_window<InspectorWindow>();
+		instance->register_window<AssetManagerWindow>();
 
 		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();

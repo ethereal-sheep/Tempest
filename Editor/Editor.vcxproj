@@ -187,6 +187,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
     <ClCompile Include="src\Util\UIElements.cpp" />
+    <ClCompile Include="src\Window\AssetManager\AssetManagerWindow.cpp" />
     <ClCompile Include="src\Window\Diagnostics\DiagnosticsWindow.cpp" />
     <ClCompile Include="src\Window\Hierarchy\HierarchyWindow.cpp" />
     <ClCompile Include="src\Window\Inspector\InspectorWindow.cpp" />
@@ -213,6 +214,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Triggers\Triggers.h" />
     <ClInclude Include="src\Util\Suppress.h" />
     <ClInclude Include="src\Util\UIElements.h" />
+    <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h" />
     <ClInclude Include="src\Window\Diagnostics\DiagnosticsWindow.h" />
     <ClInclude Include="src\Window\FileBrowser\FileBrowser.h" />
     <ClInclude Include="src\Window\FileBrowser\NewBrowser.h" />
