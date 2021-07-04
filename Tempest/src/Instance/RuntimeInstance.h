@@ -45,6 +45,7 @@ namespace Tempest
 				auto& rb = ecs.get<Components::Rigidbody>(id);
 				//auto& position = ecs.get<Components::Transform>(id).position;
 				auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get());
+				
 				LOG("{0} Current Velocity [{1}, {2}, {3}]",id, dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
 				LOG("{0} Current Position [{1}, {2}, {3}]",id, dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z);
 			}
