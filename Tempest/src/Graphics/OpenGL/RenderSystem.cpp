@@ -57,7 +57,7 @@ namespace Tempest
 		//Line test_line{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.1f, 0.f, 0.f) };
 		//Line test_line2{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.1f, 0.f) };
 		//Line test_line3{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.1f) };
-		m_LineRenderer.Submit(aabb, glm::vec4(1.f, 0.f, 0.f, 1.f));
+		//m_LineRenderer.Submit(aabb, glm::vec4(1.f, 0.f, 0.f, 1.f));
 		//m_LineRenderer.Submit(test_line2, glm::vec4(0.f, 1.f, 0.f, 1.f));
 		//m_LineRenderer.Submit(test_line3, glm::vec4(0.f, 0.f, 1.f, 1.f));
 
