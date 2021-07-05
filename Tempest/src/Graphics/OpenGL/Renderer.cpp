@@ -33,7 +33,7 @@ namespace Tempest
 			case DrawMode::POINTS:						return GL_POINTS;
 			case DrawMode::LINE_STRIP:					return GL_LINE_STRIP;
 			case DrawMode::LINE_LOOP:					return GL_LINE_LOOP;
-			case DrawMode::LINE:						return GL_LINE;
+			case DrawMode::LINE:						return GL_LINES;
 			case DrawMode::LINE_STRIP_ADJACENCY:		return GL_LINE_STRIP_ADJACENCY;
 			case DrawMode::LINES_ADJACENCY:				return GL_LINES_ADJACENCY;
 			case DrawMode::TRIANGLE_STRIP:				return GL_TRIANGLE_STRIP;

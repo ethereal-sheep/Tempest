@@ -27,7 +27,7 @@ namespace Tempest
 		RenderPipeline m_Pipeline;
 		
 		Shader quad_Shader{ "Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl" };
-		//Shader line_Shader{ "Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl" };
+		Shader line_Shader{ "Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl" };
 
 		tmap<Shape, Mesh> meshes;
 		

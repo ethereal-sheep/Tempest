@@ -207,6 +207,85 @@ namespace Tempest
 		return { vertices, indices };
 	}
 
+	std::pair<Vertices, Indices> Mesh::GenerateIndexedIcosahedron()
+	{
+		constexpr double X = 0.525731112119133606; 
+		constexpr double Z = 0.850650808352039932;
+
+		double vdata[] = 
+		{
+			-X, 0.0, Z,    X, 0.0, Z,  -X,  0.0, -Z,  X,  0.0, -Z,
+			0.0, Z,  X,   0.0, Z, -X,  0.0, -Z,   X, 0.0, -Z,  -X,
+			 Z,  X, 0.0,  -Z,  X, 0.0,  Z,  -X,  0.0, -Z, -X,  0.0
+		};
+
+		uint32_t tindices[60] = 
+		{
+			0,  4, 1, 0, 9,  4, 9,  5, 4,  4, 5, 8, 4, 8, 1,
+			8, 10, 1, 8, 3, 10, 5,  3, 8,  5, 2, 3, 2, 7, 3,
+			7, 10, 3, 7, 6, 10, 7, 11, 6, 11, 0, 6, 0, 1, 6,
+			6, 1, 10, 9, 0, 11, 9, 11, 2,  9, 2, 5, 7, 2, 11 
+		};
+
+		Vertices vertices;
+		Indices indices;
+		
+		for (int i = 0; i < 36; i+=3)
+		{
+			glm::vec3 v = glm::vec3(static_cast<GLfloat>(vdata[i]), static_cast<GLfloat>(vdata[i + 1]), static_cast<GLfloat>(vdata[i + 2]));
+			glm::vec3 n = normalize(v);
+			glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
+			glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
+			glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
+			glm::vec3 b = cross(t, n);
+
+			vertices.position.emplace_back(v);
+			vertices.texCoord.emplace_back(0, 1);
+			vertices.normal.emplace_back(n);
+			vertices.tangent.emplace_back(t);
+			vertices.bitangent.emplace_back(b);
+		}
+
+		for (int i = 0; i < 60; ++i)
+		{
+			indices.emplace_back(tindices[i]);
+		}
+
+		return { vertices, indices };
+	}
+
+	std::pair<Vertices, Indices> Mesh::GenerateIndexedDodecahedron()
+	{
+		double vdata[] =
+		{
+			-0.57735,	-0.57735,  0.57735,
+			 0.934172,  0.356822,  0,
+			 0.934172, -0.356822,  0,
+			-0.934172,  0.356822,  0,
+			-0.934172, -0.356822,  0,
+			 0,  0.934172,  0.356822,
+			 0,  0.934172, -0.356822,
+			 0.356822,  0, -0.934172,
+			-0.356822,  0, -0.934172,
+			 0, -0.934172, -0.356822,
+			 0, -0.934172,  0.356822,
+			 0.356822,  0,  0.934172,
+			-0.356822,  0,  0.934172,
+			 0.57735,  0.57735, -0.57735,
+			 0.57735,  0.57735,  0.57735,
+			-0.57735,  0.57735, -0.57735,
+			-0.57735,  0.57735,  0.57735,
+			 0.57735, -0.57735, -0.57735,
+			 0.57735, -0.57735,  0.57735,
+			-0.57735, -0.57735, -0.57735
+		};
+		
+		Vertices vertices;
+		Indices indices;
+
+		return { vertices, indices };
+	}
+	 
 	Indices Mesh::GenerateIndices(int stacks, int slices)
 	{
 		Indices indices;
