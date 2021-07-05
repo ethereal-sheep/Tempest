@@ -75,7 +75,7 @@ namespace Tempest
 		{
 			physx::PxSceneDesc sceneDesc(physics->getTolerancesScale());
 			sceneDesc.cpuDispatcher = &pcd;
-			sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
+			sceneDesc.gravity = physx::PxVec3(0.0f, 0.f, -9.81f);
 			sceneDesc.filterShader = contactReportFilterShader;
 			sceneDesc.simulationEventCallback = &gContactReportCallback;
 
@@ -110,7 +110,7 @@ namespace Tempest
 
 		bool fetchResult = scene->fetchResults(true);
 
-		LOG(">>> {0} contact report ", physx::PxU32(gContactPositions.size()));
+		//LOG(">>> {0} contact report ", physx::PxU32(gContactPositions.size()));
 
 		return fetchResult;
 	}
@@ -149,7 +149,7 @@ namespace Tempest
 		{
 			tsptr<PxRigidBody> dynamicBody;
 			dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *newShape, rb_config.density));
-
+			
 			dynamicBody->setLinearDamping(rb_config.linear_damping);
 			dynamicBody->setAngularDamping(rb_config.angular_damping);
 			dynamicBody->setLinearVelocity(PxVec3{rb_config.linear_velocity });

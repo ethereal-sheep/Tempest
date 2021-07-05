@@ -154,9 +154,9 @@ namespace Tempest
 		tpath root;
 
 		MemoryObject memory_object;
-		PhysicsObject po;
-	public:
 		
+	public:
+		PhysicsObject po;
 		ECS ecs;
 		WindowManager window_manager;
 		Camera cam;
