@@ -7,6 +7,7 @@
 #include "Window/Menubar/EditTimeMenuBar.h"
 #include "Window/Viewport/ViewportWindow.h"
 #include "Window/MainMenu/MainMenu.h"
+#include "Window/AssetManager/AssetManagerWindow.h"
 
 // filebrowsers (maybe dn)
 #include "Window/FileBrowser/SaveBrowser.h"
@@ -18,6 +19,7 @@
 #include "Window/Popup/SaveProjectPopup.h"
 #include "Window/Popup/ExportProjectPopup.h"
 #include "Window/Popup/CloseProjectPopup.h"
+#include "Window/Popup/ImportAssetPopup.h"
 #include "Window/Popup/ErrorMsgPopup.h"
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
@@ -45,16 +47,18 @@ namespace Tempest
 	void InstanceManager::register_edittime_windows()
 	{
 		// assume instance is valid here
+		instance->register_window<ViewportWindow>();
 		instance->register_window<DiagnosticsWindow>();
 		instance->register_window<HierarchyWindow>();
 		instance->register_window<InspectorWindow>();
-		instance->register_window<ViewportWindow>();
+		instance->register_window<AssetManagerWindow>();
 
 		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();
 		instance->register_always<OpenProjectPopup>();
 		instance->register_always<SaveProjectPopup>();
 		instance->register_always<CloseProjectPopup>();
+		instance->register_always<ImportAssetPopup>();
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 
 		instance->register_always<SaveBrowser>();

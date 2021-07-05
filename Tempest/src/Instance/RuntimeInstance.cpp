@@ -25,7 +25,7 @@ namespace Tempest
 	}
 	void RuntimeInstance::RunPhysxUpdate()
 	{
-		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
+		auto view = ecs.view<tc::Rigidbody, tc::Transform>();
 		for (auto id : view)
 		{
 			auto& rb = ecs.get<Components::Rigidbody>(id);

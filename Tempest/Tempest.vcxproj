@@ -180,6 +180,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\Asset\Asset.cpp" />
+    <ClCompile Include="src\Asset\Audio\AudioAsset.cpp" />
+    <ClCompile Include="src\Asset\Model\ModelAsset.cpp" />
+    <ClCompile Include="src\Asset\Texture\TextureAsset.cpp" />
+    <ClCompile Include="src\Asset\Texture\TextureLoader.cpp" />
     <ClCompile Include="src\ECS\Test\test_ecs.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\FBO.cpp" />
@@ -234,6 +239,11 @@
     <ClInclude Include="src\Application\Context.h" />
     <ClInclude Include="src\Application\EntryPoint.h" />
     <ClInclude Include="src\Asset\Asset.h" />
+    <ClInclude Include="src\Asset\Audio\AudioAsset.h" />
+    <ClInclude Include="src\Asset\IAsset.h" />
+    <ClInclude Include="src\Asset\Model\ModelAsset.h" />
+    <ClInclude Include="src\Asset\Texture\TextureAsset.h" />
+    <ClInclude Include="src\Asset\Texture\TextureLoader.h" />
     <ClInclude Include="src\Asset\Util\importer.h" />
     <ClInclude Include="src\Audio\AudioEngine.h" />
     <ClInclude Include="src\Audio\AudioManager.h" />

@@ -50,11 +50,13 @@ namespace Tempest
 				{
 					UI::DragFloat3ColorBox("Position", "##TransformPosDrag", ImVec2{ padding , 0.f }, transform->position.data(), 0.f, 0.1f);
 
-					{
-						auto vec = glm::eulerAngles(transform->rotation);
+					/*{
+						auto vec = glm::degrees(glm::eulerAngles(transform->rotation));
 						if (UI::DragFloat3ColorBox("Rotation", "##TransformRotDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 0.f, 0.1f))
-							transform->rotation = glm::quat(vec);
-					}
+							transform->rotation = glm::quat(glm::radians(vec));
+					}*/
+
+
 
 
 					static bool uniformScale = false;
@@ -62,7 +64,28 @@ namespace Tempest
 				}
 			}
 
-
+			if (auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected))
+			{
+				auto& rbConfig = rb->rb_config;
+				ImGui::PushFont(FONT_BOLD);
+				bool header = ImGui::CollapsingHeader("RigidBody##RigidBody", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+				ImGui::PopFont();
+				ImGui::Dummy({ 0.f, 1.f });
+				if (header)
+				{
+					UI::DragFloat3ColorBox("Linear Vel", "##RbLVel", ImVec2{ padding , 0.f }, rbConfig.linear_velocity.data(), 0.f, 0.1f);
+					UI::DragFloat("L_Damping", "##RbLDamping", ImVec2{ padding , 0.f }, &rbConfig.linear_damping, 0.1f, 0.f);
+					UI::DragFloat3ColorBox("Angular Vel", "##RbAVel", ImVec2{ padding , 0.f }, rbConfig.angular_velocity.data(), 0.f, 0.1f);
+					UI::DragFloat("A_Damping", "##RbADamping", ImVec2{ padding , 0.f }, &rbConfig.angular_damping, 0.1f, 0.f);
+					UI::DragFloat("Mass", "##RbMass", ImVec2{ padding , 0.f }, &rbConfig.mass, 0.1f, 0.f);
+					UI::DragFloat("Density", "##RbDensity", ImVec2{ padding , 0.f }, &rbConfig.density, 0.1f, 0.f);
+					UI::Checkbox("Is_Static", "##RbStatic", ImVec2{ padding , 0.f }, &rbConfig.is_static);
+					UI::Checkbox("Gravity", "##RbGravity", ImVec2{ padding , 0.f }, &rbConfig.gravity);
+					UI::DragFloat3("Physics Mat", "##RbPhysMat", ImVec2{ padding , 0.f }, rbConfig.material.data(), 0.f, 0.1f);
+					UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Physics Material: Static Friction , Dynamic Friction, restitution(bounciness)");
+					
+				}
+			}
 		}
 
 		ImGui::End();

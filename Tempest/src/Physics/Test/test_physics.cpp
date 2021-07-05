@@ -292,6 +292,7 @@ namespace Tempest
 	{ 
 		try
 		{
+
 			RuntimeInstance runtime("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
 			//runtime.OnInit();
 			//runtime._init();
