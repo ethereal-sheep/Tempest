@@ -17,7 +17,7 @@ namespace Tempest
 		 * @brief Requires root directory
 		 */
 		NullTimeInstance(MemoryStrategy strategy = {}) :
-			Instance("", "", strategy)
+			Instance("", "", "", strategy)
 		{
 		}
 

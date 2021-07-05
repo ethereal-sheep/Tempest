@@ -29,8 +29,8 @@ namespace Tempest
 
 	struct shape
 	{
-		SHAPE_TYPE type;
-		vec3 shapeData;
+		SHAPE_TYPE type = SHAPE_TYPE::BOX;
+		vec3 shapeData = { 1.f, 1.f, 1.f };
 
 		shape(SHAPE_TYPE shape_type = SHAPE_TYPE::NONE, float x = 0.f, float y = 0.f, float z = 0.f) : type{ shape_type }, shapeData{ x,y,z } {}
 	
@@ -96,39 +96,7 @@ namespace Tempest
 			PxReal staticFriction, PxReal dynamicFriction, PxReal restitution
 		*/
 	};
-
-
-	inline std::vector<physx::PxVec3> gContactPositions;
-
-	class ContactReportCallback: public physx::PxSimulationEventCallback
-	{
-		void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count) { PX_UNUSED(constraints); PX_UNUSED(count); }
-		void onWake(physx::PxActor** actors, physx::PxU32 count)						{ PX_UNUSED(actors); PX_UNUSED(count); }
-		void onSleep(physx::PxActor** actors, physx::PxU32 count)						{ PX_UNUSED(actors); PX_UNUSED(count); }
-		void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)					{ PX_UNUSED(pairs); PX_UNUSED(count); }
-		void onAdvance(const physx::PxRigidBody*const*, const physx::PxTransform*, const  physx::PxU32) {}
-		void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
-		{
-			PX_UNUSED((pairHeader));
-			std::vector<physx::PxContactPairPoint> contactPoints;
-		
-			for(physx::PxU32 i=0;i<nbPairs;i++)
-			{
-				physx::PxU32 contactCount = pairs[i].contactCount;
-				if(contactCount)
-				{
-					contactPoints.resize(contactCount);
-					pairs[i].extractContacts(&contactPoints[0], contactCount);
-
-					for(physx::PxU32 j=0;j<contactCount;j++)
-					{
-						gContactPositions.push_back(contactPoints[j].position);
-					}
-				}
-			}
-		}
-	};
-
+	
 	class PhysicsObject
 	{
 	public:
@@ -140,7 +108,7 @@ namespace Tempest
 		bool fetch();
 
 		// uesd for loading 
-		tsptr<physx::PxRigidActor> createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const;
+		tsptr<physx::PxRigidActor> createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos, quat rot) const;
 		// what other functions here?
 
 		/**
@@ -222,7 +190,6 @@ namespace Tempest
 		tsptr<physx::PxPhysics> physics;
 		tsptr<physx::PxCooking> cooking;
 		tsptr<physx::PxScene> scene;
-		ContactReportCallback gContactReportCallback;
 
 		// testing
 		float accumulator = 0.0f;

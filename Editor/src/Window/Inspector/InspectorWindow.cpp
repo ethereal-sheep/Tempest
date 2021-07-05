@@ -50,15 +50,11 @@ namespace Tempest
 				{
 					UI::DragFloat3ColorBox("Position", "##TransformPosDrag", ImVec2{ padding , 0.f }, transform->position.data(), 0.f, 0.1f);
 
-					/*{
+					{
 						auto vec = glm::degrees(glm::eulerAngles(transform->rotation));
 						if (UI::DragFloat3ColorBox("Rotation", "##TransformRotDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 0.f, 0.1f))
 							transform->rotation = glm::quat(glm::radians(vec));
-					}*/
-
-
-
-
+					}
 					static bool uniformScale = false;
 					UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, transform->scale.data(), 1.f, 1.f, 1.f, 1000.f);
 				}
@@ -84,6 +80,17 @@ namespace Tempest
 					UI::DragFloat3("Physics Mat", "##RbPhysMat", ImVec2{ padding , 0.f }, rbConfig.material.data(), 0.f, 0.1f);
 					UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Physics Material: Static Friction , Dynamic Friction, restitution(bounciness)");
 					
+					/*ImGui::PushID("Collider Type");
+					int collider_current = static_cast<int>(rb->shape_data.type);
+					const char* Colliders[] = { "NONE", "SPHERE", "BOX", "CAPSULE" };
+					ImGui::Text("ShapeT");
+					ImGui::SameLine();
+					ImGui::Dummy(ImVec2{ 60.f - ImGui::GetItemRectSize().x, 0.f });
+					ImGui::SameLine();
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth() - 20.f);
+					ImGui::Combo("", &collider_current, Colliders, IM_ARRAYSIZE(Colliders));
+					collision->ShapeType = static_cast<Cardinal::ECS::ShapeID>(collider_current);
+					ImGui::PopID();*/
 				}
 			}
 		}

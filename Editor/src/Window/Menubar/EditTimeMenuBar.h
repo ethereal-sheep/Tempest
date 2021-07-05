@@ -12,10 +12,22 @@ namespace Tempest
 		{
 			return "EditTimeMenuBar";
 		}
-		void show(Instance& ) override
+		void show(Instance& instance) override
 		{
+            auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+
 			if(ImGui::BeginMainMenuBar())
 			{
+				
+				if (ImGui::Button(ICON_FA_PLAY, {25.f, 25.f}))
+				{
+					edit.save();
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						edit.get_full_path(), 
+						MemoryStrategy{}, 
+						InstanceType::RUN_TIME);
+				}
+
 				if (ImGui::BeginMenu("Project"))
 				{
 					if (ImGui::MenuItem(ICON_FA_FILE_MEDICAL " New", "Ctrl+N", false))
@@ -79,9 +91,10 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Application Exiting in 10s...");
 					}
 
-
+					
 					ImGui::EndMenu();
 				}
+
 
 
 				ImGui::EndMainMenuBar();

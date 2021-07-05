@@ -72,17 +72,17 @@ namespace Tempest
 			/*--------------------------------------------------------------------*/
 
 
-			ImGuiIO& io = ImGui::GetIO();
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGuiWindowFlags window_flags =
-				ImGuiWindowFlags_NoDocking |
-				ImGuiWindowFlags_NoTitleBar |
-				ImGuiWindowFlags_NoCollapse |
-				ImGuiWindowFlags_NoResize |
-				ImGuiWindowFlags_NoMove |
-				ImGuiWindowFlags_NoBringToFrontOnFocus |
-				ImGuiWindowFlags_NoBackground |
-				ImGuiWindowFlags_NoNavFocus;
+			// ImGuiIO& io = ImGui::GetIO();
+			// ImGuiViewport* viewport = ImGui::GetMainViewport();
+			// ImGuiWindowFlags window_flags =
+			// 	ImGuiWindowFlags_NoDocking |
+			// 	ImGuiWindowFlags_NoTitleBar |
+			// 	ImGuiWindowFlags_NoCollapse |
+			// 	ImGuiWindowFlags_NoResize |
+			// 	ImGuiWindowFlags_NoMove |
+			// 	ImGuiWindowFlags_NoBringToFrontOnFocus |
+			// 	ImGuiWindowFlags_NoBackground |
+			// 	ImGuiWindowFlags_NoNavFocus;
 
 			//auto id = ImGui::DockSpaceOverViewport(viewport, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_KeepAliveOnly);
 			

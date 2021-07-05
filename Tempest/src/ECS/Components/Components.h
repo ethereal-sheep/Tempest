@@ -145,7 +145,7 @@ namespace Tempest
 			}
 
 			vec3 position;
-			quat rotation;
+			quat rotation = {1.f, 0.f, 0.f, 0.f};
 			vec3 scale = {1.f, 1.f, 1.f};
 		};
 

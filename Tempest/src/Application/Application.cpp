@@ -10,7 +10,6 @@
 
 #include "ECS/ECS.h"
 #include "ECS/Test/test_entity.h"
-#include "Physics/Test/test_physics.h"
 #include "Util/view.h"
 #include "Util/thread_pool.h"
 #include "Util/Service.h"
@@ -37,8 +36,8 @@ namespace Tempest
 		Service<EventManager>::Register();
 
 		OnInit();
-		testing_physics();
-		//testing_physics_7_1();
+
+
 	}
 
 

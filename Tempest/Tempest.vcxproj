@@ -218,7 +218,6 @@
     <ClCompile Include="src\Memory\Resource\malloc_resource.cpp" />
     <ClCompile Include="src\Physics\PhysicsObject.cpp" />
     <ClCompile Include="src\Physics\ShapeFactory\ShapeFactory.cpp" />
-    <ClCompile Include="src\Physics\Test\test_physics.cpp" />
     <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp" />
     <ClCompile Include="src\Physics\Util\px_math.cpp" />
     <ClCompile Include="src\Scripting\Graph\graph.cpp" />
@@ -281,7 +280,6 @@
     <ClInclude Include="src\Physics\Physics.h" />
     <ClInclude Include="src\Physics\PhysicsObject.h" />
     <ClInclude Include="src\Physics\ShapeFactory\ShapeFactory.h" />
-    <ClInclude Include="src\Physics\Test\test_physics.h" />
     <ClInclude Include="src\Physics\Util\px_allocator.h" />
     <ClInclude Include="src\Physics\Util\px_bp_callback.h" />
     <ClInclude Include="src\Physics\Util\px_cpu_dispatcher.h" />

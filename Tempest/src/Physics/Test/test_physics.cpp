@@ -290,56 +290,13 @@ namespace Tempest
 
 	void testing_physics_7_1() // initing of physics object
 	{ 
-		try
-		{
 
-			RuntimeInstance runtime("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
-			//runtime.OnInit();
-			//runtime._init();
-			for (int i = 0; i < 15; i++)
-			{
-				runtime._update(1.f / 60.0f);
-			}
-		}
-		catch (const std::exception&)
-		{
-
-		}
 	}
 
 	void testing_physics_Saving() // Saving object
 
 	{
-		{
-			debug_mr dg("testing_ecs_2.1");
-			dg.set_strict(true);
-			ECS ecs(&dg);
-			auto t = 2; // 2 objects
-			for (auto i = 0; i < t; ++i)
-			{
-				auto entity = ecs.create();
-				auto* rb = ecs.emplace<Components::Rigidbody>(entity);
 
-				rb->shape_data = shape(SHAPE_TYPE::SPHERE, 1);
-				auto* transform = ecs.emplace<Components::Transform>(entity);
-				if (entity % 2 == 1)
-				{
-					transform->position = { 0,0,0 };
-				}
-				else
-				{
-					transform->position = { 3,0,0 };
-				}
-			}
-			try
-			{
-				ecs.save("C:\\Users\\h_ron\\source\\repos\\Tempest\\Build");
-			}
-			catch (const std::exception&)
-			{
-
-			}
-		}
 	}
 
 	void testing_physics()

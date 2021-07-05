@@ -47,7 +47,13 @@ namespace Tempest
 			return path.parent_path();
 		}
 
-		Instance(const string& _name, const tpath& path, MemoryStrategy strategy) :
+		Instance(
+			const tpath& project_path, 
+			const string& _name, 
+			const tpath& path, 
+			MemoryStrategy strategy
+		) :
+			full_path{ project_path },
 			name{ _name },
 			root{ path },
 			memory_object(strategy),
@@ -60,6 +66,7 @@ namespace Tempest
 		
 		Instance(const tpath& project_path, MemoryStrategy strategy = {}) :
 			Instance(
+				project_path,
 				get_filename_from_path(project_path),
 				get_rootpath_from_path(project_path),
 				strategy
@@ -136,6 +143,7 @@ namespace Tempest
 
 		const string& get_name() const { return name; }
 		const tpath& get_path() const { return root; }
+		const tpath& get_full_path() const { return full_path; }
 
 	private:
 
@@ -150,6 +158,7 @@ namespace Tempest
 		virtual void _exit() = 0;
 
 	protected:
+		tpath full_path;
 		string name;
 		tpath root;
 
