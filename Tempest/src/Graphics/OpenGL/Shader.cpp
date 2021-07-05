@@ -46,7 +46,6 @@ namespace Tempest
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 512, NULL, infoLog);
-			assert("Failed To Compile Shader");
 			LOG("FAILED TO COMPILE SHADER");
 			LOG(fileName);
 			//std::cout << "ERROR:[SHADER]:FAILED_TO_COMPILE_SHADER: " << fileName << std::endl;
