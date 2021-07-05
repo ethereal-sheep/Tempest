@@ -28,24 +28,24 @@ namespace Tempest
 
 				if (ImGui::BeginMenu("Project"))
 				{
-					if (ImGui::MenuItem(ICON_FA_FILE_MEDICAL " New", "Ctrl+N", false));
+					if (ImGui::MenuItem(ICON_FA_FILE_MEDICAL " New", "Ctrl+N", false)){}
 
-					if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "", false));
-					if (ImGui::BeginMenu(ICON_FA_BOX_OPEN " Open Recent"));
-					if (ImGui::MenuItem(ICON_FA_SAVE " Save", "Ctrl+S", false));
+					if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "", false)){}
+					if (ImGui::BeginMenu(ICON_FA_BOX_OPEN " Open Recent")){}
+					if (ImGui::MenuItem(ICON_FA_SAVE " Save", "Ctrl+S", false)){}
 
-					if (ImGui::MenuItem(ICON_FA_FILE_EXCEL " Close", "", false));
-
-					UI::PaddedSeparator(1.f);
-					if (ImGui::MenuItem(ICON_FA_FILE_EXPORT " Export", "Ctrl+Shift+S", false)) ;
-					UI::PaddedSeparator(1.f);
-
-					if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Import Asset", "", false));
+					if (ImGui::MenuItem(ICON_FA_FILE_EXCEL " Close", "", false)){}
 
 					UI::PaddedSeparator(1.f);
+					if (ImGui::MenuItem(ICON_FA_FILE_EXPORT " Export", "Ctrl+Shift+S", false)){}
+					UI::PaddedSeparator(1.f);
 
-					if (ImGui::MenuItem(ICON_FA_ARROW_LEFT " Back to Main Menu", "", false));
-					if (ImGui::MenuItem(ICON_FA_DOOR_OPEN " Exit", "", false));
+					if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Import Asset", "", false)){}
+
+					UI::PaddedSeparator(1.f);
+
+					if (ImGui::MenuItem(ICON_FA_ARROW_LEFT " Back to Main Menu", "", false)){}
+					if (ImGui::MenuItem(ICON_FA_DOOR_OPEN " Exit", "", false)){}
 
 					
 					ImGui::EndMenu();

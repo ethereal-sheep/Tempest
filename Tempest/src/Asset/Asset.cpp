@@ -146,7 +146,7 @@ namespace Tempest
 	{
 		std::string ext = std::filesystem::path(filePath).extension().string();
 		std::for_each(ext.begin(), ext.end(), [](char& c) {
-			c = ::tolower(c);
+			c = static_cast<char>(::tolower(c));
 		});
 
 		/* hardcoded extension formats uwu */
