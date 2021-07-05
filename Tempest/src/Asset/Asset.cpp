@@ -19,7 +19,7 @@ namespace Tempest
         constexpr std::size_t assetTypeCount = magic_enum::enum_count<AssetType>();
         for (size_t i = 0; i < assetTypeCount; ++i)
         {
-            assets[i] = std::vector<asset_ptr>();
+            assets[i] = tvector<asset_ptr>();
         }
     }
 
@@ -40,7 +40,7 @@ namespace Tempest
 		auto existingAsset = assets_with_name.find(assetName);
 		if (existingAsset != assets_with_name.end())
 		{
-			message = "Asset " + assetName + " has already been laoded, skip loading. ";
+			message = "Asset " + assetName + " has already been loaded, skip loading. ";
 			LOG_INFO(message);
 
 			return existingAsset->second;
@@ -137,9 +137,9 @@ namespace Tempest
 		return std::static_pointer_cast<AudioAsset>(GetAssetByName(assetName));
 	}
 
-	std::vector<asset_ptr> Asset::GetAssetsByType(AssetType assetType) const
+	auto Asset::GetAssetsByType(AssetType assetType) const
 	{
-		return std::vector<asset_ptr>();
+		return make_const_range(assets.at(static_cast<size_t>(assetType)));
 	}
 
 	AssetType Asset::GetAssetTypeFromPath(const std::string& filePath)

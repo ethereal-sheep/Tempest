@@ -3,8 +3,8 @@
 #include "Texture/TextureAsset.h"
 #include "Audio/AudioAsset.h"
 #include "Model/ModelAsset.h"
-#include <vector>
-#include <unordered_map>
+#include "../Core.h"
+#include "Util/range.h"
 
 namespace Tempest
 {
@@ -22,11 +22,11 @@ namespace Tempest
         model_asset_ptr GetModelByName(std::string assetName) const;
         audio_asset_ptr GetAudioByName(std::string assetName) const;
 
-        std::vector<asset_ptr> GetAssetsByType(AssetType assetType) const;
+        auto GetAssetsByType(AssetType assetType) const;
         static AssetType GetAssetTypeFromPath(const std::string& filePath);
 
     private:
-        std::unordered_map<size_t, std::vector<asset_ptr>> assets;
-        std::unordered_map<std::string, asset_ptr> assets_with_name;
+        tmap<size_t, tvector<asset_ptr>> assets; //enum Asset type : texture 
+        tmap<std::string, asset_ptr> assets_with_name;
     };
 }
