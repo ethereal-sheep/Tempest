@@ -26,6 +26,7 @@ namespace Tempest
 				auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get());
 				//Setting up Dynamic RigidBody
 				dynamicRb->setLinearVelocity({ rb.rb_config.linear_velocity.x,rb.rb_config.linear_velocity.y, rb.rb_config.linear_velocity.z });
+				//rb.rb_config.linear_velocity = { dynamicRb->getLinearVelocity().x,  dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z };
 				dynamicRb->setAngularVelocity({ rb.rb_config.angular_velocity.x,rb.rb_config.angular_velocity.y, rb.rb_config.angular_velocity.z });
 				dynamicRb->setLinearDamping(rb.rb_config.linear_damping);
 				dynamicRb->setAngularDamping(rb.rb_config.angular_damping);
@@ -37,7 +38,6 @@ namespace Tempest
 				LOG("{0} Current Velocity [{1}, {2}, {3}]", id, dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
 				LOG("{0} Current Position [{1}, {2}, {3}]", id, dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z);
 			}
-			
 		}
 	}
 	void EditTimeInstance::_render()
