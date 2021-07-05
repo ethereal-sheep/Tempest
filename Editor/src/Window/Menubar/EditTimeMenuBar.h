@@ -62,6 +62,14 @@ namespace Tempest
 					}
 					UI::PaddedSeparator(1.f);
 
+
+					if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Import Asset", "", false))
+					{
+						Service<EventManager>::Get().instant_dispatch<ImportAssetTrigger>();
+					}
+
+					UI::PaddedSeparator(1.f);
+
 					if (ImGui::MenuItem(ICON_FA_ARROW_LEFT " Back to Main Menu", "", false))
 					{
 						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Going back to main menu in 10s...");
