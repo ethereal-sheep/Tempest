@@ -75,7 +75,7 @@ namespace Tempest
 		{
 			physx::PxSceneDesc sceneDesc(physics->getTolerancesScale());
 			sceneDesc.cpuDispatcher = &pcd;
-			sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
+			sceneDesc.gravity = physx::PxVec3(0.0f, 0.f, -9.81f);
 			sceneDesc.filterShader = contactReportFilterShader;
 			sceneDesc.simulationEventCallback = &gContactReportCallback;
 

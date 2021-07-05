@@ -32,8 +32,7 @@ namespace Tempest
 		SHAPE_TYPE type;
 		vec3 shapeData;
 
-		
-		shape(SHAPE_TYPE shape_type = SHAPE_TYPE::BOX, float x = 0.f, float y = 0.f, float z = 0.f) : type{ shape_type }, shapeData{ x,y,z } {}
+		shape(SHAPE_TYPE shape_type = SHAPE_TYPE::NONE, float x = 0.f, float y = 0.f, float z = 0.f) : type{ shape_type }, shapeData{ x,y,z } {}
 	
 		template <typename Archiver>
 		friend Archiver& operator&(Archiver& ar, shape& component)
