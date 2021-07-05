@@ -51,7 +51,8 @@ namespace Tempest
 	{
 		SHAPE_SPHERE,
 		SHAPE_CUBE,
-		SHAPE_PLANE
+		SHAPE_PLANE,
+		SHAPE_ICOSAHEDRON
 	};
 
 	struct RenderPipeline

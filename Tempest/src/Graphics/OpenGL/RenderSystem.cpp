@@ -6,21 +6,22 @@ namespace Tempest
 	{
 		m_Renderer.SetViewport(0, 0, width, height);
 		m_Pipeline.cameras.push_back(Camera{});
-		meshes.emplace(std::pair(Shape::SHAPE_CUBE, Mesh::GenerateIndexedCube(1, 1)));
-		meshes.emplace(std::pair(Shape::SHAPE_SPHERE, Mesh::GenerateIndexedSphere(1, 16, 16)));
-		meshes.emplace(std::pair(Shape::SHAPE_PLANE, Mesh::GenerateIndexedPlane(1, 1)));
+		meshes.emplace(std::pair(Shape::SHAPE_CUBE,			Mesh::GenerateIndexedCube(1, 1)));
+		meshes.emplace(std::pair(Shape::SHAPE_SPHERE,		Mesh::GenerateIndexedSphere(1, 16, 16)));
+		meshes.emplace(std::pair(Shape::SHAPE_PLANE,		Mesh::GenerateIndexedPlane(1, 1)));
+		meshes.emplace(std::pair(Shape::SHAPE_ICOSAHEDRON,	Mesh::GenerateIndexedIcosahedron()));
 
 		Transform transform;
 		transform.position = vec3(-0.5f, 0.f, 0.f);
 		transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
 		transform.scale = vec3(0.1f, 0.1f, 0.1f);
-		Submit(Shape::SHAPE_SPHERE, transform);
+		Submit(Shape::SHAPE_CUBE, transform);
 
 		Transform transform2;
 		transform2.position = vec3(0.5f, 0.f, 0.f);
 		transform2.rotation = quat(0.f, 0.f, 0.f, 0.f);
 		transform2.scale = vec3(0.1f, 0.1f, 0.1f);
-		//SubmitSprite(Shape::SHAPE_CUBE, transform2);
+		Submit(Shape::SHAPE_ICOSAHEDRON, transform2);
 
 		m_Pipeline.m_Debug.vao = &m_LineRenderer.GetVAO();
 		m_Pipeline.m_Debug.indirect = &m_LineRenderer.GetIndirect();
@@ -47,12 +48,17 @@ namespace Tempest
 
 	void RenderSystem::StartFrame()
 	{
-		Line test_line{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.1f, 0.f, 0.f) };
-		Line test_line2{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.1f, 0.f) };
-		Line test_line3{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.1f) };
-		m_LineRenderer.Submit(test_line, glm::vec4(1.f, 0.f, 0.f, 1.f));
-		m_LineRenderer.Submit(test_line2, glm::vec4(0.f, 1.f, 0.f, 1.f));
-		m_LineRenderer.Submit(test_line3, glm::vec4(0.f, 0.f, 1.f, 1.f));
+		glm::vec3 min{ 0.f, 0.f, 0.f };
+		glm::vec3 max{ 0.5f, 0.5f, 0.5f };
+		AABB aabb;
+		aabb.max = max;
+		aabb.min = min;
+		//Line test_line{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.1f, 0.f, 0.f) };
+		//Line test_line2{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.1f, 0.f) };
+		//Line test_line3{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.1f) };
+		m_LineRenderer.Submit(aabb, glm::vec4(1.f, 0.f, 0.f, 1.f));
+		//m_LineRenderer.Submit(test_line2, glm::vec4(0.f, 1.f, 0.f, 1.f));
+		//m_LineRenderer.Submit(test_line3, glm::vec4(0.f, 0.f, 1.f, 1.f));
 
 		m_LineRenderer.SubmitBuffer();
 		m_LineRenderer.ClearBuffer();
