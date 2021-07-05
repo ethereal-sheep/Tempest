@@ -110,7 +110,7 @@ namespace Tempest
 
 		bool fetchResult = scene->fetchResults(true);
 
-		//LOG(">>> {0} contact report ", physx::PxU32(gContactPositions.size()));
+		LOG(">>> {0} contact report ", physx::PxU32(gContactPositions.size()));
 
 		return fetchResult;
 	}
@@ -149,7 +149,7 @@ namespace Tempest
 		{
 			tsptr<PxRigidBody> dynamicBody;
 			dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *newShape, rb_config.density));
-			
+
 			dynamicBody->setLinearDamping(rb_config.linear_damping);
 			dynamicBody->setAngularDamping(rb_config.angular_damping);
 			dynamicBody->setLinearVelocity(PxVec3{rb_config.linear_velocity });
