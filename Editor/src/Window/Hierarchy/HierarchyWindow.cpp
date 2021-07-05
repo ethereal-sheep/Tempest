@@ -36,7 +36,7 @@ namespace Tempest
 						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
 						//auto& position = instance.ecs.get<Components::Transform>(entity).position;
 						rb.shape_data = SHAPE_TYPE::BOX;
-						rb.shape_data.shapeData = { 1, 1, 1 };
+						rb.shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
 						/*rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
 						instance.po.AddActorToScene(rb.internal_rb.get());*/
 						
@@ -51,9 +51,9 @@ namespace Tempest
 						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_SPHERE);
 
 						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
-						//auto& position = instance.ecs.get<Components::Transform>(entity).position;
+						//auto& transform = instance.ecs.get<Components::Transform>(entity);
 						rb.shape_data = SHAPE_TYPE::SPHERE;
-						rb.shape_data.shapeData = { 1, 1, 1 };
+						rb.shape_data.shapeData = { 1.f, 1.f, 1.f };
 						//rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
 						//instance.po.AddActorToScene(rb.internal_rb.get());
 					}
