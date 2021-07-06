@@ -15,6 +15,7 @@
 
 #include "Font.h"
 #include "Graphics/OpenGL/RenderSystem.h"
+#include "Util/GuizmoController.h"
 
 
 
@@ -69,6 +70,7 @@ namespace Tempest
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
+			ImGuizmo::BeginFrame();
 			/*--------------------------------------------------------------------*/
 
 

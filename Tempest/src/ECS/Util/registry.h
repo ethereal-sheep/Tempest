@@ -81,6 +81,7 @@ namespace Tempest
             
             available_pool.push_back(entity);
             entities.erase(entity);
+            return true;
         }
 
 		/**

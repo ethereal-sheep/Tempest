@@ -178,6 +178,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\imgui\ImFileDialog.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\ImGuiFileBrowser.cpp" />
+    <ClCompile Include="src\imgui\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
@@ -186,6 +187,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
+    <ClCompile Include="src\Util\GuizmoController.cpp" />
     <ClCompile Include="src\Util\UIElements.cpp" />
     <ClCompile Include="src\Window\AssetManager\AssetManagerWindow.cpp" />
     <ClCompile Include="src\Window\Diagnostics\DiagnosticsWindow.cpp" />
@@ -202,6 +204,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\imgui\ImFileDialog.h" />
     <ClInclude Include="src\imgui\imgui.h" />
     <ClInclude Include="src\imgui\ImGuiFileBrowser.h" />
+    <ClInclude Include="src\imgui\ImGuizmo.h" />
     <ClInclude Include="src\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="src\imgui\imgui_impl_win32.h" />
     <ClInclude Include="src\imgui\imgui_internal.h" />
@@ -212,6 +215,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\InstanceManager\InstanceConfig.h" />
     <ClInclude Include="src\InstanceManager\InstanceManager.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
+    <ClInclude Include="src\Util\GuizmoController.h" />
     <ClInclude Include="src\Util\Suppress.h" />
     <ClInclude Include="src\Util\UIElements.h" />
     <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h" />
@@ -228,7 +232,6 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Popup\CloseProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\ErrorMsgPopup.h" />
     <ClInclude Include="src\Window\Popup\ExportProjectPopup.h" />
-    <ClInclude Include="src\Window\Popup\ImportAssetPopup.h" />
     <ClInclude Include="src\Window\Popup\NewProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\OpenProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveCurrentBeforeOpenPopup.h" />

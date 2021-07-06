@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "Graphics/OpenGL/RenderSystem.h"
+#include "Util/GuizmoController.h"
 
 namespace Tempest
 {
@@ -25,6 +26,8 @@ namespace Tempest
 				ImGuiWindowFlags_NoSavedSettings |
 				ImGuiWindowFlags_NoBackground 
 				;
+
+			Service<GuizmoController>::Register();
 		}
 
 		void show(Instance& instance) override
@@ -127,10 +130,57 @@ namespace Tempest
 			ImGui::End();
 			ImGui::PopStyleVar(3);
 
+
+			if (instance.selected != INVALID && 
+				instance.ecs.has<tc::Transform>(instance.selected))
+			{
+
+				ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
+				auto& GC = Service<GuizmoController>::Get();
+				auto& cam = Service<RenderSystem>::Get().GetCamera();
+				auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+
+				static ImVec2 Min = { 0, 0 };
+				static ImVec2 Max = { 1600, 900 };
+
+				GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
+
+
+				vec3 tDelta;
+				vec3 rDelta;
+				vec3 sDelta;
+
+				auto mat = 
+					glm::translate(glm::make_vec3(value_ptr(transform.position)))
+					* glm::mat4(transform.rotation)
+					* glm::scale(glm::make_vec3(value_ptr(transform.scale)));
+
+				//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
+				GC.SetTransformMatrix(glm::value_ptr(mat));
+				GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
+				GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
+
+
+
+				GC.Draw();
+
+				//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
+
+				GC.GetDelta(tDelta, rDelta, sDelta);
+
+				if (tDelta.length2() > els::epsilon<float> ||
+					rDelta.length2() > els::epsilon<float>)
+				{
+					//transform
+					transform.position += tDelta;
+					//transform->scale += sDelta;
+				}
+			}
+
+
+
+
 			// change this to instance cam
-
-			
-
 
 
 			// WIP for transparent child window in viewport

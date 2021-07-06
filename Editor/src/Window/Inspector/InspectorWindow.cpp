@@ -1,5 +1,5 @@
 #include "InspectorWindow.h"
-
+#include "Util/GuizmoController.h"
 
 namespace Tempest
 {
@@ -49,6 +49,20 @@ namespace Tempest
 				if (header)
 				{
 					UI::DragFloat3ColorBox("Position", "##TransformPosDrag", ImVec2{ padding , 0.f }, transform->position.data(), 0.f, 0.1f);
+
+					auto& GC = Service<GuizmoController>::Get();
+					if (GC.GetOperation() != GuizmoController::Operation::SCALE)
+					{
+
+						ImGui::Dummy({ padding + 5.f, 0.f });
+						ImGui::SameLine();
+
+						if (ImGui::RadioButton("Local##TransfromGizmoLoc", GC.GetMode() == GuizmoController::Mode::LOCAL))
+							GC.SetMode(GuizmoController::Mode::LOCAL);
+						ImGui::SameLine();
+						if (ImGui::RadioButton("World##TransfromGizmoWorld", GC.GetMode() == GuizmoController::Mode::WORLD))
+							GC.SetMode(GuizmoController::Mode::WORLD);
+					}
 
 					{
 						auto vec = glm::degrees(glm::eulerAngles(transform->rotation));
