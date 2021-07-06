@@ -22,6 +22,7 @@ namespace Tempest
 		void MemoryUsage(Instance& instance);
 		void StatisticalData(Instance& instance);
 		void AllocationHistory(Instance& instance);
+		void Camera(Instance& instance);
 
 		std::vector<float> fps_values;
 		std::vector<float> alloc_values;

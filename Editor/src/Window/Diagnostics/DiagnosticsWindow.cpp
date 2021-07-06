@@ -2,6 +2,7 @@
 #include "Font.h"
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
+#include "Graphics/OpenGL/RenderSystem.h"
 
 namespace Tempest
 {
@@ -24,6 +25,11 @@ namespace Tempest
 				if (ImGui::BeginTabItem("Memory Usage"))
 				{
 					MemoryUsage(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Camera"))
+				{
+					Camera(instance);
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
@@ -152,6 +158,63 @@ namespace Tempest
 		ImGui::Text("Last deallocated address:     %p", mr.last_deallocated_address());
 		ImGui::Text("Last deallocated bytes:       %u", mr.last_deallocated_num_bytes());
 		ImGui::Text("Last deallocated alignment:   %u", mr.last_deallocated_alignment());
+	}
+
+	void DiagnosticsWindow::Camera(Instance& instance)
+	{
+
+		auto& cam = Service<RenderSystem>::Get().GetCamera();
+		const auto padding = 80.f;
+		{
+
+			auto pos = cam.GetPosition();
+
+			if(UI::DragFloat3ColorBox("Position", "##CameraPosDrag", ImVec2{ padding , 0.f }, value_ptr(pos), 0.f, 0.1f))
+				cam.SetPosition(pos);
+		}
+
+		{
+			auto rotation = cam.GetQuatRotation();
+			auto eulerDeg = glm::degrees(glm::eulerAngles(rotation));
+
+			if (UI::DragFloat3ColorBox("Rotation", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(eulerDeg), 0.f, 1.f))
+			{
+			}
+		}
+		{
+			auto q = cam.GetQuatRotation();
+
+			float roll = atan2(2.0 * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z);
+			float pitch = asin(-2.0 * (q.x * q.z - q.w * q.y));
+			float yaw = atan2(2.0 * (q.x * q.y + q.w * q.z), q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z);
+
+			ImGui::Selectable("Yaw", false, ImGuiSelectableFlags_Disabled, ImVec2{ 100.f, 0 });
+			ImGui::SameLine();
+			ImGui::PushID("Yaw");
+			if (ImGui::DragFloat(" ", &yaw, 1.f, 0.f, 180.f)) {}
+			ImGui::PopID();
+			ImGui::Selectable("Pitch", false, ImGuiSelectableFlags_Disabled, ImVec2{ 100.f, 0 });
+			ImGui::SameLine();
+			ImGui::PushID("Pitch");
+			if (ImGui::DragFloat(" ", &pitch, 1.f, 0.f, 180.f)) {}
+			ImGui::PopID();
+			ImGui::Selectable("Roll", false, ImGuiSelectableFlags_Disabled, ImVec2{ 100.f, 0 });
+			ImGui::SameLine();
+			ImGui::PushID("Roll");
+			if (ImGui::DragFloat(" ", &roll, 1.f, 0.f, 180.f)) {}
+			ImGui::PopID();
+		}
+		{
+			
+
+			auto up = cam.GetUp();
+			auto front = cam.GetFront();
+			auto left = cam.GetLeft();
+			if (UI::DragFloat3ColorBox("up", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(up), 0.f, 1.f)) {}
+			if (UI::DragFloat3ColorBox("front", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(front), 0.f, 1.f)) {}
+			if (UI::DragFloat3ColorBox("left", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(left), 0.f, 1.f)) {}
+
+		}
 	}
 
 }
