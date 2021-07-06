@@ -109,7 +109,7 @@ namespace Tempest
 					ImGui::TableHeadersRow();
 
 					
-
+					std::vector<Entity> destroyed_list;
 					auto view = instance.ecs.view<tc::Meta>();
 					for (auto id : view)
 					{
@@ -139,8 +139,15 @@ namespace Tempest
 						ImGui::TableSetColumnIndex(4);
 						ImGui::SmallButton(ICON_FA_CROSSHAIRS);
 						ImGui::SameLine();
-						ImGui::SmallButton(ICON_FA_TIMES_CIRCLE);
+						if (ImGui::SmallButton((std::string(ICON_FA_TIMES_CIRCLE) + "##destroyme" + std::to_string(id)).c_str() ))
+						{
+							destroyed_list.emplace_back(id);
+						}
 					}
+
+					for(auto id : destroyed_list)
+						instance.ecs.destroy(id);
+
 
 					ImGui::EndTable();
 				}
