@@ -11,7 +11,7 @@ namespace Tempest
 			auto& rb = ecs.get<Components::Rigidbody>(id);
 			auto& transform = ecs.get<Components::Transform>(id);
 
-			rb.internal_rb = po.createRigidbody(rb.rb_config, rb.shape_data, transform.position, transform.rotation);
+			rb.internal_rb = po.create_actor(rb.rb_config, rb.shape_data, transform.position, transform.rotation, id);
 			po.AddActorToScene(rb.internal_rb.get());
 			//Edit Time is setting the physx properties
 			//auto& position = ecs.get<Components::Transform>(id).position;

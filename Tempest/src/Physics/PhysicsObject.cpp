@@ -9,6 +9,7 @@
 #include "Util/px_make.h"
 #include "Util/px_math.h"
 
+#include <basetsd.h>
 
 // TESTING
 physx::PxRigidStatic* ground_plane = nullptr;
@@ -184,16 +185,23 @@ namespace Tempest
 
 		return actor;
 	}
+	tsptr<physx::PxRigidActor> PhysicsObject::create_actor(rigidbody_config rb_config, shape shape_data, vec3 pos, quat rot, id_t id )
+	{
+		auto actor = createRigidbody(rb_config, shape_data, pos, rot);
+		actor->setName((char*)UIntToPtr(id));
+		return actor;
+	}
 
-	bool PhysicsObject::raycast(vec3 origin, vec3 dir)
+	tpair<id_t, bool> PhysicsObject::raycast(vec3 origin, vec3 dir)
 	{
 		PxRaycastBuffer result;
 		auto max_dist = 100.f;
 		if (scene->raycast(PxVec3{ origin }, PxVec3{ dir }, max_dist, result))
 		{
-			if (result.getAnyHit(0).actor != static_cast<PxRigidActor*>(ground_plane))
-				return true;
+			auto* actor = result.getAnyHit(0).actor;
+			if (actor != static_cast<PxRigidActor*>(ground_plane))
+				return make_tpair(PtrToUint(actor->getName()), true);
 		}
-		return false;
+		return make_tpair(0, false);
 	}
 }

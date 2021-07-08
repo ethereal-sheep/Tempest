@@ -43,8 +43,9 @@ namespace Tempest
 				ImGui::Text("Start: %.3f , %.3f,  %.3f", start.x, start.y, start.z);
 				ImGui::Text("End:   %.3f , %.3f,  %.3f", end.x, end.y, end.z);
 
-				if (instance.po.raycast(els::to_vec3(cam.GetPosition()), els::to_vec3(lRayDir_world)))
-					ImGui::Text("HIT!");
+				auto [id, check] = instance.po.raycast(els::to_vec3(cam.GetPosition()), els::to_vec3(lRayDir_world));
+				if (check)
+					ImGui::Text("HIT! id: %u", id);
 				else
 					ImGui::Text("NO HIT!");
 

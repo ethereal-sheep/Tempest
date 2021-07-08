@@ -182,7 +182,8 @@ namespace Tempest
 		void AddActorToScene(physx::PxRigidActor* actor) {scene->addActor(*actor);}
 
 		// testing
-		bool raycast(vec3 origin, vec3 dir);
+		tsptr<physx::PxRigidActor> create_actor(rigidbody_config rb_config, shape shape_data, vec3 pos, quat rot, id_t id);
+		tpair<id_t, bool> raycast(vec3 origin, vec3 dir);
 	private:
 		px_allocator allocator;
 		px_cpu_dispatcher pcd;
@@ -197,5 +198,7 @@ namespace Tempest
 		// testing
 		float accumulator = 0.0f;
 		float step_size = 1.0f / 60.0f;
+
+		tmap<physx::PxRigidActor*, id_t> lookup;
 	};
 }
