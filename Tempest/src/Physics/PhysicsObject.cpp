@@ -10,6 +10,9 @@
 #include "Util/px_math.h"
 
 
+// TESTING
+physx::PxRigidStatic* ground_plane = nullptr;
+
 namespace Tempest
 {
 	using namespace physx;
@@ -86,8 +89,8 @@ namespace Tempest
 		// create ground plane
 		{
 			PxMaterial* material = physics->createMaterial(0.5f, 0.5f, 0.5f);
-			physx::PxRigidStatic* groundPlane = PxCreatePlane(*physics, PxPlane(0,1,0,0), *material);
-			//scene->addActor(*groundPlane);
+			ground_plane = PxCreatePlane(*physics, PxPlane(0,1,0,0), *material);
+			scene->addActor(*ground_plane);
 		}
 
 		// creates an aggregate with no collision, obviously
@@ -186,6 +189,11 @@ namespace Tempest
 	{
 		PxRaycastBuffer result;
 		auto max_dist = 100.f;
-		return scene->raycast(PxVec3{ origin }, PxVec3{ dir }, max_dist, result);
+		if (scene->raycast(PxVec3{ origin }, PxVec3{ dir }, max_dist, result))
+		{
+			if (result.getAnyHit(0).actor != static_cast<PxRigidActor*>(ground_plane))
+				return true;
+		}
+		return false;
 	}
 }
