@@ -180,6 +180,9 @@ namespace Tempest
 		*/
 
 		void AddActorToScene(physx::PxRigidActor* actor) {scene->addActor(*actor);}
+
+		// testing
+		bool raycast(vec3 origin, vec3 dir);
 	private:
 		px_allocator allocator;
 		px_cpu_dispatcher pcd;

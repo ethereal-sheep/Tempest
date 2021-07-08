@@ -10,6 +10,10 @@
 #include "Window/MainMenu/MainMenu.h"
 #include "Window/AssetManager/AssetManagerWindow.h"
 
+// test window
+#include "Window/Test/test_window.h"
+
+
 // filebrowsers (maybe dn)
 #include "Window/FileBrowser/SaveBrowser.h"
 #include "Window/FileBrowser/NewBrowser.h"
@@ -75,6 +79,7 @@ namespace Tempest
 		instance->register_window<HierarchyWindow>();
 		instance->register_window<InspectorWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
+		instance->register_window<test_window>();
 
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();

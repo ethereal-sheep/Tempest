@@ -203,5 +203,8 @@
     <ClInclude Include="src\Util\GuizmoController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\Test\test_window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

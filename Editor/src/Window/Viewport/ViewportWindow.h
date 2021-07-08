@@ -75,7 +75,7 @@ namespace Tempest
 					{
 						// Do Nothing UwU
 					}
-					else if (io.MouseDown[0])
+					else if (io.MouseDown[0]) // rotate translate
 					{
 						if (!els::is_zero(direction))
 						{
@@ -88,10 +88,12 @@ namespace Tempest
 							auto forward = glm::normalize(glm::cross(glm::vec3{ 0, 1, 0 }, cam.GetLeft())) * io.MouseDelta.y;
 							auto newPos = currentPos + forward * forward_speed;
 							cam.SetPosition(newPos);
-							//cam.Pitch(to_rad(asin(io.MouseDelta.y / els::length(els::vec2{ io.MouseDelta.x, io.MouseDelta.y }))));
 						}
+
+
+
 					}
-					else if (io.MouseDown[1])
+					else if (io.MouseDown[1]) // rotate
 					{
 						if (!els::is_zero(direction))
 						{
@@ -104,6 +106,7 @@ namespace Tempest
 							rot = rot * pitch;
 							cam.SetRotation(rot);
 						}
+
 					}
 					else if (io.MouseDown[2]) // Pan
 					{

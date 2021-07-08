@@ -87,7 +87,7 @@ namespace Tempest
 		{
 			PxMaterial* material = physics->createMaterial(0.5f, 0.5f, 0.5f);
 			physx::PxRigidStatic* groundPlane = PxCreatePlane(*physics, PxPlane(0,1,0,0), *material);
-			scene->addActor(*groundPlane);
+			//scene->addActor(*groundPlane);
 		}
 
 		// creates an aggregate with no collision, obviously
@@ -180,5 +180,12 @@ namespace Tempest
 		newShape->release();
 
 		return actor;
+	}
+
+	bool PhysicsObject::raycast(vec3 origin, vec3 dir)
+	{
+		PxRaycastBuffer result;
+		auto max_dist = 100.f;
+		return scene->raycast(PxVec3{ origin }, PxVec3{ dir }, max_dist, result);
 	}
 }

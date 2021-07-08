@@ -32,6 +32,11 @@ namespace Tempest
 					Camera(instance);
 					ImGui::EndTabItem();
 				}
+				if (ImGui::BeginTabItem("Mouse"))
+				{
+					Mouse(instance);
+					ImGui::EndTabItem();
+				}
 				ImGui::EndTabBar();
 			}
 		}
@@ -162,7 +167,6 @@ namespace Tempest
 
 	void DiagnosticsWindow::Camera(Instance& instance)
 	{
-
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		const auto padding = 80.f;
 		{
@@ -213,6 +217,43 @@ namespace Tempest
 			if (UI::DragFloat3ColorBox("up", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(up), 0.f, 1.f)) {}
 			if (UI::DragFloat3ColorBox("front", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(front), 0.f, 1.f)) {}
 			if (UI::DragFloat3ColorBox("left", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(left), 0.f, 1.f)) {}
+
+		}
+	}
+
+	void DiagnosticsWindow::Mouse(Instance& instance)
+	{
+		{
+			ImGuiIO& io = ImGui::GetIO();
+
+			auto& cam = Service<RenderSystem>::Get().GetCamera();
+
+			//DEBUG FUNTION
+			if (ImGui::IsMousePosValid())
+			{
+				ImGui::Text("ImGui Mouse Position: %.3f , %.3f", io.MousePos.x, io.MousePos.y);
+				glm::vec4 lRayStart_NDC(
+					((float)io.MousePos.x / (float)1600 - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
+					((float)io.MousePos.y / (float)900 - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
+					-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
+					1.0f
+				);
+				glm::vec4 lRayEnd_NDC(
+					((float)io.MousePos.x / (float)1600 - 0.5f) * 2.0f,
+					((float)io.MousePos.y / (float)900 - 0.5f) * -2.0f,
+					0.0,
+					1.0f
+				);
+
+				glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
+				glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world/=lRayStart_world.w;
+				glm::vec4 lRayEnd_world   = M * lRayEnd_NDC  ; lRayEnd_world  /=lRayEnd_world.w;
+				glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
+				lRayDir_world = glm::normalize(lRayDir_world);
+				ImGui::Text("Ray: %.3f , %.3f,  %.3f", lRayDir_world.x, lRayDir_world.y, lRayDir_world.z);
+			}
+			else
+				ImGui::Text("Mouse pos: <INVALID>");
 
 		}
 	}
