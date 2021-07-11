@@ -174,18 +174,18 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Actions\Action.cpp" />
     <ClCompile Include="src\Editor.cpp" />
-    <ClCompile Include="src\imgui\ImFileDialog.cpp" />
-    <ClCompile Include="src\imgui\imgui.cpp" />
-    <ClCompile Include="src\imgui\ImGuiFileBrowser.cpp" />
-    <ClCompile Include="src\imgui\ImGuizmo.cpp" />
-    <ClCompile Include="src\imgui\imgui_demo.cpp" />
-    <ClCompile Include="src\imgui\imgui_draw.cpp" />
-    <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="src\imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="src\imgui\imgui_tables.cpp" />
-    <ClCompile Include="src\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Extern\imgui\ImFileDialog.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui.cpp" />
+    <ClCompile Include="src\Extern\imgui\ImGuizmo.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
     <ClCompile Include="src\Util\GuizmoController.cpp" />
     <ClCompile Include="src\Util\UIElements.cpp" />
@@ -195,23 +195,23 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Inspector\InspectorWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Actions\Action.h" />
+    <ClInclude Include="src\Extern\imgui\imconfig.h" />
+    <ClInclude Include="src\Extern\imgui\ImFileDialog.h" />
+    <ClInclude Include="src\Extern\imgui\imgui.h" />
+    <ClInclude Include="src\Extern\imgui\ImGuizmo.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_internal.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_stdlib.h" />
+    <ClInclude Include="src\Extern\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\Extern\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\Extern\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Fonts\IconsFontaudio.h" />
     <ClInclude Include="src\Fonts\IconsFontAwesome5.h" />
     <ClInclude Include="src\Fonts\IconsForkAwesome.h" />
     <ClInclude Include="src\Fonts\IconsKenney.h" />
-    <ClInclude Include="src\imgui\imconfig.h" />
-    <ClInclude Include="src\imgui\ImFileDialog.h" />
-    <ClInclude Include="src\imgui\imgui.h" />
-    <ClInclude Include="src\imgui\ImGuiFileBrowser.h" />
-    <ClInclude Include="src\imgui\ImGuizmo.h" />
-    <ClInclude Include="src\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="src\imgui\imgui_internal.h" />
-    <ClInclude Include="src\imgui\imgui_stdlib.h" />
-    <ClInclude Include="src\imgui\imstb_rectpack.h" />
-    <ClInclude Include="src\imgui\imstb_textedit.h" />
-    <ClInclude Include="src\imgui\imstb_truetype.h" />
     <ClInclude Include="src\InstanceManager\InstanceConfig.h" />
     <ClInclude Include="src\InstanceManager\InstanceManager.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />

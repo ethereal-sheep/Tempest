@@ -1,6 +1,5 @@
 #pragma once
 #include "Instance/Instance.h"
-#include "imgui/imgui.h"
 #include "Graphics/OpenGL/RenderSystem.h"
 
 namespace Tempest

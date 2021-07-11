@@ -95,6 +95,30 @@ namespace Tempest
 					ImGui::EndMenu();
 				}
 
+				if (ImGui::BeginMenu("Edit"))
+				{
+					if (ImGui::MenuItem(ICON_FA_UNDO " Undo", "Ctrl+Z", nullptr, instance.action_history.HasUndo()))
+					{
+					}
+					if (ImGui::MenuItem(ICON_FA_REDO " Redo", "Ctrl+Y", nullptr, instance.action_history.HasRedo()))
+					{
+					}
+
+					UI::PaddedSeparator(1.f);
+
+					if (ImGui::MenuItem(ICON_FA_COPY " Copy", "   Ctrl+C", nullptr, false))
+					{
+					}
+					if (ImGui::MenuItem(ICON_FA_CLONE " Duplicate", "", nullptr, false))
+					{
+					}
+					if (ImGui::MenuItem(ICON_FA_TRASH " Delete", "   Del", nullptr, false))
+					{
+					}
+
+
+					ImGui::EndMenu();
+				}
 
 
 				ImGui::EndMainMenuBar();

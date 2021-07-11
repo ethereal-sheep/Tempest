@@ -3,6 +3,7 @@
 #include "ECS/ECS.h"
 #include "Graphics/OpenGL/Camera.h"
 #include "WindowManager.h"
+#include "Actions/ActionHistory.h"
 
 namespace Tempest
 {
@@ -57,9 +58,13 @@ namespace Tempest
 			name{ _name },
 			root{ path },
 			memory_object(strategy),
+
 			po(memory_object.get()),
 			ecs(memory_object.get()),
-			window_manager(memory_object.get()) {}
+
+			action_history(memory_object.get()),
+			window_manager(memory_object.get())
+		{}
 
 	public:
 		virtual ~Instance() = 0 {}
@@ -167,8 +172,10 @@ namespace Tempest
 	public:
 		PhysicsObject po;
 		ECS ecs;
-		WindowManager window_manager;
 		Camera cam;
+
+		ActionHistory action_history;
+		WindowManager window_manager;
 
 		
 		Entity selected = INVALID;

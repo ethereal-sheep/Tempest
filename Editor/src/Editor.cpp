@@ -8,8 +8,8 @@
 #include <iostream>
 #include <thread>
 
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_impl_win32.h"
+#include "Extern/imgui/imgui_impl_opengl3.h"
+#include "Extern/imgui/imgui_impl_win32.h"
 
 #include "InstanceManager/InstanceManager.h"
 

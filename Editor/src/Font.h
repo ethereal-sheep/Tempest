@@ -4,11 +4,10 @@
 #include "Fonts/IconsForkAwesome.h"
 #include "Fonts/IconsKenney.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
-#include "imgui/imgui_stdlib.h"
-#include "imgui/ImGuiFileBrowser.h"
-#include "imgui/ImFileDialog.h"
+#include "Extern/imgui/imgui.h"
+#include "Extern/imgui/imgui_internal.h"
+#include "Extern/imgui/imgui_stdlib.h"
+#include "Extern/imgui/ImFileDialog.h"
 
 
 

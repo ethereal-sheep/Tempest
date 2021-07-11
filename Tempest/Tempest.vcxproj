@@ -180,6 +180,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\Actions\Action.cpp" />
+    <ClCompile Include="src\Actions\ActionHistory.cpp" />
     <ClCompile Include="src\Asset\Asset.cpp" />
     <ClCompile Include="src\Asset\Audio\AudioAsset.cpp" />
     <ClCompile Include="src\Asset\Model\ModelAsset.cpp" />
@@ -233,6 +235,9 @@
     <ClCompile Include="src\Serializer\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Actions\Action.h" />
+    <ClInclude Include="src\Actions\ActionHistory.h" />
+    <ClInclude Include="src\Actions\IAction.h" />
     <ClInclude Include="src\Application\AppHandler.h" />
     <ClInclude Include="src\Application\Application.h" />
     <ClInclude Include="src\Application\Context.h" />
