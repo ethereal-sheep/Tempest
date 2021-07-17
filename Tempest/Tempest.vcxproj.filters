@@ -533,6 +533,9 @@
     <ClInclude Include="src\Graphics\OpenGL\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\Basics\RenderPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Util\Serializer\Private\Reader.inl">
