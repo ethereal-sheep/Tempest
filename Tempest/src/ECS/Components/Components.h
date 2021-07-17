@@ -4,7 +4,7 @@
 #include "TMath.h"
 #include "ECS\Entity.h"
 #include "Physics/PhysicsObject.h"
-#include "Graphics/OpenGL/RenderPipeline.h"
+#include "Graphics/Basics/RenderSystem.h"
 
 /**
 * @brief 
@@ -202,18 +202,18 @@ namespace Tempest
 		struct Mesh
 		{
 			static const char* get_type() { return "Mesh"; }
-
+		
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, Mesh& component)
 			{
 				ar.StartObject();
-				ar.Member("Shape", component.shape);
+				ar.Member("Code", component.code);
 				return ar.EndObject();
 			}
-
-			Mesh(Shape _shape = Shape::SHAPE_SPHERE) : shape(_shape) {}
-
-			Shape shape;
+		
+			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
+			
+			MeshCode code;
 		};
 	}
 	namespace tc = Tempest::Components;

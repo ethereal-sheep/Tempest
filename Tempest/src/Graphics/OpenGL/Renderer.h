@@ -1,8 +1,8 @@
 #pragma once
 
 #include <glew.h>
-#include "Graphics/OpenGL/IndexBuffer.h"
-#include "Graphics/OpenGL/VertexArray.h"
+#include "Graphics/Basics/IndexBuffer.h"
+#include "Graphics/Basics/VertexArray.h"
 
 namespace Tempest
 {

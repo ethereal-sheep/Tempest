@@ -1,48 +1,37 @@
 #pragma once
 #include "Core.h"
-#include "BufferLayout"
+#include "Graphics/OpenGL/BufferLayout.h"
 
 namespace Tempest
 {
-    class VertexBuffer : public std::enable_shared_from_this<VertexBuffer>
+    enum struct BufferType
+    {
+        ARRAY_BUFFER,
+        INDIRECT_BUFFER
+    };
+
+    class VertexBuffer //: public std::enable_shared_from_this<VertexBuffer>
     {
         uint32_t m_ID;
         uint32_t m_Size;
+        BufferType m_Type;
 
     public:
-        VertexBuffer(void* data, uint32_t size) : m_Size(size)
-        {
-            // glcreate(m_id)
-        }
-        ~VertexBuffer()
-        {
-            //gldelete(m_id)
-        }
 
-        uint32 GetID() const
-        {
+        VertexBuffer();
+        VertexBuffer(void* data, uint32_t size, BufferType type);
+        ~VertexBuffer();
 
-        }
+        uint32_t GetID() const;
+        uint32_t GetSize() const;
 
-        uint32 GetSize() const
-        {
+        void Bind() const;     
+        void Unbind() const;
 
-        }
+        void SetData(void* data, int size, BufferType type);
+        void SetSubData(void* data, int size, int offset = 0);
+        void SetSubDataResize(void* data, int size);
 
-
-        void Bind() const
-        {
-
-        }
-        
-        void Unbind() const
-        {
-            
-        }
-
-        tsptr<VertexBuffer> GetShared() const
-        {
-            return shared_from_this();
-        };
+        //tsptr<VertexBuffer> GetShared();
     };
 }

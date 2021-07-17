@@ -1,51 +1,25 @@
 #pragma once
+#include <glew.h>
 #include "Core.h"
-#include "VertexArray"
 
 namespace Tempest
 {
-    class IndexBuffer : std::enable_shared_from_this<IndexBuffer>
+    class IndexBuffer //: std::enable_shared_from_this<IndexBuffer>
     {
-        uint32 m_ID;
-        uint32 m_Count;
+        uint32_t m_ID;
+        uint32_t m_Count;
 
     public:
-        IndexBuffer(const uint32* array, uint32 count) : m_Count(count)
-        {
-            // glcreate(m_id)
-            // createindexbuffer
-        }
-        ~IndexBuffer()
-        {
-            // delete
-        }
 
-        uint32 GetID() const
-        {
-            return m_ID;
-        }
+        IndexBuffer(const uint32_t* array, uint32_t count);
+        ~IndexBuffer();
 
-        uint32 GetCount() const
-        {
-            return m_Count;
-        }
+        uint32_t GetID() const;
+        uint32_t GetCount() const;
 
-        void Bind() const
-        {
+        void Bind() const;
+        void Unbind() const;
 
-        }
-
-        void Unbind() const
-        {
-
-        }
-
-
-
-
-        tsptr<IndexBuffer> GetShared()
-        {
-            return shared_from_this();
-        };
+        //tsptr<IndexBuffer> GetShared();
     };
 }

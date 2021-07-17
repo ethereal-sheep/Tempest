@@ -48,7 +48,7 @@ namespace Tempest
 		{
 			auto& mesh = ecs.get<tc::Mesh>(id);
 			auto& transform = ecs.get<tc::Transform>(id);
-			Service<RenderSystem>::Get().Submit(mesh.shape, transform);
+			//Service<RenderSystem>::Get().Submit(mesh.code, transform);
 		}
 
 	}

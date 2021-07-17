@@ -1,56 +1,33 @@
 #pragma once
 #include "Core.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "Graphics/Basics/IndexBuffer.h"
+#include "Graphics/Basics/VertexBuffer.h"
+#include "Graphics/OpenGL/BufferLayout.h"
 
 namespace Tempest
 {
     class VertexArray : std::enable_shared_from_this<VertexArray>
     {
         uint32_t m_ID;
+        uint32_t m_Index = 0;
         tsptr<IndexBuffer> m_IBO;
         tvector<tsptr<VertexBuffer>> m_VBOs;
 
     public:
-        VertexArray(
-            const tsptr<IndexBuffer>& ibo, 
-            const tvector<tsptr<VertexBuffer>>& vbos)
-            : m_IBO(ibo->GetShared())
-        {
-            for(auto& shared : vbos)
-            {
-                m_VBOs.push_back(shared.GetShared());
-            }
-            //glCreate(m_ID)
-            // bind_buffers
-        }
-        ~VertexArray()
-        {
-            // gldelete(m_ID)
-        }
 
-        uint32 GetID() const
-        {
+        VertexArray(const tsptr<IndexBuffer>& ibo, const tvector<tsptr<VertexBuffer>>& vbos, const tvector<BufferLayout>& layouts);
+        ~VertexArray();
 
-        }
+        uint32_t GetID() const;
 
-        void Bind() const
-        {
-            // glbind(m_ID)
-            // m_IBO->Bind();
-        }
-
-        void Unbind() const
-        {
-            // m_IBO->Unbind();
-            // glunbind(m_ID)
-        }
+        void Bind() const;
+        void Unbind() const;
         
-        tsptr<VertexArray> GetShared()
-        {
-            return shared_from_this();
-        };
+        tsptr<VertexArray> GetShared();
 
+    private:
 
+        void AttachVertexBuffer(const VertexBuffer& vbo, const BufferLayout& layout);
+        void AttachIndexBuffer(const IndexBuffer& ibo) const;
     };
 }
