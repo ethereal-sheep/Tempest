@@ -204,4 +204,33 @@ namespace Tempest
 		}
 		return make_tpair(0, false);
 	}
+
+	physx::PxShape* PhysicsObject::CreateActorShape(rigidbody_config rb_config, shape shape_data)
+	{
+		PxShape* newShape = nullptr;
+		PxMaterial* material = physics->createMaterial(rb_config.material.x, rb_config.material.y, rb_config.material.z);
+		LOG("CREATE MATERIAL WITH {0}, {1}, {2}", rb_config.material.x, rb_config.material.y, rb_config.material.z);
+		
+		switch (shape_data.type)
+		{
+		case SHAPE_TYPE::SPHERE:
+			newShape = physics->createShape(physx::PxSphereGeometry(shape_data.shapeData.x), *material);
+			break;
+		case SHAPE_TYPE::CAPSULE:
+		{
+			newShape = physics->createShape(physx::PxCapsuleGeometry(shape_data.shapeData.x, shape_data.shapeData.y), *material);
+		}
+		break;
+		case SHAPE_TYPE::BOX:
+		{
+			newShape = physics->createShape(physx::PxBoxGeometry(shape_data.shapeData.x, shape_data.shapeData.y, shape_data.shapeData.z), *material);
+		}
+		break;
+		case SHAPE_TYPE::NONE:
+			LOG_ERROR("No shape data");
+			break;
+		};
+
+		return newShape;
+	}
 }

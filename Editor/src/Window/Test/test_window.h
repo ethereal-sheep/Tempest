@@ -44,7 +44,16 @@ namespace Tempest
 
 				auto [id, check] = instance.po.raycast(els::to_vec3(cam.GetPosition()), els::to_vec3(lRayDir_world));
 				if (check)
+				{
 					ImGui::Text("HIT! id: %u", id);
+					auto& io = ImGui::GetIO();
+					if (ImGui::IsMouseClicked(0))
+					{
+						instance.selected = id;
+					}
+					
+				}
+					
 				else
 					ImGui::Text("NO HIT!");
 

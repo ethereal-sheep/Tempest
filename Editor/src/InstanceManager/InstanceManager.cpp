@@ -71,6 +71,7 @@ namespace Tempest
 		instance->register_always<BottomRightOverlayPopup>();
 
 		instance->register_always<ShowRecent>();
+		instance->register_window<test_window>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{

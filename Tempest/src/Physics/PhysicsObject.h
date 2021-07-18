@@ -179,8 +179,9 @@ namespace Tempest
 		* scene->addActor(*rb->internal_rb);
 		*/
 
-		void AddActorToScene(physx::PxRigidActor* actor) {scene->addActor(*actor);}
-
+		void AddActorToScene(physx::PxRigidActor* actor) {scene->addActor(*actor); }
+		void RemoveActorFromScene(physx::PxRigidActor* actor) { scene->removeActor(*actor); }
+		physx::PxShape* CreateActorShape(rigidbody_config rb_config, shape shape_data);
 		// testing
 		tsptr<physx::PxRigidActor> create_actor(rigidbody_config rb_config, shape shape_data, vec3 pos, quat rot, id_t id);
 		tpair<id_t, bool> raycast(vec3 origin, vec3 dir);

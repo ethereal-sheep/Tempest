@@ -133,7 +133,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat3(ID, v, v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat3(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 	bool DragFloat2(const char* str, const char* ID, ImVec2 padding, float v[2], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
@@ -143,7 +144,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat2(ID, v, v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat2(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 	bool DragFloat(const char* str, const char* ID, ImVec2 padding, float* val, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
@@ -153,7 +155,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(ID, val, v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(ID, val, v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 	bool DragInt(const char* label, const char* ID, ImVec2 padding, int* v, float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
@@ -163,7 +166,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::DragInt(ID, v, v_speed, v_min, v_max, format, flags);
+		ImGui::DragInt(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 	bool DragInt2(const char* label, const char* ID, ImVec2 padding, int v[2], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
@@ -173,7 +177,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::DragInt2(ID, v, v_speed, v_min, v_max, format, flags);
+		ImGui::DragInt2(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 	bool DragInt3(const char* label, const char* ID, ImVec2 padding, int v[3], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
@@ -183,7 +188,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::DragInt3(ID, v, v_speed, v_min, v_max, format, flags);
+		ImGui::DragInt3(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 	bool DragFloat3ColorBox(const char* str, const char* ID, ImVec2 padding, float v[3], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
@@ -219,7 +225,9 @@ namespace Tempest::UI
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		ImGui::IsItemDeactivatedAfterEdit();
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -239,7 +247,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -304,7 +313,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 
@@ -324,7 +334,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 		ImGui::Dummy({ 0,5 });
@@ -361,7 +372,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -381,7 +393,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -401,7 +414,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("Z").c_str(), &v[2], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("Z").c_str(), &v[2], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 		ImGui::Dummy({ 0,5 });
@@ -438,7 +452,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 
@@ -458,7 +473,8 @@ namespace Tempest::UI
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 		ImGui::Dummy({ 0,5 });
@@ -502,7 +518,8 @@ namespace Tempest::UI
 			ImGui::PopStyleColor();
 			ImGui::PopStyleColor();
 			ImGui::SameLine();
-			bool first = ImGui::DragScalar(std::string(ID).append("first").c_str(), ImGuiDataType_Float, &v[0], v_speed, &v_min, &v_max, format, flags);
+			ImGui::DragScalar(std::string(ID).append("first").c_str(), ImGuiDataType_Float, &v[0], v_speed, &v_min, &v_max, format, flags);
+			bool first = ImGui::IsItemDeactivatedAfterEdit();
 			ImGui::PopItemWidth();
 			// ================================================================
 			ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x + 1.f);
@@ -516,7 +533,8 @@ namespace Tempest::UI
 			ImGui::PopStyleColor(3);
 			ImGui::SameLine();
 			//bool second = ImGui::DragScalar("##secondFloatId", ImGuiDataType_Float, &val.y, 1.f, &v_min, NULL, "%.3f");
-			bool second = ImGui::DragScalar(std::string(ID).append("second").c_str(), ImGuiDataType_Float, &v[1], v_speed, &v_min, &v_max, format, flags);
+			ImGui::DragScalar(std::string(ID).append("second").c_str(), ImGuiDataType_Float, &v[1], v_speed, &v_min, &v_max, format, flags);
+			bool second = ImGui::IsItemDeactivatedAfterEdit();
 			ImGui::PopItemWidth();
 			// ================================================================
 			ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x + 1.f);
@@ -529,7 +547,8 @@ namespace Tempest::UI
 				v[2] = resetValue;
 			ImGui::PopStyleColor(3);
 			ImGui::SameLine();
-			bool third = ImGui::DragScalar(std::string(ID).append("third").c_str(), ImGuiDataType_Float, &v[2], v_speed, &v_min, &v_max, format, flags);
+			ImGui::DragScalar(std::string(ID).append("third").c_str(), ImGuiDataType_Float, &v[2], v_speed, &v_min, &v_max, format, flags);
+			bool third = ImGui::IsItemDeactivatedAfterEdit();
 			ImGui::PopItemWidth();
 			// ================================================================
 
@@ -605,7 +624,8 @@ namespace Tempest::UI
 			ImGui::PopStyleColor();
 			ImGui::PopStyleColor();
 			ImGui::SameLine();
-			bool first = ImGui::DragScalar(std::string(ID).append("first").c_str(), ImGuiDataType_Float, &v[0], v_speed, &v_min, &v_max, format, flags);
+			ImGui::DragScalar(std::string(ID).append("first").c_str(), ImGuiDataType_Float, &v[0], v_speed, &v_min, &v_max, format, flags);
+			bool first = ImGui::IsItemDeactivatedAfterEdit();
 			ImGui::PopItemWidth();
 			// ================================================================
 			ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
@@ -619,7 +639,8 @@ namespace Tempest::UI
 			ImGui::PopStyleColor(3);
 			ImGui::SameLine();
 			//bool second = ImGui::DragScalar("##secondFloatId", ImGuiDataType_Float, &val.y, 1.f, &v_min, NULL, "%.3f");
-			bool second = ImGui::DragScalar(std::string(ID).append("second").c_str(), ImGuiDataType_Float, &v[1], v_speed, &v_min, &v_max, format, flags);
+			ImGui::DragScalar(std::string(ID).append("second").c_str(), ImGuiDataType_Float, &v[1], v_speed, &v_min, &v_max, format, flags);
+			bool second = ImGui::IsItemDeactivatedAfterEdit();
 			ImGui::PopItemWidth();
 			// ================================================================
 			ImGui::Dummy({ 0,5 });
@@ -650,7 +671,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::SliderInt(ID, v, v_min, v_max, format, flags);
+		ImGui::SliderInt(ID, v, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -661,7 +683,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::SliderInt2(ID, v, v_min, v_max, format, flags);
+		ImGui::SliderInt2(ID, v, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -672,7 +695,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::SliderInt3(ID, v, v_min, v_max, format, flags);
+		ImGui::SliderInt3(ID, v, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -683,7 +707,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::SliderFloat(ID, v, v_min, v_max, format, flags);
+		ImGui::SliderFloat(ID, v, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -694,7 +719,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::SliderFloat2(ID, v, v_min, v_max, format, flags);
+		ImGui::SliderFloat2(ID, v, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -705,7 +731,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::SliderFloat3(ID, v, v_min, v_max, format, flags);
+		ImGui::SliderFloat3(ID, v, v_min, v_max, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -716,7 +743,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::InputFloat(ID, v, step, step_fast, format, flags);
+		ImGui::InputFloat(ID, v, step, step_fast, format, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -727,7 +755,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::ColorEdit4(ID, col, flags);
+		ImGui::ColorEdit4(ID, col, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
@@ -738,7 +767,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		valueChange |= ImGui::ColorEdit3(ID, col, flags);
+		ImGui::ColorEdit3(ID, col, flags);
+		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
 		return valueChange;
 	}
 
