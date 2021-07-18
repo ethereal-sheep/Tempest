@@ -24,14 +24,6 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace_back(std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace_back(std::make_unique<Shader>("Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl")); 
         m_Pipeline.m_Cameras.emplace_back(Camera{});
-        //glm::mat4 transform(1.f);
-        //transform = glm::translate(transform, glm::vec3(0.f, 0.5f, 0.f));
-        //transform = glm::rotate(transform, glm::radians(0.f), glm::vec3(1.f, 0.f, 0.f));
-        //transform = glm::rotate(transform, glm::radians(0.f), glm::vec3(0.f, 1.f, 0.f));
-        //transform = glm::rotate(transform, glm::radians(0.f), glm::vec3(0.f, 0.f, 1.f));
-        //transform = glm::scale(transform, glm::vec3(1.f, 1.f, 0.f));
-        //
-        //m_Transforms.push_back(transform);
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
