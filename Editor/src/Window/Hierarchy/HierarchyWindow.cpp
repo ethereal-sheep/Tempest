@@ -29,14 +29,16 @@ namespace Tempest
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Cube";
 
-						instance.ecs.emplace<tc::Transform>(entity);
-						instance.ecs.emplace<tc::Rigidbody>(entity);
+						auto transform = instance.ecs.emplace<tc::Transform>(entity);
+						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
 						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
-
-						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
-						//auto& position = instance.ecs.get<Components::Transform>(entity).position;
-						rb.shape_data = SHAPE_TYPE::BOX;
-						rb.shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
+		
+						rb->shape_data = SHAPE_TYPE::BOX;
+						rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
+						rigidbody_config staticBody;
+						staticBody.is_static = true;
+						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+						instance.po.AddActorToScene(rb->internal_rb.get());
 						/*rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
 						instance.po.AddActorToScene(rb.internal_rb.get());*/
 						
@@ -46,16 +48,18 @@ namespace Tempest
 						auto entity = instance.ecs.create();
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Sphere";
-						instance.ecs.emplace<tc::Transform>(entity);
-						instance.ecs.emplace<tc::Rigidbody>(entity);
+						auto transform = instance.ecs.emplace<tc::Transform>(entity);
+						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
 						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_SPHERE);
 
-						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
+						
 						//auto& transform = instance.ecs.get<Components::Transform>(entity);
-						rb.shape_data = SHAPE_TYPE::SPHERE;
-						rb.shape_data.shapeData = { 1.f, 1.f, 1.f };
-						//rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
-						//instance.po.AddActorToScene(rb.internal_rb.get());
+						rb->shape_data = SHAPE_TYPE::SPHERE;
+						rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
+						rigidbody_config staticBody;
+						staticBody.is_static = true;
+						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+						instance.po.AddActorToScene(rb->internal_rb.get());
 					}
 					if (ImGui::MenuItem("Add Capsule", "", false))
 					{

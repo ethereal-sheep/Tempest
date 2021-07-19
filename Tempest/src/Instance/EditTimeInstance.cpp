@@ -32,21 +32,7 @@ namespace Tempest
 			auto& rb = ecs.get<Components::Rigidbody>(id);
 			auto& transform = ecs.get<Components::Transform>(id);
 			rb.internal_rb.get()->setGlobalPose({ transform.position.x, transform.position.y, transform.position.z });
-			/*if (!rb.rb_config.is_static)
-			{
-				auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get());
-				auto& rbConfig = rb.rb_config;
 
-				rbConfig.linear_velocity = { dynamicRb->getLinearVelocity().x,  dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z };
-				rbConfig.angular_velocity = { dynamicRb->getAngularVelocity().x,  dynamicRb->getAngularVelocity().y, dynamicRb->getAngularVelocity().z };
-				rbConfig.linear_damping = dynamicRb->getLinearDamping();
-				rbConfig.angular_damping = dynamicRb->getAngularDamping();
-
-			}
-
-
-			transform.position = { rb.internal_rb->getGlobalPose().p.x, rb.internal_rb->getGlobalPose().p.y, rb.internal_rb->getGlobalPose().p.z };
-			transform.rotation = math_cast(rb.internal_rb->getGlobalPose().q);*/
 		}
 		
 	}

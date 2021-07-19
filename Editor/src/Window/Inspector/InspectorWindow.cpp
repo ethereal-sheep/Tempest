@@ -71,7 +71,10 @@ namespace Tempest
 							transform->rotation = glm::quat(glm::radians(vec));
 					}
 					static bool uniformScale = false;
-					rb->isDirty |= UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, transform->scale.data(), 1.f, 1.f, 1.f, 1000.f);
+					if(rb)
+						rb->isDirty |= UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, transform->scale.data(), 1.f, 1.f, 1.f, 1000.f);
+					else
+						UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, transform->scale.data(), 1.f, 1.f, 1.f, 1000.f);
 				}
 			}
 
@@ -113,6 +116,7 @@ namespace Tempest
 					}
 					ImGui::PopID();
 					
+					//Collider Size
 					switch (rb->shape_data.type)
 					{
 					case SHAPE_TYPE::SPHERE:
@@ -145,20 +149,20 @@ namespace Tempest
 						switch (rb->shape_data.type)
 						{
 						case SHAPE_TYPE::SPHERE:
-							rb->shape_data.shapeData.x = transform->scale.x + (rb->shape_data.shapeData.x - 1.f);
+							rb->shape_data.shapeData.x = transform->scale.x;
 							break;
 						case SHAPE_TYPE::CAPSULE:
 						{
-							rb->shape_data.shapeData.x = transform->scale.x + (rb->shape_data.shapeData.x - 1.f);
-							rb->shape_data.shapeData.y = 0.5f * transform->scale.y + (rb->shape_data.shapeData.y - 0.5f);
+							rb->shape_data.shapeData.x = transform->scale.x;
+							rb->shape_data.shapeData.y = transform->scale.y / 2;
 							break;
 						}
 						break;
 						case SHAPE_TYPE::BOX:
 						{
-							rb->shape_data.shapeData.x = (rb->shape_data.shapeData.x * transform->scale.x) - ((rb->shape_data.shapeData.x- 0.5f) * transform->scale.x);
-							rb->shape_data.shapeData.y = (rb->shape_data.shapeData.x * transform->scale.y) - ((rb->shape_data.shapeData.y - 0.5f) * transform->scale.y);
-							rb->shape_data.shapeData.z = (rb->shape_data.shapeData.z * transform->scale.z) - ((rb->shape_data.shapeData.z - 0.5f) * transform->scale.z);
+							rb->shape_data.shapeData.x = transform->scale.x / 2;
+							rb->shape_data.shapeData.y = transform->scale.y / 2;
+							rb->shape_data.shapeData.z = transform->scale.z / 2;
 						}
 						break;
 						case SHAPE_TYPE::NONE:
@@ -166,9 +170,11 @@ namespace Tempest
 							break;
 						}
 
+						//Reattach of newShape onto Actor
 						physx::PxShape* newShape = instance.po.CreateActorShape(rbConfig, rb->shape_data);
 						physx::PxShape** curShape = nullptr;
 						const physx::PxU32 numShapes = rb->internal_rb.get()->getNbShapes();
+						
 						for (physx::PxU32 i = 0; i < numShapes; i++)
 						{
 							physx::PxShape* CurShape = NULL;
