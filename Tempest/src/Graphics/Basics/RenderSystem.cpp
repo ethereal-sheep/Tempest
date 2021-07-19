@@ -21,8 +21,10 @@ namespace Tempest
     {
         m_Renderer.SetViewport(0, 0, width, height);
 
-        m_Pipeline.m_Shaders.emplace_back(std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
-        m_Pipeline.m_Shaders.emplace_back(std::make_unique<Shader>("Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl")); 
+        m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::LINE, std::make_unique<Shader>("Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl")); 
+        m_Pipeline.m_Shaders.emplace(ShaderCode::FRAMEBUFFER, std::make_unique<Shader>("Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl"));
+
         m_Pipeline.m_Cameras.emplace_back(Camera{});
     }
 
@@ -58,6 +60,17 @@ namespace Tempest
         Clear();
     }
 
+    void RenderSystem::DrawFrameBuffer()
+    {
+        m_Pipeline.m_Shaders[ShaderCode::FRAMEBUFFER]->Bind();
+        glBindVertexArray(m_FrameBuffer.GetVertexArray());
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_FrameBuffer.GetIndexBuffer());
+        glBindTexture(GL_TEXTURE_2D, m_FrameBuffer.GetColourBuffer());
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
     void RenderSystem::BeginFrame()
     {
         m_Renderer.EnableDepthMask(true);
@@ -69,6 +82,8 @@ namespace Tempest
         
         m_Renderer.ClearColour(0.5f, 0.5f, 0.5f, 0.0f);
         m_Renderer.ClearColorDepth();
+
+        //m_FrameBuffer.Bind();
     }
 
     void RenderSystem::Render()
@@ -81,18 +96,20 @@ namespace Tempest
 
         for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
         {
-            m_Pipeline.m_Shaders[0]->Bind();
-            m_Pipeline.m_Shaders[0]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
-            m_Pipeline.m_Shaders[0]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-            m_Pipeline.m_Shaders[0]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
             m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i]).Bind();
             glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i]).GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
+
+        //m_FrameBuffer.Unbind();
     }
 
     void RenderSystem::EndFrame()
     {
-        Clear();
+        //m_FrameBuffer.Draw();
     }
 
     void RenderSystem::Clear()
@@ -105,7 +122,7 @@ namespace Tempest
         if (width == 0 || height == 0)
             return;
 
-        //m_Framebuffer.Resize(width, height);
+        m_FrameBuffer.Resize(width, height);
         m_Renderer.SetViewport(0, 0, width, height);
 
         for (auto& i : m_Pipeline.m_Cameras)

@@ -1,73 +1,46 @@
 #pragma once
 #include "Core.h"
+#include "Graphics/Basics/VertexArray.h"
+#include "Graphics/OpenGL/Shader.h"
+#include "Util.h"
 
 namespace Tempest
 {
     class FrameBuffer
     {
-        uint32_t m_ID;
+        uint32_t m_ID = 0;
 
         uint32_t m_ColourBuffer = 0; 
         uint32_t m_RenderBuffer = 0;
         
-        uint32_t m_Width;
-        uint32_t m_Height;
+        uint32_t m_Width = 0;
+        uint32_t m_Height = 0;
 
-        VAO vao;
+        //VertexArray m_VAO;
+        uint32_t m_vao = 0;
+        uint32_t m_ibo = 0;
+        uint32_t m_vbo = 0;
+
+        //[[maybe_unused]] tuptr<Shader> m_Shader;
+        Shader m_Shader{ "Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl" };
     public: 
 
-        FrameBuffer(uint32_t width, uint32_t height) 
-        : m_Width(width), m_Height(height)
-        {
-            // create quad
-            // create 
-        }
-        FrameBuffer(uint32_t width, uint32_t height, const Shader& ) 
-        : m_Width(width), m_Height(height)
-        {
-            // create quad
-            // create 
-        }
+        FrameBuffer(uint32_t width, uint32_t height);
+        FrameBuffer(uint32_t width, uint32_t height, tuptr<Shader> shader);
+        FrameBuffer() = delete;
 
-        FrameBuffer()
-        {
-            
-        }
+        uint32_t GetID() const;
+        uint32_t GetWidth() const;
+        uint32_t GetHeight() const;
+        uint32_t GetColourBuffer() const;
+        uint32_t& GetIndexBuffer();
+        uint32_t& GetVertexArray();
+     
+        void Resize(uint32_t width, uint32_t height);
 
-        uint32_t GetID() const
-        {
-            return m_ID;
-        }
+        void Draw();
 
-        uint32_t GetWidth() const
-        {
-            return m_Width;
-        }
-        uint32_t GetHeight() const
-        {
-            return m_Height;
-        }
-
-        uint32_t GetColourBuffer() const
-        {
-            return m_ColourBuffer;
-        }
-        
-
-
-        void Resize()
-        {
-
-        }
-
-        void Bind() const
-        {
-
-        }
-
-        void Unbind() const
-        {
-
-        }
+        void Bind() const;
+        void Unbind() const;
     };
 }

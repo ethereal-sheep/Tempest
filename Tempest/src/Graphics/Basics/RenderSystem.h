@@ -6,6 +6,7 @@
 #include "Graphics/OpenGL/Camera.h"
 #include "ECS/Components/Components.h"
 #include "Graphics/Basics/RenderPipeline.h"
+#include "Graphics/Basics/FrameBuffer.h"
 
 /**
  * @brief 
@@ -27,6 +28,7 @@ namespace Tempest
 
         RenderPipeline m_Pipeline;
         Renderer m_Renderer;
+        FrameBuffer m_FrameBuffer{ 1600, 900 };
 
     public:
 
@@ -37,6 +39,7 @@ namespace Tempest
         
         // rendering api
         void Draw();
+        void DrawFrameBuffer();
         void BeginFrame();
         void Render();
         void EndFrame();

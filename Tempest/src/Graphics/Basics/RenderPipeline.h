@@ -6,9 +6,16 @@
 
 namespace Tempest
 {
+	enum struct ShaderCode
+	{
+		BASIC,
+		FRAMEBUFFER,
+		LINE
+	};
+
 	struct RenderPipeline
 	{
-		using ShaderLibrary = tvector<tuptr<Shader>>;
+		using ShaderLibrary = tmap<ShaderCode, tuptr<Shader>>;
 		using MeshLibrary = tmap<MeshCode, Mesh>;
 
 		tvector<Camera> m_Cameras;
