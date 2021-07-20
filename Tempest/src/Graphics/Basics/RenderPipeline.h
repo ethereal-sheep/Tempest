@@ -16,7 +16,7 @@ namespace Tempest
 	struct RenderPipeline
 	{
 		using ShaderLibrary = tmap<ShaderCode, tuptr<Shader>>;
-		using MeshLibrary = tmap<MeshCode, Mesh>;
+		using MeshLibrary = tmap<MeshCode, tuptr<Mesh>>;
 
 		tvector<Camera> m_Cameras;
 		tvector<glm::mat4> m_Transforms;

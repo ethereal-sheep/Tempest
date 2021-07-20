@@ -50,7 +50,7 @@ namespace Tempest
 
     private:        
         
-        Mesh CreateShape(MeshCode code);
+        tuptr<Mesh> CreateShape(MeshCode code);
         glm::mat4 Model(const Transform& transform);
         void Clear();
     };

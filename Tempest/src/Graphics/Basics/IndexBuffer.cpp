@@ -33,8 +33,8 @@ namespace Tempest
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    //tsptr<IndexBuffer> IndexBuffer::GetShared()
-    //{
-    //    return shared_from_this();
-    //};
+    tsptr<IndexBuffer> IndexBuffer::GetShared()
+    {
+        return shared_from_this();
+    };
 }

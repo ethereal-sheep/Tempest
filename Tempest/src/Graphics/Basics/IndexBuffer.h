@@ -4,7 +4,7 @@
 
 namespace Tempest
 {
-    class IndexBuffer //: std::enable_shared_from_this<IndexBuffer>
+    class IndexBuffer : std::enable_shared_from_this<IndexBuffer>
     {
         uint32_t m_ID;
         uint32_t m_Count;
@@ -20,6 +20,6 @@ namespace Tempest
         void Bind() const;
         void Unbind() const;
 
-        //tsptr<IndexBuffer> GetShared();
+        tsptr<IndexBuffer> GetShared();
     };
 }

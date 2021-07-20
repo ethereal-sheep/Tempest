@@ -5,14 +5,14 @@
 
 namespace Tempest
 {
-    Mesh RenderSystem::CreateShape(MeshCode code)
+    tuptr<Mesh> RenderSystem::CreateShape(MeshCode code)
     {
         switch (code)
         {
-            case MeshCode::CUBE:            return Mesh(GeometryFactory::GenerateIndexedCube(1, 1));
-            case MeshCode::PLANE:           return Mesh(GeometryFactory::GenerateIndexedPlane(1, 1));
-            case MeshCode::SPHERE:          return Mesh(GeometryFactory::GenerateIndexedSphere(1, 16, 16));
-            case MeshCode::ICOSAHEDRON:     return Mesh(GeometryFactory::GenerateIndexedIcosahedron());
+            case MeshCode::CUBE:            return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedCube(1, 1));
+            case MeshCode::PLANE:           return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedPlane(1, 1));
+            case MeshCode::SPHERE:          return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedSphere(1, 16, 16));
+            case MeshCode::ICOSAHEDRON:     return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedIcosahedron());
             default: LOG_ASSERT("Unknown Shape");
         }
     }
@@ -93,6 +93,7 @@ namespace Tempest
         transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
         transform.scale = vec3(0.1f, 0.1f, 0.1f);
         Submit(MeshCode::ICOSAHEDRON, transform);
+        Mesh tempMesh(GeometryFactory::GenerateIndexedCube(1, 1));
 
         for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
         {
@@ -100,8 +101,8 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i]).Bind();
-            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i]).GetVertexCount(), GL_UNSIGNED_INT, NULL);
+            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
+            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
 
         //m_FrameBuffer.Unbind();
@@ -122,7 +123,7 @@ namespace Tempest
         if (width == 0 || height == 0)
             return;
 
-        m_FrameBuffer.Resize(width, height);
+        //m_FrameBuffer.Resize(width, height);
         m_Renderer.SetViewport(0, 0, width, height);
 
         for (auto& i : m_Pipeline.m_Cameras)

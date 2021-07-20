@@ -57,9 +57,11 @@ namespace Tempest
 
     void VertexArray::Unbind() const
     {
-        glBindVertexArray(0);
         m_IBO->Unbind();
+        glBindVertexArray(0);
     }
+
+    // Add move constructors for everyth?
 
     void VertexArray::AttachVertexBuffer(const VertexBuffer& vbo, const BufferLayout& layout)
     {

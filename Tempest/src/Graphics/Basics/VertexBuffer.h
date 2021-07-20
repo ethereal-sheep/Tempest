@@ -10,7 +10,7 @@ namespace Tempest
         INDIRECT_BUFFER
     };
 
-    class VertexBuffer //: public std::enable_shared_from_this<VertexBuffer>
+    class VertexBuffer : public std::enable_shared_from_this<VertexBuffer>
     {
         uint32_t m_ID;
         uint32_t m_Size;
@@ -32,6 +32,6 @@ namespace Tempest
         void SetSubData(void* data, int size, int offset = 0);
         void SetSubDataResize(void* data, int size);
 
-        //tsptr<VertexBuffer> GetShared();
+        tsptr<VertexBuffer> GetShared();
     };
 }

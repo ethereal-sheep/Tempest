@@ -8,6 +8,7 @@ namespace Tempest
 
 		std::shared_ptr<VertexBuffer> m_VBO = std::make_shared<VertexBuffer>();
 		std::shared_ptr<IndexBuffer> m_IBO = std::make_shared<IndexBuffer>(indices.data(), static_cast<uint32_t>(indices.size()));
+
 		tvector<tsptr<VertexBuffer>> vbos;
 		tvector<BufferLayout> layouts;
 		

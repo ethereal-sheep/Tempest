@@ -69,8 +69,8 @@ namespace Tempest
             SetSubData(data, size, 0);
     }
 
-    //tsptr<VertexBuffer> VertexBuffer::GetShared()
-    //{
-    //    return shared_from_this();
-    //};
+    tsptr<VertexBuffer> VertexBuffer::GetShared()
+    {
+        return shared_from_this();
+    };
 }
