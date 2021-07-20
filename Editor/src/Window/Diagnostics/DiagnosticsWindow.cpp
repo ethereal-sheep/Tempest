@@ -165,7 +165,7 @@ namespace Tempest
 		ImGui::Text("Last deallocated alignment:   %u", mr.last_deallocated_alignment());
 	}
 
-	void DiagnosticsWindow::Camera(Instance& instance)
+	void DiagnosticsWindow::Camera(Instance&)
 	{
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		const auto padding = 80.f;
@@ -188,9 +188,9 @@ namespace Tempest
 		{
 			auto q = cam.GetQuatRotation();
 
-			float roll = atan2(2.0 * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z);
-			float pitch = asin(-2.0 * (q.x * q.z - q.w * q.y));
-			float yaw = atan2(2.0 * (q.x * q.y + q.w * q.z), q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z);
+			float roll = (float)atan2(2.0f * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z);
+			float pitch = (float)asin(-2.0f * (q.x * q.z - q.w * q.y));
+			float yaw = (float)atan2(2.0f * (q.x * q.y + q.w * q.z), q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z);
 
 			ImGui::Selectable("Yaw", false, ImGuiSelectableFlags_Disabled, ImVec2{ 100.f, 0 });
 			ImGui::SameLine();
@@ -221,7 +221,7 @@ namespace Tempest
 		}
 	}
 
-	void DiagnosticsWindow::Mouse(Instance& instance)
+	void DiagnosticsWindow::Mouse(Instance& )
 	{
 		{
 			ImGuiIO& io = ImGui::GetIO();

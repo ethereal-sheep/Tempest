@@ -25,11 +25,11 @@ namespace Tempest
 		{
 			return "Add Entity";
 		}
-		void Undo(Instance& instance) override
+		void Undo(Instance& ) override
 		{
 
 		}
-		void Redo(Instance& instance) override
+		void Redo(Instance& ) override
 		{
 
 		}

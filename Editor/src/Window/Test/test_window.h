@@ -46,7 +46,6 @@ namespace Tempest
 				if (check)
 				{
 					ImGui::Text("HIT! id: %u", id);
-					auto& io = ImGui::GetIO();
 					if (ImGui::IsMouseClicked(0))
 					{
 						instance.selected = id;

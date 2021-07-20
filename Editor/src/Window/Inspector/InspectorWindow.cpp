@@ -172,12 +172,11 @@ namespace Tempest
 
 						//Reattach of newShape onto Actor
 						physx::PxShape* newShape = instance.po.CreateActorShape(rbConfig, rb->shape_data);
-						physx::PxShape** curShape = nullptr;
 						const physx::PxU32 numShapes = rb->internal_rb.get()->getNbShapes();
 						
 						for (physx::PxU32 i = 0; i < numShapes; i++)
 						{
-							physx::PxShape* CurShape = NULL;
+							physx::PxShape* CurShape = nullptr;
 							rb->internal_rb.get()->getShapes(&CurShape, 1, i);
 							rb->internal_rb.get()->detachShape(*CurShape);
 						}
