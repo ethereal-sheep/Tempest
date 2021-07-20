@@ -18,22 +18,22 @@ namespace Tempest
 		ProcessMaterialData();
 
 		// nodes and meshes
-		ProcessNodeData(s_Scene->mRootNode);
+		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{});
 	}
 
-	void Model::ProcessNodeData(const aiNode* node)
+	void Model::ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform)
 	{
 		for (id_t i = 0; i < node->mNumMeshes; ++i)
-			ProcessMeshData(s_Scene->mMeshes[node->mMeshes[i]]);
+			ProcessMeshData(s_Scene->mMeshes[node->mMeshes[i]], transform * node->mTransformation);
 		
 		// process all of its children's node meshes (if any)
 		for (id_t i = 0; i < node->mNumChildren; ++i)
 		{
-			ProcessNodeData(node->mChildren[i]);
+			ProcessNodeData(node->mChildren[i], transform * node->mTransformation);
 		}
 	}
 
-	void Model::ProcessMeshData(const aiMesh* mesh)
+	void Model::ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform)
 	{
 		tpair<Vertices, Indices> vi;
 		Vertices& vertex = vi.first;
@@ -47,7 +47,7 @@ namespace Tempest
 			const aiVector3D* pTexCoord = mesh->HasTextureCoords(0) ? &(mesh->mTextureCoords[0][i]) : &zero3D;
 
 			// push back vertex attributes
-			vertex.position.emplace_back(glm::vec3(els::to_vec3(*pPos)));
+			vertex.position.emplace_back(glm::vec3(els::to_vec3(transform * (*pPos))));
 			vertex.normal.emplace_back(glm::vec3(els::to_vec3(*pNormal)));
 			vertex.texCoord.emplace_back(pTexCoord->x, pTexCoord->y);
 

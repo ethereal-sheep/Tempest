@@ -1,5 +1,5 @@
 #include "Instance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
+#include "Graphics/Basics/RenderSystem.h"
 
 namespace Tempest
 {
@@ -21,7 +21,7 @@ namespace Tempest
 		{
 			auto& mesh = ecs.get<tc::Mesh>(id);
 			auto& transform = ecs.get<tc::Transform>(id);
-			Service<RenderSystem>::Get().Submit(mesh.shape, transform);
+			Service<RenderSystem>::Get().Submit(mesh.code, transform);
 		}
 
 	}

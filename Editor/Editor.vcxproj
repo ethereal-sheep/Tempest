@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>

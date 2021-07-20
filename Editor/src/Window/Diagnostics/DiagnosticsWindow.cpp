@@ -2,7 +2,7 @@
 #include "Font.h"
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
-#include "Graphics/OpenGL/RenderSystem.h"
+#include "Graphics/Basics/RenderSystem.h"
 
 namespace Tempest
 {

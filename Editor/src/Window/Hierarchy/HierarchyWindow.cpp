@@ -31,7 +31,7 @@ namespace Tempest
 
 						auto transform = instance.ecs.emplace<tc::Transform>(entity);
 						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
+						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
 		
 						rb->shape_data = SHAPE_TYPE::BOX;
 						rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };

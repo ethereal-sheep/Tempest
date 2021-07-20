@@ -37,8 +37,8 @@ namespace Tempest
 		}
 
 	private:
-		void ProcessNodeData(const aiNode* node);		// Nodes
-		void ProcessMeshData(const aiMesh* mesh);		// Mesh Data
+		void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform);		// Nodes
+		void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform);		// Mesh Data
 		void ProcessMaterialData(); // Material Textures + Material Info
 
 		tpath m_File;

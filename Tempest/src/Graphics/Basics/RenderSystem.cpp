@@ -91,7 +91,7 @@ namespace Tempest
     void RenderSystem::Render()
     {
         Transform transform;
-        transform.position = vec3(-0.5f, 0.f, 0.f);
+        transform.position = vec3(0.f, 0.f, 0.f);
         transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
         transform.scale = vec3(0.1f, 0.1f, 0.1f);
         //Submit(MeshCode::ICOSAHEDRON, transform);
@@ -105,15 +105,17 @@ namespace Tempest
         //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
         //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         //}
-
+        int count = 0;
         for (auto& [mesh, material] : model.GetMeshes())
         {
+            //if (count++ < 3) continue;
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(Model(transform), "ModelMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
             mesh.Bind();
             glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+            //break;
         }
         //m_FrameBuffer.Unbind();
         
