@@ -190,6 +190,7 @@
     <ClCompile Include="src\Graphics\Basics\GeometryFactory.cpp" />
     <ClCompile Include="src\Graphics\Basics\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\Basics\Mesh.cpp" />
+    <ClCompile Include="src\Graphics\Basics\Model.cpp" />
     <ClCompile Include="src\Graphics\Basics\RenderSystem.cpp" />
     <ClCompile Include="src\Graphics\Basics\VertexArray.cpp" />
     <ClCompile Include="src\Graphics\Basics\VertexBuffer.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="src\Graphics\Basics\IndexBuffer.h" />
     <ClInclude Include="src\Graphics\Basics\Material.h" />
     <ClInclude Include="src\Graphics\Basics\Mesh.h" />
+    <ClInclude Include="src\Graphics\Basics\Model.h" />
     <ClInclude Include="src\Graphics\Basics\RenderPipeline.h" />
     <ClInclude Include="src\Graphics\Basics\RenderSystem.h" />
     <ClInclude Include="src\Graphics\Basics\VertexArray.h" />
@@ -270,6 +272,7 @@
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
     <ClInclude Include="src\Graphics\OpenGL\Material.h" />
     <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />
+    <ClInclude Include="src\Graphics\Test\TestModel.h" />
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
     <ClInclude Include="src\Instance\Instance.h" />
     <ClInclude Include="src\Instance\NullTimeInstance.h" />

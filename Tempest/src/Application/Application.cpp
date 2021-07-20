@@ -14,6 +14,7 @@
 #include "Util/Service.h"
 
 #include "Graphics/Basics/RenderSystem.h"
+#include "Graphics/Test/TestModel.h"
 
 namespace Tempest
 {
@@ -36,8 +37,6 @@ namespace Tempest
 		Service<EventManager>::Register();
 
 		OnInit();
-		testing_physics();
-		//testing_physics_7_1();
 	}
 
 
@@ -57,7 +56,6 @@ namespace Tempest
 
 		Service<RenderSystem>::Get().Draw();
 		//Service<RenderSystem>::Get().EndFrame();
-
 		OnRender();
 	}
 

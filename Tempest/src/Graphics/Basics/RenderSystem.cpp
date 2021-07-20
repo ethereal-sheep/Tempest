@@ -1,5 +1,6 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "ECS/Components/Components.h"
+
 #include "Logger/Log.h"
 
 
@@ -26,6 +27,7 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::FRAMEBUFFER, std::make_unique<Shader>("Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl"));
 
         m_Pipeline.m_Cameras.emplace_back(Camera{});
+
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -92,20 +94,29 @@ namespace Tempest
         transform.position = vec3(-0.5f, 0.f, 0.f);
         transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
         transform.scale = vec3(0.1f, 0.1f, 0.1f);
-        Submit(MeshCode::ICOSAHEDRON, transform);
-        Mesh tempMesh(GeometryFactory::GenerateIndexedCube(1, 1));
+        //Submit(MeshCode::ICOSAHEDRON, transform);
+        //
+        //for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
+        //{
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+        //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
+        //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //}
 
-        for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
+        for (auto& [mesh, material] : model.GetMeshes())
         {
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(Model(transform), "ModelMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
-            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+            mesh.Bind();
+            glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
-
         //m_FrameBuffer.Unbind();
+        
     }
 
     void RenderSystem::EndFrame()

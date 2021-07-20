@@ -7,6 +7,7 @@
 #include "ECS/Components/Components.h"
 #include "Graphics/Basics/RenderPipeline.h"
 #include "Graphics/Basics/FrameBuffer.h"
+#include "Graphics/Basics/Model.h"
 
 /**
  * @brief 
@@ -29,6 +30,7 @@ namespace Tempest
         RenderPipeline m_Pipeline;
         Renderer m_Renderer;
         FrameBuffer m_FrameBuffer{ 1600, 900 };
+        Model model{ "Models/Room.fbx" };
 
     public:
 

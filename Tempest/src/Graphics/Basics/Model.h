@@ -1,9 +1,18 @@
 #pragma once
 #include "Graphics/Basics/Material.h"
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#include "Graphics/Basics/Mesh.h"
 #include "Util.h"
+#include "TMath.h"
+#include "Util/Range.h"
 
 namespace Tempest
 {
+	class Mesh;
+	class Material;
+
 	class Model
 	{
 		struct MeshData
@@ -15,52 +24,26 @@ namespace Tempest
 			uint32_t materialIndex;
 		};
 
-		Material mMaterial;
+		//Material mMaterial;
 
 	public:
 
-		Model() = default;
+		Model(const char* file);
 		~Model() = default;
 
-		const aiScene* g_scene = nullptr;
-		Assimp::Importer importer;
-
-
-		void LoadModel(const char* file)
+		auto GetMeshes() const
 		{
-			m_filepath = file;
-
-			CDN_CORE_WARN("Loading model: {0}", m_filepath);
-
-			m_pScene = m_importer.ReadFile(m_filepath,
-				aiProcess_Triangulate |
-				aiProcess_GenSmoothNormals |
-				aiProcess_JoinIdenticalVertices);
-
-			LOG_ASSERT(m_pScene && m_pScene->mRootNode && !(m_pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE),
-				m_importer.GetErrorString());
-
-			/*
-			*	Process Object Node Data
-			*/
-
-			/*
-			*	Process Object Mesh Data { Position, Normal, Tex-Coords, ... }
-			*/
-
-			/*
-			*	Process Object Material Textures { Diffuse Maps, Specular Maps, Emissive Map, ... }
-			*/
-
-			/*
-			*	Process Material Info.. { Diffuse, Specular, Reflectiveness, ... }
-			*/
-
+			return make_const_range(m_Meshes);
 		}
 
-		void ProcessNodeData();		// Nodes
-		void ProcessMeshData();		// Mesh Data
+	private:
+		void ProcessNodeData(const aiNode* node);		// Nodes
+		void ProcessMeshData(const aiMesh* mesh);		// Mesh Data
 		void ProcessMaterialData(); // Material Textures + Material Info
+
+		tpath m_File;
+		tvector<Material> m_Materials;
+		tvector<tpair<Mesh, Material*>> m_Meshes;
 
 	};
 }
