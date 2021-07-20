@@ -1,10 +1,23 @@
 #include "EditTimeInstance.h"
 #include "Graphics/OpenGL/RenderSystem.h"
+#include "ECS/Components/Components.h"
+#include <Physics/Util/px_math.h>
 
 namespace Tempest
 {
 	void EditTimeInstance::_init()
 	{
+		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
+		for (auto id : view)
+		{
+			auto& rb = ecs.get<Components::Rigidbody>(id);
+			auto& transform = ecs.get<Components::Transform>(id);
+			rigidbody_config staticBody;
+			staticBody.is_static = true;
+			rb.internal_rb = po.create_actor(staticBody, rb.shape_data, transform.position, transform.rotation, id);
+			po.AddActorToScene(rb.internal_rb.get());
+
+		}
 	}
 	void EditTimeInstance::_update(float dt)
 	{
@@ -18,41 +31,24 @@ namespace Tempest
 		{
 			auto& rb = ecs.get<Components::Rigidbody>(id);
 			auto& transform = ecs.get<Components::Transform>(id);
-			
-			//Edit Time is setting the physx properties
-			//auto& position = ecs.get<Components::Transform>(id).position;
-			if (!rb.rb_config.is_static)
-			{
-				auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get());
-				//Setting up Dynamic RigidBody
-				dynamicRb->setLinearVelocity({ rb.rb_config.linear_velocity.x,rb.rb_config.linear_velocity.y, rb.rb_config.linear_velocity.z });
-				//rb.rb_config.linear_velocity = { dynamicRb->getLinearVelocity().x,  dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z };
-				dynamicRb->setAngularVelocity({ rb.rb_config.angular_velocity.x,rb.rb_config.angular_velocity.y, rb.rb_config.angular_velocity.z });
-				dynamicRb->setLinearDamping(rb.rb_config.linear_damping);
-				dynamicRb->setAngularDamping(rb.rb_config.angular_damping);
-				dynamicRb->setMass(rb.rb_config.mass);
-				dynamicRb->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !rb.rb_config.gravity);
-				physx::PxRigidBodyExt::updateMassAndInertia(*dynamicRb, rb.rb_config.density);
+			rb.internal_rb.get()->setGlobalPose({ transform.position.x, transform.position.y, transform.position.z });
 
-				transform.position = { dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z };
-				LOG("{0} Current Velocity [{1}, {2}, {3}]", id, dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
-				LOG("{0} Current Position [{1}, {2}, {3}]", id, dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z);
-			}
 		}
+		
 	}
 	void EditTimeInstance::_render()
 	{
-		// move this to instance call when test finish
-		auto view = ecs.view<tc::Mesh>();
-		for (auto id : view)
-		{
-			auto& mesh = ecs.get<tc::Mesh>(id);
-			auto& transform = ecs.get<tc::Transform>(id);
-			//Service<RenderSystem>::Get().Submit(mesh.code, transform);
-		}
 
 	}
 	void EditTimeInstance::_exit()
 	{
+		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
+		for (auto id : view)
+		{
+			auto& rb = ecs.get<Components::Rigidbody>(id);
+			po.RemoveActorFromScene(rb.internal_rb.get());
+			rb.internal_rb = nullptr;
+
+		}
 	}
 }

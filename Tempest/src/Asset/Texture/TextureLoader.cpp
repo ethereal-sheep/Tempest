@@ -9,7 +9,7 @@ namespace Tempest
     {
     }
 
-    TextureResourceData TextureLoader::LoadTexture(const char* filename, bool RGBA)
+    TextureResourceData TextureLoader::LoadTexture(const char*, bool)
     {
         bool success = false;
         int  width = 100;

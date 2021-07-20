@@ -8,13 +8,13 @@
 #include <iostream>
 #include <thread>
 
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_impl_win32.h"
+#include "Extern/imgui/imgui_impl_opengl3.h"
+#include "Extern/imgui/imgui_impl_win32.h"
 
 #include "InstanceManager/InstanceManager.h"
 
 #include "Font.h"
-//#include "Graphics/OpenGL/RenderSystem.h"
+#include "Util/GuizmoController.h"
 
 
 
@@ -69,22 +69,23 @@ namespace Tempest
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
+			ImGuizmo::BeginFrame();
 			/*--------------------------------------------------------------------*/
 
 
-			ImGuiIO& io = ImGui::GetIO();
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGuiWindowFlags window_flags =
-				ImGuiWindowFlags_NoDocking |
-				ImGuiWindowFlags_NoTitleBar |
-				ImGuiWindowFlags_NoCollapse |
-				ImGuiWindowFlags_NoResize |
-				ImGuiWindowFlags_NoMove |
-				ImGuiWindowFlags_NoBringToFrontOnFocus |
-				ImGuiWindowFlags_NoBackground |
-				ImGuiWindowFlags_NoNavFocus;
+			// ImGuiIO& io = ImGui::GetIO();
+			 //ImGuiViewport* viewport = ImGui::GetMainViewport();
+			// ImGuiWindowFlags window_flags =
+			// 	ImGuiWindowFlags_NoDocking |
+			// 	ImGuiWindowFlags_NoTitleBar |
+			// 	ImGuiWindowFlags_NoCollapse |
+			// 	ImGuiWindowFlags_NoResize |
+			// 	ImGuiWindowFlags_NoMove |
+			// 	ImGuiWindowFlags_NoBringToFrontOnFocus |
+			// 	ImGuiWindowFlags_NoBackground |
+			// 	ImGuiWindowFlags_NoNavFocus;
 
-			//auto id = ImGui::DockSpaceOverViewport(viewport, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_KeepAliveOnly);
+			//ImGui::DockSpaceOverViewport(viewport, ImGuiDockNodeFlags_PassthruCentralNode );
 			
 
 			/*ImGui::SetNextWindowPos(viewport->WorkPos);

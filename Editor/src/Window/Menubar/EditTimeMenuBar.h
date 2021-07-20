@@ -12,10 +12,22 @@ namespace Tempest
 		{
 			return "EditTimeMenuBar";
 		}
-		void show(Instance& ) override
+		void show(Instance& instance) override
 		{
+            auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+
 			if(ImGui::BeginMainMenuBar())
 			{
+				
+				if (ImGui::Button(ICON_FA_PLAY, {25.f, 25.f}))
+				{
+					edit.save();
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						edit.get_full_path(), 
+						MemoryStrategy{}, 
+						InstanceType::RUN_TIME);
+				}
+
 				if (ImGui::BeginMenu("Project"))
 				{
 					if (ImGui::MenuItem(ICON_FA_FILE_MEDICAL " New", "Ctrl+N", false))
@@ -77,6 +89,31 @@ namespace Tempest
 					if (ImGui::MenuItem(ICON_FA_DOOR_OPEN " Exit", "", false))
 					{
 						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Application Exiting in 10s...");
+					}
+
+					
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Edit"))
+				{
+					if (ImGui::MenuItem(ICON_FA_UNDO " Undo", "Ctrl+Z", nullptr, instance.action_history.HasUndo()))
+					{
+					}
+					if (ImGui::MenuItem(ICON_FA_REDO " Redo", "Ctrl+Y", nullptr, instance.action_history.HasRedo()))
+					{
+					}
+
+					UI::PaddedSeparator(1.f);
+
+					if (ImGui::MenuItem(ICON_FA_COPY " Copy", "   Ctrl+C", nullptr, false))
+					{
+					}
+					if (ImGui::MenuItem(ICON_FA_CLONE " Duplicate", "", nullptr, false))
+					{
+					}
+					if (ImGui::MenuItem(ICON_FA_TRASH " Delete", "   Del", nullptr, false))
+					{
 					}
 
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "InstanceConfig.h"
 #include "Triggers/Triggers.h"
-#include "imgui/imgui.h"
+#include "Extern/imgui/imgui.h"
 #include "Events/EventManager.h"
 
 namespace Tempest

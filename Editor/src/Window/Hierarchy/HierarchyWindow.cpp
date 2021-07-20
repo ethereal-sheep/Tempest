@@ -29,16 +29,18 @@ namespace Tempest
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Cube";
 
-						instance.ecs.emplace<tc::Transform>(entity);
-						instance.ecs.emplace<tc::Rigidbody>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
-
-						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
-						auto& position = instance.ecs.get<Components::Transform>(entity).position;
-						rb.shape_data = SHAPE_TYPE::BOX;
-						rb.shape_data.shapeData = { 1, 1, 1 };
-						rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
-						instance.po.AddActorToScene(rb.internal_rb.get());
+						auto transform = instance.ecs.emplace<tc::Transform>(entity);
+						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
+						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
+		
+						rb->shape_data = SHAPE_TYPE::BOX;
+						rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
+						rigidbody_config staticBody;
+						staticBody.is_static = true;
+						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+						instance.po.AddActorToScene(rb->internal_rb.get());
+						/*rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
+						instance.po.AddActorToScene(rb.internal_rb.get());*/
 						
 					}
 					if (ImGui::MenuItem("Add Sphere"))
@@ -46,18 +48,20 @@ namespace Tempest
 						auto entity = instance.ecs.create();
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Sphere";
-						instance.ecs.emplace<tc::Transform>(entity);
-						instance.ecs.emplace<tc::Rigidbody>(entity);
+						auto transform = instance.ecs.emplace<tc::Transform>(entity);
+						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
 						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
 
-						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
-						auto& position = instance.ecs.get<Components::Transform>(entity).position;
-						rb.shape_data = SHAPE_TYPE::SPHERE;
-						rb.shape_data.shapeData = { 1, 1, 1 };
-						rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
-						instance.po.AddActorToScene(rb.internal_rb.get());
+						
+						//auto& transform = instance.ecs.get<Components::Transform>(entity);
+						rb->shape_data = SHAPE_TYPE::SPHERE;
+						rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
+						rigidbody_config staticBody;
+						staticBody.is_static = true;
+						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+						instance.po.AddActorToScene(rb->internal_rb.get());
 					}
-					if (ImGui::MenuItem("Add Capsule"))
+					if (ImGui::MenuItem("Add Capsule", "", false))
 					{
 						auto entity = instance.ecs.create();
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
@@ -66,12 +70,12 @@ namespace Tempest
 						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
 						instance.ecs.emplace<tc::Rigidbody>(entity);
 
-						auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
+						/*auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
 						auto& position = instance.ecs.get<Components::Transform>(entity).position;
 						rb.shape_data = SHAPE_TYPE::SPHERE;
 						rb.shape_data.shapeData = { 1, 1, 1 };
 						rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
-						instance.po.AddActorToScene(rb.internal_rb.get());
+						instance.po.AddActorToScene(rb.internal_rb.get());*/
 					}
 
 					ImGui::EndMenu();
@@ -109,7 +113,7 @@ namespace Tempest
 					ImGui::TableHeadersRow();
 
 					
-
+					std::vector<Entity> destroyed_list;
 					auto view = instance.ecs.view<tc::Meta>();
 					for (auto id : view)
 					{
@@ -139,8 +143,15 @@ namespace Tempest
 						ImGui::TableSetColumnIndex(4);
 						ImGui::SmallButton(ICON_FA_CROSSHAIRS);
 						ImGui::SameLine();
-						ImGui::SmallButton(ICON_FA_TIMES_CIRCLE);
+						if (ImGui::SmallButton((std::string(ICON_FA_TIMES_CIRCLE) + "##destroyme" + std::to_string(id)).c_str() ))
+						{
+							destroyed_list.emplace_back(id);
+						}
 					}
+
+					for(auto id : destroyed_list)
+						instance.ecs.destroy(id);
+
 
 					ImGui::EndTable();
 				}

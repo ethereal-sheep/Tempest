@@ -14,6 +14,7 @@
 #include "Math/elsRandom.h"
 #include "Math/elsVectorGeneric.h"
 #include "Math/elsNoise.h"
+#include "Math/elsValue.h"
 
 #include <glm.hpp>
 #include <gtc/type_ptr.hpp>

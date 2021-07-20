@@ -9,6 +9,10 @@
 #include "Util/px_make.h"
 #include "Util/px_math.h"
 
+#include <basetsd.h>
+
+// TESTING
+physx::PxRigidStatic* ground_plane = nullptr;
 
 namespace Tempest
 {
@@ -16,7 +20,7 @@ namespace Tempest
 
 	PxFilterFlags contactReportFilterShader(PxFilterObjectAttributes attributes0, PxFilterData filterData0,
 		PxFilterObjectAttributes attributes1, PxFilterData filterData1,
-		PxPairFlags& pairFlags, const void* constantBlock,PxU32 constantBlockSize)
+		PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
 	{
 		PX_UNUSED(attributes0);
 		PX_UNUSED(attributes1);
@@ -56,8 +60,7 @@ namespace Tempest
 		// init physics (SEE ME FOR GRAVITY SHIT)
 		{
 			physx::PxTolerancesScale scale;
-			scale.length = 100;        // typical length of an object
-			scale.speed = 981;         // typical speed of an object, gravity*1s is a reasonable choice
+
 
 			bool recordMemoryAllocations = true;
 			physics = px_make(PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
@@ -75,12 +78,20 @@ namespace Tempest
 		{
 			physx::PxSceneDesc sceneDesc(physics->getTolerancesScale());
 			sceneDesc.cpuDispatcher = &pcd;
-			sceneDesc.gravity = physx::PxVec3(0.0f, 0.f, -9.81f);
-			sceneDesc.filterShader = contactReportFilterShader;
-			sceneDesc.simulationEventCallback = &gContactReportCallback;
+			sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.f);
+			//sceneDesc.filterShader = contactReportFilterShader;
+			sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+			//sceneDesc.simulationEventCallback = &gContactReportCallback;
 
 			scene = px_make(physics->createScene(sceneDesc));
 			LOG_ASSERT_V(scene, "createScene failed!");
+		}
+
+		// create ground plane
+		{
+			PxMaterial* material = physics->createMaterial(0.5f, 0.5f, 0.5f);
+			ground_plane = PxCreatePlane(*physics, PxPlane(0,1,0,0), *material);
+			scene->addActor(*ground_plane);
 		}
 
 		// creates an aggregate with no collision, obviously
@@ -95,8 +106,8 @@ namespace Tempest
 			return false;
 
 		accumulator -= step_size;
-	//	LOG("DT: {0}", accumulator);
-		// this is threaded
+		//	LOG("DT: {0}", accumulator);
+			// this is threaded
 		scene->simulate(step_size);
 
 
@@ -106,7 +117,7 @@ namespace Tempest
 
 	bool PhysicsObject::fetch()
 	{
-		gContactPositions.clear();
+		//gContactPositions.clear();
 
 		bool fetchResult = scene->fetchResults(true);
 
@@ -115,11 +126,12 @@ namespace Tempest
 		return fetchResult;
 	}
 
-	tsptr<physx::PxRigidActor> PhysicsObject::createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos) const
+	tsptr<physx::PxRigidActor> PhysicsObject::createRigidbody(rigidbody_config rb_config, shape shape_data, vec3 pos, quat rot) const
 	{
-		
+
 		PxShape* newShape = nullptr;
 		PxMaterial* material = physics->createMaterial(rb_config.material.x, rb_config.material.y, rb_config.material.z);
+		LOG("CREATE MATERIAL WITH {0}, {1}, {2}", rb_config.material.x, rb_config.material.y, rb_config.material.z);
 		tsptr<physx::PxRigidActor> actor = nullptr;
 		switch (shape_data.type)
 		{
@@ -130,7 +142,7 @@ namespace Tempest
 		{
 			newShape = physics->createShape(physx::PxCapsuleGeometry(shape_data.shapeData.x, shape_data.shapeData.y), *material);
 		}
-			break;
+		break;
 		case SHAPE_TYPE::BOX:
 		{
 			newShape = physics->createShape(physx::PxBoxGeometry(shape_data.shapeData.x, shape_data.shapeData.y, shape_data.shapeData.z), *material);
@@ -144,28 +156,81 @@ namespace Tempest
 		LOG_ASSERT_V(newShape != nullptr, "cannot create shape");
 
 		if (rb_config.is_static)
+		{
 			actor = px_make(physx::PxCreateStatic(*physics, PxTransform(PxVec3{ pos }), *newShape));
+			actor->setGlobalPose(PxTransform(PxVec3{ pos }, math_cast(rot)));
+		}
 		else
 		{
 			tsptr<PxRigidBody> dynamicBody;
 			dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *newShape, rb_config.density));
-			
+			dynamicBody->setGlobalPose(PxTransform(PxVec3{ pos }, math_cast(rot)));
 			dynamicBody->setLinearDamping(rb_config.linear_damping);
 			dynamicBody->setAngularDamping(rb_config.angular_damping);
-			dynamicBody->setLinearVelocity(PxVec3{rb_config.linear_velocity });
-			dynamicBody->setAngularVelocity(PxVec3{rb_config.angular_velocity });
+			dynamicBody->setLinearVelocity(PxVec3{ rb_config.linear_velocity });
+			dynamicBody->setAngularVelocity(PxVec3{ rb_config.angular_velocity });
+			dynamicBody->setMass(rb_config.mass);
+			dynamicBody->attachShape(*newShape);
+			physx::PxRigidBodyExt::updateMassAndInertia(*dynamicBody, rb_config.density);
+
+
 			actor = dynamicBody;
 		}
-		
+
 		LOG_ASSERT_V(actor != nullptr, "cannot create actor");
 
-		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY,!rb_config.gravity);
+		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !rb_config.gravity);
 
 		newShape->release();
 
 		return actor;
 	}
+	tsptr<physx::PxRigidActor> PhysicsObject::create_actor(rigidbody_config rb_config, shape shape_data, vec3 pos, quat rot, id_t id )
+	{
+		auto actor = createRigidbody(rb_config, shape_data, pos, rot);
+		actor->setName((char*)UIntToPtr(id));
+		return actor;
+	}
 
+	tpair<id_t, bool> PhysicsObject::raycast(vec3 origin, vec3 dir)
+	{
+		PxRaycastBuffer result;
+		auto max_dist = 100.f;
+		if (scene->raycast(PxVec3{ origin }, PxVec3{ dir }, max_dist, result))
+		{
+			auto* actor = result.getAnyHit(0).actor;
+			if (actor != static_cast<PxRigidActor*>(ground_plane))
+				return make_tpair(PtrToUint(actor->getName()), true);
+		}
+		return make_tpair(0, false);
+	}
+
+	physx::PxShape* PhysicsObject::CreateActorShape(rigidbody_config rb_config, shape shape_data)
+	{
+		PxShape* newShape = nullptr;
+		PxMaterial* material = physics->createMaterial(rb_config.material.x, rb_config.material.y, rb_config.material.z);
+		LOG("CREATE MATERIAL WITH {0}, {1}, {2}", rb_config.material.x, rb_config.material.y, rb_config.material.z);
+		
+		switch (shape_data.type)
+		{
+		case SHAPE_TYPE::SPHERE:
+			newShape = physics->createShape(physx::PxSphereGeometry(shape_data.shapeData.x), *material);
+			break;
+		case SHAPE_TYPE::CAPSULE:
+		{
+			newShape = physics->createShape(physx::PxCapsuleGeometry(shape_data.shapeData.x, shape_data.shapeData.y), *material);
+		}
+		break;
+		case SHAPE_TYPE::BOX:
+		{
+			newShape = physics->createShape(physx::PxBoxGeometry(shape_data.shapeData.x, shape_data.shapeData.y, shape_data.shapeData.z), *material);
+		}
+		break;
+		case SHAPE_TYPE::NONE:
+			LOG_ERROR("No shape data");
+			break;
+		};
+
+		return newShape;
+	}
 }
-
-

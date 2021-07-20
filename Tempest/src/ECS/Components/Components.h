@@ -145,7 +145,7 @@ namespace Tempest
 			}
 
 			vec3 position;
-			quat rotation;
+			quat rotation = {1.f, 0.f, 0.f, 0.f};
 			vec3 scale = {1.f, 1.f, 1.f};
 		};
 
@@ -185,7 +185,7 @@ namespace Tempest
 			static const char* get_type() { return "Rigidbody"; }
 			rigidbody_config rb_config;
 			shape shape_data;
-
+			bool isDirty = false;
 			tsptr<physx::PxRigidActor> internal_rb = nullptr;
 
 

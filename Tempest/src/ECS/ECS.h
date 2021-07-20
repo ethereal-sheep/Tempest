@@ -363,6 +363,9 @@ namespace Tempest
 		 */
 		bool destroy(Entity entity)
 		{
+			for (auto& [hash, pool] : component_pools)
+				pool->erase(entity);
+
 			return entity_registry.destroy(entity);
 		}
 

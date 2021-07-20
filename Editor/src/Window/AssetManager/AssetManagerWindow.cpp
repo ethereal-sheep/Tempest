@@ -2,7 +2,7 @@
 
 namespace Tempest
 {
-    void AssetManagerWindow::show(Instance& instance)
+    void AssetManagerWindow::show(Instance&)
     {
         if (ImGui::Begin(window_name(), &visible, window_flags))
         {

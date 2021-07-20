@@ -3,6 +3,7 @@
 #include "ECS/ECS.h"
 #include "Graphics/OpenGL/Camera.h"
 #include "WindowManager.h"
+#include "Actions/ActionHistory.h"
 
 namespace Tempest
 {
@@ -47,19 +48,30 @@ namespace Tempest
 			return path.parent_path();
 		}
 
-		Instance(const string& _name, const tpath& path, MemoryStrategy strategy) :
+		Instance(
+			const tpath& project_path, 
+			const string& _name, 
+			const tpath& path, 
+			MemoryStrategy strategy
+		) :
+			full_path{ project_path },
 			name{ _name },
 			root{ path },
 			memory_object(strategy),
+
 			po(memory_object.get()),
 			ecs(memory_object.get()),
-			window_manager(memory_object.get()) {}
+
+			action_history(memory_object.get()),
+			window_manager(memory_object.get())
+		{}
 
 	public:
 		virtual ~Instance() = 0 {}
 		
 		Instance(const tpath& project_path, MemoryStrategy strategy = {}) :
 			Instance(
+				project_path,
 				get_filename_from_path(project_path),
 				get_rootpath_from_path(project_path),
 				strategy
@@ -136,6 +148,7 @@ namespace Tempest
 
 		const string& get_name() const { return name; }
 		const tpath& get_path() const { return root; }
+		const tpath& get_full_path() const { return full_path; }
 
 	private:
 
@@ -150,6 +163,7 @@ namespace Tempest
 		virtual void _exit() = 0;
 
 	protected:
+		tpath full_path;
 		string name;
 		tpath root;
 
@@ -158,8 +172,10 @@ namespace Tempest
 	public:
 		PhysicsObject po;
 		ECS ecs;
-		WindowManager window_manager;
 		Camera cam;
+
+		ActionHistory action_history;
+		WindowManager window_manager;
 
 		
 		Entity selected = INVALID;
