@@ -7,8 +7,9 @@ namespace Tempest
         : m_Width(width), m_Height(height)
     {
         glEnable(GL_DEPTH_TEST);
-        
-        constexpr float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+
+        constexpr float quadVertices[] = 
+        { 
           // positions   // texCoords
           -1.0f, -1.0f,  0.0f, 0.0f,
            1.0f, -1.0f,  1.0f, 0.0f,
@@ -30,6 +31,7 @@ namespace Tempest
               indices[i + 5] = 0 + offset;
           
               offset += 4;
+              m_Count += 6;
           }
         
         glGenVertexArrays(1, &m_vao);
@@ -42,13 +44,13 @@ namespace Tempest
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
         
-          glCreateBuffers(1, &m_ibo);
-          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-          glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-          
-          glBindVertexArray(0);
+        glCreateBuffers(1, &m_ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
         
-          glGenFramebuffers(1, &m_ID);
+        glBindVertexArray(0);
+        
+        glGenFramebuffers(1, &m_ID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
         
         // create a color attachment texture
@@ -68,6 +70,8 @@ namespace Tempest
         	LOG_CRITICAL("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        Validate();
     }
 
     uint32_t FrameBuffer::GetID() const
@@ -130,6 +134,7 @@ namespace Tempest
         	LOG_CRITICAL("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        Validate();
     }
 
     void FrameBuffer::Draw()
@@ -138,7 +143,7 @@ namespace Tempest
         glBindVertexArray(m_vao);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
         glBindTexture(GL_TEXTURE_2D, m_ColourBuffer);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, m_Count, GL_UNSIGNED_INT, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
@@ -151,5 +156,38 @@ namespace Tempest
     void FrameBuffer::Unbind() const
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDisable(GL_DEPTH_TEST);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void FrameBuffer::Validate() const
+    {
+    	switch (glCheckNamedFramebufferStatus(m_ID, GL_FRAMEBUFFER))
+    	{
+    	case GL_FRAMEBUFFER_COMPLETE:
+            LOG("Framebuffer is complete.");
+    		return;
+    	case GL_FRAMEBUFFER_UNDEFINED:
+    		LOG_CRITICAL("Framebuffer undefined.");
+    		return;
+    	case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+    		LOG_CRITICAL("Framebuffer incomplete attachment.");
+    		return;
+    	case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+    		LOG_CRITICAL("Framebuffer incomplete missing attachment.");
+    		return;
+    	case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+    		LOG_CRITICAL("Framebuffer incomplete draw buffer.");
+    		return;
+    	case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+    		LOG_CRITICAL("Framebuffer incomplete read buffer.");
+    		return;
+    	case GL_FRAMEBUFFER_UNSUPPORTED:
+    		LOG_CRITICAL("Framebuffer unsupported.");
+    		return;
+    	default:;
+    		LOG_CRITICAL("Framebuffer unknown error.");
+    	}
     }
 }

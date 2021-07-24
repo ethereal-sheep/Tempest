@@ -30,7 +30,7 @@ namespace Tempest
         RenderPipeline m_Pipeline;
         Renderer m_Renderer;
         FrameBuffer m_FrameBuffer{ 1600, 900 };
-        Model model{ "Models/Room.fbx" };
+        Model model{ "Models/Sword.fbx" };
 
     public:
 

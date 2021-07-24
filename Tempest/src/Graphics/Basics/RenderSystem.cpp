@@ -24,7 +24,7 @@ namespace Tempest
 
         m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::LINE, std::make_unique<Shader>("Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl")); 
-        m_Pipeline.m_Shaders.emplace(ShaderCode::FRAMEBUFFER, std::make_unique<Shader>("Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl"));
+        //m_Pipeline.m_Shaders.emplace(ShaderCode::FRAMEBUFFER, std::make_unique<Shader>("Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl"));
 
         m_Pipeline.m_Cameras.emplace_back(Camera{});
 
@@ -75,6 +75,8 @@ namespace Tempest
 
     void RenderSystem::BeginFrame()
     {
+        m_FrameBuffer.Bind();
+
         m_Renderer.EnableDepthMask(true);
         m_Renderer.EnableDepthTest(true);
         m_Renderer.EnableCulling(false, false, false);
@@ -83,11 +85,8 @@ namespace Tempest
         //m_Renderer.SetPolygonMode(PolyMode::FILL);
         
         m_Renderer.ClearColour(0.5f, 0.5f, 0.5f, 0.0f);
-        m_Renderer.ClearColorDepth();
-
-        //m_FrameBuffer.Bind();
+        m_Renderer.ClearColorDepth();      
     }
-
     void RenderSystem::Render()
     {
         Transform transform;
@@ -105,6 +104,7 @@ namespace Tempest
         //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
         //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         //}
+
         int count = 0;
         for (auto& [mesh, material] : model.GetMeshes())
         {
@@ -117,13 +117,13 @@ namespace Tempest
             glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
             //break;
         }
-        //m_FrameBuffer.Unbind();
+        m_FrameBuffer.Unbind();
         
     }
 
     void RenderSystem::EndFrame()
     {
-        //m_FrameBuffer.Draw();
+        m_FrameBuffer.Draw();
     }
 
     void RenderSystem::Clear()
@@ -136,7 +136,7 @@ namespace Tempest
         if (width == 0 || height == 0)
             return;
 
-        //m_FrameBuffer.Resize(width, height);
+        m_FrameBuffer.Resize(width, height);
         m_Renderer.SetViewport(0, 0, width, height);
 
         for (auto& i : m_Pipeline.m_Cameras)
