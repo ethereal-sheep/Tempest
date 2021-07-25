@@ -8,6 +8,7 @@
 #include "Graphics/Basics/RenderPipeline.h"
 #include "Graphics/Basics/FrameBuffer.h"
 #include "Graphics/Basics/Model.h"
+#include "Graphics/Basics/LineRenderer.h"
 
 /**
  * @brief 
@@ -25,7 +26,7 @@ namespace Tempest
         using Transform = tc::Transform;
 
         //FontRenderer m_FontR;
-        //LineRenderer m_LineR 
+        LineRenderer m_LineRenderer;
 
         RenderPipeline m_Pipeline;
         Renderer m_Renderer;

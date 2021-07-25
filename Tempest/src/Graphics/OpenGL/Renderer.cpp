@@ -159,6 +159,10 @@ namespace Tempest
 		//	ibo.Unbind();
 		//	indirect.Unbind();
 		//}
+		(void)mode;
+		(void)vao;
+		(void)ibo;
+		(void)indirect;
 	}
 
 	void Renderer::MultiDrawArraysIndirect(DrawMode mode, const VertexArray& vao, const VertexBuffer& indirect)
@@ -171,6 +175,9 @@ namespace Tempest
 		//	vao.Unbind();
 		//	indirect.Unbind();
 		//}
+		(void)mode;
+		(void)vao;
+		(void)indirect;
 	}
 
 	void Renderer::SetViewport(unsigned int x, unsigned int y, unsigned int width, unsigned height) const

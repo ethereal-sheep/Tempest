@@ -11,7 +11,7 @@
 namespace Tempest
 {
 	class Mesh;
-	class Material;
+	struct Material;
 
 	class Model
 	{

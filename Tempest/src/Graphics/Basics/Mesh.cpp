@@ -34,6 +34,22 @@ namespace Tempest
 		m_Count = static_cast<uint32_t>(indices.size());
     }
 
+	Mesh::Mesh(Mesh&& mesh) noexcept
+		: m_VAO{mesh.m_VAO},
+		  m_Code{std::move(mesh.m_Code)},
+		  m_Count{std::move(mesh.m_Count)}
+	{
+	}
+
+	Mesh& Mesh::operator=(Mesh&& mesh) noexcept
+	{
+		std::swap(m_VAO, mesh.m_VAO);
+		std::swap(m_Code, mesh.m_Code);
+		std::swap(m_Count, mesh.m_Count);
+		
+		return *this;
+	}
+
     void Mesh::Bind() const
     {
         m_VAO->Bind();

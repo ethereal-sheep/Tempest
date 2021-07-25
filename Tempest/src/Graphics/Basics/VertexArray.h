@@ -16,6 +16,8 @@ namespace Tempest
     public:
 
         VertexArray(const tsptr<IndexBuffer>& ibo, const tvector<tsptr<VertexBuffer>>& vbos, const tvector<BufferLayout>& layouts);
+        VertexArray(const VertexArray&) = delete;
+        VertexArray& operator=(const VertexArray&) = delete;
         ~VertexArray();
 
         uint32_t GetID() const;

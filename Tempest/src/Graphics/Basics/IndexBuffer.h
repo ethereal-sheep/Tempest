@@ -12,6 +12,8 @@ namespace Tempest
     public:
 
         IndexBuffer(const uint32_t* array, uint32_t count);
+        //IndexBuffer(const IndexBuffer&) = delete;
+        //IndexBuffer& operator=(const IndexBuffer&) = delete;
         ~IndexBuffer();
 
         uint32_t GetID() const;

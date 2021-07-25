@@ -4,6 +4,23 @@
 
 namespace Tempest
 {
+    struct DrawArrayIndirect
+    {
+    	uint32_t vertexCount = 0;
+    	uint32_t instanceCount = 0;
+    	uint32_t baseVertex = 0;
+    	uint32_t baseInstance = 0;
+    };
+    
+    struct DrawElementsIndirect
+    {
+    	uint32_t vertexCount = 0;
+    	uint32_t instanceCount = 0;
+    	uint32_t firstIndex = 0;
+    	uint32_t baseVertex = 0;
+    	uint32_t baseInstance = 0;
+    };
+
     enum struct BufferType
     {
         ARRAY_BUFFER,
@@ -19,6 +36,8 @@ namespace Tempest
     public:
 
         VertexBuffer();
+        //VertexBuffer(const VertexBuffer&) = delete;
+        //VertexBuffer& operator=(const VertexBuffer&) = delete;
         VertexBuffer(void* data, uint32_t size, BufferType type);
         ~VertexBuffer();
 
