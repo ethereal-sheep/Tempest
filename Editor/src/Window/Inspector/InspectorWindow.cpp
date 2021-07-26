@@ -121,7 +121,7 @@ namespace Tempest
 					if (ImGui::Combo("", &collider_current, Colliders, IM_ARRAYSIZE(Colliders)))
 					{
 						rb->shape_data.type = static_cast<SHAPE_TYPE>(collider_current);
-						instance.action_history.Commit<ChangeShape>(instance.selected, static_cast<SHAPE_TYPE>(old_shape), static_cast<SHAPE_TYPE>(collider_current));
+						instance.action_history.Commit<EditShape>(instance.selected, static_cast<SHAPE_TYPE>(old_shape), static_cast<SHAPE_TYPE>(collider_current));
 						rb->isDirty = true;
 					}
 					ImGui::PopID();
