@@ -99,9 +99,11 @@ namespace Tempest
 				{
 					if (ImGui::MenuItem(ICON_FA_UNDO " Undo", "Ctrl+Z", nullptr, instance.action_history.HasUndo()))
 					{
+						instance.action_history.Undo(instance);
 					}
 					if (ImGui::MenuItem(ICON_FA_REDO " Redo", "Ctrl+Y", nullptr, instance.action_history.HasRedo()))
 					{
+						instance.action_history.Redo(instance);
 					}
 
 					UI::PaddedSeparator(1.f);
