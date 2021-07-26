@@ -7,7 +7,7 @@ namespace Tempest
 {
 	void EditTimeInstance::_init()
 	{
-		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
+		auto view = ecs.view<Components::Rigidbody, tc::Transform>(exclude_t<tc::Destroyed>());
 		for (auto id : view)
 		{
 			auto& rb = ecs.get<Components::Rigidbody>(id);
@@ -26,7 +26,7 @@ namespace Tempest
 		// we can do someother shit here
 
 		po.fetch();
-		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
+		auto view = ecs.view<Components::Rigidbody, tc::Transform>(exclude_t<tc::Destroyed>());
 		for (auto id : view)
 		{
 			auto& rb = ecs.get<Components::Rigidbody>(id);

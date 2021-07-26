@@ -96,7 +96,7 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Transform, Meta, Script, Rigidbody, Mesh
+		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh
 		,END
 	};
 
@@ -215,6 +215,18 @@ namespace Tempest
 
 			Shape shape;
 		};
+
+		struct Destroyed 
+		{
+			static const char* get_type() { return "Destroyed"; }
+			
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Destroyed&)
+			{
+				ar.StartObject();
+				return ar.EndObject();
+			}
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -244,6 +256,7 @@ namespace Tempest
 		/* BELOW THIS PLEASE*/
 
 			COMPONENT_CASE(Example);
+			COMPONENT_CASE(Destroyed);
 			COMPONENT_CASE(Transform);
 			COMPONENT_CASE(Meta);
 			COMPONENT_CASE(Script);

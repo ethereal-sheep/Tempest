@@ -1,5 +1,6 @@
 #include "HierarchyWindow.h"
 #include "Events/EventManager.h"
+#include "Actions/Action.h"
 
 namespace Tempest
 {
@@ -39,6 +40,7 @@ namespace Tempest
 						staticBody.is_static = true;
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
+						instance.action_history.Commit<AddEntity>(entity);
 						/*rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
 						instance.po.AddActorToScene(rb.internal_rb.get());*/
 						
@@ -60,6 +62,7 @@ namespace Tempest
 						staticBody.is_static = true;
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
+						instance.action_history.Commit<AddEntity>(entity);
 					}
 					if (ImGui::MenuItem("Add Capsule", "", false))
 					{
@@ -114,7 +117,7 @@ namespace Tempest
 
 					
 					std::vector<Entity> destroyed_list;
-					auto view = instance.ecs.view<tc::Meta>();
+					auto view = instance.ecs.view<tc::Meta>(exclude_t<tc::Destroyed>());
 					for (auto id : view)
 					{
 						auto& meta = instance.ecs.get<tc::Meta>(id);
@@ -149,8 +152,19 @@ namespace Tempest
 						}
 					}
 
-					for(auto id : destroyed_list)
-						instance.ecs.destroy(id);
+					for (auto id : destroyed_list)
+					{
+						if (id == instance.selected)
+							instance.selected = INVALID;
+						instance.ecs.emplace<tc::Destroyed>(id);
+						// remove rb from scene
+						if (auto rb = instance.ecs.get_if<tc::Rigidbody>(id))
+						{
+							instance.po.RemoveActorFromScene(rb->internal_rb.get());
+						}
+
+						instance.action_history.Commit<RemoveEntity>(id);
+					}
 
 
 					ImGui::EndTable();
