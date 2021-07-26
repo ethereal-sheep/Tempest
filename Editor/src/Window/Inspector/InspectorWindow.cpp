@@ -1,6 +1,5 @@
 #include "InspectorWindow.h"
 #include "Util/GuizmoController.h"
-#include "Actions/Action.h"
 
 namespace Tempest
 {
@@ -96,17 +95,10 @@ namespace Tempest
 					UI::DragFloat("A_Damping", "##RbADamping", ImVec2{ padding , 0.f }, &rbConfig.angular_damping, 0.1f, 0.f);
 					UI::DragFloat("Mass", "##RbMass", ImVec2{ padding , 0.f }, &rbConfig.mass, 0.1f, 0.f);
 					UI::DragFloat("Density", "##RbDensity", ImVec2{ padding , 0.f }, &rbConfig.density, 0.1f, 0.f);
-					if (UI::Checkbox("Is_Static", "##RbStatic", ImVec2{ padding , 0.f }, &rbConfig.is_static))
-					{
-						instance.action_history.Commit<EditStatic>(instance.selected, !rbConfig.is_static);
-					}
-					if (UI::Checkbox("Gravity", "##RbGravity", ImVec2{ padding , 0.f }, &rbConfig.gravity))
-					{
-						instance.action_history.Commit<EditGravity>(instance.selected, !rbConfig.gravity);
-					}
+					UI::Checkbox("Is_Static", "##RbStatic", ImVec2{ padding , 0.f }, &rbConfig.is_static);
+					UI::Checkbox("Gravity", "##RbGravity", ImVec2{ padding , 0.f }, &rbConfig.gravity);
 					UI::DragFloat3("Physics Mat", "##RbPhysMat", ImVec2{ padding , 0.f }, rbConfig.material.data(), 0.f, 0.1f);
-					ImGui::SameLine();
-					UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Physics Material: Static Friction, Dynamic Friction, restitution(bounciness)");
+					UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Physics Material: Static Friction , Dynamic Friction, restitution(bounciness)");
 					
 					//bool changed = false;
 					ImGui::PushID("Collider Type");
@@ -114,14 +106,12 @@ namespace Tempest
 					const char* Colliders[] = { "NONE", "SPHERE", "BOX", "CAPSULE" };
 					ImGui::Text("ShapeT");
 					ImGui::SameLine();
-					ImGui::Dummy(ImVec2{ padding - ImGui::GetItemRectSize().x, 0.f  });
+					ImGui::Dummy(ImVec2{ 60.f - ImGui::GetItemRectSize().x, 0.f });
 					ImGui::SameLine();
 					ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth() - 20.f);
-					int old_shape = collider_current;
 					if (ImGui::Combo("", &collider_current, Colliders, IM_ARRAYSIZE(Colliders)))
 					{
 						rb->shape_data.type = static_cast<SHAPE_TYPE>(collider_current);
-						instance.action_history.Commit<EditShape>(instance.selected, static_cast<SHAPE_TYPE>(old_shape), static_cast<SHAPE_TYPE>(collider_current));
 						rb->isDirty = true;
 					}
 					ImGui::PopID();
@@ -155,7 +145,7 @@ namespace Tempest
 					if (rb->isDirty)
 					{
 						LOG("Value Changed");
-						
+
 						switch (rb->shape_data.type)
 						{
 						case SHAPE_TYPE::SPHERE:
@@ -197,6 +187,7 @@ namespace Tempest
 				}
 			}
 		}
+
 		ImGui::End();
 	}
 }
