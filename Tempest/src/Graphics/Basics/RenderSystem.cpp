@@ -1,5 +1,6 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "ECS/Components/Components.h"
+#include "Graphics/OpenGL/Texture.h"
 
 #include "Logger/Log.h"
 
@@ -23,7 +24,7 @@ namespace Tempest
         m_Renderer.SetViewport(0, 0, width, height);
 
         m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
-        //m_Pipeline.m_Shaders.emplace(ShaderCode::LINE, std::make_unique<Shader>("Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl")); 
+        m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl")); 
         //m_Pipeline.m_Shaders.emplace(ShaderCode::FRAMEBUFFER, std::make_unique<Shader>("Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl"));
 
         m_Pipeline.m_Cameras.emplace_back(Camera{});
@@ -75,6 +76,7 @@ namespace Tempest
 
     void RenderSystem::BeginFrame()
     {
+        /*  Line Testing
         glm::vec3 min{ 0.f, 0.f, 0.f };
         glm::vec3 max{ 0.5f, 0.5f, 0.5f };
         AABB aabb;
@@ -82,14 +84,15 @@ namespace Tempest
         aabb.min = min;
         m_LineRenderer.Submit(aabb, glm::vec4(1.f, 0.f, 0.f, 1.f));
 
-        //Line test_line{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.1f, 0.f, 0.f) };
-        //Line test_line2{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.1f, 0.f) };
-        //Line test_line3{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.1f) };
-        //m_LineRenderer.Submit(test_line2, glm::vec4(0.f, 1.f, 0.f, 1.f));
-        //m_LineRenderer.Submit(test_line3, glm::vec4(0.f, 0.f, 1.f, 1.f));
-        //
+        Line test_line{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.1f, 0.f, 0.f) };
+        Line test_line2{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.1f, 0.f) };
+        Line test_line3{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.1f) };
+        m_LineRenderer.Submit(test_line2, glm::vec4(0.f, 1.f, 0.f, 1.f));
+        m_LineRenderer.Submit(test_line3, glm::vec4(0.f, 0.f, 1.f, 1.f));
+        
         m_LineRenderer.SubmitBuffer();
         m_LineRenderer.ClearBuffer();
+        */
 
         m_FrameBuffer.Bind();
 
@@ -106,32 +109,38 @@ namespace Tempest
     void RenderSystem::Render()
     {
         Transform transform;
-        transform.position = vec3(0.f, 0.f, 0.f);
+        transform.position = vec3(-0.25f, -0.1f, 0.f);
         transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
-        transform.scale = vec3(0.1f, 0.1f, 0.1f);
-        Submit(MeshCode::ICOSAHEDRON, transform);
+        transform.scale = vec3(0.5f, 0.5f, 0.5f);
+        Submit(MeshCode::PLANE, transform);
+
+        Texture tex("Assets/test_photo.png");
         
         for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
         {
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+            tex.Bind(0);
+            
             m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
             glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
 
-        //for (auto& [mesh, material] : model.GetMeshes())
-        //{
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(Model(transform), "ModelMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-        //    mesh.Bind();
-        //    glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        //}
+        /*  Model Drawing
+        for (auto& [mesh, material] : model.GetMeshes())
+        {
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(Model(transform), "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+            mesh.Bind();
+            glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        }
+        */
 
-        m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix());
+        //m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix());
 
         m_FrameBuffer.Unbind();       
     }
@@ -143,7 +152,6 @@ namespace Tempest
 
     void RenderSystem::Clear()
     {
-        //m_Pipeline.m_Meshes.clear();
     }
 
     void RenderSystem::Resize(uint32_t width, uint32_t height)

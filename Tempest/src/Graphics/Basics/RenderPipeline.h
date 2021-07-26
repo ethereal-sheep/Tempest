@@ -10,7 +10,8 @@ namespace Tempest
 	{
 		BASIC,
 		FRAMEBUFFER,
-		LINE
+		LINE,
+		TEXTURE
 	};
 
 	struct RenderPipeline

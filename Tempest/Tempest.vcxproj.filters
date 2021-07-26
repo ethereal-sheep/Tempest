@@ -592,5 +592,7 @@
     <None Include="..\Resource\Shaders\FrameBuffer_vertex.glsl" />
     <None Include="..\Resource\Shaders\Line_fragment.glsl" />
     <None Include="..\Resource\Shaders\Line_vertex.glsl" />
+    <None Include="..\Resource\Shaders\Texture_fragment.glsl" />
+    <None Include="..\Resource\Shaders\Texture_vertex.glsl" />
   </ItemGroup>
 </Project>

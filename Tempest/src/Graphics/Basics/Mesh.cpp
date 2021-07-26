@@ -54,7 +54,7 @@ namespace Tempest
     {
         m_VAO->Bind();
     }
-    void Mesh::Unind() const
+    void Mesh::Unbind() const
     {
         m_VAO->Unbind();
     }

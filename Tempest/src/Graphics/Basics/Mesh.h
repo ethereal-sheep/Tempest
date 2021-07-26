@@ -29,7 +29,7 @@ namespace Tempest
         //Mesh(const Mesh& m);
 
         void Bind() const;
-        void Unind() const;
+        void Unbind() const;
 
         uint32_t GetVertexCount() const;
         MeshCode GetMeshCode() const;
