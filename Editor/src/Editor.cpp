@@ -127,6 +127,8 @@ namespace Tempest
 
 		void OnExit() override
 		{
+			instance_manager.exit();
+
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui_ImplWin32_Shutdown();
 			ImGui::DestroyContext();

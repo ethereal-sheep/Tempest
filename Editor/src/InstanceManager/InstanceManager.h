@@ -20,6 +20,16 @@ namespace Tempest
 			}
 		}
 
+		void exit()
+		{
+			if (instance)
+			{
+				instance->OnExit();
+				// reset instance
+				instance.reset(nullptr);
+			}
+		}
+
 		void update(float dt)
 		{
 			switch (current_state)
