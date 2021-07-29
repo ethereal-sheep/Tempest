@@ -37,7 +37,7 @@ namespace Tempest
 			{
 				float col = j / static_cast<float>(slices);
 
-				vertices.position.emplace_back(col - 0.5f, row - 0.5f, 0.f);
+				vertices.position.emplace_back(col * 2 - 1.f, row * 2 - 1.f, 0.f);
 				vertices.texCoord.emplace_back(col, row);
 				vertices.normal.emplace_back(0.f, 0.f, 1.f);
 				vertices.tangent.emplace_back(1.f, 0.f, 0.f);

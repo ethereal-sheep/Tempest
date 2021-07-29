@@ -1,5 +1,6 @@
 #include "Graphics/Basics/Model.h"
 #include "Logger/Log.h"
+#include "Core.h"
 
 namespace Tempest
 {
@@ -100,6 +101,36 @@ namespace Tempest
 			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, m.Emissive.data(), nullptr);
 			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, m.Transparent.data(), nullptr);
 			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, m.Reflective.data(), nullptr);
+
+			for (uint32_t j = 0; j < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); ++j)
+			{
+				aiString path;
+				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, j, &path) == AI_SUCCESS)
+				{
+					string full_path{path.data};
+					string lower_path{path.data};
+					std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+    					[](unsigned char c){ return std::tolower(c); });
+					
+					auto check = lower_path.find("textures");
+					if(check == string::npos) continue;
+					
+					string tex_path = full_path.substr(check, full_path.length());
+					auto file = m_File.parent_path() / tex_path;
+					
+					try
+					{
+						m.DiffuseMap = make_sptr<Texture>(file.string());
+					}
+					catch(const std::exception& e)
+					{
+						LOG_ERROR(e.what());
+					}
+
+					//auto tex_path = m_File.parent_path() / path.data;
+					//m.DiffuseMap = make_sptr<Texture>(tex.path);
+				}	
+			}
 
 		}
 	}

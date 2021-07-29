@@ -225,6 +225,16 @@ namespace Tempest
 		return ortho;
 	}
 
+	glm::mat4 Camera::GetInverseViewProjectionMatrix() const
+	{
+		return glm::inverse(viewProjection);
+	}
+
+	glm::vec2 Camera::GetResolution() const
+	{
+		return glm::vec2(static_cast<float>(window_width), static_cast<float>(window_height));
+	}
+
 	glm::vec3 Camera::ScreenspaceToWorldspace(const glm::vec2& normalized_screenspace) const
 	{
 		glm::vec4 vector = { normalized_screenspace.x,
@@ -278,7 +288,7 @@ namespace Tempest
 				break;
 
 			case 'P':
-				Move(CameraDirection::CAMERA_BACK);
+				Move(CameraDirection::CAMERA_BACK, 1.0f);
 				break;
 
 			case 'J':

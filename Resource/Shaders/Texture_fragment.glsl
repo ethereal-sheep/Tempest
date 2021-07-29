@@ -6,8 +6,9 @@ layout(location = 1) in vec2 vs_tex;
 layout(location = 0) out vec4 fs_color;
 
 uniform sampler2D texture0;
+uniform vec3 DiffuseColour;
 
 void main()
 {
-	fs_color = texture(texture0, vs_tex);
+	fs_color = vec4(DiffuseColour, 1.f);
 }

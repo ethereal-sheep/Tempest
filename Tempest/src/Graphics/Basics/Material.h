@@ -2,6 +2,7 @@
 #include <glew.h>
 #include "TMath.h"
 #include "Util.h"
+#include "Graphics/OpenGL/Texture.h"
 
 namespace Tempest
 {

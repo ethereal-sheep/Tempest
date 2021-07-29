@@ -25,7 +25,7 @@ namespace Tempest
 
         m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl")); 
-        //m_Pipeline.m_Shaders.emplace(ShaderCode::FRAMEBUFFER, std::make_unique<Shader>("Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
 
         m_Pipeline.m_Cameras.emplace_back(Camera{});
 
@@ -111,34 +111,68 @@ namespace Tempest
         Transform transform;
         transform.position = vec3(-0.25f, -0.1f, 0.f);
         transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
-        transform.scale = vec3(0.5f, 0.5f, 0.5f);
+        transform.scale = vec3(m_FrameBuffer.GetWidth()/2, m_FrameBuffer.GetHeight(), 1.f);
         Submit(MeshCode::PLANE, transform);
 
-        Texture tex("Assets/test_photo.png");
-        
-        for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
+        Transform transform2;
+        transform2.position = vec3(-0.25f, -0.1f, 0.f);
+        transform2.rotation = quat(0.f, 0.f, 0.f, 0.f);
+        transform2.scale = vec3(0.1f, 0.1f, 0.1f);
+        Submit(MeshCode::SPHERE, transform2);
+
         {
-            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-            tex.Bind(0);
-            
-            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
-            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetFront(), "front");
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "camera");
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec2f(m_Pipeline.m_Cameras[0].GetResolution(), "resolution");
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "view");
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "proj");
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Transforms[0], "model");
+            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetInverseViewProjectionMatrix(), "ivpm");
+            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->Bind();
+            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+            //glClear(GL_DEPTH_BUFFER_BIT);
         }
 
-        /*  Model Drawing
-        for (auto& [mesh, material] : model.GetMeshes())
         {
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(Model(transform), "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[1], "ModelMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-            mesh.Bind();
-            glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+
+            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
+            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
-        */
+
+       
+
+        //Texture tex("Assets/test_photo.png");
+        
+        //for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
+        //{
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+        //    
+        //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
+        //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //}
+        //
+        //  //Model Drawing
+        //for (auto& [mesh, material] : model.GetMeshes())
+        //{
+        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->Bind();
+        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(Model(transform), "ModelMatrix");
+        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+        //    if(material->DiffuseMap)
+        //        material->DiffuseMap->Bind(0);
+        //    mesh.Bind();
+        //    glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //}
+        
 
         //m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix());
 

@@ -188,6 +188,7 @@
     <ClCompile Include="src\Asset\Texture\TextureAsset.cpp" />
     <ClCompile Include="src\Asset\Texture\TextureLoader.cpp" />
     <ClCompile Include="src\ECS\Test\test_ecs.cpp" />
+    <ClCompile Include="src\Graphics\Basics\DrawShader.cpp" />
     <ClCompile Include="src\Graphics\Basics\FrameBuffer.cpp" />
     <ClCompile Include="src\Graphics\Basics\GeometryFactory.cpp" />
     <ClCompile Include="src\Graphics\Basics\IndexBuffer.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
     <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
     <ClInclude Include="src\Events\Test\event_test.h" />
+    <ClInclude Include="src\Graphics\Basics\DrawShader.h" />
     <ClInclude Include="src\Graphics\Basics\FrameBuffer.h" />
     <ClInclude Include="src\Graphics\Basics\GeometryFactory.h" />
     <ClInclude Include="src\Graphics\Basics\IndexBuffer.h" />
@@ -371,6 +373,8 @@
     <None Include="..\Resource\Shaders\FrameBuffer_vertex.glsl" />
     <None Include="..\Resource\Shaders\Basic_fragment.glsl" />
     <None Include="..\Resource\Shaders\Basic_vertex.glsl" />
+    <None Include="..\Resource\Shaders\GroundPlane_fragment.glsl" />
+    <None Include="..\Resource\Shaders\GroundPlane_vertex.glsl" />
     <None Include="..\Resource\Shaders\Line_fragment.glsl" />
     <None Include="..\Resource\Shaders\Line_vertex.glsl" />
     <None Include="..\Resource\Shaders\Texture_fragment.glsl" />

@@ -177,6 +177,9 @@
     <ClCompile Include="src\Graphics\Basics\LineRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Basics\DrawShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\AppHandler.h">
@@ -569,6 +572,9 @@
     <ClInclude Include="src\Graphics\Basics\LineRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\Basics\DrawShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Util\Serializer\Private\Reader.inl">
@@ -594,5 +600,7 @@
     <None Include="..\Resource\Shaders\Line_vertex.glsl" />
     <None Include="..\Resource\Shaders\Texture_fragment.glsl" />
     <None Include="..\Resource\Shaders\Texture_vertex.glsl" />
+    <None Include="..\Resource\Shaders\GroundPlane_fragment.glsl" />
+    <None Include="..\Resource\Shaders\GroundPlane_vertex.glsl" />
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@
 #include "Graphics/Basics/FrameBuffer.h"
 #include "Graphics/Basics/Model.h"
 #include "Graphics/Basics/LineRenderer.h"
+#include "Graphics/Basics/DrawShader.h"
 
 /**
  * @brief 
@@ -31,7 +32,7 @@ namespace Tempest
         RenderPipeline m_Pipeline;
         Renderer m_Renderer;
         FrameBuffer m_FrameBuffer{ 1600, 900 };
-        Model model{ "Models/Sword.fbx" };
+        Model model{ "Models/OldCottage.fbx" };
 
     public:
 
