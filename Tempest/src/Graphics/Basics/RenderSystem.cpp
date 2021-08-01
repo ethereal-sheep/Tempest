@@ -109,13 +109,13 @@ namespace Tempest
     void RenderSystem::Render()
     {
         Transform transform;
-        transform.position = vec3(-0.25f, -0.1f, 0.f);
+        transform.position = vec3(0.f, 0.f, 0.f);
         transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
         transform.scale = vec3(m_FrameBuffer.GetWidth()/2, m_FrameBuffer.GetHeight(), 1.f);
         Submit(MeshCode::PLANE, transform);
 
         Transform transform2;
-        transform2.position = vec3(-0.25f, -0.1f, 0.f);
+        transform2.position = vec3(0.f, 0.f, 0.f);
         transform2.rotation = quat(0.f, 0.f, 0.f, 0.f);
         transform2.scale = vec3(0.1f, 0.1f, 0.1f);
         Submit(MeshCode::SPHERE, transform2);
