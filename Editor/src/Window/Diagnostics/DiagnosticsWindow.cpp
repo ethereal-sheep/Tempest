@@ -183,6 +183,7 @@ namespace Tempest
 
 			if (UI::DragFloat3ColorBox("Rotation", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(eulerDeg), 0.f, 1.f))
 			{
+				//cam.SetRotation(eulerDeg);
 			}
 		}
 		{

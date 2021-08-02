@@ -6,6 +6,7 @@ layout(location = 1) in vec3 nearPoint;
 layout(location = 2) in vec3 farPoint;
 layout(location = 3) in mat4 fragView;
 layout(location = 7) in mat4 fragProj;
+in vec3 coord;
 layout(location = 0) out vec4 outColor;
 
 vec4 grid(vec3 fragPos3D, float scale, bool drawAxis) 
@@ -39,5 +40,14 @@ void main()
     float t = -nearPoint.y / (farPoint.y - nearPoint.y);
     vec3 fragPos3D = nearPoint + t * (farPoint - nearPoint);
     gl_FragDepth = computeDepth(fragPos3D);
+
+    float c = (
+		int(round(fragPos3D.x * 5.0)) +
+		int(round(fragPos3D.z * 5.0))
+	) % 2;
+
+	//outColor = vec4(vec3(c/2.0 + 0.3), 1);
+    //outColor = outColor * float(t > 0);
+
     outColor = grid(fragPos3D, 10, true) * float(t > 0);
 }

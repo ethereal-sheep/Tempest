@@ -103,15 +103,15 @@ namespace Tempest
         //m_Renderer.EnableCulling(true, true, true);
         //m_Renderer.SetPolygonMode(PolyMode::FILL);
         
-        m_Renderer.ClearColour(0.5f, 0.5f, 0.5f, 0.0f);
+        m_Renderer.ClearColour(0.4f, 0.5f, 0.6f, 0.0f);
         m_Renderer.ClearColorDepth();      
     }
     void RenderSystem::Render()
     {
         Transform transform;
         transform.position = vec3(0.f, 0.f, 0.f);
-        transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
-        transform.scale = vec3(m_FrameBuffer.GetWidth()/2, m_FrameBuffer.GetHeight(), 1.f);
+        transform.rotation = quat(1.f, 0.f, 0.f, 0.f);
+        transform.scale = vec3(1.f, 1.f, 1.f);
         Submit(MeshCode::PLANE, transform);
 
         Transform transform2;
@@ -134,7 +134,7 @@ namespace Tempest
             glClear(GL_DEPTH_BUFFER_BIT);
         }
 
-        {
+        /*{
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[1], "ModelMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
@@ -142,7 +142,7 @@ namespace Tempest
 
             m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
             glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        }
+        }*/
 
        
 
