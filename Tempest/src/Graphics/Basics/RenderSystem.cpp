@@ -117,7 +117,7 @@ namespace Tempest
         Transform transform2;
         transform2.position = vec3(0.f, 0.f, 0.f);
         transform2.rotation = quat(0.f, 0.f, 0.f, 0.f);
-        transform2.scale = vec3(0.1f, 0.1f, 0.1f);
+        transform2.scale = vec3(1.0f, 1.0f, 1.0f);
         Submit(MeshCode::SPHERE, transform2);
 
         {
@@ -131,7 +131,7 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetInverseViewProjectionMatrix(), "ivpm");
             m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->Bind();
             glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-            //glClear(GL_DEPTH_BUFFER_BIT);
+            glClear(GL_DEPTH_BUFFER_BIT);
         }
 
         {
