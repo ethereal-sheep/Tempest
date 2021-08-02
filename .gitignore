@@ -358,4 +358,5 @@ Build/**
 Build-int/**
 
 !Dep/PhysX/**
+!Dep/assimp/**
 
