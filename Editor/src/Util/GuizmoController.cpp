@@ -22,6 +22,28 @@ namespace Tempest
 				els::value_ptr(m_Transform),
 				els::value_ptr(m_DeltaTransform)
 			);
+
+			switch (m_State)
+			{
+			case Tempest::GuizmoController::State::NOT_IN_USE:
+			{
+				if (ImGuizmo::IsUsing())
+					m_State = State::START_USE;
+				break;
+			}
+			case Tempest::GuizmoController::State::START_USE:
+				m_State = State::IN_USE;
+				break;
+			case Tempest::GuizmoController::State::IN_USE:
+			{
+				if (!ImGuizmo::IsUsing())
+					m_State = State::END_USE;
+				break;
+			}
+			case Tempest::GuizmoController::State::END_USE:
+				m_State = State::NOT_IN_USE;
+				break;
+			}
 		}
 	}
 	void GuizmoController::SetViewportBounds(const els::vec2& pos, const els::vec2& extends)

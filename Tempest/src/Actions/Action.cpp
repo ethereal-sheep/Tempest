@@ -110,4 +110,85 @@ namespace Tempest
             rb->rb_config.is_static = !isStatic;
         }
     }
+
+    /**********************************************************************
+    * EditPosition
+    ***********************************************************************/
+    EditPosition::EditPosition(Entity entity, vec3 oldPos, vec3 newPos)
+        : ID{ entity }, old_position{ oldPos }, new_position{ newPos }
+    {
+    }
+    const char* EditPosition::Name()
+    {
+        return "EditPosition";
+    }
+    void EditPosition::Undo(Instance& instance)
+    {
+        auto& transform = instance.ecs.get<tc::Transform>(ID);
+        transform.position = old_position;
+    }
+
+    void EditPosition::Redo(Instance& instance)
+    {
+        auto& transform = instance.ecs.get<tc::Transform>(ID);
+        transform.position = new_position;
+    }
+
+    /**********************************************************************
+    * EditRotation
+    ***********************************************************************/
+    EditRotation::EditRotation(Entity entity, glm::highp_vec3 oldRotation, glm::highp_vec3 newRotation)
+        : ID{ entity }, old_rotation{ oldRotation }, new_rotation{ newRotation }
+    {
+    }
+
+    const char* EditRotation::Name()
+    {
+        return "EditRotation";
+    }
+    void EditRotation::Undo(Instance& instance)
+    {
+        auto& transform = instance.ecs.get<tc::Transform>(ID);
+        transform.rotation = glm::quat(old_rotation);
+    }
+
+    void EditRotation::Redo(Instance& instance)
+    {
+        auto& transform = instance.ecs.get<tc::Transform>(ID);
+        transform.rotation = glm::quat(new_rotation);;
+    }
+
+    /**********************************************************************
+    * EdiEditScaletRotation
+    ***********************************************************************/
+    EditScale::EditScale(Entity entity, vec3 oldScale, vec3 newScale)
+        : ID{ entity }, old_scale{ oldScale }, new_scale{ newScale }
+    {
+    }
+
+    const char* EditScale::Name()
+    {
+        return "EditScale";
+    }
+    void EditScale::Undo(Instance& instance)
+    {
+        auto& transform = instance.ecs.get<tc::Transform>(ID);
+        transform.scale = old_scale;
+
+        auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+
+        if (rb)
+            rb->isDirty = true;
+    }
+
+    void EditScale::Redo(Instance& instance)
+    {
+        auto& transform = instance.ecs.get<tc::Transform>(ID);
+        transform.scale = new_scale;
+
+        auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+
+        if (rb)
+            rb->isDirty = true;
+    }
 }

@@ -1,5 +1,6 @@
 #include "InspectorWindow.h"
 #include "Util/GuizmoController.h"
+#include <Tempest/src/Actions/Action.h>
 
 namespace Tempest
 {
@@ -52,6 +53,17 @@ namespace Tempest
 					UI::DragFloat3ColorBox("Position", "##TransformPosDrag", ImVec2{ padding , 0.f }, transform->position.data(), 0.f, 0.1f);
 
 					auto& GC = Service<GuizmoController>::Get();
+
+					if (GC.GetOperation() == GuizmoController::Operation::TRANSLATE)
+					{
+						static vec3 prevPos = vec3{ 0,0,0 };
+
+						if (GC.GetState() == GuizmoController::State::START_USE)
+							prevPos = transform->position;
+						else if (GC.GetState() == GuizmoController::State::END_USE)
+							instance.action_history.Commit<EditPosition>(instance.selected, prevPos, transform->position);
+					}
+
 					if (GC.GetOperation() != GuizmoController::Operation::SCALE)
 					{
 
@@ -66,15 +78,40 @@ namespace Tempest
 					}
 
 					{
-						auto vec = glm::degrees(glm::eulerAngles(transform->rotation));
-						if (UI::DragFloat3ColorBox("Rotation", "##TransformRotDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 0.f, 0.1f))
-							transform->rotation = glm::quat(glm::radians(vec));
+						static glm::highp_vec3 prevRot{ 0,0,0 };
+						static bool rotationEdited = false;
+						auto euler = glm::eulerAngles(transform->rotation);
+						if (UI::DragFloat3ColorBox("Rotation", "##TransformRotDrag", ImVec2{ padding , 0.f }, glm::value_ptr(euler), 0.f, 0.1f))
+						{
+							rotationEdited = true;
+
+							transform->rotation = glm::quat(euler);
+							if (ImGui::IsMouseClicked(0))
+								prevRot = euler;
+						}
+
+						else if (rotationEdited && ImGui::IsMouseReleased(0))
+						{
+							rotationEdited = false;
+							instance.action_history.Commit<EditRotation>(instance.selected, prevRot, glm::eulerAngles(transform->rotation));
+						}
 					}
-					static bool uniformScale = false;
-					if(rb)
-						rb->isDirty |= UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, transform->scale.data(), 1.f, 1.f, 1.f, 1000.f);
-					else
-						UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, transform->scale.data(), 1.f, 1.f, 1.f, 1000.f);
+
+					{
+						static bool uniformScale = false;
+						static vec3 newScale = transform->scale;
+						bool UIScaled = false;
+
+						if (UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, newScale.data(), 1.f, 1.f, 1.f, 1000.f))
+						{
+							if (rb)
+								rb->isDirty = true;
+
+							instance.action_history.Commit<EditScale>(instance.selected, transform->scale, newScale);
+							transform->scale = newScale;
+
+						}
+					}
 				}
 			}
 

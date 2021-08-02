@@ -140,6 +140,58 @@ namespace Tempest
 		void Redo(Instance&) override;
 	};
 
+	/************************************************************
+	* Action:	EditPosition
+	* Undo:		Change position to previous vec3
+	* Redo:		Change position to new vec3
+	*************************************************************/
+	class EditPosition final : public IAction
+	{
+		Entity ID;
+		vec3 old_position;
+		vec3 new_position;
 
+	public:
+		EditPosition(Entity entity, vec3 oldPos, vec3 newPos);
+		const char* Name() override;
+		void Undo(Instance& instance) override;
+		void Redo(Instance& instance) override;
+	};
+
+	/************************************************************
+	* Action:	EditRotation
+	* Undo:		Change rotation to previous vec3
+	* Redo:		Change rotation to new vec3
+	*************************************************************/
+	class EditRotation final : public IAction
+	{
+		Entity ID;
+		glm::highp_vec3 old_rotation;
+		glm::highp_vec3 new_rotation;
+
+	public:
+		EditRotation(Entity entity, glm::highp_vec3 oldRotation, glm::highp_vec3 newRotation);
+		const char* Name() override;
+		void Undo(Instance& instance) override;
+		void Redo(Instance& instance) override;
+	};
+
+	/************************************************************
+	* Action:	EditScale
+	* Undo:		Change scale to previous vec3
+	* Redo:		Change scale to new vec3
+	*************************************************************/
+	class EditScale final : public IAction
+	{
+		Entity ID;
+		vec3 old_scale;
+		vec3 new_scale;
+
+	public:
+		EditScale(Entity entity, vec3 oldScale, vec3 newScale);
+		const char* Name() override;
+		void Undo(Instance& instance) override;
+		void Redo(Instance& instance) override;
+	};
 
 }
