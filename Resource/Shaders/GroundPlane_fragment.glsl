@@ -8,8 +8,11 @@ layout(location = 3) in mat4 fragView;
 layout(location = 7) in mat4 fragProj;
 layout(location = 0) out vec4 outColor;
 
-vec4 grid(vec3 fragPos3D, float scale, bool drawAxis) {
-    vec2 coord = fragPos3D.xz * scale;
+vec4 grid(vec3 fragPos3D, float scale, bool drawAxis) 
+{
+    vec2 coord = fragPos3D.xz;
+    coord.x *= 5;
+    coord.y *= 10;
     vec2 derivative = fwidth(coord);
     vec2 grid = abs(fract(coord - 0.5) - 0.5) / derivative;
     float line = min(grid.x, grid.y);
@@ -24,11 +27,15 @@ vec4 grid(vec3 fragPos3D, float scale, bool drawAxis) {
         color.x = 1.0;
     return color;
 }
-float computeDepth(vec3 pos) {
+
+float computeDepth(vec3 pos) 
+{
     vec4 clip_space_pos = fragProj * fragView * vec4(pos.xyz, 1.0);
     return (clip_space_pos.z / clip_space_pos.w);
 }
-void main() {
+
+void main() 
+{
     float t = -nearPoint.y / (farPoint.y - nearPoint.y);
     vec3 fragPos3D = nearPoint + t * (farPoint - nearPoint);
     gl_FragDepth = computeDepth(fragPos3D);
