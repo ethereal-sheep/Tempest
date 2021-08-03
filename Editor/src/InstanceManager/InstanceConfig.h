@@ -2,6 +2,7 @@
 #include "Instance/RuntimeInstance.h"
 #include "Instance/EditTimeInstance.h"
 #include "Instance/NullTimeInstance.h"
+#include "Instance/PhysicsInstance.h"
 
 namespace Tempest
 {
@@ -11,6 +12,7 @@ namespace Tempest
 		NULL_TIME,
 		EDIT_TIME,
 		RUN_TIME,
+		PHYSICS_TIME
 	};
 
 	enum struct InstanceState
@@ -21,8 +23,14 @@ namespace Tempest
 
 	struct InstanceConfig
 	{
-		InstanceConfig(const tpath& _path = tpath{}, MemoryStrategy strategy = MemoryStrategy{}, InstanceType type = InstanceType::NULL_TIME)
-			: project_path(_path), memory_strategy(strategy), instance_type(type) {}
+		InstanceConfig(
+			const tpath& _path = tpath{}, 
+			MemoryStrategy strategy = MemoryStrategy{}, 
+			InstanceType type = InstanceType::NULL_TIME)
+			: 
+			project_path(_path), 
+			memory_strategy(strategy), 
+			instance_type(type) {}
 
 		tpath project_path;
 		MemoryStrategy memory_strategy;
@@ -37,6 +45,15 @@ namespace Tempest
 		LoadNewInstance() {}
 
 		InstanceConfig config;
+	};
+
+	struct LoadPrevInstance : public Event
+	{
+		LoadPrevInstance(MemoryStrategy strategy) :
+			memory_strategy(strategy) {}
+
+
+		MemoryStrategy memory_strategy;
 	};
 
 	struct CreateNewInstance : public Event

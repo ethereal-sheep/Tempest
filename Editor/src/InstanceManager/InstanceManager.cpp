@@ -49,6 +49,22 @@ namespace Tempest
 
 		instance->register_always<ShowRecent>();
 	}
+
+	void InstanceManager::register_physicstime_windows()
+	{
+		// assume instance is valid here
+		instance->register_window<DiagnosticsWindow>()->visible = false;
+
+		instance->register_always<MainMenuWindow>();
+
+		instance->register_always<NewProjectPopup>();
+		instance->register_always<OpenProjectPopup>();
+		instance->register_always<SaveCurrentBeforeOpenPopup>();
+		instance->register_always<ErrorMsgPopup>();
+		instance->register_always<BottomRightOverlayPopup>();
+
+		instance->register_always<ShowRecent>();
+	}
 	void InstanceManager::register_edittime_windows()
 	{
 		// assume instance is valid here

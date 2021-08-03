@@ -8,6 +8,7 @@
 #include "Extern/imgui/imgui_internal.h"
 #include "Extern/imgui/imgui_stdlib.h"
 #include "Extern/imgui/ImFileDialog.h"
+#include "Extern/imgui/implot.h"
 
 
 
@@ -15,23 +16,42 @@
 //static const char* bold_font = "FiraMono-Bold.ttf";
 
 // make sure these files are in Resource/Fonts/
-static const char* default_font = "FiraMono-Regular.ttf";
-static const char* bold_font = "FiraMono-Bold.ttf";
+static const char* heavy_font = "contax.ttf";
+static const char* body_font = "Montserrat-Regular.ttf";
 
-static const float font_text_size = 15.f;
-static const float font_icon_size = 13.f;
+static const float global_font_scale = 5.f / 6.f;
+static const float global_icon_scale = 13.f / 15.f;
 
-inline auto def() { return ImGui::GetIO().Fonts->Fonts[0]; }
-inline auto bold() { return ImGui::GetIO().Fonts->Fonts[1]; }
-inline auto fk() { return ImGui::GetIO().Fonts->Fonts[2]; }
-inline auto fad() { return ImGui::GetIO().Fonts->Fonts[3]; }
-inline auto ki() { return ImGui::GetIO().Fonts->Fonts[4]; }
+static const float header_text_size = 48.f;
+static const float subheader_text_size = 36.f;
+static const float button_text_size = 24.f;
+static const float subbutton_text_size = 18.f;
 
-#define FONT_DEFAULT	def()
-#define FONT_BOLD		bold()
-#define FONT_FK			fk()
-#define FONT_FAD		fad()
-#define FONT_KI			ki()
+static const float body_text_size = 24.f;
+static const float para_text_size = 18.f;
+
+static const float font_text_size = 24.f;
+static const float font_icon_size = 18.f;
+
+
+inline auto font_para() { return ImGui::GetIO().Fonts->Fonts[0]; } // para
+inline auto font_body() { return ImGui::GetIO().Fonts->Fonts[1]; } // body
+inline auto font_header() { return ImGui::GetIO().Fonts->Fonts[2]; } // header
+inline auto font_subheader() { return ImGui::GetIO().Fonts->Fonts[3]; } // subheader
+inline auto font_button() { return ImGui::GetIO().Fonts->Fonts[4]; } // button
+inline auto font_subbutton() { return ImGui::GetIO().Fonts->Fonts[5]; } // subbutton
+
+
+
+#define FONT_PARA		font_para()
+#define FONT_BODY		font_body()
+#define FONT_HEAD		font_header()
+#define FONT_SHEAD		font_subheader()
+#define FONT_BTN		font_button()
+#define FONT_SBTN		font_subbutton()
+
+#define FONT_DEFAULT	FONT_PARA
+#define FONT_BOLD		FONT_BODY
 
 namespace Tempest
 {
