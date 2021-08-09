@@ -43,7 +43,10 @@ namespace Tempest
 				static float padding_y = 50.f;
 				static float rounding = 0.f;
 				static ImVec2 pos = { 200,500 };
-
+				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+				//UI::Header(ImVec2{ center_x - 100.f,0 }, "HEADER");
+				UI::SubHeader(ImVec2{ center_x - 100.f,0 }, "SUBHEADER");
+				
 				// sliders for adjustment
 				ImVec2 slider_padding = { 100,0 };
 				UI::DragFloat("Padding X", "123", slider_padding, &padding_x);
