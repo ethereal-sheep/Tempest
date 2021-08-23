@@ -225,6 +225,7 @@
     <ClCompile Include="src\Physics\Util\px_math.cpp" />
     <ClCompile Include="src\Scripting\Graph\graph.cpp" />
     <ClCompile Include="src\Scripting\Nodes\CastNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
     <ClCompile Include="src\Scripting\Test\test_data.cpp" />
     <ClCompile Include="src\Scripting\Test\test_graph.cpp" />
@@ -298,6 +299,8 @@
     <ClInclude Include="src\Physics\Util\px_math.h" />
     <ClInclude Include="src\Scripting\GMS.h" />
     <ClInclude Include="src\Scripting\Graph\graph.h" />
+    <ClInclude Include="src\Scripting\Graph\modifier_graph.h" />
+    <ClInclude Include="src\Scripting\resolution.h" />
     <ClInclude Include="src\Scripting\SRM.h" />
     <ClInclude Include="src\Scripting\Util\sparse_scripts.h" />
     <ClInclude Include="src\Scripting\Util\split_view.h" />

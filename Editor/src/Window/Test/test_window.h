@@ -1,6 +1,8 @@
 #pragma once
 #include "Instance/Instance.h"
 #include "Graphics/OpenGL/RenderSystem.h"
+#include "RNG/dice_bag.h"
+#include "RNG/dice_distribution.h"
 
 namespace Tempest
 {
@@ -11,7 +13,7 @@ namespace Tempest
 			return "test_window";
 		}
 
-		bool button(
+		/*bool button(
 			const string& default_text,
 			const string& hover_text,
 			ImVec2 pos,
@@ -21,7 +23,7 @@ namespace Tempest
 		) 
 		{
 
-		}
+		}*/
 
 
 		void show(Instance& instance) override
@@ -131,67 +133,145 @@ namespace Tempest
 
 
 				{
-
-					static int  bins = 50;
-					static bool cumulative = false;
-					static bool density = true;
-					static bool outliers = true;
-					static double mu = 5;
-					static double sigma = 2;
-
-					ImGui::SetNextItemWidth(200);
-					if (ImGui::RadioButton("Sqrt", bins == ImPlotBin_Sqrt)) { bins = ImPlotBin_Sqrt; } ImGui::SameLine();
-					if (ImGui::RadioButton("Sturges", bins == ImPlotBin_Sturges)) { bins = ImPlotBin_Sturges; } ImGui::SameLine();
-					if (ImGui::RadioButton("Rice", bins == ImPlotBin_Rice)) { bins = ImPlotBin_Rice; } ImGui::SameLine();
-					if (ImGui::RadioButton("Scott", bins == ImPlotBin_Scott)) { bins = ImPlotBin_Scott; } ImGui::SameLine();
-					if (ImGui::RadioButton("N Bins", bins >= 0))                       bins = 50;
-					if (bins >= 0) {
-						ImGui::SameLine();
-						ImGui::SetNextItemWidth(200);
-						ImGui::SliderInt("##Bins", &bins, 1, 100);
-					}
-					if (ImGui::Checkbox("Density", &density))
-						ImPlot::FitNextPlotAxes();
-					ImGui::SameLine();
-					if (ImGui::Checkbox("Cumulative", &cumulative))
-						ImPlot::FitNextPlotAxes();
-					ImGui::SameLine();
-					static bool range = false;
-					ImGui::Checkbox("Range", &range);
-					static float rmin = -3;
-					static float rmax = 13;
-					if (range) {
-						ImGui::SameLine();
-						ImGui::SetNextItemWidth(200);
-						ImGui::DragFloat2("##Range", &rmin, 0.1f, -3, 13);
-						ImGui::SameLine();
-						ImGui::Checkbox("Outliers", &outliers);
-					}
-
 					// example 2d6
-					static tvector<int> dist(20, 0);
+					static dice_bag bag;
+
+					auto dice_input = [](auto d) {
+						string label = "D";
+						label += std::to_string(d);
+						auto count = bag.count(d);
+						int uone = 1;
+						if (ImGui::InputScalar(label.c_str(), ImGuiDataType_U64, &count, &uone))
+						{
+							if (count < bag.count(d))
+								bag.remove(1, d);
+							else
+								bag.add(1, d);
+						}
+
+					};
+
+					uint64_t uone = 1u;
+					static uint64_t freq = 3000u;
+					static uint64_t difficulty = 0u;
+
+					ImGui::InputScalar("Frequency", ImGuiDataType_U64, &freq);
+					ImGui::InputScalar("Difficulty", ImGuiDataType_U64, &difficulty, &uone);
+
+
+					//dice_input(2);
+					dice_input(4);
+					dice_input(6);
+					dice_input(8);
+					dice_input(10);
+					dice_input(12);
+					dice_input(20);
+					//dice_input(100);
+
+
+					static size_t output = 0;
+					auto expected = bag.expected();
+
+					if (ImGui::Button("Roll"))
+					{
+						output = bag();
+					}
+
+					ImGui::Text("Roll:      %u", output);
+					ImGui::Text("Expected:  %.1f", expected);
+
+
+					static auto win = 0;
+					static auto lose = 0;
+					static float chance = 0.f;
+					static size_t max_bucket = 0;
+					static tvector<size_t> dist;
+					static tvector<double> dist2;
+					static double max_pro = 0.0;
 
 					if (ImGui::Button("Generate"))
 					{
-						for (auto& i : dist) i = 0;
+						win = 0;
+						lose = 0;
+						max_bucket = 0;
+						auto dd = bag.get_distribution();
+						dist2 = dd.get_probability_win();
 
-						auto d6 = []() {
-							return els::random::uniform_rand(1, 6);
-						};
 
-						for (int i = 0; i < 1000; ++i)
+						max_pro = dd.get_max_probability();
+						dist.clear();
+						dist.resize(bag.spread() + 2, 0);
+						for (int i = 0; i < freq; ++i)
 						{
-							++dist[d6() + d6()];
-						}
+							auto val = bag();
 
+							max_bucket = std::max(++dist[val - bag.min()+1], max_bucket);
+
+							if (val >= difficulty) ++win; else ++lose;
+						}
+					}
+
+					ImGui::Text("Win:   %d", win);
+					ImGui::Text("Lose:  %d", lose);
+
+
+					chance = (difficulty <= bag.min()) ? 100.f : ((difficulty > bag.max() ? 0.f : dist2[difficulty - bag.min()] * 100));
+
+					ImGui::Text("Chance:  %.3f%", chance);
+
+
+					//static const char* labels[] = { "1","2","3","4","5","6","7","8","9","10","11","12","13" };
+					//static const double positions[] = { 1,2,3,4,5,6,7,8,9,10,11,12,13 };
+
+
+					ImPlot::SetNextPlotLimits(bag.min() - 1, bag.max() + 1, 0, 1, ImGuiCond_Always);
+					
+					if (ImPlot::BeginPlot("##Line Plot", "", "", ImVec2{ -1, 0 },
+						ImPlotFlags_NoLegend | ImPlotFlags_NoMousePos, ImPlotAxisFlags_None,
+						ImPlotAxisFlags_NoGridLines | ImPlotAxisFlags_LockMax |
+						ImPlotAxisFlags_LockMin))
+					{
+						ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
+						ImPlot::PlotLine("", dist2.data(), dist2.size(), 1.0, bag.min());
+						ImPlot::EndPlot();
 					}
 
 
 
+					ImPlot::SetNextPlotLimits(bag.min()-1, bag.max()+1, 0, std::max<size_t>(5u, max_bucket*3/2), ImGuiCond_Always);
 
-					if (ImPlot::BeginPlot("##Histograms")) {
-						ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
-						ImPlot::PlotBars("Test", dist.data(), 20);
+					if (ImPlot::BeginPlot("##Histograms", "", "", ImVec2{ -1, 0 }, 
+						ImPlotFlags_NoLegend | ImPlotFlags_NoMousePos, ImPlotAxisFlags_None,
+						ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_NoGridLines | ImPlotAxisFlags_LockMax |
+						ImPlotAxisFlags_LockMin | ImPlotAxisFlags_NoDecorations))
+					{
+						ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, .5f);
+						ImPlot::PlotBars("", dist.data(), dist.size() + bag.min(), 0.70, 0.0, 0 - (bag.min() - 1));
+						
+						auto [dx, dy] = ImPlot::GetPlotMousePos();
+
+						int x = std::round(dx);
+						int y = std::round(dy);
+
+						if (ImPlot::IsPlotHovered())
+						{
+							if (abs(x - dx) <= 0.35 && x >= bag.min() && x < bag.min() + dist.size() && y <= dist[x-bag.min()+1])
+							{
+								ImGui::BeginTooltip();
+								//ImGui::PushStyleColor(ImGuiCol_Text, ConvertUint32TOVec4(profile.GetZoneColor(bar.key->m_Zone)));
+								ImGui::Text(ICON_FA_MARKER);
+								ImGui::SameLine();
+								ImGui::Text("%d, %d", x, dist[x - bag.min()+1]);
+
+								//ImGui::Text("Call time: %f%s", (bar.duration - bar.start) / 1000000000.f, "ms");
+
+								ImGui::EndTooltip();
+
+							}
+						}
+
+
+						ImPlot::PlotVLines("Expected", &expected, 1);
 						ImPlot::EndPlot();
 					}
 				}

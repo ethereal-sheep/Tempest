@@ -1,9 +1,9 @@
 #include "node.h"
-#include "Instance/RuntimeInstance.h"
+#include "Instance/Instance.h"
 
 namespace Tempest
 {
-	script* node::create_script_pack(Entity entity, RuntimeInstance& instance)
+	script* node::create_script_pack(Entity entity, Instance& instance)
 	{
 		auto s = create_script(entity, instance);
 

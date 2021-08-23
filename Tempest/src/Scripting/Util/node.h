@@ -17,16 +17,10 @@ namespace Tempest
 	/**
 	 * @brief Node category type. Umbrella category for a node type.
 	 */
-	enum struct category_type
-	{
-		Cast, Variable, Group, Arithmetic, Trig,
-		Random, Numerical, Constants, Logic, Vector,
-		Utility, Entity,
-		END, test
-	};
+	enum struct category_type;
 
 	//forward declare
-	class RuntimeInstance;
+	class Instance;
 
 	class node_exception : public std::exception
 	{
@@ -65,12 +59,12 @@ namespace Tempest
 		/**
 		 * @brief Creates a script based on the node's type information.
 		 */
-		virtual script* create_script(Entity entity, RuntimeInstance& srm) = 0;
+		virtual script* create_script(Entity entity, Instance& srm) = 0;
 
 		/**
 		 * @brief Creates a script based on the node's type information.
 		 */
-		script* create_script_pack(Entity entity, RuntimeInstance& srm);
+		script* create_script_pack(Entity entity, Instance& srm);
 
 		/**
 		 * @brief Serializing function. Writes to the writer object.
@@ -180,7 +174,7 @@ public:																		\
 	void set_type(inner_type _type) { type = _type; }						\
 	static node_ptr create_node(const std::string& info);					\
 	string get_type_string() override;										\
-	script* create_script(Entity entity, RuntimeInstance& srm) override;	\
+	script* create_script(Entity entity, Instance& srm) override;			\
 private:																	\
 	inner_type type;														\
 
@@ -227,17 +221,29 @@ case category_type::NodeCategory:											\
 	*
 	*/
 
+	enum struct category_type
+	{
+		Cast, Variable, Group, Arithmetic, Trig,
+		Random, Numerical, Constants, Logic, Vector,
+		Utility, Entity,
+		END, test, util,
+	};
+
+
 	DEFINE_NODE(test_node, test, testing1, testing2, all);
 	DEFINE_NODE(CastNode, Cast, _cannot_be_empty);
 	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
+	DEFINE_NODE(UtilNode, util, Print, In);
 
 	NODE_SWITCH_START
 
 		/* BELOW THIS PLEASE*/
 
 		NODE_CASE(test_node, test);
+		NODE_CASE(VariableNode, Variable);
+		NODE_CASE(UtilNode, util);
 
-	/* ABOVE THIS PLEASE */
+		/* ABOVE THIS PLEASE */
 
 	NODE_SWITCH_END
 

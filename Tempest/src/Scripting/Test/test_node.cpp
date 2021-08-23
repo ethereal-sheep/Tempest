@@ -1,6 +1,6 @@
 
 #include "../Util/node.h"
-#include "Instance/RuntimeInstance.h"
+#include "Instance/Instance.h"
 
 namespace Tempest
 {
@@ -72,7 +72,7 @@ namespace Tempest
 		return make_uptr<test_node>(std::move(node));
 	}
 
-	script* test_node::create_script(Entity entity [[maybe_unused]], RuntimeInstance& srm [[maybe_unused]] )
+	script* test_node::create_script(Entity entity [[maybe_unused]], Instance& srm [[maybe_unused]] )
 	{
 		return nullptr;
 	}

@@ -219,6 +219,11 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Fonts\IconsKenney.h" />
     <ClInclude Include="src\InstanceManager\InstanceConfig.h" />
     <ClInclude Include="src\InstanceManager\InstanceManager.h" />
+    <ClInclude Include="src\RNG\dice.h" />
+    <ClInclude Include="src\RNG\dice_bag.h" />
+    <ClInclude Include="src\RNG\dice_distribution.h" />
+    <ClInclude Include="src\RNG\modifier.h" />
+    <ClInclude Include="src\RNG\resolution.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
     <ClInclude Include="src\Util\GuizmoController.h" />
     <ClInclude Include="src\Util\Suppress.h" />
