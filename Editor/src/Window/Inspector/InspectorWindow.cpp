@@ -81,7 +81,7 @@ namespace Tempest
 						static glm::highp_vec3 prevRot{ 0,0,0 };
 						static bool rotationEdited = false;
 						auto euler = glm::eulerAngles(transform->rotation);
-						if (UI::DragFloat3ColorBox("Rotation", "##TransformRotDrag", ImVec2{ padding , 0.f }, glm::value_ptr(euler), 0.f, 0.1f))
+						if (UI::DragFloat3ColorBox("Rotation", "##TransformRotDrag", ImVec2{ padding , 0.f }, glm::value_ptr(euler), 0.f, 0.1f).second)
 						{
 							rotationEdited = true;
 
@@ -102,7 +102,7 @@ namespace Tempest
 						static vec3 newScale = transform->scale;
 						bool UIScaled = false;
 
-						if (UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, newScale.data(), 1.f, 1.f, 1.f, 1000.f))
+						if (UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, newScale.data(), 1.f, 1.f, 1.f, 1000.f).second)
 						{
 							if (rb)
 								rb->isDirty = true;
@@ -157,12 +157,12 @@ namespace Tempest
 					switch (rb->shape_data.type)
 					{
 					case SHAPE_TYPE::SPHERE:
-						rb->isDirty |= UI::DragFloat("Radius", "##RbRadius", ImVec2{ padding , 0.f }, &rb->shape_data.shapeData.x, 0.1f, 0.5f);
+						rb->isDirty |= UI::DragFloat("Radius", "##RbRadius", ImVec2{ padding , 0.f }, &rb->shape_data.shapeData.x, 0.1f, 0.5f).second;
 						break;
 					case SHAPE_TYPE::CAPSULE:
 					{
 						vec2 temp = { rb->shape_data.shapeData.x, rb->shape_data.shapeData.y };
-						rb->isDirty |= UI::DragFloat2("Radius&Height", "##RbRadius&Height", ImVec2{ padding , 0.f }, temp.data(), 0.1f, 0.5f);
+						rb->isDirty |= UI::DragFloat2("Radius&Height", "##RbRadius&Height", ImVec2{ padding , 0.f }, temp.data(), 0.1f, 0.5f).second;
 						rb->shape_data.shapeData.x = temp.x ;
 						rb->shape_data.shapeData.y = temp.y;
 						break;
@@ -170,7 +170,7 @@ namespace Tempest
 					break;
 					case SHAPE_TYPE::BOX:
 					{
-						rb->isDirty |= UI::DragFloat3("X,Y,Z", "##RbRadius&Height", ImVec2{ padding , 0.f }, rb->shape_data.shapeData.data(), 0.1f, 0.5f);
+						rb->isDirty |= UI::DragFloat3("X,Y,Z", "##RbRadius&Height", ImVec2{ padding , 0.f }, rb->shape_data.shapeData.data(), 0.1f, 0.5f).second;
 					}
 					break;
 					case SHAPE_TYPE::NONE:
