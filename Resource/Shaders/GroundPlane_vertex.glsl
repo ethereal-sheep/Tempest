@@ -34,9 +34,9 @@ void main()
 {
     vec3 p = vertex_position;
 
-    gl_Position = proj * view * vec4(p, 1.0); // using directly the clipped coordinates
-    nearPoint = UnprojectPoint(gl_Position.x, gl_Position.y, 0.0, view, proj).xyz; // unprojecting on the near plane
-    farPoint = UnprojectPoint(gl_Position.x, gl_Position.y, 1.0, view, proj).xyz; // unprojecting on the far plane
+    //gl_Position = proj * view * vec4(p, 1.0); // using directly the clipped coordinates
+    nearPoint = UnprojectPoint(p.x, p.y, 0.0, view, proj).xyz; // unprojecting on the near plane
+    farPoint = UnprojectPoint(p.x, p.y, 1.0, view, proj).xyz; // unprojecting on the far plane
     fragView = view;
     fragProj = proj;
     gl_Position = vec4(p, 1);
