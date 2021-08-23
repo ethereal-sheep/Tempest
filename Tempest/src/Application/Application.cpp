@@ -36,6 +36,8 @@ namespace Tempest
 		Service<EventManager>::Register();
 
 		OnInit();
+
+		TestingDice();
 	}
 
 

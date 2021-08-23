@@ -223,7 +223,9 @@ case category_type::NodeCategory:											\
 
 	enum struct category_type
 	{
-		Cast, Variable, Group, Arithmetic, Trig,
+		Cast, Variable, Dice, Arithmetic,
+		
+		Group, Trig,
 		Random, Numerical, Constants, Logic, Vector,
 		Utility, Entity,
 		END, test, util,
@@ -233,6 +235,8 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(test_node, test, testing1, testing2, all);
 	DEFINE_NODE(CastNode, Cast, _cannot_be_empty);
 	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
+	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
+	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus);
 	DEFINE_NODE(UtilNode, util, Print, In);
 
 	NODE_SWITCH_START
@@ -241,6 +245,8 @@ case category_type::NodeCategory:											\
 
 		NODE_CASE(test_node, test);
 		NODE_CASE(VariableNode, Variable);
+		NODE_CASE(DiceNode, Dice);
+		NODE_CASE(ArithmeticNode, Arithmetic);
 		NODE_CASE(UtilNode, util);
 
 		/* ABOVE THIS PLEASE */

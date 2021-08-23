@@ -224,11 +224,14 @@
     <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp" />
     <ClCompile Include="src\Physics\Util\px_math.cpp" />
     <ClCompile Include="src\Scripting\Graph\graph.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ArithmeticNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\CastNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\DiceNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
     <ClCompile Include="src\Scripting\Test\test_data.cpp" />
     <ClCompile Include="src\Scripting\Test\test_graph.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_resolution_script.cpp" />
     <ClCompile Include="src\Scripting\Test\test_script_events.cpp" />
     <ClCompile Include="src\Scripting\Util\node.cpp" />
     <ClCompile Include="src\Scripting\Test\test_node.cpp" />
