@@ -2,29 +2,29 @@
 
 //layout(origin_upper_left) in vec4 gl_FragCoord;
 
-layout(location = 1) in vec3 nearPoint;
-layout(location = 2) in vec3 farPoint;
-layout(location = 3) in mat4 fragView;
-layout(location = 7) in mat4 fragProj;
-in vec3 coord;
-layout(location = 0) out vec4 outColor;
+in vec3 nearPoint;
+in vec3 farPoint;
+in mat4 fragView;
+in mat4 fragProj;
+in float near;
+in float far;
+
+out vec4 outColor;
 
 vec4 grid(vec3 fragPos3D, float scale, bool drawAxis) 
 {
-    vec2 coord = fragPos3D.xz;
-    coord.x *= 5;
-    coord.y *= 10;
+    vec2 coord = fragPos3D.xz * scale;
     vec2 derivative = fwidth(coord);
     vec2 grid = abs(fract(coord - 0.5) - 0.5) / derivative;
     float lines = min(grid.x, grid.y);
     float minimumz = min(derivative.y, 1);
     float minimumx = min(derivative.x, 1);
-    vec4 color = vec4(0.2, 0.2, 0.2, 1.0 - min(lines, 1.0));
+    vec4 color = vec4(0.1, 0.1, 0.1, 1.0 - min(lines, 1.0));
     // z axis
-    if(fragPos3D.x > -0.1 * minimumx && fragPos3D.x < 0.1 * minimumx)
+    if (fragPos3D.x > -0.1 * minimumx && fragPos3D.x < 0.1 * minimumx)
         color.z = 1.0;
     // x axis
-    if(fragPos3D.z > -0.1 * minimumz && fragPos3D.z < 0.1 * minimumz)
+    if (fragPos3D.z > -0.1 * minimumz && fragPos3D.z < 0.1 * minimumz)
         color.x = 1.0;
     return color;
 }
@@ -35,12 +35,24 @@ float computeDepth(vec3 pos)
     return (clip_space_pos.z / clip_space_pos.w);
 }
 
+float computeLinearDepth(vec3 pos) 
+{
+    vec4 clip_space_pos = fragProj * fragView * vec4(pos.xyz, 1.0);
+    float clip_space_depth = (clip_space_pos.z / clip_space_pos.w) * 2.0 - 1.0; // put back between -1 and 1
+    float linearDepth = (2.0 * near * far) / (far + near - clip_space_depth * (far - near)); // get linear value between 0.01 and 100
+    return linearDepth / far; // normalize
+}
+
 void main() 
 {
     float t = -nearPoint.y / (farPoint.y - nearPoint.y);
     vec3 fragPos3D = nearPoint + t * (farPoint - nearPoint);
-    //gl_FragDepth = computeDepth(fragPos3D);
+    gl_FragDepth = computeDepth(fragPos3D);
 
+    float linearDepth = computeLinearDepth(fragPos3D);
+    float fading = max(0, (0.5 - linearDepth));
+
+    //outColor = (grid(fragPos3D, 10, true) + grid(fragPos3D, 1, true)) * float(t > 0); // adding multiple resolution for the grid
     outColor = grid(fragPos3D, 10, true) * float(t > 0);
-    //outColor = vec4(1.0, 0.0, 0.0, 1.0) * float(t > 0); // opacity = 1 when t > 0, opacity = 0 otherwise
+    outColor.a *= fading;
 }

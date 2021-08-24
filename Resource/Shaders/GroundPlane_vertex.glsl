@@ -10,11 +10,12 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-layout(location = 1) out vec3 nearPoint;
-layout(location = 2) out vec3 farPoint;
-layout(location = 3) out mat4 fragView;
-layout(location = 7) out mat4 fragProj;
-out vec3 coord;
+out vec3 nearPoint;
+out vec3 farPoint;
+out mat4 fragView;
+out mat4 fragProj;
+out float near;
+out float far;
 
 
 vec3 gridPlane[6] = vec3[](
@@ -33,12 +34,13 @@ vec3 UnprojectPoint(float x, float y, float z, mat4 view, mat4 projection)
 void main()
 {
     vec3 p = vertex_position;
+    near = 0.01f;
+    far = 100.f;
 
-    //gl_Position = proj * view * vec4(p, 1.0); // using directly the clipped coordinates
+    gl_Position = proj * view * vec4(p, 1.0); // using directly the clipped coordinates
     nearPoint = UnprojectPoint(p.x, p.y, 0.0, view, proj).xyz; // unprojecting on the near plane
     farPoint = UnprojectPoint(p.x, p.y, 1.0, view, proj).xyz; // unprojecting on the far plane
     fragView = view;
     fragProj = proj;
     gl_Position = vec4(p, 1);
-    coord = vertex_position.xyz;
 }
