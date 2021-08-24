@@ -37,7 +37,19 @@ std::string ArithmeticNode::get_type_string()
             node.add_input(pin_type::Int, "");
             node.add_input(pin_type::Int, "");
             node.add_output(pin_type::Int, "");
-        break;
+            break;
+        case Tempest::ArithmeticNode::inner_type::Multiply:
+            node.set_name("Multiply");
+            node.add_input(pin_type::Int, "");
+            node.add_input(pin_type::Int, "");
+            node.add_output(pin_type::Int, "");
+            break;
+        case Tempest::ArithmeticNode::inner_type::Divide:
+            node.set_name("Divide");
+            node.add_input(pin_type::Int, "");
+            node.add_input(pin_type::Int, "");
+            node.add_output(pin_type::Int, "");
+            break;
         default:
             break;
         }
@@ -64,6 +76,20 @@ std::string ArithmeticNode::get_type_string()
                         return x - y;
                     }, std::placeholders::_1, std::placeholders::_2));
             break;
+        case Tempest::ArithmeticNode::inner_type::Multiply:
+        return instance.srm.add_script(
+            CreateConstexprScript<std::tuple<int>(int, int)>(
+                [](int x, int y) {
+                    return x * y;
+                }, std::placeholders::_1, std::placeholders::_2));
+        break;
+        case Tempest::ArithmeticNode::inner_type::Divide:
+            return instance.srm.add_script(
+                CreateConstexprScript<std::tuple<int>(int, int)>(
+                    [](int x, int y) {
+                        return y ? x / y : 0;
+                    }, std::placeholders::_1, std::placeholders::_2));
+        break;
         default:
             break;
         }

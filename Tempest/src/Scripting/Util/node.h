@@ -236,7 +236,7 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(CastNode, Cast, _cannot_be_empty);
 	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
 	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
-	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus);
+	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus, Multiply, Divide);
 	DEFINE_NODE(UtilNode, util, Print, In);
 
 	NODE_SWITCH_START

@@ -89,6 +89,48 @@ namespace Tempest
 		LOG("OutMinus: {0}", out);
 
 	}
+	void TestingDice5()
+	{
+		NullTimeInstance instance;
+
+		Entity t = instance.ecs.create();
+		auto node = DiceNode::create_node("D10");
+		auto node2 = ArithmeticNode::create_node("Multiply");
+		node2->get_input_pin(1)->default_var.set(9);
+
+		auto script = node->create_script(t, instance);
+		auto script2 = node2->create_script_pack(t, instance);
+		script->set_next(script2);
+		script2->set_input(0, script, 0);
+
+		(*script)();
+
+		int out = std::any_cast<int>(script2->operator[](0));
+
+		LOG("OutMultiply: {0}", out);
+
+	}
+	void TestingDice6()
+	{
+		NullTimeInstance instance;
+
+		Entity t = instance.ecs.create();
+		auto node = DiceNode::create_node("D10");
+		auto node2 = ArithmeticNode::create_node("Divide");
+		node2->get_input_pin(1)->default_var.set(2);
+
+		auto script = node->create_script(t, instance);
+		auto script2 = node2->create_script_pack(t, instance);
+		script->set_next(script2);
+		script2->set_input(0, script, 0);
+
+		(*script)();
+
+		int out = std::any_cast<int>(script2->operator[](0));
+
+		LOG("OutDivide: {0}", out);
+
+	}
 
 	void TestingDice()
 	{
@@ -96,5 +138,7 @@ namespace Tempest
 		TestingDice2();
 		TestingDice3();
 		TestingDice4();
+		TestingDice5();
+		TestingDice6();
 	}
 }
