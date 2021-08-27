@@ -26,6 +26,7 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl")); 
         m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_LIGHT, std::make_unique<Shader>("Shaders/DirectionalLight_vertex.glsl", "Shaders/DirectionalLight_fragment.glsl"));
 
         m_Pipeline.m_Cameras.emplace_back(Camera{});
 
@@ -120,19 +121,19 @@ namespace Tempest
         transform2.scale = vec3(0.15f, 0.15f, 0.15f);
         Submit(MeshCode::SPHERE, transform2);
 
-        {
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetFront(), "front");
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "camera");
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec2f(m_Pipeline.m_Cameras[0].GetResolution(), "resolution");
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "view");
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "proj");
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Transforms[0], "model");
-            m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetInverseViewProjectionMatrix(), "ivpm");
-            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->Bind();
-            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-            glClear(GL_DEPTH_BUFFER_BIT);
-        }
+        //{
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->Bind();
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetFront(), "front");
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "camera");
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec2f(m_Pipeline.m_Cameras[0].GetResolution(), "resolution");
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "view");
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "proj");
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Transforms[0], "model");
+        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetInverseViewProjectionMatrix(), "ivpm");
+        //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->Bind();
+        //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //    glClear(GL_DEPTH_BUFFER_BIT);
+        //}
 
         //{
         //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
@@ -143,6 +144,19 @@ namespace Tempest
         //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
         //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         //}
+
+        {
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Transforms[1], "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(glm::vec3(0.f, 1.f, 0.f), "LightPosition");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(glm::vec3(0.f, -1.f, 0.f), "LightDirection");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "CamPosition");
+            
+            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
+            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        }
 
        
 

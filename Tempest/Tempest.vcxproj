@@ -369,16 +369,6 @@
     <ClInclude Include="src\Util\view.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Resource\Shaders\FrameBuffer_fragment.glsl" />
-    <None Include="..\Resource\Shaders\FrameBuffer_vertex.glsl" />
-    <None Include="..\Resource\Shaders\Basic_fragment.glsl" />
-    <None Include="..\Resource\Shaders\Basic_vertex.glsl" />
-    <None Include="..\Resource\Shaders\GroundPlane_fragment.glsl" />
-    <None Include="..\Resource\Shaders\GroundPlane_vertex.glsl" />
-    <None Include="..\Resource\Shaders\Line_fragment.glsl" />
-    <None Include="..\Resource\Shaders\Line_vertex.glsl" />
-    <None Include="..\Resource\Shaders\Texture_fragment.glsl" />
-    <None Include="..\Resource\Shaders\Texture_vertex.glsl" />
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
     <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
     <None Include="src\Scripting\Util\static_id_generator.h" />
