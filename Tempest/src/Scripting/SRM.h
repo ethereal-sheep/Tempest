@@ -5,7 +5,6 @@
 
 namespace Tempest
 {
-
 	/**
 	 * @brief var_key for runtime variables.
 	 */

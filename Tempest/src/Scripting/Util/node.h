@@ -223,9 +223,10 @@ case category_type::NodeCategory:											\
 
 	enum struct category_type
 	{
-		Cast, Variable, Dice, Arithmetic,
+		Cast, Variable, Dice, Arithmetic, GetStat, SetStat, GetMainStat, 
+		Resolution, System
 		
-		Group, Trig,
+		,Group, Trig,
 		Random, Numerical, Constants, Logic, Vector,
 		Utility, Entity,
 		END, test, util,
@@ -237,6 +238,11 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
 	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
 	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus, Multiply, Divide);
+	DEFINE_NODE(GetStatNode, GetStat, _cannot_be_empty);
+	DEFINE_NODE(SetStatNode, SetStat, _cannot_be_empty);
+	DEFINE_NODE(GetMainStatNode, GetMainStat, _cannot_be_empty);
+	DEFINE_NODE(ResolutionNode, Resolution, Start, Resolve, Attacking, Defending);
+	DEFINE_NODE(SystemNode, System, Input, Output);
 	DEFINE_NODE(UtilNode, util, Print, In);
 
 	NODE_SWITCH_START
@@ -247,6 +253,11 @@ case category_type::NodeCategory:											\
 		NODE_CASE(VariableNode, Variable);
 		NODE_CASE(DiceNode, Dice);
 		NODE_CASE(ArithmeticNode, Arithmetic);
+		NODE_CASE(GetStatNode, GetStat);
+		NODE_CASE(SetStatNode, SetStat);
+		NODE_CASE(GetMainStatNode, GetMainStat);
+		NODE_CASE(ResolutionNode, Resolution);
+		NODE_CASE(SystemNode, System);
 		NODE_CASE(UtilNode, util);
 
 		/* ABOVE THIS PLEASE */

@@ -70,7 +70,6 @@ namespace Tempest
 
     script* DiceNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )
     {
-
         switch (type)
         {
         case Tempest::DiceNode::inner_type::D4:

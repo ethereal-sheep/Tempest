@@ -3,6 +3,69 @@
 
 namespace Tempest
 {
+	
+
+
+	graph::graph(const string& _name, GraphType _type, m_resource* mem) :
+		name{ _name }, type{ _type }, nodes{ mem }, links{ mem }
+	{
+		switch (type)
+		{
+		case Tempest::GraphType::Regular:
+			break;
+		case Tempest::GraphType::System:
+		{
+			// for output
+			auto var = add_var("Output", pin_type::Int);
+
+
+			auto input = add_node(SystemNode::create_node("Input"));
+
+			auto output = add_node(SystemNode::create_node("Output"));
+
+			LOG_ASSERT(var);
+			LOG_ASSERT(input);
+			LOG_ASSERT(output);
+
+			auto flow = add_link(
+				input->get_output_pin(0)->get_id(),
+				output->get_input_pin(0)->get_id()
+			);
+
+			auto i = add_link(
+				input->get_output_pin(1)->get_id(),
+				output->get_input_pin(1)->get_id()
+			);
+
+			LOG_ASSERT(flow);
+			LOG_ASSERT(i);
+
+		}
+			break;
+		case Tempest::GraphType::Resolution:
+		{
+			// start nodes
+
+			// start event
+			auto start = add_node(ResolutionNode::create_node("Start"));
+
+			// start links to System 1
+			// attacking calculates the value and passes it on
+			auto system1 = add_node(ResolutionNode::create_node("System1"));
+
+			// attacking links to defending
+			// defending calculates the value and passes it on
+			auto system2 = add_node(ResolutionNode::create_node("System2"));
+
+			// resolve attacking and defending
+			auto resolve = add_node(ResolutionNode::create_node("Resolve"));
+		}
+			break;
+		default:
+			break;
+		}
+	}
+
 
 	graph::graph(const tpath& graph_file, m_resource* mem) :
 		name{ graph_file.stem().string() }, nodes{ mem }, links{ mem }

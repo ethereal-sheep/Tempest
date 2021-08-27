@@ -5,6 +5,7 @@
 #include "ECS\Entity.h"
 #include "Physics/PhysicsObject.h"
 #include "Graphics/OpenGL/RenderPipeline.h"
+#include "Util/range.h"
 
 /**
 * @brief 
@@ -96,7 +97,8 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh
+		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh, 
+		Character, Weapon, Statline, System, Resolution
 		,END
 	};
 
@@ -179,6 +181,7 @@ namespace Tempest
 			string script{};
 			bool built = false;
 		};
+		
 		struct Rigidbody
 		{
 			
@@ -227,6 +230,277 @@ namespace Tempest
 				return ar.EndObject();
 			}
 		};
+
+		static const size_t STAT_TOTAL = 13;
+
+		struct Character
+		{
+			
+			static const char* get_type() { return "Character"; }
+
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Character& component)
+			{
+				ar.StartObject();
+				ar.Member("Charater_Name", component.name);
+				ar.Member("Weapon_Id", component.weapon);
+				ar.Vector("Charater_Stats", component.stats);
+				return ar.EndObject();
+			}
+
+			Character() : stats(STAT_TOTAL,0)
+			{
+
+			}
+
+			void remove_stat(size_t index)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats.erase(stats.begin() + index);
+				stats.push_back(0);
+			}
+
+			void set_stat(size_t index, int val)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats[index] = val;
+			}
+
+			[[nodiscard]] int& get_stat(size_t index)
+			{
+				return stats[index];
+			}
+
+			[[nodiscard]] const tvector<int>& get_stats() const
+			{
+				return stats;
+			}
+
+			[[nodiscard]] auto get_stats_range() 
+			{
+				return make_range(stats);
+			}
+
+
+			string name = "Char";
+			Entity weapon = UNDEFINED;
+			Entity system = UNDEFINED;
+		private:
+			tvector<int> stats;
+
+		};
+
+		struct Weapon
+		{
+			static const char* get_type() { return "Weapon"; }
+
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Weapon& component)
+			{
+				ar.StartObject();
+				ar.Member("Weapon_Name", component.name);
+				ar.Member("Main_Stat", component.main_stat);
+				ar.Vector("Weapon_Stats", component.stats);
+				return ar.EndObject();
+			}
+
+			Weapon() : stats(STAT_TOTAL, 0)
+			{
+
+			}
+
+			void remove_stat(size_t index)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats.erase(stats.begin() + index);
+				stats.push_back(0);
+			}
+
+			void set_stat(size_t index, int val)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats[index] = val;
+			}
+
+			[[nodiscard]] int& get_stat(size_t index)
+			{
+				return stats[index];
+			}
+
+			[[nodiscard]] const tvector<int>& get_stats() const
+			{
+				return stats;
+			}
+
+			[[nodiscard]] auto get_stats_range()
+			{
+				return make_range(stats);
+			}
+
+			void set_main_stat(size_t index)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+				main_stat = index;
+			}
+
+			[[nodiscard]] size_t get_main_stat() const
+			{
+				return main_stat;
+			}
+
+
+
+			string name = "Weapon";
+		private:
+			tvector<int> stats;
+			size_t main_stat = 1; // set to ATK as main
+		};
+
+		struct Statline
+		{
+
+			static const char* get_type() { return "Statline"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Statline& component)
+			{
+				ar.StartObject();
+				ar.Vector("Statline_Name", component.stats);
+				return ar.EndObject();
+			}
+			Statline()
+			{
+				stats.push_back("HP");
+				stats.push_back("ATK");
+				stats.push_back("DEF");
+			}
+
+			bool remove_stat(size_t index)
+			{
+				if (index >= stats.size()) return false;
+
+				stats.erase(stats.begin() + index);
+				return true;
+			}
+
+			bool remove_stat(const string& name)
+			{
+				auto f = std::find(stats.begin(), stats.end(), name);
+				if (f == stats.end()) return false;
+				stats.erase(f);
+				return true;
+			}
+
+
+			bool add_stat(const string& name)
+			{
+				if (stats.size() >= STAT_TOTAL)
+					return false;
+
+				auto f = std::find(stats.begin(), stats.end(), name);
+				if (f != stats.end()) return false;
+
+				stats.push_back(name);
+				return true;
+			}
+
+			bool rename_stat(size_t index, const string& newn)
+			{
+				if (index >= stats.size() || count(newn)) return false;
+				
+				stats[index] = newn;
+			}
+			bool rename_stat(const string& oldn, const string& newn)
+			{
+				if(!exist(oldn) || exist(newn)) return false;
+
+				auto f = index_of_stat(oldn);
+				stats[f] = newn;
+				return true;
+			}
+
+
+			[[nodiscard]] size_t index_of_stat(const string& name) const
+			{
+				auto f = std::find(stats.begin(), stats.end(), name);
+				return f - stats.begin();
+			}
+
+			[[nodiscard]] const string& operator[](size_t index) const
+			{
+				return stats[index];
+			}
+
+
+			[[nodiscard]] size_t count(const string& name) const
+			{
+				auto f = std::find(stats.begin(), stats.end(), name);
+				if (f == stats.end()) return 0;
+				return 1;
+			}
+
+			[[nodiscard]] bool exist(const string& name) const
+			{
+				auto f = std::find(stats.begin(), stats.end(), name);
+				if (f == stats.end()) return false;
+				return true;
+			}
+
+			[[nodiscard]] size_t size() const
+			{
+				return stats.size();
+			}
+
+			[[nodiscard]] const tvector<string>& get_stats() const
+			{
+				return stats;
+			}
+
+		private:
+
+			tvector<string> stats;
+		};
+
+		struct Resolution
+		{
+			static const char* get_type() { return "Resolution"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Resolution& component)
+			{
+				ar.StartObject();
+				ar.Member("Resolution_Path", component.path);
+				return ar.EndObject();
+			}
+
+			tpath path = "";
+		};
+
+		struct System
+		{
+			static const char* get_type() { return "System"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, System& component)
+			{
+				ar.StartObject();
+				ar.Member("System_Path", component.path);
+				return ar.EndObject();
+			}
+
+			tpath path = "";
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -262,6 +536,10 @@ namespace Tempest
 			COMPONENT_CASE(Script);
 			COMPONENT_CASE(Rigidbody);
 			COMPONENT_CASE(Mesh);
+			COMPONENT_CASE(Character);
+			COMPONENT_CASE(Weapon);
+			COMPONENT_CASE(Statline);
+			COMPONENT_CASE(System);
 
 		/* ABOVE THIS PLEASE */
 

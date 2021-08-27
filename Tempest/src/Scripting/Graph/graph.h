@@ -22,6 +22,11 @@ namespace Tempest
     };
 
 
+    enum struct GraphType
+    {
+        Regular, System, Resolution
+    };
+
     /**
      * @brief Graph container for nodes, pins, and links.
      */
@@ -42,8 +47,10 @@ namespace Tempest
         /**
          * @brief Regular construction for a new graph.
          */
-        graph(const string & _name = "Default", m_resource * mem = std::pmr::get_default_resource()) :
-            name{ _name }, nodes{ mem }, links{ mem } {}
+        graph(
+            const string& _name = "Default", 
+            GraphType _type = GraphType::Regular,
+            m_resource* mem = std::pmr::get_default_resource());
 
         /**
          * @brief Constructor from a graph file path.
@@ -85,7 +92,7 @@ namespace Tempest
             // if two input or output pins, fail
             if (x == y) return false;
             // if x is input and y is output, return opposite
-            if (x == false) return add_link(end, start);
+            if (x == true) return add_link(end, start);
             // if same parent, fail
             if (s_parent == e_parent) return false;
             // if any of the parent ids cannot be found, fail
@@ -306,6 +313,7 @@ namespace Tempest
         mutable string name;
         mutable tpath filepath;
 
+        GraphType type = GraphType::Regular;
         Nodes nodes;
         Links links;
         Variables variables;

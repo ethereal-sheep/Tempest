@@ -236,5 +236,8 @@
     <ClInclude Include="src\RNG\resolution.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\Test\test_window2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -227,6 +227,9 @@
     <ClCompile Include="src\Scripting\Nodes\ArithmeticNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\CastNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\DiceNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ResolutionNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\StatNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\SystemNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
     <ClCompile Include="src\Scripting\Test\test_data.cpp" />
@@ -268,6 +271,7 @@
     <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
     <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
+    <ClInclude Include="src\Events\Events\ScriptEvents.h" />
     <ClInclude Include="src\Events\Test\event_test.h" />
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
     <ClInclude Include="src\Graphics\OpenGL\FBO.h" />
@@ -300,9 +304,12 @@
     <ClInclude Include="src\Physics\Util\px_make.h" />
     <ClInclude Include="src\Physics\Util\px_malloc_allocator.h" />
     <ClInclude Include="src\Physics\Util\px_math.h" />
+    <ClInclude Include="src\Resolution\ResolutionManager.h" />
+    <ClInclude Include="src\Resolution\Statline.h" />
     <ClInclude Include="src\Scripting\GMS.h" />
     <ClInclude Include="src\Scripting\Graph\graph.h" />
-    <ClInclude Include="src\Scripting\Graph\modifier_graph.h" />
+    <ClInclude Include="src\Scripting\Graph\system_graph.h" />
+    <ClInclude Include="src\Scripting\Graph\resolution_graph.h" />
     <ClInclude Include="src\Scripting\resolution.h" />
     <ClInclude Include="src\Scripting\SRM.h" />
     <ClInclude Include="src\Scripting\Util\sparse_scripts.h" />

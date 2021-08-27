@@ -12,6 +12,7 @@
 
 // test window
 #include "Window/Test/test_window.h"
+#include "Window/Test/test_window2.h"
 
 
 // filebrowsers (maybe dn)
@@ -88,6 +89,7 @@ namespace Tempest
 
 		instance->register_always<ShowRecent>();
 		instance->register_window<test_window>();
+		instance->register_window<test_window2>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{

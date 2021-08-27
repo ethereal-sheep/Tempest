@@ -501,7 +501,7 @@ namespace Tempest
 		var_data* insert(const Key& key, var_data data)
 		{
 			auto ret = vars.emplace(key, std::move(data));
-			if (ret.second)
+			if (!ret.second)
 				return nullptr;
 
 			return &ret.first->second;
