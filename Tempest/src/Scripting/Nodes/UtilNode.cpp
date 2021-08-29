@@ -46,7 +46,7 @@ namespace Tempest
             break;
         }
 
-        return make_uptr<UtilNode>(std::move(node));
+        return make_sptr<UtilNode>(std::move(node));
     }
 
     script* UtilNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )

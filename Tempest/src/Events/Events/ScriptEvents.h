@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core.h"
 #include "Events/Events/IEvent.h"
 
 namespace Tempest
@@ -8,7 +9,9 @@ namespace Tempest
 
 	struct Input : public Event 
 	{
-		Input(int i = 0) : input(i) {}
+		Input(id_t entity, int i = 0) : owner(entity), input(i) {}
+		
+		id_t owner;
 		int input;
 	};
 }

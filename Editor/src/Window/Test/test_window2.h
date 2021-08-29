@@ -14,6 +14,12 @@ namespace Tempest
 
 		void show(Instance& instance) override
 		{
+			if (ImGui::Begin(window_name(), &visible, window_flags))
+			{
+				//if (ImGui::Button(buffer))
+					//ax::NodeEditor::NavigateToContent();
+
+			}
 		}
 	};
 }

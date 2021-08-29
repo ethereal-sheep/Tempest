@@ -43,8 +43,8 @@ namespace Tempest
 		node(category_type _category) :
 			id{ idgen::generate() }, category{ _category } {}
 
-		node(const node&) = delete;
-		node& operator=(const node&) = delete;
+		node(const node&) = default;
+		node& operator=(const node&) = default;
 		node(node&&) = default;
 		node& operator=(node&&) = default;
 		virtual ~node() = 0 {}
@@ -199,7 +199,7 @@ case category_type::NodeCategory:											\
 
 
 #define NODE_SWITCH_START \
-		static inline std::unique_ptr<node> create_helper(					\
+		static inline node_ptr create_helper(								\
 	category_type t, const string& type) {									\
 	switch (t)																\
 	{																		\

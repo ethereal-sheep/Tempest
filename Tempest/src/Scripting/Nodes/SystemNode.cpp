@@ -42,7 +42,7 @@ namespace Tempest
             break;
         }
 
-        return make_uptr<SystemNode>(std::move(node));
+        return make_sptr<SystemNode>(std::move(node));
     }
 
     script* SystemNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )
@@ -53,9 +53,15 @@ namespace Tempest
         case Tempest::SystemNode::inner_type::Input:
         {
             auto script = instance.srm.add_script(
-                CreateEventScript([entity](const Event& e) {
+                CreateEventScript([&instance, entity](const Event& e) {
                     auto a = event_cast<Input>(e);
-                    LOG("Event Called: {0}, {1}", entity, a.input);
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Owner"))
+                    {
+                        var->get<int64_t>() = static_cast<int64_t>(a.owner);
+                        LOG("Event Called: {0}, {1}", a.owner, a.input);
+                    }
+
                     return std::make_tuple(a.input);
                 }
             ));

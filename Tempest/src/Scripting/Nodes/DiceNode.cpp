@@ -65,7 +65,7 @@ namespace Tempest
             break;
         }
 
-        return make_uptr<DiceNode>(std::move(node));
+        return make_sptr<DiceNode>(std::move(node));
     }
 
     script* DiceNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )

@@ -6,6 +6,7 @@
 #include "Physics/PhysicsObject.h"
 #include "Graphics/OpenGL/RenderPipeline.h"
 #include "Util/range.h"
+#include "Scripting/Graph/graph.h"
 
 /**
 * @brief 
@@ -494,12 +495,13 @@ namespace Tempest
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, System& component)
 			{
-				ar.StartObject();
-				ar.Member("System_Path", component.path);
-				return ar.EndObject();
+				if constexpr (Archiver::IsSaving())
+					return component.g._serialize(ar);
+				else
+					return component.g._deserialize(ar);
 			}
 
-			tpath path = "";
+			graph g{ "System", GraphType::System };
 		};
 	}
 	namespace tc = Tempest::Components;

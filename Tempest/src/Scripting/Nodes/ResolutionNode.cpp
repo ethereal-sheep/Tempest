@@ -55,7 +55,7 @@ namespace Tempest
             break;
         }
 
-        return make_uptr<ResolutionNode>(std::move(node));
+        return make_sptr<ResolutionNode>(std::move(node));
     }
 
     script* ResolutionNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )

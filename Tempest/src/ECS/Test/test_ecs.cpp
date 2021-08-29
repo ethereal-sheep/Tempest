@@ -236,6 +236,32 @@ namespace Tempest
 		}
 	}
 
+	void testing_ecs_7()
+	{
+		const char* s = R"(S:\Development\Projects)";
+		Entity global = 0, i = 0, k = 0;
+
+		{
+			ECS ecs;
+			global = ecs.create();
+			auto sys = ecs.emplace<tc::System>(global);
+			sys->g.add_var("Test", pin_type::Bool);
+			ecs.save(s);
+		}
+
+		{
+			ECS ecs;
+			ecs.load(s);
+			auto sys = ecs.get_if<tc::System>(global);
+			LOG_ASSERT(sys);
+
+			LOG_ASSERT(sys->g.get_variables().size());
+			LOG_ASSERT(sys->g.get_links().size());
+			LOG_ASSERT(sys->g.get_nodes().size());
+
+		}
+	}
+
 	void testing_ecs()
 	{
 		testing_ecs_1();
@@ -243,5 +269,6 @@ namespace Tempest
 		testing_ecs_4();
 		testing_ecs_5();
 		testing_ecs_6();
+		testing_ecs_7();
 	}
 }

@@ -39,8 +39,8 @@ namespace Tempest
         using Links = tset<link>;
         using Variables = ordered_var_set<string>;
 
-        graph(const graph&) = delete;
-        graph& operator=(const graph&) = delete;
+        graph(const graph&) = default;
+        graph& operator=(const graph&) = default;
         graph(graph&&) noexcept = default;
         graph& operator=(graph&&) = default;
 
@@ -66,7 +66,7 @@ namespace Tempest
         template <typename... Args>
         node* add_node(Args&&... args)
         {
-            std::unique_ptr<node> ptr{ std::forward<Args>(args)... };
+            node_ptr ptr{ std::forward<Args>(args)... };
 
             if (!ptr) return nullptr;
 
@@ -269,6 +269,7 @@ namespace Tempest
          */
         auto get_variables() const { return make_const_range(variables); }
 
+
         /**
          * @brief Gets a node via the node_id. If node doesn't exist, returns nullptr.
          */
@@ -282,6 +283,10 @@ namespace Tempest
          * @brief Clears the entire graph of nodes and links.
          */
         void clear();
+
+
+        Writer& _serialize(Writer& writer) const;
+        Reader& _deserialize(Reader& reader);
 
 
     private:
@@ -308,8 +313,7 @@ namespace Tempest
 
 
 
-        Writer& _serialize(Writer& writer) const;
-
+        // might be deprecated
         mutable string name;
         mutable tpath filepath;
 

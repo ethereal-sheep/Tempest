@@ -359,3 +359,4 @@ Build-int/**
 
 !Dep/PhysX/**
 
+/.VSCodeCounter

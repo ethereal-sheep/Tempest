@@ -146,9 +146,9 @@ namespace Tempest
 		gms.new_graph(GraphType::System);
 
 
-		tmap<node_id_t, script*> map;
 		for (auto& g : gms.get_graphs())
 		{
+			tmap<node_id_t, script*> map;
 			// add variables
 			for (auto& [name, type, var] : g.get_variables())
 			{
@@ -173,7 +173,6 @@ namespace Tempest
 				auto s_node = g.get_node(s_parent);
 				auto e_node = g.get_node(e_parent);
 
-				
 				auto pin = s_node->get_output_pin(s_index);
 				auto type = pin->get_type();
 
@@ -188,23 +187,30 @@ namespace Tempest
 						map[s_parent], // script of prev script
 						s_index - s_node->get_num_output_flows()); // index of out pin in prev script
 				}
-
 			}
 		}
 
 		{
 			int newNum = 12;
-			instance.srm.instant_dispatch_to_id<Input>(global, newNum);
+			instance.srm.instant_dispatch_to_id<Input>(global, INVALID, newNum);
 			auto i = instance.srm.get_variable_to_id(global, "Output")->get<int>();
 			LOG_ASSERT(i == newNum);
 		}
 		
 		{
 			int newNum = 234323;
-			instance.srm.instant_dispatch_to_id<Input>(global, newNum);
+			instance.srm.instant_dispatch_to_id<Input>(global, INVALID, newNum);
 			auto i = instance.srm.get_variable_to_id(global, "Output")->get<int>();
 			LOG_ASSERT(i == newNum);
 		}
+	}
+
+	void retest_graphs()
+	{
+		ECS ecs;
+		auto global = ecs.create();
+
+		
 	}
 
 	void TestingDice()
