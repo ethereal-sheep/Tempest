@@ -37,7 +37,7 @@ namespace Tempest
 
 		OnInit();
 
-		testing_ecs();
+		//testing_ecs();
 		//TestingDice();
 	}
 

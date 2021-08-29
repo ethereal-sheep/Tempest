@@ -40,7 +40,7 @@ namespace Tempest
 			}
 
 			// calculate max and total
-			long double init = 0;
+			double init = 0;
 			total = std::accumulate(result.begin(), result.end(), init);
 
 			// calculate max

@@ -5,7 +5,7 @@ namespace Tempest
 {
 	void Instance::internal_init()
 	{
-		window_manager.init();
+		window_manager.init(*this);
 
 		// clean up destroyed
 		auto view = ecs.view<Components::Destroyed>();
@@ -32,6 +32,6 @@ namespace Tempest
 	}
 	void Instance::internal_exit()
 	{
-		window_manager.exit();
+		window_manager.exit(*this);
 	}
 }

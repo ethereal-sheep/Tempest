@@ -4,7 +4,7 @@
 
 namespace Tempest
 {
-	void HierarchyWindow::init()
+	void HierarchyWindow::init(Instance&)
 	{
 		window_flags |= ImGuiWindowFlags_MenuBar;
 	}

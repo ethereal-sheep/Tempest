@@ -32,20 +32,20 @@ namespace Tempest
 			// not sure if exception will be thrown here
 		}
 
-		void init()
+		void init(Instance& instance)
 		{
 			for (auto& window : always)
-				window->init();
+				window->init(instance);
 			for (auto& window : windows)
-				window->init();
+				window->init(instance);
 		}
 
-		void exit()
+		void exit(Instance& instance)
 		{
 			for (auto& window : always)
-				window->exit();
+				window->exit(instance);
 			for (auto& window : windows)
-				window->exit();
+				window->exit(instance);
 		}
 
 		void show(Instance& instance)

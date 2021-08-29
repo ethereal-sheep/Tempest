@@ -224,7 +224,7 @@ case category_type::NodeCategory:											\
 	enum struct category_type
 	{
 		Cast, Variable, Dice, Arithmetic, GetStat, SetStat, GetMainStat, 
-		Resolution, System
+		Resolution, System, Switch
 		
 		,Group, Trig,
 		Random, Numerical, Constants, Logic, Vector,
@@ -243,6 +243,7 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(GetMainStatNode, GetMainStat, _cannot_be_empty);
 	DEFINE_NODE(ResolutionNode, Resolution, Start, Resolve, Attacking, Defending);
 	DEFINE_NODE(SystemNode, System, Input, Output);
+	DEFINE_NODE(SwitchNode, Switch, TwoSwitch, ThreeSwitch, FiveSwitch, TenSwitch, TwentySwitch, ThirtySwitch);
 	DEFINE_NODE(UtilNode, util, Print, In);
 
 	NODE_SWITCH_START
@@ -258,6 +259,7 @@ case category_type::NodeCategory:											\
 		NODE_CASE(GetMainStatNode, GetMainStat);
 		NODE_CASE(ResolutionNode, Resolution);
 		NODE_CASE(SystemNode, System);
+		NODE_CASE(SwitchNode, Switch);
 		NODE_CASE(UtilNode, util);
 
 		/* ABOVE THIS PLEASE */

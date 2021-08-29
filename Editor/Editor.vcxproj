@@ -176,19 +176,25 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
   <ItemGroup>
     <ClCompile Include="src\Actions\Action.cpp" />
     <ClCompile Include="src\Editor.cpp" />
+    <ClCompile Include="src\Extern\imgui\crude_json.cpp" />
+    <ClCompile Include="src\Extern\imgui\drawing.cpp" />
     <ClCompile Include="src\Extern\imgui\ImFileDialog.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui.cpp" />
     <ClCompile Include="src\Extern\imgui\ImGuizmo.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_canvas.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_node_editor.cpp" />
+    <ClCompile Include="src\Extern\imgui\imgui_node_editor_api.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\Extern\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Extern\imgui\implot.cpp" />
     <ClCompile Include="src\Extern\imgui\implot_demo.cpp" />
     <ClCompile Include="src\Extern\imgui\implot_items.cpp" />
+    <ClCompile Include="src\Extern\imgui\widgets.cpp" />
     <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
     <ClCompile Include="src\Util\GuizmoController.cpp" />
     <ClCompile Include="src\Util\UIElements.cpp" />
@@ -199,19 +205,27 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
+    <ClInclude Include="src\Extern\imgui\crude_json.h" />
+    <ClInclude Include="src\Extern\imgui\drawing.h" />
     <ClInclude Include="src\Extern\imgui\imconfig.h" />
     <ClInclude Include="src\Extern\imgui\ImFileDialog.h" />
     <ClInclude Include="src\Extern\imgui\imgui.h" />
     <ClInclude Include="src\Extern\imgui\ImGuizmo.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_bezier_math.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_canvas.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_extra_math.h" />
     <ClInclude Include="src\Extern\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="src\Extern\imgui\imgui_impl_win32.h" />
     <ClInclude Include="src\Extern\imgui\imgui_internal.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_node_editor.h" />
+    <ClInclude Include="src\Extern\imgui\imgui_node_editor_internal.h" />
     <ClInclude Include="src\Extern\imgui\imgui_stdlib.h" />
     <ClInclude Include="src\Extern\imgui\implot.h" />
     <ClInclude Include="src\Extern\imgui\implot_internal.h" />
     <ClInclude Include="src\Extern\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\Extern\imgui\imstb_textedit.h" />
     <ClInclude Include="src\Extern\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Extern\imgui\widgets.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Fonts\IconsFontaudio.h" />
     <ClInclude Include="src\Fonts\IconsFontAwesome5.h" />
@@ -250,6 +264,11 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Test\test_window2.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Extern\imgui\imgui_bezier_math.inl" />
+    <None Include="src\Extern\imgui\imgui_extra_math.inl" />
+    <None Include="src\Extern\imgui\imgui_node_editor_internal.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

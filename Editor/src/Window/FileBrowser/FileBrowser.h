@@ -11,7 +11,7 @@ namespace Tempest
         {
             return "";
         }
-        void init() override
+        void init(Instance&) override
         {
             //Service<EventManager>::Get().register_listener<OverlayTrigger>(&test_overlay_popup::open_popup, this);
         }

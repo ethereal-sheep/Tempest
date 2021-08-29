@@ -148,9 +148,9 @@ namespace Tempest
 		next_config = a.config;
 	}
 
-	void load_prev_instance(const Event& e)
+	void load_prev_instance(const Event&)
 	{
-		auto& a = event_cast<LoadPrevInstance>(e);
+		//auto& a = event_cast<LoadPrevInstance>(e);
 		// check if current has prev can load or not
 
 

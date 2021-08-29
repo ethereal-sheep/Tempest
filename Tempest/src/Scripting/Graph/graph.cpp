@@ -6,14 +6,14 @@ namespace Tempest
 	
 
 
-	graph::graph(const string& _name, GraphType _type, m_resource* mem) :
+	graph::graph(const string& _name, graph_type _type, m_resource* mem) :
 		name{ _name }, type{ _type }, nodes{ mem }, links{ mem }
 	{
 		switch (type)
 		{
-		case Tempest::GraphType::Regular:
+		case Tempest::graph_type::regular:
 			break;
-		case Tempest::GraphType::System:
+		case Tempest::graph_type::system:
 		{
 			// for output
 			auto var = add_var("Output", pin_type::Int);
@@ -42,7 +42,7 @@ namespace Tempest
 
 		}
 			break;
-		case Tempest::GraphType::Resolution:
+		case Tempest::graph_type::resolution:
 		{
 			// start nodes
 
@@ -224,6 +224,7 @@ namespace Tempest
 	}
 	Reader& graph::_deserialize(Reader& reader)
 	{
+		clear();
 
 		tmap<node_id_t, node_id_t> old_new_ids;
 		reader.StartObject();
@@ -312,8 +313,6 @@ namespace Tempest
 							}
 							reader.EndArray();
 
-
-
 							// add the new id into 
 							old_new_ids[old_id] = node->get_id();
 						}
@@ -350,9 +349,9 @@ namespace Tempest
 					if (old_new_ids.count(s_parent) &&
 						old_new_ids.count(e_parent))
 					{
-						auto start_pin = create_pin_id(x, s_index, old_new_ids[old_start]);
-						auto end_pin = create_pin_id(y, e_index, old_new_ids[old_end]);
-						if (add_link(start_pin, end_pin))
+						auto start_pin = create_pin_id(x, s_index, old_new_ids[s_parent]);
+						auto end_pin = create_pin_id(y, e_index, old_new_ids[e_parent]);
+						if (!add_link(start_pin, end_pin))
 							throw graph_exception(
 								name +
 								": Linking failed between " +

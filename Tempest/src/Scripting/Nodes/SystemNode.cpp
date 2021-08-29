@@ -59,7 +59,11 @@ namespace Tempest
                     if (auto var = instance.srm.get_variable_to_id(entity, "Owner"))
                     {
                         var->get<int64_t>() = static_cast<int64_t>(a.owner);
-                        LOG("Event Called: {0}, {1}", a.owner, a.input);
+                    }
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Output"))
+                    {
+                        var->get<int>() = static_cast<int64_t>(a.input);
                     }
 
                     return std::make_tuple(a.input);

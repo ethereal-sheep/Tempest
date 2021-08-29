@@ -13,7 +13,7 @@ namespace Tempest
         {
             return "";
         }
-        void init() override
+        void init(Instance&) override
         {
             Service<EventManager>::Get().register_listener<SaveCurrentBeforeOpenTrigger>(&SaveCurrentBeforeOpenPopup::open_popup, this);
         }

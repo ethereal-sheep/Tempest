@@ -501,7 +501,7 @@ namespace Tempest
 					return component.g._deserialize(ar);
 			}
 
-			graph g{ "System", GraphType::System };
+			graph g{ "System", graph_type::system };
 		};
 	}
 	namespace tc = Tempest::Components;

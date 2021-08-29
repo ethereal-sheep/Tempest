@@ -11,7 +11,7 @@ namespace Tempest
 		{
 			return ICON_FA_SHAPES " Entities";
 		}
-		void init() override;
+		void init(Instance&) override;
 		void show(Instance& instance) override;
 
 		ImGuiTextFilter filter;

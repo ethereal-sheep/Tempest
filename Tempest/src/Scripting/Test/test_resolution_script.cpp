@@ -143,7 +143,7 @@ namespace Tempest
 		const char* s = R"(S:\Development\Projects)";
 
 		GMS gms;
-		gms.new_graph(GraphType::System);
+		gms.new_graph(graph_type::system);
 
 
 		for (auto& g : gms.get_graphs())

@@ -13,7 +13,7 @@ namespace Tempest
         {
             return "";
         }
-        void init() override
+        void init(Instance&) override
         {
             Service<EventManager>::Get().register_listener<CloseProjectTrigger>(&CloseProjectPopup::open_popup, this);
         }

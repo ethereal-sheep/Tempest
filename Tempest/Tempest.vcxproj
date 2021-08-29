@@ -229,6 +229,7 @@
     <ClCompile Include="src\Scripting\Nodes\DiceNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\ResolutionNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\StatNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\SwitchNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\SystemNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
