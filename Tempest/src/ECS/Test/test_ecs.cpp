@@ -102,7 +102,7 @@ namespace Tempest
 
 
 			auto statline = ecs.get_if<tc::Statline>(global);
-			auto character = ecs.get_if<tc::Character>(i);
+			//auto character = ecs.get_if<tc::Character>(i);
 
 			LOG_ASSERT(statline->exist(newStat));
 			LOG_ASSERT(statline->exist(newStat));
@@ -157,7 +157,7 @@ namespace Tempest
 
 	void testing_ecs_5()
 	{
-		const char* s = R"(S:\Development\Projects)";
+		//const char* s = R"(S:\Development\Projects)";
 		string newStat = "four";
 		string newStat2 = "five";
 		int newStatVal = 10;
@@ -238,28 +238,28 @@ namespace Tempest
 
 	void testing_ecs_7()
 	{
-		const char* s = R"(S:\Development\Projects)";
-		Entity global = 0, i = 0, k = 0;
+		//const char* s = R"(S:\Development\Projects)";
+		//Entity global = 0;
 
-		{
-			ECS ecs;
-			global = ecs.create();
-			auto sys = ecs.emplace<tc::System>(global);
-			sys->g.add_var("Test", pin_type::Bool);
-			ecs.save(s);
-		}
+		//{
+		//	ECS ecs;
+		//	global = ecs.create();
+		//	auto sys = ecs.emplace<tc::ActionGraph>(global);
+		//	sys->g.add_var("Test", pin_type::Bool);
+		//	ecs.save(s);
+		//}
 
-		{
-			ECS ecs;
-			ecs.load(s);
-			auto sys = ecs.get_if<tc::System>(global);
-			LOG_ASSERT(sys);
+		//{
+		//	ECS ecs;
+		//	ecs.load(s);
+		//	auto sys = ecs.get_if<tc::ActionGraph>(global);
+		//	LOG_ASSERT(sys);
 
-			LOG_ASSERT(sys->g.get_variables().size());
-			LOG_ASSERT(sys->g.get_links().size());
-			LOG_ASSERT(sys->g.get_nodes().size());
+		//	//LOG_ASSERT(sys->g.get_variables().size());
+		//	//LOG_ASSERT(sys->g.get_links().size());
+		//	//LOG_ASSERT(sys->g.get_nodes().size());
 
-		}
+		//}
 	}
 
 	void testing_ecs()

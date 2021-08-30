@@ -24,7 +24,7 @@ namespace Tempest
 
     enum struct graph_type
     {
-        regular, system, resolution
+        regular, conflict, action, resolution
     };
 
     /**

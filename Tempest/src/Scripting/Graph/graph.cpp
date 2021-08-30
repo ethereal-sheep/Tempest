@@ -5,7 +5,6 @@ namespace Tempest
 {
 	
 
-
 	graph::graph(const string& _name, graph_type _type, m_resource* mem) :
 		name{ _name }, type{ _type }, nodes{ mem }, links{ mem }
 	{
@@ -13,19 +12,67 @@ namespace Tempest
 		{
 		case Tempest::graph_type::regular:
 			break;
-		case Tempest::graph_type::system:
+		case Tempest::graph_type::conflict:
+		{
+			// attacking/defending entities
+			auto atk = add_var("Attacking", pin_type::Int64);
+			auto def = add_var("Defending", pin_type::Int64);
+			LOG_ASSERT(atk);
+			LOG_ASSERT(def);
+
+			// atk/def systems 
+			// temp: systems should be defined in character sheet (atk, def)
+			auto atk_sys = add_var("Attacking_System", pin_type::Int64);
+			auto def_sys = add_var("Defending_System", pin_type::Int64);
+			auto res_sys = add_var("Resolving_System", pin_type::Int64);
+			LOG_ASSERT(atk_sys);
+			LOG_ASSERT(def_sys);
+			LOG_ASSERT(res_sys);
+
+			// start nodes
+
+			// start event
+			auto start = add_node(ConflictNode::create_node("Start"));
+
+			// start links to System 1
+			// attacking calculates the value and passes it on
+			auto system1 = add_node(ConflictNode::create_node("Attacking"));
+
+			// attacking links to defending
+			// defending calculates the value and passes it on
+			auto system2 = add_node(ConflictNode::create_node("Defending"));
+
+			// resolve attacking and defending
+			auto resolve = add_node(ConflictNode::create_node("Resolve"));
+
+
+			LOG_ASSERT(start);
+			LOG_ASSERT(system1);
+			LOG_ASSERT(system2);
+			LOG_ASSERT(resolve);
+
+			// testing only
+			auto output = add_node(ActionNode::create_node("Output"));
+			LOG_ASSERT(output);
+			auto var = add_var("Output", pin_type::Int);
+			LOG_ASSERT(var);
+		}
+			break;
+		case Tempest::graph_type::action:
 		{
 			// for output
 			auto var = add_var("Output", pin_type::Int);
 			auto owner = add_var("Owner", pin_type::Int64);
 
-			auto input = add_node(SystemNode::create_node("Input"));
-			auto output = add_node(SystemNode::create_node("Output"));
+			auto input = add_node(ActionNode::create_node("Input"));
+			auto output = add_node(ActionNode::create_node("Output"));
 
 			LOG_ASSERT(var);
 			LOG_ASSERT(owner);
 			LOG_ASSERT(input);
 			LOG_ASSERT(output);
+
+			output->position.x = 300.f;
 
 			auto flow = add_link(
 				input->get_output_pin(0)->get_id(),
@@ -44,21 +91,7 @@ namespace Tempest
 			break;
 		case Tempest::graph_type::resolution:
 		{
-			// start nodes
-
-			// start event
-			auto start = add_node(ResolutionNode::create_node("Start"));
-
-			// start links to System 1
-			// attacking calculates the value and passes it on
-			auto system1 = add_node(ResolutionNode::create_node("System1"));
-
-			// attacking links to defending
-			// defending calculates the value and passes it on
-			auto system2 = add_node(ResolutionNode::create_node("System2"));
-
-			// resolve attacking and defending
-			auto resolve = add_node(ResolutionNode::create_node("Resolve"));
+			
 		}
 			break;
 		default:

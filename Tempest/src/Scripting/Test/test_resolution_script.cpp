@@ -140,10 +140,10 @@ namespace Tempest
 
 		Entity global = instance.ecs.create();
 
-		const char* s = R"(S:\Development\Projects)";
+		//const char* s = R"(S:\Development\Projects)";
 
 		GMS gms;
-		gms.new_graph(graph_type::system);
+		gms.new_graph(graph_type::action);
 
 
 		for (auto& g : gms.get_graphs())
@@ -207,8 +207,8 @@ namespace Tempest
 
 	void retest_graphs()
 	{
-		ECS ecs;
-		auto global = ecs.create();
+		//ECS ecs;
+		//auto global = ecs.create();
 
 		
 	}

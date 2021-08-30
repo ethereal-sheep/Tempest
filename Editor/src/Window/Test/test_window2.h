@@ -8,32 +8,28 @@ namespace Tempest
 	class test_window2 : public Window
 	{
 
+		Entity current = INVALID;
+
 		ax::NodeEditor::EditorContext* context;
 		ImVec2 mouse = ImVec2(0,0);
 		int simulate_val = 0;
+
+
+		float border = 10.f;
+		float swidth = 250.f;
+		float min_swidth = 50.f;
+		float max_swidth = 500.f;
 
 		const char* window_name() override
 		{
 			return "test_window2";
 		}
 
-		void init(Instance& instance) override
+		void init(Instance& ) override
 		{
 			context = ax::NodeEditor::CreateEditor();
 			ax::NodeEditor::SetCurrentEditor(context);
 
-			for (auto id : instance.ecs.view<tc::System>())
-			{
-				auto& sys = instance.ecs.get<tc::System>(id);
-				auto& g = sys.g;
-
-				for (auto& [node_id, node_ptr] : g.get_nodes())
-				{
-					ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position));
-				}
-
-			}
-			
 		}
 
 		void exit(Instance&) override
@@ -52,9 +48,18 @@ namespace Tempest
 			}
 		}
 
-		void try_build(Entity id, graph& g, Instance& instance)
+		void try_build_all(Instance& instance)
 		{
 			instance.srm.clear();
+			for (auto id : instance.ecs.view<tc::Graph>())
+			{
+				auto& sys = instance.ecs.get<tc::Graph>(id);
+				try_build(id, sys.g, instance);
+			}
+		}
+
+		void try_build(Entity id, graph& g, Instance& instance)
+		{
 			tmap<node_id_t, script*> map;
 
 			// add variables
@@ -100,123 +105,222 @@ namespace Tempest
 
 		void show(Instance& instance) override
 		{
-
 			if (ImGui::Begin(window_name(), &visible, window_flags))
 			{
-				if (ImGui::Button("Test"))
+
+				draw_splitter();
+				draw_sidebar(instance);
+				ImGui::SameLine();
+
+				draw_context(instance);
+
+			}
+
+			ImGui::End();
+
+
+		}
+
+		void draw_splitter()
+		{
+			ImVec2 backup_pos = ImGui::GetCursorPos();
+			ImGui::SetCursorPosX(backup_pos.x + swidth);
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
+			// We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.6f, 0.6f, 0.10f));
+			ImGui::Button("##Splitter", ImVec2(border, -1.f));
+			ImGui::PopStyleColor(3);
+
+			ImGui::SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter. 
+
+			if (ImGui::IsItemActive())
+			{
+				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+				float mouse_delta = ImGui::GetIO().MouseDelta.x;
+
+				// Minimum pane size
+				if (mouse_delta < min_swidth - swidth)
+					mouse_delta = min_swidth - swidth;
+				if (mouse_delta > max_swidth - swidth)
+					mouse_delta = max_swidth - swidth;
+
+				// Apply resize
+				swidth += mouse_delta;
+			}
+			else
+			{
+				if (ImGui::IsItemHovered())
+					ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+				else
+					ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+			}
+
+			ImGui::SetCursorPos(backup_pos);
+		}
+
+		void draw_sidebar(Instance& instance)
+		{
+			if (ImGui::BeginChild("##NodeEditorSideBar", ImVec2(swidth, -10.f), false,
+				ImGuiWindowFlags_MenuBar))
+			{
+
+				// add test graph
+				if (ImGui::Button("Add Action"))
 				{
 					auto i = instance.ecs.create();
-					instance.ecs.emplace<tc::System>(i);
+					instance.ecs.emplace<tc::ActionGraph>(i);
+					instance.ecs.emplace<tc::Graph>(i, "Action", graph_type::action);
 				}
+
+				ImGui::SameLine();
+				if (ImGui::Button("Add Conflict"))
+				{
+					auto i = instance.ecs.create();
+					instance.ecs.emplace<tc::ConflictGraph>(i);
+					instance.ecs.emplace<tc::Graph>(i, "Conflict", graph_type::conflict);
+				}
+
+				// navigate to content
 				ImGui::SameLine();
 				if (ImGui::Button("Navigate to Content"))
 				{
 					ax::NodeEditor::NavigateToContent();
 				}
 
-				if (ImGui::BeginTabBar("Node Tab"))
+				// UI elements
+				// -----------------------------------------------------------------
+				/*if (ImGui::Button((string{ "Build##" } + std::to_string(id)).c_str()))
 				{
-					for (auto id : instance.ecs.view<tc::System>())
-					{
-						if(ImGui::BeginTabItem(std::to_string(id).c_str()))
-						{
-							auto& sys = instance.ecs.get<tc::System>(id);
-							auto& g = sys.g;
-
-							if (ImGui::Button("Build"))
-							{
-								try_build(id, g, instance);
-							}
-
-							static int send = 0;
-							static int uone = 1;
-							ImGui::InputScalar("Input", ImGuiDataType_S32, &send, &uone);
-							ImGui::SameLine();
-							if (ImGui::Button("Simulate"))
-							{
-								try_system(id, send, instance);
-							}
-							ImGui::SameLine();
-							ImGui::Text("Output: %d", simulate_val);
-
-							ax::NodeEditor::Begin("Test");
-
-							update_create(g);
-							update_delete(g);
-
-							ax::NodeEditor::Suspend();
-							if (ax::NodeEditor::ShowBackgroundContextMenu())
-							{
-								mouse = ImGui::GetMousePos();
-								ImGui::OpenPopup("Create New Node");
-							}
-
-							ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-
-							draw_background_context(g);
-
-							ImGui::PopStyleVar();
-
-							ax::NodeEditor::Resume();
-
-
-							for (auto& [node_id, ptr] : g.get_nodes())
-							{
-								draw_node(ptr);
-							}
-
-							for (auto [link_id, from, to] : g.get_links_as_tri())
-							{
-								auto [input, index, parent] = pin_to_component(from);
-								auto node = g.get_node(parent);
-								auto pin = node->get_output_pin(index);
-
-								draw_link(link_id, from, to, pin->get_type());
-							}
-							ax::NodeEditor::End();
-							ImGui::EndTabItem();
-						}
-					}
-					ImGui::EndTabBar();
+					try_build(id, g, instance);
 				}
 
-				
-				// ----------------------------------------------------------------
+				static int send = 0;
+				static int uone = 1;
+				ImGui::InputScalar("Input", ImGuiDataType_S32, &send, &uone);
+				ImGui::SameLine();
+				if (ImGui::Button((string{ "Simulate##" } + std::to_string(id)).c_str()))
+				{
+					try_system(id, send, instance);
+				}
+				ImGui::SameLine();
+				ImGui::Text("Output: %d", simulate_val);*/
 
-				//update_create(g);
-				//update_delete(g);
-				//update_delete(g);
+				if (ImGui::TreeNodeEx("Conflict Graphs"))
+				{
+					for (auto id : instance.ecs.view<tc::ConflictGraph>())
+					{
+						std::string text = std::to_string(id);
+						ImGui::Indent(10.f);
+						if (ImGui::Selectable(text.c_str(), current == id))
+						{
+							current = id;
+						}
+						ImGui::Unindent(10.f);
+					}
+					ImGui::TreePop();
+				}
 
-				//ImGui::PushID(graph.GetName().c_str());
+				if (ImGui::TreeNodeEx("Action Graphs"))
+				{
+					for (auto id : instance.ecs.view<tc::ActionGraph>())
+					{
+						std::string text = std::to_string(id);
+						ImGui::Indent(10.f);
+						if (ImGui::Selectable(text.c_str(), current == id))
+						{
+							current = id;
+						}
+						ImGui::Unindent(10.f);
+					}
+					ImGui::TreePop();
+				}
 
-				//// draw nodes
 
-				//for (auto& node : graph.GetNodes())
-				//{
-				//	draw_node(*node, graph);
-				//}
-				//// draw links
-				//for (auto& link : graph.GetLinks())
-				//{
-				//	draw_link(link);
-				//}
-
-				//ImGui::PopID();
-
-				// ----------------------------------------------------------------
-
-				//DragDropTarget(graph);
 
 			}
-
-			ImGui::End();
+			ImGui::EndChild();
 		}
+
+		void draw_context(Instance& instance)
+		{
+			if (current)
+			{
+				// graphs
+
+				auto& sys = instance.ecs.get<tc::Graph>(current);
+				auto& g = sys.g;
+
+				for (auto& [node_id, node_ptr] : g.get_nodes())
+				{
+					ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position));
+				}
+
+				// -----------------------------------------------------------------
+
+				// Canvas
+				// -----------------------------------------------------------------
+				ax::NodeEditor::Begin("Test");
+
+				update_create(g);
+				update_delete(g);
+
+
+				// context
+				// ---------
+				ax::NodeEditor::Suspend();
+
+				if (ax::NodeEditor::ShowBackgroundContextMenu())
+				{
+					mouse = ImGui::GetMousePos();
+					ImGui::OpenPopup("Create New Node");
+				}
+
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+
+				draw_background_context(g);
+
+				ImGui::PopStyleVar();
+
+				ax::NodeEditor::Resume();
+				// ---------
+
+
+				// draw nodes
+				// ---------
+				for (auto& [node_id, node_ptr] : g.get_nodes())
+				{
+					draw_node(node_ptr);
+				}
+				// ---------
+
+				// draw links
+				// ---------
+				for (auto [link_id, from, to] : g.get_links_as_tri())
+				{
+					auto [input, index, parent] = pin_to_component(from);
+					auto node = g.get_node(parent);
+					auto pin = node->get_output_pin(index);
+
+					draw_link(link_id, from, to, pin->get_type());
+				}
+				// ---------
+				ax::NodeEditor::End();
+				// -----------------------------------------------------------------
+
+				for (auto& [node_id, node_ptr] : g.get_nodes())
+				{
+					node_ptr->position = els::to_vec2(ax::NodeEditor::GetNodePosition(node_id));
+				}
+			}
+		}
+
 
 		void draw_node(node_ptr n)
 		{
 			auto id = n->get_id();
 			ax::NodeEditor::BeginNode(id);
-
 
 			float owidth = 0.f;
 			for (const auto& output : n->get_outputs())
@@ -235,9 +339,10 @@ namespace Tempest
 
 			// Title
 			ImGui::Text(n->get_name().c_str());
+
 			// Update Position
-			auto pos = ax::NodeEditor::GetNodePosition(id);
-			n->position = { pos.x, pos.y };
+			//auto pos = ax::NodeEditor::GetNodePosition(id);
+			//n->position = { pos.x, pos.y };
 
 			// Input group
 			ImGui::BeginGroup();
@@ -269,26 +374,9 @@ namespace Tempest
 		{
 			int alpha = 255;
 
-			ax::Drawing::IconType iconType;
+			ax::Drawing::IconType iconType = get_pin_icon(p.get_type());
 			ImColor color = get_pin_color(p.get_type());
 			color.Value.w = static_cast<float>(alpha) / 255.0f;
-			switch (p.get_type())
-			{
-			case pin_type::Flow: iconType = ax::Drawing::IconType::Flow;				break;
-			case pin_type::Bool: iconType = ax::Drawing::IconType::Diamond;				break;
-			case pin_type::Byte: iconType = ax::Drawing::IconType::Circle;				break;
-			case pin_type::Int: iconType = ax::Drawing::IconType::Circle;				break;
-			case pin_type::Int64: iconType = ax::Drawing::IconType::Circle;				break;
-			case pin_type::Float: iconType = ax::Drawing::IconType::Square;				break;
-			case pin_type::String: iconType = ax::Drawing::IconType::Grid;				break;
-			case pin_type::Vec2: iconType = ax::Drawing::IconType::RoundSquare;			break;
-			case pin_type::Vec3: iconType = ax::Drawing::IconType::RoundSquare;			break;
-			case pin_type::Vec4: iconType = ax::Drawing::IconType::RoundSquare;			break;
-			case pin_type::Entity: iconType = ax::Drawing::IconType::Square;			break;
-			case pin_type::Vector: iconType = ax::Drawing::IconType::Square;			break;
-			default:
-				return;
-			}
 
 			BeginPin(p.get_id(), ax::NodeEditor::PinKind::Input);
 			ax::NodeEditor::PinPivotAlignment(ImVec2(0.5f, 0.5f));
@@ -322,27 +410,9 @@ namespace Tempest
 		{
 			int alpha = 255;
 
-			ax::Drawing::IconType iconType;
+			ax::Drawing::IconType iconType = get_pin_icon(p.get_type());
 			ImColor color = get_pin_color(p.get_type());
 			color.Value.w = static_cast<float>(alpha) / 255.0f;
-			switch (p.get_type())
-			{
-			case pin_type::Flow: iconType = ax::Drawing::IconType::Flow;				break;
-			case pin_type::Bool: iconType = ax::Drawing::IconType::Diamond;				break;
-			case pin_type::Byte: iconType = ax::Drawing::IconType::Circle;				break;
-			case pin_type::Int: iconType = ax::Drawing::IconType::Circle;				break;
-			case pin_type::Int64: iconType = ax::Drawing::IconType::Circle;				break;
-			case pin_type::Float: iconType = ax::Drawing::IconType::Square;				break;
-			case pin_type::String: iconType = ax::Drawing::IconType::Grid;				break;
-			case pin_type::Vec2: iconType = ax::Drawing::IconType::RoundSquare;			break;
-			case pin_type::Vec3: iconType = ax::Drawing::IconType::RoundSquare;			break;
-			case pin_type::Vec4: iconType = ax::Drawing::IconType::RoundSquare;			break;
-			case pin_type::Entity: iconType = ax::Drawing::IconType::Square;			break;
-			case pin_type::Vector: iconType = ax::Drawing::IconType::Square;			break;
-			default:
-				return;
-			}
-
 
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + owidth
 				- ImGui::CalcTextSize(p.get_name().c_str()).x);
@@ -367,9 +437,6 @@ namespace Tempest
 			ax::NodeEditor::EndPin();
 		}
 
-		void draw_context(graph&)
-		{
-		}
 
 		template <typename TNode>
 		void node_context(
@@ -403,8 +470,6 @@ namespace Tempest
 
 		void draw_background_context(graph& g)
 		{
-
-
 			if(ImGui::BeginPopup("Create New Node", ImGuiWindowFlags_NoResize))
 			{
 				ImGui::Text("All Actions For This Blueprint");
@@ -428,7 +493,7 @@ namespace Tempest
 
 				if (ImGui::Selectable("Output"))
 				{
-					auto node = g.add_node(SystemNode::create_node("Output"));
+					auto node = g.add_node(ActionNode::create_node("Output"));
 
 					if (node)
 					{
@@ -472,6 +537,7 @@ namespace Tempest
 					auto e_pin = g.get_input_pin(e);
 
 					ImColor bad = ImColor(45, 32, 32, 180);
+
 
 					if (!s_pin)
 					{
@@ -534,7 +600,6 @@ namespace Tempest
 							}
 						}
 					}
-					
 				}
 			}
 			ax::NodeEditor::EndCreate();
@@ -590,6 +655,26 @@ namespace Tempest
 			}
 		}
 
+		ax::Drawing::IconType get_pin_icon(pin_type type)
+		{
+			switch (type)
+			{
+			case pin_type::Flow: return ax::Drawing::IconType::Flow;				break;
+			case pin_type::Bool: return ax::Drawing::IconType::Diamond;				break;
+			case pin_type::Byte: return ax::Drawing::IconType::Circle;				break;
+			case pin_type::Int: return ax::Drawing::IconType::Circle;				break;
+			case pin_type::Int64: return ax::Drawing::IconType::Circle;				break;
+			case pin_type::Float: return ax::Drawing::IconType::Square;				break;
+			case pin_type::String: return ax::Drawing::IconType::Grid;				break;
+			case pin_type::Vec2: return ax::Drawing::IconType::RoundSquare;			break;
+			case pin_type::Vec3: return ax::Drawing::IconType::RoundSquare;			break;
+			case pin_type::Vec4: return ax::Drawing::IconType::RoundSquare;			break;
+			case pin_type::Entity: return ax::Drawing::IconType::Square;			break;
+			case pin_type::Vector: return ax::Drawing::IconType::Square;			break;
+			default:
+				return ax::Drawing::IconType::Square;			break;
+			}
+		}
 		
 	};
 }

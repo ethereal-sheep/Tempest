@@ -86,7 +86,7 @@ namespace Tempest
             break;
 
         case Tempest::SwitchNode::inner_type::TwentySwitch:
-            node.set_name("Ten-Switch");
+            node.set_name("Twenty-Switch");
             node.add_input(pin_type::Flow, "");
             node.add_input(pin_type::Int, "choice");
 
@@ -115,7 +115,7 @@ namespace Tempest
             node.add_output(pin_type::Int, "out");
             break;
         case Tempest::SwitchNode::inner_type::ThirtySwitch:
-            node.set_name("Ten-Switch");
+            node.set_name("Thirty-Switch");
             node.add_input(pin_type::Flow, "");
             node.add_input(pin_type::Int, "choice");
 

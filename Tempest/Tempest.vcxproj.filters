@@ -195,13 +195,13 @@
     <ClCompile Include="src\Scripting\Nodes\StatNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\ResolutionNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\SystemNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripting\Nodes\SwitchNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\Nodes\ActionNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\Nodes\ConflictNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
