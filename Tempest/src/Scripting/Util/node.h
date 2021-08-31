@@ -224,7 +224,7 @@ case category_type::NodeCategory:											\
 	enum struct category_type
 	{
 		Cast, Variable, Dice, Arithmetic, GetStat, SetStat, GetMainStat, Conflict, Action, Resolution, 
-		System, Switch
+		System, Switch, Compare
 		
 		,Group, Trig,
 		Random, Numerical, Constants, Logic, Vector,
@@ -244,6 +244,7 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(ConflictNode, Conflict, Start, Resolve, Attacking, Defending);
 	DEFINE_NODE(ActionNode, Action, Input, Output);
 	DEFINE_NODE(SwitchNode, Switch, TwoSwitch, ThreeSwitch, FiveSwitch, TenSwitch, TwentySwitch, ThirtySwitch);
+	DEFINE_NODE(CompareNode, Compare, CompareFlow);
 	DEFINE_NODE(UtilNode, util, Print, In);
 
 	NODE_SWITCH_START
@@ -260,6 +261,7 @@ case category_type::NodeCategory:											\
 		NODE_CASE(ConflictNode, Conflict);
 		NODE_CASE(ActionNode, Action);
 		NODE_CASE(SwitchNode, Switch);
+		NODE_CASE(CompareNode, Compare);
 		NODE_CASE(UtilNode, util);
 
 		/* ABOVE THIS PLEASE */

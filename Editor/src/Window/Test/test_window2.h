@@ -9,9 +9,12 @@ namespace Tempest
 	{
 
 		Entity current = INVALID;
+		Entity conflict = INVALID;
+		Entity attacking = INVALID;
+		Entity defending = INVALID;
 
 		ax::NodeEditor::EditorContext* context;
-		ImVec2 mouse = ImVec2(0,0);
+		ImVec2 mouse = ImVec2(0, 0);
 		int simulate_val = 0;
 
 
@@ -25,11 +28,16 @@ namespace Tempest
 			return "test_window2";
 		}
 
-		void init(Instance& ) override
+		void init(Instance&) override
 		{
 			context = ax::NodeEditor::CreateEditor();
 			ax::NodeEditor::SetCurrentEditor(context);
 
+
+			auto& editorStyle = ax::NodeEditor::GetStyle();
+
+			editorStyle.Colors[0] = { 0,0,0,0 };
+			editorStyle.Colors[2] = { 0,0,0,200/255.f };
 		}
 
 		void exit(Instance&) override
@@ -37,11 +45,11 @@ namespace Tempest
 			ax::NodeEditor::DestroyEditor(context);
 		}
 
-		void try_system(Entity id, int value, Instance& instance)
+		void try_system(Instance& instance)
 		{
 			// assuming built
-			instance.srm.instant_dispatch_to_id<Input>(id, id, value);
-			if (auto var = instance.srm.get_variable_to_id(id, "Output"))
+			instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending, attacking, defending, INVALID);
+			if (auto var = instance.srm.get_variable_to_id(conflict, "Output"))
 			{
 				LOG_ASSERT(var->get_type() == pin_type::Int);
 				simulate_val = var->get<int>();
@@ -183,29 +191,63 @@ namespace Tempest
 				}
 
 				// navigate to content
-				ImGui::SameLine();
 				if (ImGui::Button("Navigate to Content"))
 				{
 					ax::NodeEditor::NavigateToContent();
 				}
 
+
+				UI::PaddedSeparator(0.5f);
+
+
 				// UI elements
 				// -----------------------------------------------------------------
-				/*if (ImGui::Button((string{ "Build##" } + std::to_string(id)).c_str()))
+				if (ImGui::Button((string{ "Build" }).c_str()))
 				{
-					try_build(id, g, instance);
+					try_build_all(instance);
+				}
+				if (ImGui::Button((string{ "Simulate" }).c_str()))
+				{
+					try_system(instance);
+				}
+				ImGui::SameLine();
+				ImGui::Text("Output: %d", simulate_val);
+
+				ImGui::InputScalar("Conflict", ImGuiDataType_U32, &conflict);
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectConflict"))
+					{
+						IM_ASSERT(payload->DataSize == sizeof(Entity));
+						conflict = *static_cast<Entity*>(payload->Data);
+					}
 				}
 
-				static int send = 0;
-				static int uone = 1;
-				ImGui::InputScalar("Input", ImGuiDataType_S32, &send, &uone);
-				ImGui::SameLine();
-				if (ImGui::Button((string{ "Simulate##" } + std::to_string(id)).c_str()))
+
+				ImGui::InputScalar("Attacking", ImGuiDataType_U32, &attacking);
+
+				if (ImGui::BeginDragDropTarget())
 				{
-					try_system(id, send, instance);
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectAction"))
+					{
+						IM_ASSERT(payload->DataSize == sizeof(Entity));
+						attacking = *static_cast<Entity*>(payload->Data);
+					}
 				}
-				ImGui::SameLine();
-				ImGui::Text("Output: %d", simulate_val);*/
+
+				ImGui::InputScalar("Defending", ImGuiDataType_U32, &defending);
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectAction"))
+					{
+						IM_ASSERT(payload->DataSize == sizeof(Entity));
+						defending = *static_cast<Entity*>(payload->Data);
+					}
+				}
+
+				UI::PaddedSeparator(0.5f);
+
 
 				if (ImGui::TreeNodeEx("Conflict Graphs"))
 				{
@@ -217,10 +259,22 @@ namespace Tempest
 						{
 							current = id;
 						}
+						if (ImGui::BeginDragDropSource())
+						{
+
+							static Entity payload = 0;
+							payload = id;
+							ImGui::SetDragDropPayload("SelectConflict", &payload, sizeof(Entity));
+
+							ImGui::Text("%u", id);
+							ImGui::EndDragDropSource();
+						}
 						ImGui::Unindent(10.f);
 					}
 					ImGui::TreePop();
 				}
+
+
 
 				if (ImGui::TreeNodeEx("Action Graphs"))
 				{
@@ -232,12 +286,32 @@ namespace Tempest
 						{
 							current = id;
 						}
+						if (ImGui::BeginDragDropSource())
+						{
+							static Entity payload = 0;
+							payload = id;
+							ImGui::SetDragDropPayload("SelectAction", &payload, sizeof(Entity));
+
+							ImGui::Text("%u", id);
+							ImGui::EndDragDropSource();
+						}
 						ImGui::Unindent(10.f);
 					}
 					ImGui::TreePop();
 				}
 
+				UI::PaddedSeparator(0.5f);
 
+
+
+
+				auto& editorStyle = ax::NodeEditor::GetStyle();
+				for (int i = 0; i < ax::NodeEditor::StyleColor_Count; ++i)
+				{
+					auto name = ax::NodeEditor::GetStyleColorName((ax::NodeEditor::StyleColor)i);
+
+					ImGui::ColorEdit4(name, &editorStyle.Colors[i].x, ImGuiColorEditFlags_RGB);
+				}
 
 			}
 			ImGui::EndChild();
@@ -245,6 +319,8 @@ namespace Tempest
 
 		void draw_context(Instance& instance)
 		{
+
+
 			if (current)
 			{
 				// graphs
@@ -337,12 +413,20 @@ namespace Tempest
 					ImGui::CalcTextSize(input.get_name().c_str()).x);
 			}
 
-			// Title
-			ImGui::Text(n->get_name().c_str());
+			float twidth = ImGui::CalcTextSize(n->get_name().c_str()).x;
 
-			// Update Position
-			//auto pos = ax::NodeEditor::GetNodePosition(id);
-			//n->position = { pos.x, pos.y };
+			// Title
+			//auto size = ax::NodeEditor::GetNodeSize(id);
+			//ImGui::SameLine(100.f);
+
+			if (n->get_name() != "")
+			{
+				ImGui::PushFont(FONT_BOLD);
+				ImGui::Dummy({ 10.f, 1.f });
+				ImGui::SameLine();
+				ImGui::Text(n->get_name().c_str());
+				ImGui::PopFont();
+			}
 
 			// Input group
 			ImGui::BeginGroup();
@@ -350,6 +434,10 @@ namespace Tempest
 			{
 				draw_input_pin(input);
 			}
+
+			if(!n->get_num_inputs())
+				ImGui::Dummy({ 50.f, 0.1f });
+
 			ImGui::EndGroup();
 
 			// Output group
@@ -359,17 +447,18 @@ namespace Tempest
 			{
 				draw_output_pin(output, owidth);
 			}
+
 			ImGui::EndGroup();
 			ax::NodeEditor::EndNode();
 		}
-		
+
 		void draw_link(link l, pin_id_t from, pin_id_t to, pin_type type)
 		{
 			auto color = get_pin_color(type);
 
 			ax::NodeEditor::Link(l, from, to, color, 2.f);
 		}
-		
+
 		void draw_input_pin(const input_pin& p)
 		{
 			int alpha = 255;
@@ -390,8 +479,6 @@ namespace Tempest
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1.9f);
 			ImGui::AlignTextToFramePadding();
 			ImGui::Text(p.get_name().c_str());
-			ImGui::SameLine();
-			ImGui::Dummy({ 1.f, 0.f });
 
 			if (p.get_type() == pin_type::Int && !p.is_linked())
 			{
@@ -402,7 +489,17 @@ namespace Tempest
 				s += std::to_string(p.get_id());
 				ImGui::SetNextItemWidth(90);
 
+				/*ImGui::PushStyleColor(ImGuiCol_Button, { 250 / 255.f, 196 / 255.f, 130 / 255.f, 255 / 255.f });
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 232 / 255.f, 137 / 255.f, 64 / 255.f, 255 / 255.f });
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.f, 0.f, 0.f, 1.f });
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 250,250,250,255 });*/
 				ImGui::InputScalar(s.c_str(), ImGuiDataType_S32, &a, &uone);
+				//ImGui::PopStyleColor(4);
+			}
+			else
+			{
+				ImGui::SameLine();
+				ImGui::Dummy({ 90.f, 0.1f });
 			}
 		}
 
@@ -437,7 +534,6 @@ namespace Tempest
 			ax::NodeEditor::EndPin();
 		}
 
-
 		template <typename TNode>
 		void node_context(
 			graph& g,
@@ -470,7 +566,7 @@ namespace Tempest
 
 		void draw_background_context(graph& g)
 		{
-			if(ImGui::BeginPopup("Create New Node", ImGuiWindowFlags_NoResize))
+			if (ImGui::BeginPopup("Create New Node", ImGuiWindowFlags_NoResize))
 			{
 				ImGui::Text("All Actions For This Blueprint");
 
@@ -490,6 +586,7 @@ namespace Tempest
 				node_context<ArithmeticNode>(g, "Arithmetic");
 				node_context<DiceNode>(g, "Dice");
 				node_context<SwitchNode>(g, "Switch");
+				node_context<CompareNode>(g, "Compare");
 
 				if (ImGui::Selectable("Output"))
 				{
@@ -627,7 +724,7 @@ namespace Tempest
 					{
 						// no deletion of input nodes
 						auto n = g.get_node((node_id_t)nodeId.Get());
-						if(n->get_name() != "Input")
+						if (n->get_name() != "Input")
 							g.remove_node((node_id_t)nodeId.Get());
 					}
 				}
@@ -642,7 +739,7 @@ namespace Tempest
 			case pin_type::Flow: return ImColor(192, 192, 192);
 			case pin_type::Bool: return ImColor(128, 0, 0); // maroon
 			case pin_type::Byte: return ImColor(0, 82, 83); // sherpa blue
-			case pin_type::Int: return ImColor(46, 139, 87); // sea green
+			case pin_type::Int: return ImColor(250, 196, 130); // some orange
 			case pin_type::Int64: return ImColor(173, 223, 173); // moss green
 			case pin_type::Float: return ImColor(154, 205, 50); // yellow green
 			case pin_type::String: return ImColor(212, 175, 55); // gold
@@ -675,6 +772,6 @@ namespace Tempest
 				return ax::Drawing::IconType::Square;			break;
 			}
 		}
-		
+
 	};
 }
