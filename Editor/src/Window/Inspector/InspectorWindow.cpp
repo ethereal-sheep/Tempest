@@ -300,7 +300,9 @@ namespace Tempest
 							float font_size = ImGui::GetFontSize() * text.size() / 2;
 							float offsetX = colWidth - font_size + (font_size / 2);
 							float fontPadding = 5.f;
-							
+							ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
+							ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0.f);
+							ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
 							ImGui::Dummy({ offsetX, 0 });
 							ImGui::SameLine();
 							ImGui::Text(text.c_str());
@@ -310,11 +312,11 @@ namespace Tempest
 							ImGui::Dummy({ fontPadding, 0});
 							ImGui::SameLine();
 							ImGui::Text("Name");
-							ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
+							
 							ImGui::Dummy({ fontPadding, 0 });
 							ImGui::SameLine();
 							ImGui::InputText("##CharacterName", &cs->name);
-							ImGui::PopStyleVar();
+							
 							ImGui::Dummy({ 0, 10.f });
 
 							for (auto i = 0; i < sl->size(); i++)
@@ -325,15 +327,13 @@ namespace Tempest
 								ImGui::Dummy({ fontPadding, 0 });
 								ImGui::SameLine();
 								ImGui::Text(stat.c_str());
-								ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
 								ImGui::Dummy({ fontPadding, 0 });
 								ImGui::SameLine();
-								ImGui::InputText(label.c_str(), &data);
-								ImGui::PopStyleVar();
+								ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
 								ImGui::Dummy({ 0, 10.f });
 							}
 							ImGui::EndChild();
-
+							ImGui::PopStyleVar(3);
 
 							/*ImGui::NextColumn();
 							for (auto i = 0; i < sl->size(); i++)
