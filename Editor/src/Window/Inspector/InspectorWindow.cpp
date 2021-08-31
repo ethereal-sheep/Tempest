@@ -223,6 +223,87 @@ namespace Tempest
 					}
 				}
 			}
+
+			//StatsLine
+			if (auto sl = instance.ecs.get_if<tc::Statline>(instance.selected))
+			{
+				ImGui::PushFont(FONT_BOLD);
+				bool header = ImGui::CollapsingHeader("Statline##Statline", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+				ImGui::PopFont();
+				ImGui::Dummy({ 0.f, 1.f });
+				if (header)
+				{
+					static bool show = false;
+					if (ImGui::Button("Show"))
+					{
+						show = true;
+					}
+					if (show)
+					{
+						if (ImGui::Begin("Stats", &show))
+						{
+							for (auto i : sl->get_stats())
+							{
+								ImGui::Text(i.c_str());
+							}
+						}
+						ImGui::End();
+					}
+				}
+			}
+
+
+			//CharacterSheet
+			if (auto cs = instance.ecs.get_if<tc::Character>(instance.selected))
+			{
+				ImGui::PushFont(FONT_BOLD);
+				bool header = ImGui::CollapsingHeader("Character##Character", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+				ImGui::PopFont();
+				ImGui::Dummy({ 0.f, 1.f });
+				if (header)
+				{
+					auto sl = instance.ecs.get_if<tc::Statline>(1);
+					static bool show = false;
+					if (ImGui::Button("Show/Edit"))
+					{
+						show = true;
+					}
+					if (show)
+					{
+						if (ImGui::Begin("Data", &show))
+						{
+							ImGui::Button("Save and Return");
+
+
+							ImGui::Columns(3, "Test", false);
+							for (auto i = 0; i < sl->size(); i++)
+							{
+								string stat = sl->get_stats()[i] + " :";
+								ImGui::Text(stat.c_str());
+								ImGui::SameLine();
+								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
+							}
+							ImGui::NextColumn();
+							for (auto i = 0; i < sl->size(); i++)
+							{
+								string stat = sl->get_stats()[i] + " :";
+								ImGui::Text(stat.c_str());
+								ImGui::SameLine();
+								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
+							}
+							ImGui::NextColumn();
+							for (auto i = 0; i < sl->size(); i++)
+							{
+								string stat = sl->get_stats()[i] + " :";
+								ImGui::Text(stat.c_str());
+								ImGui::SameLine();
+								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
+							}
+						}
+						ImGui::End();
+					}
+				}
+			}
 		}
 
 		ImGui::End();

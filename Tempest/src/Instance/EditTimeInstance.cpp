@@ -8,6 +8,13 @@ namespace Tempest
 	void EditTimeInstance::_init()
 	{
 		auto view = ecs.view<Components::Rigidbody, tc::Transform>(exclude_t<tc::Destroyed>());
+
+		
+		//auto StatsLine = ecs.create();
+		//auto meta = ecs.emplace<tc::Meta>(StatsLine);
+		//meta->name = "StatsData";
+		//ecs.emplace<tc::Statline>(StatsLine);
+
 		for (auto id : view)
 		{
 			auto& rb = ecs.get<Components::Rigidbody>(id);

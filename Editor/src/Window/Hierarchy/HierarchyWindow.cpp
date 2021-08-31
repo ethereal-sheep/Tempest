@@ -33,7 +33,7 @@ namespace Tempest
 						auto transform = instance.ecs.emplace<tc::Transform>(entity);
 						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
 						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
-		
+						auto character = instance.ecs.emplace<tc::Character>(entity);
 						rb->shape_data = SHAPE_TYPE::BOX;
 						rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
 						rigidbody_config staticBody;
@@ -41,8 +41,6 @@ namespace Tempest
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
 						instance.action_history.Commit<AddEntity>(entity);
-						/*rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
-						instance.po.AddActorToScene(rb.internal_rb.get());*/
 						
 					}
 					if (ImGui::MenuItem("Add Sphere"))
@@ -81,6 +79,15 @@ namespace Tempest
 						instance.po.AddActorToScene(rb.internal_rb.get());*/
 					}
 
+					if (ImGui::MenuItem("Add Character"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Character";
+						auto character = instance.ecs.emplace<tc::Character>(entity);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
 					ImGui::EndMenu();
 				}
 				UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Simple UI for selecting objects. We should improve the UI once the UI/UX for it is done.", false);
