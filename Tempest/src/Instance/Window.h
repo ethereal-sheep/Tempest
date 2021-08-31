@@ -12,10 +12,10 @@ namespace Tempest
 		virtual const char* window_name() = 0;
 
 		// called by window_manager
-		virtual void init() {};
+		virtual void init(Instance&) {};
 
 		// called by window_manager
-		virtual void exit() {};
+		virtual void exit(Instance&) {};
 
 		// called by window_manager
 		virtual void show(Instance&) = 0;

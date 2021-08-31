@@ -54,7 +54,7 @@ std::string ArithmeticNode::get_type_string()
             break;
         }
 
-        return make_uptr<ArithmeticNode>(std::move(node));
+        return make_sptr<ArithmeticNode>(std::move(node));
     }
 
     script* ArithmeticNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )

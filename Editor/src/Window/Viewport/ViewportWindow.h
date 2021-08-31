@@ -12,7 +12,7 @@ namespace Tempest
 			return "Viewport";
 		}
 
-		void init() override
+		void init(Instance&) override
 		{
 			window_flags |=
 				ImGuiWindowFlags_NoCollapse |

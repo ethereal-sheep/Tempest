@@ -19,7 +19,7 @@ namespace Tempest
         node.set_name(typeinfo);
         node.add_output(pin_type::Int, "");
 
-        return make_uptr<GetStatNode>(std::move(node));
+        return make_sptr<GetStatNode>(std::move(node));
     }
 
     script* GetStatNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )
@@ -80,7 +80,7 @@ namespace Tempest
         node.add_output(pin_type::Flow, "");
         node.add_output(pin_type::Int, "");
 
-        return make_uptr<SetStatNode>(std::move(node));
+        return make_sptr<SetStatNode>(std::move(node));
     }
 
     script* SetStatNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )
@@ -134,7 +134,7 @@ namespace Tempest
         node.set_name("Main");
         node.add_output(pin_type::Int, "");
 
-        return make_uptr<GetMainStatNode>(std::move(node));
+        return make_sptr<GetMainStatNode>(std::move(node));
     }
 
     script* GetMainStatNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )

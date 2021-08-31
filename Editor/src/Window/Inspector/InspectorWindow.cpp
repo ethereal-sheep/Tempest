@@ -4,7 +4,7 @@
 
 namespace Tempest
 {
-	void InspectorWindow::init()
+	void InspectorWindow::init(Instance&)
 	{
 		window_flags |= ImGuiWindowFlags_MenuBar;
 	}

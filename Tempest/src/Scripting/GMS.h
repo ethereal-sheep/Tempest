@@ -25,7 +25,7 @@ namespace Tempest
 		/**
 		 * @brief Creates a new graph and returns it.
 		 */
-		graph& new_graph(GraphType type = GraphType::Regular)
+		graph& new_graph(graph_type type = graph_type::regular)
 		{
 			// make sure name is unique
 			string new_name = algo::get_next_name("Untitled", graphs.begin(), graphs.end(), 

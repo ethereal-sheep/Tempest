@@ -120,6 +120,8 @@ namespace Tempest
 			
 			if (!listener_exist<TEvent>()) return;
 
+			if (!listeners[t_hash<TEvent>()].contains(id)) return;
+
 			try_invoke(listeners[t_hash<TEvent>()].get(id), new_event);
 		}
 

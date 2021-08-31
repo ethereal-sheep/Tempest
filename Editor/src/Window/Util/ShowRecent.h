@@ -12,7 +12,7 @@ namespace Tempest
 			return "";
 		}
 
-		void init() override
+		void init(Instance&) override
 		{
 			// check APPDATA if there exist a file with project info
 			char* pValue;
@@ -81,7 +81,7 @@ namespace Tempest
 		}
 
 
-		void exit() override
+		void exit(Instance&) override
 		{
 			// if current directory is nothing, we can just return
 			if (current.empty() || current == ".json") return;

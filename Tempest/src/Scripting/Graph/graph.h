@@ -22,9 +22,9 @@ namespace Tempest
     };
 
 
-    enum struct GraphType
+    enum struct graph_type
     {
-        Regular, System, Resolution
+        regular, conflict, action, resolution
     };
 
     /**
@@ -39,8 +39,8 @@ namespace Tempest
         using Links = tset<link>;
         using Variables = ordered_var_set<string>;
 
-        graph(const graph&) = delete;
-        graph& operator=(const graph&) = delete;
+        graph(const graph&) = default;
+        graph& operator=(const graph&) = default;
         graph(graph&&) noexcept = default;
         graph& operator=(graph&&) = default;
 
@@ -49,7 +49,7 @@ namespace Tempest
          */
         graph(
             const string& _name = "Default", 
-            GraphType _type = GraphType::Regular,
+            graph_type _type = graph_type::regular,
             m_resource* mem = std::pmr::get_default_resource());
 
         /**
@@ -66,7 +66,7 @@ namespace Tempest
         template <typename... Args>
         node* add_node(Args&&... args)
         {
-            std::unique_ptr<node> ptr{ std::forward<Args>(args)... };
+            node_ptr ptr{ std::forward<Args>(args)... };
 
             if (!ptr) return nullptr;
 
@@ -178,8 +178,13 @@ namespace Tempest
         }
 
         /**
-         * @brief Gets name of graph
+         * @brief Remove link in the graph
          */
+        void remove_link(uint64_t element)
+        {
+            auto [start, end] = split_uint64_t(element);
+            remove_link(start, end);
+        }
         void remove_link(pin_id_t start, pin_id_t end)
         {
             auto element = concatenate_id_t(start, end);
@@ -197,10 +202,56 @@ namespace Tempest
             // so we don't check
             auto s_node = get_node(s_parent);
             auto e_node = get_node(e_parent);
-            s_node->get_outputs()[s_index].linked = false;
-            e_node->get_inputs()[e_index].linked = false;
+
+            // check if there is still linking
+            bool s_still = false, e_still = false;
+            for (auto l : links)
+            {
+                auto [from, to] = split_uint64_t(l);
+                if (from == start) s_still = true;
+                if (to == end) e_still = true;
+            }
+
+            s_node->get_outputs()[s_index].linked = s_still;
+            e_node->get_inputs()[e_index].linked = e_still;
 
         }
+
+        /**
+         * @brief Remove links connected to pin
+         */
+        void remove_links_to_output_pin(pin_id_t start)
+        {
+            tvector<link> remove;
+            for (auto l : links)
+            {
+                auto [from, to] = split_uint64_t(l);
+                if (from == start) remove.push_back(l);
+            }
+
+            for (auto [from, to] : split_view(remove))
+            {
+                remove_link(from, to);
+            }
+        }
+        /**
+         * @brief Remove links connected to pin
+         */
+        void remove_links_to_input_pin(pin_id_t end)
+        {
+            tvector<link> remove;
+            for (auto l : links)
+            {
+                auto [from, to] = split_uint64_t(l);
+                if (to == end) remove.push_back(l);
+            }
+
+            for (auto [from, to] : split_view(remove))
+            {
+                remove_link(from, to);
+            }
+        }
+
 
         /**
          * @brief Removes a variable from the graph
@@ -243,6 +294,8 @@ namespace Tempest
          */
         const tpath& get_path() const { return filepath; }
 
+        graph_type get_type() const { return type; }
+
         /**
          * @brief Gets full path of graph
          */
@@ -269,6 +322,7 @@ namespace Tempest
          */
         auto get_variables() const { return make_const_range(variables); }
 
+
         /**
          * @brief Gets a node via the node_id. If node doesn't exist, returns nullptr.
          */
@@ -278,10 +332,38 @@ namespace Tempest
             return nullptr;
         }
 
+        input_pin* get_input_pin(pin_id_t id)
+        {
+            auto [input, index, parent] = pin_to_component(id);
+            if (!input) return nullptr;
+
+            if (auto node = get_node(parent))
+            {
+                return node->get_input_pin(index);
+            }
+            return nullptr;
+
+        }
+        output_pin* get_output_pin(pin_id_t id)
+        {
+            auto [input, index, parent] = pin_to_component(id);
+            if (input) return nullptr;
+
+            if (auto node = get_node(parent))
+            {
+                return node->get_output_pin(index);
+            }
+            return nullptr;
+        }
+
         /**
          * @brief Clears the entire graph of nodes and links.
          */
         void clear();
+
+
+        Writer& _serialize(Writer& writer) const;
+        Reader& _deserialize(Reader& reader);
 
 
     private:
@@ -308,12 +390,11 @@ namespace Tempest
 
 
 
-        Writer& _serialize(Writer& writer) const;
-
+        // might be deprecated
         mutable string name;
         mutable tpath filepath;
 
-        GraphType type = GraphType::Regular;
+        graph_type type = graph_type::regular;
         Nodes nodes;
         Links links;
         Variables variables;

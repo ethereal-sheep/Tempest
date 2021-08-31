@@ -57,15 +57,12 @@ namespace Tempest
             node.add_output(pin_type::Int, "");
             break;
         case Tempest::DiceNode::inner_type::END:
-            node.set_name("END");
-            node.add_input(pin_type::Int, "");
-            node.add_output(pin_type::Int, "");
             break;
         default:
             break;
         }
 
-        return make_uptr<DiceNode>(std::move(node));
+        return make_sptr<DiceNode>(std::move(node));
     }
 
     script* DiceNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]] )

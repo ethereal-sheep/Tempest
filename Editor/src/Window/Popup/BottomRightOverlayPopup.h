@@ -11,7 +11,7 @@ namespace Tempest
 		{
             return "";
 		}
-		void init() override
+		void init(Instance&) override
 		{
             window_flags = 
                 ImGuiWindowFlags_NoDecoration | 

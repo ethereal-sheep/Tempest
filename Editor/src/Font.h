@@ -9,6 +9,9 @@
 #include "Extern/imgui/imgui_stdlib.h"
 #include "Extern/imgui/ImFileDialog.h"
 #include "Extern/imgui/implot.h"
+#include "Extern/imgui/imgui_node_editor.h"
+//#include "Extern/imgui/builders.h"
+#include "Extern/imgui/widgets.h"
 
 
 

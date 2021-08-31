@@ -85,7 +85,7 @@ namespace Tempest
             break;
         default: return nullptr; break;
         }
-        return std::make_unique<VariableNode>(std::move(node));
+        return make_sptr<VariableNode>(std::move(node));
     }
 
     script* create_getter(pin_type pin_t, var_data* var, Instance& instance);

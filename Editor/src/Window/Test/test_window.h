@@ -26,7 +26,7 @@ namespace Tempest
 		}*/
 
 
-		void show(Instance& instance) override
+		void show(Instance& instance [[maybe_unused]] ) override
 		{
 			if (ImGui::Begin(window_name(), &visible, window_flags))
 			{
@@ -218,7 +218,7 @@ namespace Tempest
 					ImGui::Text("Lose:  %d", lose);
 
 
-					chance = (difficulty <= bag.min()) ? 100.f : ((difficulty > bag.max() ? 0.f : dist2[difficulty - bag.min()] * 100));
+					chance = (difficulty <= bag.min()) ? 100.f : ((difficulty > bag.max() ? 0.f : static_cast<float>(dist2[difficulty - bag.min()] * 100)));
 
 					ImGui::Text("Chance:  %.3f%", chance);
 
@@ -227,7 +227,7 @@ namespace Tempest
 					//static const double positions[] = { 1,2,3,4,5,6,7,8,9,10,11,12,13 };
 
 
-					ImPlot::SetNextPlotLimits(bag.min() - 1, bag.max() + 1, 0, 1, ImGuiCond_Always);
+					ImPlot::SetNextPlotLimits(bag.min() - 1., bag.max() + 1., 0., 1., ImGuiCond_Always);
 					
 					if (ImPlot::BeginPlot("##Line Plot", "", "", ImVec2{ -1, 0 },
 						ImPlotFlags_NoLegend | ImPlotFlags_NoMousePos, ImPlotAxisFlags_None,
@@ -235,13 +235,11 @@ namespace Tempest
 						ImPlotAxisFlags_LockMin))
 					{
 						ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-						ImPlot::PlotLine("", dist2.data(), dist2.size(), 1.0, bag.min());
+						ImPlot::PlotLine("", dist2.data(), (int)dist2.size(), 1.0, (int)bag.min());
 						ImPlot::EndPlot();
 					}
 
-
-
-					ImPlot::SetNextPlotLimits(bag.min()-1, bag.max()+1, 0, std::max<size_t>(5u, max_bucket*3/2), ImGuiCond_Always);
+					ImPlot::SetNextPlotLimits(bag.min()-1., bag.max()+1., 0., static_cast<double>(std::max<size_t>(5u, max_bucket*3/2)), ImGuiCond_Always);
 
 					if (ImPlot::BeginPlot("##Histograms", "", "", ImVec2{ -1, 0 }, 
 						ImPlotFlags_NoLegend | ImPlotFlags_NoMousePos, ImPlotAxisFlags_None,
@@ -249,12 +247,12 @@ namespace Tempest
 						ImPlotAxisFlags_LockMin | ImPlotAxisFlags_NoDecorations))
 					{
 						ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, .5f);
-						ImPlot::PlotBars("", dist.data(), dist.size() + bag.min(), 0.70, 0.0, 0 - (bag.min() - 1));
+						ImPlot::PlotBars("", dist.data(), static_cast<int>(dist.size() + bag.min()), 0.70, 0.0, 0 - int(bag.min() - 1));
 						
 						auto [dx, dy] = ImPlot::GetPlotMousePos();
 
-						int x = std::round(dx);
-						int y = std::round(dy);
+						int x = (int)std::round(dx);
+						int y = (int)std::round(dy);
 
 						if (ImPlot::IsPlotHovered())
 						{

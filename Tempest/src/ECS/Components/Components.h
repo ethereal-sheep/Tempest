@@ -6,6 +6,7 @@
 #include "Physics/PhysicsObject.h"
 #include "Graphics/OpenGL/RenderPipeline.h"
 #include "Util/range.h"
+#include "Scripting/Graph/graph.h"
 
 /**
 * @brief 
@@ -98,7 +99,7 @@ namespace Tempest
 	enum struct ComponentType
 	{
 		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh, 
-		Character, Weapon, Statline, System, Resolution
+		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph
 		,END
 	};
 
@@ -472,34 +473,59 @@ namespace Tempest
 			tvector<string> stats;
 		};
 
-		struct Resolution
+		struct ConflictGraph
 		{
-			static const char* get_type() { return "Resolution"; }
+			static const char* get_type() { return "ConflictGraph"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Resolution& component)
+			friend Archiver& operator&(Archiver& ar, ConflictGraph& )
 			{
 				ar.StartObject();
-				ar.Member("Resolution_Path", component.path);
 				return ar.EndObject();
 			}
-
-			tpath path = "";
 		};
 
-		struct System
+		struct ActionGraph
 		{
-			static const char* get_type() { return "System"; }
+			static const char* get_type() { return "ActionGraph"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, System& component)
+			friend Archiver& operator&(Archiver& ar, ActionGraph& )
 			{
 				ar.StartObject();
-				ar.Member("System_Path", component.path);
 				return ar.EndObject();
 			}
+		};
 
-			tpath path = "";
+		struct ResolutionGraph
+		{
+			static const char* get_type() { return "ResolutionGraph"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, ResolutionGraph& )
+			{
+				ar.StartObject();
+				return ar.EndObject();
+			}
+		};
+
+		struct Graph
+		{
+			static const char* get_type() { return "Graph"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Graph& component)
+			{
+				if constexpr (Archiver::IsSaving())
+					return component.g._serialize(ar);
+				else
+					return component.g._deserialize(ar);
+			}
+
+			Graph(string empty = "Empty", graph_type type = graph_type::regular)
+				: g(empty, type) {}
+
+			graph g;
 		};
 	}
 	namespace tc = Tempest::Components;
@@ -516,9 +542,6 @@ namespace Tempest
 		ecs.emplace<tc::ComponentName>(entity, std::move(c));		\
 	}																\
 		break														\
-
-
-
 
 
 	template <typename ECS>
@@ -539,7 +562,11 @@ namespace Tempest
 			COMPONENT_CASE(Character);
 			COMPONENT_CASE(Weapon);
 			COMPONENT_CASE(Statline);
-			COMPONENT_CASE(System);
+
+			COMPONENT_CASE(ConflictGraph);
+			COMPONENT_CASE(ActionGraph);
+			COMPONENT_CASE(ResolutionGraph);
+			COMPONENT_CASE(Graph);
 
 		/* ABOVE THIS PLEASE */
 
