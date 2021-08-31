@@ -1,6 +1,8 @@
 #include "InspectorWindow.h"
 #include "Util/GuizmoController.h"
 #include <Tempest/src/Actions/Action.h>
+#include <Tempest/src/Graphics/OpenGL/Texture.h>
+#include <Tempest/src/Graphics/OpenGL/RenderSystem.cpp>
 
 namespace Tempest
 {
@@ -246,6 +248,12 @@ namespace Tempest
 							{
 								ImGui::Text(i.c_str());
 							}
+
+
+							if (ImGui::Button("ADD"))
+							{
+								sl->add_stat(("Random" + std::to_string(sl->size() - 2)));
+							}
 						}
 						ImGui::End();
 					}
@@ -272,10 +280,62 @@ namespace Tempest
 					{
 						if (ImGui::Begin("Data", &show))
 						{
-							ImGui::Button("Save and Return");
+							float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+							UI::Header(ImVec2{ center_x - 100.f,0 }, "Unit Creation");
+
+							if (ImGui::Button("Save"))
+							{
+								//TODO
+							}
+							ImGui::Columns(4, "Test", true);
+							auto texture = Service<RenderSystem>::Get().tex->GetID();
+							GLuint tex_id = static_cast<GLuint>(texture);
+							ImGui::Image((void*)static_cast<size_t>(tex_id), ImVec2(100, 100));
+							/*===============================
+								CHARACTER INFOMATION COLUMN
+							 ===============================*/
+							ImGui::NextColumn();
+							string text = "Character Infomation";
+							float colWidth = ImGui::GetColumnWidth(1)/2;
+							float font_size = ImGui::GetFontSize() * text.size() / 2;
+							float offsetX = colWidth - font_size + (font_size / 2);
+							float fontPadding = 5.f;
+							
+							ImGui::Dummy({ offsetX, 0 });
+							ImGui::SameLine();
+							ImGui::Text(text.c_str());
+							ImGui::Dummy({ 0, 10.f });
+							ImGui::BeginChild("##CharacterInfo", ImVec2(ImGui::GetColumnWidth(1) - 10.f, 300.0f));
+							//Name
+							ImGui::Dummy({ fontPadding, 0});
+							ImGui::SameLine();
+							ImGui::Text("Name");
+							ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
+							ImGui::Dummy({ fontPadding, 0 });
+							ImGui::SameLine();
+							ImGui::InputText("##CharacterName", &cs->name);
+							ImGui::PopStyleVar();
+							ImGui::Dummy({ 0, 10.f });
+
+							for (auto i = 0; i < sl->size(); i++)
+							{
+								string stat = sl->get_stats()[i] + " :";
+								string label = "##" + stat;
+								auto data = std::to_string(cs->get_stat(i));
+								ImGui::Dummy({ fontPadding, 0 });
+								ImGui::SameLine();
+								ImGui::Text(stat.c_str());
+								ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
+								ImGui::Dummy({ fontPadding, 0 });
+								ImGui::SameLine();
+								ImGui::InputText(label.c_str(), &data);
+								ImGui::PopStyleVar();
+								ImGui::Dummy({ 0, 10.f });
+							}
+							ImGui::EndChild();
 
 
-							ImGui::Columns(3, "Test", false);
+							/*ImGui::NextColumn();
 							for (auto i = 0; i < sl->size(); i++)
 							{
 								string stat = sl->get_stats()[i] + " :";
@@ -290,15 +350,7 @@ namespace Tempest
 								ImGui::Text(stat.c_str());
 								ImGui::SameLine();
 								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
-							}
-							ImGui::NextColumn();
-							for (auto i = 0; i < sl->size(); i++)
-							{
-								string stat = sl->get_stats()[i] + " :";
-								ImGui::Text(stat.c_str());
-								ImGui::SameLine();
-								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
-							}
+							}*/
 						}
 						ImGui::End();
 					}

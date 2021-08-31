@@ -811,7 +811,7 @@ namespace Tempest::UI
 	bool InputText(const char* label, const char* ID, ImVec2 padding, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
 	{
 		bool pressed = false;
-		ImGui::PushID(label);
+		ImGui::PushID(ID);
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
