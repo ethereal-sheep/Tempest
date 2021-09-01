@@ -1,6 +1,7 @@
 #pragma once
 #include "TMath.h"
 #include "Font.h"
+#include <Tempest/src/Core.h>
 
 namespace Tempest::UI
 {
@@ -125,6 +126,7 @@ namespace Tempest::UI
 
 	void SubHeader(ImVec2 padding, const char* str);
 	void Header(ImVec2 padding, const char* str);
+	bool UIButton_1(string unselected, string hover,ImVec2 pos, ImVec2 padding, ImFont* font);
 
 }
 

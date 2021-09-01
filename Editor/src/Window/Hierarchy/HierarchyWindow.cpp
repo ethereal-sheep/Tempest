@@ -88,6 +88,17 @@ namespace Tempest
 						auto character = instance.ecs.emplace<tc::Character>(entity);
 						instance.action_history.Commit<AddEntity>(entity);
 					}
+					if (ImGui::MenuItem("Add Weapon"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Weap_1";
+						auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
+						weapon->set_stat(1, 1);
+						weapon->set_stat(2, 1);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
 					ImGui::EndMenu();
 				}
 				UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Simple UI for selecting objects. We should improve the UI once the UI/UX for it is done.", false);
