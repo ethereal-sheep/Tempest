@@ -78,7 +78,15 @@ namespace Tempest
 						rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
 						instance.po.AddActorToScene(rb.internal_rb.get());*/
 					}
-
+					if (ImGui::MenuItem("Add Statline"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Statline";
+						auto character = instance.ecs.emplace<tc::Statline>(entity);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
 					if (ImGui::MenuItem("Add Character"))
 					{
 						// we can do factories for entities here
@@ -88,14 +96,27 @@ namespace Tempest
 						auto character = instance.ecs.emplace<tc::Character>(entity);
 						instance.action_history.Commit<AddEntity>(entity);
 					}
-					if (ImGui::MenuItem("Add Weapon"))
+					if (ImGui::MenuItem("Add Gun"))
 					{
 						// we can do factories for entities here
 						auto entity = instance.ecs.create();
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Weap_1";
+						meta->name = "Gun";
 						auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
-						weapon->set_stat(1, 1);
+						weapon->name = "Gun";
+						weapon->set_stat(1, 3);
+						weapon->set_stat(2, 1);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
+					if (ImGui::MenuItem("Add Spear"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Spear";
+						auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
+						weapon->name = "Spear";
+						weapon->set_stat(1, 2);
 						weapon->set_stat(2, 1);
 						instance.action_history.Commit<AddEntity>(entity);
 					}
