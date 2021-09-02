@@ -301,6 +301,16 @@ namespace Tempest
 				ImGui::Dummy({ 0.f, 1.f });
 				if (header)
 				{
+					const ImVec4 GrabCol = { 117.f / 255.f,117.f / 255.f,117.f / 255.f,1.f };
+					const ImVec4 HoverCol = { 99.f / 255.f,99.f / 255.f,99.f / 255.f,1.f };
+					const ImVec4 ActiveCol = { 65.f / 255.f,65.f / 255.f,65.f / 255.f,1.f };
+					ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
+					ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0.f);
+					ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
+					ImGui::PushStyleColor(ImGuiCol_ScrollbarBg, { 0.f,0.f,0.f,255.f });
+					ImGui::PushStyleColor(ImGuiCol_ScrollbarGrab, GrabCol);
+					ImGui::PushStyleColor(ImGuiCol_ScrollbarGrabHovered, HoverCol);
+					ImGui::PushStyleColor(ImGuiCol_ScrollbarGrabActive, ActiveCol);
 					auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
 					Entity StateLineId = UNDEFINED;
 					for (auto id : StatsView)
@@ -343,15 +353,15 @@ namespace Tempest
 							float font_size = ImGui::GetFontSize() * text.size() / 2;
 							float offsetX = FirstColWidth - font_size + (font_size / 2);
 							float frontPadding = 5.f;
-							ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
-							ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0.f);
-							ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
+							
+
 							ImGui::Dummy({ offsetX, 0 });
 							ImGui::SameLine();
 							ImGui::Text(text.c_str());
 							ImGui::Dummy({ 0, 10.f });
 							ImGui::BeginChild("##CharacterInfo", ImVec2(ImGui::GetColumnWidth(1) - 10.f, 300.0f));
 							//Name
+							ImGui::PushFont(FONT_PARA);
 							ImGui::Dummy({ frontPadding, 0});
 							ImGui::SameLine();
 							ImGui::Text("Name");
@@ -366,17 +376,43 @@ namespace Tempest
 							{
 								string stat = sl->get_stats()[i] + " :";
 								string label = "##" + stat;
-								auto data = std::to_string(cs->get_stat(i));
+								//auto data = std::to_string(cs->get_stat(i));
+								string WeaponData = "";
+								if (cs->weapon != UNDEFINED)
+								{
+									auto weap = instance.ecs.get_if<tc::Weapon>(cs->weapon);
+									
+									if (weap->get_stat(i) > 0)
+									{
+										string data = std::to_string(weap->get_stat(i));
+										WeaponData = "( +" + data + " )";
+									}
+									else if (weap->get_stat(i) < 0)
+									{
+										string data = std::to_string(weap->get_stat(i));
+										WeaponData = "( " + data + " )";
+									}
+										
+								}
+
+								
 								ImGui::Dummy({ frontPadding, 0 });
 								ImGui::SameLine();
 								ImGui::Text(stat.c_str());
 								ImGui::Dummy({ frontPadding, 0 });
 								ImGui::SameLine();
+								ImGui::PushItemWidth(100.f);
 								ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
+								ImGui::PopItemWidth();
+								ImGui::SameLine();
+								ImGui::Text(WeaponData.c_str());
 								ImGui::Dummy({ 0, 10.f });
+								
 							}
+							ImGui::PopFont();
 							ImGui::EndChild();
-							ImGui::PopStyleVar(3);
+							
+							
 							
 							/*==================================================================
 												WEAPON AND ITEMS COLUMN
@@ -387,9 +423,6 @@ namespace Tempest
 							font_size = ImGui::GetFontSize() * WeapText.size() / 2;
 							float SecondoffsetX = SecondColWidth - font_size + (font_size / 2);
 							
-							ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
-							ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0.f);
-							ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
 							ImGui::Dummy({ SecondoffsetX, 0 });
 							ImGui::SameLine();
 							ImGui::Text(WeapText.c_str());
@@ -509,7 +542,6 @@ namespace Tempest
 								}
 							}
 							
-							ImGui::PopStyleVar(3);
 							/*==================================================================
 													SKILL COLUMN
 							==================================================================*/
@@ -519,9 +551,6 @@ namespace Tempest
 							float ThirdColWidth = ImGui::GetColumnWidth(2) / 2;
 							float ThirdoffsetX = ThirdColWidth - font_size + (font_size / 2);
 
-							ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
-							ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0.f);
-							ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
 							ImGui::Dummy({ ThirdoffsetX, 0 });
 							ImGui::SameLine();
 							ImGui::Text(SkillText.c_str());
@@ -530,7 +559,6 @@ namespace Tempest
 
 
 							ImGui::EndChild();
-							ImGui::PopStyleVar(3);
 							
 							ImGui::EndColumns();
 							//static ImVec2 pos = { 200,500 };
@@ -556,9 +584,14 @@ namespace Tempest
 								ImGui::SameLine();
 								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
 							}*/
+							
 						}
 						ImGui::End();
+
+						
 					}
+					ImGui::PopStyleColor(4);
+					ImGui::PopStyleVar(3);
 				}
 			}
 		}
