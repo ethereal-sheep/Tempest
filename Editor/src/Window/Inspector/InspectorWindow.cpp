@@ -341,6 +341,10 @@ namespace Tempest
 
 							
 							ImGui::Columns(4, "UnitCreation", true);
+							ImGuiWindow* window = ImGui::GetCurrentWindow();
+							ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
+							ImGuiOldColumns* columns = window->DC.CurrentColumns;
+							columns->Flags = ColFlags;
 							auto texture = Service<RenderSystem>::Get().tex->GetID();
 							GLuint tex_id = static_cast<GLuint>(texture);
 							ImGui::Image((void*)static_cast<size_t>(tex_id), ImVec2(ImGui::GetColumnWidth(0), ImGui::GetColumnWidth(0)));
@@ -433,7 +437,7 @@ namespace Tempest
 							ImGui::SameLine();
 							ImGui::Text("Equipped");
 							
-							if (cs->weapon)
+							if (cs->weapon != UNDEFINED)
 							{
 								auto weap = instance.ecs.get<tc::Weapon>(cs->weapon);
 								ImGui::Dummy({ frontPadding, 0 });
@@ -465,11 +469,15 @@ namespace Tempest
 									string sub = "Add Weapon";
 									font_size = ImGui::GetFontSize() * sub.size() / 2;
 									float center = RegionWidth - font_size;
-									static Entity CurSelection = UNDEFINED;
+									static Entity CurSelection = cs->weapon;
 
 									UI::SubHeader({ center - 100.f, 0 },"Add Weapon");
 									ImGui::Dummy({ 0, 20.f });
 									ImGui::Columns(2, "Weapons", true);
+									ImGuiWindow* window = ImGui::GetCurrentWindow();
+									ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
+									ImGuiOldColumns* columns = window->DC.CurrentColumns;
+									columns->Flags = ColFlags;
 
 									/*==================================================================
 														ADD WEAPON COLUMN
@@ -486,11 +494,11 @@ namespace Tempest
 										bool isSelected = false;
 										if (CurSelection == id)
 											isSelected = true;
-										bool WeapSelected = UI::UIButton_1(weap.name.c_str(), weap.name.c_str(),pos, { 100.f, 10.f }, FONT_PARA, isSelected);
-										if (WeapSelected)
+										
+										if (UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), pos, { 100.f, 10.f }, FONT_PARA, isSelected))
 										{
 											CurSelection = id;
-											LOG("CURRENT SELECTED: {0}", CurSelection);
+											//LOG("CURRENT SELECTED: {0}", CurSelection);
 										}
 										index++;
 									}
@@ -499,7 +507,7 @@ namespace Tempest
 														Create WEAPON COLUMN
 									==================================================================*/
 									ImGui::NextColumn();
-
+									static bool CreateOpen = false;
 									//ImGuiSelectableFlags flags = ImGuiSelectableFlags_
 									ImGui::PushFont(FONT_BODY);
 									float CreateItmCol = ImGui::GetColumnWidth(1) / 2;
@@ -510,7 +518,7 @@ namespace Tempest
 									ImGui::SameLine();
 									if (UI::UISelectable(CreateItmStr.c_str()))
 									{
-										
+										CreateOpen = true;
 									}
 									ImGui::Dummy({ 0, 10.f });
 
@@ -519,25 +527,121 @@ namespace Tempest
 									CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
 									ImGui::Dummy({ CreateItmCenter, 0 });
 									ImGui::SameLine();
+									
 									if (UI::UISelectable(CreateWeapStr.c_str()))
 									{
+										CreateOpen = true;
+									}
+									if (CreateOpen)
+									{
+										ImGui::OpenPopup("Add New Weapon");
+										ImGui::SetNextWindowSize(ImVec2(800, 300));
+										if (ImGui::BeginPopupModal("Add New Weapon", NULL, flags))
+										{
+											RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
+											sub = "New Weapon/Item";
+											font_size = ImGui::GetFontSize() * sub.size() / 2;
+											center = RegionWidth - font_size;
+											UI::SubHeader({ center - 70.f, 0 }, sub.c_str());
 
+											ImGui::Dummy({ 0, 20.f });
+
+											ImGui::Columns(2, "Add New Weapon", true);
+											ImGuiWindow* window = ImGui::GetCurrentWindow();
+											ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
+											ImGuiOldColumns* columns = window->DC.CurrentColumns;
+											columns->Flags = ColFlags;
+											ImGui::SetColumnWidth(0, 332.f);
+										
+											ImGui::NextColumn();
+											ImGui::PushFont(FONT_PARA);
+											static tc::Weapon newWeap;
+											float Padding_x = 60.f;
+											ImGui::Text("Name");
+											ImGui::SameLine();
+											ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
+											ImGui::SameLine();
+											ImGui::InputText("##NewWeapName", &newWeap.name);
+											ImGui::Dummy({ 0, 10.f });
+											ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
+											for(auto i = 0; i < sl->size(); i++)
+											{
+												ImGui::Text(sl->get_stats()[i].c_str());
+												ImGui::SameLine();
+												ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
+												ImGui::SameLine();
+												ImGui::SetNextItemWidth(80.f);
+												string WeapStats = "##WeapStats" + std::to_string(i);
+												ImGui::InputInt(WeapStats.c_str(), &newWeap.get_stat(i),0);
+												
+												if (i % 2 == 0)
+												{
+													ImGui::SameLine();
+													ImGui::Dummy({ 10.f, 0 });
+													ImGui::SameLine();
+												}
+											}
+
+											ImGui::EndChild();
+											ImGui::PopFont();
+											ImGui::EndColumns();
+											if (UI::UIButton_1("Confirm", "Confirm", { 440.f, 250.f }, { 80.f, 0.f }, FONT_PARA))
+											{
+												auto entity = instance.ecs.create();
+												auto meta = instance.ecs.emplace<tc::Meta>(entity);
+												meta->name = newWeap.name;
+												auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
+												weapon->name = newWeap.name;
+												for (auto i = 0; i < sl->size(); i++)
+												{
+													weapon->set_stat(i, newWeap.get_stat(i));
+												}
+												ImGui::CloseCurrentPopup();
+												CreateOpen = false;
+											}
+											if (UI::UIButton_1("Cancel", "Cancel", { 620.f, 250.f }, { 80.f, 0.f }, FONT_PARA))
+											{
+												newWeap = tc::Weapon();
+												ImGui::CloseCurrentPopup();
+												CreateOpen = false;
+											}
+											ImGui::EndPopup();
+										}
+									}
+									ImGui::Dummy({ 0, 10.f });
+
+									string DeleteWeapStr = "Delete Weapon";
+									font_size = ImGui::GetFontSize() * DeleteWeapStr.size() / 2;
+									CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
+									ImGui::Dummy({ CreateItmCenter, 0 });
+									ImGui::SameLine();
+									if (UI::UISelectable(DeleteWeapStr.c_str()))
+									{
+										if (cs->weapon == CurSelection)
+										{
+											cs->weapon = UNDEFINED;
+										}
+										instance.ecs.emplace<tc::Destroyed>(CurSelection);
+										// remove rb from scene
+										if (auto rb = instance.ecs.get_if<tc::Rigidbody>(CurSelection))
+										{
+											instance.po.RemoveActorFromScene(rb->internal_rb.get());
+										}
+										CurSelection = UNDEFINED;
+										
+										ImGui::CloseCurrentPopup();
+										open = false;
 									}
 									ImGui::PopFont();
 									ImGui::EndColumns();
-									ImVec2 ConfirmPos = { 120, 400.f };
+									ImVec2 ConfirmPos = { 195, 400.f };
 									if (UI::UIButton_1("Confirm", "Confirm", ConfirmPos, { 50.f, 0.f }, FONT_PARA, false))
 									{
 										cs->weapon = CurSelection;
 										ImGui::CloseCurrentPopup();
 										open = false;
 									}
-									ImVec2 CancelPos = { 270, 400.f };
-									if (UI::UIButton_1("Cancel", "Cancel", CancelPos, { 50.f, 0.f }, FONT_PARA, false))
-									{
-										ImGui::CloseCurrentPopup();
-										open = false;
-									}
+									
 									ImGui::EndPopup();
 								}
 							}
@@ -561,29 +665,7 @@ namespace Tempest
 							ImGui::EndChild();
 							
 							ImGui::EndColumns();
-							//static ImVec2 pos = { 200,500 };
-							//ImVec2 slider_padding = { 100,0 };
-							//UI::DragFloat2("Pos ", "5466", slider_padding, &pos.x);
-							//ImGui::Getcol
 							
-
-							
-							/*ImGui::NextColumn();
-							for (auto i = 0; i < sl->size(); i++)
-							{
-								string stat = sl->get_stats()[i] + " :";
-								ImGui::Text(stat.c_str());
-								ImGui::SameLine();
-								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
-							}
-							ImGui::NextColumn();
-							for (auto i = 0; i < sl->size(); i++)
-							{
-								string stat = sl->get_stats()[i] + " :";
-								ImGui::Text(stat.c_str());
-								ImGui::SameLine();
-								ImGui::Text(std::to_string(cs->get_stat(i)).c_str());
-							}*/
 							
 						}
 						ImGui::End();
