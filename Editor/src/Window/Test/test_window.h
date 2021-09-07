@@ -128,7 +128,7 @@ namespace Tempest
 
 				if (clicked)
 				{
-
+					LOG("TRUE");
 				}
 
 

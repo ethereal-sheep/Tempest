@@ -7,6 +7,7 @@
 #include "Graphics/OpenGL/FBO.h"
 #include "Graphics/OpenGL/LineRenderer.h"
 #include "ECS/Components/Components.h"
+#include "Graphics/OpenGL/Texture.h"
 #include "Util.h"
 #include <memory>
 #include <Core.h>
@@ -53,6 +54,7 @@ namespace Tempest
 		uint32_t GetColourBuffer() const;
 
 		Camera& GetCamera();
+		tuptr<Texture> tex = std::make_unique<Texture>("Assets/test_photo.png", false);
 
 	};
 }
