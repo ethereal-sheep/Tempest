@@ -6,8 +6,9 @@ in vec3 vs_position;
 
 out vec4 fs_color;
 
-uniform vec3 LightPosition;
+uniform vec3 LightColor;
 uniform vec3 LightDirection;
+uniform float LightIntensity;
 uniform vec3 CamPosition;
 
 void main()
@@ -18,7 +19,6 @@ void main()
 	float shininess = 32.f;
 	vec3 Normal = normalize(vs_normal);
 
-	vec3 posToLight = normalize(LightPosition - vs_position);
 	float Diffuse = max(dot(Normal, LightDirection), 0.0);
 	vec3 Final_Diffuse = Diffuse * vec3(1.0, 1.0, 1.0);
 
@@ -27,6 +27,13 @@ void main()
 	float specConstant = pow(max(dot(posToView, Reflect), 0.0), shininess);
 	vec3 Final_Specular = vec3(1.0, 1.0, 1.0) * specConstant;
 
-	vec3 result = ambient + Final_Diffuse + Final_Specular;
+	float NL = clamp(dot(Normal, LightDirection), 0.0, 1.0);
+	
+	float shadowFactor = 1.f;
+	float shadowCoef = NL * shadowFactor;
+	
+	vec3 result = (ambient + (Final_Diffuse + Final_Specular) * shadowCoef) * LightColor * LightIntensity;
 	fs_color = vec4(vs_color * result, 1.0);
+
+	//_color = vec4(vs_color, 1.0);
 }

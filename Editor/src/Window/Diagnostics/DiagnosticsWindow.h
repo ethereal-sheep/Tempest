@@ -24,6 +24,7 @@ namespace Tempest
 		void AllocationHistory(Instance& instance);
 		void Camera(Instance& instance);
 		void Mouse(Instance& instance);
+		void Light(Instance& instance);
 
 		std::vector<float> fps_values;
 		std::vector<float> alloc_values;

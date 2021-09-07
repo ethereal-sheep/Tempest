@@ -9,7 +9,9 @@
 #include "Graphics/Basics/FrameBuffer.h"
 #include "Graphics/Basics/Model.h"
 #include "Graphics/Basics/LineRenderer.h"
-#include "Graphics/Basics/DrawShader.h"
+#include "Graphics/Basics/Lights.h"
+#include "Graphics/OpenGL/Texture.h"
+#include "Graphics/Basics/ShadowBuffer.h"
 
 /**
  * @brief 
@@ -30,6 +32,7 @@ namespace Tempest
         LineRenderer m_LineRenderer;
 
         RenderPipeline m_Pipeline;
+        ShadowBuffer m_ShadowBuffer;
         Renderer m_Renderer;
         FrameBuffer m_FrameBuffer{ 1600, 900 };
         Model model{ "Models/OldCottage.fbx" };
@@ -52,6 +55,7 @@ namespace Tempest
 
         Camera& GetCamera();
 
+        std::vector<Directional_Light> dir_lights;
     private:        
         
         tuptr<Mesh> CreateShape(MeshCode code);

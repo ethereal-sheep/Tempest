@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{DD6A
 		Resource\Shaders\GroundPlane_vertex.glsl = Resource\Shaders\GroundPlane_vertex.glsl
 		Resource\Shaders\Line_fragment.glsl = Resource\Shaders\Line_fragment.glsl
 		Resource\Shaders\Line_vertex.glsl = Resource\Shaders\Line_vertex.glsl
+		Resource\Shaders\ShadowDepth_fragment.glsl = Resource\Shaders\ShadowDepth_fragment.glsl
+		Resource\Shaders\ShadowDepth_vertex.glsl = Resource\Shaders\ShadowDepth_vertex.glsl
 		Resource\Shaders\Texture_fragment.glsl = Resource\Shaders\Texture_fragment.glsl
 		Resource\Shaders\Texture_vertex.glsl = Resource\Shaders\Texture_vertex.glsl
 	EndProjectSection

@@ -18,6 +18,6 @@ void main()
 {
 	vs_position = (ModelMatrix * vec4(vertex_position, 1.0)).xyz;
 	vs_normal = normal;
-	vs_color = tangent;
+	vs_color = normal;
 	gl_Position =  ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
 }

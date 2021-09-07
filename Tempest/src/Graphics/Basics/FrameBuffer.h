@@ -16,13 +16,11 @@ namespace Tempest
         uint32_t m_Width = 0;
         uint32_t m_Height = 0;
 
-        //VertexArray m_VAO;
         uint32_t m_vao = 0;
         uint32_t m_ibo = 0;
         uint32_t m_vbo = 0;
         uint32_t m_Count = 0;
 
-        //[[maybe_unused]] tuptr<Shader> m_Shader;
         Shader m_Shader{ "Shaders/FrameBuffer_vertex.glsl", "Shaders/FrameBuffer_fragment.glsl" };
     public: 
 

@@ -37,6 +37,11 @@ namespace Tempest
 					Mouse(instance);
 					ImGui::EndTabItem();
 				}
+				if (ImGui::BeginTabItem("Light"))
+				{
+					Light(instance);
+					ImGui::EndTabItem();
+				}
 				ImGui::EndTabBar();
 			}
 		}
@@ -257,6 +262,20 @@ namespace Tempest
 				ImGui::Text("Mouse pos: <INVALID>");
 
 		}
+	}
+
+	void DiagnosticsWindow::Light(Instance& instance)
+	{
+		auto& light = Service<RenderSystem>::Get().dir_lights[0];
+		const auto padding = 80.f;
+		UI::DragFloat3ColorBox("Direction", "##LightDirection", ImVec2{ padding , 0.f }, value_ptr(light.Direction), 0.f, 0.1f, -10.f, 10.f);
+		UI::DragFloat3ColorBox("Color", "##LightColor", ImVec2{ padding , 0.f }, value_ptr(light.Color), 0.f, 0.01f, 0.f, 1.f);
+
+		ImGui::Selectable("Intensity", false, ImGuiSelectableFlags_Disabled, ImVec2{ 10.f, 0 });
+		ImGui::SameLine();
+		ImGui::PushID("Intensity");
+		if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
+		ImGui::PopID();
 	}
 
 }

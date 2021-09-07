@@ -1,6 +1,6 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "ECS/Components/Components.h"
-#include "Graphics/OpenGL/Texture.h"
+
 
 #include "Logger/Log.h"
 
@@ -29,7 +29,19 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_LIGHT, std::make_unique<Shader>("Shaders/DirectionalLight_vertex.glsl", "Shaders/DirectionalLight_fragment.glsl"));
 
         m_Pipeline.m_Cameras.emplace_back(Camera{});
+        dir_lights.emplace_back(Directional_Light{});
 
+        Transform transform;
+        transform.position = vec3(-1.f, 0.f, 0.f);
+        transform.rotation = quat(1.f, 0.f, 0.f, 0.f);
+        transform.scale = vec3(0.15f, 0.15f, 0.15f);
+        Submit(MeshCode::PLANE, transform);
+
+        Transform transform2;
+        transform2.position = vec3(0.f, 0.f, 0.f);
+        transform2.rotation = quat(0.f, 0.f, 0.f, 0.f);
+        transform2.scale = vec3(0.15f, 0.15f, 0.15f);
+        Submit(MeshCode::SPHERE, transform2);
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -95,7 +107,7 @@ namespace Tempest
         m_LineRenderer.ClearBuffer();
         */
 
-        m_FrameBuffer.Bind();
+        //m_FrameBuffer.Bind();
 
         m_Renderer.EnableDepthMask(true);
         m_Renderer.EnableDepthTest(true);
@@ -103,24 +115,22 @@ namespace Tempest
         m_Renderer.EnableBlend(true);
         //m_Renderer.EnableCulling(true, true, true);
         //m_Renderer.SetPolygonMode(PolyMode::FILL);
-        
+        //for (auto i : dir_lights)
+        //{
+        //    m_ShadowBuffer.Bind();
+        //    m_ShadowBuffer.ClearAttachments();
+        //    m_ShadowBuffer.AttachDepthAttachment(i.DepthMap);
+        //    //m_ShadowBuffer.Validate();
+        //    m_ShadowBuffer.ResizeViewport(i.DepthMap);
+        //    m_ShadowBuffer.Draw(i.Direction, m_Pipeline.m_Sprites, m_Pipeline.m_Transforms, m_Pipeline.m_Meshes);
+        //    m_ShadowBuffer.Unbind();
+        //}
+
         m_Renderer.ClearColour(0.4f, 0.5f, 0.6f, 0.0f);
         m_Renderer.ClearColorDepth();      
     }
     void RenderSystem::Render()
     {
-        Transform transform;
-        transform.position = vec3(0.f, 0.f, 0.f);
-        transform.rotation = quat(1.f, 0.f, 0.f, 0.f);
-        transform.scale = vec3(1.f, 1.f, 1.f);
-        Submit(MeshCode::PLANE, transform);
-
-        Transform transform2;
-        transform2.position = vec3(0.f, 0.f, 0.f);
-        transform2.rotation = quat(0.f, 0.f, 0.f, 0.f);
-        transform2.scale = vec3(0.15f, 0.15f, 0.15f);
-        Submit(MeshCode::SPHERE, transform2);
-
         //{
         //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->Bind();
         //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetFront(), "front");
@@ -135,31 +145,32 @@ namespace Tempest
         //    glClear(GL_DEPTH_BUFFER_BIT);
         //}
 
-        //{
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[1], "ModelMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-        //
-        //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
-        //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        //}
+        
 
+        {
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+        
+            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
+            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        }
+        
         {
             m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Bind();
             m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Transforms[1], "ModelMatrix");
             m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
             m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(glm::vec3(0.f, 1.f, 0.f), "LightPosition");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(glm::vec3(0.f, -1.f, 0.f), "LightDirection");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
             m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "CamPosition");
             
             m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
             glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
-
        
-
         //Texture tex("Assets/test_photo.png");
         
         //for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
@@ -190,12 +201,12 @@ namespace Tempest
 
         //m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix());
 
-        m_FrameBuffer.Unbind();       
+        //m_FrameBuffer.Unbind();       
     }
 
     void RenderSystem::EndFrame()
     {
-        m_FrameBuffer.Draw();
+        //m_FrameBuffer.Draw();
     }
 
     void RenderSystem::Clear()
