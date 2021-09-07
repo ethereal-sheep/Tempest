@@ -102,7 +102,7 @@ namespace Tempest
 					{
 						static bool uniformScale = false;
 						static vec3 newScale = transform->scale;
-						bool UIScaled = false;
+						
 
 						if (UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, newScale.data(), 1.f, 1.f, 1.f, 1000.f).second)
 						{
@@ -474,9 +474,9 @@ namespace Tempest
 									UI::SubHeader({ center - 100.f, 0 },"Add Weapon");
 									ImGui::Dummy({ 0, 20.f });
 									ImGui::Columns(2, "Weapons", true);
-									ImGuiWindow* window = ImGui::GetCurrentWindow();
-									ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
-									ImGuiOldColumns* columns = window->DC.CurrentColumns;
+									window = ImGui::GetCurrentWindow();
+									
+									columns = window->DC.CurrentColumns;
 									columns->Flags = ColFlags;
 
 									/*==================================================================
@@ -547,9 +547,8 @@ namespace Tempest
 											ImGui::Dummy({ 0, 20.f });
 
 											ImGui::Columns(2, "Add New Weapon", true);
-											ImGuiWindow* window = ImGui::GetCurrentWindow();
-											ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
-											ImGuiOldColumns* columns = window->DC.CurrentColumns;
+											window = ImGui::GetCurrentWindow();
+											columns = window->DC.CurrentColumns;
 											columns->Flags = ColFlags;
 											ImGui::SetColumnWidth(0, 332.f);
 										
