@@ -863,7 +863,7 @@ namespace Tempest::UI
 		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
 
 		static float rounding = 0.f;
-		float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 		padding.y += 10.f;
 
 		// button shit
@@ -884,7 +884,7 @@ namespace Tempest::UI
 		auto old_pos = ImGui::GetCursorPos();
 		ImGui::SetCursorPos(pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
-		bool clicked = ImGui::InvisibleButton("##NiceButton", button_size);
+		ImGui::InvisibleButton("##NiceButton", button_size);
 		ImGui::PopStyleVar(1);
 		ImGui::SetCursorPos(pos);
 		if (selected)

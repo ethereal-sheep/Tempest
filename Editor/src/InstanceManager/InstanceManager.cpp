@@ -13,6 +13,7 @@
 // test window
 #include "Window/Test/test_window.h"
 #include "Window/Test/test_window2.h"
+#include "Window/Test/test_window3.h"
 
 
 // filebrowsers (maybe dn)
@@ -90,6 +91,7 @@ namespace Tempest
 		instance->register_always<ShowRecent>();
 		instance->register_window<test_window>();
 		instance->register_window<test_window2>();
+		instance->register_window<test_window3>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{
@@ -99,6 +101,7 @@ namespace Tempest
 		instance->register_window<InspectorWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 		instance->register_window<test_window>();
+		instance->register_window<test_window3>();
 
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();
