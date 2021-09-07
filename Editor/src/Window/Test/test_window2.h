@@ -413,7 +413,7 @@ namespace Tempest
 					ImGui::CalcTextSize(input.get_name().c_str()).x);
 			}
 
-			float twidth = ImGui::CalcTextSize(n->get_name().c_str()).x;
+			//float twidth = ImGui::CalcTextSize(n->get_name().c_str()).x;
 
 			// Title
 			//auto size = ax::NodeEditor::GetNodeSize(id);

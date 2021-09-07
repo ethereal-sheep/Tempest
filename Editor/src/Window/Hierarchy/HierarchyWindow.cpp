@@ -33,7 +33,6 @@ namespace Tempest
 						auto transform = instance.ecs.emplace<tc::Transform>(entity);
 						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
 						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
-						auto character = instance.ecs.emplace<tc::Character>(entity);
 						rb->shape_data = SHAPE_TYPE::BOX;
 						rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
 						rigidbody_config staticBody;
@@ -84,7 +83,7 @@ namespace Tempest
 						auto entity = instance.ecs.create();
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Statline";
-						auto character = instance.ecs.emplace<tc::Statline>(entity);
+						instance.ecs.emplace<tc::Statline>(entity);
 						instance.action_history.Commit<AddEntity>(entity);
 					}
 					if (ImGui::MenuItem("Add Character"))
@@ -93,7 +92,7 @@ namespace Tempest
 						auto entity = instance.ecs.create();
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Character";
-						auto character = instance.ecs.emplace<tc::Character>(entity);
+						instance.ecs.emplace<tc::Character>(entity);
 						instance.action_history.Commit<AddEntity>(entity);
 					}
 					if (ImGui::MenuItem("Add Gun"))
