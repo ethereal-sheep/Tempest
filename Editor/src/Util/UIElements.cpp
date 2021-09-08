@@ -960,6 +960,116 @@ namespace Tempest::UI
 		}
 		return false;
 	}
+
+    bool UIButton_2(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	{
+		const float default_padding_x = 8.f;
+		const float default_padding_y = 8.f;
+		const float border_size = 1.5f;
+		
+		const ImVec4 default_border_col = { 1.f, 1.f, 1.f, 1.f };
+		const ImVec4 hovered_border_col = { 0.980f, 0.768f, 0.509f, 1.f };
+		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
+		string str = "         ";
+		static float rounding = 0.f;
+		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+		padding.y += 10.f;
+
+		// button shit
+		ImGui::PushFont(font);
+		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 act_text_size = {
+			std::max(text_size.x, alt_text_size.x),
+			std::max(text_size.y, alt_text_size.y)
+		};
+		ImGui::PopFont();
+
+		ImVec2 button_size = {
+			act_text_size.x + default_padding_x + padding.x,
+			act_text_size.y + default_padding_y + padding.y
+		};
+
+		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+
+		ImGui::SetCursorPos(new_pos);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+		ImGui::InvisibleButton("##NiceButton", button_size);
+		ImGui::PopStyleVar(1);
+		ImGui::SetCursorPos(new_pos);
+		if (selected)
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::Text(hover.c_str());
+			ImGui::PopFont();
+			auto io = ImGui::GetIO();
+			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			{
+				return true;
+			}
+		}
+		else if (!ImGui::IsItemHovered())
+		{
+			// default
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, default_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+			ImGui::SetCursorPos(text_pos);
+			/*ImGui::SetCursorPos(
+				{
+					pos.x + button_size.x / 2.f - text_size.x / 2.f,
+					pos.y + 2.f
+				});*/
+			ImGui::PushFont(font);
+			ImGui::Text(unselected.c_str());
+			ImGui::PopFont();
+		}
+		else
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::Text(hover.c_str());
+			ImGui::PopFont();
+
+			auto io = ImGui::GetIO();
+			if (ImGui::IsMouseClicked(0))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	void AddUnderline(ImU32 col, ImVec2 min, ImVec2 max)
 	{
 		//ImVec2 min = ImGui::GetItemRectMin();

@@ -25,6 +25,7 @@ namespace Tempest
 		
 
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
 		
@@ -166,6 +167,7 @@ namespace Tempest
 				if (open)
 				{
 					ImGui::OpenPopup("Add Weapon");
+					ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 					ImGui::SetNextWindowSize(ImVec2(500, 550));
 					ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
 						ImGuiWindowFlags_NoScrollbar;
@@ -175,7 +177,7 @@ namespace Tempest
 						string sub = "Add Weapon";
 						font_size = ImGui::GetFontSize() * sub.size() / 2;
 						float center = RegionWidth - font_size;
-						static Entity CurSelection = cs->weapon;
+						CurSelection = cs->weapon;
 
 						UI::SubHeader({ center - 100.f, 0 }, "Add Weapon");
 						ImGui::Dummy({ 0, 20.f });
@@ -237,10 +239,15 @@ namespace Tempest
 						{
 							CreateOpen = true;
 						}
+
+						/*==================================================================
+											Create New WEAPON POPUP
+						==================================================================*/
 						if (CreateOpen)
 						{
 							ImGui::OpenPopup("Add New Weapon");
 							ImGui::SetNextWindowSize(ImVec2(800, 300));
+							ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 							if (ImGui::BeginPopupModal("Add New Weapon", NULL, flags))
 							{
 								RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
@@ -259,13 +266,23 @@ namespace Tempest
 
 								ImGui::NextColumn();
 								ImGui::PushFont(FONT_PARA);
-								static tc::Weapon newWeap;
+								//static tc::Weapon newWeap;
 								float Padding_x = 60.f;
 								ImGui::Text("Name");
 								ImGui::SameLine();
 								ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 								ImGui::SameLine();
 								ImGui::InputText("##NewWeapName", &newWeap.name);
+								bool disabled = newWeap.name.size() > 9;
+								ImGui::SameLine();
+								if(disabled)
+								{
+									ImGui::Text("9 Char only");
+								}
+								else
+								{
+									ImGui::Dummy({ 100.f, 10.f });
+								}
 								ImGui::Dummy({ 0, 10.f });
 								ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
 								for (auto i = 0; i < sl->size(); i++)
@@ -363,17 +380,20 @@ namespace Tempest
 				ImGui::SameLine();
 				ImGui::Text(SkillText.c_str());
 				ImGui::Dummy({ 0, 10.f });
-				ImGui::BeginChild("##SKILL", ImVec2(ImGui::GetColumnWidth(2) - 10.f, 300.0f));
+				ImGui::BeginChild("##SKILL", ImVec2(ImGui::GetColumnWidth(2) - 10.f, 100.0f));
 
 
 				ImGui::EndChild();
+				if(UI::UIButton_1("Add Skill", "Add Skill", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.4f }, { 50.f, 10.f }, FONT_PARA))
+				{
 
+				}
 				ImGui::EndColumns();
 
 				if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
 				{
 					LOG("SAVED");
-					//TODO
+					open = false;
 				}
 				
 			}
