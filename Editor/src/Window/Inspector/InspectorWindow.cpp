@@ -330,16 +330,10 @@ namespace Tempest
 							float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 							
 							UI::Header(ImVec2{ center_x - 100.f,10}, "Unit Creation");
-							ImGui::SameLine();
-							bool save = UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.8f ,ImGui::GetCursorPosY() + 10.0f}, { 90.f, 0.f }, FONT_PARA);
-							ImGui::Dummy({ 0, 20.f});
-							if (save)
-							{
-								LOG("SAVED");
-								//TODO
-							}
 
-							
+							ImGui::SameLine();
+							ImGui::Dummy({ 0, 50.f });
+
 							ImGui::Columns(4, "UnitCreation", true);
 							ImGuiWindow* window = ImGui::GetCurrentWindow();
 							ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
@@ -442,7 +436,7 @@ namespace Tempest
 								auto weap = instance.ecs.get<tc::Weapon>(cs->weapon);
 								ImGui::Dummy({ frontPadding, 0 });
 								ImGui::SameLine();
-								UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { ImGui::GetCursorPosX(), ImGui::GetCursorPosY() }, { 100.f, 10.f }, FONT_PARA);
+								UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + 10.0f}, { 100.f, 10.f }, FONT_PARA);
 							}
 							ImGui::EndChild();
 							float btnPos = ImGui::GetColumnWidth(0) + ImGui::GetColumnWidth(1);
@@ -664,7 +658,12 @@ namespace Tempest
 							
 							ImGui::EndColumns();
 							
-							
+							if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+							{
+								LOG("SAVED");
+								//TODO
+							}
+
 						}
 						ImGui::End();
 
