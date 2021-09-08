@@ -42,15 +42,9 @@ namespace Tempest
 				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 
 				UI::Header(ImVec2{ center_x - 100.f,10 }, "Unit Creation");
-				ImGui::SameLine();
-				bool save = UI::UIButton_1("Save", "Save", { center_x + 300.f,30.f }, { 90.f, 0.f }, FONT_PARA);
-				ImGui::Dummy({ 0, 20.f });
-				if (save)
-				{
-					LOG("SAVED");
-					open = false;
-				}
 
+				ImGui::SameLine();
+				ImGui::Dummy({ 0, 50.f });
 
 				ImGui::Columns(4, "UnitCreation", true);
 				ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -154,11 +148,11 @@ namespace Tempest
 					auto weap = instance.ecs.get<tc::Weapon>(cs->weapon);
 					ImGui::Dummy({ frontPadding, 0 });
 					ImGui::SameLine();
-					UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { frontPadding + 10.f, 20.f }, { 100.f, 10.f }, FONT_PARA);
+					UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + 10.0f }, { 100.f, 10.f }, FONT_PARA);
 				}
 				ImGui::EndChild();
 				float btnPos = ImGui::GetColumnWidth(0) + ImGui::GetColumnWidth(1);
-				bool addWeap = UI::UIButton_1("Add Weapon/Item", "Add Weapon/Item", { btnPos + 15, 430.f }, { 50.f, 10.f }, FONT_PARA);
+				bool addWeap = UI::UIButton_1("Add Weapon/Item", "Add Weapon/Item", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.4f }, { 50.f, 10.f }, FONT_PARA);
 
 				static bool open = false;
 				if (addWeap)
@@ -196,18 +190,17 @@ namespace Tempest
 						==================================================================*/
 						ImGui::BeginChild("##weap", ImVec2(ImGui::GetColumnWidth(0) - 10.f, 300.0f));
 						auto view = instance.ecs.view<Components::Weapon>(exclude_t<tc::Destroyed>());
-						ImVec2 pos = { 30.f, 10.f };
 						float index = 1;
+
+						const ImVec2 button_pos{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.1f };
 						for (auto id : view)
 						{
-							pos = { 30.f, 10.f };
 							auto& weap = instance.ecs.get<Components::Weapon>(id);
-							pos.y = pos.y * index + (60 * (index - 1));
 							bool isSelected = false;
 							if (CurSelection == id)
 								isSelected = true;
 
-							if (UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), pos, { 100.f, 10.f }, FONT_PARA, isSelected))
+							if (UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { button_pos.x, button_pos.y + (index - 1) * 60 }, { 100.f, 10.f }, FONT_PARA, isSelected))
 							{
 								CurSelection = id;
 								//LOG("CURRENT SELECTED: {0}", CurSelection);
@@ -296,7 +289,7 @@ namespace Tempest
 								ImGui::EndChild();
 								ImGui::PopFont();
 								ImGui::EndColumns();
-								if (UI::UIButton_1("Confirm", "Confirm", { 440.f, 250.f }, { 80.f, 0.f }, FONT_PARA))
+								if (UI::UIButton_1("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
 								{
 									auto entity = instance.ecs.create();
 									auto meta = instance.ecs.emplace<tc::Meta>(entity);
@@ -310,7 +303,7 @@ namespace Tempest
 									ImGui::CloseCurrentPopup();
 									CreateOpen = false;
 								}
-								if (UI::UIButton_1("Cancel", "Cancel", { 620.f, 250.f }, { 80.f, 0.f }, FONT_PARA))
+								if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.8f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
 								{
 									newWeap = tc::Weapon();
 									ImGui::CloseCurrentPopup();
@@ -346,7 +339,7 @@ namespace Tempest
 						ImGui::PopFont();
 						ImGui::EndColumns();
 						ImVec2 ConfirmPos = { 195, 400.f };
-						if (UI::UIButton_1("Confirm", "Confirm", ConfirmPos, { 50.f, 0.f }, FONT_PARA, false))
+						if (UI::UIButton_1("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.8f }, { 50.f, 0.f }, FONT_PARA, false))
 						{
 							cs->weapon = CurSelection;
 							ImGui::CloseCurrentPopup();
@@ -377,6 +370,11 @@ namespace Tempest
 
 				ImGui::EndColumns();
 
+				if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+				{
+					LOG("SAVED");
+					//TODO
+				}
 				
 			}
 			
