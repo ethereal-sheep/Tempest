@@ -30,6 +30,7 @@
 #include "Window/Popup/ErrorMsgPopup.h"
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
+#include "Window/Overlay/UnitSheetOverlay.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -87,6 +88,7 @@ namespace Tempest
 		instance->register_always<SaveBrowser>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
+		instance->register_always<UnitSheetOverlay>();
 
 		instance->register_always<ShowRecent>();
 		instance->register_window<test_window>();
