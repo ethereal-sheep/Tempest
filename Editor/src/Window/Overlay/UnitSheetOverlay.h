@@ -15,12 +15,7 @@ namespace Tempest
         void init(Instance&) override
         {
             window_flags =
-                ImGuiWindowFlags_NoDecoration |
-                ImGuiWindowFlags_NoDocking |
-                ImGuiWindowFlags_AlwaysAutoResize |
-                ImGuiWindowFlags_NoSavedSettings |
-                ImGuiWindowFlags_NoFocusOnAppearing |
-                ImGuiWindowFlags_NoNav;
+                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenUnitSheetTrigger>(&UnitSheetOverlay::open_popup, this);
         }
@@ -29,5 +24,6 @@ namespace Tempest
         void show(Instance&) override;
 
         bool open = false;
+        
     };
 }
