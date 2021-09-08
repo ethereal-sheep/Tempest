@@ -881,12 +881,14 @@ namespace Tempest::UI
 			act_text_size.y + default_padding_y + padding.y
 		};
 
-		auto old_pos = ImGui::GetCursorPos();
-		ImGui::SetCursorPos(pos);
+		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+
+		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
 		ImGui::PopStyleVar(1);
-		ImGui::SetCursorPos(pos);
+		ImGui::SetCursorPos(new_pos);
 		if (selected)
 		{
 			// hovered
@@ -900,11 +902,7 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
-			ImGui::SetCursorPos(
-				{
-					pos.x + button_size.x / 2.f - text_size.x / 2.f,
-					pos.y + button_size.y / 2.f - text_size.y / 2.f
-				});
+			ImGui::SetCursorPos(text_pos);
 			ImGui::PushFont(font);
 			ImGui::Text(hover.c_str());
 			ImGui::PopFont();
@@ -926,11 +924,7 @@ namespace Tempest::UI
 			ImGui::Button("##NiceButton_Dummy", button_size);
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
-			ImGui::SetCursorPos(
-				{
-					pos.x + button_size.x / 2.f - text_size.x / 2.f,
-					pos.y + button_size.y / 2.f - text_size.y / 2.f
-				});
+			ImGui::SetCursorPos(text_pos);
 			/*ImGui::SetCursorPos(
 				{
 					pos.x + button_size.x / 2.f - text_size.x / 2.f,
@@ -953,11 +947,7 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
-			ImGui::SetCursorPos(
-				{
-					pos.x + button_size.x / 2.f - text_size.x / 2.f,
-					pos.y + button_size.y / 2.f - text_size.y / 2.f
-				});
+			ImGui::SetCursorPos(text_pos);
 			ImGui::PushFont(font);
 			ImGui::Text(hover.c_str());
 			ImGui::PopFont();
