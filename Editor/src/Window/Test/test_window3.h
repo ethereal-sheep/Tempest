@@ -33,7 +33,7 @@ namespace Tempest
 			{
 				static ImVec4 active{ 0.2f, 0.2f, 0.2f, 1.f };
 				static ImVec4 inactive{ 0.062f, 0.062f, 0.062f, 1.f };
-				static const vec2 buttonSize{ 150, 30 };
+				static const ImVec2 buttonSize{ 70, 7.5 };
 
 				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding);
 				Tempest::UI::SubHeader({ ImGui::GetWindowWidth() / 3.f , padding }, "Conflict Resolutions");
@@ -62,23 +62,18 @@ namespace Tempest
 						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
 
 						ImGui::BeginChild("ChildUnit", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						for (unsigned i = 1; i <= numOfButtons; i++)
+						
+						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
+						for (unsigned i = 0; i < numOfButtons; i++)
 						{
-							if (i > 1)
-								ImGui::Dummy({ 0, 20 });
-
-							ImGui::PushStyleColor(ImGuiCol_Button, tab == i ? active : inactive);
-							if (ImGui::Button(std::string("Test Unit" + std::to_string(i)).c_str(), ImVec2(ImGui::GetContentRegionAvailWidth() - padding, 50)))
+							if (UI::UIButton_1("Test Unit" + std::to_string(i), "Test Unit" + std::to_string(i), { cursor.x , cursor.y + i * 80}, { 140, 15 }, FONT_PARA))
 								tab = i;
 						}
-						ImGui::PopStyleColor(numOfButtons);
 
 						ImGui::EndChild();
 					}
 
-					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f - buttonSize.x * 0.5f);
-					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + halfPadding);
-					if (ImGui::Button("Add Units", ImVec2(buttonSize.x, buttonSize.y))) {}
+					if (UI::UIButton_1("Add Units", "Add Units", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
 
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
@@ -101,24 +96,20 @@ namespace Tempest
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
 						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
 
-						ImGui::BeginChild("ChildActions", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						for (unsigned i = 1; i <= numOfButtons; i++)
+						ImGui::BeginChild("ChildAction", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
+						
+						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
+						for (unsigned i = 0; i < numOfButtons; i++)
 						{
-							if (i > 1)
-								ImGui::Dummy({ 0, 20 });
-
-							ImGui::PushStyleColor(ImGuiCol_Button, tab == (i + numOfButtons) ? active : inactive);
-							if (ImGui::Button(std::string("Test Action" + std::to_string(i)).c_str(), ImVec2(ImGui::GetContentRegionAvailWidth() - padding, 50)))
-								tab = (i + numOfButtons);
+							if (UI::UIButton_1("Test Action" + std::to_string(i), "Test Action" + std::to_string(i), { cursor.x , cursor.y + i * 80}, { 140, 15 }, FONT_PARA))
+								tab = i + numOfButtons;
 						}
-						ImGui::PopStyleColor(numOfButtons);
 
 						ImGui::EndChild();
 					}
 
-					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f - buttonSize.x * 0.5f);
-					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + halfPadding);
-					if (ImGui::Button("Add Actions", ImVec2(buttonSize.x, buttonSize.y))) {}
+					if (UI::UIButton_1("Add Actions", "Add Actions", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
+					
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
 					
@@ -141,23 +132,20 @@ namespace Tempest
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
 						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
 
-						ImGui::BeginChild("ChildLinks", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						for (unsigned i = 1; i <= numOfButtons; i++)
-						{
-							if (i > 1)
-								ImGui::Dummy({ 0, 20 });
+						ImGui::BeginChild("ChildLink", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
 
-							ImGui::PushStyleColor(ImGuiCol_Button, tab == (i + numOfButtons * 2) ? active : inactive);
-							if (ImGui::Button(std::string("Test Link" + std::to_string(i)).c_str(), ImVec2(ImGui::GetContentRegionAvailWidth() - padding, 50)))
+						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
+						for (unsigned i = 0; i < numOfButtons; i++)
+						{
+							if (UI::UIButton_1("Test Link" + std::to_string(i), "Test Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 140, 15 }, FONT_PARA))
 								tab = i + numOfButtons * 2;
 						}
-						ImGui::PopStyleColor(numOfButtons);
 
 						ImGui::EndChild();
 					}
-					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f - buttonSize.x * 0.5f);
-					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + halfPadding);
-					if (ImGui::Button("Add Links", ImVec2(buttonSize.x, buttonSize.y))) {}
+
+					if (UI::UIButton_1("Add Link", "Add Links", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
+					
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
 				}
