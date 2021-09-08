@@ -1,8 +1,10 @@
 #include "InspectorWindow.h"
 #include "Util/GuizmoController.h"
-#include <Tempest/src/Actions/Action.h>
-#include <Tempest/src/Graphics/OpenGL/Texture.h>
-#include <Tempest/src/Graphics/OpenGL/RenderSystem.cpp>
+#include "Tempest/src/Actions/Action.h"
+#include "Tempest/src/Graphics/OpenGL/Texture.h"
+#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
+#include "Events/EventManager.h"
+#include "Triggers/Triggers.h"
 
 namespace Tempest
 {
@@ -320,7 +322,8 @@ namespace Tempest
 					static bool show = false;
 					if (ImGui::Button("Show/Edit"))
 					{
-						show = true;
+						//show = true;
+						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>();
 					}
 					
 					if (show)
