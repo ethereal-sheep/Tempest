@@ -6,7 +6,7 @@ namespace Tempest
 {
 	void UnitSheetOverlay::open_popup(const Event& e)
 	{
-		open = true;
+		OverlayOpen = true;
 	}
 
 	void UnitSheetOverlay::show(Instance& instance)
@@ -29,7 +29,7 @@ namespace Tempest
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
 		
-		if (open)
+		if (OverlayOpen)
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
 			ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0.f);
@@ -177,7 +177,11 @@ namespace Tempest
 						string sub = "Add Weapon";
 						font_size = ImGui::GetFontSize() * sub.size() / 2;
 						float center = RegionWidth - font_size;
-						CurSelection = cs->weapon;
+						if (cs->weapon != UNDEFINED)
+						{
+
+						}
+						
 
 						UI::SubHeader({ center - 100.f, 0 }, "Add Weapon");
 						ImGui::Dummy({ 0, 20.f });
@@ -393,7 +397,7 @@ namespace Tempest
 				if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
 				{
 					LOG("SAVED");
-					open = false;
+					OverlayOpen = false;
 				}
 				
 			}

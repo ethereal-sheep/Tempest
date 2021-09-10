@@ -23,7 +23,7 @@ namespace Tempest
 
         void show(Instance&) override;
 
-        bool open = false;
+        bool OverlayOpen = false;
         tc::Weapon newWeap;
         Entity CurSelection = UNDEFINED;
     };
