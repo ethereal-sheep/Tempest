@@ -6,7 +6,6 @@
 #include "Util/view.h"
 #include "Scripting/SRM.h"
 #include "Instance/NullTimeInstance.h"
-#include "Scripting/Graph/system_graph.h"
 #include "Events/Events/ScriptEvents.h"
 
 namespace Tempest
@@ -190,7 +189,7 @@ namespace Tempest
 			}
 		}
 
-		{
+		/*{
 			int newNum = 12;
 			instance.srm.instant_dispatch_to_id<Input>(global, INVALID, newNum);
 			auto i = instance.srm.get_variable_to_id(global, "Output")->get<int>();
@@ -202,7 +201,7 @@ namespace Tempest
 			instance.srm.instant_dispatch_to_id<Input>(global, INVALID, newNum);
 			auto i = instance.srm.get_variable_to_id(global, "Output")->get<int>();
 			LOG_ASSERT(i == newNum);
-		}
+		}*/
 	}
 
 	void retest_graphs()

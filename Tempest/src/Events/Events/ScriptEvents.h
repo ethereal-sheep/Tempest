@@ -8,33 +8,20 @@ namespace Tempest
 	struct Simulate : public Event 
 	{
 
-		Simulate(
-			id_t a,
-			id_t d,
-			id_t as,
-			id_t ds,
-			id_t rs
-		) :
-			attacking(a),
-			defending(d),
-			atk_sys(as),
-			def_sys(ds),
-			res_sys(rs)
+		Simulate(id_t a, id_t d) :
+			attacker(a), defender(d)
 		{}
 
-
-		id_t attacking;
-		id_t defending;
-		id_t atk_sys;
-		id_t def_sys;
-		id_t res_sys;
+		id_t attacker;
+		id_t defender;
 	};
 
 	struct Input : public Event 
 	{
-		Input(id_t entity, int i = 0) : owner(entity), input(i) {}
-		
-		id_t owner;
+		Input(id_t a, id_t d, int i = 0) : attacker(a), defender(d), input(i) {}
+
+		id_t attacker;
+		id_t defender;
 		int input;
 	};
 }

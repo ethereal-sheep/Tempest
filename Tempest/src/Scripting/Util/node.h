@@ -223,7 +223,7 @@ case category_type::NodeCategory:											\
 
 	enum struct category_type
 	{
-		Cast, Variable, Dice, Arithmetic, GetStat, SetStat, GetMainStat, Conflict, Action, Resolution, 
+		Cast, Variable, ActionGraph, Dice, Arithmetic, GetStat, SetStat, GetMainStat, Conflict, Action, Resolution,
 		System, Switch, Compare
 		
 		,Group, Trig,
@@ -236,12 +236,16 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(test_node, test, testing1, testing2, all);
 	DEFINE_NODE(CastNode, Cast, _cannot_be_empty);
 	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
+	START_NODE(ActionGraphNode, ActionGraph, _cannot_be_empty)
+		public:
+		Entity graph_entity = INVALID;	// inject Entity member
+	END_NODE
 	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
 	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus, Multiply, Divide);
 	DEFINE_NODE(GetStatNode, GetStat, _cannot_be_empty);
 	DEFINE_NODE(SetStatNode, SetStat, _cannot_be_empty);
 	DEFINE_NODE(GetMainStatNode, GetMainStat, _cannot_be_empty);
-	DEFINE_NODE(ConflictNode, Conflict, Start, Resolve, Attacking, Defending);
+	DEFINE_NODE(ConflictNode, Conflict, Start, Win, Lose);
 	DEFINE_NODE(ActionNode, Action, Input, Output);
 	DEFINE_NODE(SwitchNode, Switch, TwoSwitch, ThreeSwitch, FiveSwitch, TenSwitch, TwentySwitch, ThirtySwitch);
 	DEFINE_NODE(CompareNode, Compare, CompareFlow);
@@ -253,6 +257,7 @@ case category_type::NodeCategory:											\
 
 		NODE_CASE(test_node, test);
 		NODE_CASE(VariableNode, Variable);
+		NODE_CASE(ActionGraphNode, ActionGraph);
 		NODE_CASE(DiceNode, Dice);
 		NODE_CASE(ArithmeticNode, Arithmetic);
 		NODE_CASE(GetStatNode, GetStat);

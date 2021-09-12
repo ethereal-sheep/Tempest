@@ -15,7 +15,7 @@ namespace Tempest
 
 		ax::NodeEditor::EditorContext* context;
 		ImVec2 mouse = ImVec2(0, 0);
-		int simulate_val = 0;
+		string simulate_val = "NULL";
 
 
 		float border = 10.f;
@@ -48,11 +48,11 @@ namespace Tempest
 		void try_system(Instance& instance)
 		{
 			// assuming built
-			instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending, attacking, defending, INVALID);
-			if (auto var = instance.srm.get_variable_to_id(conflict, "Output"))
+			instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending);
+			if (auto var = instance.srm.get_variable_to_id(conflict, "Win"))
 			{
 				LOG_ASSERT(var->get_type() == pin_type::Int);
-				simulate_val = var->get<int>();
+				simulate_val = var->get<int>() ? "Win" : "Lose";
 			}
 		}
 
@@ -211,7 +211,7 @@ namespace Tempest
 					try_system(instance);
 				}
 				ImGui::SameLine();
-				ImGui::Text("Output: %d", simulate_val);
+				ImGui::Text("Output: %s", simulate_val.c_str());
 
 				ImGui::InputScalar("Conflict", ImGuiDataType_U32, &conflict);
 
@@ -319,8 +319,6 @@ namespace Tempest
 
 		void draw_context(Instance& instance)
 		{
-
-
 			if (current)
 			{
 				// graphs
@@ -355,7 +353,7 @@ namespace Tempest
 
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
 
-				draw_background_context(g);
+				draw_background_context(g, instance);
 
 				ImGui::PopStyleVar();
 
@@ -367,7 +365,7 @@ namespace Tempest
 				// ---------
 				for (auto& [node_id, node_ptr] : g.get_nodes())
 				{
-					draw_node(node_ptr);
+					draw_node(node_ptr, instance);
 				}
 				// ---------
 
@@ -392,8 +390,7 @@ namespace Tempest
 			}
 		}
 
-
-		void draw_node(node_ptr n)
+		void draw_node(node_ptr n, Instance& instance)
 		{
 			auto id = n->get_id();
 			ax::NodeEditor::BeginNode(id);
@@ -424,7 +421,14 @@ namespace Tempest
 				ImGui::PushFont(FONT_BOLD);
 				ImGui::Dummy({ 10.f, 1.f });
 				ImGui::SameLine();
-				ImGui::Text(n->get_name().c_str());
+
+				if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
+				{
+					auto gid = gn->graph_entity;
+					ImGui::Text("%s: %u", instance.ecs.get<tc::Graph>(gid).g.get_name().c_str(), gid);
+				}
+				else
+					ImGui::Text(n->get_name().c_str());
 				ImGui::PopFont();
 			}
 
@@ -564,7 +568,7 @@ namespace Tempest
 		}
 
 
-		void draw_background_context(graph& g)
+		void draw_background_context(graph& g, Instance& instance)
 		{
 			if (ImGui::BeginPopup("Create New Node", ImGuiWindowFlags_NoResize))
 			{
@@ -588,19 +592,72 @@ namespace Tempest
 				node_context<SwitchNode>(g, "Switch");
 				node_context<CompareNode>(g, "Compare");
 
-				if (ImGui::Selectable("Output"))
+				if (g.get_type() == graph_type::action)
 				{
-					auto node = g.add_node(ActionNode::create_node("Output"));
-
-					if (node)
+					if (ImGui::Selectable("Output"))
 					{
-						ax::NodeEditor::SetNodePosition(
-							node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
-						);
-					}
-					ImGui::CloseCurrentPopup();
-				}
+						auto node = g.add_node(ActionNode::create_node("Output"));
 
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				else if (g.get_type() == graph_type::conflict)
+				{
+					if (ImGui::Selectable("Win"))
+					{
+						auto node = g.add_node(ConflictNode::create_node("Win"));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+					if (ImGui::Selectable("Lose"))
+					{
+						auto node = g.add_node(ConflictNode::create_node("Lose"));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (ImGui::TreeNodeEx("Action Graphs"))
+					{
+						for (auto i : instance.ecs.view<tc::ActionGraph>())
+						{
+							auto& agtc = instance.ecs.get<tc::Graph>(i);
+							std::string text = agtc.g.get_name() + ": " + std::to_string(i);
+							ImGui::Indent(10.f);
+							if (ImGui::Selectable(text.c_str()))
+							{
+								auto node = g.add_node(ActionGraphNode::create_node(std::to_string(i)));
+
+								if (node)
+								{
+									ax::NodeEditor::SetNodePosition(
+										node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+									);
+								}
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::Unindent(10.f);
+						}
+						ImGui::TreePop();
+					}
+				}
 				ImGui::EndChild();
 
 				ImGui::EndPopup();

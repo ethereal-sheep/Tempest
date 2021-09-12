@@ -56,9 +56,14 @@ namespace Tempest
                 CreateEventScript([&instance, entity](const Event& e) {
                     auto a = event_cast<Input>(e);
 
-                    if (auto var = instance.srm.get_variable_to_id(entity, "Owner"))
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Attacker"))
                     {
-                        var->get<int64_t>() = static_cast<int64_t>(a.owner);
+                        var->get<int64_t>() = static_cast<int64_t>(a.attacker);
+                    }
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Defender"))
+                    {
+                        var->get<int64_t>() = static_cast<int64_t>(a.defender);
                     }
 
                     if (auto var = instance.srm.get_variable_to_id(entity, "Output"))

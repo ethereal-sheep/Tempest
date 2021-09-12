@@ -31,25 +31,13 @@ namespace Tempest
 			node.set_name("Start");
 			node.add_output(pin_type::Flow, "");
 			break;
-		case Tempest::ConflictNode::inner_type::Resolve:
-			node.set_name("Resolve");
+		case Tempest::ConflictNode::inner_type::Win:
+			node.set_name("Win");
 			node.add_input(pin_type::Flow, "");
-			node.add_input(pin_type::Int, "Attacking");
-			node.add_input(pin_type::Int, "Defending");
 			break;
-		case Tempest::ConflictNode::inner_type::Attacking:
-			node.set_name("Attacking");
+		case Tempest::ConflictNode::inner_type::Lose:
+			node.set_name("Lose");
 			node.add_input(pin_type::Flow, "");
-			node.add_input(pin_type::Int, "");
-			node.add_output(pin_type::Flow, "");
-			node.add_output(pin_type::Int, "");
-			break;
-		case Tempest::ConflictNode::inner_type::Defending:
-			node.set_name("Defending");
-			node.add_input(pin_type::Flow, "");
-			node.add_input(pin_type::Int, "");
-			node.add_output(pin_type::Flow, "");
-			node.add_output(pin_type::Int, "");
 			break;
 		default:
 			break;
@@ -68,26 +56,14 @@ namespace Tempest
 				CreateEventScript([&instance, entity](const Event& e) {
 					auto a = event_cast<Simulate>(e);
 
-					if (auto var = instance.srm.get_variable_to_id(entity, "Attacking"))
+					if (auto var = instance.srm.get_variable_to_id(entity, "Attacker"))
 					{
-						var->get<int64_t>() = static_cast<int64_t>(a.attacking);
+						var->get<int64_t>() = static_cast<int64_t>(a.attacker);
 					}
 
-					if (auto var = instance.srm.get_variable_to_id(entity, "Defending"))
+					if (auto var = instance.srm.get_variable_to_id(entity, "Defender"))
 					{
-						var->get<int64_t>() = static_cast<int64_t>(a.defending);
-					}
-					if (auto var = instance.srm.get_variable_to_id(entity, "Attacking_System"))
-					{
-						var->get<int64_t>() = static_cast<int64_t>(a.atk_sys);
-					}
-					if (auto var = instance.srm.get_variable_to_id(entity, "Defending_System"))
-					{
-						var->get<int64_t>() = static_cast<int64_t>(a.def_sys);
-					}
-					if (auto var = instance.srm.get_variable_to_id(entity, "Resolving_System"))
-					{
-						var->get<int64_t>() = static_cast<int64_t>(a.res_sys);
+						var->get<int64_t>() = static_cast<int64_t>(a.defender);
 					}
 
 					}));
@@ -97,69 +73,29 @@ namespace Tempest
 			return script;
 		}
 		break;
-		case Tempest::ConflictNode::inner_type::Resolve:
+		case Tempest::ConflictNode::inner_type::Win:
 		{
 			return instance.srm.add_script(
-				CreateRuntimeScript<std::tuple<int>(int, int)>([&instance, entity](int x, int y) {
+				CreateRuntimeScript<void()>([&instance, entity]() {
 
-					return std::make_tuple(x + y);
-
-					}, std::placeholders::_1, std::placeholders::_2));
-		}
-		break;
-		case Tempest::ConflictNode::inner_type::Attacking:
-		{
-			return instance.srm.add_script(
-				CreateRuntimeScript<std::tuple<int>(int)>([&instance, entity](int x) {
-
-					// attacking entity
-
-					auto atk = instance.srm.get_variable_to_id(entity, "Attacking");
-					auto atk_sys = instance.srm.get_variable_to_id(entity, "Attacking_System");
-
-					if (atk && atk_sys)
+					if (auto var = instance.srm.get_variable_to_id(entity, "Win"))
 					{
-						Entity atk_e = (Entity)atk->get<int64_t>();
-						Entity atk_sys_e = (Entity)atk_sys->get<int64_t>();
-
-						instance.srm.instant_dispatch_to_id<Input>(atk_sys_e, atk_e, x);
-						if (auto var = instance.srm.get_variable_to_id(atk_sys_e, "Output"))
-						{
-							LOG_ASSERT(var->get_type() == pin_type::Int);
-							return std::make_tuple(var->get<int>());
-						}
+						var->get<int>() = 1;
 					}
 
-					return std::make_tuple(x);
-
-					}, std::placeholders::_1));
+				}));
 		}
-		break;
-		case Tempest::ConflictNode::inner_type::Defending:
+		case Tempest::ConflictNode::inner_type::Lose:
 		{
 			return instance.srm.add_script(
-				CreateRuntimeScript<std::tuple<int>(int)>([&instance, entity](int x) {
+				CreateRuntimeScript<void()>([&instance, entity]() {
 
-					// defending entity
-					auto def = instance.srm.get_variable_to_id(entity, "Defending");
-					auto def_sys = instance.srm.get_variable_to_id(entity, "Defending_System");
-
-					if (def && def_sys)
+					if (auto var = instance.srm.get_variable_to_id(entity, "Lose"))
 					{
-						Entity def_e = (Entity)def->get<int64_t>();
-						Entity def_sys_e = (Entity)def_sys->get<int64_t>();
-
-						instance.srm.instant_dispatch_to_id<Input>(def_sys_e, def_e, x);
-						if (auto var = instance.srm.get_variable_to_id(def_sys_e, "Output"))
-						{
-							LOG_ASSERT(var->get_type() == pin_type::Int);
-							return std::make_tuple(var->get<int>());
-						}
+						var->get<int>() = 0;
 					}
 
-					return std::make_tuple(x);
-
-					}, std::placeholders::_1));
+				}));
 		}
 		break;
 		default:
