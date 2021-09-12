@@ -28,6 +28,7 @@ namespace Tempest
 		bool addUnit = false;
 	};
 
+	struct OpenSimulateTrigger : public Event {};
 
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{

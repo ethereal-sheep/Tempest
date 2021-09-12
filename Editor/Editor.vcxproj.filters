@@ -102,6 +102,9 @@
     <ClCompile Include="src\Window\Overlay\UnitSheetOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h">
@@ -288,6 +291,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Overlay\UnitSheetOverlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\SimulateOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
