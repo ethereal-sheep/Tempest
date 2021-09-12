@@ -78,6 +78,7 @@ namespace Tempest
 			return instance.srm.add_script(
 				CreateRuntimeScript<void()>([&instance, entity]() {
 
+					// variable name is "Win"
 					if (auto var = instance.srm.get_variable_to_id(entity, "Win"))
 					{
 						var->get<int>() = 1;
@@ -90,7 +91,8 @@ namespace Tempest
 			return instance.srm.add_script(
 				CreateRuntimeScript<void()>([&instance, entity]() {
 
-					if (auto var = instance.srm.get_variable_to_id(entity, "Lose"))
+					// variable name is "Win"
+					if (auto var = instance.srm.get_variable_to_id(entity, "Win"))
 					{
 						var->get<int>() = 0;
 					}
