@@ -166,10 +166,10 @@ namespace Tempest
 		colors[ImGuiCol_TitleBgActive] = ImVec4(0.32f, 0.32f, 0.63f, 0.87f);
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.40f, 0.40f, 0.80f, 0.20f);
 		colors[ImGuiCol_MenuBarBg] = ImVec4(0.40f, 0.40f, 0.55f, 0.80f);
-		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.20f, 0.25f, 0.30f, 0.60f);
-		colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.40f, 0.40f, 0.80f, 0.30f);
-		colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.40f, 0.40f, 0.80f, 0.40f);
-		colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.41f, 0.39f, 0.80f, 0.60f);
+		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.f, 0.f, 0.f, 255.f);
+		colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.46f, 0.46f, 0.46f, 1.f);
+		colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.40f, 0.40f, 0.40f, 1.f);
+		colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.25f, 0.25f, 0.25f, 1.f);
 		colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 0.50f);
 		colors[ImGuiCol_SliderGrab] = ImVec4(1.00f, 1.00f, 1.00f, 0.30f);
 		colors[ImGuiCol_SliderGrabActive] = ImVec4(0.41f, 0.39f, 0.80f, 0.60f);
@@ -210,10 +210,10 @@ namespace Tempest
 
 
 		style.WindowRounding = 5;
-		style.ChildRounding = 5;
-		style.FrameRounding = 5;
+		style.ChildRounding = 0;
+		style.FrameRounding = 0;
 		style.PopupRounding = 5;
-		style.ScrollbarRounding = 5;
+		style.ScrollbarRounding = 0;
 		style.GrabRounding = 5;
 		style.TabRounding = 5;
 

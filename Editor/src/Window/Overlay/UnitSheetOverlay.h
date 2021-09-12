@@ -24,7 +24,17 @@ namespace Tempest
         void show(Instance&) override;
 
         bool OverlayOpen = false;
-        tc::Weapon newWeap;
+        bool AddWeaponPopup = false;
+        bool AddStatPopup = false;
+        bool EditWeaponPopup = false;
+        bool CreateOpen = false;
+        bool IsUnitCreation = false;
+        std::string Title = "Unit Creation";
+        tc::Weapon NewWeap;
+        tc::Weapon EditWeap;
+        tc::Character NewCharacter;
         Entity CurSelection = UNDEFINED;
+        std::string NewStatName = "Stat";
+        int NewStatValue = 0;
     };
 }

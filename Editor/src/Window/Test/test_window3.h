@@ -73,7 +73,10 @@ namespace Tempest
 						ImGui::EndChild();
 					}
 
-					if (UI::UIButton_1("Add Units", "Add Units", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
+					if (UI::UIButton_1("Add Units", "Add Units", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA))
+					{
+						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true);
+					}
 
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
