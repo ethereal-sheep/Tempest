@@ -54,7 +54,10 @@ namespace Tempest
 		uint32_t GetColourBuffer() const;
 
 		Camera& GetCamera();
-		tuptr<Texture> tex = std::make_unique<Texture>("Assets/test_photo.png", false);
+		tuptr<Texture> tex = std::make_unique<Texture>("Assets/test_photo2.png", false);
+		tuptr<Texture> tex2 = std::make_unique<Texture>("Assets/SubHeaderStyle.png", false);
+		tuptr<Texture> jank1 = std::make_unique<Texture>("Assets/Jank1.png", false);
+		tuptr<Texture> jank2 = std::make_unique<Texture>("Assets/Jank2.png", false);
 
 	};
 }

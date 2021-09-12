@@ -32,6 +32,7 @@
 #include "Window/Popup/BottomRightOverlayPopup.h"
 #include "Window/Overlay/UnitSheetOverlay.h"
 #include "Window/Overlay/SimulateOverlay.h"
+#include "Window/Overlay/CombatModeOverlay.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -91,6 +92,7 @@ namespace Tempest
 		instance->register_always<BottomRightOverlayPopup>();
 		instance->register_always<UnitSheetOverlay>();
 		instance->register_always<SimulateOverlay>();
+		instance->register_always<CombatModeOverlay>();
 
 		instance->register_always<ShowRecent>();
 		instance->register_window<test_window>();

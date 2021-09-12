@@ -49,6 +49,11 @@ namespace Tempest
 				//UI::Header(ImVec2{ center_x - 100.f,0 }, "HEADER");
 				UI::SubHeader(ImVec2{ center_x - 100.f,0 }, "SUBHEADER");
 				
+				if(ImGui::Button("COMBAT MODE"))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>();
+				}
+			
 				// sliders for adjustment
 				ImVec2 slider_padding = { 100,0 };
 				UI::DragFloat("Padding X", "123", slider_padding, &padding_x);

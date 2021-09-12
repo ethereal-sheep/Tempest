@@ -22,14 +22,13 @@ namespace Tempest
 	struct CloseProjectTrigger : public Event {};
 	struct ExportProjectTrigger : public Event {};
 	struct ImportAssetTrigger : public Event {};
+	struct OpenSimulateTrigger : public Event {};
+	struct OpenCombatModeTrigger : public Event {};
 	struct OpenUnitSheetTrigger : public Event 
 	{
 		OpenUnitSheetTrigger(bool isAddUnit) : addUnit{isAddUnit} {}
 		bool addUnit = false;
 	};
-
-	struct OpenSimulateTrigger : public Event {};
-
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}
