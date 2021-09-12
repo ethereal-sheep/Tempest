@@ -306,7 +306,7 @@ namespace Tempest
 					if (ImGui::Button("Show/Edit"))
 					{
 						//show = true;
-						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false);
 					}
 
 				}
