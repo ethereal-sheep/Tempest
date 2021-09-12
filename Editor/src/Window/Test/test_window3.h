@@ -64,10 +64,16 @@ namespace Tempest
 						ImGui::BeginChild("ChildUnit", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
 						
 						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
-						for (unsigned i = 0; i < numOfButtons; i++)
+						auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
+
+						unsigned i = 0;
+						for (auto id : view)
 						{
-							if (UI::UIButton_1("Test Unit" + std::to_string(i), "Test Unit" + std::to_string(i), { cursor.x , cursor.y + i * 80}, { 140, 15 }, FONT_PARA))
+							auto& Charac = instance.ecs.get<tc::Character>(id);
+							if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y + i++ * 80 }, { 140, 15 }, FONT_PARA))
+							{
 								tab = i;
+							}
 						}
 
 						ImGui::EndChild();

@@ -25,7 +25,7 @@ namespace Tempest
         bool OverlayOpen = false;
         unsigned Tab = 0;
 
-        const float Padding = 50.0f;
+        const float Padding = 100.0f;
         const float HalfPadding = Padding * 0.5f;
         const unsigned NumOfButtons = 6;
        
