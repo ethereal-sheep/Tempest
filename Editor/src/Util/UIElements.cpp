@@ -970,7 +970,7 @@ namespace Tempest::UI
 		const ImVec4 default_border_col = { 1.f, 1.f, 1.f, 1.f };
 		const ImVec4 hovered_border_col = { 0.980f, 0.768f, 0.509f, 1.f };
 		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
-		string str = "         ";
+		string str = "aaaaaaaaaaaaaaa000000";
 		static float rounding = 0.f;
 		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 		padding.y += 10.f;
@@ -978,6 +978,7 @@ namespace Tempest::UI
 		// button shit
 		ImGui::PushFont(font);
 		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
 		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
 		ImVec2 act_text_size = {
 			std::max(text_size.x, alt_text_size.x),
@@ -991,7 +992,8 @@ namespace Tempest::UI
 		};
 
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
-		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);

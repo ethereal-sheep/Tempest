@@ -384,7 +384,7 @@ namespace Tempest
 							if (CurSelection == id)
 								isSelected = true;
 
-							if (UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { button_pos.x, button_pos.y + (index - 1) * 60 }, { 100.f, 10.f }, FONT_PARA, isSelected))
+							if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { button_pos.x, button_pos.y + (index - 1) * 60 }, { 0.f, 10.f }, FONT_PARA, isSelected))
 							{
 								CurSelection = id;
 								//LOG("CURRENT SELECTED: {0}", CurSelection);
@@ -454,7 +454,7 @@ namespace Tempest
 								ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 								ImGui::SameLine();
 								ImGui::InputText("##NewWeapName", &NewWeap.name);
-								bool disabled = NewWeap.name.size() > 9;
+								bool disabled = NewWeap.name.size() > 15;
 								ImGui::SameLine();
 								if(disabled)
 								{
