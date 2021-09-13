@@ -141,32 +141,32 @@ namespace Tempest
             if cannot find stat name, throw
         */
         // get the statline
-        tc::Statline* statline = nullptr;
-        for (auto i : instance.ecs.view<tc::Statline>())
-            statline = instance.ecs.get_if<tc::Statline>(i);
+        //tc::Statline* statline = nullptr;
+        //for (auto i : instance.ecs.view<tc::Statline>())
+        //    statline = instance.ecs.get_if<tc::Statline>(i);
 
-        // no statline or no stat, throw
-        if (!statline || !statline->exist(get_name())) return nullptr; // might want reasonable msg here
+        //// no statline or no stat, throw
+        //if (!statline || !statline->exist(get_name())) return nullptr; // might want reasonable msg here
 
-        // get index of stat in statline
-        auto index = statline->index_of_stat(get_name());
+        //// get index of stat in statline
+        //auto index = statline->index_of_stat(get_name());
 
-        // if have character sheet
+        //// if have character sheet
 
-        return instance.srm.add_script(
-            CreateRuntimeScript<std::tuple<int>(int)>(
-                [&](int x) {
+        //return instance.srm.add_script(
+        //    CreateRuntimeScript<std::tuple<int>(int)>(
+        //        [&](int x) {
 
-                    if (auto character = instance.ecs.get_if<tc::Character>(entity))
-                    {
-                        auto& stat = character->get_stat(index);
-                        return std::make_tuple(stat = x);
-                    }
-                    return std::make_tuple(0);
+        //            if (auto character = instance.ecs.get_if<tc::Character>(entity))
+        //            {
+        //                auto& stat = character->get_stat(index);
+        //                return std::make_tuple(stat = x);
+        //            }
+        //            return std::make_tuple(0);
 
-                }, std::placeholders::_1));
-        
-
+        //        }, std::placeholders::_1));
+        //
+        return nullptr;
     }
     std::string GetMainStatNode::get_type_string()
     {
