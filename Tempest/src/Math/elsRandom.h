@@ -13,7 +13,6 @@
 
 namespace els
 {
-
 	namespace random
 	{
 		using defaultPRNG = std::mt19937;

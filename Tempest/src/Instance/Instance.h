@@ -4,6 +4,7 @@
 #include "Graphics/OpenGL/Camera.h"
 #include "WindowManager.h"
 #include "Actions/ActionHistory.h"
+#include "Scripting/SRM.h"
 
 namespace Tempest
 {
@@ -61,6 +62,7 @@ namespace Tempest
 
 			po(memory_object.get()),
 			ecs(memory_object.get()),
+			srm(memory_object.get()),
 
 			action_history(memory_object.get()),
 			window_manager(memory_object.get())
@@ -172,6 +174,7 @@ namespace Tempest
 	public:
 		PhysicsObject po;
 		ECS ecs;
+		SRM srm;
 		Camera cam;
 
 		ActionHistory action_history;

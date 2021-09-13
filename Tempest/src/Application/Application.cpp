@@ -38,9 +38,6 @@ namespace Tempest
 		OnInit();
 	}
 
-
-
-
 	void Application::OnEngineUpdate()
 	{
 		// Update Engine stuff first

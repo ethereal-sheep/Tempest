@@ -25,7 +25,7 @@ namespace Tempest
 		/**
 		 * @brief Creates a new graph and returns it.
 		 */
-		graph& new_graph()
+		graph& new_graph(graph_type type = graph_type::regular)
 		{
 			// make sure name is unique
 			string new_name = algo::get_next_name("Untitled", graphs.begin(), graphs.end(), 
@@ -34,7 +34,7 @@ namespace Tempest
 					return graph.get_name() == string;
 				});
 
-			return graphs.emplace_back(new_name, memory_resource);
+			return graphs.emplace_back(new_name, type, memory_resource);
 		}
 
 		/**
@@ -159,7 +159,6 @@ namespace Tempest
 
 			savable.serialize(filepath);
 		}
-
 
 		auto get_graphs()
 		{

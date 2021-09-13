@@ -213,6 +213,7 @@
     <ClCompile Include="src\Graphics\OpenGL\Texture.cpp" />
     <ClCompile Include="src\Instance\EditTimeInstance.cpp" />
     <ClCompile Include="src\Instance\Instance.cpp" />
+    <ClCompile Include="src\Instance\PhysicsInstance.cpp" />
     <ClCompile Include="src\Instance\RuntimeInstance.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
     <ClCompile Include="src\Memory\MemoryManager.cpp" />
@@ -225,10 +226,20 @@
     <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp" />
     <ClCompile Include="src\Physics\Util\px_math.cpp" />
     <ClCompile Include="src\Scripting\Graph\graph.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ActionGraphNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ArithmeticNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\CastNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\CompareNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\DiceNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ConflictNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\StatNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\SwitchNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ActionNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
     <ClCompile Include="src\Scripting\Test\test_data.cpp" />
     <ClCompile Include="src\Scripting\Test\test_graph.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_resolution_script.cpp" />
     <ClCompile Include="src\Scripting\Test\test_script_events.cpp" />
     <ClCompile Include="src\Scripting\Util\node.cpp" />
     <ClCompile Include="src\Scripting\Test\test_node.cpp" />
@@ -265,6 +276,7 @@
     <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />
     <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
+    <ClInclude Include="src\Events\Events\ScriptEvents.h" />
     <ClInclude Include="src\Events\Test\event_test.h" />
     <ClInclude Include="src\Graphics\Basics\FrameBuffer.h" />
     <ClInclude Include="src\Graphics\Basics\GeometryFactory.h" />
@@ -287,6 +299,7 @@
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
     <ClInclude Include="src\Instance\Instance.h" />
     <ClInclude Include="src\Instance\NullTimeInstance.h" />
+    <ClInclude Include="src\Instance\PhysicsInstance.h" />
     <ClInclude Include="src\Instance\RuntimeInstance.h" />
     <ClInclude Include="src\Instance\Window.h" />
     <ClInclude Include="src\Instance\WindowManager.h" />
@@ -305,8 +318,11 @@
     <ClInclude Include="src\Physics\Util\px_make.h" />
     <ClInclude Include="src\Physics\Util\px_malloc_allocator.h" />
     <ClInclude Include="src\Physics\Util\px_math.h" />
+    <ClInclude Include="src\Resolution\ResolutionManager.h" />
+    <ClInclude Include="src\Resolution\Statline.h" />
     <ClInclude Include="src\Scripting\GMS.h" />
     <ClInclude Include="src\Scripting\Graph\graph.h" />
+    <ClInclude Include="src\Scripting\resolution.h" />
     <ClInclude Include="src\Scripting\SRM.h" />
     <ClInclude Include="src\Scripting\Util\sparse_scripts.h" />
     <ClInclude Include="src\Scripting\Util\split_view.h" />

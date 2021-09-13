@@ -10,7 +10,7 @@ namespace Tempest
 		{
 			return ICON_FA_SEARCH " Inspector";
 		}
-		void init() override;
+		void init(Instance&) override;
 		void show(Instance& instance) override;
 	};
 }

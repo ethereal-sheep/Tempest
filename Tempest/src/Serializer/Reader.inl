@@ -138,6 +138,16 @@ namespace Tempest
 		return *this;
 	}
 
+
+	template<typename TFirst, typename TSecond>
+	Reader& Reader::operator& (std::pair<TFirst, TSecond>& pair)
+	{
+		*this& pair.first;
+		*this& pair.second;
+		return *this;
+	}
+
+
 	template <typename TVec>
 	Reader& Reader::vec2(const char* identifier, TVec& vec)
 	{

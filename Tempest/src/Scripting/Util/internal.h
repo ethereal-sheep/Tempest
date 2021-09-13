@@ -9,7 +9,7 @@ namespace Tempest
 	using node_id_t = id_t;
 
 	class node;
-	using node_ptr = tuptr<node>;
+	using node_ptr = tsptr<node>;
 
 
 	enum struct pin_type

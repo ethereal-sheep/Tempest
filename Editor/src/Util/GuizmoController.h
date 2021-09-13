@@ -20,6 +20,13 @@ namespace Tempest
             WORLD = ImGuizmo::MODE::WORLD
         };
 
+        enum struct State {
+            NOT_IN_USE,
+            START_USE,
+            END_USE,
+            IN_USE
+        };
+
         void Draw();
         void SetViewportBounds(const els::vec2& pos, const els::vec2& extends);
         void SetTranslateRotationScale(const els::vec3& t, const els::vec3& r, const els::vec3& s);
@@ -38,10 +45,12 @@ namespace Tempest
 
         Operation GetOperation() const { return m_Operation; }
         Mode GetMode() const { return m_Mode; }
+        State GetState() const { return m_State; }
 
     private:
         Operation m_Operation{ Operation::TRANSLATE};
         Mode m_Mode{ Mode::LOCAL};
+        State m_State{ State::NOT_IN_USE };
 
 
         els::mat4 m_ViewMatrix{ els::mat4::I };

@@ -1,6 +1,6 @@
 
 #include "../Util/node.h"
-#include "Instance/RuntimeInstance.h"
+#include "Instance/Instance.h"
 
 namespace Tempest
 {
@@ -85,13 +85,13 @@ namespace Tempest
             break;
         default: return nullptr; break;
         }
-        return std::make_unique<VariableNode>(std::move(node));
+        return make_sptr<VariableNode>(std::move(node));
     }
 
-    script* create_getter(pin_type pin_t, var_data* var, RuntimeInstance& instance);
-    script* create_setter(pin_type pin_t, var_data* var, RuntimeInstance& instance);
+    script* create_getter(pin_type pin_t, var_data* var, Instance& instance);
+    script* create_setter(pin_type pin_t, var_data* var, Instance& instance);
     
-    script* VariableNode::create_script(Entity entity, RuntimeInstance& instance)
+    script* VariableNode::create_script(Entity entity, Instance& instance)
     {
         auto v = algo::delimited_split(get_name(), ":");
         if (v.size() != 2)
@@ -130,7 +130,7 @@ namespace Tempest
         return nullptr;
     }
 
-    script* create_getter(pin_type pin_t, var_data* var, RuntimeInstance& instance)
+    script* create_getter(pin_type pin_t, var_data* var, Instance& instance)
     {
         if (!var)
             throw script_exception("VariableScript: Cannot find variable!");
@@ -184,7 +184,7 @@ namespace Tempest
         return nullptr;
     }
 
-    script* create_setter(pin_type pin_t, var_data* var, RuntimeInstance& instance)
+    script* create_setter(pin_type pin_t, var_data* var, Instance& instance)
     {
         if (!var)
             throw script_exception("VariableScript: Cannot find variable!");

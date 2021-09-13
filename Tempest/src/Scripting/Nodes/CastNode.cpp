@@ -1,6 +1,6 @@
 
 #include "../Util/node.h"
-#include "Instance/RuntimeInstance.h"
+#include "Instance/Instance.h"
 
 namespace Tempest
 {
@@ -38,10 +38,10 @@ namespace Tempest
         node.add_input(start.value(), "");
 		node.add_output(end.value(), "");
         
-        return std::make_unique<CastNode>(std::move(node));
+        return make_sptr<CastNode>(std::move(node));
     }
 
-    script* CastNode::create_script(Entity entity [[maybe_unused]], RuntimeInstance& instance [[maybe_unused]])
+    script* CastNode::create_script(Entity entity [[maybe_unused]], Instance& instance [[maybe_unused]])
     {
         // assuming created correctly
         pin_type Startpin_type = get_inputs()[0].get_type();

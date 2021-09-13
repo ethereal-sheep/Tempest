@@ -17,16 +17,10 @@ namespace Tempest
 	/**
 	 * @brief Node category type. Umbrella category for a node type.
 	 */
-	enum struct category_type
-	{
-		Cast, Variable, Group, Arithmetic, Trig,
-		Random, Numerical, Constants, Logic, Vector,
-		Utility, Entity,
-		END, test
-	};
+	enum struct category_type;
 
 	//forward declare
-	class RuntimeInstance;
+	class Instance;
 
 	class node_exception : public std::exception
 	{
@@ -49,8 +43,8 @@ namespace Tempest
 		node(category_type _category) :
 			id{ idgen::generate() }, category{ _category } {}
 
-		node(const node&) = delete;
-		node& operator=(const node&) = delete;
+		node(const node&) = default;
+		node& operator=(const node&) = default;
 		node(node&&) = default;
 		node& operator=(node&&) = default;
 		virtual ~node() = 0 {}
@@ -65,12 +59,12 @@ namespace Tempest
 		/**
 		 * @brief Creates a script based on the node's type information.
 		 */
-		virtual script* create_script(Entity entity, RuntimeInstance& srm) = 0;
+		virtual script* create_script(Entity entity, Instance& srm) = 0;
 
 		/**
 		 * @brief Creates a script based on the node's type information.
 		 */
-		script* create_script_pack(Entity entity, RuntimeInstance& srm);
+		script* create_script_pack(Entity entity, Instance& srm);
 
 		/**
 		 * @brief Serializing function. Writes to the writer object.
@@ -161,8 +155,8 @@ namespace Tempest
 		size_t non_flow_outputs = 0;
 
 	public:
-		vec2 size;
-		vec2 position;
+		vec2 size{ 1.f, 1.f};
+		vec2 position{ 0.f, 0.f };
 
 	};
 
@@ -180,7 +174,7 @@ public:																		\
 	void set_type(inner_type _type) { type = _type; }						\
 	static node_ptr create_node(const std::string& info);					\
 	string get_type_string() override;										\
-	script* create_script(Entity entity, RuntimeInstance& srm) override;	\
+	script* create_script(Entity entity, Instance& srm) override;			\
 private:																	\
 	inner_type type;														\
 
@@ -205,7 +199,7 @@ case category_type::NodeCategory:											\
 
 
 #define NODE_SWITCH_START \
-		static inline std::unique_ptr<node> create_helper(					\
+		static inline node_ptr create_helper(								\
 	category_type t, const string& type) {									\
 	switch (t)																\
 	{																		\
@@ -227,17 +221,55 @@ case category_type::NodeCategory:											\
 	*
 	*/
 
+	enum struct category_type
+	{
+		Cast, Variable, ActionGraph, Dice, Arithmetic, GetStat, SetStat, GetMainStat, Conflict, Action, Resolution,
+		System, Switch, Compare
+		
+		,Group, Trig,
+		Random, Numerical, Constants, Logic, Vector,
+		Utility, Entity,
+		END, test, util,
+	};
+
+
 	DEFINE_NODE(test_node, test, testing1, testing2, all);
 	DEFINE_NODE(CastNode, Cast, _cannot_be_empty);
 	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
+	START_NODE(ActionGraphNode, ActionGraph, _cannot_be_empty)
+		public:
+		Entity graph_entity = INVALID;	// inject Entity member
+	END_NODE
+	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
+	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus, Multiply, Divide);
+	DEFINE_NODE(GetStatNode, GetStat, Attacker, Defender, _cannot_be_empty);
+	DEFINE_NODE(SetStatNode, SetStat, _cannot_be_empty);
+	DEFINE_NODE(GetMainStatNode, GetMainStat, _cannot_be_empty);
+	DEFINE_NODE(ConflictNode, Conflict, Start, Win, Lose);
+	DEFINE_NODE(ActionNode, Action, Input, Output);
+	DEFINE_NODE(SwitchNode, Switch, TwoSwitch, ThreeSwitch, FiveSwitch, TenSwitch, TwentySwitch, ThirtySwitch);
+	DEFINE_NODE(CompareNode, Compare, CompareFlow);
+	DEFINE_NODE(UtilNode, util, Print, In);
 
 	NODE_SWITCH_START
 
 		/* BELOW THIS PLEASE*/
 
 		NODE_CASE(test_node, test);
+		NODE_CASE(VariableNode, Variable);
+		NODE_CASE(ActionGraphNode, ActionGraph);
+		NODE_CASE(DiceNode, Dice);
+		NODE_CASE(ArithmeticNode, Arithmetic);
+		NODE_CASE(GetStatNode, GetStat);
+		NODE_CASE(SetStatNode, SetStat);
+		NODE_CASE(GetMainStatNode, GetMainStat);
+		NODE_CASE(ConflictNode, Conflict);
+		NODE_CASE(ActionNode, Action);
+		NODE_CASE(SwitchNode, Switch);
+		NODE_CASE(CompareNode, Compare);
+		NODE_CASE(UtilNode, util);
 
-	/* ABOVE THIS PLEASE */
+		/* ABOVE THIS PLEASE */
 
 	NODE_SWITCH_END
 

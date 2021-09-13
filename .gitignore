@@ -360,3 +360,4 @@ Build-int/**
 !Dep/PhysX/**
 !Dep/assimp/**
 
+/.VSCodeCounter

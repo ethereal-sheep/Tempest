@@ -43,6 +43,7 @@ namespace Tempest
 			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
 			ImGui::StyleColorsDark();
+			ImPlot::CreateContext();
 			ImGuiIO& io = ImGui::GetIO();
 
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -126,8 +127,11 @@ namespace Tempest
 
 		void OnExit() override
 		{
+			instance_manager.exit();
+
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui_ImplWin32_Shutdown();
+			ImPlot::DestroyContext();
 			ImGui::DestroyContext();
 		}
 
@@ -161,10 +165,10 @@ namespace Tempest
 		colors[ImGuiCol_TitleBgActive] = ImVec4(0.32f, 0.32f, 0.63f, 0.87f);
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.40f, 0.40f, 0.80f, 0.20f);
 		colors[ImGuiCol_MenuBarBg] = ImVec4(0.40f, 0.40f, 0.55f, 0.80f);
-		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.20f, 0.25f, 0.30f, 0.60f);
-		colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.40f, 0.40f, 0.80f, 0.30f);
-		colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.40f, 0.40f, 0.80f, 0.40f);
-		colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.41f, 0.39f, 0.80f, 0.60f);
+		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.f, 0.f, 0.f, 255.f);
+		colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.46f, 0.46f, 0.46f, 1.f);
+		colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.40f, 0.40f, 0.40f, 1.f);
+		colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.25f, 0.25f, 0.25f, 1.f);
 		colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 0.50f);
 		colors[ImGuiCol_SliderGrab] = ImVec4(1.00f, 1.00f, 1.00f, 0.30f);
 		colors[ImGuiCol_SliderGrabActive] = ImVec4(0.41f, 0.39f, 0.80f, 0.60f);
@@ -205,10 +209,10 @@ namespace Tempest
 
 
 		style.WindowRounding = 5;
-		style.ChildRounding = 5;
-		style.FrameRounding = 5;
+		style.ChildRounding = 0;
+		style.FrameRounding = 0;
 		style.PopupRounding = 5;
-		style.ScrollbarRounding = 5;
+		style.ScrollbarRounding = 0;
 		style.GrabRounding = 5;
 		style.TabRounding = 5;
 
@@ -231,33 +235,60 @@ namespace Tempest
 		config.GlyphMinAdvanceX = 13.0f; // Use if you want to make the icon monospaced
 		config.PixelSnapH = true;
 
-		tpath def_f = tpath("Fonts") / default_font;
-		tpath bold_f = tpath("Fonts") / bold_font;
-		def_f.replace_extension(".ttf");
-		bold_f.replace_extension(".ttf");
+		tpath body_f = tpath("Fonts") / body_font;
+		tpath heavy_f = tpath("Fonts") / heavy_font;
 
 
+		body_f.replace_extension(".ttf");
+		heavy_f.replace_extension(".ttf");
+
+		// 0 para
 		static const ImWchar fa_range[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size); // change this to change default font
-		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", font_icon_size, &config, fa_range);
-		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", font_icon_size, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF(body_f.string().c_str(), para_text_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", para_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", para_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 
-		io.Fonts->AddFontFromFileTTF(bold_f.string().c_str(), font_text_size);
-		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", font_icon_size, &config, fa_range);
+		// 1 body
+		io.Fonts->AddFontFromFileTTF(body_f.string().c_str(), body_text_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", body_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", body_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 
-		static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
-		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
-		io.Fonts->AddFontFromFileTTF("Fonts/forkawesome-webfont.ttf", font_icon_size, &config, fk_range);
+		// 2 Header
+		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), header_text_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", header_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", header_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 
-		config.PixelSnapH = true;
-		config.GlyphOffset = { 0,2 };
-		static const ImWchar fad_range[] = { ICON_MIN_FAD, ICON_MAX_FAD, 0 };
-		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
-		io.Fonts->AddFontFromFileTTF("Fonts/fontaudio.ttf", font_icon_size, &config, fad_range);
+		// 3 Sub header
+		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), subheader_text_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", subheader_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", subheader_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 
-		static const ImWchar ki_range[] = { ICON_MIN_KI, ICON_MAX_KI, 0 };
-		io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
-		io.Fonts->AddFontFromFileTTF("Fonts/kenney-icon-font.ttf", font_icon_size, &config, ki_range);
+		// 4 Button
+		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), button_text_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", button_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", button_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+
+		// 5 Sub button
+		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), subbutton_text_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", subbutton_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", subbutton_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+
+
+		//// 6 fk 
+		//static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+		//io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), font_text_size);
+		//io.Fonts->AddFontFromFileTTF("Fonts/forkawesome-webfont.ttf", font_icon_size, &config, fk_range);
+
+		//// 8 Button
+		//static const ImWchar ki_range[] = { ICON_MIN_KI, ICON_MAX_KI, 0 };
+		//io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
+		//io.Fonts->AddFontFromFileTTF("Fonts/kenney-icon-font.ttf", font_icon_size, &config, ki_range);
+
+		//// 9 Sub button
+		//static const ImWchar ki_range[] = { ICON_MIN_KI, ICON_MAX_KI, 0 };
+		//io.Fonts->AddFontFromFileTTF(def_f.string().c_str(), font_text_size);
+		//io.Fonts->AddFontFromFileTTF("Fonts/kenney-icon-font.ttf", font_icon_size, &config, ki_range);
+
 
 	}
 	void init_file_dialog()

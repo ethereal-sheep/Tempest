@@ -178,7 +178,7 @@ namespace Tempest
 
 			auto pos = cam.GetPosition();
 
-			if(UI::DragFloat3ColorBox("Position", "##CameraPosDrag", ImVec2{ padding , 0.f }, value_ptr(pos), 0.f, 0.1f))
+			if(UI::DragFloat3ColorBox("Position", "##CameraPosDrag", ImVec2{ padding , 0.f }, value_ptr(pos), 0.f, 0.1f).first)
 				cam.SetPosition(pos);
 		}
 
@@ -186,7 +186,7 @@ namespace Tempest
 			auto rotation = cam.GetQuatRotation();
 			auto eulerDeg = glm::degrees(glm::eulerAngles(rotation));
 
-			if (UI::DragFloat3ColorBox("Rotation", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(eulerDeg), 0.f, 1.f))
+			if (UI::DragFloat3ColorBox("Rotation", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(eulerDeg), 0.f, 1.f).first)
 			{
 				//cam.SetRotation(eulerDeg);
 			}
@@ -220,46 +220,56 @@ namespace Tempest
 			auto up = cam.GetUp();
 			auto front = cam.GetFront();
 			auto left = cam.GetLeft();
-			if (UI::DragFloat3ColorBox("up", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(up), 0.f, 1.f)) {}
-			if (UI::DragFloat3ColorBox("front", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(front), 0.f, 1.f)) {}
-			if (UI::DragFloat3ColorBox("left", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(left), 0.f, 1.f)) {}
+			if (UI::DragFloat3ColorBox("up", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(up), 0.f, 1.f).first) {}
+			if (UI::DragFloat3ColorBox("front", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(front), 0.f, 1.f).first) {}
+			if (UI::DragFloat3ColorBox("left", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(left), 0.f, 1.f).first) {}
 
 		}
 	}
 
-	void DiagnosticsWindow::Mouse(Instance& )
+	void DiagnosticsWindow::Mouse(Instance& instance)
 	{
 		{
-			ImGuiIO& io = ImGui::GetIO();
-
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			auto& io = ImGui::GetIO();
+			glm::vec4 lRayStart_NDC(
+				((float)io.MousePos.x / (float)1600 - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
+				((float)io.MousePos.y / (float)900 - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
+				-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
+				1.0f
+			);
+			glm::vec4 lRayEnd_NDC(
+				((float)io.MousePos.x / (float)1600 - 0.5f) * 2.0f,
+				((float)io.MousePos.y / (float)900 - 0.5f) * -2.0f,
+				0.0,
+				1.0f
+			);
 
-			//DEBUG FUNTION
-			if (ImGui::IsMousePosValid())
+			glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
+			glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
+			glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
+			glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
+			lRayDir_world = glm::normalize(lRayDir_world);
+
+			auto start = cam.GetPosition();
+			auto end = cam.GetPosition() + lRayDir_world * 1000.0f;
+
+			ImGui::Text("Start: %.3f , %.3f,  %.3f", start.x, start.y, start.z);
+			ImGui::Text("End:   %.3f , %.3f,  %.3f", end.x, end.y, end.z);
+
+			auto [id, check] = instance.po.raycast(els::to_vec3(cam.GetPosition()), els::to_vec3(lRayDir_world));
+			if (check)
 			{
-				ImGui::Text("ImGui Mouse Position: %.3f , %.3f", io.MousePos.x, io.MousePos.y);
-				glm::vec4 lRayStart_NDC(
-					((float)io.MousePos.x / (float)1600 - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
-					((float)io.MousePos.y / (float)900 - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
-					-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
-					1.0f
-				);
-				glm::vec4 lRayEnd_NDC(
-					((float)io.MousePos.x / (float)1600 - 0.5f) * 2.0f,
-					((float)io.MousePos.y / (float)900 - 0.5f) * -2.0f,
-					0.0,
-					1.0f
-				);
-
-				glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
-				glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world/=lRayStart_world.w;
-				glm::vec4 lRayEnd_world   = M * lRayEnd_NDC  ; lRayEnd_world  /=lRayEnd_world.w;
-				glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
-				lRayDir_world = glm::normalize(lRayDir_world);
-				ImGui::Text("Ray: %.3f , %.3f,  %.3f", lRayDir_world.x, lRayDir_world.y, lRayDir_world.z);
+				ImGui::Text("HIT! id: %u", id);
+				if (ImGui::IsMouseClicked(0))
+				{
+					instance.selected = id;
+				}
 			}
+
 			else
-				ImGui::Text("Mouse pos: <INVALID>");
+				ImGui::Text("NO HIT!");
+
 
 		}
 	}

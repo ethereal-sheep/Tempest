@@ -2,6 +2,7 @@
 #include "InstanceConfig.h"
 #include "Triggers/Triggers.h"
 #include "Extern/imgui/imgui.h"
+#include "Extern/imgui/implot.h"
 #include "Events/EventManager.h"
 
 namespace Tempest
@@ -11,6 +12,16 @@ namespace Tempest
 	{
 	public:
 		~InstanceManager()
+		{
+			if (instance)
+			{
+				instance->OnExit();
+				// reset instance
+				instance.reset(nullptr);
+			}
+		}
+
+		void exit()
 		{
 			if (instance)
 			{
@@ -42,6 +53,10 @@ namespace Tempest
 				Service<EventManager>::Get().register_listener<LoadNewInstance>(
 					&InstanceManager::load_new_instance, this
 				);
+				// guess what there is two now
+				Service<EventManager>::Get().register_listener<LoadPrevInstance>(
+					&InstanceManager::load_prev_instance, this
+					);
 
 				try
 				{
@@ -89,6 +104,11 @@ namespace Tempest
 			// for debugging only (remove on release)
 			if (demo_visible)
 				ImGui::ShowDemoWindow();
+			if (implot_demo_visible)
+			{
+				ImPlot::ShowDemoWindow();
+				ImPlot::ShowStyleEditor();
+			}
 
 			instance->OnRender();
 		}
@@ -112,6 +132,7 @@ namespace Tempest
 				if (ImGui::BeginMenu("Demo"))
 				{
 					ImGui::MenuItem("ImGui Demo", nullptr, &demo_visible);
+					ImGui::MenuItem("imPlot Demo", nullptr, &implot_demo_visible);
 					ImGui::EndMenu();
 				}
 			}
@@ -127,6 +148,16 @@ namespace Tempest
 		next_config = a.config;
 	}
 
+	void load_prev_instance(const Event&)
+	{
+		//auto& a = event_cast<LoadPrevInstance>(e);
+		// check if current has prev can load or not
+
+
+		current_state = InstanceState::LOAD;
+		//next_config = a.config;
+	}
+
 private:
 	tuptr<Instance> create_new_instance()
 	{
@@ -140,6 +171,9 @@ private:
 			break;
 		case Tempest::InstanceType::RUN_TIME:
 			return make_uptr<RuntimeInstance>(next_config.project_path, next_config.memory_strategy);
+			break;
+		case Tempest::InstanceType::PHYSICS_TIME:
+			return make_uptr<PhysicsInstance>(next_config.project_path, next_config.memory_strategy);
 			break;
 		default:
 			return make_uptr<NullTimeInstance>(next_config.memory_strategy);
@@ -159,6 +193,9 @@ private:
 		case Tempest::InstanceType::RUN_TIME:
 			register_runtime_windows();
 			break;
+		case Tempest::InstanceType::PHYSICS_TIME:
+			register_physicstime_windows();
+			break;
 		default:
 			register_nulltime_windows();
 			break;
@@ -168,6 +205,7 @@ private:
 	void register_nulltime_windows();
 	void register_edittime_windows();
 	void register_runtime_windows();
+	void register_physicstime_windows();
 
 	InstanceState current_state = InstanceState::LOAD;
 	InstanceConfig next_config = {};
@@ -176,5 +214,6 @@ private:
 
 	// for debugging only (remove on release)
 	bool demo_visible = false;
+	bool implot_demo_visible = false;
 };
 }

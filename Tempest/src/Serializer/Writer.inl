@@ -72,6 +72,13 @@ namespace Tempest
 		ptr ? *this & *ptr : SetNull();
 		return *this;
 	}
+	template<typename TFirst, typename TSecond>
+	Writer& Writer::operator& (const std::pair<TFirst, TSecond> pair)
+	{
+		*this& pair.first;
+		*this& pair.second;
+		return *this;
+	}
 
 	template <typename TVec>
 	Writer& Writer::vec2(const char* identifier, const TVec& vec)

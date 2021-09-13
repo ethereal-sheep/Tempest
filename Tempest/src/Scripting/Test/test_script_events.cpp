@@ -66,7 +66,7 @@ namespace Tempest
 
 		srm.instant_dispatch_to_id<test_event>(2);
 		srm.instant_dispatch_to_id<test_event_with_member>(2, 3);
-
+		
 
 		srm.instant_dispatch<test_event_with_member>(4);
 	}

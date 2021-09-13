@@ -1,9 +1,10 @@
 #include "HierarchyWindow.h"
 #include "Events/EventManager.h"
+#include "Actions/Action.h"
 
 namespace Tempest
 {
-	void HierarchyWindow::init()
+	void HierarchyWindow::init(Instance&)
 	{
 		window_flags |= ImGuiWindowFlags_MenuBar;
 	}
@@ -39,8 +40,7 @@ namespace Tempest
 						staticBody.is_static = true;
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
-						/*rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
-						instance.po.AddActorToScene(rb.internal_rb.get());*/
+						instance.action_history.Commit<AddEntity>(entity);
 						
 					}
 					if (ImGui::MenuItem("Add Sphere"))
@@ -60,6 +60,7 @@ namespace Tempest
 						staticBody.is_static = true;
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
+						instance.action_history.Commit<AddEntity>(entity);
 					}
 					if (ImGui::MenuItem("Add Capsule", "", false))
 					{
@@ -77,7 +78,48 @@ namespace Tempest
 						rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
 						instance.po.AddActorToScene(rb.internal_rb.get());*/
 					}
-
+					if (ImGui::MenuItem("Add Statline"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Statline";
+						instance.ecs.emplace<tc::Statline>(entity);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
+					if (ImGui::MenuItem("Add Character"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Character";
+						instance.ecs.emplace<tc::Character>(entity);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
+					if (ImGui::MenuItem("Add Gun"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Gun";
+						auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
+						weapon->name = "Gun";
+						weapon->set_stat(1, 3);
+						weapon->set_stat(2, 1);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
+					if (ImGui::MenuItem("Add Spear"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Spear";
+						auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
+						weapon->name = "Spear";
+						weapon->set_stat(1, 2);
+						weapon->set_stat(2, 1);
+						instance.action_history.Commit<AddEntity>(entity);
+					}
 					ImGui::EndMenu();
 				}
 				UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Simple UI for selecting objects. We should improve the UI once the UI/UX for it is done.", false);
@@ -114,7 +156,7 @@ namespace Tempest
 
 					
 					std::vector<Entity> destroyed_list;
-					auto view = instance.ecs.view<tc::Meta>();
+					auto view = instance.ecs.view<tc::Meta>(exclude_t<tc::Destroyed>());
 					for (auto id : view)
 					{
 						auto& meta = instance.ecs.get<tc::Meta>(id);
@@ -149,8 +191,19 @@ namespace Tempest
 						}
 					}
 
-					for(auto id : destroyed_list)
-						instance.ecs.destroy(id);
+					for (auto id : destroyed_list)
+					{
+						if (id == instance.selected)
+							instance.selected = INVALID;
+						instance.ecs.emplace<tc::Destroyed>(id);
+						// remove rb from scene
+						if (auto rb = instance.ecs.get_if<tc::Rigidbody>(id))
+						{
+							instance.po.RemoveActorFromScene(rb->internal_rb.get());
+						}
+
+						instance.action_history.Commit<RemoveEntity>(id);
+					}
 
 
 					ImGui::EndTable();

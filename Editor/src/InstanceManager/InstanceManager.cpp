@@ -12,6 +12,8 @@
 
 // test window
 #include "Window/Test/test_window.h"
+#include "Window/Test/test_window2.h"
+#include "Window/Test/test_window3.h"
 
 
 // filebrowsers (maybe dn)
@@ -28,6 +30,8 @@
 #include "Window/Popup/ErrorMsgPopup.h"
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
+#include "Window/Overlay/UnitSheetOverlay.h"
+#include "Window/Overlay/SimulateOverlay.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -35,6 +39,22 @@
 namespace Tempest
 {
 	void InstanceManager::register_nulltime_windows()
+	{
+		// assume instance is valid here
+		instance->register_window<DiagnosticsWindow>()->visible = false;
+
+		instance->register_always<MainMenuWindow>();
+
+		instance->register_always<NewProjectPopup>();
+		instance->register_always<OpenProjectPopup>();
+		instance->register_always<SaveCurrentBeforeOpenPopup>();
+		instance->register_always<ErrorMsgPopup>();
+		instance->register_always<BottomRightOverlayPopup>();
+
+		instance->register_always<ShowRecent>();
+	}
+
+	void InstanceManager::register_physicstime_windows()
 	{
 		// assume instance is valid here
 		instance->register_window<DiagnosticsWindow>()->visible = false;
@@ -69,9 +89,13 @@ namespace Tempest
 		instance->register_always<SaveBrowser>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
+		instance->register_always<UnitSheetOverlay>();
+		instance->register_always<SimulateOverlay>();
 
 		instance->register_always<ShowRecent>();
 		instance->register_window<test_window>();
+		instance->register_window<test_window2>();
+		instance->register_window<test_window3>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{
@@ -81,6 +105,7 @@ namespace Tempest
 		instance->register_window<InspectorWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 		instance->register_window<test_window>();
+		instance->register_window<test_window3>();
 
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();

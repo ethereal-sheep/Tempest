@@ -1,9 +1,9 @@
 #include "node.h"
-#include "Instance/RuntimeInstance.h"
+#include "Instance/Instance.h"
 
 namespace Tempest
 {
-	script* node::create_script_pack(Entity entity, RuntimeInstance& instance)
+	script* node::create_script_pack(Entity entity, Instance& instance)
 	{
 		auto s = create_script(entity, instance);
 
@@ -53,7 +53,7 @@ namespace Tempest
 					continue;
 				}
 
-				s->set_input(i, data, 0);
+				s->set_input(i - flow_inputs, data, 0);
 
 			}
 		}
@@ -154,7 +154,7 @@ namespace Tempest
 		}
 		else
 		{
-			auto new_pin_id = create_pin_id(true, outputs.size(), id);
+			auto new_pin_id = create_pin_id(false, outputs.size(), id);
 
 			outputs.emplace_back(new_pin_id, _type, _name);
 			++non_flow_outputs;

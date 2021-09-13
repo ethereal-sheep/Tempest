@@ -59,6 +59,8 @@ namespace Tempest
         Writer& operator& (std::unique_ptr<T>& ptr);
         template <typename T, typename std::enable_if_t<std::is_default_constructible_v<T>>>
         Writer& operator& (std::shared_ptr<T>& ptr);
+        template<typename TFirst, typename TSecond>
+        Writer& operator& (const std::pair<TFirst, TSecond>);
 
         //! Created mostly for glm vectors
         template <typename TVec>

@@ -14,7 +14,7 @@ namespace Tempest
             return "";
         }
 
-        void init() override
+        void init(Instance&) override
         {
             Service<EventManager>::Get().register_listener<ImportAssetTrigger>(&ImportAssetPopup::open_popup, this);
         }

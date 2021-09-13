@@ -1,6 +1,7 @@
 
 #include "UIElements.h"
 
+
 namespace Tempest::UI
 {
 
@@ -126,77 +127,84 @@ namespace Tempest::UI
 		ImGui::Dummy(ImVec2{ padding - ImGui::GetItemRectSize().x, 0.f });
 		ImGui::SameLine();
 	}
-	bool DragFloat3(const char* str, const char* ID, ImVec2 padding, float v[3], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragFloat3(const char* str, const char* ID, ImVec2 padding, float v[3], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(str);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::DragFloat3(ID, v, v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::DragFloat3(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragFloat2(const char* str, const char* ID, ImVec2 padding, float v[2], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragFloat2(const char* str, const char* ID, ImVec2 padding, float v[2], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(str);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::DragFloat2(ID, v, v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::DragFloat2(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragFloat(const char* str, const char* ID, ImVec2 padding, float* val, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragFloat(const char* str, const char* ID, ImVec2 padding, float* val, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(str);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::DragFloat(ID, val, v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::DragFloat(ID, val, v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragInt(const char* label, const char* ID, ImVec2 padding, int* v, float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragInt(const char* label, const char* ID, ImVec2 padding, int* v, float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::DragInt(ID, v, v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::DragInt(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragInt2(const char* label, const char* ID, ImVec2 padding, int v[2], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragInt2(const char* label, const char* ID, ImVec2 padding, int v[2], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::DragInt2(ID, v, v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= valueChangeOnEdit =ImGui::DragInt2(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragInt3(const char* label, const char* ID, ImVec2 padding, int v[3], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragInt3(const char* label, const char* ID, ImVec2 padding, int v[3], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::DragInt3(ID, v, v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::DragInt3(ID, v, v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragFloat3ColorBox(const char* str, const char* ID, ImVec2 padding, float v[3], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragFloat3ColorBox(const char* str, const char* ID, ImVec2 padding, float v[3], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.f);
 
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		//Setting Text to the left
 		ImGui::Text(str);
 		ImGui::SameLine();
@@ -218,16 +226,16 @@ namespace Tempest::UI
 		if(ImGui::Button(std::string("X").append(ID).c_str(), buttonSize))
 		{
 			v[0] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
 		ImGui::IsItemDeactivatedAfterEdit();
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -242,13 +250,13 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("Y").append(ID).c_str(), buttonSize))
 		{
 			v[1] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -263,12 +271,12 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("Z").append(ID).c_str(), buttonSize))
 		{
 			v[2] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		valueChange |= ImGui::DragFloat(std::string(ID).append("Z").c_str(), &v[2], v_speed, v_min, v_max, format, flags);
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("Z").c_str(), &v[2], v_speed, v_min, v_max, format, flags);
 		ImGui::PopItemWidth();
 		// ================================================================
 		ImGui::Dummy({ 0,5 });
@@ -276,14 +284,15 @@ namespace Tempest::UI
 		ImGui::PopStyleVar();
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
-		return valueChange;
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragFloat2ColorBox(const char* label, const char* ID, ImVec2 padding, float v[2], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragFloat2ColorBox(const char* label, const char* ID, ImVec2 padding, float v[2], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.f);
 
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		//Setting Text to the left
 		ImGui::Text(label);
 		ImGui::SameLine();
@@ -306,15 +315,15 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("X").append(ID).c_str(), buttonSize))
 		{
 			v[0] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 
@@ -329,13 +338,13 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("Y").append(ID).c_str(), buttonSize))
 		{
 			v[1] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 		ImGui::Dummy({ 0,5 });
@@ -344,12 +353,13 @@ namespace Tempest::UI
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
 
-		return valueChange;
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
-	bool DragFloat3ColorBox_NoText(const char* ID, float v[3], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragFloat3ColorBox_NoText(const char* ID, float v[3], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.f);
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		//Calculating avaliable region space
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth() - 37.f);
 		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth() - 50);
@@ -365,15 +375,15 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("X").append(ID).c_str(), buttonSize))
 		{
 			v[0] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -388,13 +398,13 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("Y").append(ID).c_str(), buttonSize))
 		{
 			v[1] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -409,13 +419,13 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("Z").append(ID).c_str(), buttonSize))
 		{
 			v[2] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("Z").c_str(), &v[2], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("Z").c_str(), &v[2], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 		ImGui::Dummy({ 0,5 });
@@ -423,13 +433,14 @@ namespace Tempest::UI
 		ImGui::PopStyleVar();
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
-		return valueChange;
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 	
-	bool DragFloat2ColorBox_NoText(const char* ID, float v[2], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> DragFloat2ColorBox_NoText(const char* ID, float v[2], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.f);
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		//Calculating avaliable region space
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth() - 11.f);
 		ImGui::PushMultiItemsWidths(2, ImGui::CalcItemWidth() - 50);
@@ -445,15 +456,15 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("X").append(ID).c_str(), buttonSize))
 		{
 			v[0] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("X").c_str(), &v[0], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 
@@ -468,13 +479,13 @@ namespace Tempest::UI
 		if (ImGui::Button(std::string("Y").append(ID).c_str(), buttonSize))
 		{
 			v[1] = resetValue;
-			valueChange |= true;
+			valueChangeOnRelease |= true;
 		}
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
+		valueChangeOnEdit |= ImGui::DragFloat(std::string(ID).append("Y").c_str(), &v[1], v_speed, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
 		ImGui::PopItemWidth();
 		// ================================================================
 		ImGui::Dummy({ 0,5 });
@@ -482,10 +493,10 @@ namespace Tempest::UI
 		ImGui::PopStyleVar();
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
-		return valueChange;
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool UniformScaleFloat3(const char* label, const char* ID, ImVec2 padding, bool* b, float v[3], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> UniformScaleFloat3(const char* label, const char* ID, ImVec2 padding, bool* b, float v[3], float resetValue, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
 		ImGui::Text(label);
 		ImGui::SameLine(padding.x - 26.f);
@@ -494,7 +505,8 @@ namespace Tempest::UI
 		ImGui::Checkbox(ID, b);
 		ImGui::SameLine();
 
-		bool changed = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 
 		if (*b)
 		{
@@ -562,23 +574,26 @@ namespace Tempest::UI
 				float ratio = v[0] / temp.x;
 				v[1] *= ratio;
 				v[2] *= ratio;
-				changed = true;
+				valueChangeOnEdit = true;
+				valueChangeOnRelease = true;
 			}
 			else if (second)
 			{
 				float ratio = v[1] / temp.y;
 				v[0] *= ratio;
 				v[2] *= ratio;
-				changed = true;
+				valueChangeOnEdit = true;
+				valueChangeOnRelease = true;
 			}
 			else if (third)
 			{
 				float ratio = v[2] / temp.z;
 				v[0] *= ratio;
 				v[1] *= ratio;
-				changed = true;
+				valueChangeOnEdit = true;
+				valueChangeOnRelease = true;
 			}
-			return changed;
+			return { valueChangeOnEdit, valueChangeOnRelease };
 		}
 		else
 		{
@@ -664,112 +679,121 @@ namespace Tempest::UI
 		ImGui::PopStyleVar();
 	}
 
-	bool SliderInt(const char* label, const char* ID, ImVec2 padding, int* v, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> SliderInt(const char* label, const char* ID, ImVec2 padding, int* v, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::SliderInt(ID, v, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::SliderInt(ID, v, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool SliderInt2(const char* label, const char* ID, ImVec2 padding, int v[2], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> SliderInt2(const char* label, const char* ID, ImVec2 padding, int v[2], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::SliderInt2(ID, v, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::SliderInt2(ID, v, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool SliderInt3(const char* label, const char* ID, ImVec2 padding, int v[3], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> SliderInt3(const char* label, const char* ID, ImVec2 padding, int v[3], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::SliderInt3(ID, v, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::SliderInt3(ID, v, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool SliderFloat(const char* label, const char* ID, ImVec2 padding, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> SliderFloat(const char* label, const char* ID, ImVec2 padding, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::SliderFloat(ID, v, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::SliderFloat(ID, v, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool SliderFloat2(const char* label, const char* ID, ImVec2 padding, float v[2], float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> SliderFloat2(const char* label, const char* ID, ImVec2 padding, float v[2], float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::SliderFloat2(ID, v, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::SliderFloat2(ID, v, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool SliderFloat3(const char* label, const char* ID, ImVec2 padding, float v[3], float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	std::pair<bool, bool> SliderFloat3(const char* label, const char* ID, ImVec2 padding, float v[3], float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::SliderFloat3(ID, v, v_min, v_max, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::SliderFloat3(ID, v, v_min, v_max, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool InputFloat(const char* label, const char* ID, ImVec2 padding, float* v, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
+	std::pair<bool, bool> InputFloat(const char* label, const char* ID, ImVec2 padding, float* v, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::InputFloat(ID, v, step, step_fast, format, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::InputFloat(ID, v, step, step_fast, format, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool ColorEdit4(const char* label, const char* ID, ImVec2 padding, float col[4], ImGuiColorEditFlags flags)
+	std::pair<bool, bool> ColorEdit4(const char* label, const char* ID, ImVec2 padding, float col[4], ImGuiColorEditFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::ColorEdit4(ID, col, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::ColorEdit4(ID, col, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
-	bool ColorEdit3(const char* label, const char* ID, ImVec2 padding, float col[3], ImGuiColorEditFlags flags)
+	std::pair<bool, bool> ColorEdit3(const char* label, const char* ID, ImVec2 padding, float col[3], ImGuiColorEditFlags flags)
 	{
-		bool valueChange = false;
+		bool valueChangeOnEdit = false;
+		bool valueChangeOnRelease = false;
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
 		ImGui::SameLine();
-		ImGui::ColorEdit3(ID, col, flags);
-		valueChange |= ImGui::IsItemDeactivatedAfterEdit();
-		return valueChange;
+		valueChangeOnEdit |= ImGui::ColorEdit3(ID, col, flags);
+		valueChangeOnRelease |= ImGui::IsItemDeactivatedAfterEdit();
+		return { valueChangeOnEdit, valueChangeOnRelease };
 	}
 
 	bool Checkbox(const char* str, const char* ID, ImVec2 padding, bool* val)
@@ -788,7 +812,7 @@ namespace Tempest::UI
 	bool InputText(const char* label, const char* ID, ImVec2 padding, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
 	{
 		bool pressed = false;
-		ImGui::PushID(label);
+		ImGui::PushID(ID);
 		ImGui::Text(label);
 		ImGui::SameLine();
 		ImGui::Dummy({ padding.x - ImGui::GetItemRectSize().x, padding.y });
@@ -796,6 +820,419 @@ namespace Tempest::UI
 		pressed |= ImGui::InputText(ID, str, flags, callback, user_data);
 		ImGui::PopID();
 		return pressed;
+	}
+	void SubHeader(ImVec2 padding, const char* str)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		ImTextureID my_tex_id = io.Fonts->TexID;
+		ImGui::Dummy({ padding.x , padding.y });
+		ImGui::SameLine();
+		ImGui::Image(my_tex_id, ImVec2(50, 20));
+		ImGui::SameLine();
+		ImGui::PushFont(FONT_SHEAD);
+		//ImGui::Dummy({ padding.x , padding.y });
+		
+		ImGui::Text(str);
+		ImGui::PopFont();
+		ImGui::SameLine();
+		ImGui::Image(my_tex_id, ImVec2(50, 20));
+		
+		
+	}
+	void Header(ImVec2 padding, const char* str)
+	{
+		//ImGui::Image()
+		//ImGui::SameLine()
+		ImGui::PushFont(FONT_HEAD);
+		ImGui::Dummy({ padding.x , padding.y });
+		ImGui::SameLine();
+		ImGui::Text(str);
+		ImGui::PopFont();
+		//ImGui::SameLine()
+		//ImGui::Image()
+	}
+	
+	bool UIButton_1(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	{
+		const float default_padding_x = 8.f;
+		const float default_padding_y = 8.f;
+		const float border_size = 1.5f;
+		
+		const ImVec4 default_border_col = { 1.f, 1.f, 1.f, 1.f };
+		const ImVec4 hovered_border_col = { 0.980f, 0.768f, 0.509f, 1.f };
+		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
+
+		static float rounding = 0.f;
+		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+		padding.y += 10.f;
+
+		// button shit
+		ImGui::PushFont(font);
+		ImVec2 text_size = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+		ImVec2 alt_text_size = ImGui::CalcTextSize(hover.c_str(), nullptr, true);
+		ImVec2 act_text_size = {
+			std::max(text_size.x, alt_text_size.x),
+			std::max(text_size.y, alt_text_size.y)
+		};
+		ImGui::PopFont();
+
+		ImVec2 button_size = {
+			act_text_size.x + default_padding_x + padding.x,
+			act_text_size.y + default_padding_y + padding.y
+		};
+
+		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+
+		ImGui::SetCursorPos(new_pos);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+		ImGui::InvisibleButton("##NiceButton", button_size);
+		ImGui::PopStyleVar(1);
+		ImGui::SetCursorPos(new_pos);
+		if (selected)
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::Text(hover.c_str());
+			ImGui::PopFont();
+			auto io = ImGui::GetIO();
+			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			{
+				return true;
+			}
+		}
+		else if (!ImGui::IsItemHovered())
+		{
+			// default
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, default_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+			ImGui::SetCursorPos(text_pos);
+			/*ImGui::SetCursorPos(
+				{
+					pos.x + button_size.x / 2.f - text_size.x / 2.f,
+					pos.y + 2.f
+				});*/
+			ImGui::PushFont(font);
+			ImGui::Text(unselected.c_str());
+			ImGui::PopFont();
+		}
+		else
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::Text(hover.c_str());
+			ImGui::PopFont();
+
+			auto io = ImGui::GetIO();
+			if (ImGui::IsMouseClicked(0))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+    bool UIButton_2(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	{
+		const float default_padding_x = 8.f;
+		const float default_padding_y = 8.f;
+		const float border_size = 1.5f;
+		
+		const ImVec4 default_border_col = { 1.f, 1.f, 1.f, 1.f };
+		const ImVec4 hovered_border_col = { 0.980f, 0.768f, 0.509f, 1.f };
+		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
+		string str = "         ";
+		static float rounding = 0.f;
+		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+		padding.y += 10.f;
+
+		// button shit
+		ImGui::PushFont(font);
+		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 act_text_size = {
+			std::max(text_size.x, alt_text_size.x),
+			std::max(text_size.y, alt_text_size.y)
+		};
+		ImGui::PopFont();
+
+		ImVec2 button_size = {
+			act_text_size.x + default_padding_x + padding.x,
+			act_text_size.y + default_padding_y + padding.y
+		};
+
+		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+
+		ImGui::SetCursorPos(new_pos);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+		ImGui::InvisibleButton("##NiceButton", button_size);
+		ImGui::PopStyleVar(1);
+		ImGui::SetCursorPos(new_pos);
+		if (selected)
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::Text(hover.c_str());
+			ImGui::PopFont();
+			auto io = ImGui::GetIO();
+			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			{
+				return true;
+			}
+		}
+		else if (!ImGui::IsItemHovered())
+		{
+			// default
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, default_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+			ImGui::SetCursorPos(text_pos);
+			/*ImGui::SetCursorPos(
+				{
+					pos.x + button_size.x / 2.f - text_size.x / 2.f,
+					pos.y + 2.f
+				});*/
+			ImGui::PushFont(font);
+			ImGui::Text(unselected.c_str());
+			ImGui::PopFont();
+		}
+		else
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::Text(hover.c_str());
+			ImGui::PopFont();
+
+			auto io = ImGui::GetIO();
+			if (ImGui::IsMouseClicked(0))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void AddUnderline(ImU32 col, ImVec2 min, ImVec2 max)
+	{
+		//ImVec2 min = ImGui::GetItemRectMin();
+		//ImVec2 max = ImGui::GetItemRectMax();
+		min.y = max.y;
+		ImGui::GetWindowDrawList()->AddLine(
+			min, max, col, 2.0f);
+	}
+
+	bool UISelectable(const char* label, bool selected, ImGuiSelectableFlags flags, const ImVec2& size_arg)
+	{
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		if (window->SkipItems)
+			return false;
+
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+
+		// Submit label or explicit size to ItemSize(), whereas ItemAdd() will submit a larger/spanning rectangle.
+		ImGuiID id = window->GetID(label);
+		ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+		ImVec2 size(size_arg.x != 0.0f ? size_arg.x : label_size.x, size_arg.y != 0.0f ? size_arg.y : label_size.y);
+		ImVec2 pos = window->DC.CursorPos;
+		pos.y += window->DC.CurrLineTextBaseOffset;
+		ImGui::ItemSize(size, 0.0f);
+
+		// Fill horizontal space
+		// We don't support (size < 0.0f) in Selectable() because the ItemSpacing extension would make explicitly right-aligned sizes not visibly match other widgets.
+		const bool span_all_columns = (flags & ImGuiSelectableFlags_SpanAllColumns) != 0;
+		const float min_x = span_all_columns ? window->ParentWorkRect.Min.x : pos.x;
+		const float max_x = span_all_columns ? window->ParentWorkRect.Max.x : window->WorkRect.Max.x;
+		if (size_arg.x == 0.0f || (flags & ImGuiSelectableFlags_SpanAvailWidth))
+			size.x = ImMax(label_size.x, max_x - min_x);
+
+		// Text stays at the submission position, but bounding box may be extended on both sides
+		const ImVec2 text_min = pos;
+		const ImVec2 text_max(min_x + size.x, pos.y + size.y);
+
+		// Selectables are meant to be tightly packed together with no click-gap, so we extend their box to cover spacing between selectable.
+		ImRect bb(min_x, pos.y, text_max.x, text_max.y);
+		if ((flags & ImGuiSelectableFlags_NoPadWithHalfSpacing) == 0)
+		{
+			const float spacing_x = span_all_columns ? 0.0f : style.ItemSpacing.x;
+			const float spacing_y = style.ItemSpacing.y;
+			const float spacing_L = IM_FLOOR(spacing_x * 0.50f);
+			const float spacing_U = IM_FLOOR(spacing_y * 0.50f);
+			bb.Min.x -= spacing_L;
+			bb.Min.y -= spacing_U;
+			bb.Max.x += (spacing_x - spacing_L);
+			bb.Max.y += (spacing_y - spacing_U);
+		}
+		//if (g.IO.KeyCtrl) { GetForegroundDrawList()->AddRect(bb.Min, bb.Max, IM_COL32(0, 255, 0, 255)); }
+
+		// Modify ClipRect for the ItemAdd(), faster than doing a PushColumnsBackground/PushTableBackground for every Selectable..
+		const float backup_clip_rect_min_x = window->ClipRect.Min.x;
+		const float backup_clip_rect_max_x = window->ClipRect.Max.x;
+		if (span_all_columns)
+		{
+			window->ClipRect.Min.x = window->ParentWorkRect.Min.x;
+			window->ClipRect.Max.x = window->ParentWorkRect.Max.x;
+		}
+
+		bool item_add;
+		if (flags & ImGuiSelectableFlags_Disabled)
+		{
+			ImGuiItemFlags backup_item_flags = g.CurrentItemFlags;
+			g.CurrentItemFlags |= ImGuiItemFlags_Disabled | ImGuiItemFlags_NoNavDefaultFocus;
+			item_add = ImGui::ItemAdd(bb, id);
+			g.CurrentItemFlags = backup_item_flags;
+		}
+		else
+		{
+			item_add = ImGui::ItemAdd(bb, id);
+		}
+
+		if (span_all_columns)
+		{
+			window->ClipRect.Min.x = backup_clip_rect_min_x;
+			window->ClipRect.Max.x = backup_clip_rect_max_x;
+		}
+
+		if (!item_add)
+			return false;
+
+		// FIXME: We can standardize the behavior of those two, we could also keep the fast path of override ClipRect + full push on render only,
+		// which would be advantageous since most selectable are not selected.
+		if (span_all_columns && window->DC.CurrentColumns)
+			ImGui::PushColumnsBackground();
+		else if (span_all_columns && g.CurrentTable)
+			ImGui::TablePushBackgroundChannel();
+
+		// We use NoHoldingActiveID on menus so user can click and _hold_ on a menu then drag to browse child entries
+		ImGuiButtonFlags button_flags = 0;
+		if (flags & ImGuiSelectableFlags_NoHoldingActiveID) { button_flags |= ImGuiButtonFlags_NoHoldingActiveId; }
+		if (flags & ImGuiSelectableFlags_SelectOnClick) { button_flags |= ImGuiButtonFlags_PressedOnClick; }
+		if (flags & ImGuiSelectableFlags_SelectOnRelease) { button_flags |= ImGuiButtonFlags_PressedOnRelease; }
+		if (flags & ImGuiSelectableFlags_Disabled) { button_flags |= ImGuiButtonFlags_Disabled; }
+		if (flags & ImGuiSelectableFlags_AllowDoubleClick) { button_flags |= ImGuiButtonFlags_PressedOnClickRelease | ImGuiButtonFlags_PressedOnDoubleClick; }
+		if (flags & ImGuiSelectableFlags_AllowItemOverlap) { button_flags |= ImGuiButtonFlags_AllowItemOverlap; }
+
+		if (flags & ImGuiSelectableFlags_Disabled)
+			selected = false;
+
+		const bool was_selected = selected;
+		bool hovered, held;
+		bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held, button_flags);
+
+		// Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
+		if (pressed || (hovered && (flags & ImGuiSelectableFlags_SetNavIdOnHover)))
+		{
+			if (!g.NavDisableMouseHover && g.NavWindow == window && g.NavLayer == window->DC.NavLayerCurrent)
+			{
+				ImGui::SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect({ bb.Min.x - window->Pos.x, bb.Min.y - window->Pos.y }, { bb.Max.x - window->Pos.x, bb.Max.y - window->Pos.y }));
+				g.NavDisableHighlight = true;
+			}
+		}
+		if (pressed)
+			ImGui::MarkItemEdited(id);
+
+		if (flags & ImGuiSelectableFlags_AllowItemOverlap)
+			ImGui::SetItemAllowOverlap();
+
+		// In this branch, Selectable() cannot toggle the selection so this will never trigger.
+		if (selected != was_selected) //-V547
+			window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
+
+		// Render
+		if (held && (flags & ImGuiSelectableFlags_DrawHoveredWhenHeld))
+			hovered = true;
+		if (hovered || selected)
+		{
+			
+			//const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+			const ImU32 col = ImGui::GetColorU32({ 0.980f, 0.768f, 0.509f, 1.f });
+			UI::AddUnderline(col, text_min, { text_min.x + label_size.x, text_min.y + label_size.y });
+			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
+			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+		}
+
+		if (span_all_columns && window->DC.CurrentColumns)
+			ImGui::PopColumnsBackground();
+		else if (span_all_columns && g.CurrentTable)
+			ImGui::TablePopBackgroundChannel();
+
+		if (flags & ImGuiSelectableFlags_Disabled) ImGui::PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]);
+		ImGui::RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
+		if (flags & ImGuiSelectableFlags_Disabled) ImGui::PopStyleColor();
+
+		// Automatically close popups
+		if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(flags & ImGuiSelectableFlags_DontClosePopups) && !(g.CurrentItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
+			ImGui::CloseCurrentPopup();
+
+		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags);
+		return pressed;
+	}
+	bool UISelectable(const char* label, bool* p_selected, ImGuiSelectableFlags flags, const ImVec2& size_arg)
+	{
+		if (UISelectable(label, *p_selected, flags, size_arg))
+		{
+			*p_selected = !*p_selected;
+			return true;
+		}
+		return false;
 	}
 }
 

@@ -22,7 +22,7 @@ namespace Tempest
 		 * @brief Requires root directory
 		 */
 		RuntimeInstance(const tpath& project_path, MemoryStrategy strategy = {}) :
-			Instance(project_path, strategy), srm{memory_object.get()}
+			Instance(project_path, strategy)
 		{
 
 			build_scripts(root);
@@ -38,7 +38,6 @@ namespace Tempest
 		void build_scripts(const tpath& root_directory);
 
 	public:
-		SRM srm;
 	};
 }
 

@@ -87,7 +87,7 @@ namespace Tempest
 		 */
 		uint32_t queued_task_count() const
 		{
-			const std::scoped_lock lock(q_mutex);
+			const std::scoped_lock<Tempest::mutex> lock(q_mutex);
 			return static_cast<uint32_t>(tasks.size());
 		}
 

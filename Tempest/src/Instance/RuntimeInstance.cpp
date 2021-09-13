@@ -5,6 +5,7 @@ namespace Tempest
 {
 	void RuntimeInstance::_init()
 	{
+
 		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
 		for (auto id : view)
 		{

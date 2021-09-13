@@ -479,7 +479,10 @@ namespace Tempest
 
 		std::any operator[](size_t index [[maybe_unused]] ) override
 		{
-			return false;
+			if constexpr (std::is_same_v<Ret, void>)
+				return {};
+			else
+				return outputs[index];
 		}
 
 		script* set_input(size_t, script*, size_t) override

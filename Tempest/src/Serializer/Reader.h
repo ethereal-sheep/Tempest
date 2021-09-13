@@ -35,7 +35,7 @@ namespace Tempest
 		Reader& Vector(const char* identifier, TVector& vec);
 		template <typename TMap>
 		Reader& Map(const char* identifier, const char* key_identifier, const char* value_identifier, TMap& map);
-		
+
 		template <typename TVariant>
 		Reader& Variant(const char* identifier, TVariant& var);
 		template <typename TVariant>
@@ -56,6 +56,8 @@ namespace Tempest
 		Reader& operator& (std::unique_ptr<T>& ptr);
 		template <typename T, typename std::enable_if_t<std::is_default_constructible_v<T>>>
 		Reader& operator& (std::shared_ptr<T>& ptr);
+		template<typename TFirst, typename TSecond>
+		Reader& operator& (std::pair<TFirst, TSecond>&);
 
 		//! Created mostly for glm vectors
 		template <typename TVec>

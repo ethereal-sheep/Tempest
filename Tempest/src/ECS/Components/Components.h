@@ -5,6 +5,8 @@
 #include "ECS\Entity.h"
 #include "Physics/PhysicsObject.h"
 #include "Graphics/Basics/Mesh.h"
+#include "Util/range.h"
+#include "Scripting/Graph/graph.h"
 
 /**
 * @brief 
@@ -96,7 +98,8 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Transform, Meta, Script, Rigidbody, Mesh
+		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh, 
+		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph
 		,END
 	};
 
@@ -179,6 +182,7 @@ namespace Tempest
 			string script{};
 			bool built = false;
 		};
+		
 		struct Rigidbody
 		{
 			
@@ -215,6 +219,350 @@ namespace Tempest
 			
 			MeshCode code;
 		};
+
+		struct Destroyed 
+		{
+			static const char* get_type() { return "Destroyed"; }
+			
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Destroyed&)
+			{
+				ar.StartObject();
+				return ar.EndObject();
+			}
+		};
+
+		static const size_t STAT_TOTAL = 13;
+
+		struct Character
+		{
+			
+			static const char* get_type() { return "Character"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Character& component)
+			{
+				ar.StartObject();
+				ar.Member("Charater_Name", component.name);
+				ar.Member("Weapon_Id", component.weapon);
+				ar.Vector("Charater_Stats", component.stats);
+				return ar.EndObject();
+			}
+
+			Character() : stats(STAT_TOTAL,0)
+			{
+
+			}
+
+			[[deprecated("No more removal of stat")]]
+			void remove_stat(size_t index)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats.erase(stats.begin() + index);
+				stats.push_back(0);
+			}
+
+			void set_stat(size_t index, int val)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats[index] = val;
+			}
+
+			[[nodiscard]] int& operator[](size_t index)
+			{
+				return stats[index];
+			}
+
+			[[nodiscard]] int& get_stat(size_t index)
+			{
+				return stats[index];
+			}
+
+			[[deprecated("Iterate statline and get stat via []")]]
+			[[nodiscard]] const tvector<int>& get_stats() const
+			{
+				return stats;
+			}
+
+			[[deprecated("Iterate statline and get stat via []")]]
+			[[nodiscard]] auto get_stats_range() 
+			{
+				return make_range(stats);
+			}
+
+
+			string name = "Char";
+			Entity weapon = UNDEFINED;
+			Entity system = UNDEFINED;
+		private:
+			tvector<int> stats;
+
+		};
+
+		struct Weapon
+		{
+			static const char* get_type() { return "Weapon"; }
+
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Weapon& component)
+			{
+				ar.StartObject();
+				ar.Member("Weapon_Name", component.name);
+				ar.Member("Main_Stat", component.main_stat);
+				ar.Vector("Weapon_Stats", component.stats);
+				return ar.EndObject();
+			}
+
+			Weapon() : stats(STAT_TOTAL, 0)
+			{
+				
+			}
+
+			[[deprecated("No more removal of stat")]]
+			void remove_stat(size_t index)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats.erase(stats.begin() + index);
+				stats.push_back(0);
+			}
+
+			void set_stat(size_t index, int val)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+
+				stats[index] = val;
+			}
+
+			[[nodiscard]] int& get_stat(size_t index)
+			{
+				return stats[index];
+			}
+
+			[[nodiscard]] int& operator[](size_t index)
+			{
+				return stats[index];
+			}
+
+			[[deprecated("Iterate statline and get stat via []")]]
+			[[nodiscard]] const tvector<int>& get_stats() const
+			{
+				return stats;
+			}
+
+			[[nodiscard]] auto get_stats_range()
+			{
+				return make_range(stats);
+			}
+
+			void set_main_stat(size_t index)
+			{
+				if (index >= STAT_TOTAL)
+					return;
+				main_stat = index;
+			}
+
+			[[nodiscard]] size_t get_main_stat() const
+			{
+				return main_stat;
+			}
+
+
+
+			string name = "Weapon";
+		private:
+			tvector<int> stats;
+			size_t main_stat = 1; // set to ATK as main
+		};
+
+		struct Statline
+		{
+
+			static const char* get_type() { return "Statline"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Statline& component)
+			{
+				ar.StartObject();
+				ar.Vector("Statline_Data", component.stat_list);
+				return ar.EndObject();
+			}
+			Statline() : stat_list(STAT_TOTAL)
+			{
+				/*stats.push_back("HP");
+				stats.push_back("ATK");
+				stats.push_back("DEF");*/
+
+				stat_list[0] = tpair<bool, string>(true, "HP");
+				stat_list[1] = tpair<bool, string>(true, "ATK");
+				stat_list[2] = tpair<bool, string>(true, "DEF");
+
+				stat_list[3] = tpair<bool, string>(false, "Stat1");
+				stat_list[4] = tpair<bool, string>(false, "Stat2");
+				stat_list[5] = tpair<bool, string>(false, "Stat3");
+				stat_list[6] = tpair<bool, string>(false, "Stat4");
+				stat_list[7] = tpair<bool, string>(false, "Stat5");
+				stat_list[8] = tpair<bool, string>(false, "Stat6");
+				stat_list[9] = tpair<bool, string>(false, "Stat7");
+				stat_list[10] = tpair<bool, string>(false, "Stat8");
+				stat_list[11] = tpair<bool, string>(false, "Stat9");
+				stat_list[12] = tpair<bool, string>(false, "Stat10");
+			}
+
+			[[deprecated("No more removal of stat")]] 
+			bool remove_stat(size_t )
+			{
+				return false;
+			}
+
+			[[deprecated("No more removal of stat")]]
+			bool remove_stat(const string& )
+			{
+				return false;
+			}
+
+			[[deprecated("No more adding of stat")]]
+			bool add_stat(const string& )
+			{
+				return false;
+			}
+
+			[[deprecated("Rename stat via get_stats")]]
+			bool rename_stat(size_t , const string& )
+			{
+				return false;
+			}
+
+			[[deprecated("No more removal of stat")]]
+			bool rename_stat(const string& , const string& )
+			{
+				return false;
+			}
+
+			[[deprecated("No more removal of stat")]]
+			size_t index_of_stat(const string& name) const
+			{
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [&](auto pair)
+					{
+						return pair.second == name;
+					});
+				return f - stat_list.begin();
+			}
+
+			[[nodiscard]] string& operator[](size_t index)
+			{
+				return stat_list[index].second;
+			}
+
+			[[nodiscard]] bool& operator()(size_t index)
+			{
+				return stat_list[index].first;
+			}
+
+			[[nodiscard]] size_t count(const string& name) const
+			{
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [&](auto pair)
+					{
+						return pair.second == name;
+					});
+				if (f == stat_list.end()) return 0;
+				return 1;
+			}
+
+			[[nodiscard]] bool exist(const string& name) const
+			{
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [&](auto pair)
+					{
+						return pair.second == name;
+					});
+				if (f == stat_list.end()) return false;
+				return true;
+			}
+
+			[[nodiscard]] size_t size() const
+			{
+				return stat_list.size();
+			}
+
+			[[deprecated("use get_stat_range()")]]
+			[[nodiscard]] const tvector<string>& get_stats() const
+			{
+				return stats;
+			}
+
+			[[nodiscard]] auto get_stat_range()
+			{
+				return make_range(stat_list);
+			}
+
+		private:
+
+			tvector<string> stats;
+
+			tvector<tpair<bool, string>> stat_list;
+		};
+
+		struct ConflictGraph
+		{
+			static const char* get_type() { return "ConflictGraph"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, ConflictGraph& )
+			{
+				ar.StartObject();
+				return ar.EndObject();
+			}
+		};
+
+		struct ActionGraph
+		{
+			static const char* get_type() { return "ActionGraph"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, ActionGraph& )
+			{
+				ar.StartObject();
+				return ar.EndObject();
+			}
+		};
+
+		struct ResolutionGraph
+		{
+			static const char* get_type() { return "ResolutionGraph"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, ResolutionGraph& )
+			{
+				ar.StartObject();
+				return ar.EndObject();
+			}
+		};
+
+		struct Graph
+		{
+			static const char* get_type() { return "Graph"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Graph& component)
+			{
+				if constexpr (Archiver::IsSaving())
+					return component.g._serialize(ar);
+				else
+					return component.g._deserialize(ar);
+			}
+
+			Graph(string empty = "Empty", graph_type type = graph_type::regular)
+				: g(empty, type) {}
+
+			graph g;
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -232,9 +580,6 @@ namespace Tempest
 		break														\
 
 
-
-
-
 	template <typename ECS>
 	void deserialize_helper(Reader& reader, ECS& ecs, ComponentType type)
 	{									
@@ -244,11 +589,20 @@ namespace Tempest
 		/* BELOW THIS PLEASE*/
 
 			COMPONENT_CASE(Example);
+			COMPONENT_CASE(Destroyed);
 			COMPONENT_CASE(Transform);
 			COMPONENT_CASE(Meta);
 			COMPONENT_CASE(Script);
 			COMPONENT_CASE(Rigidbody);
 			COMPONENT_CASE(Mesh);
+			COMPONENT_CASE(Character);
+			COMPONENT_CASE(Weapon);
+			COMPONENT_CASE(Statline);
+
+			COMPONENT_CASE(ConflictGraph);
+			COMPONENT_CASE(ActionGraph);
+			COMPONENT_CASE(ResolutionGraph);
+			COMPONENT_CASE(Graph);
 
 		/* ABOVE THIS PLEASE */
 

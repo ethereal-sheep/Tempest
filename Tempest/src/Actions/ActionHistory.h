@@ -34,10 +34,10 @@ namespace Tempest
 			undo_stack.push_back(std::move(action));
 
 			// check if stack is of a certain length
-			if (undo_stack.size() >= HISTORY_SIZE)
+			/*if (undo_stack.size() >= HISTORY_SIZE)
 			{
 				undo_stack.erase(undo_stack.begin());
-			}
+			}*/
 		}
 		void Undo(Instance&);
 		void Redo(Instance&);

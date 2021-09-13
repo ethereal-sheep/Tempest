@@ -15,7 +15,7 @@ namespace Tempest
 			return ICON_FA_DUNGEON " Some Cool Editor";
 		}
 
-		void init() override
+		void init(Instance&) override
 		{
 			window_flags |= 
 				ImGuiWindowFlags_NoResize | 
