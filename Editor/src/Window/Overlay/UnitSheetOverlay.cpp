@@ -88,7 +88,7 @@ namespace Tempest
 				ImGui::Dummy({ 0, 10.f });
 				ImGui::BeginChild("##CharacterInfo", ImVec2(ImGui::GetColumnWidth(1) - 10.f, viewport->Size.y * 0.5f));
 				//Name
-				ImGui::PushFont(FONT_PARA);
+				ImGui::PushFont(FONT_BODY);
 				ImGui::Dummy({ frontPadding, 0 });
 				ImGui::SameLine();
 				ImGui::Text("Name");
@@ -101,7 +101,7 @@ namespace Tempest
 
 				for (auto i = 0; i < sl->size(); i++)
 				{
-					string stat = sl->get_stats()[i] + " :";
+					string stat = sl->operator[](i) + " :";
 					string label = "##" + stat;
 					//auto data = std::to_string(cs->get_stat(i));
 					string WeaponData = "";
@@ -190,7 +190,7 @@ namespace Tempest
 						ImGui::PopItemWidth();
 						ImGui::PopFont();
 
-						if (UI::UIButton_1("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.3f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
+						/*if (UI::UIButton_1("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.3f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
 						{
 							sl->add_stat(NewStatName);
 							cs->get_stat(sl->index_of_stat(NewStatName)) = NewStatValue;
@@ -198,7 +198,7 @@ namespace Tempest
 							AddStatPopup = false;
 							NewStatName = "Stat";
 							NewStatValue = 0;
-						}
+						}*/
 
 						if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.8f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
 						{
@@ -286,7 +286,7 @@ namespace Tempest
 							ImGui::BeginChild("##EditWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
 							for (auto i = 0; i < sl->size(); i++)
 							{
-								ImGui::Text(sl->get_stats()[i].c_str());
+								ImGui::Text(sl->operator[](i).c_str());
 								ImGui::SameLine();
 								ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 								ImGui::SameLine();
@@ -468,7 +468,7 @@ namespace Tempest
 								ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f }, true);
 								for (auto i = 0; i < sl->size(); i++)
 								{
-									ImGui::Text(sl->get_stats()[i].c_str());
+									ImGui::Text(sl->operator[](i).c_str());
 									ImGui::SameLine();
 									ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 									ImGui::SameLine();

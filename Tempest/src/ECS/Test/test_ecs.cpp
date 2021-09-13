@@ -79,41 +79,41 @@ namespace Tempest
 	void testing_ecs_3()
 	{
 
-		const char* s = R"(S:\Development\Projects)";
-		string newStat = "Hello";
-		int newStatVal = 10;
-		Entity global = 0, i = 0;
-		{
-			ECS ecs;
-			global = ecs.create();
-			i = ecs.create();
-			auto statline = ecs.emplace<tc::Statline>(global);
-			auto character = ecs.emplace<tc::Character>(i);
+		//const char* s = R"(S:\Development\Projects)";
+		//string newStat = "Hello";
+		//int newStatVal = 10;
+		//Entity global = 0, i = 0;
+		//{
+		//	ECS ecs;
+		//	global = ecs.create();
+		//	i = ecs.create();
+		//	auto statline = ecs.emplace<tc::Statline>(global);
+		//	auto character = ecs.emplace<tc::Character>(i);
 
-			statline->add_stat(newStat);
-			character->set_stat(statline->index_of_stat(newStat), newStatVal);
-			ecs.save(s);
-		}
-		{
-			ECS ecs;
-			ecs.load(s);
-			LOG_ASSERT(ecs.has<tc::Statline>(global));
-			LOG_ASSERT(ecs.has<tc::Character>(i));
-
-
-			auto statline = ecs.get_if<tc::Statline>(global);
-			//auto character = ecs.get_if<tc::Character>(i);
-
-			LOG_ASSERT(statline->exist(newStat));
-			LOG_ASSERT(statline->exist(newStat));
+		//	statline->add_stat(newStat);
+		//	character->set_stat(statline->index_of_stat(newStat), newStatVal);
+		//	ecs.save(s);
+		//}
+		//{
+		//	ECS ecs;
+		//	ecs.load(s);
+		//	LOG_ASSERT(ecs.has<tc::Statline>(global));
+		//	LOG_ASSERT(ecs.has<tc::Character>(i));
 
 
+		//	auto statline = ecs.get_if<tc::Statline>(global);
+		//	//auto character = ecs.get_if<tc::Character>(i);
 
-		}
+		//	LOG_ASSERT(statline->exist(newStat));
+		//	LOG_ASSERT(statline->exist(newStat));
+
+
+
+		//}
 	}
 	void testing_ecs_4()
 	{
-		const char* s = R"(S:\Development\Projects)";
+		/*const char* s = R"(S:\Development\Projects)";
 		string newStat = "four";
 		string newStat2 = "five";
 		int newStatVal = 10;
@@ -151,14 +151,14 @@ namespace Tempest
 			LOG_ASSERT(character->get_stat(statline->index_of_stat(newStat2)) == newStatVal2);
 
 		}
-
+*/
 
 	}
 
 	void testing_ecs_5()
 	{
 		//const char* s = R"(S:\Development\Projects)";
-		string newStat = "four";
+		/*string newStat = "four";
 		string newStat2 = "five";
 		int newStatVal = 10;
 		int newStatVal2 = 2321;
@@ -184,11 +184,11 @@ namespace Tempest
 			LOG_ASSERT(character->get_stats()[3] == newStatVal2);
 			LOG_ASSERT(statline->get_stats()[3] == newStat2);
 
-		}
+		}*/
 	}
 	void testing_ecs_6()
 	{
-		const char* s = R"(S:\Development\Projects)";
+		/*const char* s = R"(S:\Development\Projects)";
 		string newStat = "four";
 		string newStat2 = "five";
 		int newStatVal = 10;
@@ -233,7 +233,7 @@ namespace Tempest
 			LOG_ASSERT(calc_char_some_stat("ATK") == newStatVal);
 
 			ecs.save(s);
-		}
+		}*/
 	}
 
 	void testing_ecs_7()

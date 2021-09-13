@@ -246,16 +246,16 @@ namespace Tempest
 					{
 						if (ImGui::Begin("Stats", &show))
 						{
-							for (auto i : sl->get_stats())
+							for (auto& [enabled, s] : sl->get_stat_range())
 							{
-								ImGui::Text(i.c_str());
+								ImGui::Text(s.c_str());
 							}
 
 
-							if (ImGui::Button("ADD"))
+							/*if (ImGui::Button("ADD"))
 							{
 								sl->add_stat(("Random" + std::to_string(sl->size() - 2)));
-							}
+							}*/
 						}
 						ImGui::End();
 					}
@@ -282,7 +282,7 @@ namespace Tempest
 						{
 							for (auto i = 0; i < sl->size(); i++)
 							{
-								string stat = sl->get_stats()[i] + " :";
+								string stat = sl->operator[](i) + " :";
 								ImGui::Text(stat.c_str());
 								ImGui::SameLine();
 								ImGui::Text(std::to_string(w->get_stat(i)).c_str());

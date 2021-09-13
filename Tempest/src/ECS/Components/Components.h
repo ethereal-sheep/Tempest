@@ -239,7 +239,6 @@ namespace Tempest
 			
 			static const char* get_type() { return "Character"; }
 
-
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, Character& component)
 			{
@@ -255,6 +254,7 @@ namespace Tempest
 
 			}
 
+			[[deprecated("No more removal of stat")]]
 			void remove_stat(size_t index)
 			{
 				if (index >= STAT_TOTAL)
@@ -272,16 +272,23 @@ namespace Tempest
 				stats[index] = val;
 			}
 
+			[[nodiscard]] int& operator[](size_t index)
+			{
+				return stats[index];
+			}
+
 			[[nodiscard]] int& get_stat(size_t index)
 			{
 				return stats[index];
 			}
 
+			[[deprecated("Iterate statline and get stat via []")]]
 			[[nodiscard]] const tvector<int>& get_stats() const
 			{
 				return stats;
 			}
 
+			[[deprecated("Iterate statline and get stat via []")]]
 			[[nodiscard]] auto get_stats_range() 
 			{
 				return make_range(stats);
@@ -313,9 +320,10 @@ namespace Tempest
 
 			Weapon() : stats(STAT_TOTAL, 0)
 			{
-
+				
 			}
 
+			[[deprecated("No more removal of stat")]]
 			void remove_stat(size_t index)
 			{
 				if (index >= STAT_TOTAL)
@@ -338,6 +346,12 @@ namespace Tempest
 				return stats[index];
 			}
 
+			[[nodiscard]] int& operator[](size_t index)
+			{
+				return stats[index];
+			}
+
+			[[deprecated("Iterate statline and get stat via []")]]
 			[[nodiscard]] const tvector<int>& get_stats() const
 			{
 				return stats;
@@ -377,100 +391,122 @@ namespace Tempest
 			friend Archiver& operator&(Archiver& ar, Statline& component)
 			{
 				ar.StartObject();
-				ar.Vector("Statline_Name", component.stats);
+				ar.Vector("Statline_Data", component.stat_list);
 				return ar.EndObject();
 			}
-			Statline()
+			Statline() : stat_list(STAT_TOTAL)
 			{
-				stats.push_back("HP");
+				/*stats.push_back("HP");
 				stats.push_back("ATK");
-				stats.push_back("DEF");
+				stats.push_back("DEF");*/
+
+				stat_list[0] = tpair<bool, string>(true, "HP");
+				stat_list[1] = tpair<bool, string>(true, "ATK");
+				stat_list[2] = tpair<bool, string>(true, "DEF");
+
+				stat_list[3] = tpair<bool, string>(false, "Stat1");
+				stat_list[4] = tpair<bool, string>(false, "Stat2");
+				stat_list[5] = tpair<bool, string>(false, "Stat3");
+				stat_list[6] = tpair<bool, string>(false, "Stat4");
+				stat_list[7] = tpair<bool, string>(false, "Stat5");
+				stat_list[8] = tpair<bool, string>(false, "Stat6");
+				stat_list[9] = tpair<bool, string>(false, "Stat7");
+				stat_list[10] = tpair<bool, string>(false, "Stat8");
+				stat_list[11] = tpair<bool, string>(false, "Stat9");
+				stat_list[12] = tpair<bool, string>(false, "Stat10");
 			}
 
-			bool remove_stat(size_t index)
+			[[deprecated("No more removal of stat")]] 
+			bool remove_stat(size_t )
 			{
-				if (index >= stats.size()) return false;
-
-				stats.erase(stats.begin() + index);
-				return true;
+				return false;
 			}
 
-			bool remove_stat(const string& name)
+			[[deprecated("No more removal of stat")]]
+			bool remove_stat(const string& )
 			{
-				auto f = std::find(stats.begin(), stats.end(), name);
-				if (f == stats.end()) return false;
-				stats.erase(f);
-				return true;
+				return false;
 			}
 
-
-			bool add_stat(const string& name)
+			[[deprecated("No more adding of stat")]]
+			bool add_stat(const string& )
 			{
-				if (stats.size() >= STAT_TOTAL)
-					return false;
-
-				auto f = std::find(stats.begin(), stats.end(), name);
-				if (f != stats.end()) return false;
-
-				stats.push_back(name);
-				return true;
+				return false;
 			}
 
-			bool rename_stat(size_t index, const string& newn)
+			[[deprecated("Rename stat via get_stats")]]
+			bool rename_stat(size_t , const string& )
 			{
-				if (index >= stats.size() || count(newn)) return false;
-				
-				stats[index] = newn;
+				return false;
 			}
-			bool rename_stat(const string& oldn, const string& newn)
+
+			[[deprecated("No more removal of stat")]]
+			bool rename_stat(const string& , const string& )
 			{
-				if(!exist(oldn) || exist(newn)) return false;
-
-				auto f = index_of_stat(oldn);
-				stats[f] = newn;
-				return true;
+				return false;
 			}
 
-
-			[[nodiscard]] size_t index_of_stat(const string& name) const
+			[[deprecated("No more removal of stat")]]
+			size_t index_of_stat(const string& name) const
 			{
-				auto f = std::find(stats.begin(), stats.end(), name);
-				return f - stats.begin();
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [&](auto pair)
+					{
+						return pair.second == name;
+					});
+				return f - stat_list.begin();
 			}
 
-			[[nodiscard]] const string& operator[](size_t index) const
+			[[nodiscard]] string& operator[](size_t index)
 			{
-				return stats[index];
+				return stat_list[index].second;
 			}
 
+			[[nodiscard]] bool& operator()(size_t index)
+			{
+				return stat_list[index].first;
+			}
 
 			[[nodiscard]] size_t count(const string& name) const
 			{
-				auto f = std::find(stats.begin(), stats.end(), name);
-				if (f == stats.end()) return 0;
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [&](auto pair)
+					{
+						return pair.second == name;
+					});
+				if (f == stat_list.end()) return 0;
 				return 1;
 			}
 
 			[[nodiscard]] bool exist(const string& name) const
 			{
-				auto f = std::find(stats.begin(), stats.end(), name);
-				if (f == stats.end()) return false;
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [&](auto pair)
+					{
+						return pair.second == name;
+					});
+				if (f == stat_list.end()) return false;
 				return true;
 			}
 
 			[[nodiscard]] size_t size() const
 			{
-				return stats.size();
+				return stat_list.size();
 			}
 
+			[[deprecated("use get_stat_range()")]]
 			[[nodiscard]] const tvector<string>& get_stats() const
 			{
 				return stats;
 			}
 
+			[[nodiscard]] auto get_stat_range()
+			{
+				return make_range(stat_list);
+			}
+
 		private:
 
 			tvector<string> stats;
+
+			tvector<tpair<bool, string>> stat_list;
 		};
 
 		struct ConflictGraph

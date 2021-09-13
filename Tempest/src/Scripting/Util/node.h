@@ -242,7 +242,7 @@ case category_type::NodeCategory:											\
 	END_NODE
 	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
 	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus, Multiply, Divide);
-	DEFINE_NODE(GetStatNode, GetStat, _cannot_be_empty);
+	DEFINE_NODE(GetStatNode, GetStat, Attacker, Defender, _cannot_be_empty);
 	DEFINE_NODE(SetStatNode, SetStat, _cannot_be_empty);
 	DEFINE_NODE(GetMainStatNode, GetMainStat, _cannot_be_empty);
 	DEFINE_NODE(ConflictNode, Conflict, Start, Win, Lose);

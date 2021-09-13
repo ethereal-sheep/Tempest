@@ -36,5 +36,7 @@ namespace Tempest
         Entity CurSelection = UNDEFINED;
         std::string NewStatName = "Stat";
         int NewStatValue = 0;
+
+
     };
 }

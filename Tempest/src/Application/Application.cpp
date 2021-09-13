@@ -41,9 +41,6 @@ namespace Tempest
 		//TestingDice();
 	}
 
-
-
-
 	void Application::OnEngineUpdate()
 	{
 		// Update Engine stuff first
