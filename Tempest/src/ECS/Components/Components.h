@@ -313,7 +313,7 @@ namespace Tempest
 
 			Weapon() : stats(STAT_TOTAL, 0)
 			{
-
+				
 			}
 
 			void remove_stat(size_t index)
@@ -385,6 +385,7 @@ namespace Tempest
 				stats.push_back("HP");
 				stats.push_back("ATK");
 				stats.push_back("DEF");
+
 			}
 
 			bool remove_stat(size_t index)
@@ -434,8 +435,11 @@ namespace Tempest
 
 			[[nodiscard]] size_t index_of_stat(const string& name) const
 			{
-				auto f = std::find(stats.begin(), stats.end(), name);
-				return f - stats.begin();
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [](auto pair)
+					{
+						return pair.second == name;
+					});
+				return f - stat_list.begin();
 			}
 
 			[[nodiscard]] const string& operator[](size_t index) const
@@ -446,21 +450,27 @@ namespace Tempest
 
 			[[nodiscard]] size_t count(const string& name) const
 			{
-				auto f = std::find(stats.begin(), stats.end(), name);
-				if (f == stats.end()) return 0;
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [](auto pair)
+					{
+						return pair.second == name;
+					});
+				if (f == stat_list.end()) return 0;
 				return 1;
 			}
 
 			[[nodiscard]] bool exist(const string& name) const
 			{
-				auto f = std::find(stats.begin(), stats.end(), name);
-				if (f == stats.end()) return false;
+				auto f = std::find_if(stat_list.begin(), stat_list.end(), [](auto pair)
+					{
+						return pair.second == name;
+					});
+				if (f == stat_list.end()) return false;
 				return true;
 			}
 
 			[[nodiscard]] size_t size() const
 			{
-				return stats.size();
+				return stat_list.size();
 			}
 
 			[[nodiscard]] const tvector<string>& get_stats() const
@@ -468,9 +478,16 @@ namespace Tempest
 				return stats;
 			}
 
+			[[nodiscard]] auto get_stat_range()
+			{
+				return make_range(stat_list);
+			}
+
 		private:
 
 			tvector<string> stats;
+
+			tvector<tpair<bool, string>> stat_list;
 		};
 
 		struct ConflictGraph

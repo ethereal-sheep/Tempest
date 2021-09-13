@@ -88,7 +88,7 @@ namespace Tempest
 				ImGui::Dummy({ 0, 10.f });
 				ImGui::BeginChild("##CharacterInfo", ImVec2(ImGui::GetColumnWidth(1) - 10.f, viewport->Size.y * 0.5f));
 				//Name
-				ImGui::PushFont(FONT_PARA);
+				ImGui::PushFont(FONT_BODY);
 				ImGui::Dummy({ frontPadding, 0 });
 				ImGui::SameLine();
 				ImGui::Text("Name");
