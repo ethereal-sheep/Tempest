@@ -450,7 +450,6 @@ namespace Tempest
 					string s = magic_enum::enum_name(gsn->get_type()).data();
 					auto index = std::stoi(gsn->get_name());
 
-
 					string name = "Get " + s + " " + (*statline)[index];
 					ImGui::Text(name.c_str());
 					twidth = ImGui::CalcTextSize(name.c_str()).x;

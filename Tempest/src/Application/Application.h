@@ -9,6 +9,7 @@ namespace Tempest
 	{
 	public:
 		Application(uint32_t width, uint32_t height, std::wstring name);
+		virtual ~Application() {}
 
 		void OnEngineInit();
 		void OnEngineUpdate();
