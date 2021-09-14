@@ -423,7 +423,7 @@ namespace Tempest
 					ImGui::CalcTextSize(input.get_name().c_str()).x);
 			}
 
-			//float twidth = ImGui::CalcTextSize(n->get_name().c_str()).x;
+			float twidth = ImGui::CalcTextSize(n->get_name().c_str()).x;
 
 			// Title
 			//auto size = ax::NodeEditor::GetNodeSize(id);
@@ -438,6 +438,7 @@ namespace Tempest
 				if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
 				{
 					auto gid = gn->graph_entity;
+
 					ImGui::Text("%s: %u", instance.ecs.get<tc::Graph>(gid).g.get_name().c_str(), gid);
 				}
 				else if (auto gsn = dynamic_cast<GetStatNode*>(n.get()))
@@ -449,7 +450,10 @@ namespace Tempest
 					string s = magic_enum::enum_name(gsn->get_type()).data();
 					auto index = std::stoi(gsn->get_name());
 
-					ImGui::Text("Get %s %s", s.c_str(), statline->operator[](index).c_str());
+
+					string name = "Get " + s + " " + (*statline)[index];
+					ImGui::Text(name.c_str());
+					twidth = ImGui::CalcTextSize(name.c_str()).x;
 				}
 				else
 					ImGui::Text(n->get_name().c_str());
@@ -463,9 +467,12 @@ namespace Tempest
 				draw_input_pin(input);
 			}
 
-			if(!n->get_num_inputs())
-				ImGui::Dummy({ 50.f, 0.1f });
-
+			float extra_offset = 0.f;
+			if (!n->get_num_inputs())
+			{
+				extra_offset = 50.f;
+				ImGui::Dummy({ twidth - owidth, 0.1f });
+			}
 			ImGui::EndGroup();
 
 			// Output group
@@ -626,7 +633,9 @@ namespace Tempest
 
 					for (auto i = 0; i < statline->size(); ++i)
 					{
-						std::string text = "Get Attacker " + statline->operator[](i);
+						if (!(*statline)(i)) continue;
+
+						std::string text = "Get Attacker " + (*statline)[i];
 						ImGui::Indent(10.f);
 						if (ImGui::Selectable(text.c_str()))
 						{
@@ -653,7 +662,9 @@ namespace Tempest
 
 					for (auto i = 0; i < statline->size(); ++i)
 					{
-						std::string text = "Get Defender " + statline->operator[](i);
+						if (!(*statline)(i)) continue;
+
+						std::string text = "Get Attacker " + (*statline)[i];
 						ImGui::Indent(10.f);
 						if (ImGui::Selectable(text.c_str()))
 						{
