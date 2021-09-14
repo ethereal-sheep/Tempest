@@ -405,7 +405,7 @@ namespace Tempest
 				stat_list[2] = tpair<bool, string>(true, "DEF");
 
 				stat_list[3] = tpair<bool, string>(false, "Stat1");
-				stat_list[4] = tpair<bool, string>(true, "Stat2");
+				stat_list[4] = tpair<bool, string>(false, "Stat2");
 				stat_list[5] = tpair<bool, string>(false, "Stat3");
 				stat_list[6] = tpair<bool, string>(false, "Stat4");
 				stat_list[7] = tpair<bool, string>(false, "Stat5");

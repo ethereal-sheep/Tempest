@@ -279,7 +279,7 @@ namespace Tempest
 							ImGui::SameLine();
 							if(disabled)
 							{
-								ImGui::Text("9 Char only");
+								ImGui::Text("15 Char only");
 							}
 							else
 							{
@@ -287,9 +287,8 @@ namespace Tempest
 							}
 							ImGui::Dummy({ 0, 10.f });
 							ImGui::BeginChild("##EditWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
-							for (auto i = 0; i < sl->size(); i++)
+							for (auto i = 0, j = 0; i < sl->size(); i++)
 							{
-								
 								if ((*sl)(i))
 								{
 									ImGui::Text(sl->operator[](i).c_str());
@@ -300,12 +299,13 @@ namespace Tempest
 									string WeapStats = "##WeapStats" + std::to_string(i);
 									ImGui::InputInt(WeapStats.c_str(), &EditWeap.get_stat(i), 0);
 
-									if (i % 2 == 0)
+									if (j % 2 == 0)
 									{
 										ImGui::SameLine();
 										ImGui::Dummy({ 10.f, 0 });
 										ImGui::SameLine();
 									}
+									j++;
 								}
 							}
 
@@ -465,7 +465,7 @@ namespace Tempest
 								ImGui::SameLine();
 								if(disabled)
 								{
-									ImGui::Text("9 Char only");
+									ImGui::Text("15 Char only");
 								}
 								else
 								{
@@ -473,21 +473,25 @@ namespace Tempest
 								}
 								ImGui::Dummy({ 0, 10.f });
 								ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f }, true);
-								for (auto i = 0; i < sl->size(); i++)
+								for (auto i = 0, j = 0; i < sl->size(); i++)
 								{
-									ImGui::Text(sl->operator[](i).c_str());
-									ImGui::SameLine();
-									ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
-									ImGui::SameLine();
-									ImGui::SetNextItemWidth(80.f);
-									string WeapStats = "##WeapStats" + std::to_string(i);
-									ImGui::InputInt(WeapStats.c_str(), &NewWeap.get_stat(i), 0);
-
-									if (i % 2 == 0)
+									if ((*sl)(i))
 									{
+										ImGui::Text(sl->operator[](i).c_str());
 										ImGui::SameLine();
-										ImGui::Dummy({ 10.f, 0 });
+										ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 										ImGui::SameLine();
+										ImGui::SetNextItemWidth(80.f);
+										string WeapStats = "##WeapStats" + std::to_string(i);
+										ImGui::InputInt(WeapStats.c_str(), &NewWeap.get_stat(i), 0);
+
+										if (j % 2 == 0)
+										{
+											ImGui::SameLine();
+											ImGui::Dummy({ 10.f, 0 });
+											ImGui::SameLine();
+										}
+										j++;
 									}
 								}
 
@@ -609,10 +613,6 @@ namespace Tempest
 			}
 			
 			ImGui::End();
-			
-		//	ImGui::PopStyleVar(3);
-		//	ImGui::PopStyleColor(4);
-			
 		}
 		
 		
