@@ -35,24 +35,61 @@ namespace Tempest
 				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
 				// Drag drop section
 				{
-					ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.3f), true, ImGuiWindowFlags_NoScrollWithMouse);
+					const float availRegion = ImGui::GetContentRegionAvail().y * 0.3f;
+					ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, availRegion), true, window_flags | ImGuiWindowFlags_NoScrollbar);
 
-					// VS word (please bring y-axis down to centre
-					center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
-					text = "VS";
-					text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
-					ImGui::Dummy(ImVec2{ text_center, 0.f });
+					// Attacker section
+					{
+						ImGui::BeginChild("##DragDropAttackerSimulate", ImVec2(contentSize * 0.5f, availRegion - 2.0f), false, window_flags | ImGuiWindowFlags_NoScrollbar);
+
+						if (Attacker != UNDEFINED)
+						{
+							auto& character = instance.ecs.get<tc::Character>(Attacker);
+							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 200.0f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { 180, 15 }, FONT_PARA)) {}
+						}
+
+						ImGui::EndChild();
+
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UNIT_CONTENT_ITEM"))
+							{
+								Attacker = *(const Entity*)payload->Data;
+							}
+
+							ImGui::EndDragDropTarget();
+						}
+					}
+				
+
 					ImGui::SameLine();
-					ImGui::PushFont(FONT_SHEAD);
-					ImGui::Text(text.c_str());
-					ImGui::PopFont();
 
-				//	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() / 3.0f);
+					// Defender section
+					{
+						ImGui::BeginChild("##DragDropDefenderSimulate", ImVec2(contentSize * 0.5f, availRegion - 2.0f), false, window_flags | ImGuiWindowFlags_NoScrollbar);
+						if (Defender != UNDEFINED)
+						{
+							auto& character = instance.ecs.get<tc::Character>(Defender);
+							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), { ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { 180, 15 }, FONT_PARA)) {}
+						}
+						ImGui::EndChild();
 
 
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UNIT_CONTENT_ITEM"))
+							{
+								Defender = *(const Entity*)payload->Data;
+							}
+
+							ImGui::EndDragDropTarget();
+						}
+					}
+					
 
 					ImGui::EndChild();
 				}
+		
 
 				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
 				// Content selection section
@@ -72,9 +109,24 @@ namespace Tempest
 					unsigned i = 0;
 					for (auto id : view)
 					{
+						ImGui::PushID(id);
+						ImGui::BeginGroup();
+						const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
+
 						auto& Charac = instance.ecs.get<tc::Character>(id);
-						if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y + i++ * 80 }, { 180, 15 }, FONT_PARA))
-							Tab = i;
+						if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), pos, { 180, 15 }, FONT_PARA)) {}
+
+						ImGui::EndGroup();
+				
+						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+						{
+							ImGui::SetDragDropPayload("UNIT_CONTENT_ITEM", &id, sizeof(Entity));
+							UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y }, { 180, 15 }, FONT_PARA);
+							ImGui::EndDragDropSource();
+						}
+
+						ImGui::PopID();
+				
 					}
 
 					ImGui::EndChild();
