@@ -9,7 +9,6 @@
 **********************************************************************************/
 #pragma once
 #include "SoundDefinition.h"
-#include "SoundMeta.h"
 #include "TMath.h"
 #include "Core.h"
 
@@ -42,9 +41,9 @@ namespace Tempest
 		ChannelID Play(tpath path, string bus, float vol = 0.5f, bool loop = false);
 
 		// registers a sound and loads it
-		void RegisterSound(tpath file_path, bool is3D);
-		void Register2DSound(tpath file_path);
-		void Register3DSound(tpath file_path);
+		bool RegisterSound(tpath file_path, bool is3D);
+		bool Register2DSound(tpath file_path);
+		bool Register3DSound(tpath file_path);
 
 		// checks if a sound exists
 		bool CheckSoundExist(tpath file_path);

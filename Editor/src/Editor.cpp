@@ -17,6 +17,7 @@
 #include "Graphics/OpenGL/RenderSystem.h"
 #include "Util/GuizmoController.h"
 
+#include "Audio/AudioEngine.h"
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -26,6 +27,7 @@ namespace Tempest
 	void init_font();
 	void init_style();
 	void init_file_dialog();
+	void init_sounds();
 
 	class Editor : public Application
 	{
@@ -56,6 +58,7 @@ namespace Tempest
 			init_font();
 			init_style();
 			init_file_dialog();
+			init_sounds();
 		}
 
 		void OnUpdate() override
@@ -315,5 +318,17 @@ namespace Tempest
 			GLuint texID = PtrToUint(tex);
 			glDeleteTextures(1, &texID);
 		};
+	}
+	void init_sounds()
+	{
+		AudioEngine ae;
+		for (auto entry : fs::directory_iterator(R"(Sounds2D/)"))
+		{
+			LOG_ASSERT(ae.Register2DSound(entry.path()));
+		}
+		for (auto entry : fs::directory_iterator("Sounds3D/"))
+		{
+			LOG_ASSERT(ae.Register3DSound(entry.path()));
+		}
 	}
 }

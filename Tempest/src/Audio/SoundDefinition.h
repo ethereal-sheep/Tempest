@@ -21,7 +21,7 @@ namespace Tempest
 
 		// 3d stuff
 		vec3 m_Pos{ 0.f };
-		float m_MinDistance{ 0.f };
+		float m_MinDistance{ 1.f };
 		float m_MaxDistance{ 500.f };
 
 		//booleans

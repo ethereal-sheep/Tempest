@@ -10,8 +10,6 @@ namespace Tempest
 {
 	void DiagnosticsWindow::init(Instance& )
 	{
-		AudioEngine ae; 
-		ae.Register2DSound("Sounds/Hit.wav");
 	}
 	void DiagnosticsWindow::show(Instance& instance)
 	{
@@ -74,10 +72,17 @@ namespace Tempest
 			Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Error triggered by Diagnostics!");
 		if (ImGui::Button("Trigger TEvent<string>"))
 			Service<EventManager>::Get().instant_dispatch<TEvent<string>>("Error triggered by Diagnostics!");
+
+		static float a = 0.f;
+		ImGui::DragFloat("Test", &a);
 		if (ImGui::Button("Play Sound"))
 		{
 			AudioEngine ae;
-			ae.Play("Sounds/Hit.wav", "SFX");
+			SoundDefinition sd;
+			
+			sd.m_Pos = vec3{a, 0.f, 0.f};
+
+			ae.Play("Sounds3D/Hit.wav", "SFX", sd);
 		}
 		
 	}

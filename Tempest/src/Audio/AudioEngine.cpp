@@ -244,7 +244,7 @@ namespace Tempest
 		Implementation()
 		{
 			System_Create(&mp_System);
-			mp_System->init(128, FMOD_INIT_NORMAL, nullptr);
+			mp_System->init(128, FMOD_INIT_3D_RIGHTHANDED, nullptr);
 
 			FMOD::ChannelGroup* bus;
 			bus = nullptr;
@@ -371,20 +371,23 @@ namespace Tempest
 	}
 
 
-	void AudioEngine::RegisterSound(tpath file_path, bool is3D)
+	bool AudioEngine::RegisterSound(tpath file_path, bool is3D)
 	{
+		if (audioImpl->m_Sounds.count(file_path))
+			return true;
+
 		audioImpl->m_Sounds.emplace(file_path, nullptr);
-		audioImpl->Load(file_path, is3D);
+		return audioImpl->Load(file_path, is3D);
 	}
 
-	void AudioEngine::Register2DSound(tpath file_path)
+	bool AudioEngine::Register2DSound(tpath file_path)
 	{
-		RegisterSound(file_path, false);
+		return RegisterSound(file_path, false);
 	}
 
-	void AudioEngine::Register3DSound(tpath file_path)
+	bool AudioEngine::Register3DSound(tpath file_path)
 	{
-		RegisterSound(file_path, true);
+		return RegisterSound(file_path, true);
 	}
 
 	bool AudioEngine::CheckSoundExist(tpath file_path)
