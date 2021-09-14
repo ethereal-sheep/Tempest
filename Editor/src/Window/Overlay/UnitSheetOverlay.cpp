@@ -101,39 +101,42 @@ namespace Tempest
 
 				for (auto i = 0; i < sl->size(); i++)
 				{
-					string stat = sl->operator[](i) + " :";
-					string label = "##" + stat;
-					//auto data = std::to_string(cs->get_stat(i));
-					string WeaponData = "";
-					if (cs->weapon != UNDEFINED)
+					if ((*sl)(i))
 					{
-						auto weap = instance.ecs.get_if<tc::Weapon>(cs->weapon);
-
-						if (weap->get_stat(i) > 0)
+						string stat = sl->operator[](i) + " :";
+						string label = "##" + stat;
+						//auto data = std::to_string(cs->get_stat(i));
+						string WeaponData = "";
+						if (cs->weapon != UNDEFINED)
 						{
-							string data = std::to_string(weap->get_stat(i));
-							WeaponData = "( +" + data + " )";
-						}
-						else if (weap->get_stat(i) < 0)
-						{
-							string data = std::to_string(weap->get_stat(i));
-							WeaponData = "( " + data + " )";
+							auto weap = instance.ecs.get_if<tc::Weapon>(cs->weapon);
+
+							if (weap->get_stat(i) > 0)
+							{
+								string data = std::to_string(weap->get_stat(i));
+								WeaponData = "( +" + data + " )";
+							}
+							else if (weap->get_stat(i) < 0)
+							{
+								string data = std::to_string(weap->get_stat(i));
+								WeaponData = "( " + data + " )";
+							}
+
 						}
 
+
+						ImGui::Dummy({ frontPadding, 0 });
+						ImGui::SameLine();
+						ImGui::Text(stat.c_str());
+						ImGui::Dummy({ frontPadding, 0 });
+						ImGui::SameLine();
+						ImGui::PushItemWidth(100.f);
+						ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
+						ImGui::PopItemWidth();
+						ImGui::SameLine();
+						ImGui::Text(WeaponData.c_str());
+						ImGui::Dummy({ 0, 10.f });
 					}
-
-
-					ImGui::Dummy({ frontPadding, 0 });
-					ImGui::SameLine();
-					ImGui::Text(stat.c_str());
-					ImGui::Dummy({ frontPadding, 0 });
-					ImGui::SameLine();
-					ImGui::PushItemWidth(100.f);
-					ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
-					ImGui::PopItemWidth();
-					ImGui::SameLine();
-					ImGui::Text(WeaponData.c_str());
-					ImGui::Dummy({ 0, 10.f });
 
 				}
 				ImGui::PopFont();
@@ -286,19 +289,23 @@ namespace Tempest
 							ImGui::BeginChild("##EditWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
 							for (auto i = 0; i < sl->size(); i++)
 							{
-								ImGui::Text(sl->operator[](i).c_str());
-								ImGui::SameLine();
-								ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
-								ImGui::SameLine();
-								ImGui::SetNextItemWidth(80.f);
-								string WeapStats = "##WeapStats" + std::to_string(i);
-								ImGui::InputInt(WeapStats.c_str(), &EditWeap.get_stat(i), 0);
-
-								if (i % 2 == 0)
+								
+								if ((*sl)(i))
 								{
+									ImGui::Text(sl->operator[](i).c_str());
 									ImGui::SameLine();
-									ImGui::Dummy({ 10.f, 0 });
+									ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 									ImGui::SameLine();
+									ImGui::SetNextItemWidth(80.f);
+									string WeapStats = "##WeapStats" + std::to_string(i);
+									ImGui::InputInt(WeapStats.c_str(), &EditWeap.get_stat(i), 0);
+
+									if (i % 2 == 0)
+									{
+										ImGui::SameLine();
+										ImGui::Dummy({ 10.f, 0 });
+										ImGui::SameLine();
+									}
 								}
 							}
 
