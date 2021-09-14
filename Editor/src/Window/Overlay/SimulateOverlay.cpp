@@ -26,20 +26,37 @@ namespace Tempest
 				string text = "Simulate";
 				float text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
 
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.1f });
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 				UI::SubHeader(ImVec2{ text_center - 100.f,50 }, "Simulate");
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.1f});
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f});
 
-				text = "Simulate your resolution here with up to two selected units.";
-				text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
-                ImGui::Dummy(ImVec2{ text_center, 0.f});
-                ImGui::SameLine();
-				ImGui::PushFont(FONT_PARA);
-				ImGui::Text(text.c_str());
-				ImGui::PopFont();
-				ImGui::Dummy({ (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f, 10.0f});
-				ImGui::SameLine();
-				ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.6f), true, ImGuiWindowFlags_NoScrollWithMouse);
+				const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
+
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+				// Drag drop section
+				{
+					ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.3f), true, ImGuiWindowFlags_NoScrollWithMouse);
+
+					// VS word (please bring y-axis down to centre
+					center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
+					text = "VS";
+					text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
+					ImGui::Dummy(ImVec2{ text_center, 0.f });
+					ImGui::SameLine();
+					ImGui::PushFont(FONT_SHEAD);
+					ImGui::Text(text.c_str());
+					ImGui::PopFont();
+
+				//	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() / 3.0f);
+
+
+
+					ImGui::EndChild();
+				}
+
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+				// Content selection section
+				ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.8f), true, ImGuiWindowFlags_NoScrollWithMouse);
 				
 				const auto regoinAvailWidth = ImGui::GetContentRegionAvailWidth() / 3.0f - Padding;
 				const auto regoinAvailHeight = ImGui::GetContentRegionAvail().y;

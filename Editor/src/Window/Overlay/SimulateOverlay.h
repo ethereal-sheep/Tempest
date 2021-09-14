@@ -28,6 +28,7 @@ namespace Tempest
         const float Padding = 100.0f;
         const float HalfPadding = Padding * 0.5f;
         const unsigned NumOfButtons = 6;
-       
+        Entity Attacker = UNDEFINED;
+        Entity Defender = UNDEFINED;
     };
 }

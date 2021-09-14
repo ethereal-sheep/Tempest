@@ -472,7 +472,7 @@ namespace Tempest
 									ImGui::Dummy({ 100.f, 10.f });
 								}
 								ImGui::Dummy({ 0, 10.f });
-								ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f }, true);
+								ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
 								for (auto i = 0, j = 0; i < sl->size(); i++)
 								{
 									if ((*sl)(i))
