@@ -148,4 +148,12 @@ namespace Tempest
 	 * @brief Alias for filesystem directory entry
 	 */
 	using tentry = std::filesystem::directory_entry;
+
+	struct fs_hash
+	{
+		size_t operator()(const tpath& path) const
+		{
+			return fs::hash_value(path);
+		}
+	};
 }

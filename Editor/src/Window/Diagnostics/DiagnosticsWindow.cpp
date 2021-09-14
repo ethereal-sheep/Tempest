@@ -3,9 +3,16 @@
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
 #include "Graphics/OpenGL/RenderSystem.h"
+#include "Audio/AudioEngine.h"
+
 
 namespace Tempest
 {
+	void DiagnosticsWindow::init(Instance& )
+	{
+		AudioEngine ae; 
+		ae.Register2DSound("Sounds/Hit.wav");
+	}
 	void DiagnosticsWindow::show(Instance& instance)
 	{
 		if (ImGui::Begin(window_name(), &visible, window_flags))
@@ -67,6 +74,12 @@ namespace Tempest
 			Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Error triggered by Diagnostics!");
 		if (ImGui::Button("Trigger TEvent<string>"))
 			Service<EventManager>::Get().instant_dispatch<TEvent<string>>("Error triggered by Diagnostics!");
+		if (ImGui::Button("Play Sound"))
+		{
+			AudioEngine ae;
+			ae.Play("Sounds/Hit.wav", "SFX");
+		}
+		
 	}
 
 	void DiagnosticsWindow::ShowFPSGraph()
@@ -219,6 +232,11 @@ namespace Tempest
 			if (UI::DragFloat3ColorBox("left", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(left), 0.f, 1.f).first) {}
 
 		}
+	}
+
+	void DiagnosticsWindow::Audio(Instance& instance)
+	{
+
 	}
 
 	void DiagnosticsWindow::Mouse(Instance& instance)

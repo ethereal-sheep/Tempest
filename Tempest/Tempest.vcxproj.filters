@@ -36,9 +36,6 @@
     <ClCompile Include="src\Audio\AudioEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Audio\AudioManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ECS\Components\Components.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -338,13 +335,7 @@
     <ClInclude Include="src\Audio\AudioEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Audio\AudioManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Audio\SoundDefinition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Audio\SoundMeta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Util\Serializer\Public\Reader.h">

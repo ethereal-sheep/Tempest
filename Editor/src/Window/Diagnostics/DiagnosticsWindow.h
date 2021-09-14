@@ -12,6 +12,7 @@ namespace Tempest
 			return ICON_FA_STETHOSCOPE " Diagnostics";
 		}
 
+		void init(Instance& instance) override;
 		void show(Instance& instance) override;
 
 		void Runtime(Instance& instance);
@@ -23,6 +24,7 @@ namespace Tempest
 		void StatisticalData(Instance& instance);
 		void AllocationHistory(Instance& instance);
 		void Camera(Instance& instance);
+		void Audio(Instance& instance);
 		void Mouse(Instance& instance);
 
 		std::vector<float> fps_values;

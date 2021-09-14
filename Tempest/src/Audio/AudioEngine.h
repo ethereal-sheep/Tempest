@@ -11,102 +11,95 @@
 #include "SoundDefinition.h"
 #include "SoundMeta.h"
 #include "TMath.h"
+#include "Core.h"
 
 namespace Tempest
 {
-	namespace Audio
+	using SoundID = size_t;
+	using ChannelID = id_t;
+
+	constexpr ChannelID NO_SOUND = static_cast<ChannelID>(-1);
+	constexpr ChannelID NO_CHANNEL = static_cast<ChannelID>(-1);
+
+	class AudioEngine
 	{
-		using SoundID = size_t;
-		using ChannelID = size_t;
+	public:
+		static void Init();
+		static void Update();
+		static void Shutdown();
+		static bool IsOkay();
 
-		constexpr ChannelID NO_SOUND = static_cast<ChannelID>(-1);
-		constexpr ChannelID NO_CHANNEL = static_cast<ChannelID>(-1);
+		/**********************************************************************
+		*
+		* Sound functions
+		*
+		***********************************************************************/
+		// play sound with highest level of specifics
+		ChannelID Play(
+			tpath path, string bus, const SoundDefinition &);
 
-		class AudioEngine
-		{
-		public:
-			static void Init();
-			static void Update(float dt);
-			static void Shutdown();
-			static bool IsOkay();
+		// Play 
+		ChannelID Play(tpath path, string bus, float vol = 0.5f, bool loop = false);
 
-			/**********************************************************************
-			*
-			* Sound functions
-			*
-			***********************************************************************/
-			SoundID RegisterSound(const SoundMeta& sd);
-			SoundID RegisterSound(SoundMeta&& sd);
-			void UnregisterSound(SoundID id);
+		// registers a sound and loads it
+		void RegisterSound(tpath file_path, bool is3D);
+		void Register2DSound(tpath file_path);
+		void Register3DSound(tpath file_path);
 
-			// load a sound given by the id, meta should already be specified
-			bool Load(SoundID id);
+		// checks if a sound exists
+		bool CheckSoundExist(tpath file_path);
 
-			// unloads a sound
-			bool Unload(SoundID id);
-			void UnloadAllSounds();
+		/**********************************************************************
+		*
+		* Channel functions
+		*
+		***********************************************************************/
+		// stops given channel (fade time not implemented yet)
+		void StopChannel(ChannelID channelID);
 
-			// plays a sound and returns the channel id
-			ChannelID Play(
-				SoundID id, const SoundDefinition& = SoundDefinition{});
+		// pause/unpause given channel
+		void TogglePauseChannel(ChannelID channelID);
 
-			// gets the sound def
-			SoundMeta& GetSoundMeta(SoundID id);
+		// stops all channels
+		void StopAllChannels();
 
-			bool HasSoundMeta(SoundID id);
+		// pause all channels
+		void PauseAllChannels();
+		void UnpauseAllChannels();
+
+		// sets the listener position and orientation
+		// can add velocity for doppler
+		void Set3DListener(
+			const vec3& pos,
+			const vec3& look,
+			const vec3& up);
 
 
-			/**********************************************************************
-			*
-			* Channel functions
-			*
-			***********************************************************************/
-			// stops given channel (fade time not implemented yet)
-			void StopChannel(const size_t& channelID);
+		// sets the channel 3D position
+		// note: no effect for 2D sounds
+		void SetChannel3dPosition(ChannelID channelID, vec3 pos);
+		
+		// check if a bus exist
+		bool CheckBusExist(const std::string& bus);
 
-			// pause/unpause given channel
-			void TogglePauseChannel(const size_t& channelID);
+		// getters/setter volume
+		void SetChannelVolume(ChannelID channelID, float vol);
+		float GetChannelVolume(ChannelID channelID);
 
-			// stops all channels
-			void StopAllChannels();
+		// set/get the bus volume
+		void SetBusVolume(const std::string& bus, float vol);
+		float GetBusVolume(const std::string& bus);
 
-			// pause all channels
-			void PauseAllChannels();
-			void UnpauseAllChannels();
+		// set/get master volume
+		void SetMasterVolume(float vol);
+		float GetMasterVolume();
 
-			// sets the listener position and orientation
-			// can add velocity for doppler
-			void Set3DListener(
-				const vec3& pos,
-				const vec3& look,
-				const vec3& up);
+		void ResetVolume();
 
-			/*void Set3DListenerOrientation(
-				const quat&);*/
+		// returns true if given channgel is playing
+		bool IsPlaying(ChannelID channelID);
 
-			// sets the channel 3D position
-			// note: no effect for 2D sounds
-			void SetChannel3dPosition(const size_t& channelID, const vec3& pos);
-
-			bool CheckBusExist(const std::string& bus);
-
-			// getters/setter volume
-			void SetChannelVolume(const size_t& channelID, float vol);
-			float GetChannelVolume(const size_t& channelID);
-
-			void SetBusVolume(const std::string& bus, float vol);
-			float GetBusVolume(const std::string& bus);
-
-			void SetMasterVolume(float vol);
-			float GetMasterVolume();
-
-			void ResetVolume();
-
-			// returns true if given channgel is playing
-			bool IsPlaying(const size_t& channelID);
-
-			// returns the duration of the channel in ms
-			unsigned int GetChannelLength(const size_t& channelID);
-		};
-	}
+		// returns the duration of the channel in ms
+		unsigned int GetChannelLength(ChannelID channelID);
+	};
 }
