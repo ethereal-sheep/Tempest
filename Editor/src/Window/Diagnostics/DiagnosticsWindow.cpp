@@ -350,6 +350,8 @@ namespace Tempest
 		ImGui::PushID("Intensity");
 		if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
 		ImGui::PopID();
+	}
+
 	void DiagnosticsWindow::Textures(Instance&)
 	{
 		if (ImGui::CollapsingHeader("Textures", ImGuiTreeNodeFlags_DefaultOpen))
