@@ -10,6 +10,7 @@ namespace Tempest
 {
 	void DiagnosticsWindow::init(Instance&)
 	{
+
 	}
 	void DiagnosticsWindow::show(Instance& instance)
 	{
@@ -40,6 +41,11 @@ namespace Tempest
 				if (ImGui::BeginTabItem("Audio"))
 				{
 					Audio(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Textures"))
+				{
+					Textures(instance);
 					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("Mouse"))
@@ -232,7 +238,7 @@ namespace Tempest
 		}
 	}
 
-	void DiagnosticsWindow::Audio(Instance& instance)
+	void DiagnosticsWindow::Audio(Instance& )
 	{
 		if (ImGui::CollapsingHeader("2D Sounds", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -324,6 +330,34 @@ namespace Tempest
 
 
 		}
+	}
+
+	void DiagnosticsWindow::Textures(Instance&)
+	{
+		if (ImGui::CollapsingHeader("Textures", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			for (auto entry : fs::directory_iterator(R"(Assets/)"))
+			{
+				auto path = entry.path();
+				auto selected = curr_tex ? curr_tex->GetName() == path.string() : false;
+				if (ImGui::Selectable(path.string().c_str(), selected))
+				{
+					curr_tex = tex_map[path];
+				}
+			}
+		}
+
+		// example
+		// everything in Resources/Assets will load into this map
+		// tex_map["Assets/test_photo.png"] (gets shared_ptr to texture, interface might change in future)
+		// if doesn't exist, its nullptr
+
+		UI::PaddedSeparator(0.5f);
+
+		if(curr_tex)
+			ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+
+
 	}
 
 }

@@ -28,6 +28,8 @@ namespace Tempest
 	void init_style();
 	void init_file_dialog();
 	void init_sounds();
+	void init_ui_textures();
+	void clear_ui_textures();
 
 	class Editor : public Application
 	{
@@ -59,6 +61,7 @@ namespace Tempest
 			init_style();
 			init_file_dialog();
 			init_sounds();
+			init_ui_textures();
 		}
 
 		void OnUpdate() override
@@ -131,7 +134,10 @@ namespace Tempest
 
 		void OnExit() override
 		{
+
 			instance_manager.exit();
+
+			clear_ui_textures();
 
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui_ImplWin32_Shutdown();
@@ -330,5 +336,16 @@ namespace Tempest
 		{
 			LOG_ASSERT(ae.Register3DSound(entry.path()));
 		}
+	}
+	void init_ui_textures()
+	{
+		for (auto entry : fs::directory_iterator(R"(Assets/)"))
+		{
+			tex_map[entry.path()] = make_sptr<Texture>(entry.path().string(), false);
+		}
+	}
+	void clear_ui_textures()
+	{
+		tex_map.clear();
 	}
 }

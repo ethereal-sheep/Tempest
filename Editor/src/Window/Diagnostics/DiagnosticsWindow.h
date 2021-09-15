@@ -27,6 +27,7 @@ namespace Tempest
 		void Camera(Instance& instance);
 		void Audio(Instance& instance);
 		void Mouse(Instance& instance);
+		void Textures(Instance& instance);
 
 		std::vector<float> fps_values;
 		std::vector<float> alloc_values;
@@ -34,6 +35,7 @@ namespace Tempest
 
 
 		const int graphsize = 100;
+		tsptr<Texture> curr_tex;
 		AudioPlayer player;
 	};
 }
