@@ -3,9 +3,15 @@
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
 #include "Graphics/Basics/RenderSystem.h"
+#include "Audio/AudioEngine.h"
+
 
 namespace Tempest
 {
+	void DiagnosticsWindow::init(Instance&)
+	{
+
+	}
 	void DiagnosticsWindow::show(Instance& instance)
 	{
 		if (ImGui::Begin(window_name(), &visible, window_flags))
@@ -30,6 +36,16 @@ namespace Tempest
 				if (ImGui::BeginTabItem("Camera"))
 				{
 					Camera(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Audio"))
+				{
+					Audio(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Textures"))
+				{
+					Textures(instance);
 					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("Mouse"))
@@ -72,6 +88,7 @@ namespace Tempest
 			Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Error triggered by Diagnostics!");
 		if (ImGui::Button("Trigger TEvent<string>"))
 			Service<EventManager>::Get().instant_dispatch<TEvent<string>>("Error triggered by Diagnostics!");
+
 	}
 
 	void DiagnosticsWindow::ShowFPSGraph()
@@ -178,7 +195,7 @@ namespace Tempest
 
 			auto pos = cam.GetPosition();
 
-			if(UI::DragFloat3ColorBox("Position", "##CameraPosDrag", ImVec2{ padding , 0.f }, value_ptr(pos), 0.f, 0.1f).first)
+			if (UI::DragFloat3ColorBox("Position", "##CameraPosDrag", ImVec2{ padding , 0.f }, value_ptr(pos), 0.f, 0.1f).first)
 				cam.SetPosition(pos);
 		}
 
@@ -215,7 +232,7 @@ namespace Tempest
 			ImGui::PopID();
 		}
 		{
-			
+
 
 			auto up = cam.GetUp();
 			auto front = cam.GetFront();
@@ -224,6 +241,53 @@ namespace Tempest
 			if (UI::DragFloat3ColorBox("front", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(front), 0.f, 1.f).first) {}
 			if (UI::DragFloat3ColorBox("left", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(left), 0.f, 1.f).first) {}
 
+		}
+	}
+
+	void DiagnosticsWindow::Audio(Instance& )
+	{
+		if (ImGui::CollapsingHeader("2D Sounds", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			for (auto entry : fs::directory_iterator(R"(Sounds2D/)"))
+			{
+				auto path = entry.path();
+				auto selected = entry.path() == player.GetCurrentTrack();
+				if (ImGui::Selectable(path.string().c_str(), selected))
+				{
+					player.SelectNewTrack(path);
+				}
+			}
+		}
+		if (ImGui::CollapsingHeader("3D Sounds", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			for (auto entry : fs::directory_iterator(R"(Sounds3D/)"))
+			{
+				auto path = entry.path();
+				auto selected = entry.path() == player.GetCurrentTrack();
+				if (ImGui::Selectable(path.string().c_str(), selected))
+				{
+					player.SelectNewTrack(path);
+				}
+			}
+		}
+
+		UI::PaddedSeparator(0.5f);
+
+		ImGui::Text("Current: %s", player.GetCurrentTrack().string().c_str());
+
+		player.Draw();
+
+		UI::PaddedSeparator(0.5f);
+
+		static float a = 0.f;
+		ImGui::DragFloat("Test 3D Pos (x)", &a, 0.01f);
+		if (ImGui::Button("Play 3D Sound"))
+		{
+			AudioEngine ae;
+			SoundDefinition sd;
+
+			sd.m_Pos = vec3{ a, 0.f, 0.f };
+			ae.Play("Sounds3D/Hit.wav", "SFX", sd);
 		}
 	}
 
@@ -286,6 +350,32 @@ namespace Tempest
 		ImGui::PushID("Intensity");
 		if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
 		ImGui::PopID();
+	void DiagnosticsWindow::Textures(Instance&)
+	{
+		if (ImGui::CollapsingHeader("Textures", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			for (auto entry : fs::directory_iterator(R"(Assets/)"))
+			{
+				auto path = entry.path();
+				auto selected = curr_tex ? curr_tex->GetName() == path.string() : false;
+				if (ImGui::Selectable(path.string().c_str(), selected))
+				{
+					curr_tex = tex_map[path];
+				}
+			}
+		}
+
+		// example
+		// everything in Resources/Assets will load into this map
+		// tex_map["Assets/test_photo.png"] (gets shared_ptr to texture, interface might change in future)
+		// if doesn't exist, its nullptr
+
+		UI::PaddedSeparator(0.5f);
+
+		if(curr_tex)
+			ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+
+
 	}
 
 }

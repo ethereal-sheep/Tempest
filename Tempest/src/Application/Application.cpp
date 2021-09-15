@@ -11,6 +11,7 @@
 #include "Util/view.h"
 #include "Util/thread_pool.h"
 #include "Util/Service.h"
+#include "Audio/AudioEngine.h"
 
 #include "Graphics/Basics/RenderSystem.h"
 #include "Graphics/Test/TestModel.h"
@@ -35,12 +36,15 @@ namespace Tempest
 		Service<thread_pool>::Register(thread::hardware_concurrency());
 		Service<EventManager>::Register();
 
+		AudioEngine::Init();
+
 		OnInit();
 	}
 
 	void Application::OnEngineUpdate()
 	{
 		// Update Engine stuff first
+		AudioEngine::Update();
 		Service<RenderSystem>::Get().GetCamera().Update();
 		OnUpdate();
 		
@@ -61,6 +65,8 @@ namespace Tempest
 		OnExit();
 
 		// then exit engine stuff
+
+		AudioEngine::Shutdown();
 	}
 
 	void Application::OnKeyPress(uint8_t key, uint8_t repeat)

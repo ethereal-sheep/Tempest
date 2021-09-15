@@ -25,7 +25,7 @@ namespace Tempest
 	{
 		InstanceConfig(
 			const tpath& _path = tpath{}, 
-			MemoryStrategy strategy = MemoryStrategy{ DebugFlag::DEBUG_STRICT },
+			MemoryStrategy strategy = MemoryStrategy{ DebugFlag::NONE },
 			InstanceType type = InstanceType::NULL_TIME)
 			: 
 			project_path(_path), 

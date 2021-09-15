@@ -1,4 +1,6 @@
 #pragma once
+#include "Core.h"
+
 #include "Fonts/IconsFontaudio.h"
 #include "Fonts/IconsFontAwesome5.h"
 #include "Fonts/IconsForkAwesome.h"
@@ -12,7 +14,7 @@
 #include "Extern/imgui/imgui_node_editor.h"
 //#include "Extern/imgui/builders.h"
 #include "Extern/imgui/widgets.h"
-
+#include "Graphics/OpenGL/Texture.h"
 
 
 //static const char* default_font = "FiraMono-Regular.ttf";
@@ -56,7 +58,9 @@ inline auto font_subbutton() { return ImGui::GetIO().Fonts->Fonts[5]; } // subbu
 #define FONT_DEFAULT	FONT_PARA
 #define FONT_BOLD		FONT_BODY
 
+
+
 namespace Tempest
 {
-	
+	inline tmap<tpath, tsptr<Texture>, fs_hash> tex_map;
 }
