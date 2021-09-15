@@ -346,7 +346,7 @@ namespace Tempest
 				}
 			}
 		}
-
+		
 		// example
 		// everything in Resources/Assets will load into this map
 		// tex_map["Assets/test_photo.png"] (gets shared_ptr to texture, interface might change in future)

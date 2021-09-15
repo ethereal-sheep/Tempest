@@ -48,7 +48,8 @@ namespace Tempest
 				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 				//UI::Header(ImVec2{ center_x - 100.f,0 }, "HEADER");
 				UI::SubHeader("SUBHEADER");
-				
+				static bool test;
+				UI::UICheckBox_1("TS", &test);
 				if(ImGui::Button("COMBAT MODE"))
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>();

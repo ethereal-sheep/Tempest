@@ -846,6 +846,7 @@ namespace Tempest::UI
 	{
 		ImGui::PushFont(FONT_HEAD);
 		auto curr_tex = tex_map["Assets/HeaderStyle1.png"];
+		
 		float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
 		auto windowWidth = ImGui::GetWindowSize().x;
 		auto textWidth = ImGui::CalcTextSize(str).x;
@@ -1259,6 +1260,73 @@ namespace Tempest::UI
 			return true;
 		}
 		return false;
+	}
+	bool UICheckBox_1(const char* label, bool* v)
+	{
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		if (window->SkipItems)
+			return false;
+		
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+		const ImGuiID id = window->GetID(label);
+		const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+		auto curr_tex = tex_map["Assets/Unselected.png"];
+		const float square_sz = ImGui::GetFrameHeight();
+		//const float square_sz = curr_tex->GetHeight();
+		const ImVec2 pos = window->DC.CursorPos;
+		ImVec2 sqSz = ImVec2(square_sz + (label_size.x > 0.0f ? style.ItemInnerSpacing.x + label_size.x : 0.0f), label_size.y + style.FramePadding.y * 2.0f);
+		const ImRect total_bb(pos, { pos.x + sqSz.x, pos.y + sqSz.y });
+		ImGui::ItemSize(total_bb, style.FramePadding.y);
+		if (!ImGui::ItemAdd(total_bb, id))
+		{
+			IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags | ImGuiItemStatusFlags_Checkable | (*v ? ImGuiItemStatusFlags_Checked : 0));
+			return false;
+		}
+
+		bool hovered, held;
+		bool pressed = ImGui::ButtonBehavior(total_bb, id, &hovered, &held);
+		if (pressed)
+		{
+			*v = !(*v);
+			
+			ImGui::MarkItemEdited(id);
+		}
+
+		const ImRect check_bb(pos, { pos.x + square_sz, pos.y + square_sz });
+		ImGui::RenderNavHighlight(total_bb, id);
+	
+		if (!*v)
+		{
+			window->DrawList->AddImage((void*)static_cast<size_t>(curr_tex->GetID()), check_bb.Min, check_bb.Max);
+			//ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(check_bb.GetWidth(), check_bb.GetWidth()));
+		}
+		
+		ImU32 check_col = ImGui::GetColorU32(ImGuiCol_CheckMark);
+		bool mixed_value = (g.CurrentItemFlags & ImGuiItemFlags_MixedValue) != 0;
+		if (mixed_value)
+		{
+			// Undocumented tristate/mixed/indeterminate checkbox (#2644)
+			// This may seem awkwardly designed because the aim is to make ImGuiItemFlags_MixedValue supported by all widgets (not just checkbox)
+			ImVec2 pad(ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)), ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)));
+			window->DrawList->AddRectFilled({ check_bb.Min.x + pad.x, check_bb.Min.y + pad.y }, { check_bb.Max.x - pad.x, check_bb.Max.y - pad.y}, check_col, style.FrameRounding);
+		}
+		else if (*v)
+		{
+			const float pad = ImMax(1.0f, IM_FLOOR(square_sz / 6.0f));
+			curr_tex = tex_map["Assets/Selected.png"];
+			window->DrawList->AddImage((void*)static_cast<size_t>(curr_tex->GetID()), check_bb.Min, check_bb.Max);
+			//ImGui::RenderCheckMark(window->DrawList, { check_bb.Min.x + pad, check_bb.Min.y + pad }, check_col, square_sz - pad * 2.0f);
+		}
+
+		ImVec2 label_pos = ImVec2(check_bb.Max.x + style.ItemInnerSpacing.x, check_bb.Min.y + style.FramePadding.y);
+		if (g.LogEnabled)
+			ImGui::LogRenderedText(&label_pos, mixed_value ? "[~]" : *v ? "[x]" : "[ ]");
+		if (label_size.x > 0.0f)
+			ImGui::RenderText(label_pos, label);
+
+		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags | ImGuiItemStatusFlags_Checkable | (*v ? ImGuiItemStatusFlags_Checked : 0));
+		return pressed;
 	}
 }
 
