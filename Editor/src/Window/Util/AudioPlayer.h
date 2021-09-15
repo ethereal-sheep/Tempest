@@ -48,7 +48,7 @@ namespace Tempest
 
 
 			ImGui::GetColumnWidth();
-			ImGui::BeginChild("", ImVec2(ImGui::GetColumnWidth() - 15.f, 50));
+			ImGui::BeginChild("", ImVec2(ImGui::GetColumnWidth() - 15.f, 70));
 
 
 			float length = static_cast<float>(ae.GetChannelLength(current)) / 1000.f;
