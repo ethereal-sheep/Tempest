@@ -78,18 +78,6 @@ namespace Tempest
 		if (ImGui::Button("Trigger TEvent<string>"))
 			Service<EventManager>::Get().instant_dispatch<TEvent<string>>("Error triggered by Diagnostics!");
 
-		static float a = 0.f;
-		ImGui::DragFloat("Test", &a);
-		if (ImGui::Button("Play Sound"))
-		{
-			AudioEngine ae;
-			SoundDefinition sd;
-
-			sd.m_Pos = vec3{ a, 0.f, 0.f };
-
-			ae.Play("Sounds3D/Hit.wav", "SFX", sd);
-		}
-
 	}
 
 	void DiagnosticsWindow::ShowFPSGraph()
@@ -276,6 +264,19 @@ namespace Tempest
 		ImGui::Text("Current: %s", player.GetCurrentTrack().string().c_str());
 
 		player.Draw();
+
+		UI::PaddedSeparator(0.5f);
+
+		static float a = 0.f;
+		ImGui::DragFloat("Test 3D Pos (x)", &a, 0.01f);
+		if (ImGui::Button("Play 3D Sound"))
+		{
+			AudioEngine ae;
+			SoundDefinition sd;
+
+			sd.m_Pos = vec3{ a, 0.f, 0.f };
+			ae.Play("Sounds3D/Hit.wav", "SFX", sd);
+		}
 	}
 
 	void DiagnosticsWindow::Mouse(Instance& instance)
