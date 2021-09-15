@@ -1,35 +1,23 @@
-#pragma once
-#include "Instance/Instance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
-#include "Util/UIElements.h"
+#include "CombatModeOverlay.h"
+#include "Tempest/src/Graphics/OpenGL/Texture.h"
+#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
+#include "ConflictResOverlay.h"
 
 namespace Tempest
 {
-	class test_window3 : public Window
+	void ConflictResOverlay::open_popup(const Event& e)
 	{
-		unsigned tab = 0;
-		const unsigned numOfButtons = 10;
-		const float padding = 50.0f;
-		const float halfPadding = padding * 0.5f;
+		OverlayOpen = true;
+	}
+	void ConflictResOverlay::show(Instance& instance)
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 
-		const char* window_name() override
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+		if (OverlayOpen)
 		{
-			return "test_window3";
-		}
-
-		void init(Instance&) override
-		{
-			ImGuiStyle* style = &ImGui::GetStyle();
-
-			style->FramePadding = ImVec2(8, 6);
-			style->Colors[ImGuiCol_Button] = ImColor(40, 40, 40, 255);
-			style->Colors[ImGuiCol_ButtonActive] = ImColor(40, 40, 40, 255);
-			style->Colors[ImGuiCol_ButtonHovered] = ImColor(30, 30, 30, 255);
-		}
-
-		void show(Instance& instance [[maybe_unused]] ) override
-		{
-			/*if (ImGui::Begin(window_name(), &visible, window_flags))
+			if (ImGui::Begin("Conflict Resolution", &visible, window_flags))
 			{
 				static ImVec4 active{ 0.2f, 0.2f, 0.2f, 1.f };
 				static ImVec4 inactive{ 0.062f, 0.062f, 0.062f, 1.f };
@@ -62,8 +50,8 @@ namespace Tempest
 						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
 
 						ImGui::BeginChild("ChildUnit", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
+
+						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
 						auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
 
 						unsigned i = 0;
@@ -86,9 +74,9 @@ namespace Tempest
 
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
-				
+
 				}
-				
+
 				ImGui::SameLine();
 				ImGui::Dummy({ halfPadding, 0 });
 				ImGui::SameLine();
@@ -106,11 +94,11 @@ namespace Tempest
 						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
 
 						ImGui::BeginChild("ChildAction", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
+
+						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
 						for (unsigned i = 0; i < numOfButtons; i++)
 						{
-							if (UI::UIButton_1("Test Action" + std::to_string(i), "Test Action" + std::to_string(i), { cursor.x , cursor.y + i * 80}, { 140, 15 }, FONT_PARA))
+							if (UI::UIButton_1("Test Action" + std::to_string(i), "Test Action" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 140, 15 }, FONT_PARA))
 								tab = i + numOfButtons;
 						}
 
@@ -118,12 +106,12 @@ namespace Tempest
 					}
 
 					if (UI::UIButton_1("Add Actions", "Add Actions", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
-					
+
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
-					
+
 				}
-				
+
 
 				ImGui::SameLine();
 				ImGui::Dummy({ halfPadding, 0 });
@@ -154,17 +142,16 @@ namespace Tempest
 					}
 
 					if (UI::UIButton_1("Add Link", "Add Links", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
-					
+
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
 				}
-				
+
 
 				ImGui::EndChild();
 			}
 
-			ImGui::End();*/
-	
+			ImGui::End();
 		}
-	};
+	}
 }

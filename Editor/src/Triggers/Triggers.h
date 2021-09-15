@@ -24,6 +24,7 @@ namespace Tempest
 	struct ImportAssetTrigger : public Event {};
 	struct OpenSimulateTrigger : public Event {};
 	struct OpenCombatModeTrigger : public Event {};
+	struct OpenConflictResTrigger : public Event {};
 	struct OpenUnitSheetTrigger : public Event 
 	{
 		OpenUnitSheetTrigger(bool isAddUnit) : addUnit{isAddUnit} {}

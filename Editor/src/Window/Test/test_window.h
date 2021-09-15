@@ -53,6 +53,11 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>();
 				}
+
+				if (ImGui::Button("CONFLICT RES"))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				}
 			
 				// sliders for adjustment
 				ImVec2 slider_padding = { 100,0 };
