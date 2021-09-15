@@ -124,8 +124,9 @@ namespace Tempest::UI
 	bool InputText(const char* label, const char* ID, ImVec2 padding, std::string* str, ImGuiInputTextFlags flags = 0,
 			ImGuiInputTextCallback callback = NULL, void* user_data = NULL);
 
-	void SubHeader(ImVec2 padding, const char* str);
-	void Header(ImVec2 padding, const char* str);
+	void SubHeader(const char* str);
+	void Header_1(const char* str);
+	void Header_2(const char* str);
 	// Button size will Scale with Text
 	bool UIButton_1(string unselected, string hover,ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 

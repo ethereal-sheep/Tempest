@@ -24,7 +24,7 @@ namespace Tempest
 				static const ImVec2 buttonSize{ 70, 7.5 };
 
 				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding);
-				Tempest::UI::SubHeader({ ImGui::GetWindowWidth() / 3.f , padding }, "Conflict Resolutions");
+				Tempest::UI::SubHeader("Conflict Resolutions");
 
 				ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoScrollbar;
 				windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;

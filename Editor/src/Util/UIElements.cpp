@@ -821,35 +821,59 @@ namespace Tempest::UI
 		ImGui::PopID();
 		return pressed;
 	}
-	void SubHeader(ImVec2 padding, const char* str)
+	void SubHeader(const char* str)
 	{
-		ImGuiIO& io = ImGui::GetIO();
-		ImTextureID my_tex_id = io.Fonts->TexID;
-		ImGui::Dummy({ padding.x , padding.y });
+		ImGui::PushFont(FONT_HEAD);
+		auto curr_tex = tex_map["Assets/SubHeaderStyle.png"];
+		float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = ImGui::CalcTextSize(str).x;
+
+
 		ImGui::SameLine();
-		ImGui::Image(my_tex_id, ImVec2(50, 20));
+		ImGui::SetCursorPosX((windowWidth - textWidth - (curr_tex->GetWidth()*2)) * 0.5f);
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
 		ImGui::SameLine();
-		ImGui::PushFont(FONT_SHEAD);
-		//ImGui::Dummy({ padding.x , padding.y });
-		
+
 		ImGui::Text(str);
-		ImGui::PopFont();
 		ImGui::SameLine();
-		ImGui::Image(my_tex_id, ImVec2(50, 20));
-		
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 1,1 }, { 0,0 });
+		ImGui::PopFont();
+
 		
 	}
-	void Header(ImVec2 padding, const char* str)
+	void Header_1(const char* str)
 	{
-		//ImGui::Image()
-		//ImGui::SameLine()
 		ImGui::PushFont(FONT_HEAD);
-		ImGui::Dummy({ padding.x , padding.y });
-		ImGui::SameLine();
+		auto curr_tex = tex_map["Assets/HeaderStyle1.png"];
+		float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = ImGui::CalcTextSize(str).x;
+
+		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(str);
+		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
 		ImGui::PopFont();
-		//ImGui::SameLine()
-		//ImGui::Image()
+	}
+
+	void Header_2(const char* str)
+	{
+		ImGui::PushFont(FONT_HEAD);
+		auto curr_tex = tex_map["Assets/HeaderStyle2.png"];
+		float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = ImGui::CalcTextSize(str).x;
+
+		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		ImGui::Text(str);
+		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
+		ImGui::PopFont();
 	}
 	
 	bool UIButton_1(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)

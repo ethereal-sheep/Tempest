@@ -27,7 +27,7 @@ namespace Tempest
 				float text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
 
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
-				UI::SubHeader(ImVec2{ text_center - 100.f,50 }, "Simulate");
+				UI::SubHeader("Simulate");
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f});
 
 				const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;

@@ -58,7 +58,7 @@ namespace Tempest
 			{
 				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 
-				UI::Header(ImVec2{ center_x - 100.f,50 }, Title.c_str());
+				UI::Header_1(Title.c_str());
 
 				ImGui::SameLine();
 				ImGui::Dummy({ 0, 100.f });
@@ -165,7 +165,7 @@ namespace Tempest
 						float center = RegionWidth - font_size;
 
 
-						UI::SubHeader({ center - font_size , 0 }, sub.c_str());
+						UI::SubHeader(sub.c_str());
 						ImGui::PushFont(FONT_PARA);
 						ImGui::Dummy({0, 50.f });
 						
@@ -257,7 +257,7 @@ namespace Tempest
 							string Editsub = "Edit Weapon/Item";
 							font_size = ImGui::GetFontSize() * Editsub.size() / 2;
 							float center = RegionWidth - font_size;
-							UI::SubHeader({ center - 70.f, 0 }, Editsub.c_str());
+							UI::SubHeader(Editsub.c_str());
 
 							ImGui::Dummy({ 0, 20.f });
 							ImGui::Columns(2, "Edit Weapon", true);
@@ -368,7 +368,7 @@ namespace Tempest
 						}
 						
 
-						UI::SubHeader({ center - 100.f, 0 }, "Add Weapon");
+						UI::SubHeader("Add Weapon");
 						ImGui::Dummy({ 0, 20.f });
 						ImGui::Columns(2, "Weapons", true);
 						window = ImGui::GetCurrentWindow();
@@ -443,7 +443,7 @@ namespace Tempest
 								sub = "New Weapon/Item";
 								font_size = ImGui::GetFontSize() * sub.size() / 2;
 								center = RegionWidth - font_size;
-								UI::SubHeader({ center - 70.f, 0 }, sub.c_str());
+								UI::SubHeader(sub.c_str());
 
 								ImGui::Dummy({ 0, 20.f });
 

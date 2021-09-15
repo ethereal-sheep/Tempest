@@ -47,7 +47,7 @@ namespace Tempest
 				static ImVec2 pos = { 200,500 };
 				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 				//UI::Header(ImVec2{ center_x - 100.f,0 }, "HEADER");
-				UI::SubHeader(ImVec2{ center_x - 100.f,0 }, "SUBHEADER");
+				UI::SubHeader("SUBHEADER");
 				
 				if(ImGui::Button("COMBAT MODE"))
 				{
