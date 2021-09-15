@@ -200,7 +200,6 @@
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Application\Context.cpp" />
     <ClCompile Include="src\Audio\AudioEngine.cpp" />
-    <ClCompile Include="src\Audio\AudioManager.cpp" />
     <ClCompile Include="src\ECS\Components\Components.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\BufferLayout.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\IndexBuffer.cpp" />
@@ -261,9 +260,7 @@
     <ClInclude Include="src\Asset\Texture\TextureLoader.h" />
     <ClInclude Include="src\Asset\Util\importer.h" />
     <ClInclude Include="src\Audio\AudioEngine.h" />
-    <ClInclude Include="src\Audio\AudioManager.h" />
     <ClInclude Include="src\Audio\SoundDefinition.h" />
-    <ClInclude Include="src\Audio\SoundMeta.h" />
     <ClInclude Include="src\Core.h" />
     <ClInclude Include="src\ECS\Components\Components.h" />
     <ClInclude Include="src\ECS\ECS.h" />

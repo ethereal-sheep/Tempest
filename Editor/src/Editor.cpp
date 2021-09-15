@@ -17,6 +17,7 @@
 #include "Graphics/OpenGL/RenderSystem.h"
 #include "Util/GuizmoController.h"
 
+#include "Audio/AudioEngine.h"
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -26,6 +27,9 @@ namespace Tempest
 	void init_font();
 	void init_style();
 	void init_file_dialog();
+	void init_sounds();
+	void init_ui_textures();
+	void clear_ui_textures();
 
 	class Editor : public Application
 	{
@@ -56,6 +60,8 @@ namespace Tempest
 			init_font();
 			init_style();
 			init_file_dialog();
+			init_sounds();
+			init_ui_textures();
 		}
 
 		void OnUpdate() override
@@ -128,7 +134,10 @@ namespace Tempest
 
 		void OnExit() override
 		{
+
 			instance_manager.exit();
+
+			clear_ui_textures();
 
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui_ImplWin32_Shutdown();
@@ -315,5 +324,28 @@ namespace Tempest
 			GLuint texID = PtrToUint(tex);
 			glDeleteTextures(1, &texID);
 		};
+	}
+	void init_sounds()
+	{
+		AudioEngine ae;
+		for (auto entry : fs::directory_iterator(R"(Sounds2D/)"))
+		{
+			LOG_ASSERT(ae.Register2DSound(entry.path()));
+		}
+		for (auto entry : fs::directory_iterator(R"(Sounds3D/)"))
+		{
+			LOG_ASSERT(ae.Register3DSound(entry.path()));
+		}
+	}
+	void init_ui_textures()
+	{
+		for (auto entry : fs::directory_iterator(R"(Assets/)"))
+		{
+			tex_map[entry.path()] = make_sptr<Texture>(entry.path().string(), false);
+		}
+	}
+	void clear_ui_textures()
+	{
+		tex_map.clear();
 	}
 }
