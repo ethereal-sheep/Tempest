@@ -1,6 +1,7 @@
 #pragma once
 #include "Instance/Instance.h"
 #include "Util/UIElements.h"
+#include "Window/Util/AudioPlayer.h"
 
 namespace Tempest
 {
@@ -33,5 +34,6 @@ namespace Tempest
 
 
 		const int graphsize = 100;
+		AudioPlayer player;
 	};
 }

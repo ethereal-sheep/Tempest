@@ -326,7 +326,7 @@ namespace Tempest
 		{
 			LOG_ASSERT(ae.Register2DSound(entry.path()));
 		}
-		for (auto entry : fs::directory_iterator("Sounds3D/"))
+		for (auto entry : fs::directory_iterator(R"(Sounds3D/)"))
 		{
 			LOG_ASSERT(ae.Register3DSound(entry.path()));
 		}

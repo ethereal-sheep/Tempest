@@ -8,7 +8,7 @@
 
 namespace Tempest
 {
-	void DiagnosticsWindow::init(Instance& )
+	void DiagnosticsWindow::init(Instance&)
 	{
 	}
 	void DiagnosticsWindow::show(Instance& instance)
@@ -35,6 +35,11 @@ namespace Tempest
 				if (ImGui::BeginTabItem("Camera"))
 				{
 					Camera(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Audio"))
+				{
+					Audio(instance);
 					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("Mouse"))
@@ -79,12 +84,12 @@ namespace Tempest
 		{
 			AudioEngine ae;
 			SoundDefinition sd;
-			
-			sd.m_Pos = vec3{a, 0.f, 0.f};
+
+			sd.m_Pos = vec3{ a, 0.f, 0.f };
 
 			ae.Play("Sounds3D/Hit.wav", "SFX", sd);
 		}
-		
+
 	}
 
 	void DiagnosticsWindow::ShowFPSGraph()
@@ -191,7 +196,7 @@ namespace Tempest
 
 			auto pos = cam.GetPosition();
 
-			if(UI::DragFloat3ColorBox("Position", "##CameraPosDrag", ImVec2{ padding , 0.f }, value_ptr(pos), 0.f, 0.1f).first)
+			if (UI::DragFloat3ColorBox("Position", "##CameraPosDrag", ImVec2{ padding , 0.f }, value_ptr(pos), 0.f, 0.1f).first)
 				cam.SetPosition(pos);
 		}
 
@@ -227,7 +232,7 @@ namespace Tempest
 			ImGui::PopID();
 		}
 		{
-			
+
 
 			auto up = cam.GetUp();
 			auto front = cam.GetFront();
@@ -241,7 +246,36 @@ namespace Tempest
 
 	void DiagnosticsWindow::Audio(Instance& instance)
 	{
+		if (ImGui::CollapsingHeader("2D Sounds", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			for (auto entry : fs::directory_iterator(R"(Sounds2D/)"))
+			{
+				auto path = entry.path();
+				auto selected = entry.path() == player.GetCurrentTrack();
+				if (ImGui::Selectable(path.string().c_str(), selected))
+				{
+					player.SelectNewTrack(path);
+				}
+			}
+		}
+		if (ImGui::CollapsingHeader("3D Sounds", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			for (auto entry : fs::directory_iterator(R"(Sounds3D/)"))
+			{
+				auto path = entry.path();
+				auto selected = entry.path() == player.GetCurrentTrack();
+				if (ImGui::Selectable(path.string().c_str(), selected))
+				{
+					player.SelectNewTrack(path);
+				}
+			}
+		}
 
+		UI::PaddedSeparator(0.5f);
+
+		ImGui::Text("Current: %s", player.GetCurrentTrack().string().c_str());
+
+		player.Draw();
 	}
 
 	void DiagnosticsWindow::Mouse(Instance& instance)

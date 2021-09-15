@@ -267,6 +267,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Test\test_window.h" />
     <ClInclude Include="src\Window\Test\test_window2.h" />
     <ClInclude Include="src\Window\Test\test_window3.h" />
+    <ClInclude Include="src\Window\Util\AudioPlayer.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>

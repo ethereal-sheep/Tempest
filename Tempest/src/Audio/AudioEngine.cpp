@@ -8,6 +8,7 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 #include "Core.h"
+#include "Util/range.h"
 #include "AudioEngine.h"
 #include "fmod/fmod.hpp"
 
@@ -395,6 +396,7 @@ namespace Tempest
 		auto it = audioImpl->m_Sounds.find(file_path);
 		return it != audioImpl->m_Sounds.end();
 	}
+
 
 
 	void AudioEngine::StopChannel(ChannelID channelID)

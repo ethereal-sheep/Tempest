@@ -14,11 +14,7 @@
 
 namespace Tempest
 {
-	using SoundID = size_t;
 	using ChannelID = id_t;
-
-	constexpr ChannelID NO_SOUND = static_cast<ChannelID>(-1);
-	constexpr ChannelID NO_CHANNEL = static_cast<ChannelID>(-1);
 
 	class AudioEngine
 	{
@@ -47,6 +43,7 @@ namespace Tempest
 
 		// checks if a sound exists
 		bool CheckSoundExist(tpath file_path);
+
 
 		/**********************************************************************
 		*
@@ -100,5 +97,6 @@ namespace Tempest
 
 		// returns the duration of the channel in ms
 		unsigned int GetChannelLength(ChannelID channelID);
+
 	};
 }
