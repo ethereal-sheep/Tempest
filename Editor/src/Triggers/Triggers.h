@@ -22,6 +22,10 @@ namespace Tempest
 	struct CloseProjectTrigger : public Event {};
 	struct ExportProjectTrigger : public Event {};
 	struct ImportAssetTrigger : public Event {};
+	//Popup Trigger
+	struct DefineStatsTrigger : public Event {};
+
+	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};
 	struct OpenCombatModeTrigger : public Event {};
 	struct OpenConflictResTrigger : public Event {};
@@ -35,6 +39,8 @@ namespace Tempest
 		OpenUnitSheetTrigger(bool isAddUnit) : addUnit{isAddUnit} {}
 		bool addUnit = false;
 	};
+
+	
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}
