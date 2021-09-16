@@ -482,7 +482,7 @@ namespace Tempest
 										ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 										ImGui::SameLine();
 										ImGui::SetNextItemWidth(80.f);
-										string WeapStats = "##WeapStats" + std::to_string(i);
+										string WeapStats =  "##WeapStats" + std::to_string(i);
 										ImGui::InputInt(WeapStats.c_str(), &NewWeap.get_stat(i), 0);
 
 										if (j % 2 == 0)

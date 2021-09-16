@@ -25,6 +25,11 @@ namespace Tempest
 	struct OpenSimulateTrigger : public Event {};
 	struct OpenCombatModeTrigger : public Event {};
 	struct OpenConflictResTrigger : public Event {};
+	struct OpenActionGraphTrigger : public Event 
+	{
+		OpenActionGraphTrigger(Entity entityid) : id{ entityid } {}
+		Entity id = UNDEFINED;
+	};
 	struct OpenUnitSheetTrigger : public Event 
 	{
 		OpenUnitSheetTrigger(bool isAddUnit) : addUnit{isAddUnit} {}

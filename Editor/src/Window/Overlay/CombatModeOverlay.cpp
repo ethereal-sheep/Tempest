@@ -7,8 +7,6 @@ namespace Tempest
 	void CombatModeOverlay::open_popup(const Event& e)
 	{
 		OverlayOpen = true;
-
-		auto a = event_cast<OpenCombatModeTrigger>(e);
 	}
 
 	void CombatModeOverlay::show(Instance& instance)

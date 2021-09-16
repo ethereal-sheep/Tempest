@@ -830,14 +830,14 @@ namespace Tempest::UI
 		auto textWidth = ImGui::CalcTextSize(str).x;
 
 
-		ImGui::SameLine();
+		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - textWidth - (curr_tex->GetWidth()*2)) * 0.5f);
 		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
 		ImGui::SameLine();
-
 		ImGui::Text(str);
 		ImGui::SameLine();
 		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 1,1 }, { 0,0 });
+		ImGui::EndGroup();
 		ImGui::PopFont();
 
 		
@@ -846,17 +846,18 @@ namespace Tempest::UI
 	{
 		ImGui::PushFont(FONT_HEAD);
 		auto curr_tex = tex_map["Assets/HeaderStyle1.png"];
-		
-		float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
 		auto windowWidth = ImGui::GetWindowSize().x;
 		auto textWidth = ImGui::CalcTextSize(str).x;
 
+		
+		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
 		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(str);
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
 		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
+		ImGui::EndGroup();
 		ImGui::PopFont();
 	}
 
@@ -864,16 +865,16 @@ namespace Tempest::UI
 	{
 		ImGui::PushFont(FONT_HEAD);
 		auto curr_tex = tex_map["Assets/HeaderStyle2.png"];
-		float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
 		auto windowWidth = ImGui::GetWindowSize().x;
 		auto textWidth = ImGui::CalcTextSize(str).x;
-
+		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
 		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(str);
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
 		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
+		ImGui::EndGroup();
 		ImGui::PopFont();
 	}
 	

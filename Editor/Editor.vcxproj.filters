@@ -111,6 +111,9 @@
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\Overlay\AttackSystemOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h">
@@ -309,6 +312,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Overlay\ConflictResOverlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\AttackSystemOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -45,7 +45,8 @@ namespace Tempest
 						if (Attacker != UNDEFINED)
 						{
 							auto& character = instance.ecs.get<tc::Character>(Attacker);
-							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 200.0f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { 180, 15 }, FONT_PARA)) {}
+							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 200.0f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { 180, 15 }, FONT_PARA))
+								Attacker = UNDEFINED;
 						}
 
 						ImGui::EndChild();
@@ -70,7 +71,8 @@ namespace Tempest
 						if (Defender != UNDEFINED)
 						{
 							auto& character = instance.ecs.get<tc::Character>(Defender);
-							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), { ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { 180, 15 }, FONT_PARA)) {}
+							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), { ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { 180, 15 }, FONT_PARA))
+								Defender = UNDEFINED;
 						}
 						ImGui::EndChild();
 
@@ -140,13 +142,28 @@ namespace Tempest
 				// Add more things ehre
 				{
 					ImGui::BeginChild("##MiddleSideSimulate", ImVec2(regoinAvailWidth, regoinAvailHeight - Padding));
-			
+
 					const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
+					int index = 0;
+					for (auto id : instance.ecs.view<tc::ActionGraph>())
+					{
+						auto& g = instance.ecs.get<tc::Graph>(id);
+						g.g.get_name();
+						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id);
+						}
+						index++;
+							
+					}
+
+					/*const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
 					for (unsigned i = 0; i < NumOfButtons; i++)
 					{
 						if (UI::UIButton_1("System" + std::to_string(i), "System" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 180, 15 }, FONT_PARA))
 							Tab = i + NumOfButtons;
-					}
+					}*/
 
 					ImGui::EndChild();
 
