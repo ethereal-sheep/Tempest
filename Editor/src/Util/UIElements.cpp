@@ -825,7 +825,6 @@ namespace Tempest::UI
 	{
 		ImGui::PushFont(FONT_HEAD);
 		auto curr_tex = tex_map["Assets/SubHeaderStyle.png"];
-		float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
 		auto windowWidth = ImGui::GetWindowSize().x;
 		auto textWidth = ImGui::CalcTextSize(str).x;
 

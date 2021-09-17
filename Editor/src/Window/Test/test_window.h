@@ -59,6 +59,13 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
 				}
+				
+				if (ImGui::Button("DEFINE STATS"))
+				{
+					Service<EventManager>::Get().instant_dispatch<DefineStatsTrigger>();
+				}
+				
+				
 			
 				// sliders for adjustment
 				ImVec2 slider_padding = { 100,0 };
