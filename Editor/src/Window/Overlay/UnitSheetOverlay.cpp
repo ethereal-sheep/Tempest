@@ -101,7 +101,16 @@ namespace Tempest
 				ImGui::Dummy({ frontPadding, 0 });
 				ImGui::SameLine();
 				ImGui::InputText("##CharacterName", &cs->name);
-
+				bool NameDisabled = cs->name.size() > 15;
+				ImGui::SameLine();
+				if (NameDisabled)
+				{
+					ImGui::Text("15 Char only");
+				}
+				else
+				{
+					ImGui::Dummy({ 100.f, 10.f });
+				}
 				ImGui::Dummy({ 0, 10.f });
 
 				for (auto i = 0; i < sl->size(); i++)
@@ -280,7 +289,7 @@ namespace Tempest
 							ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 							ImGui::SameLine();
 							ImGui::InputText("##EditWeapName", &EditWeap.name);
-							bool disabled = EditWeap.name.size() > 9;
+							bool disabled = EditWeap.name.size() > 15;
 							ImGui::SameLine();
 							if(disabled)
 							{
@@ -597,6 +606,12 @@ namespace Tempest
 				}
 				ImGui::EndColumns();
 
+				if (NameDisabled)
+				{
+					ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+					ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+					
+				}
 				if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
 				{
 					LOG("SAVED");
@@ -613,6 +628,11 @@ namespace Tempest
 						}
 					}
 					OverlayOpen = false;
+				}
+				if (NameDisabled)
+				{
+					ImGui::PopItemFlag();
+					ImGui::PopStyleVar();
 				}
 				
 			}
