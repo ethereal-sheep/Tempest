@@ -6,7 +6,6 @@ layout(location = 2)  in vec3 normal;
 layout(location = 3)  in vec3 tangent;
 layout(location = 4)  in vec3 bitangent;
 
-uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 

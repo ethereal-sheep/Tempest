@@ -34,6 +34,7 @@ namespace Tempest
 		m_Count = static_cast<uint32_t>(indices.size());
     }
 
+
 	Mesh::Mesh(Mesh&& mesh) noexcept
 		: m_VAO{mesh.m_VAO},
 		  m_Code{std::move(mesh.m_Code)},
@@ -68,4 +69,5 @@ namespace Tempest
 	{
 		return m_Code;
 	}
+	
 }

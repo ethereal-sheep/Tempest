@@ -32,6 +32,7 @@ namespace Tempest
         void Unbind() const;
 
         uint32_t GetVertexCount() const;
+        tsptr<VertexArray> GetVertexArray();
         MeshCode GetMeshCode() const;
     };
 

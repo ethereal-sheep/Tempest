@@ -29,6 +29,8 @@ namespace Tempest
 	public:
 
 		Model(const char* file);
+		Model(Model&& model);
+		Model& operator=(Model&& model) noexcept;
 		~Model() = default;
 
 		auto GetMeshes() const

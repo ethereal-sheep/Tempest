@@ -265,43 +265,43 @@ namespace Tempest
 
 	void Camera::OnKeyPress(uint8_t key)
 	{
-		switch (key)
-		{
-			case 'W': 
-				Move(CameraDirection::CAMERA_UP);
-				break;
-
-			case 'A':
-				Move(CameraDirection::CAMERA_LEFT);
-				break;
-
-			case 'S':
-				Move(CameraDirection::CAMERA_DOWN);
-				break;
-
-			case 'D':
-				Move(CameraDirection::CAMERA_RIGHT);
-				break;
-
-			case 'O':
-				Move(CameraDirection::CAMERA_FORWARD);
-				break;
-
-			case 'P':
-				Move(CameraDirection::CAMERA_BACK, 1.0f);
-				break;
-
-			case 'J':
-				Rotate(.01f, glm::vec3(1.f, 0.f, 0.f));
-				break;
-
-			case 'K':
-				Rotate(.01f, glm::vec3(0.f, 1.f, 0.f));
-				break;
-
-			case 'L':
-				Rotate(.01f, glm::vec3(0.f, 0.f, 1.f));
-				break;
-		}
+		//switch (key)
+		//{
+		//	case 'W': 
+		//		Move(CameraDirection::CAMERA_UP);
+		//		break;
+		//
+		//	case 'A':
+		//		Move(CameraDirection::CAMERA_LEFT);
+		//		break;
+		//
+		//	case 'S':
+		//		Move(CameraDirection::CAMERA_DOWN);
+		//		break;
+		//
+		//	case 'D':
+		//		Move(CameraDirection::CAMERA_RIGHT);
+		//		break;
+		//
+		//	case 'O':
+		//		Move(CameraDirection::CAMERA_FORWARD);
+		//		break;
+		//
+		//	case 'P':
+		//		Move(CameraDirection::CAMERA_BACK, 1.0f);
+		//		break;
+		//
+		//	case 'J':
+		//		Rotate(.01f, glm::vec3(1.f, 0.f, 0.f));
+		//		break;
+		//
+		//	case 'K':
+		//		Rotate(.01f, glm::vec3(0.f, 1.f, 0.f));
+		//		break;
+		//
+		//	case 'L':
+		//		Rotate(.01f, glm::vec3(0.f, 0.f, 1.f));
+		//		break;
+		//}
 	}
 }

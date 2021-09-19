@@ -22,6 +22,22 @@ namespace Tempest
 		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{});
 	}
 
+	Model::Model(Model&& model)
+	:	m_File{std::move(model.m_File)},
+		m_Materials{std::move(model.m_Materials)},
+		m_Meshes{std::move(model.m_Meshes)}
+	{
+	}
+
+	Model& Model::operator=(Model&& model) noexcept
+	{
+		std::swap(m_File, model.m_File);
+		std::swap(m_Materials, model.m_Materials);
+		std::swap(m_Meshes, model.m_Meshes);
+
+		return *this;
+	}
+
 	void Model::ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform)
 	{
 		for (id_t i = 0; i < node->mNumMeshes; ++i)
