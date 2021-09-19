@@ -27,8 +27,9 @@ namespace Tempest
 	struct OpenConflictResTrigger : public Event {};
 	struct OpenActionGraphTrigger : public Event 
 	{
-		OpenActionGraphTrigger(Entity entityid) : id{ entityid } {}
+		OpenActionGraphTrigger(Entity entityid, Instance& in) : id{ entityid }, instance{in} {}
 		Entity id = UNDEFINED;
+		Instance& instance;
 	};
 	struct OpenUnitSheetTrigger : public Event 
 	{

@@ -152,7 +152,7 @@ namespace Tempest
 						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
 						{
 							OverlayOpen = false;
-							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id);
+							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
 						}
 						index++;
 							
@@ -177,11 +177,21 @@ namespace Tempest
 					ImGui::BeginChild("##RightSideSimulate", ImVec2(regoinAvailWidth, regoinAvailHeight - Padding));
 
 					const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-					for (unsigned i = 0; i < NumOfButtons; i++)
+					int index = 0;
+					for (auto id : instance.ecs.view<tc::ConflictGraph>())
 					{
-						if (UI::UIButton_1("Link" + std::to_string(i), "Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 180, 15 }, FONT_PARA))
-							Tab = i + NumOfButtons * 2;
+						auto& g = instance.ecs.get<tc::Graph>(id);
+						g.g.get_name();
+						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+						}
+						index++;
+
 					}
+
+
 					ImGui::EndChild();
 				}
 
