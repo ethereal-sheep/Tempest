@@ -34,7 +34,16 @@ namespace Tempest
 
 				const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
 
+				auto tex = tex_map["Assets/SimulationBackdrop.png"];
 				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+				ImVec2 point = ImGui::GetCursorPos();
+				{
+
+					ImVec2 Min{ point.x, point.y };
+					ImVec2 Max{ Min.x + viewport->Size.x * 0.91f, Min.y + viewport->Size.y * 0.73f };
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
+				}
+
 				// Drag drop section
 				{
 					const float availRegion = ImGui::GetContentRegionAvail().y * 0.3f;
@@ -48,7 +57,7 @@ namespace Tempest
 						ImGui::BeginChild("##DragDropAttackerSimulate", ImVec2(contentSize * 0.5f, availRegion - 2.0f), true, window_flags );
 
 						// Attacker image
-						ImGui::SetCursorPos({ ImGui::GetCursorPosX() + 20.0f, ImGui::GetCursorPosY() + 15.0f });
+						ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.05f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.11f });
 						ImGui::Image((void*)static_cast<size_t>(tex_map["Assets/Attacker.png"]->GetID()), {tex_map["Assets/Attacker.png"]->GetWidth() * 0.9f, tex_map["Assets/Attacker.png"]->GetHeight() * 0.9f });
 
 						ImGui::SameLine();
@@ -125,9 +134,9 @@ namespace Tempest
 
 					ImGui::EndChild();
 				}
-		
 
 				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+
 				// Content selection section
 				ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.8f), true, ImGuiWindowFlags_NoScrollWithMouse);
 				
