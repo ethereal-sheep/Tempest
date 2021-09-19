@@ -38,7 +38,7 @@ namespace Tempest
 
 				//auto& g = instance.ecs.get<tc::Graph>(id);
 
-				if (ImGui::BeginTable("Test Table", 3))
+				if (ImGui::BeginTable("graph header table", 3))
 				{
 					ImGui::TableNextRow();
 
