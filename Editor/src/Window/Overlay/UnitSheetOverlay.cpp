@@ -18,6 +18,9 @@ namespace Tempest
 		{
 			IsUnitCreation = false;
 			Title = "Editing Unit";
+
+			if (a.entityID != UNDEFINED)
+				SelectedID = a.entityID;
 		}
 	}
 
@@ -28,7 +31,9 @@ namespace Tempest
 		if(IsUnitCreation)
 			cs = &NewCharacter;
 		else
-			cs = instance.ecs.get_if<tc::Character>(instance.selected);
+			cs = instance.ecs.get_if<tc::Character>(SelectedID);
+		
+
 		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
 		Entity StateLineId = UNDEFINED;
 		for (auto id : StatsView)
