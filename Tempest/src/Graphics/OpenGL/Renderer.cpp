@@ -103,6 +103,11 @@ namespace Tempest
 		glClear(clearMask);
 	}
 
+	void Renderer::ClearDepth() const
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
 	void Renderer::ClearColorDepth() const
 	{
 		glClear(clearMask | GL_DEPTH_BUFFER_BIT);
@@ -135,6 +140,20 @@ namespace Tempest
 		}
 	}
 
+	void Renderer::DrawElements(DrawMode mode, const Mesh& mesh, DrawType type)
+	{
+		mesh.Bind();
+		glDrawElements(GLMode(mode), mesh.GetVertexCount(), GLDrawType(type), nullptr);
+		mesh.Unbind();
+	}
+
+	void Renderer::DrawElements(DrawMode mode, const tuptr<Mesh>& mesh, DrawType type)
+	{
+		mesh->Bind();
+		glDrawElements(GLMode(mode), mesh->GetVertexCount(), GLDrawType(type), nullptr);
+		mesh->Unbind();
+	}
+
 	void Renderer::DrawArrays(DrawMode mode, const VertexArray& vao, unsigned int vertexCount)
 	{
 		if (vertexCount != 0)
@@ -148,29 +167,36 @@ namespace Tempest
 	void Renderer::MultiDrawElementsIndirect(DrawMode mode, const VertexArray& vao, const IndexBuffer& ibo,
 		const VertexBuffer& indirect)
 	{
-		if (indirect.GetSize() != 0)
-		{
-			vao.Bind();
-			ibo.Bind();
-			indirect.Bind();
-			glMultiDrawElementsIndirect(GLMode(mode), GL_UNSIGNED_INT, nullptr,
-				indirect.GetSize() / sizeof(DrawElementsIndirectCommand), 0);
-			vao.Unbind();
-			ibo.Unbind();
-			indirect.Unbind();
-		}
+		//if (indirect.GetSize() != 0)
+		//{
+		//	vao.Bind();
+		//	ibo.Bind();
+		//	indirect.Bind();
+		//	glMultiDrawElementsIndirect(GLMode(mode), GL_UNSIGNED_INT, nullptr,
+		//		indirect.GetSize() / sizeof(DrawElementsIndirectCommand), 0);
+		//	vao.Unbind();
+		//	ibo.Unbind();
+		//	indirect.Unbind();
+		//}
+		(void)mode;
+		(void)vao;
+		(void)ibo;
+		(void)indirect;
 	}
 
 	void Renderer::MultiDrawArraysIndirect(DrawMode mode, const VertexArray& vao, const VertexBuffer& indirect)
 	{
-		if (indirect.GetSize() != 0)
-		{
-			vao.Bind();
-			indirect.Bind();
-			glMultiDrawArraysIndirect(GLMode(mode), nullptr, indirect.GetSize() / sizeof(DrawArraysIndirectCommand), 0);
-			vao.Unbind();
-			indirect.Unbind();
-		}
+		//if (indirect.GetSize() != 0)
+		//{
+		//	vao.Bind();
+		//	indirect.Bind();
+		//	glMultiDrawArraysIndirect(GLMode(mode), nullptr, indirect.GetSize() / sizeof(DrawArraysIndirectCommand), 0);
+		//	vao.Unbind();
+		//	indirect.Unbind();
+		//}
+		(void)mode;
+		(void)vao;
+		(void)indirect;
 	}
 
 	void Renderer::SetViewport(unsigned int x, unsigned int y, unsigned int width, unsigned height) const

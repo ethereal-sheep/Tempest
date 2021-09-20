@@ -1,629 +1,218 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\Actions\Action.cpp" />
+    <ClCompile Include="src\Actions\ActionHistory.cpp" />
+    <ClCompile Include="src\Asset\Asset.cpp" />
+    <ClCompile Include="src\Asset\Audio\AudioAsset.cpp" />
+    <ClCompile Include="src\Asset\Model\ModelAsset.cpp" />
+    <ClCompile Include="src\Asset\Texture\TextureAsset.cpp" />
+    <ClCompile Include="src\Asset\Texture\TextureLoader.cpp" />
+    <ClCompile Include="src\ECS\Test\test_ecs.cpp" />
+    <ClCompile Include="src\Graphics\Basics\FrameBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Basics\GeometryFactory.cpp" />
+    <ClCompile Include="src\Graphics\Basics\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Basics\LineRenderer.cpp" />
+    <ClCompile Include="src\Graphics\Basics\Mesh.cpp" />
+    <ClCompile Include="src\Graphics\Basics\Model.cpp" />
+    <ClCompile Include="src\Graphics\Basics\RenderSystem.cpp" />
+    <ClCompile Include="src\Graphics\Basics\ShadowBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Basics\ShadowMap.cpp" />
+    <ClCompile Include="src\Graphics\Basics\VertexArray.cpp" />
+    <ClCompile Include="src\Graphics\Basics\VertexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Material.cpp" />
+    <ClCompile Include="src\Application\AppHandler.cpp" />
+    <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\Application\Context.cpp" />
+    <ClCompile Include="src\Audio\AudioEngine.cpp" />
+    <ClCompile Include="src\ECS\Components\Components.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\BufferLayout.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Renderer.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Shader.cpp" />
+    <ClCompile Include="src\Graphics\OpenGL\Texture.cpp" />
+    <ClCompile Include="src\Instance\EditTimeInstance.cpp" />
+    <ClCompile Include="src\Instance\Instance.cpp" />
+    <ClCompile Include="src\Instance\PhysicsInstance.cpp" />
+    <ClCompile Include="src\Instance\RuntimeInstance.cpp" />
+    <ClCompile Include="src\Logger\Logger.cpp" />
+    <ClCompile Include="src\Memory\MemoryManager.cpp" />
+    <ClCompile Include="src\Memory\MemoryObject.cpp" />
+    <ClCompile Include="src\Memory\Resource\aligned_malloc_resource.cpp" />
+    <ClCompile Include="src\Memory\Resource\debug_resource.cpp" />
+    <ClCompile Include="src\Memory\Resource\malloc_resource.cpp" />
+    <ClCompile Include="src\Physics\PhysicsObject.cpp" />
+    <ClCompile Include="src\Physics\ShapeFactory\ShapeFactory.cpp" />
+    <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp" />
+    <ClCompile Include="src\Physics\Util\px_math.cpp" />
+    <ClCompile Include="src\Scripting\Graph\graph.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ActionGraphNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ArithmeticNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\CastNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\CompareNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\DiceNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ConflictNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\StatNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\SwitchNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\ActionNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_data.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_graph.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_resolution_script.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_script_events.cpp" />
+    <ClCompile Include="src\Scripting\Util\node.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_node.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_node_functions.cpp" />
+    <ClCompile Include="src\Serializer\Reader.cpp" />
+    <ClCompile Include="src\Serializer\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Application\AppHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Application\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Application\Context.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Memory\MemoryManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Memory\Resource\debug_resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Memory\Resource\malloc_resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Audio\AudioEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Components\Components.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Serializer\Reader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Serializer\Writer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Memory\MemoryObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\IndexBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\VertexArray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\VertexBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\BufferLayout.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Logger\Logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\tracy\TracyClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\Skybox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\RenderSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Test\test_node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Test\test_node_functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Util\node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Test\test_graph.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Graph\graph.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Test\test_data.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\CastNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Test\test_script_events.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Memory\Resource\aligned_malloc_resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Test\test_ecs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\PhysicsObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Instance\Instance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Instance\RuntimeInstance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Instance\EditTimeInstance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Util\px_math.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\FrameBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ShapeFactory\ShapeFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\FBO.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\OpenGL\LineRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Asset\Texture\TextureAsset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Asset\Texture\TextureLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Asset\Audio\AudioAsset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Asset\Model\ModelAsset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Asset\Asset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Actions\Action.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Actions\ActionHistory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Instance\PhysicsInstance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\DiceNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\ArithmeticNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Test\test_resolution_script.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\StatNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\SwitchNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\ActionNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\ConflictNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\CompareNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\Nodes\ActionGraphNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="src\Actions\Action.h" />
+    <ClInclude Include="src\Actions\ActionHistory.h" />
+    <ClInclude Include="src\Actions\IAction.h" />
+    <ClInclude Include="src\Application\AppHandler.h" />
+    <ClInclude Include="src\Application\Application.h" />
+    <ClInclude Include="src\Application\Context.h" />
+    <ClInclude Include="src\Application\EntryPoint.h" />
+    <ClInclude Include="src\Asset\Asset.h" />
+    <ClInclude Include="src\Asset\Audio\AudioAsset.h" />
+    <ClInclude Include="src\Asset\IAsset.h" />
+    <ClInclude Include="src\Asset\Model\ModelAsset.h" />
+    <ClInclude Include="src\Asset\Texture\TextureAsset.h" />
+    <ClInclude Include="src\Asset\Texture\TextureLoader.h" />
+    <ClInclude Include="src\Asset\Util\importer.h" />
+    <ClInclude Include="src\Audio\AudioEngine.h" />
+    <ClInclude Include="src\Audio\SoundDefinition.h" />
+    <ClInclude Include="src\Core.h" />
+    <ClInclude Include="src\ECS\Components\Components.h" />
+    <ClInclude Include="src\ECS\ECS.h" />
+    <ClInclude Include="src\ECS\Entity.h" />
+    <ClInclude Include="src\ECS\Systems\Systems.h" />
+    <ClInclude Include="src\ECS\Test\test_entity.h" />
+    <ClInclude Include="src\ECS\Util\registry.h" />
+    <ClInclude Include="src\ECS\Util\runtime_view.h" />
+    <ClInclude Include="src\ECS\Util\sparse_set.h" />
+    <ClInclude Include="src\Events\Events\KeyInputEvents.h" />
+    <ClInclude Include="src\Events\Events\ScriptEvents.h" />
+    <ClInclude Include="src\Events\Test\event_test.h" />
+    <ClInclude Include="src\Graphics\Basics\FrameBuffer.h" />
+    <ClInclude Include="src\Graphics\Basics\GeometryFactory.h" />
+    <ClInclude Include="src\Graphics\Basics\IndexBuffer.h" />
+    <ClInclude Include="src\Graphics\Basics\Lights.h" />
+    <ClInclude Include="src\Graphics\Basics\LineRenderer.h" />
+    <ClInclude Include="src\Graphics\Basics\Material.h" />
+    <ClInclude Include="src\Graphics\Basics\Mesh.h" />
+    <ClInclude Include="src\Graphics\Basics\Model.h" />
+    <ClInclude Include="src\Graphics\Basics\RenderPipeline.h" />
+    <ClInclude Include="src\Graphics\Basics\RenderSystem.h" />
+    <ClInclude Include="src\Graphics\Basics\ShadowBuffer.h" />
+    <ClInclude Include="src\Graphics\Basics\ShadowMap.h" />
+    <ClInclude Include="src\Graphics\Basics\VertexArray.h" />
+    <ClInclude Include="src\Graphics\Basics\VertexBuffer.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Material.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />
+    <ClInclude Include="src\Graphics\Test\TestModel.h" />
+    <ClInclude Include="src\Instance\EditTimeInstance.h" />
+    <ClInclude Include="src\Instance\Instance.h" />
+    <ClInclude Include="src\Instance\NullTimeInstance.h" />
+    <ClInclude Include="src\Instance\PhysicsInstance.h" />
+    <ClInclude Include="src\Instance\RuntimeInstance.h" />
+    <ClInclude Include="src\Instance\Window.h" />
+    <ClInclude Include="src\Instance\WindowManager.h" />
+    <ClInclude Include="src\Memory\Resource\aligned_malloc_resource.h" />
+    <ClInclude Include="src\Memory\Util\aligned_malloc.h" />
+    <ClInclude Include="src\Physics\Filters\Filters.h" />
+    <ClInclude Include="src\Physics\Physics.h" />
+    <ClInclude Include="src\Physics\PhysicsObject.h" />
+    <ClInclude Include="src\Physics\ShapeFactory\ShapeFactory.h" />
+    <ClInclude Include="src\Physics\Util\px_allocator.h" />
+    <ClInclude Include="src\Physics\Util\px_bp_callback.h" />
+    <ClInclude Include="src\Physics\Util\px_cpu_dispatcher.h" />
+    <ClInclude Include="src\Physics\Util\px_deleter.h" />
+    <ClInclude Include="src\Physics\Util\px_err_callback.h" />
+    <ClInclude Include="src\Physics\Util\px_include.h" />
+    <ClInclude Include="src\Physics\Util\px_make.h" />
+    <ClInclude Include="src\Physics\Util\px_malloc_allocator.h" />
+    <ClInclude Include="src\Physics\Util\px_math.h" />
+    <ClInclude Include="src\Resolution\ResolutionManager.h" />
+    <ClInclude Include="src\Resolution\Statline.h" />
+    <ClInclude Include="src\Scripting\GMS.h" />
+    <ClInclude Include="src\Scripting\Graph\graph.h" />
+    <ClInclude Include="src\Scripting\resolution.h" />
+    <ClInclude Include="src\Scripting\SRM.h" />
+    <ClInclude Include="src\Scripting\Util\sparse_scripts.h" />
+    <ClInclude Include="src\Scripting\Util\split_view.h" />
+    <ClInclude Include="src\Scripting\Util\node.h" />
+    <ClInclude Include="src\Scripting\Test\test_scripting.h" />
+    <ClInclude Include="src\Scripting\Util\internal.h" />
+    <ClInclude Include="src\Scripting\Util\pin.h" />
+    <ClInclude Include="src\Scripting\Util\script.h" />
+    <ClInclude Include="src\Scripting\Util\var_data.h" />
+    <ClInclude Include="src\Scripting\Util\var_set.h" />
+    <ClInclude Include="src\Util\thread_pool.h" />
+    <ClInclude Include="src\Util\algorithm.h" />
+    <ClInclude Include="src\Util\range.h" />
+    <ClInclude Include="src\Util\timer.h" />
+    <ClInclude Include="src\Util\type_traits.h" />
+    <ClInclude Include="src\Events\EventManager.h" />
+    <ClInclude Include="src\Events\Events.h" />
+    <ClInclude Include="src\Events\Events\IEvent.h" />
+    <ClInclude Include="src\Events\Util\event_queue.h" />
+    <ClInclude Include="src\Graphics\OpenGL\BufferLayout.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Shader.h" />
+    <ClInclude Include="src\Graphics\OpenGL\Texture.h" />
+    <ClInclude Include="src\GSM.h" />
+    <ClInclude Include="src\Logger\InstanceLogger.h" />
+    <ClInclude Include="src\Logger\Log.h" />
+    <ClInclude Include="src\Logger\Logger.h" />
+    <ClInclude Include="src\Memory.h" />
+    <ClInclude Include="src\Memory\MemoryManager.h" />
+    <ClInclude Include="src\Memory\MemoryObject.h" />
+    <ClInclude Include="src\Memory\Resource.h" />
+    <ClInclude Include="src\Memory\Test\lousy_string_1.h" />
+    <ClInclude Include="src\Memory\Test\lousy_string_2.h" />
+    <ClInclude Include="src\Memory\Test\mem_test.h" />
+    <ClInclude Include="src\Memory\Resource\debug_resource.h" />
+    <ClInclude Include="src\Memory\Resource\malloc_resource.h" />
+    <ClInclude Include="src\Serializer\Serializer.h" />
+    <ClInclude Include="src\Serializer\Test\serialize_test.h" />
+    <ClInclude Include="src\TMath.h" />
+    <ClInclude Include="src\Math\elsCompare.h" />
+    <ClInclude Include="src\Math\elsHeader.h" />
+    <ClInclude Include="src\Math\elsMath.h" />
+    <ClInclude Include="src\Math\elsMatrix2.h" />
+    <ClInclude Include="src\Math\elsMatrix3.h" />
+    <ClInclude Include="src\Math\elsMatrix4.h" />
+    <ClInclude Include="src\Math\elsNoise.h" />
+    <ClInclude Include="src\Math\elsQuaternion.h" />
+    <ClInclude Include="src\Math\elsRandom.h" />
+    <ClInclude Include="src\Math\elsTest.h" />
+    <ClInclude Include="src\Math\elsTransform2.h" />
+    <ClInclude Include="src\Math\elsTransform3.h" />
+    <ClInclude Include="src\Math\elsValue.h" />
+    <ClInclude Include="src\Math\elsVector2.h" />
+    <ClInclude Include="src\Math\elsVector3.h" />
+    <ClInclude Include="src\Math\elsVector4.h" />
+    <ClInclude Include="src\Math\elsVectorGeneric.h" />
+    <ClInclude Include="src\Util.h" />
+    <ClInclude Include="src\Util\magic_enum.hpp" />
+    <ClInclude Include="src\Util\Serializer\Public\Reader.h" />
+    <ClInclude Include="src\Util\Serializer\Public\Writer.h" />
+    <ClInclude Include="src\Serializer\Reader.h" />
+    <ClInclude Include="src\Serializer\Writer.h" />
+    <ClInclude Include="src\Util\Service.h" />
+    <ClInclude Include="src\Util\view.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Application\AppHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Application\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Application\Context.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Application\EntryPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Components\Components.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Systems\Systems.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsCompare.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsMatrix2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsMatrix3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsMatrix4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsNoise.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsQuaternion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsRandom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsTransform2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsTransform3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsValue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsVector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsVector3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsVector4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\elsVectorGeneric.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Util\sparse_set.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Util\registry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\ECS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Util\runtime_view.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\Service.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\magic_enum.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\MemoryManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Resource\debug_resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Resource\malloc_resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Test\lousy_string_1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Test\lousy_string_2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Test\mem_test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Audio\AudioEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Audio\SoundDefinition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\Serializer\Public\Reader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\Serializer\Public\Writer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Serializer\Reader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Serializer\Writer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Serializer\Test\serialize_test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Serializer\Serializer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\IndexBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\VertexArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\VertexBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\BufferLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Logger\Log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Logger\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Logger\InstanceLogger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\MemoryObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GSM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Asset\Asset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Asset\Util\importer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\Util\event_queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\Events.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\type_traits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\Test\event_test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\Events\IEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\Events\KeyInputEvents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\pin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\Skybox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\RenderPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\RenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\var_data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\script.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Graph\graph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Test\test_scripting.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\GMS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\algorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\range.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\split_view.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\var_set.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\view.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\SRM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\Util\sparse_scripts.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_allocator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Util\aligned_malloc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Memory\Resource\aligned_malloc_resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_err_callback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\thread_pool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Test\test_entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_include.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Physics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_malloc_allocator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_deleter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_make.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_cpu_dispatcher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\PhysicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Util\px_bp_callback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Filters\Filters.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\Instance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\RuntimeInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\EditTimeInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\WindowManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\NullTimeInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\FrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\ShapeFactory\ShapeFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\FBO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\OpenGL\LineRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Asset\IAsset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Asset\Texture\TextureAsset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Asset\Texture\TextureLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Asset\Audio\AudioAsset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Asset\Model\ModelAsset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Actions\Action.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Actions\ActionHistory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Actions\IAction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Instance\PhysicsInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\resolution.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resolution\ResolutionManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resolution\Statline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\Events\ScriptEvents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Util\Serializer\Private\Reader.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="src\Util\Serializer\Private\Writer.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="src\Serializer\Reader.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="src\Serializer\Writer.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="src\Scripting\Util\static_id_generator.h" />
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
     <None Include="src\Graphics\Shaders\Quad_Vert.glsl" />
-    <None Include="..\Resource\Shaders\Basic_fragment.glsl" />
-    <None Include="..\Resource\Shaders\Basic_vertex.glsl" />
-    <None Include="..\Resource\Shaders\FrameBuffer_fragment.glsl" />
-    <None Include="..\Resource\Shaders\FrameBuffer_vertex.glsl" />
-    <None Include="..\Resource\Shaders\Line_fragment.glsl" />
-    <None Include="..\Resource\Shaders\Line_vertex.glsl" />
+    <None Include="src\Scripting\Util\static_id_generator.h" />
+    <None Include="src\Util\Serializer\Private\Reader.inl" />
+    <None Include="src\Util\Serializer\Private\Writer.inl" />
+    <None Include="src\Serializer\Reader.inl" />
+    <None Include="src\Serializer\Writer.inl" />
   </ItemGroup>
 </Project>

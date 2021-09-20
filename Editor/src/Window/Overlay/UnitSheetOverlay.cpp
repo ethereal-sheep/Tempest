@@ -73,9 +73,9 @@ namespace Tempest
 				ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
 				ImGuiOldColumns* columns = window->DC.CurrentColumns;
 				columns->Flags = ColFlags;
-				auto texture = Service<RenderSystem>::Get().tex->GetID();
-				GLuint tex_id = static_cast<GLuint>(texture);
-				ImGui::Image((void*)static_cast<size_t>(tex_id), ImVec2(ImGui::GetColumnWidth(0), ImGui::GetColumnWidth(0)));
+				//auto texture = Service<RenderSystem>::Get().tex->GetID();
+				//GLuint tex_id = static_cast<GLuint>(texture);
+				//ImGui::Image((void*)static_cast<size_t>(tex_id), ImVec2(ImGui::GetColumnWidth(0), ImGui::GetColumnWidth(0)));
 				/*==================================================================
 									CHARACTER INFOMATION COLUMN
 				==================================================================*/

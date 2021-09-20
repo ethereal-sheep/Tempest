@@ -27,6 +27,7 @@ namespace Tempest
 		void Camera(Instance& instance);
 		void Audio(Instance& instance);
 		void Mouse(Instance& instance);
+		void Light(Instance& instance);
 		void Textures(Instance& instance);
 
 		std::vector<float> fps_values;

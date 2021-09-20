@@ -122,7 +122,7 @@ namespace Tempest
 		stbi_set_flip_vertically_on_load(flip);
 		unsigned char* m_data = stbi_load(file.c_str(), &tex.m_Width, &tex.m_Height, &tex.m_Channels, 0);
 		if(!m_data)
-			LOG_ASSERT("Failed to load image!");
+			throw std::invalid_argument{std::string("Failed to load image! Filename: ") + file};
 
 		InitStorage(tex.m_Width, tex.m_Height, tex.m_Channels == 4 ? Texture_Format::RGBA : Texture_Format::RGB, Texture_Type::TEXTURE_2D);
 		SetSubData(m_data);

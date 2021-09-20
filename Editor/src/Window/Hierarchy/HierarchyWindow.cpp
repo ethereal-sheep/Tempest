@@ -32,7 +32,8 @@ namespace Tempest
 
 						auto transform = instance.ecs.emplace<tc::Transform>(entity);
 						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
+						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
+		
 						rb->shape_data = SHAPE_TYPE::BOX;
 						rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
 						rigidbody_config staticBody;
@@ -49,7 +50,7 @@ namespace Tempest
 						meta->name = "Sphere";
 						auto transform = instance.ecs.emplace<tc::Transform>(entity);
 						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_SPHERE);
+						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
 
 						
 						//auto& transform = instance.ecs.get<Components::Transform>(entity);
@@ -67,7 +68,7 @@ namespace Tempest
 						auto meta = instance.ecs.emplace<tc::Meta>(entity);
 						meta->name = "Capsule";
 						instance.ecs.emplace<tc::Transform>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, Shape::SHAPE_CUBE);
+						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
 						instance.ecs.emplace<tc::Rigidbody>(entity);
 
 						/*auto& rb = instance.ecs.get<Components::Rigidbody>(entity);

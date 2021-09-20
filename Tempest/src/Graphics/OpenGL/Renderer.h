@@ -1,8 +1,9 @@
 #pragma once
 
 #include <glew.h>
-#include "Graphics/OpenGL/IndexBuffer.h"
-#include "Graphics/OpenGL/VertexArray.h"
+#include "Graphics/Basics/IndexBuffer.h"
+#include "Graphics/Basics/VertexArray.h"
+#include "Graphics/Basics/Mesh.h"
 
 namespace Tempest
 {
@@ -86,12 +87,15 @@ namespace Tempest
 		Renderer();
 
 		void Clear() const;
+		void ClearDepth() const;
 		void ClearColorDepth() const;
 		void Flush() const;
 		void Finish() const;
 
 		void ClearColour(float r, float g, float b, float a);
 		void DrawElements(DrawMode mode, const VertexArray& vao, const IndexBuffer& ibo, DrawType type = DrawType::UNSIGNED_INT);
+		void DrawElements(DrawMode mode, const Mesh& mesh, DrawType type = DrawType::UNSIGNED_INT);
+		void DrawElements(DrawMode mode, const tuptr<Mesh>& mesh, DrawType type = DrawType::UNSIGNED_INT);
 		void DrawArrays(DrawMode mode, const VertexArray& vao, unsigned int vertexCount);
 		void MultiDrawElementsIndirect(DrawMode mode, const VertexArray& vao, const IndexBuffer& ibo, const VertexBuffer& indirect);
 		void MultiDrawArraysIndirect(DrawMode mode, const VertexArray& vao, const VertexBuffer& indirect);

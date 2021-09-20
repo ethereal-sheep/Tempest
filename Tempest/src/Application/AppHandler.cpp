@@ -1,5 +1,6 @@
 #include "AppHandler.h"
 #include "Application.h"
+#include "Logger/Log.h"
 
 namespace Tempest
 {
@@ -46,7 +47,7 @@ namespace Tempest
 		}
 		catch (const std::exception& a)
 		{
-			std::cout << a.what(); __debugbreak();
+			LOG(a.what());
 		}
 		catch (...)
 		{

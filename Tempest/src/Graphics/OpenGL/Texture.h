@@ -84,7 +84,6 @@ namespace Tempest
 		Texture_Format m_Format = Texture_Format::RGB;
 
 	public:
-		explicit Texture() = default;
 		explicit Texture(const std::string & file, bool flip = true);
 		explicit Texture(const std::string & right,
 			const std::string & left,
@@ -97,6 +96,8 @@ namespace Tempest
 
 		Texture(const Texture&) = delete;
 		Texture& operator=(const Texture&) = delete;
+	
+	private:
 
 		void InitStorage(uint32_t width, uint32_t height, Texture_Format format, Texture_Type type);
 		void SetSubData(void* data, uint32_t lod = 0, uint32_t xOffset = 0, uint32_t yOffset = 0) const;
@@ -111,6 +112,8 @@ namespace Tempest
 		void SetLOD(uint32_t lod) const;
 
 		void GenerateMipmaps() const;
+
+	public:
 
 		uint32_t GetID() const;
 		void Bind(uint32_t slot) const;

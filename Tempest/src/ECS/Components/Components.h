@@ -4,7 +4,7 @@
 #include "TMath.h"
 #include "ECS\Entity.h"
 #include "Physics/PhysicsObject.h"
-#include "Graphics/OpenGL/RenderPipeline.h"
+#include "Graphics/Basics/RenderPipeline.h"
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
 
@@ -211,13 +211,13 @@ namespace Tempest
 			friend Archiver& operator&(Archiver& ar, Mesh& component)
 			{
 				ar.StartObject();
-				ar.Member("Shape", component.shape);
+				ar.Member("Code", component.code);
 				return ar.EndObject();
 			}
 
-			Mesh(Shape _shape = Shape::SHAPE_SPHERE) : shape(_shape) {}
+			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
 
-			Shape shape;
+			MeshCode code;
 		};
 
 		struct Destroyed 
