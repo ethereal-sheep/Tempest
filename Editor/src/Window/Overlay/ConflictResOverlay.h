@@ -25,9 +25,11 @@ namespace Tempest
         void show(Instance&) override;
 
         bool OverlayOpen = false;
-        unsigned tab = 0;
         const unsigned numOfButtons = 10;
         const float padding = 50.0f;
         const float halfPadding = padding * 0.5f;
+        tsptr<Texture> AddUnitTex;
+        tsptr<Texture> AddActionTex;
+        tsptr<Texture> AddLinkTex;
     };
 }

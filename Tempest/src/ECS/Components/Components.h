@@ -4,7 +4,7 @@
 #include "TMath.h"
 #include "ECS\Entity.h"
 #include "Physics/PhysicsObject.h"
-#include "Graphics/Basics/Mesh.h"
+#include "Graphics/Basics/RenderPipeline.h"
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
 
@@ -206,7 +206,7 @@ namespace Tempest
 		struct Mesh
 		{
 			static const char* get_type() { return "Mesh"; }
-		
+
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, Mesh& component)
 			{
@@ -214,9 +214,9 @@ namespace Tempest
 				ar.Member("Code", component.code);
 				return ar.EndObject();
 			}
-		
+
 			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
-			
+
 			MeshCode code;
 		};
 

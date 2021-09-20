@@ -34,6 +34,7 @@ namespace Tempest
         tc::Weapon EditWeap;
         tc::Character NewCharacter;
         Entity CurSelection = UNDEFINED;
+        Entity SelectedID = INVALID;
         std::string NewStatName = "Stat";
         int NewStatValue = 0;
 

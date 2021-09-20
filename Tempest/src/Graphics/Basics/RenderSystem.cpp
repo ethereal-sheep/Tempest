@@ -15,7 +15,7 @@ namespace Tempest
             case MeshCode::PLANE:           return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedPlane(1, 1));
             case MeshCode::SPHERE:          return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedSphere(1, 16, 16));
             case MeshCode::ICOSAHEDRON:     return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedIcosahedron());
-            default: LOG_ASSERT("Unknown Shape");
+            default:                        return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedCube(1, 1));
         }
     }
 

@@ -37,7 +37,7 @@ namespace Tempest
 				const float graph_context_height = ImGui::GetWindowHeight() * 0.7f;
 
 				//auto& g = instance.ecs.get<tc::Graph>(id);
-
+				
 				if (ImGui::BeginTable("graph header table", 3))
 				{
 					ImGui::TableNextRow();
@@ -67,12 +67,13 @@ namespace Tempest
 				}
 
 
-
+				ImGui::Separator();
 
 				// draw the context
 				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				draw_context(instance, graph_context_height);
 				ImGui::PopStyleColor();
+				ImGui::Separator();
 
 
 				float button_y = ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f;

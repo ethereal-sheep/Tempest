@@ -35,6 +35,7 @@
 #include "Window/Overlay/CombatModeOverlay.h"
 #include "Window/Overlay/ConflictResOverlay.h"
 #include "Window/Overlay/AttackSystemOverlay.h"
+#include "Window/Popup/DefineStatsPopup.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -97,6 +98,7 @@ namespace Tempest
 		instance->register_always<CombatModeOverlay>();
 		instance->register_always<ConflictResOverlay>();
 		instance->register_always<AttackSystemOverlay>();
+		instance->register_always<DefineStatsPopup>();
 
 		instance->register_always<ShowRecent>();
 		instance->register_window<test_window>();

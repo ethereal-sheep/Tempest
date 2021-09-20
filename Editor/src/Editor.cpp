@@ -346,7 +346,14 @@ namespace Tempest
 	{
 		for (auto entry : fs::directory_iterator(R"(Assets/)"))
 		{
-			tex_map[entry.path()] = make_sptr<Texture>(entry.path().string(), false);
+			try
+			{
+				tex_map[entry.path()] = make_sptr<Texture>(entry.path().string(), false);
+			}
+			catch (...)
+			{
+				LOG_WARN("{0} cannot be loaded!", entry.path().string());
+			}
 		}
 	}
 	void clear_ui_textures()
