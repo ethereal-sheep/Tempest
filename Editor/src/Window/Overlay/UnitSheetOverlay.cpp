@@ -58,7 +58,7 @@ namespace Tempest
 			{
 				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 
-				UI::Header(ImVec2{ center_x - 100.f,50 }, Title.c_str());
+				UI::Header_1(Title.c_str());
 
 				ImGui::SameLine();
 				ImGui::Dummy({ 0, 100.f });
@@ -101,39 +101,42 @@ namespace Tempest
 
 				for (auto i = 0; i < sl->size(); i++)
 				{
-					string stat = sl->operator[](i) + " :";
-					string label = "##" + stat;
-					//auto data = std::to_string(cs->get_stat(i));
-					string WeaponData = "";
-					if (cs->weapon != UNDEFINED)
+					if ((*sl)(i))
 					{
-						auto weap = instance.ecs.get_if<tc::Weapon>(cs->weapon);
-
-						if (weap->get_stat(i) > 0)
+						string stat = sl->operator[](i) + " :";
+						string label = "##" + stat;
+						//auto data = std::to_string(cs->get_stat(i));
+						string WeaponData = "";
+						if (cs->weapon != UNDEFINED)
 						{
-							string data = std::to_string(weap->get_stat(i));
-							WeaponData = "( +" + data + " )";
-						}
-						else if (weap->get_stat(i) < 0)
-						{
-							string data = std::to_string(weap->get_stat(i));
-							WeaponData = "( " + data + " )";
+							auto weap = instance.ecs.get_if<tc::Weapon>(cs->weapon);
+
+							if (weap->get_stat(i) > 0)
+							{
+								string data = std::to_string(weap->get_stat(i));
+								WeaponData = "( +" + data + " )";
+							}
+							else if (weap->get_stat(i) < 0)
+							{
+								string data = std::to_string(weap->get_stat(i));
+								WeaponData = "( " + data + " )";
+							}
+
 						}
 
+
+						ImGui::Dummy({ frontPadding, 0 });
+						ImGui::SameLine();
+						ImGui::Text(stat.c_str());
+						ImGui::Dummy({ frontPadding, 0 });
+						ImGui::SameLine();
+						ImGui::PushItemWidth(100.f);
+						ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
+						ImGui::PopItemWidth();
+						ImGui::SameLine();
+						ImGui::Text(WeaponData.c_str());
+						ImGui::Dummy({ 0, 10.f });
 					}
-
-
-					ImGui::Dummy({ frontPadding, 0 });
-					ImGui::SameLine();
-					ImGui::Text(stat.c_str());
-					ImGui::Dummy({ frontPadding, 0 });
-					ImGui::SameLine();
-					ImGui::PushItemWidth(100.f);
-					ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
-					ImGui::PopItemWidth();
-					ImGui::SameLine();
-					ImGui::Text(WeaponData.c_str());
-					ImGui::Dummy({ 0, 10.f });
 
 				}
 				ImGui::PopFont();
@@ -162,7 +165,7 @@ namespace Tempest
 						float center = RegionWidth - font_size;
 
 
-						UI::SubHeader({ center - font_size , 0 }, sub.c_str());
+						UI::SubHeader(sub.c_str());
 						ImGui::PushFont(FONT_PARA);
 						ImGui::Dummy({0, 50.f });
 						
@@ -254,7 +257,7 @@ namespace Tempest
 							string Editsub = "Edit Weapon/Item";
 							font_size = ImGui::GetFontSize() * Editsub.size() / 2;
 							float center = RegionWidth - font_size;
-							UI::SubHeader({ center - 70.f, 0 }, Editsub.c_str());
+							UI::SubHeader(Editsub.c_str());
 
 							ImGui::Dummy({ 0, 20.f });
 							ImGui::Columns(2, "Edit Weapon", true);
@@ -276,7 +279,7 @@ namespace Tempest
 							ImGui::SameLine();
 							if(disabled)
 							{
-								ImGui::Text("9 Char only");
+								ImGui::Text("15 Char only");
 							}
 							else
 							{
@@ -284,21 +287,25 @@ namespace Tempest
 							}
 							ImGui::Dummy({ 0, 10.f });
 							ImGui::BeginChild("##EditWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
-							for (auto i = 0; i < sl->size(); i++)
+							for (auto i = 0, j = 0; i < sl->size(); i++)
 							{
-								ImGui::Text(sl->operator[](i).c_str());
-								ImGui::SameLine();
-								ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
-								ImGui::SameLine();
-								ImGui::SetNextItemWidth(80.f);
-								string WeapStats = "##WeapStats" + std::to_string(i);
-								ImGui::InputInt(WeapStats.c_str(), &EditWeap.get_stat(i), 0);
-
-								if (i % 2 == 0)
+								if ((*sl)(i))
 								{
+									ImGui::Text(sl->operator[](i).c_str());
 									ImGui::SameLine();
-									ImGui::Dummy({ 10.f, 0 });
+									ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 									ImGui::SameLine();
+									ImGui::SetNextItemWidth(80.f);
+									string WeapStats = "##WeapStats" + std::to_string(i);
+									ImGui::InputInt(WeapStats.c_str(), &EditWeap.get_stat(i), 0);
+
+									if (j % 2 == 0)
+									{
+										ImGui::SameLine();
+										ImGui::Dummy({ 10.f, 0 });
+										ImGui::SameLine();
+									}
+									j++;
 								}
 							}
 
@@ -361,7 +368,7 @@ namespace Tempest
 						}
 						
 
-						UI::SubHeader({ center - 100.f, 0 }, "Add Weapon");
+						UI::SubHeader("Add Weapon");
 						ImGui::Dummy({ 0, 20.f });
 						ImGui::Columns(2, "Weapons", true);
 						window = ImGui::GetCurrentWindow();
@@ -384,7 +391,7 @@ namespace Tempest
 							if (CurSelection == id)
 								isSelected = true;
 
-							if (UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { button_pos.x, button_pos.y + (index - 1) * 60 }, { 100.f, 10.f }, FONT_PARA, isSelected))
+							if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { button_pos.x, button_pos.y + (index - 1) * 60 }, { 0.f, 10.f }, FONT_PARA, isSelected))
 							{
 								CurSelection = id;
 								//LOG("CURRENT SELECTED: {0}", CurSelection);
@@ -436,7 +443,7 @@ namespace Tempest
 								sub = "New Weapon/Item";
 								font_size = ImGui::GetFontSize() * sub.size() / 2;
 								center = RegionWidth - font_size;
-								UI::SubHeader({ center - 70.f, 0 }, sub.c_str());
+								UI::SubHeader(sub.c_str());
 
 								ImGui::Dummy({ 0, 20.f });
 
@@ -454,33 +461,37 @@ namespace Tempest
 								ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 								ImGui::SameLine();
 								ImGui::InputText("##NewWeapName", &NewWeap.name);
-								bool disabled = NewWeap.name.size() > 9;
+								bool disabled = NewWeap.name.size() > 15;
 								ImGui::SameLine();
 								if(disabled)
 								{
-									ImGui::Text("9 Char only");
+									ImGui::Text("15 Char only");
 								}
 								else
 								{
 									ImGui::Dummy({ 100.f, 10.f });
 								}
 								ImGui::Dummy({ 0, 10.f });
-								ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f }, true);
-								for (auto i = 0; i < sl->size(); i++)
+								ImGui::BeginChild("##NewWeapStats", { ImGui::GetColumnWidth(1) - 10.f, 100.f });
+								for (auto i = 0, j = 0; i < sl->size(); i++)
 								{
-									ImGui::Text(sl->operator[](i).c_str());
-									ImGui::SameLine();
-									ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
-									ImGui::SameLine();
-									ImGui::SetNextItemWidth(80.f);
-									string WeapStats = "##WeapStats" + std::to_string(i);
-									ImGui::InputInt(WeapStats.c_str(), &NewWeap.get_stat(i), 0);
-
-									if (i % 2 == 0)
+									if ((*sl)(i))
 									{
+										ImGui::Text(sl->operator[](i).c_str());
 										ImGui::SameLine();
-										ImGui::Dummy({ 10.f, 0 });
+										ImGui::Dummy({ Padding_x - ImGui::GetItemRectSize().x ,0.f });
 										ImGui::SameLine();
+										ImGui::SetNextItemWidth(80.f);
+										string WeapStats =  "##WeapStats" + std::to_string(i);
+										ImGui::InputInt(WeapStats.c_str(), &NewWeap.get_stat(i), 0);
+
+										if (j % 2 == 0)
+										{
+											ImGui::SameLine();
+											ImGui::Dummy({ 10.f, 0 });
+											ImGui::SameLine();
+										}
+										j++;
 									}
 								}
 
@@ -602,10 +613,6 @@ namespace Tempest
 			}
 			
 			ImGui::End();
-			
-		//	ImGui::PopStyleVar(3);
-		//	ImGui::PopStyleColor(4);
-			
 		}
 		
 		
