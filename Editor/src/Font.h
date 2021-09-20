@@ -23,10 +23,13 @@
 // make sure these files are in Resource/Fonts/
 static const char* heavy_font = "contax.ttf";
 static const char* body_font = "Montserrat-Regular.ttf";
+static const char* open_font = "OpenSans-SemiBold.ttf";
+
 
 static const float global_font_scale = 5.f / 6.f;
 static const float global_icon_scale = 13.f / 15.f;
 
+static const float open_text_size = 64.f;
 static const float header_text_size = 48.f;
 static const float subheader_text_size = 36.f;
 static const float button_text_size = 24.f;
@@ -45,6 +48,7 @@ inline auto font_header() { return ImGui::GetIO().Fonts->Fonts[2]; } // header
 inline auto font_subheader() { return ImGui::GetIO().Fonts->Fonts[3]; } // subheader
 inline auto font_button() { return ImGui::GetIO().Fonts->Fonts[4]; } // button
 inline auto font_subbutton() { return ImGui::GetIO().Fonts->Fonts[5]; } // subbutton
+inline auto font_open() { return ImGui::GetIO().Fonts->Fonts[6]; } // opensans
 
 
 
@@ -54,6 +58,7 @@ inline auto font_subbutton() { return ImGui::GetIO().Fonts->Fonts[5]; } // subbu
 #define FONT_SHEAD		font_subheader()
 #define FONT_BTN		font_button()
 #define FONT_SBTN		font_subbutton()
+#define FONT_OPEN		font_open()
 
 #define FONT_DEFAULT	FONT_PARA
 #define FONT_BOLD		FONT_BODY

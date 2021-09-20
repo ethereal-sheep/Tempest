@@ -27,15 +27,70 @@ namespace Tempest
 			// start event
 			auto start = add_node(ConflictNode::create_node("Start"));
 			auto win = add_node(ConflictNode::create_node("Win"));
+			auto lose = add_node(ConflictNode::create_node("Lose"));
+			auto compare = add_node(CompareNode::create_node("CompareFlow"));
 
 			LOG_ASSERT(start);
 			LOG_ASSERT(win);
+			LOG_ASSERT(lose);
+			LOG_ASSERT(compare);
 
 			// testing only
 			/*auto output = add_node(ActionNode::create_node("Output"));
 			LOG_ASSERT(output);
 			auto var = add_var("Output", pin_type::Int);
 			LOG_ASSERT(var);*/
+
+			win->position.x = 600.f;
+			lose->position.x = 600.f;
+			lose->position.y = 75.f;
+			compare->position.x = 270.f;
+
+			// add some dice for fun
+
+			auto d61 = add_node(DiceNode::create_node("D6"));
+			auto d62 = add_node(DiceNode::create_node("D6"));
+
+			LOG_ASSERT(d61);
+			LOG_ASSERT(d62);
+
+			d61->position.y = 75.f;
+			d62->position.y = 150.f;
+
+			// link start and compare flow
+			LOG_ASSERT(add_link(
+				start->get_output_pin(0)->get_id(),
+				compare->get_input_pin(0)->get_id()
+			));
+
+			// link compare flow and win
+			LOG_ASSERT(add_link(
+				compare->get_output_pin(0)->get_id(),
+				win->get_input_pin(0)->get_id()
+			));
+			// link compare flow and win
+			LOG_ASSERT(add_link(
+				compare->get_output_pin(1)->get_id(),
+				win->get_input_pin(0)->get_id()
+			));
+			// link compare flow and lose
+			LOG_ASSERT(add_link(
+				compare->get_output_pin(2)->get_id(),
+				lose->get_input_pin(0)->get_id()
+			));
+
+			// link d6 and compare
+			LOG_ASSERT(add_link(
+				d61->get_output_pin(0)->get_id(),
+				compare->get_input_pin(1)->get_id()
+			));
+			// link d6 and compare
+			LOG_ASSERT(add_link(
+				d62->get_output_pin(0)->get_id(),
+				compare->get_input_pin(2)->get_id()
+			));
+
+
 		}
 			break;
 		case Tempest::graph_type::action:

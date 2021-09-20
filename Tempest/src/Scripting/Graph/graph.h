@@ -366,6 +366,7 @@ namespace Tempest
         Reader& _deserialize(Reader& reader);
 
 
+        mutable string name;
     private:
 
         /**
@@ -391,7 +392,7 @@ namespace Tempest
 
 
         // might be deprecated
-        mutable string name;
+        //mutable string name;
         mutable tpath filepath;
 
         graph_type type = graph_type::regular;
