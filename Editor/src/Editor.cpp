@@ -14,7 +14,6 @@
 #include "InstanceManager/InstanceManager.h"
 
 #include "Font.h"
-#include "Graphics/OpenGL/RenderSystem.h"
 #include "Util/GuizmoController.h"
 
 #include "Audio/AudioEngine.h"

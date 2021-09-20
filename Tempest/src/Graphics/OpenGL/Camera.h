@@ -86,6 +86,8 @@ namespace Tempest
 		glm::mat4 GetReverseDepthViewProjectionMatrix() const;
 		glm::mat4 GetRotationMatrix() const;
 		glm::mat4 GetOrthoProjectionMatrix() const;
+		glm::mat4 GetInverseViewProjectionMatrix() const;
+		glm::vec2 GetResolution() const;
 
 		glm::vec3 ScreenspaceToWorldspace(const glm::vec2&) const;
 		glm::vec2 WorldspaceToScreenspace(const glm::vec3&) const;

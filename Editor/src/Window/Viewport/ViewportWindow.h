@@ -1,6 +1,6 @@
 #pragma once
 #include "Instance/Instance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
+#include "Graphics/Basics/RenderSystem.h"
 #include "Util/GuizmoController.h"
 
 namespace Tempest

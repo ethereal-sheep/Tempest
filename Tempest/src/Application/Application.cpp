@@ -3,8 +3,6 @@
 #include "Util.h"
 #include "Events/Test/event_test.h"
 
-#include "Graphics/OpenGL/RenderSystem.h"
-
 #include "Scripting/Test/test_scripting.h"
 #include "Scripting/GMS.h"
 
@@ -14,6 +12,9 @@
 #include "Util/thread_pool.h"
 #include "Util/Service.h"
 #include "Audio/AudioEngine.h"
+
+#include "Graphics/Basics/RenderSystem.h"
+#include "Graphics/Test/TestModel.h"
 
 namespace Tempest
 {
@@ -32,16 +33,12 @@ namespace Tempest
 		Logger::Init();
 		Service<RenderSystem>::Register(m_width, m_height);
 		LOG("Initializing Tempest Engine");
-		LOG(glGetString(GL_VERSION));
 		Service<thread_pool>::Register(thread::hardware_concurrency());
 		Service<EventManager>::Register();
 
 		AudioEngine::Init();
 
 		OnInit();
-
-		//testing_ecs();
-		//TestingDice();
 	}
 
 	void Application::OnEngineUpdate()
@@ -57,9 +54,8 @@ namespace Tempest
 	void Application::OnEngineRender()
 	{
 
-		Service<RenderSystem>::Get().StartFrame();
-		Service<RenderSystem>::Get().EndFrame();
-
+		Service<RenderSystem>::Get().Draw();
+		//Service<RenderSystem>::Get().EndFrame();
 		OnRender();
 	}
 
@@ -75,7 +71,12 @@ namespace Tempest
 
 	void Application::OnKeyPress(uint8_t key, uint8_t repeat)
 	{
-		Service<RenderSystem>::Get().GetCamera().OnKeyPress(key);
+		//Service<RenderSystem>::Get().GetCamera().OnKeyPress(key);
+		if(key == 'G')
+			Service<RenderSystem>::Get().RenderGrid(true);
+
+		if (key == 'A')
+			Service<RenderSystem>::Get().SubmitModel("Models/HandgunB.fbx", Tempest::tc::Transform{});
 		(void)repeat;
 	}
 

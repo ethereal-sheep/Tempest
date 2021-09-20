@@ -2,7 +2,7 @@
 #include "Font.h"
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
-#include "Graphics/OpenGL/RenderSystem.h"
+#include "Graphics/Basics/RenderSystem.h"
 #include "Audio/AudioEngine.h"
 
 
@@ -51,6 +51,11 @@ namespace Tempest
 				if (ImGui::BeginTabItem("Mouse"))
 				{
 					Mouse(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Light"))
+				{
+					Light(instance);
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
@@ -200,6 +205,7 @@ namespace Tempest
 
 			if (UI::DragFloat3ColorBox("Rotation", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(eulerDeg), 0.f, 1.f).first)
 			{
+				//cam.SetRotation(eulerDeg);
 			}
 		}
 		{
@@ -330,6 +336,20 @@ namespace Tempest
 
 
 		}
+	}
+
+	void DiagnosticsWindow::Light(Instance& instance)
+	{
+		auto& light = Service<RenderSystem>::Get().dir_lights[0];
+		const auto padding = 80.f;
+		UI::DragFloat3ColorBox("Direction", "##LightDirection", ImVec2{ padding , 0.f }, value_ptr(light.Direction), 0.f, 0.1f, -10.f, 10.f);
+		UI::DragFloat3ColorBox("Color", "##LightColor", ImVec2{ padding , 0.f }, value_ptr(light.Color), 0.f, 0.01f, 0.f, 1.f);
+
+		ImGui::Selectable("Intensity", false, ImGuiSelectableFlags_Disabled, ImVec2{ 10.f, 0 });
+		ImGui::SameLine();
+		ImGui::PushID("Intensity");
+		if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
+		ImGui::PopID();
 	}
 
 	void DiagnosticsWindow::Textures(Instance&)
