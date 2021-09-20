@@ -36,7 +36,7 @@ namespace Tempest
 				ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 				ImGui::SetNextWindowSize(ImVec2(700, 600));
 				ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
-					ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
+					ImGuiWindowFlags_NoScrollbar /*| ImGuiWindowFlags_NoMove*/;
                 auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
                 Entity StateLineId = UNDEFINED;
                 for (auto id : StatsView)
@@ -60,12 +60,13 @@ namespace Tempest
                     ImGui::Text(str.c_str(), wrap_width);
                     ImGui::PopTextWrapPos();
                     ImGui::PopFont();
-                    ImU32 lineCol = ImGui::GetColorU32({ 0.48f, 0.48f, 0.48f, 0.5f });
-                    ImVec2 lineMin{ ImGui::GetMainViewport()->GetCenter().x - ImGui::GetWindowWidth() * 0.4f, ImGui::GetMainViewport()->GetCenter().y - ImGui::GetWindowHeight()* 0.27f };
-                    ImVec2 lineMax{ ImGui::GetMainViewport()->GetCenter().x + ImGui::GetWindowWidth() * 0.4f, ImGui::GetMainViewport()->GetCenter().y - ImGui::GetWindowHeight() * 0.27f };
+                   ImU32 lineCol = ImGui::GetColorU32({ 0.48f, 0.48f, 0.48f, 0.5f });
+                    ImVec2 lineMin{ ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvailWidth() * 0.1f, ImGui::GetCursorScreenPos().y };
+                    ImVec2 lineMax{ ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvailWidth() * 0.9f, ImGui::GetCursorScreenPos().y };
 
                     ImGui::GetWindowDrawList()->AddLine(
                         lineMin, lineMax, lineCol, 2.0f);
+
                     ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
                     ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.1f, ImGui::GetWindowHeight() * 0.3f });
                     ImGui::PushFont(FONT_BODY);
