@@ -36,7 +36,7 @@ namespace Tempest
 				ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 				ImGui::SetNextWindowSize(ImVec2(700, 600));
 				ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
-					ImGuiWindowFlags_NoScrollbar /*| ImGuiWindowFlags_NoMove*/;
+					ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
                 auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
                 Entity StateLineId = UNDEFINED;
                 for (auto id : StatsView)
