@@ -70,6 +70,8 @@ namespace Tempest
 			// need to use dt
 			// fps controller can be done in instance manager
 			instance.OnUpdate(1.f);
+
+
 		}
 
 		void OnRender() override

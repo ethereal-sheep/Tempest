@@ -21,7 +21,7 @@ namespace Tempest
                 ImGuiWindowFlags_MenuBar;
         }
 
-        void show(Instance&) override
+        void show(Instance& instance) override
         {
 			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 			ImVec2 size = ImGui::GetMainViewport()->Size;
@@ -58,11 +58,23 @@ namespace Tempest
 
 							ImGui::EndMenu();
 						}
-
-
 						ImGui::EndMenuBar();
 					}
 				}
+
+				// debugging
+
+
+				for (auto i : instance.ecs.view<tc::Model>())
+				{
+					auto& m = instance.ecs.get<tc::Model>(i);
+					
+
+					ImGui::Text(m.m.GetFilename().string().c_str());
+
+				}
+
+
 
 			}
 			ImGui::End();

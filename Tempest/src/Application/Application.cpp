@@ -72,11 +72,11 @@ namespace Tempest
 	void Application::OnKeyPress([[maybe_unused]] uint8_t key, [[maybe_unused]] uint8_t repeat)
 	{
 		//Service<RenderSystem>::Get().GetCamera().OnKeyPress(key);
-		/*if(key == 'G')
+		if(key == 'G')
 			Service<RenderSystem>::Get().RenderGrid(true);
 
 		if (key == 'A')
-			Service<RenderSystem>::Get().SubmitModel("Models/HandgunB.fbx", Tempest::tc::Transform{});*/
+			Service<RenderSystem>::Get().SubmitModel("Models/HandgunB.fbx", Tempest::tc::Transform{});
 		
 	}
 

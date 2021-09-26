@@ -53,8 +53,10 @@ namespace Tempest
                 if (ImGui::Button("Ok"))
                 {
                     ImGui::CloseCurrentPopup();
-
-                    //Model model(path.string().c_str());
+                    
+                    auto entity = instance.ecs.create();
+                    auto m = instance.ecs.emplace<tc::Model>(entity);
+                    m->m = Model(path.string().c_str());
                 }
                 ImGui::SameLine();
                 if (ImGui::Button("Cancel"))
