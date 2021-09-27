@@ -31,11 +31,14 @@ namespace Tempest
         m_Pipeline.m_Cameras.emplace_back(Camera{});
         dir_lights.emplace_back(Directional_Light{});
 
+        pt_lights.emplace_back(Point_Light{});
+        pt_lights[0].Position = glm::vec3(0.5f, 0.5f, 0.5f);
+
         Transform transform;
-        transform.position = vec3(-1.f, 0.f, 0.f);
-        transform.rotation = quat(1.f, 0.f, 0.f, 0.f);
-        transform.scale = vec3(0.15f, 0.15f, 0.15f);
-        Submit(MeshCode::PLANE, transform);
+        transform.position = vec3(0.f, -.5f, 0.f);
+        transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
+        transform.scale = vec3(0.1f, 0.1f, 0.1f);
+        Submit(MeshCode::CUBE, transform);
 
         Transform transform2;
         transform2.position = vec3(0.f, 0.f, 0.f);
@@ -148,13 +151,19 @@ namespace Tempest
         
 
         {
+            Transform transform;
+            transform.position = vec3(pt_lights[0].Position.x, pt_lights[0].Position.y, pt_lights[0].Position.z);
+            transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
+            transform.scale = vec3(0.1f, 0.1f, 0.1f);
+
+
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(Model(transform), "ModelMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
             m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
         
-            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
-            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->Bind();
+            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
         
         {
@@ -167,6 +176,9 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
             m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "CamPosition");
             
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(pt_lights[0].Position, "PointLightPositions[0]");
+            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(pt_lights[0].Intensity, "PointLightIntensity");
+
             m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
             glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }

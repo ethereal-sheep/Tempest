@@ -341,6 +341,7 @@ namespace Tempest
 	void DiagnosticsWindow::Light(Instance& instance)
 	{
 		auto& light = Service<RenderSystem>::Get().dir_lights[0];
+		auto& ptlight = Service<RenderSystem>::Get().pt_lights[0];
 		const auto padding = 80.f;
 		UI::DragFloat3ColorBox("Direction", "##LightDirection", ImVec2{ padding , 0.f }, value_ptr(light.Direction), 0.f, 0.1f, -10.f, 10.f);
 		UI::DragFloat3ColorBox("Color", "##LightColor", ImVec2{ padding , 0.f }, value_ptr(light.Color), 0.f, 0.01f, 0.f, 1.f);
@@ -349,6 +350,13 @@ namespace Tempest
 		ImGui::SameLine();
 		ImGui::PushID("Intensity");
 		if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
+		ImGui::PopID();
+		ImGui::NewLine();
+		UI::DragFloat3ColorBox("Position", "##PointLightPosition", ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
+		ImGui::Selectable("Intensity2", false, ImGuiSelectableFlags_Disabled, ImVec2{ 10.f, 0 });
+		ImGui::SameLine();
+		ImGui::PushID("Intensity2");
+		if (ImGui::DragFloat(" ", &ptlight.Intensity, 0.01f, 0.f, 1.f)) {}
 		ImGui::PopID();
 	}
 

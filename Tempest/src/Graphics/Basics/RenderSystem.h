@@ -56,6 +56,7 @@ namespace Tempest
         Camera& GetCamera();
 
         std::vector<Directional_Light> dir_lights;
+        std::vector<Point_Light> pt_lights;
     private:        
         
         tuptr<Mesh> CreateShape(MeshCode code);
