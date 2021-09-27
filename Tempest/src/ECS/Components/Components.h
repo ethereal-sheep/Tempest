@@ -4,7 +4,7 @@
 #include "TMath.h"
 #include "ECS\Entity.h"
 #include "Physics/PhysicsObject.h"
-#include "Graphics/Basics/Mesh.h"
+#include "Graphics/Basics/RenderPipeline.h"
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
 
@@ -98,7 +98,7 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh, 
+		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh, Model,
 		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph
 		,END
 	};
@@ -206,7 +206,7 @@ namespace Tempest
 		struct Mesh
 		{
 			static const char* get_type() { return "Mesh"; }
-		
+
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, Mesh& component)
 			{
@@ -214,9 +214,9 @@ namespace Tempest
 				ar.Member("Code", component.code);
 				return ar.EndObject();
 			}
-		
+
 			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
-			
+
 			MeshCode code;
 		};
 
@@ -563,6 +563,22 @@ namespace Tempest
 
 			graph g;
 		};
+
+		struct Model
+		{
+			static const char* get_type() { return "Model"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Model& )
+			{
+				ar.StartObject();
+				//ar.Member("Path", component.code);
+				return ar.EndObject();
+			}
+			Tempest::Model m;
+		};
+
+
 	}
 	namespace tc = Tempest::Components;
 
@@ -595,6 +611,7 @@ namespace Tempest
 			COMPONENT_CASE(Script);
 			COMPONENT_CASE(Rigidbody);
 			COMPONENT_CASE(Mesh);
+			COMPONENT_CASE(Model);
 			COMPONENT_CASE(Character);
 			COMPONENT_CASE(Weapon);
 			COMPONENT_CASE(Statline);

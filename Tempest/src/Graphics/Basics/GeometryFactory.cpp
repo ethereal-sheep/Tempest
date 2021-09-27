@@ -27,6 +27,30 @@ namespace Tempest
 		return size();
 	}
 
+	std::pair<Vertices, Indices> GeometryFactory::GenerateIndexedPlane()
+	{
+		Vertices vertices;
+		for (int i = 0; i <= 1; ++i)
+		{
+			float row = i / static_cast<float>(1);
+			for (int j = 0; j <= 1; ++j)
+			{
+				float col = j / static_cast<float>(1);
+
+				vertices.position.emplace_back(col * 2 - 1.f, row * 2 - 1.f, 0.f);
+				vertices.texCoord.emplace_back(col, row);
+				vertices.normal.emplace_back(0.f, 0.f, 1.f);
+				vertices.tangent.emplace_back(1.f, 0.f, 0.f);
+				vertices.bitangent.emplace_back(0.f, 1.f, 0.f);
+			}
+		}
+
+		Indices indices = GenerateIndices(1, 1);
+		//AssertVertexCount(vertices);
+
+		return { vertices, indices };
+	}
+
 	std::pair<Vertices, Indices> GeometryFactory::GenerateIndexedPlane(int stacks, int slices)
 	{
 		Vertices vertices;
@@ -37,7 +61,7 @@ namespace Tempest
 			{
 				float col = j / static_cast<float>(slices);
 
-				vertices.position.emplace_back(col * 2 - 1.f, row * 2 - 1.f, 0.f);
+				vertices.position.emplace_back(col - 0.5f, row - 0.5f, 0.f);
 				vertices.texCoord.emplace_back(col, row);
 				vertices.normal.emplace_back(0.f, 0.f, 1.f);
 				vertices.tangent.emplace_back(1.f, 0.f, 0.f);

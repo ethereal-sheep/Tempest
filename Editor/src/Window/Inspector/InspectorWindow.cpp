@@ -266,7 +266,11 @@ namespace Tempest
 			{
 				ImGui::PushFont(FONT_BOLD);
 				bool header = ImGui::CollapsingHeader("Weapon##Weapon", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
-				auto sl = instance.ecs.get_if<tc::Statline>(1);
+				auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+				Entity StateLineId = UNDEFINED;
+				for (auto id : StatsView)
+					StateLineId = id;
+				auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
 				ImGui::PopFont();
 				ImGui::Dummy({ 0.f, 1.f });
 				if (header)
@@ -306,7 +310,7 @@ namespace Tempest
 					if (ImGui::Button("Show/Edit"))
 					{
 						//show = true;
-						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false);
+						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance.selected);
 					}
 
 				}

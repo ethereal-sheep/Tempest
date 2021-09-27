@@ -103,6 +103,11 @@ namespace Tempest
 		glClear(clearMask);
 	}
 
+	void Renderer::ClearDepth() const
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
 	void Renderer::ClearColorDepth() const
 	{
 		glClear(clearMask | GL_DEPTH_BUFFER_BIT);
@@ -133,6 +138,20 @@ namespace Tempest
 			vao.Unbind();
 			ibo.Unbind();
 		}
+	}
+
+	void Renderer::DrawElements(DrawMode mode, const Mesh& mesh, DrawType type)
+	{
+		mesh.Bind();
+		glDrawElements(GLMode(mode), mesh.GetVertexCount(), GLDrawType(type), nullptr);
+		mesh.Unbind();
+	}
+
+	void Renderer::DrawElements(DrawMode mode, const tuptr<Mesh>& mesh, DrawType type)
+	{
+		mesh->Bind();
+		glDrawElements(GLMode(mode), mesh->GetVertexCount(), GLDrawType(type), nullptr);
+		mesh->Unbind();
 	}
 
 	void Renderer::DrawArrays(DrawMode mode, const VertexArray& vao, unsigned int vertexCount)

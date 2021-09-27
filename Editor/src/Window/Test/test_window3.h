@@ -29,7 +29,7 @@ namespace Tempest
 
 		void show(Instance& instance [[maybe_unused]] ) override
 		{
-			if (ImGui::Begin(window_name(), &visible, window_flags))
+			/*if (ImGui::Begin(window_name(), &visible, window_flags))
 			{
 				static ImVec4 active{ 0.2f, 0.2f, 0.2f, 1.f };
 				static ImVec4 inactive{ 0.062f, 0.062f, 0.062f, 1.f };
@@ -163,7 +163,7 @@ namespace Tempest
 				ImGui::EndChild();
 			}
 
-			ImGui::End();
+			ImGui::End();*/
 	
 		}
 	};

@@ -28,7 +28,6 @@ namespace Tempest
 			auto& transform = ecs.get<tc::Transform>(id);
 			Service<RenderSystem>::Get().Submit(mesh.code, transform);
 		}
-
 	}
 	void Instance::internal_exit()
 	{

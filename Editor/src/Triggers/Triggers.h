@@ -22,14 +22,27 @@ namespace Tempest
 	struct CloseProjectTrigger : public Event {};
 	struct ExportProjectTrigger : public Event {};
 	struct ImportAssetTrigger : public Event {};
+	//Popup Trigger
+	struct DefineStatsTrigger : public Event {};
+
+	//Overlay Trigger
+	struct OpenSimulateTrigger : public Event {};
+	struct OpenCombatModeTrigger : public Event {};
+	struct OpenConflictResTrigger : public Event {};
+	struct OpenActionGraphTrigger : public Event 
+	{
+		OpenActionGraphTrigger(Entity entityid, Instance& in) : id{ entityid }, instance{in} {}
+		Entity id = UNDEFINED;
+		Instance& instance;
+	};
 	struct OpenUnitSheetTrigger : public Event 
 	{
-		OpenUnitSheetTrigger(bool isAddUnit) : addUnit{isAddUnit} {}
+		OpenUnitSheetTrigger(bool isAddUnit, Entity id = UNDEFINED) : addUnit{ isAddUnit }, entityID{ id } {}
 		bool addUnit = false;
+		Entity entityID = UNDEFINED;
 	};
 
-	struct OpenSimulateTrigger : public Event {};
-
+	
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}

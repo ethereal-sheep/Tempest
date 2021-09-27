@@ -15,35 +15,33 @@ namespace Tempest
 
 	class Model
 	{
-		struct MeshData
-		{
-			tvector<vec3> position;
-			tvector<vec3> normal;
-			tvector<vec3> texcoords;
-			tvector<uint32_t> indices;
-			uint32_t materialIndex;
-		};
-
-		//Material mMaterial;
-
 	public:
-
+		Model() = default;
 		Model(const char* file);
-		~Model() = default;
 
 		auto GetMeshes() const
 		{
 			return make_const_range(m_Meshes);
 		}
 
+		operator bool() const 
+		{
+			return m_Meshes.size();
+		}
+
+		const tpath& GetFilename() const
+		{
+			return m_File;
+		}
+
 	private:
-		void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform);		// Nodes
-		void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform);		// Mesh Data
-		void ProcessMaterialData(); // Material Textures + Material Info
+		void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform, const tvector<tsptr<Material>>& materials);		// Nodes
+		void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, const tvector<tsptr<Material>>& materials);		// Mesh Data
+		//void ProcessMaterialData(); // Material Textures + Material Info
 
 		tpath m_File;
-		tvector<Material> m_Materials;
-		tvector<tpair<Mesh, Material*>> m_Meshes;
+		//tvector<Material> m_Materials;
+		tvector<tpair<Mesh, tsptr<Material>>> m_Meshes;
 
 	};
 }

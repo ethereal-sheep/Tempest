@@ -25,6 +25,7 @@ namespace Tempest
 	struct GeometryFactory
 	{
 		static std::pair<Vertices, Indices> GenerateIndexedPlane(int stacks, int slices);
+		static std::pair<Vertices, Indices> GenerateIndexedPlane();							// For Ground Plane
 		static std::pair<Vertices, Indices> GenerateIndexedCube(int stacks, int slices); // Width and Height
 		static std::pair<Vertices, Indices> GenerateIndexedSphere(float radius = 1.f, int stacks = 16, int slices = 16);
 		static std::pair<Vertices, Indices> GenerateIndexedIcosahedron();

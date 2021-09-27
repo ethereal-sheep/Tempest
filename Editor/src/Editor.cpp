@@ -246,6 +246,7 @@ namespace Tempest
 
 		tpath body_f = tpath("Fonts") / body_font;
 		tpath heavy_f = tpath("Fonts") / heavy_font;
+		tpath open_f = tpath("Fonts") / open_font;
 
 
 		body_f.replace_extension(".ttf");
@@ -281,6 +282,11 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), subbutton_text_size * global_font_scale);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", subbutton_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", subbutton_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+
+		// 6 Sub button
+		io.Fonts->AddFontFromFileTTF(open_f.string().c_str(), open_text_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", open_text_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", open_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 
 
 		//// 6 fk 
@@ -340,7 +346,14 @@ namespace Tempest
 	{
 		for (auto entry : fs::directory_iterator(R"(Assets/)"))
 		{
-			tex_map[entry.path()] = make_sptr<Texture>(entry.path().string(), false);
+			try
+			{
+				tex_map[entry.path()] = make_sptr<Texture>(entry.path().string(), false);
+			}
+			catch (...)
+			{
+				LOG_WARN("{0} cannot be loaded!", entry.path().string());
+			}
 		}
 	}
 	void clear_ui_textures()

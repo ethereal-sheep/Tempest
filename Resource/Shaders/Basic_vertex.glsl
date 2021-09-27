@@ -14,6 +14,6 @@ uniform mat4 ProjectionMatrix;
 
 void main()
 {
-	vs_color = tangent;
+	vs_color = normal;
 	gl_Position =  ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
 }

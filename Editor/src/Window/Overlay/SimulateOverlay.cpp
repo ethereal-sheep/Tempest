@@ -19,27 +19,126 @@ namespace Tempest
 
 		if (OverlayOpen)
 		{
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+
 			if (ImGui::Begin("Select Unit Sheet", nullptr, window_flags))
 			{
 				float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
-				const float contentSize = ImGui::GetContentRegionAvailWidth() * 0.85f;
+				const float contentSize = ImGui::GetContentRegionAvailWidth() * 0.9f;
 				string text = "Simulate";
 				float text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
 
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.1f });
-				UI::SubHeader(ImVec2{ text_center - 100.f,50 }, "Simulate");
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.1f});
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+				UI::SubHeader("Simulate");
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f});
 
-				text = "Simulate your resolution here with up to two selected units.";
-				text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
-                ImGui::Dummy(ImVec2{ text_center, 0.f});
-                ImGui::SameLine();
-				ImGui::PushFont(FONT_PARA);
-				ImGui::Text(text.c_str());
-				ImGui::PopFont();
-				ImGui::Dummy({ (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f, 10.0f});
-				ImGui::SameLine();
-				ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.6f), true, ImGuiWindowFlags_NoScrollWithMouse);
+				const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
+
+				auto tex = tex_map["Assets/SimulationBackdrop.png"];
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+				ImVec2 point = ImGui::GetCursorPos();
+				{
+
+					ImVec2 Min{ point.x, point.y };
+					ImVec2 Max{ Min.x + viewport->Size.x * 0.91f, Min.y + viewport->Size.y * 0.73f };
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
+				}
+
+				// Drag drop section
+				{
+					const float availRegion = ImGui::GetContentRegionAvail().y * 0.3f;
+					auto curr_tex = tex_map["Assets/ButtonSlot.png"];
+					const ImVec2 button_slot_size{ curr_tex->GetWidth() * 0.9f, curr_tex->GetHeight() * 0.9f };
+
+					ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, availRegion), true, window_flags | ImGuiWindowFlags_NoScrollbar);
+
+					// Attacker section
+					{
+						ImGui::BeginChild("##DragDropAttackerSimulate", ImVec2(contentSize * 0.5f, availRegion - 2.0f), true, window_flags );
+
+						// Attacker image
+						ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.05f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.11f });
+						ImGui::Image((void*)static_cast<size_t>(tex_map["Assets/Attacker.png"]->GetID()), {tex_map["Assets/Attacker.png"]->GetWidth() * 0.9f, tex_map["Assets/Attacker.png"]->GetHeight() * 0.9f });
+
+						ImGui::SameLine();
+
+						// Button slot
+						ImVec2 buttonPos{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.45f - button_slot_size.x * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - button_slot_size.y * 0.5f};
+						
+						ImGui::SetCursorPos(buttonPos);
+						ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), button_slot_size); // Image draws from top left
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UNIT_CONTENT_ITEM"))
+							{
+								Attacker = *(const Entity*)payload->Data;
+							}
+
+							ImGui::EndDragDropTarget();
+						}
+
+						if (Attacker != UNDEFINED)
+						{
+							auto& character = instance.ecs.get<tc::Character>(Attacker);
+							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f}, { 180, 15 }, FONT_PARA))
+								Attacker = UNDEFINED;
+						}
+
+						ImGui::EndChild();
+					
+					}
+				
+					ImGui::SameLine(0,0);
+
+					// Defender section
+					{
+						ImGui::BeginChild("##DragDropDefenderSimulate", ImVec2(contentSize * 0.5f, availRegion - 2.0f), true, window_flags );
+
+						ImGui::SameLine();
+
+						// Button slot
+						ImVec2 buttonPos{ ImGui::GetCursorPosX() - 20.0f * 0.5f + ImGui::GetContentRegionAvailWidth() * 0.35f - button_slot_size.x * 0.5f,
+										  ImGui::GetCursorPosY() + 15.0f * 0.5f + ImGui::GetContentRegionAvail().y * 0.5f - button_slot_size.y * 0.5f};
+
+						ImGui::SetCursorPos(buttonPos);
+						ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), button_slot_size); // Image draws from top left
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UNIT_CONTENT_ITEM"))
+							{
+								Defender = *(const Entity*)payload->Data;
+							}
+
+							ImGui::EndDragDropTarget();
+						}
+
+						ImGui::SameLine();
+
+						// Defender image
+						ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.56f - (tex_map["Assets/Defender.png"]->GetWidth() * 0.9f) * 0.5f , ImGui::GetCursorPosY() - (tex_map["Assets/Defender.png"]->GetHeight() * 0.9f) * 0.5f + 15.0f});
+						ImGui::Image((void*)static_cast<size_t>(tex_map["Assets/Defender.png"]->GetID()), { tex_map["Assets/Defender.png"]->GetWidth() * 0.9f, tex_map["Assets/Defender.png"]->GetHeight() * 0.9f });
+
+						if (Defender != UNDEFINED)
+						{
+							auto& character = instance.ecs.get<tc::Character>(Defender);
+							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f }, { 180, 15 }, FONT_PARA))
+								Defender = UNDEFINED;
+						}
+
+						
+
+						ImGui::EndChild();
+					
+					}
+					
+
+					ImGui::EndChild();
+				}
+
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+
+				// Content selection section
+				ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.8f), true, ImGuiWindowFlags_NoScrollWithMouse);
 				
 				const auto regoinAvailWidth = ImGui::GetContentRegionAvailWidth() / 3.0f - Padding;
 				const auto regoinAvailHeight = ImGui::GetContentRegionAvail().y;
@@ -55,9 +154,24 @@ namespace Tempest
 					unsigned i = 0;
 					for (auto id : view)
 					{
+						ImGui::PushID(id);
+						ImGui::BeginGroup();
+						const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
+
 						auto& Charac = instance.ecs.get<tc::Character>(id);
-						if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y + i++ * 80 }, { 180, 15 }, FONT_PARA))
-							Tab = i;
+						if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), pos, { 180, 15 }, FONT_PARA)) {}
+
+						ImGui::EndGroup();
+				
+						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+						{
+							ImGui::SetDragDropPayload("UNIT_CONTENT_ITEM", &id, sizeof(Entity));
+							UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y }, { 180, 15 }, FONT_PARA);
+							ImGui::EndDragDropSource();
+						}
+
+						ImGui::PopID();
+				
 					}
 
 					ImGui::EndChild();
@@ -71,12 +185,19 @@ namespace Tempest
 				// Add more things ehre
 				{
 					ImGui::BeginChild("##MiddleSideSimulate", ImVec2(regoinAvailWidth, regoinAvailHeight - Padding));
-			
+
 					const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-					for (unsigned i = 0; i < NumOfButtons; i++)
+					int index = 0;
+					for (auto id : instance.ecs.view<tc::ActionGraph>())
 					{
-						if (UI::UIButton_1("System" + std::to_string(i), "System" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 180, 15 }, FONT_PARA))
-							Tab = i + NumOfButtons;
+						auto& g = instance.ecs.get<tc::Graph>(id);
+						g.g.get_name();
+						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+						}
+						index++;
 					}
 
 					ImGui::EndChild();
@@ -91,10 +212,17 @@ namespace Tempest
 					ImGui::BeginChild("##RightSideSimulate", ImVec2(regoinAvailWidth, regoinAvailHeight - Padding));
 
 					const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-					for (unsigned i = 0; i < NumOfButtons; i++)
+					int index = 0;
+					for (auto id : instance.ecs.view<tc::ConflictGraph>())
 					{
-						if (UI::UIButton_1("Link" + std::to_string(i), "Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 180, 15 }, FONT_PARA))
-							Tab = i + NumOfButtons * 2;
+						auto& g = instance.ecs.get<tc::Graph>(id);
+						g.g.get_name();
+						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+						}
+						index++;
 					}
 					ImGui::EndChild();
 				}
@@ -113,6 +241,8 @@ namespace Tempest
 					OverlayOpen = false;
 				}
 			}
+
+			ImGui::PopStyleVar();
 
 			ImGui::End();
 

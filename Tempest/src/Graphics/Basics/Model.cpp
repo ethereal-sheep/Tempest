@@ -15,26 +15,93 @@ namespace Tempest
 			aiProcess_GenSmoothNormals |
 			aiProcess_JoinIdenticalVertices);
 
-		// materials
-		ProcessMaterialData();
+		// create a list of material
+		tvector<tsptr<Material>> materials(s_Scene->mNumMaterials, make_sptr<Material>());
+
+		// pass in materials to be processed
+		for (id_t i = 0; i < s_Scene->mNumMaterials; ++i)
+		{
+			const auto* pMaterial = s_Scene->mMaterials[i];
+			// turn into Tempest::Material
+			auto& m = *materials[i];
+			pMaterial->Get(AI_MATKEY_REFRACTI, m.Refraction);
+			pMaterial->Get(AI_MATKEY_REFLECTIVITY, m.Reflection);
+			pMaterial->Get(AI_MATKEY_SHININESS, m.Shininess);
+			pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, m.ShininessStrength);
+			pMaterial->Get(AI_MATKEY_OPACITY, m.Opacity);
+
+			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, m.Diffuse.data(), nullptr);
+			pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, m.Ambient.data(), nullptr);
+			pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, m.Specular.data(), nullptr);
+			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, m.Emissive.data(), nullptr);
+			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, m.Transparent.data(), nullptr);
+			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, m.Reflective.data(), nullptr);
+
+			for (uint32_t j = 0; j < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); ++j)
+			{
+				aiString path;
+				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, j, &path) == AI_SUCCESS)
+				{
+					string full_path{ path.data };
+					string lower_path{ path.data };
+					std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+						[](unsigned char c) { return std::tolower(c); });
+
+					auto check = lower_path.find("textures");
+					if (check == string::npos) continue;
+
+					string tex_path = full_path.substr(check, full_path.length());
+					auto file = m_File.parent_path() / tex_path;
+
+					try
+					{
+						m.DiffuseMap = make_sptr<Texture>(file.string());
+					}
+					catch (const std::exception& e)
+					{
+						LOG_ERROR(e.what());
+					}
+
+					//auto tex_path = m_File.parent_path() / path.data;
+					//m.DiffuseMap = make_sptr<Texture>(tex.path);
+				}
+			}
+		}
 
 		// nodes and meshes
-		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{});
+		// recursive into the scene graph
+		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, materials);
 	}
 
-	void Model::ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform)
+	/*Model::Model(Model&& model)
+	:	m_File{std::move(model.m_File)},
+		m_Materials{std::move(model.m_Materials)},
+		m_Meshes{std::move(model.m_Meshes)}
+	{
+	}
+
+	Model& Model::operator=(Model&& model) noexcept
+	{
+		std::swap(m_File, model.m_File);
+		std::swap(m_Materials, model.m_Materials);
+		std::swap(m_Meshes, model.m_Meshes);
+
+		return *this;
+	}*/
+
+	void Model::ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform, const tvector<tsptr<Material>>& materials)
 	{
 		for (id_t i = 0; i < node->mNumMeshes; ++i)
-			ProcessMeshData(s_Scene->mMeshes[node->mMeshes[i]], transform * node->mTransformation);
+			ProcessMeshData(s_Scene->mMeshes[node->mMeshes[i]], transform * node->mTransformation, materials);
 		
 		// process all of its children's node meshes (if any)
 		for (id_t i = 0; i < node->mNumChildren; ++i)
 		{
-			ProcessNodeData(node->mChildren[i], transform * node->mTransformation);
+			ProcessNodeData(node->mChildren[i], transform * node->mTransformation, materials);
 		}
 	}
 
-	void Model::ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform)
+	void Model::ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, const tvector<tsptr<Material>>& materials)
 	{
 		tpair<Vertices, Indices> vi;
 		Vertices& vertex = vi.first;
@@ -74,64 +141,17 @@ namespace Tempest
 		}
 
 		m_Meshes.emplace_back(
-			tpair<Mesh, Material*>(
+			tpair<Mesh, tsptr<Material>>(
 				std::move(vi), 
-				&m_Materials[mesh->mMaterialIndex])
+				materials[mesh->mMaterialIndex])
 			);
 	}
 
-	void Model::ProcessMaterialData()
-	{
-		m_Materials.resize(s_Scene->mNumMaterials);
-			
-		for (id_t i = 0; i < s_Scene->mNumMaterials; ++i)
-		{
-			const auto* pMaterial = s_Scene->mMaterials[i];
-			// turn into Tempest::Material
-			auto& m = m_Materials[i];
-			pMaterial->Get(AI_MATKEY_REFRACTI, m.Refraction);
-			pMaterial->Get(AI_MATKEY_REFLECTIVITY, m.Reflection);
-			pMaterial->Get(AI_MATKEY_SHININESS, m.Shininess);
-			pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, m.ShininessStrength);
-			pMaterial->Get(AI_MATKEY_OPACITY, m.Opacity);
-			
-			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, m.Diffuse.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, m.Ambient.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, m.Specular.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, m.Emissive.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, m.Transparent.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, m.Reflective.data(), nullptr);
+	//void Model::ProcessMaterialData()
+	//{
+	//	//m_Materials.resize(s_Scene->mNumMaterials);
+	//	tvector<Material> materials(s_Scene->mNumMaterials);
 
-			for (uint32_t j = 0; j < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); ++j)
-			{
-				aiString path;
-				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, j, &path) == AI_SUCCESS)
-				{
-					string full_path{path.data};
-					string lower_path{path.data};
-					std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
-    					[](unsigned char c){ return std::tolower(c); });
-					
-					auto check = lower_path.find("textures");
-					if(check == string::npos) continue;
-					
-					string tex_path = full_path.substr(check, full_path.length());
-					auto file = m_File.parent_path() / tex_path;
-					
-					try
-					{
-						m.DiffuseMap = make_sptr<Texture>(file.string());
-					}
-					catch(const std::exception& e)
-					{
-						LOG_ERROR(e.what());
-					}
-
-					//auto tex_path = m_File.parent_path() / path.data;
-					//m.DiffuseMap = make_sptr<Texture>(tex.path);
-				}	
-			}
-
-		}
-	}
+	//	
+	//}
 }

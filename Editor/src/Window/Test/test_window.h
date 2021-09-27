@@ -47,8 +47,26 @@ namespace Tempest
 				static ImVec2 pos = { 200,500 };
 				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 				//UI::Header(ImVec2{ center_x - 100.f,0 }, "HEADER");
-				UI::SubHeader(ImVec2{ center_x - 100.f,0 }, "SUBHEADER");
+				UI::SubHeader("SUBHEADER");
+				static bool test;
+				UI::UICheckBox_1("TS", &test);
+				if(ImGui::Button("COMBAT MODE"))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>();
+				}
+
+				if (ImGui::Button("CONFLICT RES"))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				}
 				
+				if (ImGui::Button("DEFINE STATS"))
+				{
+					Service<EventManager>::Get().instant_dispatch<DefineStatsTrigger>();
+				}
+				
+				
+			
 				// sliders for adjustment
 				ImVec2 slider_padding = { 100,0 };
 				UI::DragFloat("Padding X", "123", slider_padding, &padding_x);

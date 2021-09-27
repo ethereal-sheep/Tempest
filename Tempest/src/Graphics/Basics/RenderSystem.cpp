@@ -15,7 +15,7 @@ namespace Tempest
             case MeshCode::PLANE:           return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedPlane(1, 1));
             case MeshCode::SPHERE:          return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedSphere(1, 16, 16));
             case MeshCode::ICOSAHEDRON:     return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedIcosahedron());
-            default: LOG_ASSERT("Unknown Shape");
+            default:                        return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedCube(1, 1));
         }
     }
 
@@ -27,39 +27,33 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl")); 
         m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_LIGHT, std::make_unique<Shader>("Shaders/DirectionalLight_vertex.glsl", "Shaders/DirectionalLight_fragment.glsl"));
+        
+        if(m_Pipeline.m_Cameras.empty())
+            m_Pipeline.m_Cameras.emplace_back(Camera{});
 
-        m_Pipeline.m_Cameras.emplace_back(Camera{});
-        dir_lights.emplace_back(Directional_Light{});
-
-        pt_lights.emplace_back(Point_Light{});
-        pt_lights[0].Position = glm::vec3(0.5f, 0.5f, 0.5f);
-
-        Transform transform;
-        transform.position = vec3(0.f, -.5f, 0.f);
-        transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
-        transform.scale = vec3(0.1f, 0.1f, 0.1f);
-        Submit(MeshCode::CUBE, transform);
-
-        Transform transform2;
-        transform2.position = vec3(0.f, 0.f, 0.f);
-        transform2.rotation = quat(0.f, 0.f, 0.f, 0.f);
-        transform2.scale = vec3(0.15f, 0.15f, 0.15f);
-        Submit(MeshCode::SPHERE, transform2);
+        //dir_lights.emplace_back(Directional_Light{});
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
     {
-        m_Pipeline.m_Transforms.push_back(Model(transform));
+        SpriteObj sprite;
+        sprite.m_Code = code;
+        sprite.m_Transform = to_Model_Matrix(transform);
+        m_Pipeline.m_Sprites.emplace_back(sprite);
 
         if (m_Pipeline.m_Meshes.find(code) == m_Pipeline.m_Meshes.end())
         {
             m_Pipeline.m_Meshes.emplace(std::make_pair(code, CreateShape(code)));
         }
-
-        m_Pipeline.m_Sprites.push_back(code);
     }
 
-    glm::mat4 RenderSystem::Model(const Transform& transform)
+    void RenderSystem::SubmitModel(const string& path, const Transform& transform)
+    {
+        m_Pipeline.m_Models.emplace_back(std::make_shared<Model>(path.c_str()));
+        m_Pipeline.m_ModelTransforms.emplace_back(to_Model_Matrix(transform));
+    }
+
+    glm::mat4 RenderSystem::to_Model_Matrix(const Transform& transform)
     {
         glm::mat4 mdl(1.f);
         
@@ -110,119 +104,67 @@ namespace Tempest
         m_LineRenderer.ClearBuffer();
         */
 
-        //m_FrameBuffer.Bind();
+        m_FrameBuffer.Bind();
 
         m_Renderer.EnableDepthMask(true);
         m_Renderer.EnableDepthTest(true);
         m_Renderer.EnableCulling(false, false, false);
         m_Renderer.EnableBlend(true);
-        //m_Renderer.EnableCulling(true, true, true);
-        //m_Renderer.SetPolygonMode(PolyMode::FILL);
-        //for (auto i : dir_lights)
-        //{
-        //    m_ShadowBuffer.Bind();
-        //    m_ShadowBuffer.ClearAttachments();
-        //    m_ShadowBuffer.AttachDepthAttachment(i.DepthMap);
-        //    //m_ShadowBuffer.Validate();
-        //    m_ShadowBuffer.ResizeViewport(i.DepthMap);
-        //    m_ShadowBuffer.Draw(i.Direction, m_Pipeline.m_Sprites, m_Pipeline.m_Transforms, m_Pipeline.m_Meshes);
-        //    m_ShadowBuffer.Unbind();
-        //}
 
         m_Renderer.ClearColour(0.4f, 0.5f, 0.6f, 0.0f);
         m_Renderer.ClearColorDepth();      
     }
     void RenderSystem::Render()
     {
-        //{
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->Bind();
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetFront(), "front");
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "camera");
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetVec2f(m_Pipeline.m_Cameras[0].GetResolution(), "resolution");
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "view");
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "proj");
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Transforms[0], "model");
-        //    m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetInverseViewProjectionMatrix(), "ivpm");
-        //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->Bind();
-        //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        //    glClear(GL_DEPTH_BUFFER_BIT);
-        //}
-
         
+        if (GridActive)
+            RenderAAGrid();
 
+        // Drawing Polygons
+        for (auto& i : m_Pipeline.m_Sprites)
         {
-            Transform transform;
-            transform.position = vec3(pt_lights[0].Position.x, pt_lights[0].Position.y, pt_lights[0].Position.z);
-            transform.rotation = quat(0.f, 0.f, 0.f, 0.f);
-            transform.scale = vec3(0.1f, 0.1f, 0.1f);
-
-
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(Model(transform), "ModelMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-        
-            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->Bind();
-            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[0])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        }
-        
-        {
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Transforms[1], "ModelMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras[0].GetPosition(), "CamPosition");
+            if(m_Pipeline.m_Meshes[i.m_Code]->GetVertexArray())
+            {
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(i.m_Transform, "ModelMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+                m_Pipeline.m_Meshes[i.m_Code]->Bind();
+                m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.m_Meshes[i.m_Code]);
+            }
             
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(pt_lights[0].Position, "PointLightPositions[0]");
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(pt_lights[0].Intensity, "PointLightIntensity");
-
-            m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->Bind();
-            glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[1])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
         }
-       
-        //Texture tex("Assets/test_photo.png");
         
-        //for (size_t i = 0; i < m_Pipeline.m_Sprites.size(); ++i)
-        //{
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Transforms[0], "ModelMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-        //    
-        //    m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->Bind();
-        //    glDrawElements(GL_TRIANGLES, m_Pipeline.m_Meshes.at(m_Pipeline.m_Sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        //}
-        //
-        //  //Model Drawing
-        //for (auto& [mesh, material] : model.GetMeshes())
-        //{
-        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->Bind();
-        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(Model(transform), "ModelMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-        //    m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
-        //    if(material->DiffuseMap)
-        //        material->DiffuseMap->Bind(0);
-        //    mesh.Bind();
-        //    glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        //}
-        
+          //Drawing Models
+        for (size_t i = 0; i < m_Pipeline.m_ModelTransforms.size(); ++i)
+        {
+            for (auto& [mesh, material] : m_Pipeline.m_Models[i]->GetMeshes())
+            {
+                m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_ModelTransforms[i], "ModelMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+                if (material->DiffuseMap)
+                    material->DiffuseMap->Bind(0);
+                mesh.Bind();
+                glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+            }
+        }
 
-        //m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix());
-
-        //m_FrameBuffer.Unbind();       
+        m_FrameBuffer.Unbind();       
     }
 
     void RenderSystem::EndFrame()
     {
-        //m_FrameBuffer.Draw();
+        m_FrameBuffer.Draw();
     }
 
     void RenderSystem::Clear()
     {
+        m_Pipeline.m_Sprites.clear();
+        //m_Pipeline.m_Models.clear();
+        //m_Pipeline.m_ModelTransforms.clear();
     }
 
     void RenderSystem::Resize(uint32_t width, uint32_t height)
@@ -242,5 +184,20 @@ namespace Tempest
     Camera& RenderSystem::GetCamera()
     {
         return m_Pipeline.m_Cameras.front();
+    }
+
+    void RenderSystem::RenderGrid(bool state)
+    {
+        GridActive = state;
+    }
+
+    void RenderSystem::RenderAAGrid()
+    {   
+        m_Pipeline.m_Shaders[ShaderCode::GROUND]->Bind();
+        m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "view");
+        m_Pipeline.m_Shaders[ShaderCode::GROUND]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "proj");
+        m_Pipeline.Grid.m_Mesh.Bind();
+        m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.Grid.m_Mesh);
+        m_Renderer.ClearDepth();
     }
 }

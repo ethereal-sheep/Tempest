@@ -21,17 +21,16 @@ namespace Tempest
 
     public:
 
+        Mesh() = default;
         Mesh(const std::pair<Vertices, Indices>& data);
-        Mesh(const Mesh&) = delete;
-        Mesh& operator=(const Mesh&) = delete;
-        Mesh(Mesh&& mesh) noexcept;
-        Mesh& operator=(Mesh&& mesh)noexcept;
+        
         //Mesh(const Mesh& m);
 
         void Bind() const;
         void Unbind() const;
 
         uint32_t GetVertexCount() const;
+        tsptr<VertexArray> GetVertexArray();
         MeshCode GetMeshCode() const;
     };
 
