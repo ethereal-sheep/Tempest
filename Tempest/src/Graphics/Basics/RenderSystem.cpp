@@ -1,49 +1,67 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "ECS/Components/Components.h"
-
-
 #include "Logger/Log.h"
 
 
 namespace Tempest
 {
-    tuptr<Mesh> RenderSystem::CreateShape(MeshCode code)
+    void RenderSystem::InitMeshes()
     {
-        switch (code)
-        {
-            case MeshCode::CUBE:            return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedCube(1, 1));
-            case MeshCode::PLANE:           return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedPlane(1, 1));
-            case MeshCode::SPHERE:          return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedSphere(1, 16, 16));
-            case MeshCode::ICOSAHEDRON:     return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedIcosahedron());
-            default:                        return std::make_unique<Mesh>(GeometryFactory::GenerateIndexedCube(1, 1));
-        }
+        m_Pipeline.m_Meshes.emplace(std::make_pair(MeshCode::CUBE, std::make_unique<Mesh>(GeometryFactory::GenerateIndexedCube(1, 1))));
+        m_Pipeline.m_Meshes.emplace(std::make_pair(MeshCode::PLANE, std::make_unique<Mesh>(GeometryFactory::GenerateIndexedPlane(1, 1))));
+        m_Pipeline.m_Meshes.emplace(std::make_pair(MeshCode::SPHERE, std::make_unique<Mesh>(GeometryFactory::GenerateIndexedSphere(1, 16, 16))));
+        m_Pipeline.m_Meshes.emplace(std::make_pair(MeshCode::ICOSAHEDRON, std::make_unique<Mesh>(GeometryFactory::GenerateIndexedIcosahedron())));
+    }
+
+    void RenderSystem::InitShaders()
+    {
+        m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_LIGHT, std::make_unique<Shader>("Shaders/DirectionalLight_vertex.glsl", "Shaders/DirectionalLight_fragment.glsl"));
+    }
+
+    void RenderSystem::InitBuffers()
+    {
+        const BufferLayout Instanced_Layout{
+            Layout_Format::AOS,
+            {
+                VertexType::Mat4,
+                VertexType::Mat3,
+            } };
+
+        m_Pipeline.s_Mesh.m_Instanced.SetData(nullptr, 0, BufferType::ARRAY_BUFFER);
+        m_Pipeline.m_Meshes[MeshCode::CUBE]->GetVertexArray()->AttachVertexBufferInstanced(m_Pipeline.s_Mesh.m_Instanced, Instanced_Layout);
+        m_Pipeline.m_Meshes[MeshCode::SPHERE]->GetVertexArray()->AttachVertexBufferInstanced(m_Pipeline.s_Mesh.m_Instanced, Instanced_Layout);
+        m_Pipeline.m_Meshes[MeshCode::PLANE]->GetVertexArray()->AttachVertexBufferInstanced(m_Pipeline.s_Mesh.m_Instanced, Instanced_Layout);
+        m_Pipeline.m_Meshes[MeshCode::ICOSAHEDRON]->GetVertexArray()->AttachVertexBufferInstanced(m_Pipeline.s_Mesh.m_Instanced, Instanced_Layout);
+
+        m_Pipeline.m_Indirect.SetData(nullptr, 20, BufferType::INDIRECT_BUFFER);
     }
 
     RenderSystem::RenderSystem(uint32_t width, uint32_t height)
     {
         m_Renderer.SetViewport(0, 0, width, height);
 
-        m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
-        m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl")); 
-        m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
-        m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_LIGHT, std::make_unique<Shader>("Shaders/DirectionalLight_vertex.glsl", "Shaders/DirectionalLight_fragment.glsl"));
+        InitMeshes();
+        InitShaders();
+        InitBuffers();
         
         if(m_Pipeline.m_Cameras.empty())
             m_Pipeline.m_Cameras.emplace_back(Camera{});
-
-        //dir_lights.emplace_back(Directional_Light{});
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
     {
         SpriteObj sprite;
-        sprite.m_Code = code;
         sprite.m_Transform = to_Model_Matrix(transform);
-        m_Pipeline.m_Sprites.emplace_back(sprite);
-
-        if (m_Pipeline.m_Meshes.find(code) == m_Pipeline.m_Meshes.end())
+        sprite.m_Normal = glm::inverse(glm::transpose(glm::mat3(sprite.m_Transform)));
+        switch (code)
         {
-            m_Pipeline.m_Meshes.emplace(std::make_pair(code, CreateShape(code)));
+            case MeshCode::CUBE:            m_Pipeline.m_Cubes.emplace_back(sprite);            break;
+            case MeshCode::SPHERE:          m_Pipeline.m_Spheres.emplace_back(sprite);          break;
+            case MeshCode::PLANE:           m_Pipeline.m_Planes.emplace_back(sprite);           break;
+            case MeshCode::ICOSAHEDRON:     m_Pipeline.m_Icosahedrons.emplace_back(sprite);     break;
         }
     }
 
@@ -51,18 +69,6 @@ namespace Tempest
     {
         m_Pipeline.m_Models.emplace_back(std::make_shared<Model>(path.c_str()));
         m_Pipeline.m_ModelTransforms.emplace_back(to_Model_Matrix(transform));
-    }
-
-    glm::mat4 RenderSystem::to_Model_Matrix(const Transform& transform)
-    {
-        glm::mat4 mdl(1.f);
-        
-        glm::mat4 translate = glm::translate(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
-        glm::mat4 rotate(transform.rotation);
-        glm::mat4 scale = glm::scale(glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
-        
-        mdl = translate * rotate * scale;
-        return mdl;
     }
 
     void RenderSystem::Draw()
@@ -114,26 +120,17 @@ namespace Tempest
         m_Renderer.ClearColour(0.4f, 0.5f, 0.6f, 0.0f);
         m_Renderer.ClearColorDepth();      
     }
+
     void RenderSystem::Render()
-    {
-        
+    {    
         if (GridActive)
             RenderAAGrid();
 
         // Drawing Polygons
-        for (auto& i : m_Pipeline.m_Sprites)
-        {
-            if(m_Pipeline.m_Meshes[i.m_Code]->GetVertexArray())
-            {
-                m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(i.m_Transform, "ModelMatrix");
-                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
-                m_Pipeline.m_Meshes[i.m_Code]->Bind();
-                m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.m_Meshes[i.m_Code]);
-            }
-            
-        }
+        DrawSprites(MeshCode::CUBE,         m_Pipeline.m_Shaders[ShaderCode::BASIC]);
+        DrawSprites(MeshCode::SPHERE,       m_Pipeline.m_Shaders[ShaderCode::BASIC]);
+        DrawSprites(MeshCode::PLANE,        m_Pipeline.m_Shaders[ShaderCode::BASIC]);
+        DrawSprites(MeshCode::ICOSAHEDRON,  m_Pipeline.m_Shaders[ShaderCode::BASIC]);
         
           //Drawing Models
         for (size_t i = 0; i < m_Pipeline.m_ModelTransforms.size(); ++i)
@@ -155,6 +152,38 @@ namespace Tempest
         m_FrameBuffer.Unbind();       
     }
 
+    void RenderSystem::DrawSprites(MeshCode code, const tuptr<Shader>& shader)
+    {
+        switch (code)
+        {
+            case MeshCode::CUBE:            DrawSprites(shader, m_Pipeline.m_Cubes, code);            break;
+            case MeshCode::SPHERE:          DrawSprites(shader, m_Pipeline.m_Spheres, code);          break;
+            case MeshCode::PLANE:           DrawSprites(shader, m_Pipeline.m_Planes, code);           break;
+            case MeshCode::ICOSAHEDRON:     DrawSprites(shader, m_Pipeline.m_Icosahedrons, code);     break;
+        }
+    }
+
+    void RenderSystem::DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code)
+    {
+        if (sprites.empty()) return;
+
+        shader->Bind();
+        shader->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+        shader->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+
+        auto& spriteMesh = m_Pipeline.s_Mesh;
+        spriteMesh.m_Instanced.SetSubDataResize((void*)sprites.data(), static_cast<int32_t>(sprites.size() * sizeof(SpriteObj)));
+        spriteMesh.m_Indirect.vertexCount = m_Pipeline.m_Meshes[code]->GetVertexCount();
+        spriteMesh.m_Indirect.instanceCount = static_cast<uint32_t>(sprites.size());
+        m_Pipeline.m_Indirect.SetSubData(static_cast<void*>(&spriteMesh.m_Indirect), sizeof(DrawElementsIndirect));
+
+        m_Pipeline.m_Meshes[code]->Bind();
+        m_Pipeline.m_Indirect.Bind();
+        glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, m_Pipeline.m_Indirect.GetSize() / sizeof(DrawElementsIndirect), 0);
+        m_Pipeline.m_Indirect.Unbind();
+        m_Pipeline.m_Meshes[code]->Unbind();
+    }
+
     void RenderSystem::EndFrame()
     {
         m_FrameBuffer.Draw();
@@ -162,7 +191,10 @@ namespace Tempest
 
     void RenderSystem::Clear()
     {
-        m_Pipeline.m_Sprites.clear();
+        m_Pipeline.m_Cubes.clear();
+        m_Pipeline.m_Planes.clear();
+        m_Pipeline.m_Spheres.clear();
+        m_Pipeline.m_Icosahedrons.clear();
         //m_Pipeline.m_Models.clear();
         //m_Pipeline.m_ModelTransforms.clear();
     }
@@ -189,6 +221,18 @@ namespace Tempest
     void RenderSystem::RenderGrid(bool state)
     {
         GridActive = state;
+    }
+
+    glm::mat4 RenderSystem::to_Model_Matrix(const Transform& transform)
+    {
+        glm::mat4 mdl(1.f);
+
+        glm::mat4 translate = glm::translate(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+        glm::mat4 rotate(transform.rotation);
+        glm::mat4 scale = glm::scale(glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
+
+        mdl = translate * rotate * scale;
+        return mdl;
     }
 
     void RenderSystem::RenderAAGrid()

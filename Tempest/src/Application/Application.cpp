@@ -74,9 +74,6 @@ namespace Tempest
 		//Service<RenderSystem>::Get().GetCamera().OnKeyPress(key);
 		if(key == 'G')
 			Service<RenderSystem>::Get().RenderGrid(true);
-
-		if (key == 'A')
-			Service<RenderSystem>::Get().SubmitModel("Models/HandgunB.fbx", Tempest::tc::Transform{});
 		
 	}
 

@@ -24,6 +24,9 @@ namespace Tempest
 
         void Bind() const;
         void Unbind() const;
+
+        void AttachVertexBufferInstanced(const VertexBuffer& vbo, const BufferLayout& layout);        
+        void SetBindingDivisor(unsigned int index, unsigned int divisor) const;
         
         tsptr<VertexArray> GetShared();
 

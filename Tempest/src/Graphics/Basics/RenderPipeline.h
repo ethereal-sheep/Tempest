@@ -19,13 +19,19 @@ namespace Tempest
 
 	struct SpriteObj
 	{
-		MeshCode m_Code;
 		glm::mat4 m_Transform;
+		glm::mat3 m_Normal;
 	};
 
 	struct AAGrid
 	{
 		Mesh m_Mesh = GeometryFactory::GenerateIndexedPlane();
+	};
+
+	struct SpriteMesh
+	{
+		DrawElementsIndirect m_Indirect;
+		VertexBuffer m_Instanced;
 	};
 
 	struct RenderPipeline
@@ -42,12 +48,17 @@ namespace Tempest
 		/*
 		*	Polygons
 		*/
-		tvector<SpriteObj> m_Sprites;
+		tvector<SpriteObj> m_Spheres;
+		tvector<SpriteObj> m_Cubes;
+		tvector<SpriteObj> m_Planes;
+		tvector<SpriteObj> m_Icosahedrons;
 		
 		tvector<Camera> m_Cameras;
 		ShaderLibrary m_Shaders;
 		MeshLibrary m_Meshes;
 
 		AAGrid Grid;
+		SpriteMesh s_Mesh;
+		VertexBuffer m_Indirect;
 	};
 }
