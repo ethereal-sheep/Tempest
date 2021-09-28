@@ -38,6 +38,7 @@ namespace Tempest
     {
         m_VAO->Bind();
     }
+
     void Mesh::Unbind() const
     {
         m_VAO->Unbind();

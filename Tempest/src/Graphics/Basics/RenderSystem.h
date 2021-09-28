@@ -24,21 +24,22 @@
 namespace Tempest
 {
 	class RenderSystem
-    {   
-        
+    {    
         using Transform = tc::Transform;
 
         //FontRenderer m_FontR;
         LineRenderer m_LineRenderer;
-
         RenderPipeline m_Pipeline;
         ShadowBuffer m_ShadowBuffer;
         //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
         FrameBuffer m_FrameBuffer{ 1600, 900 };
-        //Model model{ "Models/HandgunB.fbx" };
 
         bool GridActive = false;
+
+        void InitMeshes();
+        void InitShaders();
+        void InitBuffers();
 
     public:
 
@@ -67,11 +68,12 @@ namespace Tempest
         std::vector<Directional_Light> dir_lights;
         std::vector<Point_Light> pt_lights;
     private:        
-        
-        tuptr<Mesh> CreateShape(MeshCode code);
+       
         glm::mat4 to_Model_Matrix(const Transform& transform);
-        void Clear();
 
-        void RenderAAGrid();
+        void Clear();                                                                                        // Clear Pipeline
+        void DrawSprites(MeshCode code, const tuptr<Shader>& shader);                                        // Render Sprites of different meshes
+        void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code);     // Render Sprites of different meshes
+        void RenderAAGrid();                                                                                 // Render Anti-Aliased Grid
     };
 }

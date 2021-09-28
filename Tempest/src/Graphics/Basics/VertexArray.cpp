@@ -88,6 +88,21 @@ namespace Tempest
             ++m_Index;
         }
     }
+    
+    void VertexArray::AttachVertexBufferInstanced(const VertexBuffer& vbo, const BufferLayout& layout)
+    {
+    	const uint32_t startingIndex = m_Index;
+    
+    	AttachVertexBuffer(vbo, layout);
+    
+    	for (auto i = startingIndex; i < m_Index; ++i)
+    		SetBindingDivisor(i, 1);
+    }
+    
+    void VertexArray::SetBindingDivisor(unsigned int index, unsigned int divisor) const
+    {
+    	glVertexArrayBindingDivisor(m_ID, index, divisor);
+    }
 
     void VertexArray::AttachIndexBuffer(const IndexBuffer& ibo) const
     {
