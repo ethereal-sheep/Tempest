@@ -31,7 +31,13 @@ namespace Tempest
         if(m_Pipeline.m_Cameras.empty())
             m_Pipeline.m_Cameras.emplace_back(Camera{});
 
-        //dir_lights.emplace_back(Directional_Light{});
+        dir_lights.emplace_back(Directional_Light{});
+        pt_lights.emplace_back(Point_Light{});
+        pt_lights[0].Position = glm::vec3(0.5f, 0.5f, 0.5f);
+
+        pt_lights.emplace_back(Point_Light{});
+        pt_lights[1].Position = glm::vec3(-1.f, 0.5f, 0.5f);
+
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -120,7 +126,8 @@ namespace Tempest
         if (GridActive)
             RenderAAGrid();
 
-        // Drawing Polygons
+        //Drawing Polygons
+        m_FrameBuffer.Bind();
         for (auto& i : m_Pipeline.m_Sprites)
         {
             if(m_Pipeline.m_Meshes[i.m_Code]->GetVertexArray())
@@ -130,6 +137,28 @@ namespace Tempest
                 m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
                 m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
                 m_Pipeline.m_Meshes[i.m_Code]->Bind();
+
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(i.m_Transform, "ModelMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1i((int)pt_lights.size(), "PointLightNumber");
+
+                for (unsigned int ptLight = 0; ptLight < pt_lights.size(); ++ptLight)
+                {
+                   std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
+                   m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+                   std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
+                   m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+                }
+                
+        
+
                 m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.m_Meshes[i.m_Code]);
             }
             
@@ -148,6 +177,18 @@ namespace Tempest
                 if (material->DiffuseMap)
                     material->DiffuseMap->Bind(0);
                 mesh.Bind();
+
+               /* for (auto& dirLight : dir_lights)
+                {
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Bind();
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_ModelTransforms[i], "ModelMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dirLight.Color, "LightColor");
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dirLight.Direction, "LightDirection");
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(dirLight.Intensity, "LightIntensity");
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+                }*/
                 glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
             }
         }

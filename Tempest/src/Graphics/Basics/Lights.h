@@ -30,7 +30,7 @@ namespace Tempest
 		glm::vec3 Color = glm::vec3(1.f, 1.f, 1.f);
 		glm::vec3 Position = glm::vec3(0.f, 0.f, 1.f);
 		float Radius = 0.5f;
-		float Intensity = 0.5f;
+		float Intensity = 0.7f;
 	};
 
 	struct SpotLight

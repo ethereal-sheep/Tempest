@@ -13,6 +13,7 @@ out vec3 vs_position;
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
+uniform int PointLightNumber;
 
 void main()
 {

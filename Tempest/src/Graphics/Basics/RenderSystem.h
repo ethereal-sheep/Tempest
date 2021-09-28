@@ -33,6 +33,7 @@ namespace Tempest
 
         RenderPipeline m_Pipeline;
         ShadowBuffer m_ShadowBuffer;
+        //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
         FrameBuffer m_FrameBuffer{ 1600, 900 };
         //Model model{ "Models/HandgunB.fbx" };
