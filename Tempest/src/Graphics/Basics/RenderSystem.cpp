@@ -19,6 +19,8 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_LIGHT, std::make_unique<Shader>("Shaders/DirectionalLight_vertex.glsl", "Shaders/DirectionalLight_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::SHADOW_MAP, std::make_unique<Shader>("Shaders/ShadowDepth_vertex.glsl", "Shaders/ShadowDepth_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::DEBUG, std::make_unique<Shader>("Shaders/DEBUG_vertex.glsl", "Shaders/DEBUG_fragment.glsl"));
     }
 
     void RenderSystem::InitBuffers()
@@ -57,6 +59,30 @@ namespace Tempest
         pt_lights.emplace_back(Point_Light{});
         pt_lights[1].Position = glm::vec3(-1.f, 0.5f, 0.5f);
 
+
+        /// TEST DEPTH MAP
+        //unsigned int depthMapFBO;
+        glGenFramebuffers(1, &m_ShadowBuffer.m_depthMapFBO);
+        // create depth texture
+        //unsigned int depthMap;
+        glGenTextures(1, &m_ShadowBuffer.depthMap);
+        glBindTexture(GL_TEXTURE_2D, m_ShadowBuffer.depthMap);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // attach depth texture as FBO's depth buffer
+        glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowBuffer.m_depthMapFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ShadowBuffer.depthMap, 0);
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+        m_Pipeline.m_Shaders[ShaderCode::DEBUG]->Bind();
+        m_Pipeline.m_Shaders[ShaderCode::DEBUG]->Set1i(0, "depthMap");
+        // END DEPTH MAP
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -131,6 +157,55 @@ namespace Tempest
 
     void RenderSystem::Render()
     {    
+
+        ///// TEST
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
+        float near_plane = 1.0f, far_plane = 7.5f;
+        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+        lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+        lightSpaceMatrix = lightProjection * lightView;
+
+        m_Pipeline.m_Shaders[ShaderCode::SHADOW_MAP]->Bind();
+        m_Pipeline.m_Shaders[ShaderCode::SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        glViewport(0, 0, m_ShadowBuffer.m_Width, m_ShadowBuffer.m_Height);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowBuffer.m_depthMapFBO);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, woodTexture);
+        //renderScene(simpleDepthShader);
+
+        DrawSprites(MeshCode::CUBE, m_Pipeline.m_Shaders[ShaderCode::SHADOW_MAP]);
+        DrawSprites(MeshCode::SPHERE, m_Pipeline.m_Shaders[ShaderCode::SHADOW_MAP]);
+        DrawSprites(MeshCode::PLANE, m_Pipeline.m_Shaders[ShaderCode::SHADOW_MAP]);
+        DrawSprites(MeshCode::ICOSAHEDRON, m_Pipeline.m_Shaders[ShaderCode::SHADOW_MAP]);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        glViewport(0, 0, 1600, 900);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        m_Pipeline.m_Shaders[ShaderCode::DEBUG]->Bind();
+
+
+        m_Pipeline.m_Shaders[ShaderCode::DEBUG]->Set1f(near_plane, "near_plane");
+        m_Pipeline.m_Shaders[ShaderCode::DEBUG]->Set1f(far_plane, "far_plane");
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, m_ShadowBuffer.depthMap);
+
+        DrawSprites(MeshCode::CUBE, m_Pipeline.m_Shaders[ShaderCode::DEBUG]);
+        DrawSprites(MeshCode::SPHERE, m_Pipeline.m_Shaders[ShaderCode::DEBUG]);
+        DrawSprites(MeshCode::PLANE, m_Pipeline.m_Shaders[ShaderCode::DEBUG]);
+        DrawSprites(MeshCode::ICOSAHEDRON, m_Pipeline.m_Shaders[ShaderCode::DEBUG]);
+
+
+        m_FrameBuffer.Bind();
+        /// END TEST
+
         if (GridActive)
             RenderAAGrid();
 

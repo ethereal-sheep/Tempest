@@ -43,7 +43,8 @@ namespace Tempest
 		uint32_t m_Width = 0;
 		uint32_t m_Height = 0;
 		uint32_t m_depthMapFBO = 0;
-		uint32_t m_depthCubeMap = 0;
+		uint32_t depthMap = 0;
+
 
 	};
 }

@@ -14,7 +14,9 @@ namespace Tempest
 		LINE,
 		TEXTURE,
 		GROUND,
-		DIRECTIONAL_LIGHT
+		DIRECTIONAL_LIGHT,
+		SHADOW_MAP,
+		DEBUG
 	};
 
 	struct SpriteObj

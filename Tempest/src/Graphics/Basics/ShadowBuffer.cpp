@@ -101,50 +101,10 @@ namespace Tempest
 
 	void ShadowBuffer::Draw(const std::vector<Point_Light>& point_lights, const tvector<MeshCode>& sprites, const tvector<glm::mat4>& transforms, const tmap<MeshCode, tuptr<Mesh>>& meshes)
 	{
-        /*glm::mat4 lightProjection, lightView;
-        glm::mat4 lightSpaceMatrix;
-        float near_plane = 1.0f, far_plane = 7.5f;
-        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-        lightView = glm::lookAt(lightDir, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-        lightSpaceMatrix = lightProjection * lightView;
-
-        m_Shader.Bind();
-        m_Shader.SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-
-        Bind();
-        glClear(GL_DEPTH_BUFFER_BIT);
-        for (size_t i = 0; i < sprites.size(); ++i)
-        {
-            m_Shader.SetMat4fv(transforms[i], "model");
-            meshes.at(sprites[i])->Bind();
-            glDrawElements(GL_TRIANGLES, meshes.at(sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        }
-
-        Unbind();*/
-        //m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.m_Meshes[i.m_Code]);
-       
-        //glViewport(0, 0, m_ShadowMap.GetWidth(), m_ShadowMap.GetHeight());
-        Bind();
-        //glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowMap.m_depthMapFBO);
-        glClear(GL_DEPTH_BUFFER_BIT);
-        //simpleDepthShader.use();
-        //glActiveTexture(GL_TEXTURE0 + #)
-        m_Shader.Bind();
-       /* m_Shader.Set1i(0, "diffuseTexture");
-        m_Shader.Set1i(1, "depthMap");*/
-
-     
-
-
-        
-        //renderScene(simpleDepthShader);
-        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_depthCubeMap);
-
-       // glDrawElements(GL_TRIANGLES, meshes.at(sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        (void)point_lights;
+        (void)sprites;
+        (void)transforms;
+        (void)meshes;
 
 	}
 
