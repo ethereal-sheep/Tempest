@@ -2,6 +2,7 @@
 #include "Instance/Instance.h"
 #include "Events/EventManager.h"
 #include "Font.h"
+#include "assimp/Exporter.hpp"
 
 namespace Tempest
 {
@@ -40,6 +41,19 @@ namespace Tempest
 								Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
 								Service<EventManager>::Get().instant_dispatch<OpenFileTrigger>();
 							}
+							ImGui::Dummy({ 0.f, 1.f });
+							ImGui::Separator();
+							ImGui::Dummy({ 0.f, 1.f });
+
+							if (ImGui::MenuItem(ICON_FA_COMPRESS_ARROWS_ALT " Compile Test", "", false)) 
+							{
+								test_compile();
+							}
+							if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Import Test", "", false))
+							{
+								test_load_res();
+							}
+
 
 							ImGui::Dummy({ 0.f, 1.f });
 							ImGui::Separator();
@@ -79,6 +93,54 @@ namespace Tempest
 			}
 			ImGui::End();
         }
+
+		void test_compile()
+		{
+			// test if we can import then export
+
+			Assimp::Importer importer;
+			const char* in_path = R"(S:\Development\Tempest\Resource\Models\Sword.fbx)";
+			const char* out_path = R"(S:\Development\temp\testing_export\Sword.glb)";
+
+			auto scene = importer.ReadFile(in_path,
+				aiProcess_Triangulate |
+				aiProcess_GenSmoothNormals |
+				aiProcess_JoinIdenticalVertices);
+
+			if (!scene)
+			{
+				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Failed Import!");
+				return;
+			}
+
+
+			Assimp::Exporter exporter;
+			auto result = exporter.Export(scene, "glb2", out_path);
+
+			if (!(result == aiReturn_SUCCESS))
+			{
+				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Failed Compilation!");
+				return;
+			}
+		}
+		void test_load_res()
+		{
+			Assimp::Importer importer;
+			const char* in_path = R"(S:\Development\temp\testing_export\Sword.glb)";
+
+			auto scene = importer.ReadFile(in_path,
+				aiProcess_Triangulate |
+				aiProcess_GenSmoothNormals |
+				aiProcess_JoinIdenticalVertices);
+
+			
+
+			if (!scene)
+			{
+				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Failed import of Resource!");
+				return;
+			}
+		}
 
     };
 }
