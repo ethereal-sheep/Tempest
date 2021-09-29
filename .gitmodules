@@ -25,3 +25,6 @@
 [submodule "Libraries/PhysX"]
 	path = Libraries/PhysX
 	url = https://github.com/NVIDIAGameWorks/PhysX.git
+[submodule "Libraries/tinyddsloader"]
+	path = Libraries/tinyddsloader
+	url = https://github.com/benikabocha/tinyddsloader.git
