@@ -129,64 +129,16 @@ void main()
 {
 	ambient = vec3(0.0f, 0.0f, 0.0f);
 	diffuse = vec3(0.0f, 0.0f, 0.0f);
-	specular = vec3(0.0f, 0.0f, 0.0f);
-	//
-	//vec3 Normal = normalize(vs_normal);
+	specular = vec3(0.0f, 0.0f, 0.0f);	
 
-	//vec4 intensity = vec4(ambient,1.0) * vec4(LightColor, 1.0);
-	//vec3 pos = vs_position;
-	//
-	//vec3 N = normalize(vs_normal);
-	//vec3 V = normalize(-pos);
-	//vec3 L = normalize(LightDirection);
-	//
-	////// Blin-Phong
-	//vec4 diffuseComp = vec4(diffuse, 1.0) * max(dot(N,L),0)  * vec4(LightColor, 1.0);
-	//vec3 halfwayDir = normalize(L+V);
-	//vec4 specularComp = vec4(specular,1.0) * pow(max(dot(N, halfwayDir),0), 4 * int(shininess))  * vec4(LightColor, 1.0);
-	//float shadow = ShadowCal(FragPosLightSpace);
-	//intensity +=  (diffuseComp + specularComp) * LightIntensity;
-	////(1.0 - shadow) *
-	//vec3 posToView = normalize(CamPosition - vs_position);
+	//CalculateDirectionalLight();    // Directional light
 
 
-	//float shadow = 0.f;//ShadowCalculation(vs_position);    
 	// POINT LIGHT
-	
-
-	//CalculateDirectionalLight();
-
-	//float shadow = ShadowCal(FragPosLightSpace);
-	//vec3 posToView = normalize(CamPosition - vs_position);
-
-
 	for(int i = 0; i< PointLightNumber; i++)
 	{
 		computePointLight(PointLightPositions[i], pointLightColors, pointLightConsts, pointLightLinears, pointLightQuads);
 	}
-
-	//for(int ptLight = 0 ; ptLight < PointLightNumber; ptLight++)
-	//{
-	//	// Point Lights
-	//	vec3 lightDir = normalize(PointLightPositions[ptLight] - vs_position);
-	//	float Diffuse = max(dot(Normal, lightDir), 0.0);
-	//	vec3 Reflect = normalize(reflect(-lightDir, Normal));
-	//	float specConstant = pow(max(dot(posToView, Reflect), 0.0), shininess);
-	//	float distance = length(PointLightPositions[ptLight] - vs_position);
-	//	float attenuation = 1.0 / (1.0 + 0.09 * distance + 0.0322 * (distance * distance));
-	//	vec3 Final_Diffuse = Diffuse * vec3(1.0, 1.0, 1.0);
-	//	vec3 Final_Specular = vec3(1.0, 1.0, 1.0) * specConstant;
-	//	Final_Diffuse *= attenuation;
-	//	Final_Specular *= attenuation;
-	//	result += (ambient + (1.0 - shadow) * (Final_Diffuse + Final_Specular)) * PointLightIntensity[ptLight];
-	//}
-	//fs_color = vec4(vs_color * result, 1.0);
-
-
-	//	ambient *= texture(diffuseTexture, fTexCoords).rgb;
-	// diffuse *= texture(diffuseTexture, fTexCoords).rgb;
-	// specular *= texture(specularTexture, fTexCoords).rgb;
-
 
 	//ambient *= texture(diffuseTexture, vs_tex).rgb;
 	//diffuse *= texture(diffuseTexture, vs_tex).rgb;
@@ -200,11 +152,5 @@ void main()
 	vec3 color = min((ambient + (1.0f - shadow)*diffuse) + (1.0f - shadow)*specular, 1.0f);
 	
 	fs_color = vec4(color, 1.0f);
-
-
-
-
-
-	//fs_color = vec4(vs_color, 1.0);
 }
 
