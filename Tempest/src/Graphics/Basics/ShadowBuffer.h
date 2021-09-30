@@ -26,7 +26,7 @@ namespace Tempest
 		uint32_t m_Count = 0;
 
 
-		ShadowBuffer(uint32_t width = 1024, uint32_t height = 1024);
+		ShadowBuffer(uint32_t width = 2048, uint32_t height = 2048);
 		
 		void AttachDepthAttachment(const ShadowMap& sm) const;
 		void ClearAttachments();
@@ -44,6 +44,7 @@ namespace Tempest
 		uint32_t m_Height = 0;
 		uint32_t m_depthMapFBO = 0;
 		uint32_t depthMap = 0;
+		uint32_t depthCubemap = 0;
 
 
 	};

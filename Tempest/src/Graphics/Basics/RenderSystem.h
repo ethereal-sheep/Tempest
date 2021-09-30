@@ -67,13 +67,15 @@ namespace Tempest
 
         std::vector<Directional_Light> dir_lights;
         std::vector<Point_Light> pt_lights;
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);
 
         void Clear();                                                                                        // Clear Pipeline
-        void DrawSprites(MeshCode code, const tuptr<Shader>& shader);                                        // Render Sprites of different meshes
-        void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code);     // Render Sprites of different meshes
+        void DrawSprites(MeshCode code, ShaderCode shaderType);                                        // Render Sprites of different meshes
+        void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType);     // Render Sprites of different meshes
         void RenderAAGrid();                                                                                 // Render Anti-Aliased Grid
     };
 }

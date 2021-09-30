@@ -16,7 +16,9 @@ namespace Tempest
 		GROUND,
 		DIRECTIONAL_LIGHT,
 		SHADOW_MAP,
-		DEBUG
+		DEBUG,
+		GEOMTEST,
+		POINT_LIGHT
 	};
 
 	struct SpriteObj

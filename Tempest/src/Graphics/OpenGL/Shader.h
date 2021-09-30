@@ -16,9 +16,10 @@ namespace Tempest
 
 		GLuint LoadShader(GLenum type, const std::string& fileName);
 		void LinkProgram(GLuint vertexShader, GLuint fragmentShader);
-
+		void LinkProgram(GLuint vertexShader, GLuint fragmentShader, GLuint geomShader);
 	public:
 		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		Shader(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& geomSrc);
 		~Shader();
 
 		Shader(const Shader&) = delete;
