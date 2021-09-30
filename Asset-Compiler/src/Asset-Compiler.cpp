@@ -19,6 +19,7 @@
 #include "Window/Popup/BottomRightOverlayPopup.h"
 #include "Window/Popup/ErrorMsgPopup.h"
 #include "Window/FileBrowser/OpenFile.h"
+#include "Window/FileBrowser/ImportBrowser.h"
 #include "Window/Home.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -36,7 +37,7 @@ namespace Tempest
 
 	public:
 		Asset_Compiler()
-			: Application(1600, 900, L"Editor") {}
+			: Application(1600, 900, L"Asset-Compiler") {}
 
 		void OnInit() override
 		{
@@ -60,7 +61,8 @@ namespace Tempest
 			instance.register_window<Home>();
 			instance.register_always<BottomRightOverlayPopup>();
 			instance.register_always<ErrorMsgPopup>();
-			instance.register_always<OpenFile>();
+			//instance.register_always<OpenFile>();
+			instance.register_always<ImportBrowser>();
 
 			instance.OnInit();
 		}
