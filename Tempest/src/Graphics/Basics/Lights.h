@@ -31,6 +31,12 @@ namespace Tempest
 		glm::vec3 Position = glm::vec3(0.f, 0.f, 1.f);
 		float Radius = 0.5f;
 		float Intensity = 0.7f;
+		uint32_t m_pointFBO = 0;
+		uint32_t m_cubemap = 0;
+		uint32_t m_Width = 2048;
+		uint32_t m_Height = 2048;
+		Point_Light();
+
 	};
 
 	struct SpotLight

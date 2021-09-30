@@ -1,7 +1,7 @@
 #version 460
 layout (location = 0) in vec3 aPos;
 
-uniform mat4 model;
+layout(location = 5)  in mat4 model;
 
 void main()
 {

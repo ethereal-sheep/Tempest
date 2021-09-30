@@ -67,6 +67,7 @@
     <ClCompile Include="src\Scripting\Test\test_node_functions.cpp" />
     <ClCompile Include="src\Serializer\Reader.cpp" />
     <ClCompile Include="src\Serializer\Writer.cpp" />
+    <ClCompile Include="src\Graphics\Basics\light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
