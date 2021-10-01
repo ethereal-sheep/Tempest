@@ -831,11 +831,11 @@ namespace Tempest::UI
 
 		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - textWidth - (curr_tex->GetWidth()*2)) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())));
 		ImGui::SameLine();
 		ImGui::Text(str);
 		ImGui::SameLine();
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 1,1 }, { 0,0 });
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())), { 1.f,1.f }, { 0.f,0.f });
 		ImGui::EndGroup();
 		ImGui::PopFont();
 
@@ -851,11 +851,11 @@ namespace Tempest::UI
 		
 		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())));
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(str);
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())), { 0.f,1.f }, { 1.f, 0.f });
 		ImGui::EndGroup();
 		ImGui::PopFont();
 	}
@@ -868,11 +868,11 @@ namespace Tempest::UI
 		auto textWidth = ImGui::CalcTextSize(str).x;
 		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())));
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(str);
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())), { 0.f,1.f }, { 1.f,0.f });
 		ImGui::EndGroup();
 		ImGui::PopFont();
 	}
@@ -1120,6 +1120,13 @@ namespace Tempest::UI
 		ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
 		ImVec2 size(size_arg.x != 0.0f ? size_arg.x : label_size.x, size_arg.y != 0.0f ? size_arg.y : label_size.y);
 		ImVec2 pos = window->DC.CursorPos;
+
+		//Calculating the center position of the text
+		float CreateItmCol = ImGui::GetContentRegionAvail().x * 0.5f;
+		string CreateItmStr = label;
+		float font_size = ImGui::GetFontSize() * CreateItmStr.size() * 0.5f;
+		float CreateItmCenter = CreateItmCol - font_size + (font_size * 0.5f);
+		pos.x += CreateItmCenter;
 		pos.y += window->DC.CurrLineTextBaseOffset;
 		ImGui::ItemSize(size, 0.0f);
 
@@ -1228,16 +1235,19 @@ namespace Tempest::UI
 			hovered = true;
 		if (hovered || selected)
 		{
+			//Getting the texture and centering the position of the Image
 			auto highlightImg = tex_map["Assets/MainMenuButton.png"];
-			//const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
 			const ImU32 col = ImGui::GetColorU32({ 0.980f, 0.768f, 0.509f, 1.f });
-			//UI::AddUnderline(col, text_min, { text_min.x + label_size.x, text_min.y + label_size.y });
-			ImVec2 hMin = bb.Min;
-			ImVec2 hMax = {bb.Min.x + highlightImg->GetWidth(), bb.Min.y + highlightImg->GetHeight()};
-
+			float tex_width = highlightImg->GetWidth() * 0.5f;
+			//float tex_height = highlightImg->GetHeight() * 0.5f;
+			const ImVec2 hMin = { bb.Min.x - (tex_width * 0.5f) + (label_size.x * 0.5f), bb.Min.y };
+			const ImVec2 hMax = { hMin.x + tex_width, bb.Max.y };
+			
+			//Adding of the Highlighted image when hover
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(highlightImg->GetID()), hMin, hMax);
-			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
-			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+
+			//Debugging Purposes
+			//ImGui::RenderFrame(hMin, hMax, col, false, 0.0f);
 		}
 
 		if (span_all_columns && window->DC.CurrentColumns)
@@ -1246,6 +1256,7 @@ namespace Tempest::UI
 			ImGui::TablePopBackgroundChannel();
 
 		if (flags & ImGuiSelectableFlags_Disabled) ImGui::PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]);
+		
 		ImGui::RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
 		if (flags & ImGuiSelectableFlags_Disabled) ImGui::PopStyleColor();
 

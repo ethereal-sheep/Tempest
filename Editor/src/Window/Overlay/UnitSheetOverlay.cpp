@@ -61,7 +61,7 @@ namespace Tempest
 		//	ImGui::PushStyleColor(ImGuiCol_ScrollbarGrabActive, ActiveCol);
 			if (ImGui::Begin("Edit Unit Sheet", nullptr, window_flags))
 			{
-				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+				//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 
 				UI::Header_1(Title.c_str());
 
@@ -173,10 +173,10 @@ namespace Tempest
 						ImGuiWindowFlags_NoScrollbar;
 					if (ImGui::BeginPopupModal("Add Stat", NULL, flags))
 					{
-						float RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
+						//float RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
 						string sub = "Add Stat";
 						font_size = ImGui::GetFontSize() * sub.size() / 2;
-						float center = RegionWidth - font_size;
+						//float center = RegionWidth - font_size;
 
 
 						UI::SubHeader(sub.c_str());
@@ -267,10 +267,10 @@ namespace Tempest
 						ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 						if (ImGui::BeginPopupModal("Edit Weapon", NULL, flags))
 						{
-							float RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
+							//float RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
 							string Editsub = "Edit Weapon/Item";
 							font_size = ImGui::GetFontSize() * Editsub.size() / 2;
-							float center = RegionWidth - font_size;
+							//float center = RegionWidth - font_size;
 							UI::SubHeader(Editsub.c_str());
 
 							ImGui::Dummy({ 0, 20.f });
@@ -420,12 +420,12 @@ namespace Tempest
 						
 						//ImGuiSelectableFlags flags = ImGuiSelectableFlags_
 						ImGui::PushFont(FONT_BODY);
-						float CreateItmCol = ImGui::GetColumnWidth(1) / 2;
+						//float CreateItmCol = ImGui::GetContentRegionAvail().x * 0.5f;
 						string CreateItmStr = "Create New Item";
-						font_size = ImGui::GetFontSize() * CreateItmStr.size() / 2;
+						/*font_size = ImGui::GetFontSize() * CreateItmStr.size() / 2;
 						float CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
 						ImGui::Dummy({ CreateItmCenter, 0 });
-						ImGui::SameLine();
+						ImGui::SameLine();*/
 						if (UI::UISelectable(CreateItmStr.c_str()))
 						{
 							CreateOpen = true;
@@ -434,9 +434,9 @@ namespace Tempest
 
 						string CreateWeapStr = "Create New Weapon";
 						font_size = ImGui::GetFontSize() * CreateWeapStr.size() / 2;
-						CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
+						/*CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
 						ImGui::Dummy({ CreateItmCenter, 0 });
-						ImGui::SameLine();
+						ImGui::SameLine();*/
 
 						if (UI::UISelectable(CreateWeapStr.c_str()))
 						{
@@ -548,10 +548,10 @@ namespace Tempest
 						ImGui::Dummy({ 0, 10.f });
 
 						string DeleteWeapStr = "Delete Weapon";
-						font_size = ImGui::GetFontSize() * DeleteWeapStr.size() / 2;
-						CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
-						ImGui::Dummy({ CreateItmCenter, 0 });
-						ImGui::SameLine();
+						//font_size = ImGui::GetFontSize() * DeleteWeapStr.size() / 2;
+						//CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
+						/*ImGui::Dummy({ CreateItmCenter, 0 });
+						ImGui::SameLine();*/
 						if (UI::UISelectable(DeleteWeapStr.c_str()))
 						{
 							if (cs->weapon == CurSelection)

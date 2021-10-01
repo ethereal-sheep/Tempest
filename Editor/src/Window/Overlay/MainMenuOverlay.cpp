@@ -5,7 +5,7 @@
 
 namespace Tempest
 {
-	void MainMenuOverlay::open_popup(const Event& e)
+	void MainMenuOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
 		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
