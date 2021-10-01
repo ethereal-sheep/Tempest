@@ -238,6 +238,8 @@ namespace Tempest
 				// Simulate button
 				if (UI::UIButton_1("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 350.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
 				{
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>();
+					LOG("OPEN");
 					OverlayOpen = false;
 				}
 			}
