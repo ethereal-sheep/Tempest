@@ -354,15 +354,45 @@ namespace Tempest
 			if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
 			ImGui::PopID();
 		}
-		/*
-		ImGui::NewLine();
-		UI::DragFloat3ColorBox("Position", "##PointLightPosition", ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
-		ImGui::Selectable("Intensity2", false, ImGuiSelectableFlags_Disabled, ImVec2{ 10.f, 0 });
-		ImGui::SameLine();
-		ImGui::PushID("Intensity2");
-		if (ImGui::DragFloat(" ", &ptlight.Intensity, 0.01f, 0.f, 1.f)) {}
-		ImGui::PopID();
-		*/
+		ImGui::Dummy(ImVec2{ 0, 0.25f });
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2{ 0, 0.25f });
+		if (Service<RenderSystem>::Get().pt_lights.size() < 10)
+		{			
+			if (ImGui::Button("Add Point Light"))
+			{
+				int index = Service<RenderSystem>::Get().pt_lights.size();
+				Service<RenderSystem>::Get().pt_lights.emplace_back(Point_Light{});
+				Service<RenderSystem>::Get().pt_lights[index].Position = glm::vec3(0.5f, 0.5f, 0.5f);
+			}
+		}
+		if (Service<RenderSystem>::Get().pt_lights.size())
+		{
+			if (Service<RenderSystem>::Get().pt_lights.size() > 1)
+			{
+				if (ImGui::Button("Remove Point Light"))
+				{
+					Service<RenderSystem>::Get().pt_lights.pop_back();
+				}
+			}
+			const auto padding = 80.f;
+			for (unsigned int i = 0; i < Service<RenderSystem>::Get().pt_lights.size(); ++i)
+			{
+				ImGui::Dummy(ImVec2{ 0, 0.25f });
+				ImGui::Separator();
+				ImGui::Dummy(ImVec2{ 0, 0.25f });
+				auto& ptlight = Service<RenderSystem>::Get().pt_lights[i];
+				std::string PointLightPosition = "PLightPos" + std::to_string(i);
+				std::string PointLightPositionID = "##Pos" + std::to_string(i);
+				std::string PointLightIntensity = "PLightIntensity" + std::to_string(i);
+				UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
+				ImGui::Selectable(PointLightIntensity.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 10.f, 0 });
+				ImGui::SameLine();
+				ImGui::PushID(PointLightIntensity.data());
+				if (ImGui::DragFloat(" ", &ptlight.Intensity, 0.01f, 0.f, 1.f)) {}
+				ImGui::PopID();
+			}
+		}
 	}
 
 	void DiagnosticsWindow::Textures(Instance&)
