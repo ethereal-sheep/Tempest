@@ -1228,10 +1228,11 @@ namespace Tempest::UI
 			hovered = true;
 		if (hovered || selected)
 		{
-			
+			//auto bgImg = tex_map["Assets/MainMenuButton.png"];
 			//const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
 			const ImU32 col = ImGui::GetColorU32({ 0.980f, 0.768f, 0.509f, 1.f });
 			UI::AddUnderline(col, text_min, { text_min.x + label_size.x, text_min.y + label_size.y });
+
 			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
 			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
 		}
