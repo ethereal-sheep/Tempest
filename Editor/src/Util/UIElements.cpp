@@ -1124,8 +1124,7 @@ namespace Tempest::UI
 		//Calculating the center position of the text
 		float CreateItmCol = ImGui::GetContentRegionAvail().x * 0.5f;
 		string CreateItmStr = label;
-		float font_size = ImGui::GetFontSize() * CreateItmStr.size() * 0.5f;
-		float CreateItmCenter = CreateItmCol - font_size + (font_size * 0.5f);
+		float CreateItmCenter = CreateItmCol - label_size.x + (label_size.x * 0.5f);
 		pos.x += CreateItmCenter;
 		pos.y += window->DC.CurrLineTextBaseOffset;
 		ImGui::ItemSize(size, 0.0f);
