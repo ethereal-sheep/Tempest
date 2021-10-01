@@ -193,6 +193,7 @@
     <ClCompile Include="src\Graphics\Basics\FrameBuffer.cpp" />
     <ClCompile Include="src\Graphics\Basics\GeometryFactory.cpp" />
     <ClCompile Include="src\Graphics\Basics\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Basics\light.cpp" />
     <ClCompile Include="src\Graphics\Basics\LineRenderer.cpp" />
     <ClCompile Include="src\Graphics\Basics\Mesh.cpp" />
     <ClCompile Include="src\Graphics\Basics\Model.cpp" />

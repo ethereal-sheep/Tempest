@@ -41,6 +41,14 @@ float pointLightConsts = 0.7f;
 float pointLightLinears = 0.15; // or   0.09f
 float pointLightQuads = 0.052f; // or  0.032f;
 
+vec3 gridSamplingDisk[20] = vec3[]
+(
+   vec3(1, 1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1, 1,  1), 
+   vec3(1, 1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+   vec3(1, 1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1, 1,  0),
+   vec3(1, 0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1, 0, -1),
+   vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
+);
 
 void CalculateDirectionalLight()
 {
@@ -79,7 +87,7 @@ void CalculateDirectionalLight()
 
 }
 
-void computePointLight(vec3 lightPosition, vec3 lightColor, float constant, float lin, float quad) 
+void computePointLight(vec3 lightPosition, vec3 lightColor, float constant, float lin, float quad, float shadow) 
 {
 	float distance = length(lightPosition - vs_position.xyz);
 	float att = 1.0f / (constant + lin * distance + quad * distance * distance);
@@ -90,39 +98,59 @@ void computePointLight(vec3 lightPosition, vec3 lightColor, float constant, floa
 	//diffuse
 	vec3 norm = normalize(vs_normal);
 	vec3 lightDir_normalized = normalize(lightPosition - vs_position.xyz); //point light
-	diffuse += att * max(dot(norm, lightDir_normalized), 0.0f) * lightColor;
+	diffuse += (1.0f - shadow) * (att * max(dot(norm, lightDir_normalized), 0.0f) * lightColor);
 	
 	//spec
 	vec3 viewDir_normalized = normalize(viewPos - vs_position.xyz);
 	vec3 reflection = reflect(-lightDir_normalized, norm);
 	float spec = pow(max(dot(viewDir_normalized, reflection), 0.0f), shininess);
-	specular += att * specularStrength * spec * lightColor;
+	specular += (1.0f - shadow)* (att * specularStrength * spec * lightColor);
 }
 
-float computeShadow()
+
+
+float computeShadow(int ptnum)
 {
-	// perform perspective divide
-	vec3 normalizedCoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
+	//// perform perspective divide
+	//vec3 normalizedCoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
+	//
+	//// Transform to [0,1] range
+	//normalizedCoords = normalizedCoords * 0.5 + 0.5;
+	//
+	//// Get closest depth value from light's perspective
+	//float closestDepth = texture(depthMap, normalizedCoords.xyz).r;
+	//
+	//// Get depth of current fragment from light's perspective
+	//float currentDepth = normalizedCoords.z;
+	//
+	//if (normalizedCoords.z > 1.0f)
+	//	return 0.0f;
+	//
+	//// Check whether current frag pos is in shadow
+	//float bias = max(0.05f * (1.0f - dot(vs_normal, LightDirection)), 0.005f);
+	//float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	//
+	//return shadow;
+
+	vec3 fragToLight = vs_position - PointLightPositions[ptnum];
+	float currentDepth = length(fragToLight);
+	float shadow = 0.0;
+    float bias = 0.15;
+    int samples = 20;
+	float viewDistance = length(viewPos - vs_position);
+	float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
 	
-	// Transform to [0,1] range
-	normalizedCoords = normalizedCoords * 0.5 + 0.5;
-	
-	// Get closest depth value from light's perspective
-	float closestDepth = texture(shadowMap, normalizedCoords.xy).r;
-	
-	// Get depth of current fragment from light's perspective
-	float currentDepth = normalizedCoords.z;
-	
-	if (normalizedCoords.z > 1.0f)
-		return 0.0f;
-	
-	// Check whether current frag pos is in shadow
-	float bias = max(0.05f * (1.0f - dot(vs_normal, LightDirection)), 0.005f);
-	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	for(int i = 0; i < samples; ++i)
+    {
+        float closestDepth = texture(depthMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        closestDepth *= far_plane;   // undo mapping [0;1]
+        if(currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+    shadow /= float(samples);
 
 	return shadow;
 
-	
 }
 
 void main()
@@ -137,7 +165,8 @@ void main()
 	// POINT LIGHT
 	for(int i = 0; i< PointLightNumber; i++)
 	{
-		computePointLight(PointLightPositions[i], pointLightColors, pointLightConsts, pointLightLinears, pointLightQuads);
+		float shadow = computeShadow(i);
+		computePointLight(PointLightPositions[i], pointLightColors, pointLightConsts, pointLightLinears, pointLightQuads, shadow);
 	}
 
 	//ambient *= texture(diffuseTexture, vs_tex).rgb;
@@ -148,8 +177,8 @@ void main()
 	diffuse *= vs_color;
 	specular *= vs_color;
 
-	float shadow = computeShadow();
-	vec3 color = min((ambient + (1.0f - shadow)*diffuse) + (1.0f - shadow)*specular, 1.0f);
+	
+	vec3 color = min((ambient + diffuse) + specular, 1.0f);
 	
 	fs_color = vec4(color, 1.0f);
 }
