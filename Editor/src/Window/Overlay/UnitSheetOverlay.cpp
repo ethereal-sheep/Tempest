@@ -1,6 +1,6 @@
 #include "UnitSheetOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
+#include "Tempest/src/Graphics/Basics/RenderSystem.h"
 
 namespace Tempest
 {

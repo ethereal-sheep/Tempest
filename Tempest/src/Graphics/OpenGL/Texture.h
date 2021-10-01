@@ -4,6 +4,7 @@
 #include <stb_image.h>
 #include "Logger/Log.h"
 #include "TMath.h"
+#include "tinyddsloader.h"
 
 namespace Tempest
 {

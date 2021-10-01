@@ -123,12 +123,16 @@ namespace Tempest
         // Drawing Polygons
         for (auto& i : m_Pipeline.m_Sprites)
         {
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(i.m_Transform, "ModelMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
-            m_Pipeline.m_Meshes[i.m_Code]->Bind();
-            m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.m_Meshes[i.m_Code]);
+            if(m_Pipeline.m_Meshes[i.m_Code]->GetVertexArray())
+            {
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(i.m_Transform, "ModelMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::BASIC]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+                m_Pipeline.m_Meshes[i.m_Code]->Bind();
+                m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.m_Meshes[i.m_Code]);
+            }
+            
         }
         
           //Drawing Models
