@@ -8,6 +8,13 @@ namespace Tempest
 {
     class MainMenuOverlay : public Window
     {
+        enum class UI_SHOW
+        {
+            INITIAL,
+            MAP_UI,
+            CONFLICT_UI,
+            SETTINGS
+        };
         const char* window_name() override
         {
             return "";
@@ -23,6 +30,9 @@ namespace Tempest
 
         void show(Instance&) override;
 
+        void OpenLocalUI(Instance& instance, const ImGuiViewport& viewport);
+
         bool OverlayOpen = false;
+        UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
     };
 }
