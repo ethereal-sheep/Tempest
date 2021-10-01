@@ -23,7 +23,7 @@ namespace Tempest
 		{
 			instance.window_manager.close_all();
 
-			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.3f));
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 
 			if (ImGui::Begin("MainMenu", nullptr, window_flags))
