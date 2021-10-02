@@ -277,7 +277,7 @@ namespace Tempest
 
             shader->Set1f(ambientStrength, "ambientStrength");
             shader->Set1f(shininess,       "shininess");
-            shader->Set1f(shininess,       "specularStrength");
+            shader->Set1f(specularStrength,       "specularStrength");
             shader->Set1i(dir_lights[0].hide ? 0 : 1 ,"DirectionalLightOn");
 
             break;
@@ -418,5 +418,10 @@ namespace Tempest
     int RenderSystem::GetGammaCorrection()
     {
         return GammaCorrection;
+    }
+
+    void RenderSystem::SetGammaCorrection(int gamma)
+    {
+        GammaCorrection = gamma;
     }
 }

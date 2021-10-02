@@ -180,7 +180,11 @@ void main()
 
 	
 	vec3 color = min((ambient + diffuse) + specular, 1.0f);
-	
+
+	// gamma correction
+	if (GammaCorrection > 0)
+		color = pow(color, vec3(1.0/1.8));
+
 	fs_color = vec4(color, 1.0f);
 }
 

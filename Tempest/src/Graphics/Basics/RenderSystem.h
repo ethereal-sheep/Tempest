@@ -67,7 +67,8 @@ namespace Tempest
         Camera& GetCamera();
 
         int GetActivePt_lightsNum();
-        int GetGammaCorrection(); 
+        int GetGammaCorrection();
+        void SetGammaCorrection(int);
         std::vector<Directional_Light> dir_lights;
         std::vector<Point_Light> pt_lights;
         glm::mat4 lightProjection, lightView;

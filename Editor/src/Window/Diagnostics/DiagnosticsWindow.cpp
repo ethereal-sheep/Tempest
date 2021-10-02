@@ -340,6 +340,36 @@ namespace Tempest
 
 	void DiagnosticsWindow::Light(Instance& instance)
 	{
+		auto& shininess = Service<RenderSystem>::Get().shininess;
+		auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;
+		auto& specularStrength = Service<RenderSystem>::Get().specularStrength;
+		std::string shininessID = "Shininess";
+		std::string ambientStrengthID = "Ambient Strength";
+		std::string specularStrengthID = "Specular Stregth";
+		ImGui::Selectable(shininessID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+		ImGui::SameLine();
+		ImGui::PushID(shininessID.data());
+		if (ImGui::DragFloat(" ", &shininess, 1.f, 1.f, 50.f)) {}
+		ImGui::PopID();
+		ImGui::Selectable(ambientStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+		ImGui::SameLine();
+		ImGui::PushID(ambientStrengthID.data());
+		if (ImGui::DragFloat(" ", &ambientStrength, 0.01f, 0.f, 1.f)) {}
+		ImGui::PopID();
+		ImGui::Selectable(specularStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+		ImGui::SameLine();
+		ImGui::PushID(specularStrengthID.data());
+		if (ImGui::DragFloat(" ", &specularStrength, 0.01f, 0.f, 1.f)) {}
+		ImGui::PopID();
+		if (ImGui::Button("Toggle Gamma Correction"))
+		{
+			int gamma = Service<RenderSystem>::Get().GetGammaCorrection();
+			gamma = (gamma) ? 0 : 1;
+			Service<RenderSystem>::Get().SetGammaCorrection(gamma);
+		}
+		ImGui::Dummy(ImVec2{ 0, 0.25f });
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2{ 0, 0.25f });
 		if (Service<RenderSystem>::Get().dir_lights.size())
 		{
 			auto& light = Service<RenderSystem>::Get().dir_lights[0];
@@ -360,7 +390,7 @@ namespace Tempest
 				UI::DragFloat3ColorBox("Direction", "##LightDirection", ImVec2{ padding , 0.f }, value_ptr(light.Direction), 0.f, 0.1f, -10.f, 10.f);
 				UI::DragFloat3ColorBox("Color", "##LightColor", ImVec2{ padding , 0.f }, value_ptr(light.Color), 0.f, 0.01f, 0.f, 1.f);
 
-				ImGui::Selectable("Intensity", false, ImGuiSelectableFlags_Disabled, ImVec2{ 10.f, 0 });
+				ImGui::Selectable("Intensity", false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
 				ImGui::SameLine();
 				ImGui::PushID("Intensity");
 				if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
@@ -368,10 +398,10 @@ namespace Tempest
 			}
 
 		}
-		ImGui::Dummy(ImVec2{ 0, 0.25f });
+		/*ImGui::Dummy(ImVec2{ 0, 0.25f });
 		ImGui::Separator();
 		ImGui::Dummy(ImVec2{ 0, 0.25f });
-		/*if (Service<RenderSystem>::Get().pt_lights.size() < 10)
+		if (Service<RenderSystem>::Get().pt_lights.size() < 10)
 		{			
 			if (ImGui::Button("Add Point Light"))
 			{
@@ -411,12 +441,30 @@ namespace Tempest
 					}
 					std::string PointLightPosition = "PLightPos" + std::to_string(i);
 					std::string PointLightPositionID = "##Pos" + std::to_string(i);
-					std::string PointLightIntensity = "PLightIntensity" + std::to_string(i);
+					std::string PointLightIntensity = "Intensity" + std::to_string(i);
+					std::string PointLightConstant = "Constant" + std::to_string(i);
+					std::string PointLightLinear = "Linear" + std::to_string(i);
+					std::string PointLightQuadratic = "Quadratic" + std::to_string(i);
 					UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
-					ImGui::Selectable(PointLightIntensity.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 10.f, 0 });
+					ImGui::Selectable(PointLightIntensity.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
 					ImGui::SameLine();
 					ImGui::PushID(PointLightIntensity.data());
 					if (ImGui::DragFloat(" ", &ptlight.Intensity, 0.01f, 0.f, 1.f)) {}
+					ImGui::PopID();
+					ImGui::Selectable(PointLightConstant.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+					ImGui::SameLine();
+					ImGui::PushID(PointLightConstant.data());
+					if (ImGui::DragFloat(" ", &ptlight.pointLightConsts, 0.01f, 0.f, 1.f)) {}
+					ImGui::PopID();
+					ImGui::Selectable(PointLightLinear.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+					ImGui::SameLine();
+					ImGui::PushID(PointLightLinear.data());
+					if (ImGui::DragFloat(" ", &ptlight.pointLightLinears, 0.01f, 0.f, 1.f)) {}
+					ImGui::PopID();
+					ImGui::Selectable(PointLightQuadratic.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+					ImGui::SameLine();
+					ImGui::PushID(PointLightQuadratic.data());
+					if (ImGui::DragFloat(" ", &ptlight.pointLightQuads, 0.01f, 0.f, 1.f)) {}
 					ImGui::PopID();
 				}
 			
