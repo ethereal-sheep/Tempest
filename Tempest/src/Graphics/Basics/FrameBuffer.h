@@ -34,7 +34,7 @@ namespace Tempest
         uint32_t GetColourBuffer() const;
         uint32_t& GetIndexBuffer();
         uint32_t& GetVertexArray();
-     
+        void SetFrameBufferSize();
         void Resize(uint32_t width, uint32_t height);
         void Validate() const;
         void Draw();

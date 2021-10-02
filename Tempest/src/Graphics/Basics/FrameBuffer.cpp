@@ -190,4 +190,9 @@ namespace Tempest
     		LOG_CRITICAL("Framebuffer unknown error.");
     	}
     }
+    
+    void FrameBuffer::SetFrameBufferSize()
+    {
+        glViewport(0, 0, m_Height, m_Width);
+    }
 }

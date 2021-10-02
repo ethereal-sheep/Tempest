@@ -20,7 +20,7 @@ namespace Tempest
 	struct Directional_Light
 	{
 		glm::vec3 Color = glm::vec3(1.f, 1.f, 1.f);
-		glm::vec3 Direction = glm::vec3(0.f, 1.f, 0.f);
+		glm::vec3 Direction = glm::vec3(0.f, 1.f, 0.0001f);
 		float Intensity = 0.5f;
 		uint32_t m_dirFBO = 0;
 		uint32_t m_depthmap = 0;

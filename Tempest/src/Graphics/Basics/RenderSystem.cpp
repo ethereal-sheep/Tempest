@@ -64,8 +64,6 @@ namespace Tempest
 
      /*  if(pt_lights.size())
             pt_lights[0].hide = false;*/
-
-        //glViewport(0, 0, 1600, 900);
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -161,8 +159,8 @@ namespace Tempest
             DrawSprites(MeshCode::PLANE,       ShaderCode::POINT_LIGHT_DEPTH, numPt);
             DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::POINT_LIGHT_DEPTH, numPt);
         }
-        glViewport(0, 0, 1600, 900); // Set back default view port for drawing ( NEED CHECK WHERE TO TAKE VIEWPORT VALUES)
-
+        
+        m_FrameBuffer.SetFrameBufferSize();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         m_FrameBuffer.Bind();
 
@@ -325,6 +323,7 @@ namespace Tempest
             break;
         default:
             m_FrameBuffer.Bind();
+            m_FrameBuffer.SetFrameBufferSize();
             break;
         
         }
