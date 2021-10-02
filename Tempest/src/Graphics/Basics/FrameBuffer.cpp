@@ -193,6 +193,6 @@ namespace Tempest
     
     void FrameBuffer::SetFrameBufferSize()
     {
-        glViewport(0, 0, m_Height, m_Width);
+        glViewport(0, 0, m_Width, m_Height);
     }
 }
