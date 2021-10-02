@@ -18,8 +18,10 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
-        m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_LIGHT, std::make_unique<Shader>("Shaders/DirectionalLight_vertex.glsl", "Shaders/DirectionalLight_fragment.glsl"));
-    }
+        m_Pipeline.m_Shaders.emplace(ShaderCode::LIGHTING, std::make_unique<Shader>("Shaders/Lighting_vertex.glsl", "Shaders/Lighting_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_SHADOW_MAP, std::make_unique<Shader>("Shaders/DirShadowMap_vertex.glsl", "Shaders/DirShadowMap_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::POINT_LIGHT_DEPTH, std::make_unique<Shader>("Shaders/point_shadows_depth_vertex.glsl", "Shaders/point_shadows_depth_fragment.glsl","Shaders/point_shadows_depth_geom.glsl" ));
+ }
 
     void RenderSystem::InitBuffers()
     {
@@ -50,13 +52,20 @@ namespace Tempest
         if(m_Pipeline.m_Cameras.empty())
             m_Pipeline.m_Cameras.emplace_back(Camera{});
 
+        // Make 1 Directional Light
         dir_lights.emplace_back(Directional_Light{});
-        pt_lights.emplace_back(Point_Light{});
-        pt_lights[0].Position = glm::vec3(0.5f, 0.5f, 0.5f);
+        
+        // Make all FBO for all point Lights
+        for(int makePointLight = 0 ; makePointLight < (int)MAX_POINT_LIGHT ; makePointLight++)
+        {
+            pt_lights.emplace_back(Point_Light{});
+            pt_lights[makePointLight].Position = glm::vec3( (float)makePointLight * 0.5f, 0.5f, 0.5f);
+        }
 
-        pt_lights.emplace_back(Point_Light{});
-        pt_lights[1].Position = glm::vec3(-1.f, 0.5f, 0.5f);
+     /*  if(pt_lights.size())
+            pt_lights[0].hide = false;*/
 
+        //glViewport(0, 0, 1600, 900);
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -131,15 +140,48 @@ namespace Tempest
 
     void RenderSystem::Render()
     {    
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Directional light depth map
+        if(!dir_lights[0].hide)
+        {
+            DrawSprites(MeshCode::CUBE,        ShaderCode::DIRECTIONAL_SHADOW_MAP);
+            DrawSprites(MeshCode::SPHERE,      ShaderCode::DIRECTIONAL_SHADOW_MAP);
+            DrawSprites(MeshCode::PLANE,       ShaderCode::DIRECTIONAL_SHADOW_MAP);
+            DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::DIRECTIONAL_SHADOW_MAP);
+        }
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // render all pt lights to depth buffer
+        for(int numPt = 0 ; numPt < GetActivePt_lightsNum(); numPt++)
+        {
+            DrawSprites(MeshCode::CUBE,        ShaderCode::POINT_LIGHT_DEPTH, numPt);
+            DrawSprites(MeshCode::SPHERE,      ShaderCode::POINT_LIGHT_DEPTH, numPt);
+            DrawSprites(MeshCode::PLANE,       ShaderCode::POINT_LIGHT_DEPTH, numPt);
+            DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+        }
+        glViewport(0, 0, 1600, 900); // Set back default view port for drawing ( NEED CHECK WHERE TO TAKE VIEWPORT VALUES)
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        m_FrameBuffer.Bind();
+
         if (GridActive)
             RenderAAGrid();
 
         // Drawing Polygons
-        DrawSprites(MeshCode::CUBE,         m_Pipeline.m_Shaders[ShaderCode::BASIC]);
-        DrawSprites(MeshCode::SPHERE,       m_Pipeline.m_Shaders[ShaderCode::BASIC]);
-        DrawSprites(MeshCode::PLANE,        m_Pipeline.m_Shaders[ShaderCode::BASIC]);
-        DrawSprites(MeshCode::ICOSAHEDRON,  m_Pipeline.m_Shaders[ShaderCode::BASIC]);
-        
+        DrawSprites(MeshCode::CUBE,         ShaderCode::LIGHTING);
+        DrawSprites(MeshCode::SPHERE,       ShaderCode::LIGHTING);
+        DrawSprites(MeshCode::PLANE,        ShaderCode::LIGHTING);
+        DrawSprites(MeshCode::ICOSAHEDRON,  ShaderCode::LIGHTING);
+       
+
+        //DrawSprites(MeshCode::CUBE, ShaderCode::BASIC);
+        //DrawSprites(MeshCode::SPHERE, ShaderCode::BASIC);
+        //DrawSprites(MeshCode::PLANE, ShaderCode::BASIC);
+        //DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::BASIC);
+
+
           //Drawing Models
         for (size_t i = 0; i < m_Pipeline.m_ModelTransforms.size(); ++i)
         {
@@ -155,22 +197,22 @@ namespace Tempest
                 mesh.Bind();
 
                 // Dir + Point Light
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Bind();
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Color, "LightColor");
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(dir_lights[0].Intensity, "LightIntensity");
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
 
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1i((int)pt_lights.size(), "PointLightNumber");
+                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1i((int)pt_lights.size(), "PointLightNumber");
 
                 for (unsigned int ptLight = 0; ptLight < pt_lights.size(); ++ptLight)
                 {
                     std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
-                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+                    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
                     std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
-                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+                    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
                 }
                 glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
             }
@@ -179,24 +221,113 @@ namespace Tempest
         m_FrameBuffer.Unbind();       
     }
 
-    void RenderSystem::DrawSprites(MeshCode code, const tuptr<Shader>& shader)
+    void RenderSystem::DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num)
     {
         switch (code)
         {
-            case MeshCode::CUBE:            DrawSprites(shader, m_Pipeline.m_Cubes, code);            break;
-            case MeshCode::SPHERE:          DrawSprites(shader, m_Pipeline.m_Spheres, code);          break;
-            case MeshCode::PLANE:           DrawSprites(shader, m_Pipeline.m_Planes, code);           break;
-            case MeshCode::ICOSAHEDRON:     DrawSprites(shader, m_Pipeline.m_Icosahedrons, code);     break;
+            case MeshCode::CUBE:            DrawSprites(m_Pipeline.m_Shaders[shaderType], m_Pipeline.m_Cubes, code, shaderType, pt_light_num);            break;
+            case MeshCode::SPHERE:          DrawSprites(m_Pipeline.m_Shaders[shaderType], m_Pipeline.m_Spheres, code, shaderType, pt_light_num);          break;
+            case MeshCode::PLANE:           DrawSprites(m_Pipeline.m_Shaders[shaderType], m_Pipeline.m_Planes, code, shaderType, pt_light_num);           break;
+            case MeshCode::ICOSAHEDRON:     DrawSprites(m_Pipeline.m_Shaders[shaderType], m_Pipeline.m_Icosahedrons, code, shaderType, pt_light_num);     break;
         }
     }
 
-    void RenderSystem::DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code)
+    void RenderSystem::DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType , int pt_light_num)
     {
         if (sprites.empty()) return;
 
         shader->Bind();
         shader->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
         shader->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+
+        const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+        switch (shaderType)
+        {
+        case (ShaderCode::LIGHTING):
+            // Bind default FBO
+            m_FrameBuffer.Bind();
+
+            // Send in uniform values
+            shader->SetVec3f(dir_lights[0].Color,       "LightColor");
+            shader->SetVec3f(dir_lights[0].Direction,   "LightDirection");
+            shader->Set1f(dir_lights[0].Intensity,      "LightIntensity");
+            shader->Set1f(far_plane,                    "far_plane");
+            shader->Set1i((int)GetActivePt_lightsNum(), "PointLightNumber");
+            shader->SetMat4fv(lightSpaceMatrix,         "lightSpaceMatrix");
+            
+            shader->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+            for (unsigned int ptLight = 0; ptLight < (unsigned int)GetActivePt_lightsNum(); ++ptLight)
+            {
+                std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
+                shader->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+                std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
+                shader->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+                std::string pointLightColors    = "pointLightColors[" + std::to_string(ptLight) + "]";
+                shader->SetVec3f(pt_lights[ptLight].Color, pointLightColors.data());
+                std::string pointLightConsts    = "pointLightConsts[" + std::to_string(ptLight) + "]";
+                shader->Set1f(pt_lights[ptLight].pointLightConsts, pointLightConsts.data());
+                std::string pointLightLinears   = "pointLightLinears[" + std::to_string(ptLight) + "]";
+                shader->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
+                std::string pointLightQuads     = "pointLightQuads[" + std::to_string(ptLight) + "]";
+                shader->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+            }
+            shader->Set1i(0, "depthMap");   // Set Point light depth to be slot 0
+            shader->Set1i(1, "shadowMap");  // Set Dir Light depthh to be slot 1
+            shader->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
+
+            shader->Set1f(ambientStrength, "ambientStrength");
+            shader->Set1f(shininess,       "shininess");
+            shader->Set1f(specularStrength,       "specularStrength");
+            shader->Set1i(dir_lights[0].hide ? 0 : 1 ,"DirectionalLightOn");
+
+            break;
+        case (ShaderCode::DIRECTIONAL_SHADOW_MAP):
+            {
+                // Bind Directional Light FBO
+                dir_lights[0].Bind(); 
+
+                // Send in uniform values
+                lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+                glm::vec3 cam = m_Pipeline.m_Cameras.front().GetPosition();
+                glm::vec3 target = cam + dir_lights[0].Direction;
+                lightView = glm::lookAt( 10.f * dir_lights[0].Direction,
+                                         glm::vec3(0.0f, 0.0f, 0.0f),
+                                         glm::vec3(0.0f, 1.0f, 0.0f)); 
+                lightSpaceMatrix = lightProjection * lightView;
+                shader->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+                shader->Set1i(1, "shadowMap"); // Set Shadow map for directional light to be slot 1 (note: point light shadow at slot 0 )
+            }
+            break;
+        case (ShaderCode::POINT_LIGHT_DEPTH):
+        {
+            if(pt_light_num != -1)
+            {
+                // Bind Point Light FBO
+                pt_lights[pt_light_num].Bind(); 
+
+                // Send in uniform values
+                glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
+                std::vector<glm::mat4> shadowTransforms;
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[pt_light_num].Position, pt_lights[pt_light_num].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[pt_light_num].Position, pt_lights[pt_light_num].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[pt_light_num].Position, pt_lights[pt_light_num].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[pt_light_num].Position, pt_lights[pt_light_num].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[pt_light_num].Position, pt_lights[pt_light_num].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[pt_light_num].Position, pt_lights[pt_light_num].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                
+                for (unsigned int i = 0; i < 6; ++i)
+                    shader->SetMat4fv(shadowTransforms[i], ("shadowMatrices[" + std::to_string(i) + "]").c_str());
+                shader->Set1f(far_plane, "far_plane");
+                shader->SetVec3f(pt_lights[pt_light_num].Position, "lightPos");
+            }
+
+        }
+            break;
+        default:
+            m_FrameBuffer.Bind();
+            break;
+        
+        }
 
         auto& spriteMesh = m_Pipeline.s_Mesh;
         spriteMesh.m_Instanced.SetSubDataResize((void*)sprites.data(), static_cast<int32_t>(sprites.size() * sizeof(SpriteObj)));
@@ -206,30 +337,11 @@ namespace Tempest
 
         m_Pipeline.m_Meshes[code]->Bind();
         m_Pipeline.m_Indirect.Bind();
-
-        // Dir + Point Light
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Bind();
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-
-        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1i((int)pt_lights.size(), "PointLightNumber");
-
-        for (unsigned int ptLight = 0; ptLight < pt_lights.size(); ++ptLight)
-        {
-            std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
-            std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
-            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_LIGHT]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
-        }
-
-        // Render
         glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, m_Pipeline.m_Indirect.GetSize() / sizeof(DrawElementsIndirect), 0);
         m_Pipeline.m_Indirect.Unbind();
         m_Pipeline.m_Meshes[code]->Unbind();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
     }
 
     void RenderSystem::EndFrame()
@@ -291,5 +403,25 @@ namespace Tempest
         m_Pipeline.Grid.m_Mesh.Bind();
         m_Renderer.DrawElements(DrawMode::TRIANGLES, m_Pipeline.Grid.m_Mesh);
         m_Renderer.ClearDepth();
+    }
+
+
+    int RenderSystem::GetActivePt_lightsNum()
+    {
+        int counter = 0;
+        for(auto& point : pt_lights)
+            if(point.hide == false)
+                counter++;
+        return counter;
+    }
+
+    int RenderSystem::GetGammaCorrection()
+    {
+        return GammaCorrection;
+    }
+
+    void RenderSystem::SetGammaCorrection(int gamma)
+    {
+        GammaCorrection = gamma;
     }
 }

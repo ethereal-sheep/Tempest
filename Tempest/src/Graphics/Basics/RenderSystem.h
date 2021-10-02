@@ -35,6 +35,7 @@ namespace Tempest
         Renderer m_Renderer;
         FrameBuffer m_FrameBuffer{ 1600, 900 };
 
+        int  GammaCorrection = 1;
         bool GridActive = false;
 
         void InitMeshes();
@@ -65,15 +66,29 @@ namespace Tempest
 
         Camera& GetCamera();
 
+        int GetActivePt_lightsNum();
+        int GetGammaCorrection();
+        void SetGammaCorrection(int);
         std::vector<Directional_Light> dir_lights;
         std::vector<Point_Light> pt_lights;
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
+
+        uint32_t MAX_POINT_LIGHT = 10;
+
+        // To be changed to objects instead of global values
+        float shininess = 32.f;
+        float ambientStrength = 0.05f;
+        float specularStrength = 0.5f;
+
+
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);
 
         void Clear();                                                                                        // Clear Pipeline
-        void DrawSprites(MeshCode code, const tuptr<Shader>& shader);                                        // Render Sprites of different meshes
-        void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code);     // Render Sprites of different meshes
+        void DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num = -1);                                        // Render Sprites of different meshes
+        void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType, int pt_light_num = -1);     // Render Sprites of different meshes
         void RenderAAGrid();                                                                                 // Render Anti-Aliased Grid
     };
 }
