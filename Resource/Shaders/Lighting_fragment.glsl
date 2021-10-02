@@ -183,7 +183,7 @@ void main()
 
 	// gamma correction
 	if (GammaCorrection > 0)
-		color = pow(color, vec3(1.0/1.8));
+		color = pow(color, vec3(1.0/2.2));
 
 	fs_color = vec4(color, 1.0f);
 }

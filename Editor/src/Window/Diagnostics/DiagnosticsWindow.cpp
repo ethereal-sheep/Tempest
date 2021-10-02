@@ -441,11 +441,14 @@ namespace Tempest
 					}
 					std::string PointLightPosition = "PLightPos" + std::to_string(i);
 					std::string PointLightPositionID = "##Pos" + std::to_string(i);
+					std::string PointLightColor = "Color" + std::to_string(i);
+					std::string PointLightColorID = "##Color" + std::to_string(i);
 					std::string PointLightIntensity = "Intensity" + std::to_string(i);
 					std::string PointLightConstant = "Constant" + std::to_string(i);
 					std::string PointLightLinear = "Linear" + std::to_string(i);
 					std::string PointLightQuadratic = "Quadratic" + std::to_string(i);
 					UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
+					UI::DragFloat3ColorBox(PointLightColor.data(), PointLightColorID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Color), 0.f, 0.01f, 0.f, 1.f);
 					ImGui::Selectable(PointLightIntensity.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
 					ImGui::SameLine();
 					ImGui::PushID(PointLightIntensity.data());
