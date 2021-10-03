@@ -1,3 +1,4 @@
+#include "Core.h"
 #include "Application.h"
 
 #include "Util.h"
@@ -49,6 +50,7 @@ namespace Tempest
 		OnUpdate();
 		
 		//testing_physics_7_2();
+		FrameMark
 	}
 
 	void Application::OnEngineRender()
