@@ -118,11 +118,12 @@ namespace Tempest
 
 			// Content region
 			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - (viewport.Size.x * 0.6f * 0.5f), viewport.Size.y * 0.25f});
-			ImGui::BeginChild("##DragDropSectionSimulate", ImVec2{ viewport.Size.x * 0.6f, viewport.Size.y * 0.5f }, true, window_flags);
-			int selectedItem = 0;
+			
+			ImGui::BeginChild("##LoadingMap", ImVec2{ viewport.Size.x * 0.6f, viewport.Size.y * 0.5f }, true);
+			static int selectedItem = 0;
 
-			const ImVec2 itemSize{ viewport.Size.x * 0.6f * 0.8f, viewport.Size.y * 0.5f * 0.25f };
-
+			const ImVec2 itemSize{ viewport.Size.x * 0.6f * 0.8f, viewport.Size.y * 0.5f * 0.3f };
+			auto tex = tex_map["Assets/test_photo.png"];
 			for(int i = 0 ; i < 5; i++)
 			{
 				ImGui::Dummy(ImVec2{0.f,20.f});
@@ -130,36 +131,13 @@ namespace Tempest
 				ImGui::SameLine();
 				std::string itemid = "##" + std::to_string(i);
 				ImGui::PushID(i);
-				if (ImGui::Selectable("", i == selectedItem, 0, itemSize))
+				if (UI::UIMapSelectable((void*)static_cast<size_t>(tex->GetID()), "NAME","DATE","UNIT", i == selectedItem, 0, itemSize))
 				{
 					selectedItem = i;
 				
 					LOG("SELECTED TRUE");
 				}
-				// ImGui::SameLine();
-				// auto tex = tex_map["Assets/test_photo2.png"];
-				// ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2( 30.f,20.f));
-				// ImGui::SameLine();
-				// ImGui::RenderText(ImVec2{ 30,40 }, "NAMEEE");
-				// // ImGui::Text("DATEE");
-				// // ImGui::Text("NUMBER OF UNIT CREATED");
 				 ImGui::PopID();
-			//	ImGui::Columns(1, "NumMaps", true);
-			//	ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
-			//	ImGuiWindow* window = ImGui::GetCurrentWindow();
-			//	ImGuiOldColumns* columns = window->DC.CurrentColumns;
-			//	columns->Flags = ColFlags;
-			
-				
-			//	ImGui::NextColumn();
-			// 	float posy = GetContentRegionAvail.y();
-			// 	ImGui::Text("NAMEEEE");
-			// 	ImGui::SetCursorPosY(posy*0.5f);
-			// 	ImGui::Text("DATEE");
-			// 	ImGui::SetCursorPosY(posy);
-			// 	ImGui::Text("NUMBER OF UNIT CREATED");
-			// //	ImGui::EndColumns();
-			// 	ImGui::Dummy({0, 30.f});
 			}
 			ImGui::EndChild();
 
