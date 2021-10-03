@@ -9,6 +9,10 @@ namespace Tempest
 	{
 		OverlayOpen = true;
 		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+		Entity Attacker = UNDEFINED;
+		Entity Defender = UNDEFINED;
+		Entity ActionID = UNDEFINED;
+		Entity LinkID = UNDEFINED;
 	}
 
 	void SimulateOverlay::show(Instance& instance)
@@ -187,10 +191,19 @@ namespace Tempest
 					{
 						auto& g = instance.ecs.get<tc::Graph>(id);
 						g.g.get_name();
-						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
+						bool selected = false;
+						if (id == ActionID)
+							selected = true;
+						if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 70.f, 15.f }, FONT_PARA, selected))
 						{
 							//OverlayOpen = false;
 							//Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+							
+							if (selected == true)
+								ActionID = UNDEFINED;
+							else
+								ActionID = id;
+
 						}
 						index++;
 					}
@@ -211,22 +224,31 @@ namespace Tempest
 					for (auto id : instance.ecs.view<tc::ConflictGraph>())
 					{
 						auto& g = instance.ecs.get<tc::Graph>(id);
+						bool selected = false;
+						if (id == LinkID)
+							selected = true;
 						g.g.get_name();
-						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
+						if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x + 10.f , cursor.y + index * 80 }, { 70.f, 15.f}, FONT_PARA, selected))
 						{
 							// make sure i can simulate
 							// 1. have atk and def 
 							// 2. atk and def have characters
 							// 3. have conflict and conflict graph
+							
 
+							if (selected == true)
+								LinkID = UNDEFINED;
+							else
+								LinkID = id;
 							if (Defender != INVALID &&
 								Attacker != INVALID &&
 								instance.ecs.has<tc::Character>(Defender) &&
 								instance.ecs.has<tc::Character>(Attacker)
 							)
 							{
-								Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(Attacker, Defender, id);
-								OverlayOpen = false;
+								
+								//Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(Attacker, Defender, id);
+								//OverlayOpen = false;
 							}
 
 						}
@@ -238,16 +260,36 @@ namespace Tempest
 				ImGui::EndChild();
 
 				// Cancel button
-				if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
-				{
-					OverlayOpen = false;
-				}
+				
 
 				// Simulate button
-				if (UI::UIButton_1("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 350.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+				bool disable = false;
+				if (ActionID == UNDEFINED || LinkID == UNDEFINED)
+					disable = true;
+				
+				if (disable)
+				{
+					ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+					ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+				}
+				if (UI::UIButton_2("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
 				{
 					//Service<EventManager>::Get().instant_dispatch<SimulationTrigger>();
 					//OverlayOpen = false;
+				}
+				if (UI::UIButton_2("Custom Map", "Custom Map", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.75f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
+				{
+					//Service<EventManager>::Get().instant_dispatch<SimulationTrigger>();
+					//OverlayOpen = false;
+				}
+				if (disable)
+				{
+					ImGui::PopItemFlag();
+					ImGui::PopStyleVar();
+				}
+				if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.895f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
+				{
+					OverlayOpen = false;
 				}
 			}
 

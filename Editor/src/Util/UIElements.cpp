@@ -914,6 +914,7 @@ namespace Tempest::UI
 		ImGui::InvisibleButton("##NiceButton", button_size);
 		ImGui::PopStyleVar(1);
 		ImGui::SetCursorPos(new_pos);
+		bool hovered = ImGui::IsItemHovered();
 		if (selected)
 		{
 			// hovered
@@ -932,7 +933,7 @@ namespace Tempest::UI
 			ImGui::Text(hover.c_str());
 			ImGui::PopFont();
 			auto io = ImGui::GetIO();
-			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				return true;
 			}
@@ -1024,6 +1025,7 @@ namespace Tempest::UI
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
 		ImGui::PopStyleVar(1);
+		bool hovered = ImGui::IsItemHovered();
 		ImGui::SetCursorPos(new_pos);
 		if (selected)
 		{
@@ -1043,7 +1045,7 @@ namespace Tempest::UI
 			ImGui::Text(hover.c_str());
 			ImGui::PopFont();
 			auto io = ImGui::GetIO();
-			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				return true;
 			}

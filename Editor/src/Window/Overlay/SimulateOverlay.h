@@ -29,10 +29,9 @@ namespace Tempest
         const float HalfPadding = Padding * 0.5f;
         const unsigned NumOfButtons = 6;
 
-        Entity Action = UNDEFINED;
-        Entity System = UNDEFINED;
-
         Entity Attacker = UNDEFINED;
         Entity Defender = UNDEFINED;
+        Entity ActionID = UNDEFINED;
+        Entity LinkID = UNDEFINED;
     };
 }

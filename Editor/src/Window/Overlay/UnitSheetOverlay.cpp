@@ -454,6 +454,7 @@ namespace Tempest
 										weapon->set_stat(i, NewWeap.get_stat(i));
 									}
 									ImGui::CloseCurrentPopup();
+									NewWeap = tc::Weapon();
 									CreateOpen = false;
 								}
 								if (disabled)
@@ -539,24 +540,40 @@ namespace Tempest
 					ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 					
 				}
-				if (UI::UIButton_2("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 0.f, 10.f }, FONT_PARA))
+				if (IsUnitCreation)
 				{
-					LOG("SAVED");
-					if(IsUnitCreation)
+					if (UI::UIButton_2("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.80f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 0.f, 10.f }, FONT_PARA))
 					{
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = cs->name;
-						auto character = instance.ecs.emplace<tc::Character>(entity);
-						character->name = cs->name;
-						
-						for (auto i = 0; i < tc::STAT_TOTAL - 1; i++)
+						LOG("SAVED");
+						if (IsUnitCreation)
 						{
+							auto entity = instance.ecs.create();
+							auto meta = instance.ecs.emplace<tc::Meta>(entity);
+							meta->name = cs->name;
+							auto character = instance.ecs.emplace<tc::Character>(entity);
+							character->name = cs->name;
 
-							character->set_stat(i, cs->get_stat(i));
+							for (auto i = 0; i < tc::STAT_TOTAL - 1; i++)
+							{
+
+								character->set_stat(i, cs->get_stat(i));
+							}
 						}
+						OverlayOpen = false;
+						NewCharacter = tc::Character();
 					}
-					OverlayOpen = false;
+					if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.92f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 0.f, 10.f }, FONT_PARA))
+					{
+						OverlayOpen = false;
+						NewCharacter = tc::Character();
+					}
+				}
+				else
+				{
+					if (UI::UIButton_2("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.92f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 0.f, 10.f }, FONT_PARA))
+					{
+						OverlayOpen = false;
+					}
 				}
 				if (NameDisabled)
 				{
