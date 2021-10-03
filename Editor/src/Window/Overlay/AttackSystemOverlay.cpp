@@ -96,13 +96,13 @@ namespace Tempest
 				{
 					OverlayOpen = false;
 					instance.ecs.get<tc::Graph>(id).g = temp_graph;
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
 				}
 
 				if (UI::UIButton_1("Close", "Close", pos3, { 50.f, 10.f }, FONT_PARA))
 				{
 					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
 				}
 
 				

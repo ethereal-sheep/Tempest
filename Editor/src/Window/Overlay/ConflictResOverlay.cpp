@@ -110,15 +110,34 @@ namespace Tempest
 						ImGui::BeginChild("ChildAction", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);
 
 						const ImVec2 cursor{ ImGui::GetCursorPosX() + 180, ImGui::GetCursorPosY() + 30 };
-						for (unsigned i = 0; i < numOfButtons; i++)
+						
+
+						unsigned i = 0;
+						for (auto id : instance.ecs.view<tc::ActionGraph>())
 						{
-							if (UI::UIButton_2("Test Action" + std::to_string(i), "Test Action" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, button2Size, FONT_PARA)) {}
+							ImGui::PushID(id);
+							//ImGui::BeginGroup();
+							const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
+
+							auto& action = instance.ecs.get<tc::Graph>(id);
+
+							if (UI::UIButton_2(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), pos, button2Size, FONT_PARA))
+							{
+								OverlayOpen = false;
+								Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+							}
+							ImGui::PopID();
 						}
 
 						ImGui::EndChild();
 					}
 
-					if (UI::UIButton_1("Add Actions", "Add Actions", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, buttonSize, FONT_PARA)) {}
+					if (UI::UIButton_1("Add Actions", "Add Actions", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, buttonSize, FONT_PARA)) 
+					{
+						auto i = instance.ecs.create();
+						instance.ecs.emplace<tc::ActionGraph>(i);
+						instance.ecs.emplace<tc::Graph>(i, "Action", graph_type::action);
+					}
 
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
@@ -152,15 +171,41 @@ namespace Tempest
 						ImGui::BeginChild("ChildLink", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);
 
 						const ImVec2 cursor{ ImGui::GetCursorPosX() + 180, ImGui::GetCursorPosY() + 30 };
-						for (unsigned i = 0; i < numOfButtons; i++)
+
+						unsigned i = 0;
+						for (auto id : instance.ecs.view<tc::ConflictGraph>())
 						{
-							if (UI::UIButton_2("Test Link" + std::to_string(i), "Test Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, button2Size, FONT_PARA)) {}
+							ImGui::PushID(id);
+							//ImGui::BeginGroup();
+							const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
+
+							auto& conflict = instance.ecs.get<tc::Graph>(id);
+
+							if (UI::UIButton_2(conflict.g.name + ": " + std::to_string(i), conflict.g.name + ": " + std::to_string(i), pos, button2Size, FONT_PARA))
+							{
+								OverlayOpen = false;
+								Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+							}
+							ImGui::PopID();
 						}
+
+						//ImGui::EndChild();
+
+
+						//for (unsigned i = 0; i < numOfButtons; i++)
+						//{
+						//	if (UI::UIButton_2("Test Link" + std::to_string(i), "Test Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, button2Size, FONT_PARA)) {}
+						//}
 
 						ImGui::EndChild();
 					}
 
-					if (UI::UIButton_1("Add Link", "Add Links", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, buttonSize, FONT_PARA)) {}
+					if (UI::UIButton_1("Add Sequence", "Add Sequence", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, buttonSize, FONT_PARA)) 
+					{
+						auto i = instance.ecs.create();
+						instance.ecs.emplace<tc::ConflictGraph>(i);
+						instance.ecs.emplace<tc::Graph>(i, "Sequence", graph_type::conflict);
+					}
 
 					ImGui::EndChild();
 					ImGui::PopStyleColor();
@@ -173,8 +218,6 @@ namespace Tempest
 
 				const ImVec2 buttonPos{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f,  ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.75f };
 				
-				
-
 				//// other buttons 
 				const ImVec2 button3Size{ 0.f, 8.0f };
 				if (UI::UIButton_2("Define stats", "Define stats", buttonPos, button3Size, FONT_BODY))

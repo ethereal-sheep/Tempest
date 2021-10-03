@@ -261,6 +261,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\RNG\dice_distribution.h" />
     <ClInclude Include="src\RNG\modifier.h" />
     <ClInclude Include="src\RNG\resolution.h" />
+    <ClInclude Include="src\Triggers\SimulationTriggers.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
     <ClInclude Include="src\Util\GuizmoController.h" />
     <ClInclude Include="src\Util\Suppress.h" />
@@ -297,6 +298,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Test\test_window3.h" />
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
+    <ClInclude Include="src\Window\Util\SimulationBuilder.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>
   <ItemGroup>
