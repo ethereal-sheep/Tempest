@@ -195,6 +195,7 @@ namespace Tempest
 						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
 						{
 							OverlayOpen = false;
+
 							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
 						}
 						index++;

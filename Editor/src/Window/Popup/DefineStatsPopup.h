@@ -70,7 +70,7 @@ namespace Tempest
                     ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
                     ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.1f, ImGui::GetWindowHeight() * 0.3f });
                     ImGui::PushFont(FONT_BODY);
-                    for (int i = 3; i < tempStat.size(); i++)
+                    for (int i = 3; i < tc::STAT_TOTAL - 1; i++)
                     {
                         if ((tempStat)(i))
                         {
@@ -113,8 +113,8 @@ namespace Tempest
                     }
                     ImGui::PopFont();
                     ImGui::PopItemWidth();
-
-                    if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.3f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
+                    ImGui::SetCursorPosX(0);
+                    if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
                         *sl = tempStat;
                         ImGui::CloseCurrentPopup();
