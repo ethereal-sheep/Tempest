@@ -6,7 +6,7 @@
 #include "Graphics/OpenGL/Camera.h"
 #include "ECS/Components/Components.h"
 #include "Graphics/Basics/RenderPipeline.h"
-#include "Graphics/Basics/FrameBuffer.h"
+#include "Graphics/Basics/FBO.h"
 #include "Graphics/Basics/Model.h"
 #include "Graphics/Basics/LineRenderer.h"
 #include "Graphics/Basics/Lights.h"
@@ -33,7 +33,7 @@ namespace Tempest
         ShadowBuffer m_ShadowBuffer;
         //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
-        FrameBuffer m_FrameBuffer{ 1600, 900 };
+        FBO m_FrameBuffer{ 1600, 900 };
 
         int  GammaCorrection = 1;
         bool GridActive = false;
@@ -45,7 +45,7 @@ namespace Tempest
     public:
 
         RenderSystem(uint32_t width, uint32_t height);
-
+        ~RenderSystem() = default;
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path

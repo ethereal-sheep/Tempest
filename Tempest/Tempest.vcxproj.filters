@@ -68,6 +68,8 @@
     <ClCompile Include="src\Serializer\Reader.cpp" />
     <ClCompile Include="src\Serializer\Writer.cpp" />
     <ClCompile Include="src\Graphics\Basics\Light.cpp" />
+    <ClCompile Include="src\Graphics\Basics\FBO.cpp" />
+    <ClCompile Include="src\Graphics\Basics\RenderBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -206,6 +208,8 @@
     <ClInclude Include="src\Serializer\Writer.h" />
     <ClInclude Include="src\Util\Service.h" />
     <ClInclude Include="src\Util\view.h" />
+    <ClInclude Include="src\Graphics\Basics\FBO.h" />
+    <ClInclude Include="src\Graphics\Basics\RenderBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

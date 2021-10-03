@@ -1,198 +1,173 @@
 #include "Graphics/Basics/FrameBuffer.h"
-#include "Logger/Log.h"
 
 namespace Tempest
 {
-    FrameBuffer::FrameBuffer(uint32_t width, uint32_t height)
-        : m_Width(width), m_Height(height)
-    {
-        glEnable(GL_DEPTH_TEST);
+	constexpr GLenum GLModeOf(FrameBufferMode mode)
+	{
+		switch (mode)
+		{
+			default: assert(0);
+			case FrameBufferMode::READ:			return GL_READ_FRAMEBUFFER;
+			case FrameBufferMode::WRITE:		return GL_DRAW_FRAMEBUFFER;
+		}
+	}
 
-        constexpr float quadVertices[] = 
-        { 
-          // positions   // texCoords
-          -1.0f, -1.0f,  0.0f, 0.0f,
-           1.0f, -1.0f,  1.0f, 0.0f,
-           1.0f,  1.0f,  1.0f, 1.0f,
-          -1.0f,  1.0f,  0.0f, 1.0f,
-        };
-        
-          GLuint indices[6];
-          GLuint offset = 0;
-          
-          for (int i = 0; i < 6; i += 6)
-          {
-              indices[i + 0] = 0 + offset;
-              indices[i + 1] = 1 + offset;
-              indices[i + 2] = 2 + offset;
-          
-              indices[i + 3] = 2 + offset;
-              indices[i + 4] = 3 + offset;
-              indices[i + 5] = 0 + offset;
-          
-              offset += 4;
-              m_Count += 6;
-          }
-        
-        glGenVertexArrays(1, &m_vao);
-        glGenBuffers(1, &m_vbo);
-        glBindVertexArray(m_vao);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-        
-        glCreateBuffers(1, &m_ibo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-        
-        glBindVertexArray(0);
-        
-        glGenFramebuffers(1, &m_ID);
-        glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
-        
-        // create a color attachment texture
-        glGenTextures(1, &m_ColourBuffer);
-        glBindTexture(GL_TEXTURE_2D, m_ColourBuffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColourBuffer, 0);
-        // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-        glGenRenderbuffers(1, &m_RenderBuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height); // use a single renderbuffer object for both a depth AND stencil buffer.
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderBuffer); // now actually attach it
-        // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        	LOG_CRITICAL("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-        
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	constexpr GLenum GLModeOf(FrameCopyBit mode)
+	{
+		switch (mode)
+		{
+			default: assert(0);
+			case FrameCopyBit::COLOR_BUFFER_BIT:		return GL_COLOR_BUFFER_BIT;
+			case FrameCopyBit::DEPTH_BUFFER_BIT:		return GL_DEPTH_BUFFER_BIT;
+			case FrameCopyBit::STENCIL_BUFFER_BIT:		return GL_STENCIL_BUFFER_BIT;
+		}
+	}
 
-        Validate();
-    }
+	constexpr GLenum GLModeOf(FrameCopyFilter mode)
+	{
+		switch (mode)
+		{
+			default: assert(0);
+			case FrameCopyFilter::LINEAR:		return GL_LINEAR;
+			case FrameCopyFilter::NEAREST:		return GL_NEAREST;
+		}
+	}
 
-    uint32_t FrameBuffer::GetID() const
-    {
-        return m_ID;
-    }
+	FrameBuffer::FrameBuffer()
+	{
+		glCreateFramebuffers(1, &m_ID);
+	}
 
-    uint32_t FrameBuffer::GetWidth() const
-    {
-        return m_Width;
-    }
+	FrameBuffer::~FrameBuffer()
+	{
+		if (m_ID != 0)
+			glDeleteFramebuffers(1, &m_ID);
+	}
 
-    uint32_t FrameBuffer::GetHeight() const
-    {
-        return m_Height;
-    }
+	void FrameBuffer::AttachColorBuffer([[maybe_unused]] const Texture& texture)
+	{
+		const auto attachment = GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount++;
+		
+		glNamedFramebufferTexture(m_ID, attachment, texture.GetID(), 0);
+		
+		m_Width = texture.GetWidth();
+		m_Height = texture.GetHeight();
+	}
 
-    uint32_t FrameBuffer::GetColourBuffer() const
-    {
-        return m_ColourBuffer;
-    }
+	void FrameBuffer::PopColorBuffer()
+	{
+		if (m_colorAttachmentCount != 0)
+		{
+			const auto attachment = GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount--;
+			glNamedFramebufferTexture(m_ID, attachment, 0, 0);
+		}
+	}
 
-    uint32_t& FrameBuffer::GetIndexBuffer()
-    {
-        return m_ibo;
-    }
+	void FrameBuffer::AttachDepthBuffer([[maybe_unused]] const Texture& texture) const
+	{
+		glNamedFramebufferTexture(m_ID, GL_DEPTH_ATTACHMENT, texture.GetID(), 0);
+	}
 
-    uint32_t& FrameBuffer::GetVertexArray()
-    {
-        return m_vao;
-    }
+	void FrameBuffer::AttachDepthBuffer([[maybe_unused]] const RenderBuffer& buffer) const
+	{
+		glNamedFramebufferTexture(m_ID, GL_DEPTH_ATTACHMENT, buffer.GetID(), 0);
+	}
 
-    void FrameBuffer::Resize(uint32_t width, uint32_t height)
-    {
-        if (width == 0 || height == 0)
-              return;
-        
-          //glDeleteTextures(1, &m_ColourBuffer);
-          //glDeleteTextures(1, &m_RenderBuffer);
-          
-          m_Width = width;
-          m_Height = height;
-        
-          // create a color attachment texture
-          glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
-        
-        //glGenTextures(1, &m_ColourBuffer);
-        glBindTexture(GL_TEXTURE_2D, m_ColourBuffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColourBuffer, 0);
-        // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-        //glGenRenderbuffers(1, &m_RenderBuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height); // use a single renderbuffer object for both a depth AND stencil buffer.
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderBuffer); // now actually attach it
-        // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        	LOG_CRITICAL("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-        
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        Validate();
-    }
+	void FrameBuffer::AttachDepthStencilBuffer(const Texture& texture) const
+	{
+		glNamedFramebufferTexture(m_ID, GL_DEPTH_STENCIL_ATTACHMENT, texture.GetID(), 0);
+	}
 
-    void FrameBuffer::Draw()
-    {
-        m_Shader.Bind();
-        glBindVertexArray(m_vao);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-        glBindTexture(GL_TEXTURE_2D, m_ColourBuffer);
-        glDrawElements(GL_TRIANGLES, m_Count, GL_UNSIGNED_INT, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-    }
+	void FrameBuffer::AttachDepthStencilBuffer(const RenderBuffer& buffer) const
+	{
+		glNamedFramebufferTexture(m_ID, GL_DEPTH_STENCIL_ATTACHMENT, buffer.GetID(), 0);
+	}
 
-    void FrameBuffer::Bind() const
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
-    }
+	void FrameBuffer::PopDepthBuffer()
+	{
+		glNamedFramebufferTexture(m_ID, GL_DEPTH_ATTACHMENT, 0, 0);
+	}
 
-    void FrameBuffer::Unbind() const
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glDisable(GL_DEPTH_TEST);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
+	void FrameBuffer::CopyBufferContents(const FrameBuffer& src, FrameCopyBit copy, FrameCopyFilter filter,
+		uint32_t srcX0, uint32_t srcY0, uint32_t srcX1, uint32_t srcY1,
+		uint32_t dstX0, uint32_t dstY0, uint32_t dstX1, uint32_t dstY1) const
+	{
+		glBlitNamedFramebuffer(m_ID, src.GetID(),
+			srcX0, srcY0, srcX1, srcY1,
+			dstX0, dstY0, dstX1, dstY1,
+			GLModeOf(copy), GLModeOf(filter));
+	}
 
-    void FrameBuffer::Validate() const
-    {
-    	switch (glCheckNamedFramebufferStatus(m_ID, GL_FRAMEBUFFER))
-    	{
-    	case GL_FRAMEBUFFER_COMPLETE:
-            LOG("Framebuffer is complete.");
-    		return;
-    	case GL_FRAMEBUFFER_UNDEFINED:
-    		LOG_CRITICAL("Framebuffer undefined.");
-    		return;
-    	case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-    		LOG_CRITICAL("Framebuffer incomplete attachment.");
-    		return;
-    	case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-    		LOG_CRITICAL("Framebuffer incomplete missing attachment.");
-    		return;
-    	case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-    		LOG_CRITICAL("Framebuffer incomplete draw buffer.");
-    		return;
-    	case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
-    		LOG_CRITICAL("Framebuffer incomplete read buffer.");
-    		return;
-    	case GL_FRAMEBUFFER_UNSUPPORTED:
-    		LOG_CRITICAL("Framebuffer unsupported.");
-    		return;
-    	default:;
-    		LOG_CRITICAL("Framebuffer unknown error.");
-    	}
-    }
-    
-    void FrameBuffer::SetFrameBufferSize()
-    {
-        glViewport(0, 0, m_Width, m_Height);
-    }
+	void FrameBuffer::UseDrawBuffers() const
+	{
+		const auto attachments = std::make_unique<uint32_t[]>(m_colorAttachmentCount);
+		for (uint32_t i = 0; i < m_colorAttachmentCount; ++i)
+			attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+
+		glNamedFramebufferDrawBuffers(m_ID, m_colorAttachmentCount, attachments.get());
+	}
+
+	void FrameBuffer::UseOnlyDepth() const
+	{
+		glNamedFramebufferDrawBuffer(m_ID, GL_NONE);
+		glNamedFramebufferReadBuffer(m_ID, GL_NONE);
+	}
+
+	void FrameBuffer::Validate() const
+	{
+		switch (glCheckNamedFramebufferStatus(m_ID, GL_FRAMEBUFFER))
+		{
+		case GL_FRAMEBUFFER_COMPLETE:
+			return;
+		case GL_FRAMEBUFFER_UNDEFINED:
+			LOG_CRITICAL("Framebuffer undefined.");
+			return;
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			LOG_CRITICAL("Framebuffer incomplete attachment.");
+			return;
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+			LOG_CRITICAL("Framebuffer incomplete missing attachment.");
+			return;
+		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+			LOG_CRITICAL("Framebuffer incomplete draw buffer.");
+			return;
+		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+			LOG_CRITICAL("Framebuffer incomplete read buffer.");
+			return;
+		case GL_FRAMEBUFFER_UNSUPPORTED:
+			LOG_CRITICAL("Framebuffer unsupported.");
+			return;
+		default:;
+			LOG_CRITICAL("Framebuffer unknown error.");
+		}
+	}
+
+	uint32_t FrameBuffer::GetID() const
+	{
+		return m_ID;
+	}
+
+	void FrameBuffer::Bind(FrameBufferMode mode) const
+	{
+		glBindFramebuffer(GLModeOf(mode), m_ID);
+	}
+
+	void FrameBuffer::Unbind(FrameBufferMode mode)
+	{
+		glBindFramebuffer(GLModeOf(mode), 0);
+	}
+
+	uint32_t FrameBuffer::GetWidth() const
+	{
+		return m_Width;
+	}
+
+	uint32_t FrameBuffer::GetHeight() const
+	{
+		return m_Height;
+	}
+	uint32_t FrameBuffer::GetColorAttachmentCount() const
+	{
+		return m_colorAttachmentCount;
+	}
 }
