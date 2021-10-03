@@ -32,6 +32,8 @@
 #include "Window/Popup/BottomRightOverlayPopup.h"
 #include "Window/Popup/DefineStatsPopup.h"
 
+#include "Window/Util/SimulationBuilder.h"
+
 // Overlays
 #include "Window/Overlay/UnitSheetOverlay.h"
 #include "Window/Overlay/SimulateOverlay.h"
@@ -40,7 +42,6 @@
 #include "Window/Overlay/AttackSystemOverlay.h"
 #include "Window/Overlay/MainMenuOverlay.h"
 #include "Window/Overlay/SimulateResultOverlay.h"
-
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -107,7 +108,10 @@ namespace Tempest
 		instance->register_always<ConflictResOverlay>();
 		instance->register_always<AttackSystemOverlay>();
 		instance->register_always<MainMenuOverlay>();
+
+		instance->register_always<MainMenuOverlay>();
 		
+		instance->register_always<SimulationBuilder>();
 		
 
 		instance->register_always<ShowRecent>();

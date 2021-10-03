@@ -1,6 +1,7 @@
 #include "SimulateOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
+#include "Triggers/SimulationTriggers.h"
 
 namespace Tempest
 {
@@ -124,14 +125,8 @@ namespace Tempest
 							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f }, { 180, 15 }, FONT_PARA))
 								Defender = UNDEFINED;
 						}
-
-						
-
 						ImGui::EndChild();
-					
 					}
-					
-
 					ImGui::EndChild();
 				}
 
@@ -194,9 +189,8 @@ namespace Tempest
 						g.g.get_name();
 						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
 						{
-							OverlayOpen = false;
-
-							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+							//OverlayOpen = false;
+							//Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
 						}
 						index++;
 					}
@@ -220,8 +214,21 @@ namespace Tempest
 						g.g.get_name();
 						if (UI::UIButton_1(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 180, 15 }, FONT_PARA))
 						{
-							OverlayOpen = false;
-							Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
+							// make sure i can simulate
+							// 1. have atk and def 
+							// 2. atk and def have characters
+							// 3. have conflict and conflict graph
+
+							if (Defender != INVALID &&
+								Attacker != INVALID &&
+								instance.ecs.has<tc::Character>(Defender) &&
+								instance.ecs.has<tc::Character>(Attacker)
+							)
+							{
+								Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(Attacker, Defender, id);
+								OverlayOpen = false;
+							}
+
 						}
 						index++;
 					}
@@ -239,9 +246,8 @@ namespace Tempest
 				// Simulate button
 				if (UI::UIButton_1("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 350.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
 				{
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>();
-					LOG("OPEN");
-					OverlayOpen = false;
+					//Service<EventManager>::Get().instant_dispatch<SimulationTrigger>();
+					//OverlayOpen = false;
 				}
 			}
 
