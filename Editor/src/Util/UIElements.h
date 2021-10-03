@@ -135,6 +135,8 @@ namespace Tempest::UI
 	void AddUnderline(ImU32 col, ImVec2 min = { 0, 0 }, ImVec2 max = { 0, 0 });
 	bool UISelectable(const char* label, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	bool UISelectable(const char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
+	bool UIMapSelectable(ImTextureID tex, const char* name, const char* date, const char* UnitData, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
+	bool UIMapSelectable(ImTextureID tex, const char* name, const char* date, const char* unitData, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	bool UICheckBox_1(const char* label, bool* v);
 }
 

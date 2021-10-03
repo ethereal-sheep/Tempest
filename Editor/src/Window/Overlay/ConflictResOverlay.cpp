@@ -18,6 +18,8 @@ namespace Tempest
 		if (OverlayOpen)
 		{
 			window_flags |= ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.3f));
 			if (ImGui::Begin("Conflict Resolution", &visible, window_flags))
 			{
 				static ImVec4 active{ 0.2f, 0.2f, 0.2f, 1.f };
@@ -190,12 +192,14 @@ namespace Tempest
 				if (UI::UIButton_2("Cancel", "Cancel", { buttonPos.x,buttonPos.y + padding * 3.0f}, button3Size, FONT_BODY))
 				{
 					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
 				}
 
 
 			}
 
 			ImGui::End();
+			ImGui::PopStyleColor();
 		}
 	}
 }
