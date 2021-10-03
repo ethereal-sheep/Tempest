@@ -5,7 +5,7 @@
 
 namespace Tempest
 {
-	void ConflictResOverlay::open_popup(const Event& e)
+	void ConflictResOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
 	}
@@ -52,7 +52,7 @@ namespace Tempest
 					}
 
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 5);
-					ImGui::Image((void*)static_cast<size_t>(AddUnitTex->GetID()), ImVec2(AddUnitTex->GetWidth(), AddUnitTex->GetHeight()));
+					ImGui::Image((void*)static_cast<size_t>(AddUnitTex->GetID()), ImVec2(static_cast<float>(AddUnitTex->GetWidth()), static_cast<float>(AddUnitTex->GetHeight())));
 
 					{
 						ImGui::BeginChild("ChildUnit", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);
@@ -104,7 +104,7 @@ namespace Tempest
 					}
 
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 5);
-					ImGui::Image((void*)static_cast<size_t>(AddActionTex->GetID()), ImVec2(AddActionTex->GetWidth(), AddActionTex->GetHeight()));
+					ImGui::Image((void*)static_cast<size_t>(AddActionTex->GetID()), ImVec2(static_cast<float>(AddActionTex->GetWidth()), static_cast<float>(AddActionTex->GetHeight())));
 
 					{
 						ImGui::BeginChild("ChildAction", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);
@@ -146,7 +146,7 @@ namespace Tempest
 					}
 
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 5);
-					ImGui::Image((void*)static_cast<size_t>(AddLinkTex->GetID()), ImVec2(AddLinkTex->GetWidth(), AddLinkTex->GetHeight()));
+					ImGui::Image((void*)static_cast<size_t>(AddLinkTex->GetID()), ImVec2(static_cast<float>(AddLinkTex->GetWidth()), static_cast<float>(AddLinkTex->GetHeight())));
 
 					{
 						ImGui::BeginChild("ChildLink", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);

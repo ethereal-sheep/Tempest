@@ -4,7 +4,7 @@
 
 namespace Tempest
 {
-	void SimulateOverlay::open_popup(const Event& e)
+	void SimulateOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
 		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -23,10 +23,10 @@ namespace Tempest
 
 			if (ImGui::Begin("Select Unit Sheet", nullptr, window_flags))
 			{
-				float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
+				//float center_x = ImGui::GetContentRegionAvailWidth() * 0.5f;
 				const float contentSize = ImGui::GetContentRegionAvailWidth() * 0.9f;
 				string text = "Simulate";
-				float text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
+				//float text_center = center_x - (ImGui::CalcTextSize(text.c_str()).x * 0.5f);
 
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 				UI::SubHeader("Simulate");
@@ -238,6 +238,8 @@ namespace Tempest
 				// Simulate button
 				if (UI::UIButton_1("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 350.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
 				{
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>();
+					LOG("OPEN");
 					OverlayOpen = false;
 				}
 			}
