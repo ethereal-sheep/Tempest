@@ -142,9 +142,10 @@ namespace Tempest
 	template<typename TFirst, typename TSecond>
 	Reader& Reader::operator& (std::pair<TFirst, TSecond>& pair)
 	{
-		*this& pair.first;
-		*this& pair.second;
-		return *this;
+		StartObject();
+		Member("first", pair.first);
+		Member("second", pair.second);
+		return EndObject();
 	}
 
 

@@ -394,6 +394,7 @@ namespace Tempest
 				ar.Vector("Statline_Data", component.stat_list);
 				return ar.EndObject();
 			}
+
 			Statline() : stat_list(STAT_TOTAL)
 			{
 				/*stats.push_back("HP");
