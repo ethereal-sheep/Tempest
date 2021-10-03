@@ -109,8 +109,6 @@ namespace Tempest
 		instance->register_always<AttackSystemOverlay>();
 		instance->register_always<MainMenuOverlay>();
 
-		instance->register_always<MainMenuOverlay>();
-		
 		instance->register_always<SimulationBuilder>();
 		
 
