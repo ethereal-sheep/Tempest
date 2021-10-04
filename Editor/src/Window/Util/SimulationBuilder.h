@@ -55,6 +55,9 @@ namespace Tempest
 				frequency = a.freq;
 				win = &a.win;
 				lose = &a.lose;
+
+				num_win = 0;
+				num_lose = 0;
 			}
 		}
 

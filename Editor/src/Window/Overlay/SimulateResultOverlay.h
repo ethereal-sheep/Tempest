@@ -97,8 +97,8 @@ namespace Tempest
                     // Cancel button
                     if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
-                        //OverlayOpen = false;
-                        Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Test");
+                        OverlayOpen = false;
+                        //Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Test");
                     }
 
                     // Simulate button
