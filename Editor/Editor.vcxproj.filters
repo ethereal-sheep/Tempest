@@ -117,9 +117,6 @@
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window\Overlay\SimulateResultOverlay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h">
