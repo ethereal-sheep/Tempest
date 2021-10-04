@@ -553,7 +553,7 @@ namespace Tempest
 							auto character = instance.ecs.emplace<tc::Character>(entity);
 							character->name = cs->name;
 
-							for (auto i = 0; i < tc::STAT_TOTAL - 1; i++)
+							for (auto i = 0; i < tc::STAT_TOTAL; i++)
 							{
 
 								character->set_stat(i, cs->get_stat(i));

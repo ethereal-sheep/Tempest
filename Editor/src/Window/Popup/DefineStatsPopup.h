@@ -70,7 +70,7 @@ namespace Tempest
                     ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
                     ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.1f, ImGui::GetWindowHeight() * 0.3f });
                     ImGui::PushFont(FONT_BODY);
-                    for (int i = 3; i < tc::STAT_TOTAL - 1; i++)
+                    for (int i = 3; i < tc::STAT_TOTAL; i++)
                     {
                         if ((tempStat)(i))
                         {

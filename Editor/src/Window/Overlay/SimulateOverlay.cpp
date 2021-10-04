@@ -249,16 +249,14 @@ namespace Tempest
 								LinkID = UNDEFINED;
 							else
 								LinkID = id;
-							if (Defender != INVALID &&
-								Attacker != INVALID &&
-								instance.ecs.has<tc::Character>(Defender) &&
-								instance.ecs.has<tc::Character>(Attacker)
-							)
-							{
-								
-								//Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(Attacker, Defender, id);
-								//OverlayOpen = false;
-							}
+							//if (Defender != INVALID &&
+							//	Attacker != INVALID &&
+							//	instance.ecs.has<tc::Character>(Defender) &&
+							//	instance.ecs.has<tc::Character>(Attacker)
+							//)
+							//{
+
+							//}
 
 						}
 						index++;
@@ -288,8 +286,7 @@ namespace Tempest
 				}
 				if (UI::UIButton_2("Custom Map", "Custom Map", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.75f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
 				{
-					//Service<EventManager>::Get().instant_dispatch<SimulationTrigger>();
-					//OverlayOpen = false;
+
 				}
 				if (disable)
 				{
@@ -298,7 +295,6 @@ namespace Tempest
 				}
 				if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.895f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
 				{
-
 					OverlayOpen = false;
 				}
 			}
