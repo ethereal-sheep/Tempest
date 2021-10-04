@@ -17,6 +17,8 @@ namespace Tempest
 		LIGHTING,
 		DIRECTIONAL_SHADOW_MAP,
 		POINT_LIGHT_DEPTH,
+		MODEL,
+		MODEL_TEXTURE
 	};
 
 	struct SpriteObj
