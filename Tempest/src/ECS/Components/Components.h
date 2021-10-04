@@ -7,6 +7,7 @@
 #include "Graphics/Basics/RenderPipeline.h"
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
+#include "Graphics/Basics/Model.h"
 
 /**
 * @brief 
@@ -219,6 +220,21 @@ namespace Tempest
 
 			MeshCode code;
 		};
+		struct Model
+		{
+			static const char* get_type() { return "Model"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Model& component)
+			{
+				ar.StartObject();
+				ar.Member("Path", component.path);
+				return ar.EndObject();
+			}
+			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
+			string path;
+		};
+
 
 		struct Destroyed 
 		{
@@ -562,20 +578,6 @@ namespace Tempest
 				: g(empty, type) {}
 
 			graph g;
-		};
-
-		struct Model
-		{
-			static const char* get_type() { return "Model"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Model& )
-			{
-				ar.StartObject();
-				//ar.Member("Path", component.code);
-				return ar.EndObject();
-			}
-			Tempest::Model m;
 		};
 
 

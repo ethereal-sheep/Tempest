@@ -25,6 +25,12 @@ namespace Tempest
 		glm::mat3 m_Normal;
 	};
 
+	struct ModelObj
+	{
+		tsptr<Model> m_Model;
+		glm::mat4 m_Transform;
+	};
+
 	struct AAGrid
 	{
 		Mesh m_Mesh = GeometryFactory::GenerateIndexedPlane();
@@ -44,8 +50,8 @@ namespace Tempest
 		/*
 		*	Models
 		*/
-		tvector<tsptr<Model>> m_Models;
-		tvector<glm::mat4> m_ModelTransforms;
+		tmap<string, tsptr<Model>> m_ModelLibrary;
+		tvector<ModelObj> m_Models;
 		
 		/*
 		*	Polygons

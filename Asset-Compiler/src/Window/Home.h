@@ -84,7 +84,7 @@ namespace Tempest
 					auto& m = instance.ecs.get<tc::Model>(i);
 					
 
-					ImGui::Text(m.m.GetFilename().string().c_str());
+					ImGui::Text(m.path.c_str());
 
 				}
 

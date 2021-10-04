@@ -28,6 +28,14 @@ namespace Tempest
 			auto& transform = ecs.get<tc::Transform>(id);
 			Service<RenderSystem>::Get().Submit(mesh.code, transform);
 		}
+
+		auto view2 = ecs.view<tc::Model>(exclude_t<tc::Destroyed>());
+		for (auto id : view2)
+		{
+			auto& model = ecs.get<tc::Model>(id);
+			auto& transform = ecs.get<tc::Transform>(id);
+			Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
+		}
 	}
 	void Instance::internal_exit()
 	{

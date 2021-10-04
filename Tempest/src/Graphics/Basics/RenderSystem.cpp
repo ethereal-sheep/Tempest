@@ -82,8 +82,14 @@ namespace Tempest
 
     void RenderSystem::SubmitModel(const string& path, const Transform& transform)
     {
-        m_Pipeline.m_Models.emplace_back(std::make_shared<Model>(path.c_str()));
-        m_Pipeline.m_ModelTransforms.emplace_back(to_Model_Matrix(transform));
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::make_shared<Model>(path.c_str())));
+        }
+        ModelObj model;
+        model.m_Transform = to_Model_Matrix(transform);
+        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        m_Pipeline.m_Models.push_back(model);
     }
 
     void RenderSystem::Draw()
@@ -107,7 +113,7 @@ namespace Tempest
 
     void RenderSystem::BeginFrame()
     {
-        /*  Line Testing
+        //  Line Testing
         glm::vec3 min{ 0.f, 0.f, 0.f };
         glm::vec3 max{ 0.5f, 0.5f, 0.5f };
         AABB aabb;
@@ -123,7 +129,7 @@ namespace Tempest
         
         m_LineRenderer.SubmitBuffer();
         m_LineRenderer.ClearBuffer();
-        */
+        
 
         m_FrameBuffer.Bind();
 
@@ -181,12 +187,12 @@ namespace Tempest
 
 
           //Drawing Models
-        for (size_t i = 0; i < m_Pipeline.m_ModelTransforms.size(); ++i)
+        for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
         {
-            for (auto& [mesh, material] : m_Pipeline.m_Models[i]->GetMeshes())
+            for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
             {
                 m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->Bind();
-                m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_ModelTransforms[i], "ModelMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
                 m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
                 m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
                 m_Pipeline.m_Shaders[ShaderCode::TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
@@ -195,27 +201,27 @@ namespace Tempest
                 mesh.Bind();
 
                 // Dir + Point Light
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Bind();
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Color, "LightColor");
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Direction, "LightDirection");
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(dir_lights[0].Intensity, "LightIntensity");
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-
-                m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1i((int)pt_lights.size(), "PointLightNumber");
-
-                for (unsigned int ptLight = 0; ptLight < pt_lights.size(); ++ptLight)
-                {
-                    std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
-                    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
-                    std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
-                    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
-                }
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Bind();
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Color, "LightColor");
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(dir_lights[0].Intensity, "LightIntensity");
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+                //
+                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1i((int)pt_lights.size(), "PointLightNumber");
+                //
+                //for (unsigned int ptLight = 0; ptLight < pt_lights.size(); ++ptLight)
+                //{
+                //    std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
+                //    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+                //    std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
+                //    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+                //}
                 glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
             }
         }
-
+        m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix());
         m_FrameBuffer.Unbind();       
     }
 
@@ -355,7 +361,6 @@ namespace Tempest
         m_Pipeline.m_Spheres.clear();
         m_Pipeline.m_Icosahedrons.clear();
         //m_Pipeline.m_Models.clear();
-        //m_Pipeline.m_ModelTransforms.clear();
     }
 
     void RenderSystem::Resize(uint32_t width, uint32_t height)

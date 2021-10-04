@@ -56,7 +56,7 @@ namespace Tempest
                     
                     auto entity = instance.ecs.create();
                     auto m = instance.ecs.emplace<tc::Model>(entity);
-                    m->m = Model(path.string().c_str());
+                    m->path = path.string();
                 }
                 ImGui::SameLine();
                 if (ImGui::Button("Cancel"))
