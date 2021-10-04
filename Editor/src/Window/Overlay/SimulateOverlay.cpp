@@ -85,7 +85,7 @@ namespace Tempest
 						if (Attacker != UNDEFINED)
 						{
 							auto& character = instance.ecs.get<tc::Character>(Attacker);
-							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f}, { 180, 15 }, FONT_PARA))
+							if (UI::UIButton_2(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f}, { 60, 15 }, FONT_PARA))
 								Attacker = UNDEFINED;
 						}
 
@@ -135,7 +135,7 @@ namespace Tempest
 						if (Defender != UNDEFINED)
 						{
 							auto& character = instance.ecs.get<tc::Character>(Defender);
-							if (UI::UIButton_1(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f }, { 180, 15 }, FONT_PARA))
+							if (UI::UIButton_2(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f }, { 60, 15 }, FONT_PARA))
 								Defender = UNDEFINED;
 						}
 						ImGui::EndChild();
@@ -167,14 +167,14 @@ namespace Tempest
 						const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
 
 						auto& Charac = instance.ecs.get<tc::Character>(id);
-						if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), pos, { 180, 15 }, FONT_PARA)) {}
+						if (UI::UIButton_2(Charac.name.c_str(), Charac.name.c_str(), pos, { 60, 15 }, FONT_PARA)) {}
 
 						ImGui::EndGroup();
 				
 						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 						{
 							ImGui::SetDragDropPayload("UNIT_CONTENT_ITEM", &id, sizeof(Entity));
-							UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y }, { 180, 15 }, FONT_PARA);
+							UI::UIButton_2(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y }, { 60, 15 }, FONT_PARA);
 							ImGui::EndDragDropSource();
 						}
 
@@ -203,7 +203,7 @@ namespace Tempest
 						bool selected = false;
 						if (id == ActionID)
 							selected = true;
-						if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 70.f, 15.f }, FONT_PARA, selected))
+						if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 60.f, 15.f }, FONT_PARA, selected))
 						{
 							//OverlayOpen = false;
 							//Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
@@ -237,7 +237,7 @@ namespace Tempest
 						if (id == LinkID)
 							selected = true;
 						g.g.get_name();
-						if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x + 10.f , cursor.y + index * 80 }, { 70.f, 15.f}, FONT_PARA, selected))
+						if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x + 10.f , cursor.y + index * 80 }, { 60.f, 15.f}, FONT_PARA, selected))
 						{
 							// make sure i can simulate
 							// 1. have atk and def 
