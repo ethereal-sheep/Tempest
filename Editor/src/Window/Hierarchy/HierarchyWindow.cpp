@@ -105,7 +105,7 @@ namespace Tempest
 						auto transform = instance.ecs.emplace<tc::Transform>(entity);
 						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
 						//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
-						instance.ecs.emplace<tc::Model>(entity, "Models/Chair.fbx");
+						instance.ecs.emplace<tc::Model>(entity, "Models/Sword.fbx");
 
 
 						//auto& transform = instance.ecs.get<Components::Transform>(entity);

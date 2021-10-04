@@ -53,6 +53,9 @@ namespace Tempest
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight, const Transform& transform);           // Submitting Point Light {Transform to be used for pos}
         void SubmitLights(const SpotLight& slight, const Transform& transform);             // Submitting SpotLight {Transform to be used for pos}
+
+        void DrawLine(const Line& line, const glm::vec4& color);                            // Drawing Lines
+        void DrawLine(const AABB& box, const glm::vec4& color);                             // Drawing Bounding Boxes
         
         // rendering api
         void Draw();

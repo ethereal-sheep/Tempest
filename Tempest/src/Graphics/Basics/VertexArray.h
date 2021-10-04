@@ -15,6 +15,7 @@ namespace Tempest
 
     public:
 
+        VertexArray();
         VertexArray(const tsptr<IndexBuffer>& ibo, const tvector<tsptr<VertexBuffer>>& vbos, const tvector<BufferLayout>& layouts);
         VertexArray(const VertexArray&) = delete;
         VertexArray& operator=(const VertexArray&) = delete;
@@ -25,14 +26,11 @@ namespace Tempest
         void Bind() const;
         void Unbind() const;
 
+        void AttachVertexBuffer(const VertexBuffer& vbo, const BufferLayout& layout);
+        void AttachIndexBuffer(const IndexBuffer& ibo) const;
         void AttachVertexBufferInstanced(const VertexBuffer& vbo, const BufferLayout& layout);        
         void SetBindingDivisor(unsigned int index, unsigned int divisor) const;
         
-        tsptr<VertexArray> GetShared();
-
-    private:
-
-        void AttachVertexBuffer(const VertexBuffer& vbo, const BufferLayout& layout);
-        void AttachIndexBuffer(const IndexBuffer& ibo) const;
+        tsptr<VertexArray> GetShared();  
     };
 }

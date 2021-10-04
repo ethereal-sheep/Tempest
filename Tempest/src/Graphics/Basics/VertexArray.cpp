@@ -20,6 +20,12 @@ namespace Tempest
             case VertexType::Bool:		return GL_BOOL;
         }
     }
+
+    VertexArray::VertexArray()
+    {
+        glCreateVertexArrays(1, &m_ID);
+    }
+
     VertexArray::VertexArray(const tsptr<IndexBuffer>& ibo, const tvector<tsptr<VertexBuffer>>& vbos, const tvector<BufferLayout>& layouts)
         : m_IBO(ibo)
     {
@@ -52,12 +58,12 @@ namespace Tempest
     void VertexArray::Bind() const
     {
         glBindVertexArray(m_ID);
-        m_IBO->Bind();
+        if(m_IBO != nullptr) m_IBO->Bind();
     }
 
     void VertexArray::Unbind() const
     {
-        m_IBO->Unbind();
+        if (m_IBO != nullptr) m_IBO->Unbind();
         glBindVertexArray(0);
     }
 

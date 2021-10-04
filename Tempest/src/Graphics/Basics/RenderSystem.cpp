@@ -17,6 +17,7 @@ namespace Tempest
     {
         m_Pipeline.m_Shaders.emplace(ShaderCode::BASIC, std::make_unique<Shader>("Shaders/Basic_vertex.glsl", "Shaders/Basic_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::TEXTURE, std::make_unique<Shader>("Shaders/Texture_vertex.glsl", "Shaders/Texture_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::LINE, std::make_unique<Shader>("Shaders/Line_vertex.glsl", "Shaders/Line_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::GROUND, std::make_unique<Shader>("Shaders/GroundPlane_vertex.glsl", "Shaders/GroundPlane_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::LIGHTING, std::make_unique<Shader>("Shaders/Lighting_vertex.glsl", "Shaders/Lighting_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::DIRECTIONAL_SHADOW_MAP, std::make_unique<Shader>("Shaders/DirShadowMap_vertex.glsl", "Shaders/DirShadowMap_fragment.glsl"));
@@ -92,6 +93,16 @@ namespace Tempest
         m_Pipeline.m_Models.push_back(model);
     }
 
+    void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)
+    {
+        m_LineRenderer.Submit(line, color);
+    }
+
+    void RenderSystem::DrawLine(const AABB& box, const glm::vec4& color)
+    {
+        m_LineRenderer.Submit(box, color);
+    }
+
     void RenderSystem::Draw()
     {
         BeginFrame();
@@ -113,24 +124,10 @@ namespace Tempest
 
     void RenderSystem::BeginFrame()
     {
-        //  Line Testing
-        glm::vec3 min{ 0.f, 0.f, 0.f };
-        glm::vec3 max{ 0.5f, 0.5f, 0.5f };
-        AABB aabb;
-        aabb.max = max;
-        aabb.min = min;
-        m_LineRenderer.Submit(aabb, glm::vec4(1.f, 0.f, 0.f, 1.f));
-
-        Line test_line{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.1f, 0.f, 0.f) };
-        Line test_line2{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.1f, 0.f) };
-        Line test_line3{ glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.1f) };
-        m_LineRenderer.Submit(test_line2, glm::vec4(0.f, 1.f, 0.f, 1.f));
-        m_LineRenderer.Submit(test_line3, glm::vec4(0.f, 0.f, 1.f, 1.f));
-        
+        /*  Updating line renderer  */
         m_LineRenderer.SubmitBuffer();
         m_LineRenderer.ClearBuffer();
         
-
         m_FrameBuffer.Bind();
 
         m_Renderer.EnableDepthMask(true);
@@ -186,7 +183,7 @@ namespace Tempest
         //DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::BASIC);
 
 
-          //Drawing Models
+        // Drawing Models
         for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
         {
             for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
@@ -221,7 +218,8 @@ namespace Tempest
                 glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
             }
         }
-        m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix());
+        m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);
+
         m_FrameBuffer.Unbind();       
     }
 
@@ -352,6 +350,7 @@ namespace Tempest
     void RenderSystem::EndFrame()
     {
         m_FrameBuffer.Draw();
+
     }
 
     void RenderSystem::Clear()
@@ -360,7 +359,7 @@ namespace Tempest
         m_Pipeline.m_Planes.clear();
         m_Pipeline.m_Spheres.clear();
         m_Pipeline.m_Icosahedrons.clear();
-        //m_Pipeline.m_Models.clear();
+        m_Pipeline.m_Models.clear();
     }
 
     void RenderSystem::Resize(uint32_t width, uint32_t height)

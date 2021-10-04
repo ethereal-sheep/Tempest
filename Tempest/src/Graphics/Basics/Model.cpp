@@ -17,6 +17,7 @@ namespace Tempest
 
 		// create a list of material
 		tvector<tsptr<Material>> materials(s_Scene->mNumMaterials, make_sptr<Material>());
+		auto tex = s_Scene->GetEmbeddedTexture(m_File.string().c_str());
 
 		// pass in materials to be processed
 		for (id_t i = 0; i < s_Scene->mNumMaterials; ++i)
