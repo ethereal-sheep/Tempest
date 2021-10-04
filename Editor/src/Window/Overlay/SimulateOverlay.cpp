@@ -264,7 +264,7 @@ namespace Tempest
 
 				// Simulate button
 				bool disable = false;
-				if (ActionID == UNDEFINED || LinkID == UNDEFINED)
+				if (LinkID == UNDEFINED)
 					disable = true;
 				
 				if (disable)
@@ -274,8 +274,8 @@ namespace Tempest
 				}
 				if (UI::UIButton_2("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
 				{
-					//Service<EventManager>::Get().instant_dispatch<SimulationTrigger>();
-					//OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(Attacker, Defender, LinkID);
+					OverlayOpen = false;
 				}
 				if (UI::UIButton_2("Custom Map", "Custom Map", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.75f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
 				{

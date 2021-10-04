@@ -55,60 +55,60 @@ namespace Tempest
                     UI::SubHeader("Simulate");
                     ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
-                    const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
 
-                    //auto tex = tex_map["Assets/SimulationBackdrop.png"];
-                    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
-
-
-                    ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.8f), true);
 
                     
+                    const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
 
+                    auto tex = tex_map["Assets/SimulationBackdrop.png"];
+                    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+                    ImVec2 point = ImGui::GetCursorPos();
+                    
 
-                    //ImVec2 point = ImGui::GetCursorPos();
+                    ImVec2 Min{ point.x, point.y };
+                    ImVec2 Max{ Min.x + viewport->Size.x * 0.91f, Min.y + viewport->Size.y * 0.73f };
+                    ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
+                    
+                    ImGui::BeginChild("##ContentSectionSimulate", ImVec2(Max.x - Min.x, Max.y - Min.y), true, ImGuiWindowFlags_NoScrollWithMouse);
+
+                    ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.05f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.11f });
+                    ImGui::Image((void*)static_cast<size_t>(tex_map["Assets/Attacker.png"]->GetID()), { tex_map["Assets/Attacker.png"]->GetWidth() * 0.9f, tex_map["Assets/Attacker.png"]->GetHeight() * 0.9f });
+                    ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.56f - (tex_map["Assets/Defender.png"]->GetWidth() * 0.9f) * 0.5f , ImGui::GetCursorPosY() - (tex_map["Assets/Defender.png"]->GetHeight() * 0.9f) * 0.5f + 15.0f });
+                    ImGui::Image((void*)static_cast<size_t>(tex_map["Assets/Defender.png"]->GetID()), { tex_map["Assets/Defender.png"]->GetWidth() * 0.9f, tex_map["Assets/Defender.png"]->GetHeight() * 0.9f });
+                    
+                    ImGui::EndChild();
+                    //ImGui::Text("Test");
+                    //ImGui::Text("Attacker: %u", atk);
+                    //ImGui::Text("Defender: %u", def);
+                    //ImGui::Text("Conflict: %u", conflict);
+                    //const uint32_t one = 1;
+                    //ImGui::InputScalar("Frequency", ImGuiDataType_U32, &freq, &one);
+
+                    //if (win + lose != 0)
+                    //{
+                    //    ImGui::Text("%.3f", 1.f * win / (win+lose));
+                    //}
+                    //else
                     //{
 
-                    //    ImVec2 Min{ point.x, point.y };
-                    //    ImVec2 Max{ Min.x + viewport->Size.x * 0.91f, Min.y + viewport->Size.y * 0.73f };
-                    //    
+                    //    ImGui::Text("Press Simulate");
                     //}
 
+                    //// Cancel button
+                    //if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+                    //{
+                    //    OverlayOpen = false;
+                    //    //Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Test");
+                    //}
 
-                    ImGui::Text("Test");
-                    ImGui::Text("Attacker: %u", atk);
-                    ImGui::Text("Defender: %u", def);
-                    ImGui::Text("Conflict: %u", conflict);
-                    const uint32_t one = 1;
-                    ImGui::InputScalar("Frequency", ImGuiDataType_U32, &freq, &one);
+                    //// Simulate button
+                    //if (UI::UIButton_1("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 350.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+                    //{
+                    //    freq = std::clamp(freq, 1u, 100000u);
 
-                    if (win + lose != 0)
-                    {
-                        ImGui::Text("%.3f", 1.f * win / (win+lose));
-                    }
-                    else
-                    {
+                    //    Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, conflict, freq, win, lose);
 
-                        ImGui::Text("Press Simulate");
-                    }
-
-                    ImGui::EndChild();
-
-                    // Cancel button
-                    if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
-                    {
-                        OverlayOpen = false;
-                        //Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Test");
-                    }
-
-                    // Simulate button
-                    if (UI::UIButton_1("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 350.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
-                    {
-                        freq = std::clamp(freq, 1u, 100000u);
-
-                        Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, conflict, freq, win, lose);
-
-                    }
+                    //}
 
                 }
                 ImGui::End();
