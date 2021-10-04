@@ -8,11 +8,11 @@ namespace Tempest
 	void SimulateOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
-		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
-		Entity Attacker = UNDEFINED;
-		Entity Defender = UNDEFINED;
-		Entity ActionID = UNDEFINED;
-		Entity LinkID = UNDEFINED;
+		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar;
+		Attacker = UNDEFINED;
+		Defender = UNDEFINED;
+		ActionID = UNDEFINED;
+		LinkID = UNDEFINED;
 	}
 
 	void SimulateOverlay::show(Instance& instance)
@@ -53,13 +53,13 @@ namespace Tempest
 				{
 					const float availRegion = ImGui::GetContentRegionAvail().y * 0.3f;
 					auto curr_tex = tex_map["Assets/ButtonSlot.png"];
-					const ImVec2 button_slot_size{ curr_tex->GetWidth() * 0.9f, curr_tex->GetHeight() * 0.9f };
+					const ImVec2 button_slot_size{ curr_tex->GetWidth() * 0.68f, curr_tex->GetHeight() * 0.67f };
 
-					ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, availRegion), true, window_flags | ImGuiWindowFlags_NoScrollbar);
+					ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, availRegion), false, window_flags | ImGuiWindowFlags_NoScrollbar);
 
 					// Attacker section
 					{
-						ImGui::BeginChild("##DragDropAttackerSimulate", ImVec2(contentSize * 0.5f, availRegion - 2.0f), true, window_flags );
+						ImGui::BeginChild("##DragDropAttackerSimulate", ImVec2(contentSize * 0.45f, availRegion - 2.0f), false, window_flags );
 
 						// Attacker image
 						ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.05f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.11f });
@@ -92,12 +92,20 @@ namespace Tempest
 						ImGui::EndChild();
 					
 					}
-				
+					ImGui::SameLine();
+					ImGui::BeginChild("##VSChild", ImVec2(contentSize * 0.1f, availRegion - 2.0f), false, window_flags);
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::Dummy({ 0.f, ImGui::GetContentRegionAvail().y * 0.41f });
+					ImGui::Dummy({ ImGui::GetContentRegionAvail().x * 0.25f, 0.f });
+					ImGui::SameLine();
+					ImGui::Text("VS");
+					ImGui::PopFont();
+					ImGui::EndChild();
 					ImGui::SameLine(0,0);
 
 					// Defender section
 					{
-						ImGui::BeginChild("##DragDropDefenderSimulate", ImVec2(contentSize * 0.5f, availRegion - 2.0f), true, window_flags );
+						ImGui::BeginChild("##DragDropDefenderSimulate", ImVec2(contentSize * 0.45f, availRegion - 2.0f), false, window_flags );
 
 						ImGui::SameLine();
 
@@ -117,6 +125,7 @@ namespace Tempest
 							ImGui::EndDragDropTarget();
 						}
 
+						
 						ImGui::SameLine();
 
 						// Defender image
@@ -137,7 +146,7 @@ namespace Tempest
 				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
 
 				// Content selection section
-				ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.8f), true, ImGuiWindowFlags_NoScrollWithMouse);
+				ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.8f), false, ImGuiWindowFlags_NoScrollWithMouse);
 				
 				const auto regoinAvailWidth = ImGui::GetContentRegionAvailWidth() / 3.0f - Padding;
 				const auto regoinAvailHeight = ImGui::GetContentRegionAvail().y;
@@ -264,7 +273,7 @@ namespace Tempest
 
 				// Simulate button
 				bool disable = false;
-				if (LinkID == UNDEFINED)
+				if (LinkID == UNDEFINED || Attacker == UNDEFINED || Defender == UNDEFINED)
 					disable = true;
 				
 				if (disable)
@@ -289,6 +298,7 @@ namespace Tempest
 				}
 				if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.895f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
 				{
+
 					OverlayOpen = false;
 				}
 			}

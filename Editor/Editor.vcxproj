@@ -223,7 +223,6 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp" />
-    <ClCompile Include="src\Window\Overlay\SimulateResultOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\UnitSheetOverlay.cpp" />
   </ItemGroup>
   <ItemGroup>
