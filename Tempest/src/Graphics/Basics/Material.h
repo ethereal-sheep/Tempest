@@ -3,6 +3,7 @@
 #include "TMath.h"
 #include "Util.h"
 #include "Graphics/OpenGL/Texture.h"
+#include <assimp/Importer.hpp>
 
 namespace Tempest
 {
@@ -10,6 +11,7 @@ namespace Tempest
 
 	struct Material
 	{
+		tsptr<Texture> BaseTexture = nullptr;
 		tsptr<Texture> DiffuseMap = nullptr;
 		tsptr<Texture> EmissiveMap = nullptr;
 		tsptr<Texture> SpecularMap = nullptr;
@@ -27,5 +29,6 @@ namespace Tempest
 		float Shininess = 0.f;
 		float ShininessStrength = 0.f;
 		float Opacity = 1.f;
+
 	};
 }

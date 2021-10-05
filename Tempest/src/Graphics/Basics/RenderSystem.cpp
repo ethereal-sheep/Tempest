@@ -24,6 +24,7 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::POINT_LIGHT_DEPTH, std::make_unique<Shader>("Shaders/point_shadows_depth_vertex.glsl", "Shaders/point_shadows_depth_fragment.glsl","Shaders/point_shadows_depth_geom.glsl" ));
         m_Pipeline.m_Shaders.emplace(ShaderCode::MODEL, std::make_unique<Shader>("Shaders/Model_vertex.glsl", "Shaders/Model_fragment.glsl"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::MODEL_TEXTURE, std::make_unique<Shader>("Shaders/Model2_vertex.glsl", "Shaders/Model2_fragment.glsl"));
+        m_Pipeline.m_Shaders.emplace(ShaderCode::MODEL_LIGHT, std::make_unique<Shader>("Shaders/Model3_vertex.glsl", "Shaders/Model3_fragment.glsl"));
  }
 
     void RenderSystem::InitBuffers()
@@ -168,9 +169,9 @@ namespace Tempest
         m_FrameBuffer.SetFrameBufferSize();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         m_FrameBuffer.Bind();
-
-        if (GridActive)
-            RenderAAGrid();
+        
+ 
+        RenderAAGrid();
 
         // Drawing Polygons
         DrawSprites(MeshCode::CUBE,         ShaderCode::LIGHTING);
@@ -199,37 +200,104 @@ namespace Tempest
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
                     material->DiffuseMap->Bind(0);
                 }
+                
+                else if (material->BaseTexture)
+                {
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Bind();
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+                    material->BaseTexture->Bind(0);
+                    const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+                    
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(dir_lights[0].Color, "LightColor");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(dir_lights[0].Intensity, "LightIntensity");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(far_plane, "far_plane");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i((int)GetActivePt_lightsNum(), "PointLightNumber");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+                    
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+                    for (unsigned int ptLight = 0; ptLight < (unsigned int)GetActivePt_lightsNum(); ++ptLight)
+                    {
+                        std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+                        std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+                        std::string pointLightColors = "pointLightColors[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(pt_lights[ptLight].Color, pointLightColors.data());
+                        std::string pointLightConsts = "pointLightConsts[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightConsts, pointLightConsts.data());
+                        std::string pointLightLinears = "pointLightLinears[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
+                        std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+                    }
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(0, "depthMap");   // Set Point light depth to be slot 0
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(1, "shadowMap");  // Set Dir Light depthh to be slot 1
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
+                    
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(ambientStrength, "ambientStrength");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(shininess, "shininess");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(specularStrength, "specularStrength");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(dir_lights[0].hide ? 0 : 1, "DirectionalLightOn");
+                }
+                
+                //else
+                //{
+                //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->Bind();
+                //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+                //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+                //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+                //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+                //}
 
+                //mesh.Bind();
+                //glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
                 else
                 {
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL]->Bind();
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-                }
+                    // Dir + Point Light
+                    const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Bind();
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(far_plane, "far_plane");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i((int)GetActivePt_lightsNum(), "PointLightNumber");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
 
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+                    for (unsigned int ptLight = 0; ptLight < (unsigned int)GetActivePt_lightsNum(); ++ptLight)
+                    {
+                        std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+                        std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+                        std::string pointLightColors = "pointLightColors[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(pt_lights[ptLight].Color, pointLightColors.data());
+                        std::string pointLightConsts = "pointLightConsts[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightConsts, pointLightConsts.data());
+                        std::string pointLightLinears = "pointLightLinears[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
+                        std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+                    }
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "depthMap");   // Set Point light depth to be slot 0
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(1, "shadowMap");  // Set Dir Light depthh to be slot 1
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
+
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(ambientStrength, "ambientStrength");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(shininess, "shininess");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(specularStrength, "specularStrength");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(dir_lights[0].hide ? 0 : 1, "DirectionalLightOn");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+                }
                 mesh.Bind();
                 glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-
-                // Dir + Point Light
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Bind();
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Color, "LightColor");
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(dir_lights[0].Direction, "LightDirection");
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(dir_lights[0].Intensity, "LightIntensity");
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-                //
-                //m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1i((int)pt_lights.size(), "PointLightNumber");
-                //
-                //for (unsigned int ptLight = 0; ptLight < pt_lights.size(); ++ptLight)
-                //{
-                //    std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
-                //    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
-                //    std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
-                //    m_Pipeline.m_Shaders[ShaderCode::LIGHTING]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
-                //}
-                //glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
             }
         }
         m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);

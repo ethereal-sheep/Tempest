@@ -105,7 +105,29 @@ namespace Tempest
 						auto transform = instance.ecs.emplace<tc::Transform>(entity);
 						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
 						//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
-						instance.ecs.emplace<tc::Model>(entity, "Models/Chair2.fbx");
+						instance.ecs.emplace<tc::Model>(entity, "Models/Chair.fbx");
+
+
+						//auto& transform = instance.ecs.get<Components::Transform>(entity);
+						rb->shape_data = SHAPE_TYPE::SPHERE;
+						rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
+						rigidbody_config staticBody;
+						staticBody.is_static = true;
+						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+						instance.po.AddActorToScene(rb->internal_rb.get());
+						instance.action_history.Commit<AddEntity>(entity);
+					}
+
+					if (ImGui::MenuItem("Add Table"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Table";
+						auto transform = instance.ecs.emplace<tc::Transform>(entity);
+						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
+						//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
+						instance.ecs.emplace<tc::Model>(entity, "Models/Bed_Sci-Fi.fbx");
 
 
 						//auto& transform = instance.ecs.get<Components::Transform>(entity);

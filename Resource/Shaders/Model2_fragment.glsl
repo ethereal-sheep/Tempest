@@ -10,5 +10,5 @@ uniform vec3 DiffuseColour;
 
 void main()
 {
-	fs_color = vec4(DiffuseColour * vec3(texture(texture0, vs_tex)), 1.0);
+	fs_color = vec4(vec3(texture(texture0, vs_tex)), 1.0);
 }

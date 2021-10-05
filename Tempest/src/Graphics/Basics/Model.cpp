@@ -16,15 +16,17 @@ namespace Tempest
 			aiProcess_JoinIdenticalVertices);
 
 		// create a list of material
-		tvector<tsptr<Material>> materials(s_Scene->mNumMaterials, make_sptr<Material>());
+		tvector<tsptr<Material>> materials;
 		auto tex = s_Scene->GetEmbeddedTexture(m_File.string().c_str());
 
 		// pass in materials to be processed
 		for (id_t i = 0; i < s_Scene->mNumMaterials; ++i)
 		{
+			Material m;
+			aiString tex;
 			const auto* pMaterial = s_Scene->mMaterials[i];
 			// turn into Tempest::Material
-			auto& m = *materials[i];
+			//auto& m = *materials[i];
 			pMaterial->Get(AI_MATKEY_REFRACTI, m.Refraction);
 			pMaterial->Get(AI_MATKEY_REFLECTIVITY, m.Reflection);
 			pMaterial->Get(AI_MATKEY_SHININESS, m.Shininess);
@@ -37,11 +39,38 @@ namespace Tempest
 			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, m.Emissive.data(), nullptr);
 			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, m.Transparent.data(), nullptr);
 			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, m.Reflective.data(), nullptr);
+			pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), tex);
+			if (tex.length)
+			{
+				string full_path{ tex.data };
+				string lower_path{ tex.data };
+				std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+					[](unsigned char c) { return std::tolower(c); });
+
+				auto check = lower_path.find("models");
+				if (check == string::npos) continue;
+
+				string tex_path = full_path.substr(check, full_path.length());
+				//auto file2 = m_File.parent_path() / tex_path;
+
+				try
+				{
+					m.BaseTexture = make_sptr<Texture>(tex_path);
+				}
+				catch (const std::exception& e)
+				{
+					LOG_ERROR(e.what());
+				}
+			}
+			//else
+			//{
+			//	m.BaseTexture = nullptr;
+			//}
 
 			for (uint32_t j = 0; j < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); ++j)
 			{
 				aiString path;
-				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, j, &path) == AI_SUCCESS)
+				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 				{
 					string full_path{ path.data };
 					string lower_path{ path.data };
@@ -67,6 +96,7 @@ namespace Tempest
 					//m.DiffuseMap = make_sptr<Texture>(tex.path);
 				}
 			}
+			materials.push_back(make_sptr<Material>(m));
 		}
 
 		// nodes and meshes
