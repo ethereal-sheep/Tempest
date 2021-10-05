@@ -47,7 +47,7 @@ namespace Tempest
         glViewport(0, 0, m_Width, m_Height);
         glBindFramebuffer(GL_FRAMEBUFFER,m_dirFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
-        glActiveTexture(GL_TEXTURE1);
+        glActiveTexture(GL_TEXTURE6);
         glBindTexture(GL_TEXTURE_2D, m_depthmap); // Remember to set shadow map to 1
     }
 
@@ -56,7 +56,7 @@ namespace Tempest
         glViewport(0, 0, m_Width, m_Height);
         glBindFramebuffer(GL_FRAMEBUFFER, m_pointFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
-        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE5);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubemap);
     }
 }

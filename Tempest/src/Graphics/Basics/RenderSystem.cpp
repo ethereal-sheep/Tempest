@@ -154,9 +154,9 @@ namespace Tempest
             DrawSprites(MeshCode::PLANE,       ShaderCode::DIRECTIONAL_SHADOW_MAP);
             DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::DIRECTIONAL_SHADOW_MAP);
         }
-
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        
         // render all pt lights to depth buffer
         for(int numPt = 0 ; numPt < GetActivePt_lightsNum(); numPt++)
         {
@@ -168,23 +168,24 @@ namespace Tempest
         
         m_FrameBuffer.SetFrameBufferSize();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        m_FrameBuffer.Bind();
         
  
         RenderAAGrid();
 
         // Drawing Polygons
-        DrawSprites(MeshCode::CUBE,         ShaderCode::LIGHTING);
-        DrawSprites(MeshCode::SPHERE,       ShaderCode::LIGHTING);
-        DrawSprites(MeshCode::PLANE,        ShaderCode::LIGHTING);
-        DrawSprites(MeshCode::ICOSAHEDRON,  ShaderCode::LIGHTING);
+         DrawSprites(MeshCode::CUBE,         ShaderCode::LIGHTING);
+         DrawSprites(MeshCode::SPHERE,       ShaderCode::LIGHTING);
+         DrawSprites(MeshCode::PLANE,        ShaderCode::LIGHTING);
+         DrawSprites(MeshCode::ICOSAHEDRON,  ShaderCode::LIGHTING);
        
-
+        //glClear(GL_COLOR_BUFFER_BIT);
         //DrawSprites(MeshCode::CUBE, ShaderCode::BASIC);
         //DrawSprites(MeshCode::SPHERE, ShaderCode::BASIC);
         //DrawSprites(MeshCode::PLANE, ShaderCode::BASIC);
         //DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::BASIC);
 
+         m_FrameBuffer.Bind();
+         glActiveTexture(GL_TEXTURE0);
 
         // Drawing Models
         for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
@@ -234,8 +235,9 @@ namespace Tempest
                         std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
                     }
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(0, "depthMap");   // Set Point light depth to be slot 0
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(1, "shadowMap");  // Set Dir Light depthh to be slot 1
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
                     
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(ambientStrength, "ambientStrength");
@@ -286,8 +288,9 @@ namespace Tempest
                         std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
                     }
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "depthMap");   // Set Point light depth to be slot 0
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(1, "shadowMap");  // Set Dir Light depthh to be slot 1
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
 
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(ambientStrength, "ambientStrength");
@@ -298,10 +301,15 @@ namespace Tempest
                 }
                 mesh.Bind();
                 glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+                if (material->BaseTexture)
+                {
+                    material->BaseTexture->Unbind(0);
+                }
+               // mesh.Unbind();
             }
         }
         m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);
-
+        //glClear(GL_COLOR_BUFFER_BIT);
         m_FrameBuffer.Unbind();       
     }
 
@@ -355,8 +363,8 @@ namespace Tempest
                 std::string pointLightQuads     = "pointLightQuads[" + std::to_string(ptLight) + "]";
                 shader->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
             }
-            shader->Set1i(0, "depthMap");   // Set Point light depth to be slot 0
-            shader->Set1i(1, "shadowMap");  // Set Dir Light depthh to be slot 1
+            shader->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
+            shader->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
             shader->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
 
             shader->Set1f(ambientStrength, "ambientStrength");
@@ -379,7 +387,7 @@ namespace Tempest
                                          glm::vec3(0.0f, 1.0f, 0.0f)); 
                 lightSpaceMatrix = lightProjection * lightView;
                 shader->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-                shader->Set1i(1, "shadowMap"); // Set Shadow map for directional light to be slot 1 (note: point light shadow at slot 0 )
+                shader->Set1i(6, "shadowMap"); // Set Shadow map for directional light to be slot 1 (note: point light shadow at slot 0 )
             }
             break;
         case (ShaderCode::POINT_LIGHT_DEPTH):
@@ -403,6 +411,7 @@ namespace Tempest
                     shader->SetMat4fv(shadowTransforms[i], ("shadowMatrices[" + std::to_string(i) + "]").c_str());
                 shader->Set1f(far_plane, "far_plane");
                 shader->SetVec3f(pt_lights[pt_light_num].Position, "lightPos");
+                shader->Set1i(5, "shadowMap"); // Set Shadow map for directional light to be slot 1 (note: point light shadow at slot 0 )
             }
 
         }

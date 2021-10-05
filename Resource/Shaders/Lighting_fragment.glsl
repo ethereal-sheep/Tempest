@@ -24,8 +24,8 @@ uniform float pointLightLinears[10];
 uniform float pointLightQuads[10];
 
 //uniform sampler2D diffuseTexture;
-uniform sampler2D shadowMap;  // In slot 1
-uniform samplerCube depthMap; // In slot 0
+uniform sampler2D shadowMap;  // In slot 5
+uniform samplerCube depthMap; // In slot 6
 
 uniform vec3  viewPos;
 uniform float far_plane;
