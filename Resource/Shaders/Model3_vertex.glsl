@@ -20,8 +20,8 @@ uniform mat4 lightSpaceMatrix;
 
 void main()
 {
-	vs_position = (ModelMatrix * vec4(vertex_position, 1.0)).xyz;
-	vs_normal = (transpose(inverse(ModelMatrix)) * vec4(normal, 1.0)).xyz; 
+	vs_position = (ModelMatrix * vec4(vertex_position, 1.0)).xzy;
+	vs_normal = (transpose(inverse(ModelMatrix)) * vec4(normal, 1.0)).xzy; 
 	vs_color = normal;
 	vs_tex = texCoord;
 	FragPosLightSpace = lightSpaceMatrix * vec4(vs_position, 1.0);

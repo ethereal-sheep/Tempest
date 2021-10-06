@@ -26,7 +26,7 @@ uniform float pointLightQuads[10];
 uniform int pointLightHide[10];
 
 
-//uniform sampler2D diffuseTexture;
+uniform sampler2D diffuseTexture;
 uniform sampler2D shadowMap;  // In slot 5
 uniform samplerCube depthMap; // In slot 6
 
@@ -192,5 +192,5 @@ void main()
 	if (GammaCorrection > 0)
 		color = pow(color, vec3(1.0 / 2.2));
 
-	fs_color = vec4(color, 1.0f);
+	fs_color = vec4(color * vec3(texture(diffuseTexture, vs_tex)), 1.0f);
 }
