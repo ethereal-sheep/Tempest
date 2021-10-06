@@ -1,5 +1,5 @@
 #version 460
-
+// Model2_fragment
 in vec3 vs_color;
 in vec3 vs_normal;
 in vec3 vs_position;
@@ -25,7 +25,8 @@ uniform float pointLightLinears[10];
 uniform float pointLightQuads[10];
 uniform int pointLightHide[10];
 
-//uniform sampler2D diffuseTexture;
+
+uniform sampler2D diffuseTexture;
 uniform sampler2D shadowMap;  // In slot 5
 uniform samplerCube depthMap; // In slot 6
 
@@ -39,7 +40,6 @@ uniform float ambientStrength;
 uniform float specularStrength;
 
 uniform vec3 DiffuseColour;
-uniform sampler2D texture0;
 
 // Declaration of variables
 vec3 ambient;
@@ -192,5 +192,5 @@ void main()
 	if (GammaCorrection > 0)
 		color = pow(color, vec3(1.0 / 2.2));
 
-	fs_color = vec4(color * vec3(texture(texture0, vs_tex)), 1.0f);
+	fs_color = vec4(color * vec3(texture(diffuseTexture, vs_tex)), 1.0f);
 }

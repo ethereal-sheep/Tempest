@@ -1,4 +1,5 @@
 #version 460
+// Model3_fragment
 in vec3 vs_color;
 in vec3 vs_normal;
 in vec3 vs_position;
@@ -193,4 +194,3 @@ void main()
 
 	fs_color = vec4(color, 1.0f);
 }
-
