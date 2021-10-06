@@ -831,11 +831,11 @@ namespace Tempest::UI
 
 		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - textWidth - (curr_tex->GetWidth()*2)) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())));
 		ImGui::SameLine();
 		ImGui::Text(str);
 		ImGui::SameLine();
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 1,1 }, { 0,0 });
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())), { 1.f,1.f }, { 0.f,0.f });
 		ImGui::EndGroup();
 		ImGui::PopFont();
 
@@ -851,11 +851,11 @@ namespace Tempest::UI
 		
 		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())));
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(str);
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())), { 0.f,1.f }, { 1.f, 0.f });
 		ImGui::EndGroup();
 		ImGui::PopFont();
 	}
@@ -868,11 +868,11 @@ namespace Tempest::UI
 		auto textWidth = ImGui::CalcTextSize(str).x;
 		ImGui::BeginGroup();
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())));
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(str);
 		ImGui::SetCursorPosX((windowWidth - curr_tex->GetWidth()) * 0.5f);
-		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()), { 0,1 }, { 1,0 });
+		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(static_cast<float>(curr_tex->GetWidth()), static_cast<float>(curr_tex->GetHeight())), { 0.f,1.f }, { 1.f,0.f });
 		ImGui::EndGroup();
 		ImGui::PopFont();
 	}
@@ -914,6 +914,7 @@ namespace Tempest::UI
 		ImGui::InvisibleButton("##NiceButton", button_size);
 		ImGui::PopStyleVar(1);
 		ImGui::SetCursorPos(new_pos);
+		bool hovered = ImGui::IsItemHovered();
 		if (selected)
 		{
 			// hovered
@@ -932,7 +933,7 @@ namespace Tempest::UI
 			ImGui::Text(hover.c_str());
 			ImGui::PopFont();
 			auto io = ImGui::GetIO();
-			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				return true;
 			}
@@ -1024,6 +1025,7 @@ namespace Tempest::UI
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
 		ImGui::PopStyleVar(1);
+		bool hovered = ImGui::IsItemHovered();
 		ImGui::SetCursorPos(new_pos);
 		if (selected)
 		{
@@ -1043,7 +1045,7 @@ namespace Tempest::UI
 			ImGui::Text(hover.c_str());
 			ImGui::PopFont();
 			auto io = ImGui::GetIO();
-			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				return true;
 			}
@@ -1120,6 +1122,12 @@ namespace Tempest::UI
 		ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
 		ImVec2 size(size_arg.x != 0.0f ? size_arg.x : label_size.x, size_arg.y != 0.0f ? size_arg.y : label_size.y);
 		ImVec2 pos = window->DC.CursorPos;
+
+		//Calculating the center position of the text
+		float CreateItmCol = ImGui::GetContentRegionAvail().x * 0.5f;
+		string CreateItmStr = label;
+		float CreateItmCenter = CreateItmCol - label_size.x + (label_size.x * 0.5f);
+		pos.x += CreateItmCenter;
 		pos.y += window->DC.CurrLineTextBaseOffset;
 		ImGui::ItemSize(size, 0.0f);
 
@@ -1228,12 +1236,19 @@ namespace Tempest::UI
 			hovered = true;
 		if (hovered || selected)
 		{
-			
-			//const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+			//Getting the texture and centering the position of the Image
+			auto highlightImg = tex_map["Assets/MainMenuButton.png"];
 			const ImU32 col = ImGui::GetColorU32({ 0.980f, 0.768f, 0.509f, 1.f });
-			UI::AddUnderline(col, text_min, { text_min.x + label_size.x, text_min.y + label_size.y });
-			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
-			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+			float tex_width = highlightImg->GetWidth() * 0.5f;
+			//float tex_height = highlightImg->GetHeight() * 0.5f;
+			const ImVec2 hMin = { bb.Min.x - (tex_width * 0.5f) + (label_size.x * 0.5f), bb.Min.y };
+			const ImVec2 hMax = { hMin.x + tex_width, bb.Max.y };
+			
+			//Adding of the Highlighted image when hover
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(highlightImg->GetID()), hMin, hMax);
+
+			//Debugging Purposes
+			//ImGui::RenderFrame(hMin, hMax, col, false, 0.0f);
 		}
 
 		if (span_all_columns && window->DC.CurrentColumns)
@@ -1242,6 +1257,7 @@ namespace Tempest::UI
 			ImGui::TablePopBackgroundChannel();
 
 		if (flags & ImGuiSelectableFlags_Disabled) ImGui::PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]);
+		
 		ImGui::RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
 		if (flags & ImGuiSelectableFlags_Disabled) ImGui::PopStyleColor();
 
@@ -1328,5 +1344,172 @@ namespace Tempest::UI
 		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags | ImGuiItemStatusFlags_Checkable | (*v ? ImGuiItemStatusFlags_Checked : 0));
 		return pressed;
 	}
+
+	bool UIMapSelectable(ImTextureID tex, const char* name, const char* date, const char* unitData, bool selected, ImGuiSelectableFlags flags, const ImVec2& size_arg)
+	{
+		
+		 ImGuiWindow* window = ImGui::GetCurrentWindow();
+		 if (window->SkipItems)
+		 	return false;
+
+		 ImGuiContext& g = *GImGui;
+		 const ImGuiStyle& style = g.Style;
+
+		 // Submit label or explicit size to ItemSize(), whereas ItemAdd() will submit a larger/spanning rectangle.
+		 ImGuiID id = window->GetID(name);
+		 ImVec2 label_size = ImGui::CalcTextSize(name, NULL, true);
+		 ImVec2 label_size2 = ImGui::CalcTextSize(date, NULL, true);
+		 ImVec2 size(size_arg.x != 0.0f ? size_arg.x : label_size.x, size_arg.y != 0.0f ? size_arg.y : label_size.y);
+		 ImVec2 pos = window->DC.CursorPos;
+		 pos.y += window->DC.CurrLineTextBaseOffset;
+		 ImGui::ItemSize(size, 0.0f);
+		
+		 // Fill horizontal space
+		 // We don't support (size < 0.0f) in Selectable() because the ItemSpacing extension would make explicitly right-aligned sizes not visibly match other widgets.
+		 const bool span_all_columns = (flags & ImGuiSelectableFlags_SpanAllColumns) != 0;
+		 const float min_x = span_all_columns ? window->ParentWorkRect.Min.x : pos.x;
+		 const float max_x = span_all_columns ? window->ParentWorkRect.Max.x : window->WorkRect.Max.x;
+		 if (size_arg.x == 0.0f || (flags & ImGuiSelectableFlags_SpanAvailWidth))
+		 	size.x = ImMax(label_size.x, max_x - min_x);
+
+		 // Text stays at the submission position, but bounding box may be extended on both sides
+		 const ImVec2 text_min = { pos.x +  (size.x * 0.33f) , pos.y - size.y * 0.7f };
+		 const ImVec2 text_min2 = { pos.x +  (size.x * 0.33f) , pos.y };
+		 const ImVec2 text_min3 = { pos.x +  (size.x * 0.33f) , pos.y + size.y * 0.7f };
+		 const ImVec2 text_max(min_x + size.x, pos.y + size.y);
+
+		 // Selectables are meant to be tightly packed together with no click-gap, so we extend their box to cover spacing between selectable.
+		 ImRect bb(min_x, pos.y, text_max.x, text_max.y);
+		 if ((flags & ImGuiSelectableFlags_NoPadWithHalfSpacing) == 0)
+		 {
+		 	const float spacing_x = span_all_columns ? 0.0f : style.ItemSpacing.x;
+		 	const float spacing_y = style.ItemSpacing.y;
+		 	const float spacing_L = IM_FLOOR(spacing_x * 0.50f);
+		 	const float spacing_U = IM_FLOOR(spacing_y * 0.50f);
+		 	bb.Min.x -= spacing_L;
+		 	bb.Min.y -= spacing_U;
+		 	bb.Max.x += (spacing_x - spacing_L);
+		 	bb.Max.y += (spacing_y - spacing_U);
+		 }
+		 //if (g.IO.KeyCtrl) { GetForegroundDrawList()->AddRect(bb.Min, bb.Max, IM_COL32(0, 255, 0, 255)); }
+
+		 // Modify ClipRect for the ItemAdd(), faster than doing a PushColumnsBackground/PushTableBackground for every Selectable..
+		 const float backup_clip_rect_min_x = window->ClipRect.Min.x;
+		 const float backup_clip_rect_max_x = window->ClipRect.Max.x;
+		 if (span_all_columns)
+		 {
+		 	window->ClipRect.Min.x = window->ParentWorkRect.Min.x;
+		 	window->ClipRect.Max.x = window->ParentWorkRect.Max.x;
+		 }
+
+		 bool item_add;
+		 if (flags & ImGuiSelectableFlags_Disabled)
+		 {
+		 	ImGuiItemFlags backup_item_flags = g.CurrentItemFlags;
+		 	g.CurrentItemFlags |= ImGuiItemFlags_Disabled | ImGuiItemFlags_NoNavDefaultFocus;
+		 	item_add = ImGui::ItemAdd(bb, id);
+		 	g.CurrentItemFlags = backup_item_flags;
+		 }
+		 else
+		 {
+		 	item_add = ImGui::ItemAdd(bb, id);
+		 }
+
+		 if (span_all_columns)
+		 {
+		 	window->ClipRect.Min.x = backup_clip_rect_min_x;
+		 	window->ClipRect.Max.x = backup_clip_rect_max_x;
+		 }
+
+		 if (!item_add)
+		 	return false;
+
+		 // FIXME: We can standardize the behavior of those two, we could also keep the fast path of override ClipRect + full push on render only,
+		 // which would be advantageous since most selectable are not selected.
+		 if (span_all_columns && window->DC.CurrentColumns)
+			 ImGui::PushColumnsBackground();
+		 else if (span_all_columns && g.CurrentTable)
+			 ImGui::TablePushBackgroundChannel();
+
+		 // We use NoHoldingActiveID on menus so user can click and _hold_ on a menu then drag to browse child entries
+		 ImGuiButtonFlags button_flags = 0;
+		 if (flags & ImGuiSelectableFlags_NoHoldingActiveID) { button_flags |= ImGuiButtonFlags_NoHoldingActiveId; }
+		 if (flags & ImGuiSelectableFlags_SelectOnClick) { button_flags |= ImGuiButtonFlags_PressedOnClick; }
+		 if (flags & ImGuiSelectableFlags_SelectOnRelease) { button_flags |= ImGuiButtonFlags_PressedOnRelease; }
+		 if (flags & ImGuiSelectableFlags_Disabled) { button_flags |= ImGuiButtonFlags_Disabled; }
+		 if (flags & ImGuiSelectableFlags_AllowDoubleClick) { button_flags |= ImGuiButtonFlags_PressedOnClickRelease | ImGuiButtonFlags_PressedOnDoubleClick; }
+		 if (flags & ImGuiSelectableFlags_AllowItemOverlap) { button_flags |= ImGuiButtonFlags_AllowItemOverlap; }
+
+		 if (flags & ImGuiSelectableFlags_Disabled)
+		 	selected = false;
+
+		 const bool was_selected = selected;
+		 bool hovered, held;
+		 bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held, button_flags);
+
+		 // Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
+		 if (pressed || (hovered && (flags & ImGuiSelectableFlags_SetNavIdOnHover)))
+		 {
+		 	if (!g.NavDisableMouseHover && g.NavWindow == window && g.NavLayer == window->DC.NavLayerCurrent)
+		 	{
+				ImGui::SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect({ bb.Min.x - window->Pos.x, bb.Min.y - window->Pos.y }, { bb.Max.x - window->Pos.x, bb.Max.y - window->Pos.y }));
+		 		g.NavDisableHighlight = true;
+		 	}
+		 }
+		 if (pressed)
+			 ImGui::MarkItemEdited(id);
+
+		 if (flags & ImGuiSelectableFlags_AllowItemOverlap)
+			 ImGui::SetItemAllowOverlap();
+
+		 // In this branch, Selectable() cannot toggle the selection so this will never trigger.
+		 if (selected != was_selected) //-V547
+		 	window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
+
+		 // Render
+		 if (held && (flags & ImGuiSelectableFlags_DrawHoveredWhenHeld))
+		 	hovered = true;
+		 if (hovered || selected)
+		 {
+		 	const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+			ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
+			ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+		 }
+
+		 if (span_all_columns && window->DC.CurrentColumns)
+			 ImGui::PopColumnsBackground();
+		 else if (span_all_columns && g.CurrentTable)
+			 ImGui::TablePopBackgroundChannel();
+		 
+		 if (flags & ImGuiSelectableFlags_Disabled) ImGui::PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]);
+		 ImGui::GetWindowDrawList()->AddImage(tex, bb.Min, { bb.Min.x + (bb.Max.x * 0.2f), bb.Max.y });
+
+		 const ImU32 col = ImGui::GetColorU32({ 0.5f,0.5f,0.5f,0.5f });
+		 ImGui::GetWindowDrawList()->AddLine({ bb.Min.x + (bb.Max.x * 0.21f), bb.Min.y }, { bb.Min.x + (bb.Max.x * 0.21f), bb.Max.y }, col,2.f);
+		 ImGui::PushFont(FONT_BODY);
+		 ImGui::RenderTextClipped(text_min, text_max, name, NULL, &label_size, style.SelectableTextAlign, &bb);
+		 ImGui::PopFont();
+		 ImGui::RenderTextClipped(text_min2, text_max, date, NULL, &label_size, style.SelectableTextAlign, &bb);
+		 ImGui::RenderTextClipped(text_min3, text_max, unitData, NULL, &label_size, style.SelectableTextAlign, &bb);
+		 if (flags & ImGuiSelectableFlags_Disabled) ImGui::PopStyleColor();
+
+		 // Automatically close popups
+		 if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(flags & ImGuiSelectableFlags_DontClosePopups) && !(g.CurrentItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
+			 ImGui::CloseCurrentPopup();
+
+		 IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags);
+		 return pressed;
+		
+	}
+	bool UIMapSelectable(ImTextureID tex, const char* name, const char* date, const char* unitData, bool* p_selected, ImGuiSelectableFlags flags, const ImVec2& size_arg)
+	{
+		if (UIMapSelectable(tex, name, date, unitData, *p_selected, flags, size_arg))
+		{
+			*p_selected = !*p_selected;
+			return true;
+		}
+		return false;
+	}
+	
 }
 

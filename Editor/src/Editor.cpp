@@ -18,7 +18,6 @@
 
 #include "Audio/AudioEngine.h"
 
-
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace Tempest
@@ -117,7 +116,7 @@ namespace Tempest
 
 
 			instance_manager.render();
-			instance_manager.menubar();
+			//instance_manager.menubar();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();

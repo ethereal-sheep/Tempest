@@ -24,11 +24,21 @@ namespace Tempest
 	struct ImportAssetTrigger : public Event {};
 	//Popup Trigger
 	struct DefineStatsTrigger : public Event {};
+	struct ConfirmationTrigger : public Event {};
 
 	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};
+	struct OpenSimulateResultTrigger : public Event
+	{
+		OpenSimulateResultTrigger(Entity a, Entity d, Entity c) :
+			atk(a), def(d), conflict(c){}
+		Entity atk;
+		Entity def;
+		Entity conflict;
+	};
 	struct OpenCombatModeTrigger : public Event {};
 	struct OpenConflictResTrigger : public Event {};
+	struct OpenMainMenuTrigger : public Event {};
 	struct OpenActionGraphTrigger : public Event 
 	{
 		OpenActionGraphTrigger(Entity entityid, Instance& in) : id{ entityid }, instance{in} {}
@@ -51,5 +61,4 @@ namespace Tempest
 
 	struct ShowRecentUtil : public Event {};
 	struct AddRecentUtil : public Event {};
-
 }

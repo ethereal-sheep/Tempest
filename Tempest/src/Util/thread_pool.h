@@ -151,13 +151,13 @@ namespace Tempest
 		template <typename Func, typename... Args,
 			typename = std::enable_if_t<std::is_void_v<
 			std::invoke_result_t<std::decay_t<Func>, std::decay_t<Args>...>>>>
-		future_bool submit_task(Func&& task, Args &&...args)
+		future_bool submit_task(Func task, Args ...args)
 		{
 			// make a promise and set it to true when the task has finished
 			tsptr<std::promise<bool>> promise(make_sptr<std::promise<bool>>());
-			push_task([&task, &args..., promise]
+			push_task([task, args..., promise]
 				{
-					std::forward<Func>(task)(std::forward<Args>(args)...);
+					task(args...);
 					promise->set_value(true);
 				});
 			return promise->get_future();
@@ -173,13 +173,13 @@ namespace Tempest
 		template <typename Func, typename... Args,
 			typename Ret = std::invoke_result_t<std::decay_t<Func>, std::decay_t<Args>...>,
 			typename = std::enable_if_t<!std::is_void_v<Ret>>>
-		future<Ret> submit_task(Func&& task, Args &&...args)
+		future<Ret> submit_task(Func task, Args ...args)
 		{
 			// make a promise and set it to true when the task has finished
 			tsptr<std::promise<Ret>> promise(make_sptr<std::promise<Ret>>());
-			push_task([&task, &args..., promise]
+			push_task([task, args..., promise]
 				{
-					promise->set_value(std::forward<Func>(task)(std::forward<Args>(args)...));
+					promise->set_value(task(args...));
 				});
 			// returns the future produced by promise
 			return promise->get_future();

@@ -4,13 +4,13 @@
 
 namespace Tempest
 {
-	void CombatModeOverlay::open_popup(const Event& e)
+	void CombatModeOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
 		window_flags |= ImGuiWindowFlags_NoScrollWithMouse;
 	}
 
-	void CombatModeOverlay::show(Instance& instance)
+	void CombatModeOverlay::show(Instance&)
 	{
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
 

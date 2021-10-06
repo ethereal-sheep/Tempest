@@ -25,7 +25,6 @@ namespace Tempest
 
         bool OverlayOpen = false;
         bool AddWeaponPopup = false;
-        bool AddStatPopup = false;
         bool EditWeaponPopup = false;
         bool CreateOpen = false;
         bool IsUnitCreation = false;

@@ -176,7 +176,7 @@ namespace Tempest
 		 */
 		bool contains(Entity entity) const override
 		{
-			if (empty() || sparse[entity] >= size())
+			if (empty() || entity >= MAX_ENTITY || sparse[entity] >= size())
 				return false;
 			return entityList[sparse[entity]] == entity;
 		}

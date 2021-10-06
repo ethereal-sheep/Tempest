@@ -30,12 +30,18 @@
 #include "Window/Popup/ErrorMsgPopup.h"
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
+#include "Window/Popup/DefineStatsPopup.h"
+
+#include "Window/Util/SimulationBuilder.h"
+
+// Overlays
 #include "Window/Overlay/UnitSheetOverlay.h"
 #include "Window/Overlay/SimulateOverlay.h"
 #include "Window/Overlay/CombatModeOverlay.h"
 #include "Window/Overlay/ConflictResOverlay.h"
 #include "Window/Overlay/AttackSystemOverlay.h"
-#include "Window/Popup/DefineStatsPopup.h"
+#include "Window/Overlay/MainMenuOverlay.h"
+#include "Window/Overlay/SimulateResultOverlay.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -82,23 +88,29 @@ namespace Tempest
 		instance->register_window<InspectorWindow>();
 		instance->register_window<AssetManagerWindow>();
 
-		instance->register_always<EditTimeMenuBar>();
+		//instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();
 		instance->register_always<OpenProjectPopup>();
 		instance->register_always<SaveProjectPopup>();
 		instance->register_always<CloseProjectPopup>();
 		instance->register_always<ImportAssetPopup>();
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
+		instance->register_always<DefineStatsPopup>();
+
 
 		instance->register_always<SaveBrowser>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
 		instance->register_always<UnitSheetOverlay>();
 		instance->register_always<SimulateOverlay>();
+		instance->register_always<SimulateResultOverlay>();
 		instance->register_always<CombatModeOverlay>();
 		instance->register_always<ConflictResOverlay>();
 		instance->register_always<AttackSystemOverlay>();
-		instance->register_always<DefineStatsPopup>();
+		instance->register_always<MainMenuOverlay>();
+
+		instance->register_always<SimulationBuilder>();
+		
 
 		instance->register_always<ShowRecent>();
 		instance->register_window<test_window>();

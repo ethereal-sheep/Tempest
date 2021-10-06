@@ -498,7 +498,7 @@ namespace Tempest
 		UI::PaddedSeparator(0.5f);
 
 		if(curr_tex)
-			ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2(curr_tex->GetWidth(), curr_tex->GetHeight()));
+			ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2((float)curr_tex->GetWidth(), (float)curr_tex->GetHeight()));
 
 
 	}

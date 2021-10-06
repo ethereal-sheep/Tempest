@@ -48,9 +48,20 @@ namespace Tempest
 				window->exit(instance);
 		}
 
+		void close_all()
+		{
+			for (auto& window : windows)
+				window->visible = false;
+		}
+
+		void show_all()
+		{
+			for (auto& window : windows)
+				window->visible = true;
+		}
+
 		void show(Instance& instance)
 		{
-
 			for (auto& window : windows)
 			{
 				if(window->visible)

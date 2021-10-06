@@ -1,6 +1,6 @@
 #pragma once
 
-//#define TRACY_ENABLE
+#include "Tracy.hpp"
 
 #include <vector>
 #include <string>

@@ -63,7 +63,7 @@ namespace Tempest
         case Tempest::GetStatNode::inner_type::Attacker:
             return instance.srm.add_script(
                 CreateConstexprScript<std::tuple<int>(void)>(
-                    [&]() {
+                    [&instance, entity, sid = stat_id]() {
 
                         auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
 
@@ -71,11 +71,11 @@ namespace Tempest
 
                         if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                         {
-                            auto& stat = character->get_stat(stat_id);
+                            auto& stat = character->get_stat(sid);
 
                             if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
                             {
-                                return stat + weapon->get_stat(stat_id);
+                                return stat + weapon->get_stat(sid);
                             }
                             return stat;
                         }
@@ -85,18 +85,18 @@ namespace Tempest
         case Tempest::GetStatNode::inner_type::Defender:
             return instance.srm.add_script(
                 CreateConstexprScript<std::tuple<int>(void)>(
-                    [&]() {
+                    [&instance, entity, sid = stat_id]() {
                         auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
 
                         Entity def_e = (Entity)defer->get<int64_t>();
 
                         if (auto character = instance.ecs.get_if<tc::Character>(def_e))
                         {
-                            auto& stat = character->get_stat(id);
+                            auto& stat = character->get_stat(sid);
 
                             if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
                             {
-                                return stat + weapon->get_stat(id);
+                                return stat + weapon->get_stat(sid);
                             }
                             return stat;
                         }
@@ -172,7 +172,7 @@ namespace Tempest
         case Tempest::SetStatNode::inner_type::Attacker:
             return instance.srm.add_script(
                 CreateRuntimeScript<std::tuple<int>(int)>(
-                    [&](int x) {
+                    [&instance, entity, sid = stat_id](int x) {
 
                         auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
 
@@ -180,7 +180,7 @@ namespace Tempest
 
                         if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                         {
-                            auto& stat = character->get_stat(stat_id);
+                            auto& stat = character->get_stat(sid);
                             return stat = x;
                         }
                         return 0;
@@ -189,14 +189,14 @@ namespace Tempest
         case Tempest::SetStatNode::inner_type::Defender:
             return instance.srm.add_script(
                 CreateRuntimeScript<std::tuple<int>(int)>(
-                    [&](int x) {
+                    [&instance, entity, sid = stat_id](int x) {
                         auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
 
                         Entity def_e = (Entity)defer->get<int64_t>();
 
                         if (auto character = instance.ecs.get_if<tc::Character>(def_e))
                         {
-                            auto& stat = character->get_stat(id);
+                            auto& stat = character->get_stat(sid);
                             return stat = x;
                         }
                         return 0;
@@ -263,7 +263,7 @@ namespace Tempest
         case Tempest::GetMainStatNode::inner_type::Attacker:
             return instance.srm.add_script(
                 CreateConstexprScript<std::tuple<int>(void)>(
-                    [&]() {
+                    [&instance, entity]() {
 
                         auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
 
@@ -273,8 +273,8 @@ namespace Tempest
                         {
                             if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
                             {
-                                auto id = weapon->get_main_stat();
-                                return  weapon->get_stat(id) + character->get_stat(id);
+                                auto sid = weapon->get_main_stat();
+                                return  weapon->get_stat(sid) + character->get_stat(sid);
                             }
                         }
                         return 0;
@@ -283,7 +283,7 @@ namespace Tempest
         case Tempest::GetMainStatNode::inner_type::Defender:
             return instance.srm.add_script(
                 CreateConstexprScript<std::tuple<int>(void)>(
-                    [&]() {
+                    [&instance, entity]() {
                         auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
 
                         Entity def_e = (Entity)defer->get<int64_t>();
@@ -292,8 +292,8 @@ namespace Tempest
                         {
                             if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
                             {
-                                auto id = weapon->get_main_stat();
-                                return  weapon->get_stat(id) + character->get_stat(id);
+                                auto sid = weapon->get_main_stat();
+                                return  weapon->get_stat(sid) + character->get_stat(sid);
                             }
                         }
                         return 0;

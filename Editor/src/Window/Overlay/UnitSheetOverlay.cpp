@@ -61,7 +61,7 @@ namespace Tempest
 		//	ImGui::PushStyleColor(ImGuiCol_ScrollbarGrabActive, ActiveCol);
 			if (ImGui::Begin("Edit Unit Sheet", nullptr, window_flags))
 			{
-				float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+				//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
 
 				UI::Header_1(Title.c_str());
 
@@ -73,13 +73,14 @@ namespace Tempest
 				ImGuiOldColumnFlags ColFlags = ImGuiOldColumnFlags_NoResize;
 				ImGuiOldColumns* columns = window->DC.CurrentColumns;
 				columns->Flags = ColFlags;
-				//auto texture = Service<RenderSystem>::Get().tex->GetID();
-				//GLuint tex_id = static_cast<GLuint>(texture);
-				//ImGui::Image((void*)static_cast<size_t>(tex_id), ImVec2(ImGui::GetColumnWidth(0), ImGui::GetColumnWidth(0)));
+
+				auto tex = tex_map["Assets/test_photo2.png"];
+				ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2(ImGui::GetColumnWidth(0), ImGui::GetColumnWidth(0)));
 				/*==================================================================
 									CHARACTER INFOMATION COLUMN
 				==================================================================*/
 				ImGui::NextColumn();
+				ImGui::PushFont(FONT_BODY);
 				string text = "Character Infomation";
 				float FirstColWidth = ImGui::GetColumnWidth(1) / 2;
 				float font_size = ImGui::GetFontSize() * text.size() / 2;
@@ -89,7 +90,9 @@ namespace Tempest
 
 				ImGui::Dummy({ offsetX, 0 });
 				ImGui::SameLine();
+				
 				ImGui::Text(text.c_str());
+				ImGui::PopFont();
 				ImGui::Dummy({ 0, 10.f });
 				ImGui::BeginChild("##CharacterInfo", ImVec2(ImGui::GetColumnWidth(1) - 10.f, viewport->Size.y * 0.5f));
 				//Name
@@ -156,104 +159,29 @@ namespace Tempest
 				ImGui::PopFont();
 				ImGui::EndChild();
 
-				if (IsUnitCreation && UI::UIButton_1("Add Stat", "Add Stat", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f }, { 50.f, 10.f }, FONT_PARA))
-				{
-					AddStatPopup = true;
-					NewStatName = "Stat";
-					NewStatValue = 0;
-					LOG("ADDING STAT");
-				}
-
-				if (AddStatPopup)
-				{
-					ImGui::OpenPopup("Add Stat");
-					ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-					ImGui::SetNextWindowSize(ImVec2(500, 300));
-					ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
-						ImGuiWindowFlags_NoScrollbar;
-					if (ImGui::BeginPopupModal("Add Stat", NULL, flags))
-					{
-						float RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
-						string sub = "Add Stat";
-						font_size = ImGui::GetFontSize() * sub.size() / 2;
-						float center = RegionWidth - font_size;
-
-
-						UI::SubHeader(sub.c_str());
-						ImGui::PushFont(FONT_PARA);
-						ImGui::Dummy({0, 50.f });
-						
-						ImGui::Dummy({ ImGui::GetContentRegionAvailWidth() * 0.25f, 50.f });
-						ImGui::SameLine();
-						ImGui::Text("Stat Name");
-						ImGui::SameLine();
-						ImGui::Dummy({ 60.f - ImGui::GetItemRectSize().x, 0 });
-						ImGui::SameLine();
-						ImGui::PushItemWidth(150.0f);
-						ImGui::InputText("##AddStatName", &NewStatName);
-						ImGui::PopItemWidth();
-						
-						
-						ImGui::Dummy({ 0, frontPadding });
-
-						ImGui::Dummy({ ImGui::GetContentRegionAvailWidth() * 0.25f, 50.f });
-						ImGui::SameLine();
-						ImGui::Text("Stat Value");
-						ImGui::SameLine();
-						ImGui::Dummy({ 60.f - ImGui::GetItemRectSize().x, 0 });
-						ImGui::SameLine();
-						ImGui::PushItemWidth(150.0f);
-						ImGui::InputInt("##AddStatValue", &NewStatValue, 0);
-						ImGui::PopItemWidth();
-						ImGui::PopFont();
-
-						/*if (UI::UIButton_1("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.3f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
-						{
-							sl->add_stat(NewStatName);
-							cs->get_stat(sl->index_of_stat(NewStatName)) = NewStatValue;
-							ImGui::CloseCurrentPopup();
-							AddStatPopup = false;
-							NewStatName = "Stat";
-							NewStatValue = 0;
-						}*/
-
-						if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.8f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
-						{
-							ImGui::CloseCurrentPopup();
-
-							NewStatName = "Stat";
-							NewStatValue = 0;
-							AddStatPopup = false;
-						}
-
-					}
-
-					ImGui::EndPopup();
-				}
-
 				/*==================================================================
 									WEAPON AND ITEMS COLUMN
 				==================================================================*/
 				ImGui::NextColumn();
-				string WeapText = "Weapons and Items";
+				ImGui::PushFont(FONT_BODY);
+				string WeapText = "Inventory";
 				float SecondColWidth = ImGui::GetColumnWidth(2) / 2;
 				font_size = ImGui::GetFontSize() * WeapText.size() / 2;
 				float SecondoffsetX = SecondColWidth - font_size + (font_size / 2);
 
 				ImGui::Dummy({ SecondoffsetX, 0 });
 				ImGui::SameLine();
+				
 				ImGui::Text(WeapText.c_str());
+				ImGui::PopFont();
 				ImGui::Dummy({ 0, 10.f });
 				ImGui::BeginChild("##WeapAndItem", ImVec2(ImGui::GetColumnWidth(2) - 10.f, viewport->Size.y * 0.5f));
 
-				ImGui::Dummy({ frontPadding + 20.0f, 0 });
-				ImGui::SameLine();
-				ImGui::Text("Equipped");
 
 				if (cs->weapon != UNDEFINED)
 				{
 					auto& weap = instance.ecs.get<tc::Weapon>(cs->weapon);
-					if(UI::UIButton_1(weap.name.c_str(), weap.name.c_str(), { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f - 80.0f, ImGui::GetCursorPosY() + 30.0f }, { 100.f, 10.f }, FONT_PARA))
+					if(UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + 30.0f }, { 40.f, 20.f }, FONT_BODY))
 					{
 						EditWeaponPopup = true;
 						EditWeap = weap;
@@ -267,10 +195,10 @@ namespace Tempest
 						ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 						if (ImGui::BeginPopupModal("Edit Weapon", NULL, flags))
 						{
-							float RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
+							//float RegionWidth = ImGui::GetContentRegionAvailWidth() / 2.f;
 							string Editsub = "Edit Weapon/Item";
 							font_size = ImGui::GetFontSize() * Editsub.size() / 2;
-							float center = RegionWidth - font_size;
+							//float center = RegionWidth - font_size;
 							UI::SubHeader(Editsub.c_str());
 
 							ImGui::Dummy({ 0, 20.f });
@@ -367,7 +295,7 @@ namespace Tempest
 				{
 					ImGui::OpenPopup("Add Weapon");
 					ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-					ImGui::SetNextWindowSize(ImVec2(500, 550));
+					ImGui::SetNextWindowSize(ImVec2(700, 550));
 					ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
 						ImGuiWindowFlags_NoScrollbar;
 					if (ImGui::BeginPopupModal("Add Weapon", NULL, flags))
@@ -376,10 +304,7 @@ namespace Tempest
 						string sub = "Add Weapon";
 						font_size = ImGui::GetFontSize() * sub.size() / 2;
 						float center = RegionWidth - font_size;
-						if (cs->weapon != UNDEFINED)
-						{
 
-						}
 						
 
 						UI::SubHeader("Add Weapon");
@@ -405,7 +330,7 @@ namespace Tempest
 							if (CurSelection == id)
 								isSelected = true;
 
-							if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { button_pos.x, button_pos.y + (index - 1) * 60 }, { 0.f, 10.f }, FONT_PARA, isSelected))
+							if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { button_pos.x, button_pos.y + (index - 1) * 70 }, { 30.f, 20.f }, FONT_PARA, isSelected))
 							{
 								CurSelection = id;
 								//LOG("CURRENT SELECTED: {0}", CurSelection);
@@ -420,12 +345,12 @@ namespace Tempest
 						
 						//ImGuiSelectableFlags flags = ImGuiSelectableFlags_
 						ImGui::PushFont(FONT_BODY);
-						float CreateItmCol = ImGui::GetColumnWidth(1) / 2;
+						//float CreateItmCol = ImGui::GetContentRegionAvail().x * 0.5f;
 						string CreateItmStr = "Create New Item";
-						font_size = ImGui::GetFontSize() * CreateItmStr.size() / 2;
+						/*font_size = ImGui::GetFontSize() * CreateItmStr.size() / 2;
 						float CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
 						ImGui::Dummy({ CreateItmCenter, 0 });
-						ImGui::SameLine();
+						ImGui::SameLine();*/
 						if (UI::UISelectable(CreateItmStr.c_str()))
 						{
 							CreateOpen = true;
@@ -434,9 +359,9 @@ namespace Tempest
 
 						string CreateWeapStr = "Create New Weapon";
 						font_size = ImGui::GetFontSize() * CreateWeapStr.size() / 2;
-						CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
+						/*CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
 						ImGui::Dummy({ CreateItmCenter, 0 });
-						ImGui::SameLine();
+						ImGui::SameLine();*/
 
 						if (UI::UISelectable(CreateWeapStr.c_str()))
 						{
@@ -517,7 +442,7 @@ namespace Tempest
 									ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 									ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 								}
-								if (UI::UIButton_1("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
+								if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
 								{
 									auto entity = instance.ecs.create();
 									auto meta = instance.ecs.emplace<tc::Meta>(entity);
@@ -529,6 +454,7 @@ namespace Tempest
 										weapon->set_stat(i, NewWeap.get_stat(i));
 									}
 									ImGui::CloseCurrentPopup();
+									NewWeap = tc::Weapon();
 									CreateOpen = false;
 								}
 								if (disabled)
@@ -548,10 +474,10 @@ namespace Tempest
 						ImGui::Dummy({ 0, 10.f });
 
 						string DeleteWeapStr = "Delete Weapon";
-						font_size = ImGui::GetFontSize() * DeleteWeapStr.size() / 2;
-						CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
-						ImGui::Dummy({ CreateItmCenter, 0 });
-						ImGui::SameLine();
+						//font_size = ImGui::GetFontSize() * DeleteWeapStr.size() / 2;
+						//CreateItmCenter = CreateItmCol - font_size + (font_size / 2);
+						/*ImGui::Dummy({ CreateItmCenter, 0 });
+						ImGui::SameLine();*/
 						if (UI::UISelectable(DeleteWeapStr.c_str()))
 						{
 							if (cs->weapon == CurSelection)
@@ -572,7 +498,7 @@ namespace Tempest
 						ImGui::PopFont();
 						ImGui::EndColumns();
 						ImVec2 ConfirmPos = { 195, 400.f };
-						if (UI::UIButton_1("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.8f }, { 50.f, 0.f }, FONT_PARA, false))
+						if (UI::UIButton_2("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.8f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.75f }, { 0,10 }, FONT_PARA, false))
 						{
 							cs->weapon = CurSelection;
 							ImGui::CloseCurrentPopup();
@@ -587,6 +513,7 @@ namespace Tempest
 										SKILL COLUMN
 				==================================================================*/
 				ImGui::NextColumn();
+				ImGui::PushFont(FONT_BODY);
 				string SkillText = "Skill";
 				font_size = ImGui::GetFontSize() * SkillText.size() / 2;
 				float ThirdColWidth = ImGui::GetColumnWidth(2) / 2;
@@ -595,6 +522,7 @@ namespace Tempest
 				ImGui::Dummy({ ThirdoffsetX, 0 });
 				ImGui::SameLine();
 				ImGui::Text(SkillText.c_str());
+				ImGui::PopFont();
 				ImGui::Dummy({ 0, 10.f });
 				ImGui::BeginChild("##SKILL", ImVec2(ImGui::GetColumnWidth(2) - 10.f, viewport->Size.y * 0.5f));
 
@@ -612,22 +540,40 @@ namespace Tempest
 					ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 					
 				}
-				if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() - 100.0f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+				if (IsUnitCreation)
 				{
-					LOG("SAVED");
-					if(IsUnitCreation)
+					if (UI::UIButton_2("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.80f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 0.f, 10.f }, FONT_PARA))
 					{
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = cs->name;
-						auto character = instance.ecs.emplace<tc::Character>(entity);
-						character->name = cs->name;
-						for (auto i = 0; i < sl->size(); i++)
+						LOG("SAVED");
+						if (IsUnitCreation)
 						{
-							character->set_stat(i, cs->get_stat(i));
+							auto entity = instance.ecs.create();
+							auto meta = instance.ecs.emplace<tc::Meta>(entity);
+							meta->name = cs->name;
+							auto character = instance.ecs.emplace<tc::Character>(entity);
+							character->name = cs->name;
+
+							for (auto i = 0; i < tc::STAT_TOTAL; i++)
+							{
+
+								character->set_stat(i, cs->get_stat(i));
+							}
 						}
+						OverlayOpen = false;
+						NewCharacter = tc::Character();
 					}
-					OverlayOpen = false;
+					if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.92f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 0.f, 10.f }, FONT_PARA))
+					{
+						OverlayOpen = false;
+						NewCharacter = tc::Character();
+					}
+				}
+				else
+				{
+					if (UI::UIButton_2("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.92f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 0.f, 10.f }, FONT_PARA))
+					{
+						OverlayOpen = false;
+					}
 				}
 				if (NameDisabled)
 				{

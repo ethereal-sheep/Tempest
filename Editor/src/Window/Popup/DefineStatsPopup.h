@@ -70,12 +70,12 @@ namespace Tempest
                     ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
                     ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.1f, ImGui::GetWindowHeight() * 0.3f });
                     ImGui::PushFont(FONT_BODY);
-                    for (int i = 3; i < tempStat.size(); i++)
+                    for (int i = 3; i < tc::STAT_TOTAL; i++)
                     {
                         if ((tempStat)(i))
                         {
                             ImVec4 col = {0.47f,0.47f,0.47f,0.6f };
-                            ImVec4 textCol = { 0.9,0.9,0.9,1.f };
+                            ImVec4 textCol = { 0.9f,0.9f,0.9f,1.f };
                             
                             ImGui::PushStyleColor(ImGuiCol_FrameBg, col);
                             ImGui::PushStyleColor(ImGuiCol_Text, textCol);
@@ -113,8 +113,8 @@ namespace Tempest
                     }
                     ImGui::PopFont();
                     ImGui::PopItemWidth();
-
-                    if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.3f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 80.f, 0.f }, FONT_PARA))
+                    ImGui::SetCursorPosX(0);
+                    if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
                         *sl = tempStat;
                         ImGui::CloseCurrentPopup();

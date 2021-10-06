@@ -126,9 +126,9 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -163,7 +163,7 @@ xcopy /y /d "..\Dep\assimp\Debug\assimp-vc142-mtd.dll" "$(TargetDir)" /q</Comman
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -223,6 +223,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\AttackSystemOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\CombatModeOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\UnitSheetOverlay.cpp" />
   </ItemGroup>
@@ -261,6 +262,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\RNG\dice_distribution.h" />
     <ClInclude Include="src\RNG\modifier.h" />
     <ClInclude Include="src\RNG\resolution.h" />
+    <ClInclude Include="src\Triggers\SimulationTriggers.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
     <ClInclude Include="src\Util\GuizmoController.h" />
     <ClInclude Include="src\Util\Suppress.h" />
@@ -278,10 +280,13 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Overlay\AttackSystemOverlay.h" />
     <ClInclude Include="src\Window\Overlay\CombatModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\ConflictResOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />
     <ClInclude Include="src\Window\Overlay\SimulateOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\SimulateResultOverlay.h" />
     <ClInclude Include="src\Window\Overlay\UnitSheetOverlay.h" />
     <ClInclude Include="src\Window\Popup\BottomRightOverlayPopup.h" />
     <ClInclude Include="src\Window\Popup\CloseProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\ConfirmationPopup.h" />
     <ClInclude Include="src\Window\Popup\DefineStatsPopup.h" />
     <ClInclude Include="src\Window\Popup\ErrorMsgPopup.h" />
     <ClInclude Include="src\Window\Popup\ExportProjectPopup.h" />
@@ -294,6 +299,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Test\test_window3.h" />
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
+    <ClInclude Include="src\Window\Util\SimulationBuilder.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>
   <ItemGroup>
