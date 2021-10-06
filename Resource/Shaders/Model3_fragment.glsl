@@ -1,4 +1,5 @@
 #version 460
+// Model3_fragment
 in vec3 vs_color;
 in vec3 vs_normal;
 in vec3 vs_position;
@@ -22,6 +23,8 @@ uniform vec3  pointLightColors[10];
 uniform float pointLightConsts[10];
 uniform float pointLightLinears[10];
 uniform float pointLightQuads[10];
+uniform int pointLightHide[10];
+
 
 //uniform sampler2D diffuseTexture;
 uniform sampler2D shadowMap;  // In slot 5
@@ -91,7 +94,7 @@ void CalculateDirectionalLight()
 {
 	vec3 pos = vs_position;
 	vec3 N = normalize(vs_normal);
-	vec3 V = normalize(-pos);
+	vec3 V = normalize(CamPosition-pos);
 	vec3 L = normalize(LightDirection);
 
 	float dirShadow = computeShadowDir();
@@ -167,6 +170,8 @@ void main()
 	// POINT LIGHT
 	for (int i = 0; i < PointLightNumber; i++)
 	{
+		if(pointLightHide[i] > 0)
+			continue;
 		float shadow = computeShadow(i);
 		computePointLight(PointLightPositions[i], pointLightColors[i], pointLightConsts[i], pointLightLinears[i], pointLightQuads[i], shadow);
 	}
@@ -189,4 +194,3 @@ void main()
 
 	fs_color = vec4(color, 1.0f);
 }
-
