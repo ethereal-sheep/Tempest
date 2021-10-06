@@ -292,11 +292,11 @@ namespace Tempest
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(dir_lights[0].Direction, "LightDirection");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(dir_lights[0].Intensity, "LightIntensity");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(far_plane, "far_plane");
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i((int)GetActivePt_lightsNum(), "PointLightNumber");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i((int)pt_lights.size(), "PointLightNumber");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
                     
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-                    for (unsigned int ptLight = 0; ptLight < (unsigned int)GetActivePt_lightsNum(); ++ptLight)
+                    for (unsigned int ptLight = 0; ptLight < (unsigned int)pt_lights.size(); ++ptLight)
                     {
                         std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
@@ -310,6 +310,9 @@ namespace Tempest
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
                         std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+
+                        std::string pointLightHide     = "pointLightHide[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(pt_lights[ptLight].hide, pointLightHide.data());
                     }
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
@@ -345,11 +348,11 @@ namespace Tempest
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(far_plane, "far_plane");
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i((int)GetActivePt_lightsNum(), "PointLightNumber");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i((int)pt_lights.size(), "PointLightNumber");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
 
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-                    for (unsigned int ptLight = 0; ptLight < (unsigned int)GetActivePt_lightsNum(); ++ptLight)
+                    for (unsigned int ptLight = 0; ptLight < (unsigned int)pt_lights.size(); ++ptLight)
                     {
                         std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
@@ -363,6 +366,9 @@ namespace Tempest
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
                         std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
                         m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+
+                        std::string pointLightHide     = "pointLightHide[" + std::to_string(ptLight) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(pt_lights[ptLight].hide, pointLightHide.data());
                     }
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
@@ -416,11 +422,11 @@ namespace Tempest
             shader->SetVec3f(dir_lights[0].Direction,   "LightDirection");
             shader->Set1f(dir_lights[0].Intensity,      "LightIntensity");
             shader->Set1f(far_plane,                    "far_plane");
-            shader->Set1i((int)GetActivePt_lightsNum(), "PointLightNumber");
+            shader->Set1i((int)pt_lights.size(), "PointLightNumber");
             shader->SetMat4fv(lightSpaceMatrix,         "lightSpaceMatrix");
             
             shader->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-            for (unsigned int ptLight = 0; ptLight < (unsigned int)GetActivePt_lightsNum(); ++ptLight)
+            for (unsigned int ptLight = 0; ptLight < (unsigned int)pt_lights.size(); ++ptLight)
             {
                 std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
                 shader->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
@@ -434,6 +440,9 @@ namespace Tempest
                 shader->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
                 std::string pointLightQuads     = "pointLightQuads[" + std::to_string(ptLight) + "]";
                 shader->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+
+                std::string pointLightHide     = "pointLightHide[" + std::to_string(ptLight) + "]";
+                shader->Set1i(pt_lights[ptLight].hide, pointLightHide.data());
             }
             shader->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
             shader->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
