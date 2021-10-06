@@ -6,6 +6,7 @@ layout(location = 2)  in vec3 normal;
 layout(location = 3)  in vec3 tangent;
 layout(location = 4)  in vec3 bitangent;
 layout(location = 5)  in mat4 model;
+layout(location = 9)  in mat3 normalMatrix;
 
 in vec4 fs_color;
 out vec3 vs_color;
@@ -22,7 +23,7 @@ uniform mat4 lightSpaceMatrix;
 void main()
 {
 	vs_position = (model * vec4(vertex_position, 1.0)).xyz;
-	vs_normal = (transpose(inverse(model)) * vec4(normal, 1.0)).xyz; 
+	vs_normal = normalMatrix * normal; 
 	vs_color = normal;
 	vs_tex = texCoord;
 	FragPosLightSpace = lightSpaceMatrix * vec4(vs_position, 1.0);
