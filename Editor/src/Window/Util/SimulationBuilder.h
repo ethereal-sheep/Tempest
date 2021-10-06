@@ -114,7 +114,7 @@ namespace Tempest
 
 		}
 
-		void running(Instance& instance)
+		void running(Instance& )
 		{
 			
 		}

@@ -338,7 +338,7 @@ namespace Tempest
 		}
 	}
 
-	void DiagnosticsWindow::Light(Instance& instance)
+	void DiagnosticsWindow::Light(Instance& )
 	{
 		auto& shininess = Service<RenderSystem>::Get().shininess;
 		auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;

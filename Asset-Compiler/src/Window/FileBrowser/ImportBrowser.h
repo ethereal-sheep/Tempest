@@ -25,7 +25,7 @@ namespace Tempest
             enable_popup = true;
         }
 
-        void show(Instance& instance) override
+        void show(Instance& ) override
         {
             // enable browser
             if (enable_popup)
@@ -36,8 +36,6 @@ namespace Tempest
                     "Model file (*.fbx;*.3ds;){.fbx,.3ds},.*");
                 enable_popup = false;
             }
-
-
 
             if (ifd::FileDialog::Instance().IsDone("ImportDialog")) {
                 if (ifd::FileDialog::Instance().HasResult()) {

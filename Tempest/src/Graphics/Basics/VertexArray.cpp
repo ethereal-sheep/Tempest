@@ -17,7 +17,8 @@ namespace Tempest
             case VertexType::Int2:
             case VertexType::Int3:
             case VertexType::Int4:		return GL_INT;
-            case VertexType::Bool:		return GL_BOOL;
+            case VertexType::Bool:		
+            default:                    return GL_BOOL;
         }
     }
 

@@ -263,7 +263,7 @@ namespace Tempest
 		return glm::vec2(vector.x, vector.y);
 	}
 
-	void Camera::OnKeyPress(uint8_t key)
+	void Camera::OnKeyPress([[maybe_unused]] uint8_t key)
 	{
 		//switch (key)
 		//{

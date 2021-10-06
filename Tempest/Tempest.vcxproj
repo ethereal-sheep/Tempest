@@ -158,7 +158,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);TRACY_ENABLE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\stb;$(SolutionDir)Libraries\extn\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\stb;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\tracy</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

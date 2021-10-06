@@ -63,7 +63,7 @@ namespace Tempest
 
     void VertexBuffer::SetSubDataResize(void* data, int size)
     {
-        if (GetSize() < size)
+        if ((int)GetSize() < size)
             SetData(data, size, m_Type);
         else
             SetSubData(data, size, 0);
