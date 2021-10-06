@@ -65,9 +65,6 @@ namespace Tempest
             pt_lights.emplace_back(Point_Light{});
             pt_lights[makePointLight].Position = glm::vec3( (float)makePointLight * 0.5f, 0.5f, 0.5f);
         }
-
-     /*  if(pt_lights.size())
-            pt_lights[0].hide = false;*/
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -147,16 +144,24 @@ namespace Tempest
          
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        
+        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+        lightView = glm::lookAt( 10.f * dir_lights[0].Direction,
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            glm::vec3(0.0f, 1.0f, 0.0f)); 
+        lightSpaceMatrix = lightProjection * lightView;
+
         // Directional light depth map
         if(!dir_lights[0].hide)
         {
             dir_lights[0].Bind();
 
+        
+
             DrawSprites(MeshCode::CUBE,        ShaderCode::DIRECTIONAL_SHADOW_MAP);
             DrawSprites(MeshCode::SPHERE,      ShaderCode::DIRECTIONAL_SHADOW_MAP);
             DrawSprites(MeshCode::PLANE,       ShaderCode::DIRECTIONAL_SHADOW_MAP);
             DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::DIRECTIONAL_SHADOW_MAP);
+
 
 
             for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
@@ -165,19 +170,12 @@ namespace Tempest
                 {
                     // Send in uniform values
                     m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
-                    lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-                    glm::vec3 cam = m_Pipeline.m_Cameras.front().GetPosition();
-                    glm::vec3 target = cam + dir_lights[0].Direction;
-                    lightView = glm::lookAt( 10.f * dir_lights[0].Direction,
-                        glm::vec3(0.0f, 0.0f, 0.0f),
-                        glm::vec3(0.0f, 1.0f, 0.0f)); 
-                    lightSpaceMatrix = lightProjection * lightView;
+                    
                     m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
                     m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(6, "shadowMap"); // Set Shadow map for directional light to be slot 6 
 
                     m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
                     m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                    //glActiveTexture(GL_TEXTURE6);
                     mesh.Bind();
                     glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
                     mesh.Unbind();
@@ -253,12 +251,6 @@ namespace Tempest
          DrawSprites(MeshCode::ICOSAHEDRON,  ShaderCode::LIGHTING);
 
          glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-
-        //glClear(GL_COLOR_BUFFER_BIT);
-        //DrawSprites(MeshCode::CUBE, ShaderCode::BASIC);
-        //DrawSprites(MeshCode::SPHERE, ShaderCode::BASIC);
-        //DrawSprites(MeshCode::PLANE, ShaderCode::BASIC);
-        //DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::BASIC);
 
          m_FrameBuffer.Bind();
          glActiveTexture(GL_TEXTURE0);
@@ -457,13 +449,11 @@ namespace Tempest
         case (ShaderCode::DIRECTIONAL_SHADOW_MAP):
             {
                 // Send in uniform values
-                lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-                glm::vec3 cam = m_Pipeline.m_Cameras.front().GetPosition();
-                glm::vec3 target = cam + dir_lights[0].Direction;
-                lightView = glm::lookAt( 10.f * dir_lights[0].Direction,
-                                         glm::vec3(0.0f, 0.0f, 0.0f),
-                                         glm::vec3(0.0f, 1.0f, 0.0f)); 
-                lightSpaceMatrix = lightProjection * lightView;
+                //lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+                //lightView = glm::lookAt( 100.f * -dir_lights[0].Direction,
+                //                         glm::vec3(0.0f, 0.0f, 0.0f),
+                //                         glm::vec3(0.0f, 1.0f, 0.0f)); 
+                //lightSpaceMatrix = lightProjection * lightView;
                 shader->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
                 shader->Set1i(6, "shadowMap"); // Set Shadow map for directional light to be slot 1 (note: point light shadow at slot 0 )
                 shader->Set1i(0, "meshDrawing"); // 1 for meshdrawing
