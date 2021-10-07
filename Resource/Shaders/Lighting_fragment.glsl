@@ -178,13 +178,13 @@ void main()
 	//diffuse *= texture(diffuseTexture, vs_tex).rgb;
 	//specular *= texture(diffuseTexture, vs_tex).rgb;
 	
-	ambient *= vs_color;
-	diffuse *= vs_color;
-	specular *= vs_color;
+	//ambient *= vs_color;
+	//diffuse *= vs_color;
+	//specular *= vs_color;
 
 	
 	vec3 color = min((ambient + diffuse) + specular, 1.0f);
-
+		color *= vs_color;
 	// gamma correction
 	if (GammaCorrection > 0)
 		color = pow(color, vec3(1.0/2.2));
