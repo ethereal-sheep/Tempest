@@ -41,6 +41,8 @@ namespace Tempest
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
 						instance.action_history.Commit<AddEntity>(entity);
+
+						instance.selected = entity;
 						
 					}
 					if (ImGui::MenuItem("Add Sphere"))
@@ -61,23 +63,25 @@ namespace Tempest
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
 						instance.action_history.Commit<AddEntity>(entity);
-					}
-					if (ImGui::MenuItem("Add Capsule", "", false))
-					{
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Capsule";
-						instance.ecs.emplace<tc::Transform>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
-						instance.ecs.emplace<tc::Rigidbody>(entity);
 
-						/*auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
-						auto& position = instance.ecs.get<Components::Transform>(entity).position;
-						rb.shape_data = SHAPE_TYPE::SPHERE;
-						rb.shape_data.shapeData = { 1, 1, 1 };
-						rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
-						instance.po.AddActorToScene(rb.internal_rb.get());*/
+						instance.selected = entity;
 					}
+					//if (ImGui::MenuItem("Add Capsule", "", false))
+					//{
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Capsule";
+					//	instance.ecs.emplace<tc::Transform>(entity);
+					//	instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
+					//	instance.ecs.emplace<tc::Rigidbody>(entity);
+
+					//	/*auto& rb = instance.ecs.get<Components::Rigidbody>(entity);
+					//	auto& position = instance.ecs.get<Components::Transform>(entity).position;
+					//	rb.shape_data = SHAPE_TYPE::SPHERE;
+					//	rb.shape_data.shapeData = { 1, 1, 1 };
+					//	rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
+					//	instance.po.AddActorToScene(rb.internal_rb.get());*/
+					//}
 					if (ImGui::MenuItem("Add Statline"))
 					{
 						// we can do factories for entities here
@@ -116,6 +120,9 @@ namespace Tempest
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
 						instance.action_history.Commit<AddEntity>(entity);
+
+
+						instance.selected = entity;
 					}
 
 					if (ImGui::MenuItem("Add Table"))
@@ -138,6 +145,9 @@ namespace Tempest
 						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
 						instance.po.AddActorToScene(rb->internal_rb.get());
 						instance.action_history.Commit<AddEntity>(entity);
+
+
+						instance.selected = entity;
 					}
 
 					if (ImGui::MenuItem("Add Spear"))
@@ -151,6 +161,9 @@ namespace Tempest
 						weapon->set_stat(1, 2);
 						weapon->set_stat(2, 1);
 						instance.action_history.Commit<AddEntity>(entity);
+
+
+						instance.selected = entity;
 					}
 					ImGui::EndMenu();
 				}
