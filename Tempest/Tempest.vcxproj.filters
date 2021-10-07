@@ -22,7 +22,6 @@
     <ClCompile Include="src\Graphics\Basics\VertexArray.cpp" />
     <ClCompile Include="src\Graphics\Basics\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
-    <ClCompile Include="src\Graphics\OpenGL\Material.cpp" />
     <ClCompile Include="src\Application\AppHandler.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Application\Context.cpp" />
@@ -115,7 +114,6 @@
     <ClInclude Include="src\Graphics\Basics\VertexArray.h" />
     <ClInclude Include="src\Graphics\Basics\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
-    <ClInclude Include="src\Graphics\OpenGL\Material.h" />
     <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />
     <ClInclude Include="src\Graphics\Test\TestModel.h" />
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
