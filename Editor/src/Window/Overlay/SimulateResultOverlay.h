@@ -144,8 +144,6 @@ namespace Tempest
                         Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
                         OverlayOpen = false;
                     }
-
-
                 }
                 ImGui::End();
             }

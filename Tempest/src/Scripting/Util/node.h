@@ -55,7 +55,7 @@ namespace Tempest
 
 		node(const node&) = default;
 		node& operator=(const node&) = default;
-		node(node&&) = default;
+		node(node&&) noexcept = default;
 		node& operator=(node&&) = default;
 		virtual ~node() = 0 {}
 

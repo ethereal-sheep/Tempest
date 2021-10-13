@@ -93,7 +93,6 @@ namespace Tempest
 				ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 				if (ImGui::BeginPopupModal("Simulating Conflict", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 				{
-
 					ImVec2 pos = ImGui::GetCursorScreenPos();
 					ImVec2 marker_min = ImVec2(pos.x + wrap_width, pos.y);
 					ImVec2 marker_max = ImVec2(pos.x + wrap_width + 10, pos.y + ImGui::GetTextLineHeight());
