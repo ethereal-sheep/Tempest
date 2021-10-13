@@ -49,7 +49,7 @@ namespace Tempest
                 }
                 else
                 {
-                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT }, InstanceType::EDIT_TIME);
                 }
 
                 enable_popup = false;
@@ -67,14 +67,14 @@ namespace Tempest
                 if (ImGui::Button("Save"))
                 {
                     edit->save();
-                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{DebugFlag::DEBUG_STRICT}, InstanceType::EDIT_TIME);
                     ImGui::CloseCurrentPopup();
                 }
 
                 ImGui::SameLine();
                 if (ImGui::Button("Discard Changes"))
                 {
-                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{ DebugFlag::DEBUG_STRICT }, InstanceType::EDIT_TIME);
                     ImGui::CloseCurrentPopup();
                 }
 

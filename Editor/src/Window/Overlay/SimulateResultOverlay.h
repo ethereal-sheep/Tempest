@@ -117,15 +117,13 @@ namespace Tempest
                         ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f , (Max.y - Min.y) * 0.4f });
                         
                         ImGui::Text("%.1f %%", 100.f * win / (win+lose));
-                        
-                        
                     }
                     else
                     {
                         auto size = ImGui::CalcTextSize("Press Simulate");
                         ImGui::SetCursorPos({ ImGui::GetCursorPosX() + (ImGui::GetContentRegionAvailWidth() - size.x) * 0.5f , (Max.y - Min.y) * 0.4f });
                         ImGui::Text("Press Simulate");
-                        
+                         
                     }
                     ImGui::PopFont();
                     ImGui::EndChild();

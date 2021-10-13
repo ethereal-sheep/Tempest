@@ -300,6 +300,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Util\SimulationBuilder.h" />
+    <ClInclude Include="src\Window\Util\SimulationStart.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>
   <ItemGroup>
