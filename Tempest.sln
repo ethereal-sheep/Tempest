@@ -42,6 +42,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asset-Compiler", "Asset-Com
 		{3DFCC228-6442-4ECF-A665-CAF9E34053A9} = {3DFCC228-6442-4ECF-A665-CAF9E34053A9}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prefab-Creator", "Prefab-Creator\Prefab-Creator.vcxproj", "{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3DFCC228-6442-4ECF-A665-CAF9E34053A9} = {3DFCC228-6442-4ECF-A665-CAF9E34053A9}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -74,6 +79,14 @@ Global
 		{937F1BAD-CD47-4148-B993-6934A4CD3598}.Release|x64.Build.0 = Release|x64
 		{937F1BAD-CD47-4148-B993-6934A4CD3598}.Release|x86.ActiveCfg = Release|Win32
 		{937F1BAD-CD47-4148-B993-6934A4CD3598}.Release|x86.Build.0 = Release|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x64.ActiveCfg = Debug|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x64.Build.0 = Debug|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x86.ActiveCfg = Debug|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x86.Build.0 = Debug|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x64.ActiveCfg = Release|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x64.Build.0 = Release|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x86.ActiveCfg = Release|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

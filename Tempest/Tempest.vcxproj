@@ -160,6 +160,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\stb;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\tracy</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -242,6 +243,7 @@
     <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
     <ClCompile Include="src\Scripting\Test\test_data.cpp" />
     <ClCompile Include="src\Scripting\Test\test_graph.cpp" />
+    <ClCompile Include="src\ECS\Test\test_prototype.cpp" />
     <ClCompile Include="src\Scripting\Test\test_resolution_script.cpp" />
     <ClCompile Include="src\Scripting\Test\test_script_events.cpp" />
     <ClCompile Include="src\Scripting\Util\node.cpp" />
@@ -271,8 +273,14 @@
     <ClInclude Include="src\ECS\Components\Components.h" />
     <ClInclude Include="src\ECS\ECS.h" />
     <ClInclude Include="src\ECS\Entity.h" />
+    <ClInclude Include="src\ECS\PPS.h" />
+    <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
     <ClInclude Include="src\ECS\Systems\Systems.h" />
     <ClInclude Include="src\ECS\Test\test_entity.h" />
+    <ClInclude Include="src\ECS\Util\coptional.h" />
+    <ClInclude Include="src\ECS\Util\prefab.h" />
+    <ClInclude Include="src\ECS\Util\prototype.h" />
+    <ClInclude Include="src\ECS\Util\prototype_container.h" />
     <ClInclude Include="src\ECS\Util\registry.h" />
     <ClInclude Include="src\ECS\Util\runtime_view.h" />
     <ClInclude Include="src\ECS\Util\sparse_set.h" />

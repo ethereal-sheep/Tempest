@@ -8,9 +8,4 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#pragma once
-namespace Tempest
-{
-	void testing_ecs();
-	void testing_prototype();
-}
+ #pragma once

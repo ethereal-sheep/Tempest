@@ -69,6 +69,7 @@
     <ClCompile Include="src\Graphics\Basics\Light.cpp" />
     <ClCompile Include="src\Graphics\Basics\FBO.cpp" />
     <ClCompile Include="src\Graphics\Basics\RenderBuffer.cpp" />
+    <ClCompile Include="src\ECS\Test\test_prototype.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -208,6 +209,12 @@
     <ClInclude Include="src\Util\view.h" />
     <ClInclude Include="src\Graphics\Basics\FBO.h" />
     <ClInclude Include="src\Graphics\Basics\RenderBuffer.h" />
+    <ClInclude Include="src\ECS\Util\coptional.h" />
+    <ClInclude Include="src\ECS\Util\prototype.h" />
+    <ClInclude Include="src\ECS\Util\prefab.h" />
+    <ClInclude Include="src\ECS\PPS.h" />
+    <ClInclude Include="src\ECS\Util\prototype_container.h" />
+    <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

@@ -599,12 +599,18 @@ namespace Tempest
 #define COMPONENT_CASE(ComponentName)								\
 	case ComponentType::ComponentName:								\
 	{																\
-		Entity entity;												\
-		tc::ComponentName c;										\
-		reader.Member("Entity", entity);							\
-		reader.Member("Component", c);								\
-		ecs.force_create(entity);									\
-		ecs.emplace<tc::ComponentName>(entity, std::move(c));		\
+		if constexpr (ECS::is_entity_keyed) {						\
+			Entity entity;											\
+			tc::ComponentName c;									\
+			reader.Member("Entity", entity);						\
+			reader.Member("Component", c);							\
+			ecs.force_create(entity);								\
+			ecs.emplace<tc::ComponentName>(entity, std::move(c));	\
+		}															\
+		else {														\
+			auto c = ecs.emplace<tc::ComponentName>();				\
+			reader.Member("Component", *c);							\
+		}															\
 	}																\
 		break														\
 
@@ -642,7 +648,6 @@ namespace Tempest
 		}									
 	}
 
-
 	template <typename ECS>
 	void deserialize_component(const tentry& component_file, ECS& ecs)
 	{
@@ -652,7 +657,6 @@ namespace Tempest
 		Reader reader(json.c_str());
 		if (reader.HasError())
 			return; // warn here
-
 
 		reader.StartObject();
 

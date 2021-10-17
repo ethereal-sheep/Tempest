@@ -22,7 +22,7 @@
 
 namespace Tempest
 {
-	static const char* components_folder = "Components";
+	static const char* default_folder = "Components";
 
 
 	class ECS_exception : public std::exception
@@ -81,12 +81,15 @@ namespace Tempest
 		}
 
 	public:
+		static const bool is_entity_keyed = true;
+
 		/**
 		 * @brief Constructs an ECS object
 		 * @param mem Pointer to a polymorphic memory resource; default gets
 		 * the default memory resource
 		 */
-		ECS(m_resource* mem = std::pmr::get_default_resource()) : 
+		ECS(m_resource* mem = std::pmr::get_default_resource(),
+			string components_folder = default_folder) :
 			memory_resource(mem),
 			entity_registry(mem),
 			component_pools(mem) {}
@@ -482,6 +485,7 @@ namespace Tempest
 		m_resource* memory_resource;
 		registry entity_registry;
 		tmap<size_t, tuptr<sparse_set>> component_pools;
+		string components_folder;
 	};
 
 
