@@ -116,7 +116,7 @@ namespace Tempest
 
 
 			instance_manager.render();
-			//instance_manager.menubar();
+			instance_manager.menubar();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();

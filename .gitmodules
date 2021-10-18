@@ -28,3 +28,6 @@
 [submodule "Libraries/tinyddsloader"]
 	path = Libraries/tinyddsloader
 	url = https://github.com/benikabocha/tinyddsloader.git
+[submodule "rttr"]
+	path = rttr
+	url = https://github.com/rttrorg/rttr.git
