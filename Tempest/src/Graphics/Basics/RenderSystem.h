@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+                or disclosure of this file or its contents without the prior
+                written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #pragma once
 #include "Graphics/Basics/Mesh.h"
 #include "Core.h"
@@ -6,7 +16,7 @@
 #include "Graphics/OpenGL/Camera.h"
 #include "ECS/Components/Components.h"
 #include "Graphics/Basics/RenderPipeline.h"
-#include "Graphics/Basics/FrameBuffer.h"
+#include "Graphics/Basics/FBO.h"
 #include "Graphics/Basics/Model.h"
 #include "Graphics/Basics/LineRenderer.h"
 #include "Graphics/Basics/Lights.h"
@@ -24,25 +34,28 @@
 namespace Tempest
 {
 	class RenderSystem
-    {   
-        
+    {    
         using Transform = tc::Transform;
 
         //FontRenderer m_FontR;
         LineRenderer m_LineRenderer;
-
         RenderPipeline m_Pipeline;
         ShadowBuffer m_ShadowBuffer;
+        //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
-        FrameBuffer m_FrameBuffer{ 1600, 900 };
-        //Model model{ "Models/HandgunB.fbx" };
+        FBO m_FrameBuffer{ 1600, 900 };
 
+        int  GammaCorrection = 1;
         bool GridActive = false;
+
+        void InitMeshes();
+        void InitShaders();
+        void InitBuffers();
 
     public:
 
         RenderSystem(uint32_t width, uint32_t height);
-
+        ~RenderSystem() = default;
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
@@ -50,6 +63,9 @@ namespace Tempest
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight, const Transform& transform);           // Submitting Point Light {Transform to be used for pos}
         void SubmitLights(const SpotLight& slight, const Transform& transform);             // Submitting SpotLight {Transform to be used for pos}
+
+        void DrawLine(const Line& line, const glm::vec4& color);                            // Drawing Lines
+        void DrawLine(const AABB& box, const glm::vec4& color);                             // Drawing Bounding Boxes
         
         // rendering api
         void Draw();
@@ -63,13 +79,29 @@ namespace Tempest
 
         Camera& GetCamera();
 
+        int GetActivePt_lightsNum();
+        int GetGammaCorrection();
+        void SetGammaCorrection(int);
         std::vector<Directional_Light> dir_lights;
-    private:        
-        
-        tuptr<Mesh> CreateShape(MeshCode code);
-        glm::mat4 to_Model_Matrix(const Transform& transform);
-        void Clear();
+        std::vector<Point_Light> pt_lights;
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
 
-        void RenderAAGrid();
+        uint32_t MAX_POINT_LIGHT = 10;
+
+        // To be changed to objects instead of global values
+        float shininess = 32.f;
+        float ambientStrength = 0.05f;
+        float specularStrength = 0.5f;
+        const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+
+    private:        
+       
+        glm::mat4 to_Model_Matrix(const Transform& transform);
+
+        void Clear();                                                                                        // Clear Pipeline
+        void DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num = -1);                                        // Render Sprites of different meshes
+        void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType, int pt_light_num = -1);     // Render Sprites of different meshes
+        void RenderAAGrid();                                                                                 // Render Anti-Aliased Grid
     };
 }

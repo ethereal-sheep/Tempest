@@ -1,8 +1,19 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #pragma once
 #include <glew.h>
 #include "TMath.h"
 #include "Util.h"
 #include "Graphics/OpenGL/Texture.h"
+#include <assimp/Importer.hpp>
 
 namespace Tempest
 {
@@ -10,6 +21,7 @@ namespace Tempest
 
 	struct Material
 	{
+		tsptr<Texture> BaseTexture = nullptr;
 		tsptr<Texture> DiffuseMap = nullptr;
 		tsptr<Texture> EmissiveMap = nullptr;
 		tsptr<Texture> SpecularMap = nullptr;
@@ -27,5 +39,6 @@ namespace Tempest
 		float Shininess = 0.f;
 		float ShininessStrength = 0.f;
 		float Opacity = 1.f;
+
 	};
 }

@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #pragma once
 
 #include "Util.h"
@@ -7,6 +17,7 @@
 #include "Graphics/Basics/RenderPipeline.h"
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
+#include "Graphics/Basics/Model.h"
 
 /**
 * @brief 
@@ -219,6 +230,21 @@ namespace Tempest
 
 			MeshCode code;
 		};
+		struct Model
+		{
+			static const char* get_type() { return "Model"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Model& component)
+			{
+				ar.StartObject();
+				ar.Member("Path", component.path);
+				return ar.EndObject();
+			}
+			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
+			string path;
+		};
+
 
 		struct Destroyed 
 		{
@@ -565,20 +591,6 @@ namespace Tempest
 			graph g;
 		};
 
-		struct Model
-		{
-			static const char* get_type() { return "Model"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Model& )
-			{
-				ar.StartObject();
-				//ar.Member("Path", component.code);
-				return ar.EndObject();
-			}
-			Tempest::Model m;
-		};
-
 
 	}
 	namespace tc = Tempest::Components;
@@ -587,12 +599,18 @@ namespace Tempest
 #define COMPONENT_CASE(ComponentName)								\
 	case ComponentType::ComponentName:								\
 	{																\
-		Entity entity;												\
-		tc::ComponentName c;										\
-		reader.Member("Entity", entity);							\
-		reader.Member("Component", c);								\
-		ecs.force_create(entity);									\
-		ecs.emplace<tc::ComponentName>(entity, std::move(c));		\
+		if constexpr (ECS::is_entity_keyed) {						\
+			Entity entity;											\
+			tc::ComponentName c;									\
+			reader.Member("Entity", entity);						\
+			reader.Member("Component", c);							\
+			ecs.force_create(entity);								\
+			ecs.emplace<tc::ComponentName>(entity, std::move(c));	\
+		}															\
+		else {														\
+			auto c = ecs.emplace<tc::ComponentName>();				\
+			reader.Member("Component", *c);							\
+		}															\
 	}																\
 		break														\
 
@@ -630,7 +648,6 @@ namespace Tempest
 		}									
 	}
 
-
 	template <typename ECS>
 	void deserialize_component(const tentry& component_file, ECS& ecs)
 	{
@@ -640,7 +657,6 @@ namespace Tempest
 		Reader reader(json.c_str());
 		if (reader.HasError())
 			return; // warn here
-
 
 		reader.StartObject();
 

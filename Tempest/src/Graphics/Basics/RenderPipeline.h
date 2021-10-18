@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #pragma once
 #include "Graphics/OpenGL/Camera.h"
 #include "Graphics/Basics/Mesh.h"
@@ -14,18 +24,35 @@ namespace Tempest
 		LINE,
 		TEXTURE,
 		GROUND,
-		DIRECTIONAL_LIGHT
+		LIGHTING,
+		DIRECTIONAL_SHADOW_MAP,
+		POINT_LIGHT_DEPTH,
+		MODEL,
+		MODEL_TEXTURE,
+		MODEL_LIGHT
 	};
 
 	struct SpriteObj
 	{
-		MeshCode m_Code;
+		glm::mat4 m_Transform;
+		glm::mat3 m_Normal;
+	};
+
+	struct ModelObj
+	{
+		tsptr<Model> m_Model;
 		glm::mat4 m_Transform;
 	};
 
 	struct AAGrid
 	{
 		Mesh m_Mesh = GeometryFactory::GenerateIndexedPlane();
+	};
+
+	struct SpriteMesh
+	{
+		DrawElementsIndirect m_Indirect;
+		VertexBuffer m_Instanced;
 	};
 
 	struct RenderPipeline
@@ -36,18 +63,23 @@ namespace Tempest
 		/*
 		*	Models
 		*/
-		tvector<tsptr<Model>> m_Models;
-		tvector<glm::mat4> m_ModelTransforms;
+		tmap<string, tsptr<Model>> m_ModelLibrary;
+		tvector<ModelObj> m_Models;
 		
 		/*
 		*	Polygons
 		*/
-		tvector<SpriteObj> m_Sprites;
+		tvector<SpriteObj> m_Spheres;
+		tvector<SpriteObj> m_Cubes;
+		tvector<SpriteObj> m_Planes;
+		tvector<SpriteObj> m_Icosahedrons;
 		
 		tvector<Camera> m_Cameras;
 		ShaderLibrary m_Shaders;
 		MeshLibrary m_Meshes;
 
 		AAGrid Grid;
+		SpriteMesh s_Mesh;
+		VertexBuffer m_Indirect;
 	};
 }

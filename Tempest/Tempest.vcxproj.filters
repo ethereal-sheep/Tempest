@@ -22,7 +22,6 @@
     <ClCompile Include="src\Graphics\Basics\VertexArray.cpp" />
     <ClCompile Include="src\Graphics\Basics\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\OpenGL\Camera.cpp" />
-    <ClCompile Include="src\Graphics\OpenGL\Material.cpp" />
     <ClCompile Include="src\Application\AppHandler.cpp" />
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Application\Context.cpp" />
@@ -67,6 +66,10 @@
     <ClCompile Include="src\Scripting\Test\test_node_functions.cpp" />
     <ClCompile Include="src\Serializer\Reader.cpp" />
     <ClCompile Include="src\Serializer\Writer.cpp" />
+    <ClCompile Include="src\Graphics\Basics\Light.cpp" />
+    <ClCompile Include="src\Graphics\Basics\FBO.cpp" />
+    <ClCompile Include="src\Graphics\Basics\RenderBuffer.cpp" />
+    <ClCompile Include="src\ECS\Test\test_prototype.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -112,7 +115,6 @@
     <ClInclude Include="src\Graphics\Basics\VertexArray.h" />
     <ClInclude Include="src\Graphics\Basics\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
-    <ClInclude Include="src\Graphics\OpenGL\Material.h" />
     <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />
     <ClInclude Include="src\Graphics\Test\TestModel.h" />
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
@@ -205,6 +207,14 @@
     <ClInclude Include="src\Serializer\Writer.h" />
     <ClInclude Include="src\Util\Service.h" />
     <ClInclude Include="src\Util\view.h" />
+    <ClInclude Include="src\Graphics\Basics\FBO.h" />
+    <ClInclude Include="src\Graphics\Basics\RenderBuffer.h" />
+    <ClInclude Include="src\ECS\Util\coptional.h" />
+    <ClInclude Include="src\ECS\Util\prototype.h" />
+    <ClInclude Include="src\ECS\Util\prefab.h" />
+    <ClInclude Include="src\ECS\PPS.h" />
+    <ClInclude Include="src\ECS\Util\prototype_container.h" />
+    <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

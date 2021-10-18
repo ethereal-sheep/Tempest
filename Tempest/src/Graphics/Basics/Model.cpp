@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #include "Graphics/Basics/Model.h"
 #include "Logger/Log.h"
 #include "Core.h"
@@ -16,14 +26,17 @@ namespace Tempest
 			aiProcess_JoinIdenticalVertices);
 
 		// create a list of material
-		tvector<tsptr<Material>> materials(s_Scene->mNumMaterials, make_sptr<Material>());
+		tvector<tsptr<Material>> materials;
+		//auto tex = s_Scene->GetEmbeddedTexture(m_File.string().c_str());
 
 		// pass in materials to be processed
 		for (id_t i = 0; i < s_Scene->mNumMaterials; ++i)
 		{
+			Material m;
+			aiString atex;
 			const auto* pMaterial = s_Scene->mMaterials[i];
 			// turn into Tempest::Material
-			auto& m = *materials[i];
+			//auto& m = *materials[i];
 			pMaterial->Get(AI_MATKEY_REFRACTI, m.Refraction);
 			pMaterial->Get(AI_MATKEY_REFLECTIVITY, m.Reflection);
 			pMaterial->Get(AI_MATKEY_SHININESS, m.Shininess);
@@ -36,26 +49,53 @@ namespace Tempest
 			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, m.Emissive.data(), nullptr);
 			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, m.Transparent.data(), nullptr);
 			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, m.Reflective.data(), nullptr);
+			pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), atex);
+			if (atex.length)
+			{
+				string full_path{ atex.data };
+				string lower_path{ atex.data };
+				std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+					[](char c) { return (char)std::tolower((int)c); });
+
+				auto check = lower_path.find("models");
+				if (check == string::npos) continue;
+
+				string tex_path = full_path.substr(check, full_path.length());
+				//auto file2 = m_File.parent_path() / tex_path;
+
+				try
+				{
+					m.BaseTexture = make_sptr<Texture>(tex_path);
+				}
+				catch (const std::exception& e)
+				{
+					LOG_ERROR(e.what());
+				}
+			}
+			//else
+			//{
+			//	m.BaseTexture = nullptr;
+			//}
 
 			for (uint32_t j = 0; j < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); ++j)
 			{
 				aiString path;
-				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, j, &path) == AI_SUCCESS)
+				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 				{
 					string full_path{ path.data };
 					string lower_path{ path.data };
 					std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
-						[](unsigned char c) { return std::tolower(c); });
+						[](char c) { return (char)std::tolower((int)c); });
 
 					auto check = lower_path.find("textures");
 					if (check == string::npos) continue;
 
 					string tex_path = full_path.substr(check, full_path.length());
-					auto file = m_File.parent_path() / tex_path;
+					auto tfile = m_File.parent_path() / tex_path;
 
 					try
 					{
-						m.DiffuseMap = make_sptr<Texture>(file.string());
+						m.DiffuseMap = make_sptr<Texture>(tfile.string().c_str());
 					}
 					catch (const std::exception& e)
 					{
@@ -66,6 +106,7 @@ namespace Tempest
 					//m.DiffuseMap = make_sptr<Texture>(tex.path);
 				}
 			}
+			materials.push_back(make_sptr<Material>(m));
 		}
 
 		// nodes and meshes

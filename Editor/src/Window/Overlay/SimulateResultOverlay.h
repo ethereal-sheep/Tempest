@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+                or disclosure of this file or its contents without the prior
+                written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #pragma once
 #include "Instance/Instance.h"
 #include "Util/UIElements.h"
@@ -107,15 +117,13 @@ namespace Tempest
                         ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f , (Max.y - Min.y) * 0.4f });
                         
                         ImGui::Text("%.1f %%", 100.f * win / (win+lose));
-                        
-                        
                     }
                     else
                     {
                         auto size = ImGui::CalcTextSize("Press Simulate");
                         ImGui::SetCursorPos({ ImGui::GetCursorPosX() + (ImGui::GetContentRegionAvailWidth() - size.x) * 0.5f , (Max.y - Min.y) * 0.4f });
                         ImGui::Text("Press Simulate");
-                        
+                         
                     }
                     ImGui::PopFont();
                     ImGui::EndChild();
@@ -136,8 +144,6 @@ namespace Tempest
                         Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
                         OverlayOpen = false;
                     }
-
-
                 }
                 ImGui::End();
             }

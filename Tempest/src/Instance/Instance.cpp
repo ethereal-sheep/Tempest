@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #include "Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
 
@@ -27,6 +37,14 @@ namespace Tempest
 			auto& mesh = ecs.get<tc::Mesh>(id);
 			auto& transform = ecs.get<tc::Transform>(id);
 			Service<RenderSystem>::Get().Submit(mesh.code, transform);
+		}
+
+		auto view2 = ecs.view<tc::Model>(exclude_t<tc::Destroyed>());
+		for (auto id : view2)
+		{
+			auto& model = ecs.get<tc::Model>(id);
+			auto& transform = ecs.get<tc::Transform>(id);
+			Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
 		}
 	}
 	void Instance::internal_exit()

@@ -1,14 +1,13 @@
 #version 460
 
-layout(location = 0) in vec3 vs_color;
-layout(location = 1) in vec2 vs_tex;
+in vec3 vs_color;
+in vec2 vs_tex;
 
-layout(location = 0) out vec4 fs_color;
+out vec4 fs_color;
 
 uniform sampler2D texture0;
-uniform vec3 DiffuseColour;
 
 void main()
 {
-	fs_color = vec4(DiffuseColour * vec3(texture(texture0, vs_tex)), 1.0);
+	fs_color = texture(texture0, vs_tex);
 }

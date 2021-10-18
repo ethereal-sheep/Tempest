@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #include "InstanceManager.h"
 
 // windows
@@ -86,9 +96,9 @@ namespace Tempest
 		instance->register_window<DiagnosticsWindow>();
 		instance->register_window<HierarchyWindow>();
 		instance->register_window<InspectorWindow>();
-		instance->register_window<AssetManagerWindow>();
+		//instance->register_window<AssetManagerWindow>();
 
-		//instance->register_always<EditTimeMenuBar>();
+		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();
 		instance->register_always<OpenProjectPopup>();
 		instance->register_always<SaveProjectPopup>();

@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+                or disclosure of this file or its contents without the prior
+                written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #include "Graphics/Basics/VertexArray.h"
 #include "Logger/Log.h"
 
@@ -17,9 +27,16 @@ namespace Tempest
             case VertexType::Int2:
             case VertexType::Int3:
             case VertexType::Int4:		return GL_INT;
-            case VertexType::Bool:		return GL_BOOL;
+            case VertexType::Bool:		
+            default:                    return GL_BOOL;
         }
     }
+
+    VertexArray::VertexArray()
+    {
+        glCreateVertexArrays(1, &m_ID);
+    }
+
     VertexArray::VertexArray(const tsptr<IndexBuffer>& ibo, const tvector<tsptr<VertexBuffer>>& vbos, const tvector<BufferLayout>& layouts)
         : m_IBO(ibo)
     {
@@ -52,12 +69,12 @@ namespace Tempest
     void VertexArray::Bind() const
     {
         glBindVertexArray(m_ID);
-        m_IBO->Bind();
+        if(m_IBO != nullptr) m_IBO->Bind();
     }
 
     void VertexArray::Unbind() const
     {
-        m_IBO->Unbind();
+        if (m_IBO != nullptr) m_IBO->Unbind();
         glBindVertexArray(0);
     }
 
@@ -87,6 +104,21 @@ namespace Tempest
             }
             ++m_Index;
         }
+    }
+    
+    void VertexArray::AttachVertexBufferInstanced(const VertexBuffer& vbo, const BufferLayout& layout)
+    {
+    	const uint32_t startingIndex = m_Index;
+    
+    	AttachVertexBuffer(vbo, layout);
+    
+    	for (auto i = startingIndex; i < m_Index; ++i)
+    		SetBindingDivisor(i, 1);
+    }
+    
+    void VertexArray::SetBindingDivisor(unsigned int index, unsigned int divisor) const
+    {
+    	glVertexArrayBindingDivisor(m_ID, index, divisor);
     }
 
     void VertexArray::AttachIndexBuffer(const IndexBuffer& ibo) const

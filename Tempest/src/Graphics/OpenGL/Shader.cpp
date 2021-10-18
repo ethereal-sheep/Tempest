@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #include "Shader.h"
 #include <fstream>
 #include "Logger/Log.h"
@@ -80,6 +90,34 @@ namespace Tempest
 	}
 
 	/*
+		Create a program for OpenGL to link and use the shader + geom
+	*/
+	void Shader::LinkProgram(GLuint vertexShader, GLuint fragmentShader, GLuint geomShader)
+	{
+		char infoLog[512];
+		GLint success;
+
+		id = glCreateProgram();
+
+		glAttachShader(id, vertexShader);
+
+		glAttachShader(id, fragmentShader);
+
+		glAttachShader(id, geomShader);
+
+		glLinkProgram(id);
+
+		glGetProgramiv(id, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(id, 512, NULL, infoLog);
+			LOG("Failed to link program");
+		}
+
+		glUseProgram(0);
+	}
+
+	/*
 		Creates an object with a shader program loaded
 	*/
 	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc)
@@ -96,6 +134,26 @@ namespace Tempest
 		glDeleteShader(vertex_Shader);
 		glDeleteShader(fragment_Shader);
 	}
+
+	/*
+	Creates an object with a shader program loaded + geom
+*/
+	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& geomSrc)
+	{
+		GLuint vertex_Shader = 0;
+		GLuint fragment_Shader = 0;
+		GLuint geom_Shader = 0;
+		vertex_Shader = LoadShader(GL_VERTEX_SHADER, vertexSrc);
+		fragment_Shader = LoadShader(GL_FRAGMENT_SHADER, fragmentSrc);
+		geom_Shader = LoadShader(GL_GEOMETRY_SHADER, geomSrc);
+		LinkProgram(vertex_Shader, fragment_Shader, geom_Shader);
+
+		//End
+		glDeleteShader(vertex_Shader);
+		glDeleteShader(fragment_Shader);
+		glDeleteShader(geom_Shader);
+	}
+
 
 	/*
 		Delete the program from memory

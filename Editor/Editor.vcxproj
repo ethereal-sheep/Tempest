@@ -99,6 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +131,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,9 +165,10 @@ xcopy /y /d "..\Dep\assimp\Debug\assimp-vc142-mtd.dll" "$(TargetDir)" /q</Comman
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\tracy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -298,6 +301,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Util\SimulationBuilder.h" />
+    <ClInclude Include="src\Window\Util\SimulationStart.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>
   <ItemGroup>

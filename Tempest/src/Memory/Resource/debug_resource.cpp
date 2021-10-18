@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 
 #include "debug_resource.h"
 #include "Util.h"
@@ -169,7 +179,7 @@ namespace Tempest
 		return user;
 	}
 
-	void debug_resource::do_deallocate(void* ptr, size_t bytes, size_t alignment)
+	void debug_resource::do_deallocate(void* ptr, [[maybe_unused]] size_t bytes, [[maybe_unused]] size_t alignment)
 	{
 		//deallocating nullptr
 		if (ptr == nullptr)
@@ -290,8 +300,8 @@ namespace Tempest
 		head->m_object.m_magic_number = deallocatedMemoryPattern;
 
 		// set history
-		m_last_deallocated_num_bytes = bytes;
-		m_last_deallocated_alignment = alignment;
+		m_last_deallocated_num_bytes = i->second.m_bytes;
+		m_last_deallocated_alignment = i->second.m_alignment;
 		m_last_deallocated_address = ptr;
 
 		m_upstream->deallocate(head, sizeof(AlignedHeader) + i->second.m_bytes + paddingSize, i->second.m_alignment);
@@ -299,7 +309,7 @@ namespace Tempest
 			const std::scoped_lock lock(res_mutex);
 			m_blocks.erase(i);
 		}
-		m_bytes_outstanding -= bytes;
+		m_bytes_outstanding -= i->second.m_bytes;
 	}
 
 	bool debug_resource::do_is_equal(const memory_resource& other) const noexcept

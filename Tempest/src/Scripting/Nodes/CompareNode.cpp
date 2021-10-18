@@ -1,3 +1,13 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+                or disclosure of this file or its contents without the prior
+                written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 
 #include "../Util/node.h"
 #include "Instance/Instance.h"
@@ -32,9 +42,9 @@ namespace Tempest
             node.add_input(pin_type::Flow, "");
             node.add_input(pin_type::Int, "lhs");
             node.add_input(pin_type::Int, "rhs");
-            node.add_output(pin_type::Flow, u8"\uf531");
-            node.add_output(pin_type::Flow, u8"\uf52c");
-            node.add_output(pin_type::Flow, u8"\uf536");
+            node.add_output(pin_type::Flow, (const char*)u8"\uf531");
+            node.add_output(pin_type::Flow, (const char*)u8"\uf52c");
+            node.add_output(pin_type::Flow, (const char*)u8"\uf536");
             break;
         default:
             break;

@@ -1,55 +1,69 @@
+/**********************************************************************************
+* \author		_ (_@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+                or disclosure of this file or its contents without the prior
+                written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
+
 #include "Graphics/Basics/ShadowBuffer.h"
 
 namespace Tempest
 {
-	ShadowBuffer::ShadowBuffer()
+	ShadowBuffer::ShadowBuffer(uint32_t width , uint32_t height)
 	{
         glEnable(GL_DEPTH_TEST);
+        m_Width = width;
+        m_Height = height;
+        //constexpr float quadVertices[] =
+        //{
+        //    // positions  
+        //    -1.0f, -1.0f, 
+        //     1.0f, -1.0f, 
+        //     1.0f,  1.0f, 
+        //    -1.0f,  1.0f 
+        //};
 
-        constexpr float quadVertices[] =
-        {
-            // positions  
-            -1.0f, -1.0f, 
-             1.0f, -1.0f, 
-             1.0f,  1.0f, 
-            -1.0f,  1.0f 
-        };
+        //GLuint indices[6];
+        //GLuint offset = 0;
 
-        GLuint indices[6];
-        GLuint offset = 0;
+        //for (int i = 0; i < 6; i += 6)
+        //{
+        //    indices[i + 0] = 0 + offset;
+        //    indices[i + 1] = 1 + offset;
+        //    indices[i + 2] = 2 + offset;
 
-        for (int i = 0; i < 6; i += 6)
-        {
-            indices[i + 0] = 0 + offset;
-            indices[i + 1] = 1 + offset;
-            indices[i + 2] = 2 + offset;
+        //    indices[i + 3] = 2 + offset;
+        //    indices[i + 4] = 3 + offset;
+        //    indices[i + 5] = 0 + offset;
 
-            indices[i + 3] = 2 + offset;
-            indices[i + 4] = 3 + offset;
-            indices[i + 5] = 0 + offset;
+        //    offset += 4;
+        //    m_Count += 6;
+        //}
 
-            offset += 4;
-            m_Count += 6;
-        }
+        //glGenVertexArrays(1, &m_vao);
+        //glGenBuffers(1, &m_vbo);
+        //glBindVertexArray(m_vao);
+        //glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        //glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        //glEnableVertexAttribArray(0);
+        //glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 
-        glGenVertexArrays(1, &m_vao);
-        glGenBuffers(1, &m_vbo);
-        glBindVertexArray(m_vao);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+        //glCreateBuffers(1, &m_ibo);
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glCreateBuffers(1, &m_ibo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        //glBindVertexArray(0);
 
-        glBindVertexArray(0);
+        //glGenFramebuffers(1, &m_ID);
+        //glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
 
-        glGenFramebuffers(1, &m_ID);
-        glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        
 	}
 
 	void ShadowBuffer::AttachDepthAttachment(const ShadowMap& sm) const
@@ -68,7 +82,7 @@ namespace Tempest
 
 	void ShadowBuffer::Validate() const
 	{
-        switch (glCheckNamedFramebufferStatus(m_ID, GL_FRAMEBUFFER))
+        switch (glCheckNamedFramebufferStatus(m_depthMapFBO, GL_FRAMEBUFFER))
         {
         case GL_FRAMEBUFFER_COMPLETE:
         	return;
@@ -95,33 +109,18 @@ namespace Tempest
         }
 	}
 
-	void ShadowBuffer::Draw(const glm::vec3& lightDir, const tvector<MeshCode>& sprites, const tvector<glm::mat4>& transforms, const tmap<MeshCode, tuptr<Mesh>>& meshes)
+	void ShadowBuffer::Draw(const std::vector<Point_Light>& point_lights, const tvector<MeshCode>& sprites, const tvector<glm::mat4>& transforms, const tmap<MeshCode, tuptr<Mesh>>& meshes)
 	{
-        glm::mat4 lightProjection, lightView;
-        glm::mat4 lightSpaceMatrix;
-        float near_plane = 1.0f, far_plane = 7.5f;
-        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-        lightView = glm::lookAt(lightDir, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-        lightSpaceMatrix = lightProjection * lightView;
+        (void)point_lights;
+        (void)sprites;
+        (void)transforms;
+        (void)meshes;
 
-        m_Shader.Bind();
-        m_Shader.SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-
-        Bind();
-        glClear(GL_DEPTH_BUFFER_BIT);
-        for (size_t i = 0; i < sprites.size(); ++i)
-        {
-            m_Shader.SetMat4fv(transforms[i], "model");
-            meshes.at(sprites[i])->Bind();
-            glDrawElements(GL_TRIANGLES, meshes.at(sprites[i])->GetVertexCount(), GL_UNSIGNED_INT, NULL);
-        }
-
-        Unbind();
 	}
 
 	void ShadowBuffer::Bind() const
 	{
-        glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_depthMapFBO);
 	}
 
 	void ShadowBuffer::Unbind() const
