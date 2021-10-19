@@ -303,13 +303,13 @@ namespace Tempest
 		m_last_deallocated_num_bytes = i->second.m_bytes;
 		m_last_deallocated_alignment = i->second.m_alignment;
 		m_last_deallocated_address = ptr;
+		m_bytes_outstanding -= i->second.m_bytes;
 
 		m_upstream->deallocate(head, sizeof(AlignedHeader) + i->second.m_bytes + paddingSize, i->second.m_alignment);
 		{
 			const std::scoped_lock lock(res_mutex);
 			m_blocks.erase(i);
 		}
-		m_bytes_outstanding -= i->second.m_bytes;
 	}
 
 	bool debug_resource::do_is_equal(const memory_resource& other) const noexcept
