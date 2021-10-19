@@ -14,6 +14,8 @@
 #include "../Prototypes/Prototype_Category.h"
 #include "ECS/ECS.h"
 
+#include <rttr/registration>
+
 
 namespace Tempest
 {
@@ -195,7 +197,7 @@ namespace Tempest
 
 	void testing_prototype()
 	{
-		testing_coptional1();
+		/*testing_coptional1();
 		testing_prototype1();
 		testing_prototype2();
 		testing_prototype_serialize();
@@ -206,6 +208,6 @@ namespace Tempest
 
 
 		testing_prefab_copy();
-		testing_prefab_serialize();
+		testing_prefab_serialize();*/
 	}
 }

@@ -95,7 +95,7 @@ namespace Tempest
 		});
 	}
 
-	[[no_discard]]
+	[[nodiscard]]
 	inline static prototype create_new_prototype(const string& category)
 	{
 		if (!detail::proto_categories.categories.count(category))
@@ -104,13 +104,13 @@ namespace Tempest
 			return detail::proto_categories.categories.at(category).create();
 	}
 
-	[[no_discard]]
+	[[nodiscard]]
 	inline static auto get_prototype_categories()
 	{
 		return const_range(detail::proto_categories.categories);
 	}
 
-	[[no_discard]]
+	[[nodiscard]]
 	inline static bool verify(const string& category, const prototype& p)
 	{
 		if (!detail::proto_categories.categories.count(category))
@@ -118,7 +118,7 @@ namespace Tempest
 
 		detail::proto_categories.categories.at(category).verify(p);
 	}
-	[[no_discard]]
+	[[nodiscard]]
 	inline static bool verify_strict(const string& category, const prototype& p)
 	{
 		if (!detail::proto_categories.categories.count(category))
