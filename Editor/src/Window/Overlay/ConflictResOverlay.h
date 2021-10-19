@@ -40,6 +40,8 @@ namespace Tempest
         const float halfPadding = padding * 0.5f;
         tsptr<Texture> AddUnitTex;
         tsptr<Texture> AddActionTex;
-        tsptr<Texture> AddLinkTex;
+        tsptr<Texture> AddSquenceTex;
+        tsptr<Texture> AddWeaponTex;
+        tsptr<Texture> AddItemTex;
     };
 }
