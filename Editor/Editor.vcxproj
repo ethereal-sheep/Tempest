@@ -80,15 +80,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build-int\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Build\Editor\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build-int\Editor\$(Configuration)\</IntDir>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build-int\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Build\Editor\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build-int\Editor\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
@@ -150,8 +150,8 @@
     <CustomBuildStep>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
-xcopy /y /d "..\Dep\assimp\Debug\assimp-vc142-mtd.dll" "$(TargetDir)" /q
-xcopy /y /d "..\Dep\rttr\Debug\rttr_core_d.dll" "$(TargetDir)" /q
+xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mtd.dll" "$(TargetDir)" /q
+xcopy /y /d "..\Dep\rttr\$(Configuration)\rttr_core_d.dll" "$(TargetDir)" /q
 xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </CustomBuildStep>
     <CustomBuildStep>

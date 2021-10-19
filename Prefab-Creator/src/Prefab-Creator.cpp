@@ -8,6 +8,7 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
+#include <oleidl.h>
 
 #include "Core.h"
 #include "Util.h"
@@ -41,6 +42,8 @@ namespace Tempest
 	void init_font();
 	void init_style();
 	void init_file_dialog();
+
+	
 
 	class Prefab_Creator : public Application
 	{
@@ -84,6 +87,8 @@ namespace Tempest
 
 			*/ 
 		
+			//auto i = system("asset-compiler.exe");
+
 			testing_prototype();
 
 			instance.OnInit();
@@ -170,6 +175,62 @@ namespace Tempest
 
 		LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
+
+			switch (msg)
+			{
+				case WM_DROPFILES:
+				{
+					// do some shit here
+					HDROP hDropInfo = (HDROP)wParam;
+					WCHAR sItem[MAX_PATH];
+
+					for (int i = 0; DragQueryFile(hDropInfo, i, sItem, sizeof(sItem)); i++)
+					{
+						//Is the item a file or a directory?
+						if (GetFileAttributes(sItem) & FILE_ATTRIBUTE_DIRECTORY)
+						{
+							LOG("Folders not supported!");
+						}
+						else {
+							SetFileAttributes(sItem, FILE_ATTRIBUTE_NORMAL); //Make file writable
+							//DeleteFile(sItem);
+
+							/************ TAKE NOTE ***************/
+							// consider moving this into another place (in window class)
+							// we just dispatch an event here
+							// when calling asset-compiler
+							// we need:
+							// the filename (tpath s)
+							// the destination of compiled resource (targetdir)
+							// user should be able to choose target at the start and all subsequent will be 
+							// at the dir
+
+							char output[MAX_PATH];
+							sprintf_s(output, "%ws", sItem);
+
+							
+							tpath s(output);
+							// check if s is valid
+							if (fs::exists(s))
+							{
+								std::string cmd("Asset-Compiler\\Asset-Compiler.exe ");
+								cmd += s.string();
+								LOG("Starting compilation...");
+								auto err = system(cmd.c_str());
+								LOG("...compilation end");
+							}
+							else
+							{
+								// error
+								LOG_ERROR("Bad file!");
+							}
+
+						}
+					}
+					DragFinish(hDropInfo);
+				}
+			}
+
 			return ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
 		}
 	};
