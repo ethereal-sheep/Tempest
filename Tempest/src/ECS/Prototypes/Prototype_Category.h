@@ -30,7 +30,7 @@ namespace Tempest
 		{
 			tmap<string, proto_category> categories;
 
-			proto_category_container();
+			inline proto_category_container();
 		};
 
 		static proto_category_container proto_categories;
@@ -79,7 +79,7 @@ namespace Tempest
 
 			prototype create() const
 			{
-				prototype p;
+				prototype p(type_info);
 				for (auto fn : create_fns) fn(p);
 				return p;
 			}
@@ -88,7 +88,31 @@ namespace Tempest
 
 	DEFINE_PROTO_CATEGORIES
 	{
+		PROTO_CATEGORY(Door)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+		});
+
 		PROTO_CATEGORY(Wall)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+		});
+
+		PROTO_CATEGORY(Tile)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+		});
+
+		PROTO_CATEGORY(Decoration)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+		});
+
+		PROTO_CATEGORY(Obstacle)
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)

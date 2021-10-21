@@ -15,7 +15,6 @@ namespace Tempest
 {
 	void GuizmoController::Draw()
 	{
-		
 		if (m_IsEnabled)
 		{
 			ImGuizmo::Enable(true);

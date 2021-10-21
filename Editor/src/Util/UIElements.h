@@ -27,7 +27,7 @@ namespace Tempest::UI
 		return label + "##" + a;
 	}
 
-	void PaddedSeparator(float padding = 0.f);
+	void PaddedSeparator(float padding = 1.f);
 	void PaddedSeparator(float up, float down);
 
 	void DrawLine();

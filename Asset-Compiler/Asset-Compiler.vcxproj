@@ -159,7 +159,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mt.lib;$(SolutionDir)Dep\rttr\$(Configuration)\rttr_core.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>

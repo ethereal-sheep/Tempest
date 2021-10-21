@@ -12,7 +12,6 @@
 #include "Instance/Instance.h"
 #include "Events/EventManager.h"
 #include "Font.h"
-#include "assimp/Exporter.hpp"
 
 namespace Tempest
 {
@@ -22,135 +21,105 @@ namespace Tempest
         {
             return "Home";
         }
-        void init(Instance&) override
+        void init(Instance& instance) override
         {
-            window_flags |=
-                ImGuiWindowFlags_NoResize |
-                ImGuiWindowFlags_NoDocking |
-                ImGuiWindowFlags_NoCollapse |
-                ImGuiWindowFlags_NoMove |
-                ImGuiWindowFlags_MenuBar;
+            // make sure 
+			char* pValue;
+			size_t len;
+			[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
+			if (!pValue)
+			{
+				LOG_WARN("APPDATA environment variable could not be found!");
+				return;
+			}
+			tpath path{ pValue };
+			free(pValue); // It's OK to call free with NULL
+			path /= "Documents";
+			path /= "PrefabCreatorTempData";
+			path /= "_recent.json";
+
+			Serializer serializer;
+			string json = serializer.GetJson(path);
+
+			Reader reader(json.c_str());
+
+
+			if (!reader.HasError())
+			{
+				reader.StartObject();
+				string p_str;
+				reader.Member("rec", p_str);
+				reader.EndObject();
+
+				if(!fs::exists(p_str))
+					to_retarget = true;
+				else
+				{
+					auto& creator = dynamic_cast<CreatorInstance&>(instance);
+					creator.retarget(p_str);
+				}
+			}
+			else
+			{
+				to_retarget = true;
+			}
+
         }
 
-        void show(Instance& instance) override
-        {
-			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-			ImVec2 size = ImGui::GetMainViewport()->Size;
-			ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-			ImGui::SetNextWindowSize(ImVec2(size.x / 1.5f, size.y / 1.5f), ImGuiCond_Always);
-			if (ImGui::Begin(window_name(), nullptr, window_flags))
+		void exit(Instance& instance) override
+		{
+			// check APPDATA if there exist a file with project info
+			char* pValue;
+			size_t len;
+			[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
+			if (!pValue)
 			{
-				// menu bar
-				{
-					if (ImGui::BeginMenuBar())
-					{
-						if (ImGui::BeginMenu("Project"))
-						{
-							if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "", false))
-							{
-								Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
-								Service<EventManager>::Get().instant_dispatch<OpenFileTrigger>();
-							}
-							ImGui::Dummy({ 0.f, 1.f });
-							ImGui::Separator();
-							ImGui::Dummy({ 0.f, 1.f });
-
-							if (ImGui::MenuItem(ICON_FA_COMPRESS_ARROWS_ALT " Compile Test", "", false)) 
-							{
-								test_compile();
-							}
-							if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Import Test", "", false))
-							{
-								test_load_res();
-							}
-
-
-							ImGui::Dummy({ 0.f, 1.f });
-							ImGui::Separator();
-							ImGui::Dummy({ 0.f, 1.f });
-
-							if (ImGui::MenuItem(ICON_FA_FILE_EXPORT " Export", "Ctrl+Shift+S", false, false)) {}
-
-							ImGui::Dummy({ 0.f, 1.f });
-							ImGui::Separator();
-							ImGui::Dummy({ 0.f, 1.f });
-
-							if (ImGui::MenuItem(ICON_FA_DOOR_OPEN " Exit", "", false))
-							{
-								Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Application Exiting in 10s...");
-							}
-
-							ImGui::EndMenu();
-						}
-						ImGui::EndMenuBar();
-					}
-				}
-
-				// debugging
-
-
-				for (auto i : instance.ecs.view<tc::Model>())
-				{
-					auto& m = instance.ecs.get<tc::Model>(i);
-					
-
-					ImGui::Text(m.path.c_str());
-
-				}
-
-
-
+				LOG_WARN("APPDATA environment variable could not be found!");
+				return;
 			}
-			ImGui::End();
+			tpath envpath{ pValue };
+			free(pValue); // It's OK to call free with NULL
+			envpath /= "Documents";
+			envpath /= "PrefabCreatorTempData";
+
+			if (!fs::exists(envpath))
+				fs::create_directory(envpath);
+
+
+			string p_str = instance.get_full_path().string();
+			LOG_ASSERT(fs::exists(p_str));
+
+			Writer writer;
+			writer.StartObject();
+			writer.Member("rec", p_str);
+			writer.EndObject();
+
+			Serializer::SaveJson(envpath / "_recent.json", writer.GetString());
+
+			// save any unsaved thing
+		}
+
+        void show(Instance& ) override
+        {
+			if (to_retarget)
+			{
+				Service<EventManager>::Get().instant_dispatch<RetargetingTrigger>();
+				to_retarget = false;
+			}
+
+
         }
 
 		void test_compile()
 		{
-			// test if we can import then export
 
-			Assimp::Importer importer;
-			const char* in_path = R"(S:\Development\Tempest\Resource\Models\Sword.fbx)";
-			const char* out_path = R"(S:\Development\temp\testing_export\Sword.glb)";
-
-			auto scene = importer.ReadFile(in_path,
-				aiProcess_Triangulate |
-				aiProcess_GenSmoothNormals |
-				aiProcess_JoinIdenticalVertices);
-
-			if (!scene)
-			{
-				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Failed Import!");
-				return;
-			}
-
-
-			Assimp::Exporter exporter;
-			auto result = exporter.Export(scene, "glb2", out_path);
-
-			if (!(result == aiReturn_SUCCESS))
-			{
-				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Failed Compilation!");
-				return;
-			}
 		}
+
 		void test_load_res()
 		{
-			Assimp::Importer importer;
-			const char* in_path = R"(S:\Development\temp\testing_export\Sword.glb)";
 
-			auto scene = importer.ReadFile(in_path,
-				aiProcess_Triangulate |
-				aiProcess_GenSmoothNormals |
-				aiProcess_JoinIdenticalVertices);
-
-			
-
-			if (!scene)
-			{
-				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("Failed import of Resource!");
-				return;
-			}
 		}
 
+		bool to_retarget = false;
     };
 }

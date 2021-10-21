@@ -26,5 +26,7 @@ namespace Tempest
 	};
 
 	struct OpenFileTrigger : public Event {};
-
+	struct TargetingTrigger : public Event {};
+	struct SettingTrigger : public Event {};
+	struct RetargetingTrigger : public Event {};
 }
