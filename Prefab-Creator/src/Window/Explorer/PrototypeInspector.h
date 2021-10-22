@@ -118,6 +118,13 @@ namespace Tempest
 						ImGui::PopItemWidth();
 						UI::PaddedSeparator(1.f);
 
+						AABB box;
+						box.min.x = -0.5;
+						box.min.y = -0.5;
+						box.max.x = 0.5;
+						box.max.y = 0.5;
+						
+						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
 					}
 				}
 
