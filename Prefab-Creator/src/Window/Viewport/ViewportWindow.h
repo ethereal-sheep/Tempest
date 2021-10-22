@@ -18,6 +18,8 @@ namespace Tempest
 {
 	class ViewportWindow : public Window
 	{
+		CameraControls cam_ctrl;
+
 		const char* window_name() override
 		{
 			return "Viewport";
@@ -41,6 +43,11 @@ namespace Tempest
 
 		void show(Instance& instance) override
 		{
+
+
+			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			cam_ctrl.show_debug(cam);
+
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -52,6 +59,8 @@ namespace Tempest
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+
 			if (ImGui::Begin("Viewport", nullptr, window_flags))
 			{
 				// DockSpace
@@ -63,88 +72,123 @@ namespace Tempest
 						ImGuiDockNodeFlags_PassthruCentralNode);
 				}
 
-				auto& cam = Service<RenderSystem>::Get().GetCamera();
 				
 
-				//UI::world_camera_controls(cam);
+				cam_ctrl.update(cam);
+				
 
-
-				//UI::world_camera_controls(cam);
-
-				const glm::vec3 position(0);
+				/*const glm::vec3 position(0);
 
 				auto direction = els::to_vec2(io.MouseDelta);
 				auto yaw_speed = 1.f / 4.f;
 				auto pitch_speed = 1.f / 4.f;
 				auto pan_speed = 1.f / 4.f;
 				auto forward_speed = 1.f / 4.f;
-				auto scroll_speed = forward_speed * 2.f;
+				auto scroll_speed = forward_speed * 2.f;*/
 
 
+				/*auto pos = -cam.GetPosition();
+				auto front = cam.GetFront();
 
+				pos.y = 0;
+				front.y = 0;
+				auto angle = glm::angle(glm::normalize(pos), glm::normalize(front));
 
-				if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
+				if (abs(angle) > 0.001f)
 				{
-					if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
-					{
-						//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
-						//(m_SavedMousePos.x, m_SavedMousePos.y);
-					}
+					auto yaw = glm::angleAxis(angle / 200, glm::vec3{ 0, 1, 0 });
+					auto rot = cam.GetQuatRotation();
+					rot = glm::normalize(rot * yaw);
+					cam.SetRotation(rot);
+				}*/
 
-					if (io.MouseDown[0] && io.MouseDown[1])
-					{
-						// turn body to same angle as 
 
-					}
-					else if (io.MouseDown[0]) // rotate translate
-					{
-						if (!els::is_zero(direction))
-						{
-							auto rot = cam.GetQuatRotation();
-							auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-							rot = rot * yaw;
-							cam.SetRotation(rot);
 
-							auto currentPos = cam.GetPosition();
-							auto forward = glm::normalize(glm::cross(glm::vec3{ 0, 1, 0 }, cam.GetLeft())) * io.MouseDelta.y;
-							auto newPos = currentPos + forward * forward_speed;
-							cam.SetPosition(newPos);
-						}
-					}
-					else if (io.MouseDown[1]) // rotate
-					{
-						if (!els::is_zero(direction))
-						{
-							auto rot = cam.GetQuatRotation();
+				//if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
+				//{
+				//	if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
+				//	{
+				//		//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+				//		//(m_SavedMousePos.x, m_SavedMousePos.y);
+				//	}
 
-							auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-							rot = rot * yaw;
-							cam.SetRotation(rot);
-							auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), cam.GetLeft());
-							rot = rot * pitch;
-							cam.SetRotation(rot);
-						}
+				//	if (io.MouseDown[0] && io.MouseDown[1])
+				//	{
+				//		// turn body to the origin
 
-					}
-					else if (io.MouseDown[2]) // Pan
-					{
-						if (!els::is_zero(direction))
-						{
+				//		auto rot = cam.GetQuatRotation();
+				//		auto pos = -cam.GetPosition();
+				//		auto front = cam.GetFront();
 
-							auto up = glm::vec3{ 0, 1, 0 };
-							auto right = cam.GetLeft();
+				//		pos.y = 0;
+				//		front.y = 0;
+				//		auto angle = glm::angle(glm::normalize(pos), glm::normalize(front));
 
-							auto currentPos = cam.GetPosition();
-							auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
-							auto newPos = currentPos - worldSpaceDirection * pan_speed;
+				//		LOG("{}", angle);
 
-							cam.SetPosition(newPos);
-						}
-					}
+				//		auto yaw = glm::angleAxis(angle, glm::vec3{ 0, 1, 0 });
+				//		rot = glm::normalize(rot * yaw);
+				//		cam.SetRotation(rot);
+				//		// tilt head to origin
 
-					cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
+				//		//pos = -cam.GetPosition();
+				//		//front = cam.GetFront();
+				//		//angle = glm::angle(glm::normalize(pos), glm::normalize(front));
 
-				}
+				//		//auto pitch = glm::angleAxis(0.01f, cam.GetLeft());
+				//		//rot = rot * pitch;
+				//		//cam.SetRotation(rot);
+
+				//	}
+				//	else if (io.MouseDown[0]) // rotate translate
+				//	{
+				//		if (!els::is_zero(direction))
+				//		{
+				//			auto rot = cam.GetQuatRotation();
+				//			auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+				//			rot = rot * yaw;
+				//			cam.SetRotation(rot);
+
+				//			auto currentPos = cam.GetPosition();
+				//			auto forward = glm::normalize(glm::cross(glm::vec3{ 0, 1, 0 }, cam.GetLeft())) * io.MouseDelta.y;
+				//			auto newPos = currentPos + forward * forward_speed;
+				//			cam.SetPosition(newPos);
+				//		}
+				//	}
+				//	else if (io.MouseDown[1]) // rotate
+				//	{
+				//		if (!els::is_zero(direction))
+				//		{
+				//			auto rot = cam.GetQuatRotation();
+
+				//			auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+				//			rot = rot * yaw;
+				//			cam.SetRotation(rot);
+				//			auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), cam.GetLeft());
+				//			rot = rot * pitch;
+				//			cam.SetRotation(rot);
+				//		}
+
+				//	}
+				//	else if (io.MouseDown[2]) // Pan
+				//	{
+				//		if (!els::is_zero(direction))
+				//		{
+
+				//			auto up = glm::vec3{ 0, 1, 0 };
+				//			auto right = cam.GetLeft();
+
+				//			auto currentPos = cam.GetPosition();
+				//			auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
+				//			auto newPos = currentPos - worldSpaceDirection * pan_speed;
+
+				//			cam.SetPosition(newPos);
+				//		}
+				//	}
+
+				//	cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
+
+				// }
 
 
 			}
@@ -158,7 +202,6 @@ namespace Tempest
 
 				ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
 				auto& GC = Service<GuizmoController>::Get();
-				auto& cam = Service<RenderSystem>::Get().GetCamera();
 				auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
 
 				static ImVec2 Min = { 0, 0 };

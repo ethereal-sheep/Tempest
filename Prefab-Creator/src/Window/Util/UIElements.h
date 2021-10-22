@@ -136,3 +136,8 @@ namespace Tempest::UI
 		ImGuiInputTextCallback callback = NULL, void* user_data = NULL);
 }
 
+
+namespace ImGui
+{
+	bool ComboWithFilter(const char* label, int* current_item, const std::vector<std::string>& items);
+}
