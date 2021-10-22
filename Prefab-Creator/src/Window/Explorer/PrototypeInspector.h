@@ -85,7 +85,54 @@ namespace Tempest
 							UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, transform->scale.data(), 0.f, 0.1f);
 							UI::PaddedSeparator(1.f);
 
+							ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
+							auto& GC = Service<GuizmoController>::Get();
+							auto& cam = Service<RenderSystem>::Get().GetCamera();
+
+							static ImVec2 Min = { 0, 0 };
+							static ImVec2 Max = { 1600, 900 };
+
+							GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
+
+
+							vec3 tDelta;
+							vec3 rDelta;
+							vec3 sDelta;
+
+							auto mat =
+								glm::translate(glm::make_vec3(value_ptr(transform->position)))
+								* glm::mat4(transform->rotation)
+								* glm::scale(glm::make_vec3(value_ptr(transform->scale)));
+
+							//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
+							GC.SetTransformMatrix(glm::value_ptr(mat));
+							GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
+							GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
+
+
+
+							GC.Draw();
+
+							//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
+
+							GC.GetDelta(tDelta, rDelta, sDelta);
+
+							if (tDelta.length2() > els::epsilon<float> ||
+								rDelta.length2() > els::epsilon<float>)
+							{
+								//transform
+								transform->position += tDelta;
+								//transform->scale += sDelta;
+							}
+
+
 						}
+					}
+					if (auto mesh = _current->get_if<tc::Mesh>())
+					{
+						auto transform = _current->get_if<tc::Transform>();
+						if(transform)
+							Service<RenderSystem>::Get().Submit(mesh->code, *transform);
 					}
 				}
 
@@ -106,25 +153,49 @@ namespace Tempest
 						static int y = 1;
 						const int one = 1;
 						ImGui::PushItemWidth(padding);
-						if (ImGui::InputScalar("##xby", ImGuiDataType_S32, &x, &one))
+						if (ImGui::InputScalar("X##xby", ImGuiDataType_S32, &x, &one))
 						{
 							x = std::clamp(x, 1, 3);
 						}
 						ImGui::Text(ICON_FA_TIMES);
-						if (ImGui::InputScalar("##yby", ImGuiDataType_S32, &y, &one))
+						if (ImGui::InputScalar("Y##yby", ImGuiDataType_S32, &y, &one))
 						{
 							y = std::clamp(y, 1, 3);
 						}
 						ImGui::PopItemWidth();
-						UI::PaddedSeparator(1.f);
+
+						static auto a = 0;
+						bool check = a != 0;
+						
+						if (ImGui::Checkbox("Bounding" "##ShowBoundingBoxSHape", &check))
+						{
+							if (a != 0)
+								a = 0;
+							else
+								a = 2;
+						}
+
 
 						AABB box;
-						box.min.x = -0.5;
-						box.min.y = -0.5;
-						box.max.x = 0.5;
-						box.max.y = 0.5;
+						box.min.x = -.5f;
+						box.min.z = -.5f;
+						box.min.y = 0;
+
+						box.max.x = .5f + (x-1);
+						box.max.z = .5f + (y-1);
+						box.max.y = a;
+
+						Line l;
+						l.p0 = glm::vec3(-.1, 0, -.1);
+						l.p1 = glm::vec3(.1, 0, .1);
+
+						Line r;
+						r.p0 = glm::vec3(-.1, 0, .1);
+						r.p1 = glm::vec3(.1, 0, -.1);
 						
 						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+						Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 					}
 				}
 

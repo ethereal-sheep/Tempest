@@ -1,0 +1,46 @@
+{
+    "Metadata": {
+        "Type": "Prototype"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    -0.0907299816608429,
+                    0.8428590893745422,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    0.20000000298023225,
+                    0.20000000298023225,
+                    0.20000000298023225
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Mesh"
+            },
+            "Component": {
+                "Code": 1
+            }
+        }
+    ]
+}

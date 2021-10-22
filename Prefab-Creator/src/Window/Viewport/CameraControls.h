@@ -246,8 +246,19 @@ namespace Tempest
 				{
 					if (!els::is_zero(direction))
 					{
+						const float max_angle = glm::radians(270.f);
+						auto rel_pos = orbit_axis - cam.GetPosition();
 
-						
+						start_rotation = cam.GetQuatRotation();
+
+						auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+						auto rot = end_rotation * yaw;
+
+						end_rotation = rot;
+						current_orbit_time = 0.f;
+						total_orbit_time = rotate_time;
+
+						easing = EasingMode::LINEAR;
 					}
 				}
 				else if (io.MouseDown[1]) // rotate around
@@ -277,24 +288,25 @@ namespace Tempest
 				}
 				else if (io.MouseDown[2]) // Pan
 				{
-					//if (!els::is_zero(direction))
-					//{
-					//	auto up = glm::vec3{ 0, 1, 0 };
-					//	auto right = cam.GetLeft();
+					if (!els::is_zero(direction))
+					{
+						const float max_angle = glm::radians(270.f);
+						auto rel_pos = orbit_axis - cam.GetPosition();
 
-					//	auto currentPos = cam.GetPosition();
-					//	auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
-					//	auto newPos = end_position - worldSpaceDirection * pan_speed;
+						start_rotation = cam.GetQuatRotation();
+						auto rot = end_rotation;
+						auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+						auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), left);
+						rot = end_rotation * pitch;
 
+						end_rotation = rot;
+						current_orbit_time = 0.f;
+						total_orbit_time = rotate_time;
 
-					//	current_pos_time = 0.f;
-					//	total_pos_time = pan_time;
+						easing = EasingMode::LINEAR;
 
-					//	start_position = currentPos;
-					//	end_position = newPos;
-
-					//	//cam.SetPosition(newPos);
-					//}
+						//cam.SetPosition(newPos);
+					}
 				}
 
 				else if (abs(io.MouseWheel) > 0.001f)
@@ -400,12 +412,19 @@ namespace Tempest
 					UI::DragFloat3ColorBox("Orbit Axis", "##Orbit Axis", padding, value_ptr(axis), 0.f, 1.f);
 
 					bool check = mode == CameraControlMode::WORLD;
-					if (UI::Checkbox("World", "##CameraMode", padding, &check))
+					if (check)
 					{
-						if (mode != CameraControlMode::WORLD)
-							set_world_camera();
-						else
+						if (ImGui::Button("Use Orbit Camera"))
+						{
 							set_orbit_camera(cam, axis);
+						}
+					}
+					else
+					{
+						if (ImGui::Button("Use World Camera"))
+						{
+							set_world_camera();
+						}
 					}
 				}
 				if (mode == CameraControlMode::WORLD)

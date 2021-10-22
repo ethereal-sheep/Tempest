@@ -92,6 +92,7 @@ namespace Tempest
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)
+			REQUIRE(Mesh)
 		});
 
 		PROTO_CATEGORY(Wall)
