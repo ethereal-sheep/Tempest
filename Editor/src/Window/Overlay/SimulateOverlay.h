@@ -32,6 +32,8 @@ namespace Tempest
 
         void show(Instance&) override;
 
+        void DisplayUnitSection(const ImVec2 start_pos, Entity &unit_type); 
+
         bool OverlayOpen = false;
         unsigned Tab = 0;
 
@@ -43,5 +45,7 @@ namespace Tempest
         Entity Defender = UNDEFINED;
         Entity ActionID = UNDEFINED;
         Entity LinkID = UNDEFINED;
+
+        float padding{ 0.0f };
     };
 }
