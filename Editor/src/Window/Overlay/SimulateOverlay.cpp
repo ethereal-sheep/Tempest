@@ -52,12 +52,12 @@ namespace Tempest
 				const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
 
 				auto tex = tex_map["Assets/SimulationBackdrop.png"];
-				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+				//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
 				ImVec2 point = ImGui::GetCursorPos();
 				{
 
 					ImVec2 Min{ point.x, point.y };
-					ImVec2 Max{ Min.x + viewport->Size.x * 0.91f, Min.y + viewport->Size.y * 0.73f };
+					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y * 0.73f };
 					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
 				}
 
@@ -95,8 +95,8 @@ namespace Tempest
 
 
 				// attack section
-				DisplayUnitSection({ viewport->Size.x * 0.2f,viewport->Size.y * 0.5f }, Attacker);
-				DisplayUnitSection({ viewport->Size.x * 0.8f,viewport->Size.y * 0.5f }, Defender);
+				DisplayUnitSection({ viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, Attacker);
+				DisplayUnitSection({ viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, Defender);
 
 
 				if (UI::UIButton_2("Back", "Back", { viewport->Size.x * 0.1f, viewport->Size.y * 0.9f }, { 0,0 }, FONT_PARA))
@@ -106,7 +106,7 @@ namespace Tempest
 
 				if (UI::UIButton_2("Next", "Next", { viewport->Size.x * 0.9f, viewport->Size.y * 0.9f }, { 0,0 }, FONT_PARA))
 				{
-					OverlayOpen = false;
+					//OverlayOpen = false;
 					auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
 
 					// for testing here
