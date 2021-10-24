@@ -41,6 +41,7 @@
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
 #include "Window/Popup/DefineStatsPopup.h"
+#include "Window/Popup/SimulateSelectionPopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
 
@@ -106,6 +107,7 @@ namespace Tempest
 		instance->register_always<ImportAssetPopup>();
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 		instance->register_always<DefineStatsPopup>();
+		instance->register_always<SimulateSelectionPopup>();
 
 
 		instance->register_always<SaveBrowser>();

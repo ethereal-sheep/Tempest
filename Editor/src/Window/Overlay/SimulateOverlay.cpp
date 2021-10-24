@@ -12,6 +12,7 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "Triggers/SimulationTriggers.h"
+#include "Triggers/Triggers.h"
 
 namespace Tempest
 {
@@ -19,12 +20,31 @@ namespace Tempest
 	{
 		OverlayOpen = true;
 		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar;
-		Attacker = UNDEFINED;
-		Defender = UNDEFINED;
-		ActionID = UNDEFINED;
-		LinkID = UNDEFINED;
+		attacker.Reset();
+		defender.Reset();
+		sequence = UNDEFINED;
 
 		padding = ImGui::GetMainViewport()->Size.y * 0.02f;
+	}
+
+	void SimulateOverlay::confirm_data(const Event& e)
+	{
+		auto a = event_cast<SimulateSelectionConfirm>(e);
+		UnitData& owner = a.is_attacker ? attacker : defender;
+		switch (a.type)
+		{
+		case SIMULATE_POPUP_TYPE::UNIT:
+			owner.unit_id = a.data;
+			break;
+		case SIMULATE_POPUP_TYPE::WEAPON:
+			owner.weapon = a.data;
+			break;
+		case SIMULATE_POPUP_TYPE::ACTION:
+			owner.action = a.data;
+			break;
+		default:
+			break;
+		}
 	}
 
 	void SimulateOverlay::show(Instance& instance)
@@ -85,7 +105,7 @@ namespace Tempest
 
 						if (UI::UIButton_2(conflict.g.name + ": " + std::to_string(i), conflict.g.name + ": " + std::to_string(i), pos, {70.0f,20.0f}, FONT_PARA))
 						{
-							LinkID = id;
+							sequence = id;
 						}
 
 						ImGui::PopID();
@@ -95,8 +115,8 @@ namespace Tempest
 
 
 				// attack section
-				DisplayUnitSection({ viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, Attacker);
-				DisplayUnitSection({ viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, Defender);
+				DisplayUnitSection({ viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
+				DisplayUnitSection({ viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, false);
 
 
 				if (UI::UIButton_2("Back", "Back", { viewport->Size.x * 0.1f, viewport->Size.y * 0.9f }, { 0,0 }, FONT_PARA))
@@ -106,18 +126,18 @@ namespace Tempest
 
 				if (UI::UIButton_2("Next", "Next", { viewport->Size.x * 0.9f, viewport->Size.y * 0.9f }, { 0,0 }, FONT_PARA))
 				{
-					//OverlayOpen = false;
-					auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
-
 					// for testing here
-					for (auto id : view)
-					{
-						if (Attacker == UNDEFINED)
-							Attacker = id;
-						else if (Defender == UNDEFINED)
-							Defender = id;
-					}
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(Attacker, Defender, LinkID);
+					//auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
+
+					//// for testing here
+					//for (auto id : view)
+					//{
+					//	if (attacker.unit_id == UNDEFINED)
+					//		attacker.unit_id = id;
+					//	else if (defender.unit_id == UNDEFINED)
+					//		defender.unit_id = id;
+					//}
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(attacker.unit_id, defender.unit_id, sequence);
 				}	
 
 				{
@@ -379,13 +399,14 @@ namespace Tempest
 
 		}
 	}
-	void SimulateOverlay::DisplayUnitSection(const ImVec2 start_pos, Entity& unit_type)
+	void SimulateOverlay::DisplayUnitSection(const ImVec2 start_pos, bool is_attacker)
 	{
-		(void)unit_type;
 		ImGui::SetCursorPos(start_pos);
+
 		if (UI::UIButton_2("CHARA", "CHARA", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
-			// open popup here
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::UNIT, is_attacker, is_attacker ? attacker.unit_id : defender.unit_id);
 		}
 
 		// character mame
@@ -396,7 +417,8 @@ namespace Tempest
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 4.0f });
 		if (UI::UIButton_2("SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
-
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, is_attacker ? attacker.weapon : defender.weapon);
 		}
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 7.0f });
 		if (UI::UIButton_2("SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))

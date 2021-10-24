@@ -32,9 +32,29 @@ namespace Tempest
 	struct CloseProjectTrigger : public Event {};
 	struct ExportProjectTrigger : public Event {};
 	struct ImportAssetTrigger : public Event {};
+
 	//Popup Trigger
+	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
+	struct SimulatePopupTrigger : public Event
+	{
+		SimulatePopupTrigger(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data) :
+			type{ type }, is_attacker{ is_attacker }, data{ data }{}
+		SIMULATE_POPUP_TYPE type;
+		bool is_attacker;
+		Entity data;
+	};
+
+	//Confirm Trigger
+	struct SimulateSelectionConfirm : public Event
+	{
+		SimulateSelectionConfirm(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data) :
+			type{ type }, is_attacker{ is_attacker }, data{ data }{}
+		SIMULATE_POPUP_TYPE type;
+		bool is_attacker;
+		Entity data;
+	};
 
 	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};
@@ -71,4 +91,5 @@ namespace Tempest
 
 	struct ShowRecentUtil : public Event {};
 	struct AddRecentUtil : public Event {};
+
 }
