@@ -38,6 +38,7 @@ namespace Tempest
             std::array< void*, 2> image_id;
             STATE current_state{ UNHOVER };
             ImVec2 size{ 0,0 };
+            bool is_active{ false };
         };
 
         const char* window_name() override
@@ -56,6 +57,8 @@ namespace Tempest
         void open_popup(const Event& e);
 
         void show(Instance&) override;
+
+        // helpers
         void push_button_style() const;
         void pop_button_style() const;
         void initialise_tabs();
@@ -66,6 +69,9 @@ namespace Tempest
         bool OverlayOpen = false;
         bool IsUnitCreation = false;
         std::array<TabImageData, TOTAL> Tabs;
+        TABS_TYPE CurrentTab{ TABS_TYPE::UNIT };
+        tc::Character NewCharacter;
+        Entity SelectedID = INVALID;
 
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;

@@ -25,9 +25,11 @@ namespace Tempest
 		Tabs[TABS_TYPE::ACTION].current_state = TabImageData::STATE::UNHOVER;
 
 		auto a = event_cast<OpenUnitSheetTrigger>(e);
+
 		if (a.addUnit)
 		{
-		/*	tc::Character* cs = &tc::Character();
+			// TODO: shift this to a function
+			tc::Character* cs = &NewCharacter;
 			auto entity = a.instance.ecs.create();
 			auto meta = a.instance.ecs.emplace<tc::Meta>(entity);
 			meta->name = cs->name;
@@ -35,41 +37,21 @@ namespace Tempest
 			character->name = cs->name;
 
 			for (auto i = 0; i < tc::STAT_TOTAL; i++)
-			{
-
 				character->set_stat(i, cs->get_stat(i));
-			}*/
+
+			NewCharacter = tc::Character();
+			SelectedID = entity;
 		}
-
-		else
-		{
-
-		}
-
-	/*	if (a.addUnit)
-		{
-			IsUnitCreation = true;
-			Title = "Unit Creation";
-		}
-		else
-		{
-			IsUnitCreation = false;
-			Title = "Editing Unit";
-
-			if (a.entityID != UNDEFINED)
-				SelectedID = a.entityID;
-		}*/
+		
+		else if (a.entityID != UNDEFINED)
+			SelectedID = a.entityID;
 	}
 
 	void UnitSheetOverlay::show(Instance& instance)
 	{	
 		tc::Character* cs = nullptr;
 
-		//if(IsUnitCreation)
-		//	cs = &NewCharacter;
-		//else
-		//	cs = instance.ecs.get_if<tc::Character>(SelectedID);
-		
+		cs = instance.ecs.get_if<tc::Character>(SelectedID);
 
 		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
 		Entity StateLineId = UNDEFINED;
@@ -77,11 +59,10 @@ namespace Tempest
 			StateLineId = id;
 		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
 
-		const ImVec4 GrabCol = { 117.f / 255.f,117.f / 255.f,117.f / 255.f,1.f };
-		const ImVec4 HoverCol = { 99.f / 255.f,99.f / 255.f,99.f / 255.f,1.f };
-		const ImVec4 ActiveCol = { 65.f / 255.f,65.f / 255.f,65.f / 255.f,1.f };
+		//const ImVec4 GrabCol = { 117.f / 255.f,117.f / 255.f,117.f / 255.f,1.f };
+		//const ImVec4 HoverCol = { 99.f / 255.f,99.f / 255.f,99.f / 255.f,1.f };
+		//const ImVec4 ActiveCol = { 65.f / 255.f,65.f / 255.f,65.f / 255.f,1.f };
 		
-
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		
 		ImGui::SetNextWindowPos(viewport->Pos);
@@ -97,7 +78,6 @@ namespace Tempest
 				
 				ImVec2 point{ 0,0 };
 				{
-
 					ImVec2 Min{ point.x, point.y };
 					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
 					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
@@ -124,7 +104,7 @@ namespace Tempest
 						auto& charac = instance.ecs.get<tc::Character>(id);
 						if (UI::UIButton_1(charac.name.c_str(), charac.name.c_str(), { cursor.x , cursor.y + i++ * 100 }, { 50,50 }, FONT_PARA))
 						{
-							//data = id;
+							cs = &charac;
 						}
 
 						
@@ -139,30 +119,91 @@ namespace Tempest
 
 				// display unit picture here
 
-
+				//ImGui::SetNextWindowSizeConstraints(); for buttons resize?
+				// 
 				// tabs 
 				{
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.3f, viewport->Size.y * 0.15f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.15f });
 
 					push_button_style();
 
 					render_tabs(TABS_TYPE::UNIT, [&]() {
-						// display the character info
-					});
 
-					ImGui::SameLine();
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.25f });
+						ImGui::BeginChild("##UnitsInformationDisplay", { viewport->Size.x * 0.6f, viewport->Size.y * 0.55f }, true);
+
+						// display the character info
+						float frontPadding = 5.f;
+						ImGui::PushFont(FONT_BODY);
+						ImGui::Dummy({ frontPadding, 0 });
+						ImGui::SameLine();
+						ImGui::Text("Name");
+
+						ImGui::Dummy({ frontPadding, 0 });
+						ImGui::SameLine();
+						ImGui::InputText("##CharacterName", &cs->name);
+						bool NameDisabled = cs->name.size() > 15;
+						ImGui::SameLine();
+						if (NameDisabled)
+						{
+							ImGui::Text("15 Char only");
+						}
+						else
+						{
+							ImGui::Dummy({ 100.f, 10.f });
+						}
+						ImGui::Dummy({ 0, 10.f });
+
+						for (auto i = 0; i < sl->size(); i++)
+						{
+							if ((*sl)(i))
+							{
+								string stat = sl->operator[](i) + " :";
+								string label = "##" + stat;
+								string WeaponData = "";
+								if (cs->weapon != UNDEFINED)
+								{
+									auto weap = instance.ecs.get_if<tc::Weapon>(cs->weapon);
+
+									if (weap->get_stat(i) > 0)
+									{
+										string data = std::to_string(weap->get_stat(i));
+										WeaponData = "( +" + data + " )";
+									}
+									else if (weap->get_stat(i) < 0)
+									{
+										string data = std::to_string(weap->get_stat(i));
+										WeaponData = "( " + data + " )";
+									}
+
+								}
+
+								ImGui::Dummy({ frontPadding, 0 });
+								ImGui::SameLine();
+								ImGui::Text(stat.c_str());
+								ImGui::Dummy({ frontPadding, 0 });
+								ImGui::SameLine();
+								ImGui::PushItemWidth(100.f);
+								ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
+								ImGui::PopItemWidth();
+								ImGui::SameLine();
+								ImGui::Text(WeaponData.c_str());
+								ImGui::Dummy({ 0, 10.f });
+							}
+
+						}
+						ImGui::PopFont();
+
+						ImGui::EndChild();
+					});
 
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
 						// display equipped weapon info
 					});
 
-					ImGui::SameLine();
-
 					render_tabs(TABS_TYPE::ITEM, []() {
-						// not using
+						// not using, i no on-hover item picture :(
 					});
-
-					ImGui::SameLine();
 
 					render_tabs(TABS_TYPE::ACTION, [&]() {
 						// display list of actions
@@ -172,10 +213,10 @@ namespace Tempest
 				}
 
 				// display unit information function
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.25f });
+			/*	ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.25f });
 				ImGui::BeginChild("##UnitsInformationDisplay", { viewport->Size.x * 0.6f, viewport->Size.y * 0.55f }, true);
 
-				ImGui::EndChild();
+				ImGui::EndChild();*/
 
 
 				// scuff back button
@@ -729,15 +770,33 @@ namespace Tempest
 	template<typename F>
 	void UnitSheetOverlay::render_tabs(TABS_TYPE type, F&& func)
 	{
+		ImVec2 prev_cursor_pos{ 0.f,0.f };
+
 		if (ImGui::ImageButton(Tabs[type].image_id[Tabs[type].current_state], Tabs[type].size))
 		{
-			func();
+			Tabs[CurrentTab].current_state = TabImageData::STATE::UNHOVER;
+			Tabs[CurrentTab].is_active = false;
+			Tabs[type].is_active = true;
+
+			CurrentTab = type;
 		}
 
 		if (ImGui::IsItemHovered())
 			Tabs[type].current_state = TabImageData::STATE::HOVER;
 		else
 			Tabs[type].current_state = TabImageData::STATE::UNHOVER;
+
+		if (type != TABS_TYPE::ACTION)
+		{
+			ImGui::SameLine();
+			prev_cursor_pos = ImGui::GetCursorPos();
+		}
+
+		if (Tabs[type].is_active)
+			func();
+
+		// Get ready for next render of tab
+		ImGui::SetCursorPos(prev_cursor_pos);
 	}
 
 	void UnitSheetOverlay::initialise_tabs()
