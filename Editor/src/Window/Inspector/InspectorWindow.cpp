@@ -320,7 +320,7 @@ namespace Tempest
 					if (ImGui::Button("Show/Edit"))
 					{
 						//show = true;
-						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance.selected);
+						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false,instance, instance.selected);
 					}
 
 				}

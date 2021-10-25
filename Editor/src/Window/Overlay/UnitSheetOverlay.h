@@ -18,6 +18,28 @@ namespace Tempest
 {
     class UnitSheetOverlay : public Window
     {
+        enum TABS_TYPE
+        {
+            UNIT,
+            WEAPON,
+            ITEM,
+            ACTION,
+            TOTAL
+        };
+
+        struct TabImageData
+        {
+            enum STATE
+            {
+                UNHOVER,
+                HOVER
+            };
+
+            std::array< void*, 2> image_id;
+            STATE current_state{ UNHOVER };
+            ImVec2 size{ 0,0 };
+        };
+
         const char* window_name() override
         {
             return "";
@@ -28,16 +50,26 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenUnitSheetTrigger>(&UnitSheetOverlay::open_popup, this);
+
+            initialise_tabs();
         }
         void open_popup(const Event& e);
 
         void show(Instance&) override;
+        void push_button_style() const;
+        void pop_button_style() const;
+        void initialise_tabs();
+
+        template<typename F>
+        void render_tabs(TABS_TYPE type, F&& func);
 
         bool OverlayOpen = false;
-        bool AddWeaponPopup = false;
+        bool IsUnitCreation = false;
+        std::array<TabImageData, TOTAL> Tabs;
+
+   /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;
         bool CreateOpen = false;
-        bool IsUnitCreation = false;
         std::string Title = "Unit Creation";
         tc::Weapon NewWeap;
         tc::Weapon EditWeap;
@@ -45,8 +77,7 @@ namespace Tempest
         Entity CurSelection = UNDEFINED;
         Entity SelectedID = INVALID;
         std::string NewStatName = "Stat";
-        int NewStatValue = 0;
-
+        int NewStatValue = 0;*/
 
     };
 }
