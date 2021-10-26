@@ -14,7 +14,6 @@
 #include <stb_image.h>
 #include "Logger/Log.h"
 #include "TMath.h"
-#include "tinyddsloader.h"
 
 namespace Tempest
 {
@@ -95,6 +94,7 @@ namespace Tempest
 		Texture_Format m_Format = Texture_Format::RGB;
 
 	public:
+		explicit Texture(const std::string& file, [[maybe_unused]] int d);
 		explicit Texture(const std::string & file, bool flip = true);
 		explicit Texture(const std::string & right,
 			const std::string & left,
@@ -105,6 +105,7 @@ namespace Tempest
 		explicit Texture(uint32_t width, uint32_t height, Texture_Format format, Texture_Type type);
 		~Texture();
 
+		void LoadDDS(const std::string& file);
 		Texture(const Texture&) = delete;
 		Texture& operator=(const Texture&) = delete;
 	

@@ -137,7 +137,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
-      <Command>xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mtd.dll" "$(TargetDir)" /q</Command>
+      <Command>xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mtd.dll" "$(TargetDir)" /q
+xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
       <Outputs>output;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -164,7 +165,7 @@
     </Link>
     <CustomBuildStep>
       <Command>xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mt.dll" "$(TargetDir)" /q
-</Command>
+xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q</Command>
       <Outputs>output;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>

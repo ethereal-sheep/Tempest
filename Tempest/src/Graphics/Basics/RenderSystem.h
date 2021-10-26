@@ -95,6 +95,8 @@ namespace Tempest
         float specularStrength = 0.5f;
         const GLfloat near_plane = 1.0f, far_plane = 25.0f;
 
+ 
+
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);
