@@ -408,12 +408,12 @@ namespace Tempest
 				ImGui::Separator();
 				{
 
-					static glm::vec3 axis;
-					UI::DragFloat3ColorBox("Orbit Axis", "##Orbit Axis", padding, value_ptr(axis), 0.f, 1.f);
 
 					bool check = mode == CameraControlMode::WORLD;
 					if (check)
 					{
+						static glm::vec3 axis;
+						UI::DragFloat3ColorBox("Orbit Axis", "##Orbit Axis", padding, value_ptr(axis), 0.f, 1.f);
 						if (ImGui::Button("Use Orbit Camera"))
 						{
 							set_orbit_camera(cam, axis);
