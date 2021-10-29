@@ -213,19 +213,26 @@ namespace Tempest
 
 							
 							tpath s(output);
-							// check if s is valid
-							if (fs::exists(s))
-							{
-								std::string cmd("Asset-Compiler\\Asset-Compiler.exe ");
-								cmd += s.string();
-								LOG("Starting compilation...");
-								[[maybe_unused]] auto err = system(cmd.c_str());
-								LOG("...compilation end");
-							}
-							else
+							// check if s is valid and resource have been targeted
+							if (!fs::exists(s))
 							{
 								// error
 								LOG_ERROR("Bad file!");
+							}
+							else if (!fs::exists(instance.get_full_path()))
+							{
+								// error
+								LOG_ERROR("Resources folder not targeted!");
+							}
+							else
+							{
+								std::string cmd("Asset-Compiler\\Asset-Compiler.exe ");
+								cmd += s.string();
+								cmd += " ";
+								cmd += instance.get_full_path().string();
+								LOG("Starting compilation...");
+								[[maybe_unused]] auto err = system(cmd.c_str());
+								LOG("...compilation end");
 							}
 
 						}
