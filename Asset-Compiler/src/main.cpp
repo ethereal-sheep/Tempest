@@ -64,6 +64,8 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 		m.pos.push_back(glm::vec3(p.x, p.y, p.z));
 		m.norm.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));
 		m.tex.push_back(glm::vec2(pTexCoord->x, pTexCoord->y));
+
+		std::cout << "Normals: " << pNormal->x << ", " << pNormal->y << ", " << pNormal->z << std::endl;
 	}
 
 	for (size_t i = 0; i < mesh->mNumFaces; ++i)
@@ -87,9 +89,10 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 bool WriteToFile(const Mesh& m, const std::string& path)
 {
 	std::filesystem::path p{ path };
-	std::string name = (p.replace_extension(".a")).string();
-
-	std::ofstream file{ name };
+	auto name = p.replace_extension(".a");
+	std::string new_path = "../Resource/Models/";
+	new_path.append((name.filename()).string());
+	std::ofstream file{ new_path };
 	if (!file.is_open())
 	{
 		std::cout << "Failed to Open File" << std::endl;
