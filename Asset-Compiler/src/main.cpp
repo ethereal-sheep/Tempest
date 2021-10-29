@@ -11,6 +11,7 @@
 #include <fstream>
 #include <glm.hpp>
 #include <sstream>
+#include "Tempest/src/Logger/Log.h"
 
 thread_local Assimp::Importer s_Importer;
 thread_local const aiScene* s_Scene;
@@ -65,7 +66,7 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 		m.norm.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));
 		m.tex.push_back(glm::vec2(pTexCoord->x, pTexCoord->y));
 
-		std::cout << "Normals: " << pNormal->x << ", " << pNormal->y << ", " << pNormal->z << std::endl;
+		//std::cout << "Normals: " << pNormal->x << ", " << pNormal->y << ", " << pNormal->z << std::endl;
 	}
 
 	for (size_t i = 0; i < mesh->mNumFaces; ++i)
@@ -90,9 +91,7 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 {
 	std::filesystem::path p{ path };
 	auto name = p.replace_extension(".a");
-	std::string new_path = "../Resource/Models/";
-	new_path.append((name.filename()).string());
-	std::ofstream file{ new_path };
+	std::ofstream file{ name.string() };
 	if (!file.is_open())
 	{
 		std::cout << "Failed to Open File" << std::endl;
@@ -306,6 +305,15 @@ int main(int argc, char* argv[])
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	int t = argc;
+	std::filesystem::path pt{ argv[1] };
+	std::string ext = pt.extension().string();
+	if (ext != ".fbx" || ext != ".3ds")
+	{
+		//LOG("Incorrect File Type!");
+		std::cout << "Incorrect File Type" << std::endl;
+		return -1;
+	}
+
 	while (t > 1)
 	{	
 		if (!LoadModel(argv[1]))
@@ -320,6 +328,7 @@ int main(int argc, char* argv[])
 			return 0;
 		}
 	}
+	//LOG_WARN("No File Specified!");
 	std::cout << "No File Specified!" << std::endl;
 	return -1;
 }
