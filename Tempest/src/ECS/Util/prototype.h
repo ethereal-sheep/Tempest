@@ -88,6 +88,10 @@ namespace Tempest
 			reader.EndObject();
 		}
 
+		const string& get_name() const {
+			return name;
+		}
+
 		tpath save(const tpath& folder) const
 		{
 			// if directory doesn't exist, create new_directory

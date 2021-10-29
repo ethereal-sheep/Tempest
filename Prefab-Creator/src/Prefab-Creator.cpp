@@ -23,15 +23,22 @@
 
 
 #include "Audio/AudioEngine.h"
-#include "Instance/NullTimeInstance.h"
+#include "Instance/CreatorInstance.h"
 #include "Font.h"
 
 // window includes
 #include "Window/Popup/BottomRightOverlayPopup.h"
 #include "Window/Popup/ErrorMsgPopup.h"
+#include "Window/Popup/RetargetingPopup.h"
+#include "Window/Popup/SettingsPopup.h"
 #include "Window/FileBrowser/OpenFile.h"
 #include "Window/FileBrowser/ImportBrowser.h"
+#include "Window/FileBrowser/TargetingBrowser.h"
 #include "Window/Home.h"
+#include "Window/Viewport/ViewportWindow.h"
+#include "Window/Menubar/Menubar.h"
+#include "Window/Explorer/PrototypeExplorer.h"
+#include "Window/Explorer/PrototypeInspector.h"
 
 #include "ECS/Test/test_entity.h"
 
@@ -48,7 +55,7 @@ namespace Tempest
 	class Prefab_Creator : public Application
 	{
 
-		NullTimeInstance instance;
+		CreatorInstance instance;
 
 	public:
 		Prefab_Creator()
@@ -73,11 +80,16 @@ namespace Tempest
 			init_file_dialog();
 
 			// init windows
-			instance.register_window<Home>();
+			instance.register_window<ViewportWindow>();
+			instance.register_always<Menubar>();
 			instance.register_always<BottomRightOverlayPopup>();
+			instance.register_always<Home>();
 			instance.register_always<ErrorMsgPopup>();
-			//instance.register_always<OpenFile>();
 			instance.register_always<ImportBrowser>();
+			instance.register_always<RetargetingPopup>();
+			instance.register_always<SettingPopup>();
+			instance.register_always<TargetingBrowser>();
+			instance.register_always<PrototypeExplorer>();
 			
 			/*
 				viewport window
@@ -109,55 +121,46 @@ namespace Tempest
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
+			ImGuizmo::BeginFrame();
 			/*--------------------------------------------------------------------*/
+			//ImGuiIO& io = ImGui::GetIO();
+			//ImGuiViewport* viewport = ImGui::GetMainViewport();
+			//ImGuiWindowFlags window_flags =
+			//	ImGuiWindowFlags_NoDocking |
+			//	ImGuiWindowFlags_NoTitleBar |
+			//	ImGuiWindowFlags_NoCollapse |
+			//	ImGuiWindowFlags_NoResize |
+			//	ImGuiWindowFlags_NoMove |
+			//	ImGuiWindowFlags_NoBringToFrontOnFocus |
+			//	ImGuiWindowFlags_NoBackground |
+			//	ImGuiWindowFlags_NoNavFocus;
 
+			//ImGui::DockSpaceOverViewport(viewport, ImGuiDockNodeFlags_PassthruCentralNode);
 
-			 ImGuiIO& io = ImGui::GetIO();
-			 ImGuiViewport* viewport = ImGui::GetMainViewport();
-			 ImGuiWindowFlags window_flags =
-			 	ImGuiWindowFlags_NoDocking |
-			 	ImGuiWindowFlags_NoTitleBar |
-			 	ImGuiWindowFlags_NoCollapse |
-			 	ImGuiWindowFlags_NoResize |
-			 	ImGuiWindowFlags_NoMove |
-			 	ImGuiWindowFlags_NoBringToFrontOnFocus |
-			 	ImGuiWindowFlags_NoBackground |
-			 	ImGuiWindowFlags_NoNavFocus;
+			//ImGui::SetNextWindowPos(viewport->WorkPos);
+			//ImGui::SetNextWindowSize(viewport->WorkSize);
+			//ImGui::SetNextWindowViewport(viewport->ID);
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+			//if (ImGui::Begin("Main", nullptr, window_flags))
+			//{
+			//	ImGui::PopStyleVar(3);
+			//	// DockSpace
+			//	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			//	{
+			//		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			//		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), 0);
+			//	}
+			//	//ImGui::Image((ImTextureID)Service<RenderSystem>::Get().GetColourBuffer(), {1600, 900});
 
-			ImGui::DockSpaceOverViewport(viewport, ImGuiDockNodeFlags_PassthruCentralNode );
-
-			ImGui::SetNextWindowPos(viewport->WorkPos);
-			ImGui::SetNextWindowSize(viewport->WorkSize);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			if (ImGui::Begin("Main", nullptr, window_flags))
-			{
-				ImGui::PopStyleVar(3);
-				// DockSpace
-				if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-				{
-					ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-					ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f),0);
-				}
-				//ImGui::Image((ImTextureID)Service<RenderSystem>::Get().GetColourBuffer(), {1600, 900});
-
-			}
-			ImGui::End();
-
-
+			//}
+			//ImGui::End();
 			instance.OnRender();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();
-			//wglMakeCurrent(AppHandler::GetContext()->GetHDC(), AppHandler::GetContext()->GetHGLRC());
-
-			//glClear(GL_COLOR_BUFFER_BIT);
-
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			//ImGui::UpdatePlatformWindows();
-			//ImGui::RenderPlatformWindowsDefault();
 			/*--------------------------------------------------------------------*/
 		}
 
@@ -210,19 +213,26 @@ namespace Tempest
 
 							
 							tpath s(output);
-							// check if s is valid
-							if (fs::exists(s))
-							{
-								std::string cmd("Asset-Compiler\\Asset-Compiler.exe ");
-								cmd += s.string();
-								LOG("Starting compilation...");
-								auto err = system(cmd.c_str());
-								LOG("...compilation end");
-							}
-							else
+							// check if s is valid and resource have been targeted
+							if (!fs::exists(s))
 							{
 								// error
 								LOG_ERROR("Bad file!");
+							}
+							else if (!fs::exists(instance.get_full_path()))
+							{
+								// error
+								LOG_ERROR("Resources folder not targeted!");
+							}
+							else
+							{
+								std::string cmd("Asset-Compiler\\Asset-Compiler.exe ");
+								cmd += s.string();
+								cmd += " ";
+								cmd += instance.get_full_path().string();
+								LOG("Starting compilation...");
+								[[maybe_unused]] auto err = system(cmd.c_str());
+								LOG("...compilation end");
 							}
 
 						}
