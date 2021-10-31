@@ -17,6 +17,7 @@
 #include "Util.h"
 #include "TMath.h"
 #include "Util/Range.h"
+#include <glm.hpp>
 
 namespace Tempest
 {

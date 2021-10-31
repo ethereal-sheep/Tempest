@@ -356,6 +356,7 @@ namespace Tempest
 	}
 	void init_ui_textures()
 	{
+
 		for (auto entry : fs::directory_iterator(R"(Assets/)"))
 		{
 			try
@@ -367,6 +368,8 @@ namespace Tempest
 				LOG_WARN("{0} cannot be loaded!", entry.path().string());
 			}
 		}
+		LOG_ASSERT(fs::exists("Assets/dds_test.dds"));
+
 	}
 	void clear_ui_textures()
 	{

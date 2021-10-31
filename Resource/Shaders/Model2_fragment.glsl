@@ -193,4 +193,5 @@ void main()
 		color = pow(color, vec3(1.0 / 2.2));
 
 	fs_color = vec4(color * vec3(texture(diffuseTexture, vs_tex)), 1.0f);
+	//fs_color = texture(diffuseTexture, vs_tex);
 }
