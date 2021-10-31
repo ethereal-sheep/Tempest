@@ -53,12 +53,6 @@ namespace Tempest
 
 		cs = instance.ecs.get_if<tc::Character>(SelectedID);
 
-		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
-		Entity StateLineId = UNDEFINED;
-		for (auto id : StatsView)
-			StateLineId = id;
-		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
-
 		//const ImVec4 GrabCol = { 117.f / 255.f,117.f / 255.f,117.f / 255.f,1.f };
 		//const ImVec4 HoverCol = { 99.f / 255.f,99.f / 255.f,99.f / 255.f,1.f };
 		//const ImVec4 ActiveCol = { 65.f / 255.f,65.f / 255.f,65.f / 255.f,1.f };
@@ -128,85 +122,20 @@ namespace Tempest
 					push_button_style();
 
 					render_tabs(TABS_TYPE::UNIT, [&]() {
-
-						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.25f });
-						ImGui::BeginChild("##UnitsInformationDisplay", { viewport->Size.x * 0.6f, viewport->Size.y * 0.55f }, true);
-
-						// display the character info
-						float frontPadding = 5.f;
-						ImGui::PushFont(FONT_BODY);
-						ImGui::Dummy({ frontPadding, 0 });
-						ImGui::SameLine();
-						ImGui::Text("Name");
-
-						ImGui::Dummy({ frontPadding, 0 });
-						ImGui::SameLine();
-						ImGui::InputText("##CharacterName", &cs->name);
-						bool NameDisabled = cs->name.size() > 15;
-						ImGui::SameLine();
-						if (NameDisabled)
-						{
-							ImGui::Text("15 Char only");
-						}
-						else
-						{
-							ImGui::Dummy({ 100.f, 10.f });
-						}
-						ImGui::Dummy({ 0, 10.f });
-
-						for (auto i = 0; i < sl->size(); i++)
-						{
-							if ((*sl)(i))
-							{
-								string stat = sl->operator[](i) + " :";
-								string label = "##" + stat;
-								string WeaponData = "";
-								if (cs->weapon != UNDEFINED)
-								{
-									auto weap = instance.ecs.get_if<tc::Weapon>(cs->weapon);
-
-									if (weap->get_stat(i) > 0)
-									{
-										string data = std::to_string(weap->get_stat(i));
-										WeaponData = "( +" + data + " )";
-									}
-									else if (weap->get_stat(i) < 0)
-									{
-										string data = std::to_string(weap->get_stat(i));
-										WeaponData = "( " + data + " )";
-									}
-
-								}
-
-								ImGui::Dummy({ frontPadding, 0 });
-								ImGui::SameLine();
-								ImGui::Text(stat.c_str());
-								ImGui::Dummy({ frontPadding, 0 });
-								ImGui::SameLine();
-								ImGui::PushItemWidth(100.f);
-								ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
-								ImGui::PopItemWidth();
-								ImGui::SameLine();
-								ImGui::Text(WeaponData.c_str());
-								ImGui::Dummy({ 0, 10.f });
-							}
-
-						}
-						ImGui::PopFont();
-
-						ImGui::EndChild();
+						UnitSheetOverlay::display_unit_stats(*viewport, instance, *cs);
 					});
 
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
-						// display equipped weapon info
+						UnitSheetOverlay::display_weapon_stats(*viewport, instance, *cs);
 					});
 
-					render_tabs(TABS_TYPE::ITEM, []() {
+					render_tabs(TABS_TYPE::ITEM, [&]() {
 						// not using, i no on-hover item picture :(
+						UnitSheetOverlay::display_items(*viewport, instance, *cs);
 					});
 
 					render_tabs(TABS_TYPE::ACTION, [&]() {
-						// display list of actions
+						UnitSheetOverlay::display_actions(*viewport, instance, *cs);
 					});
 
 					pop_button_style();
@@ -793,7 +722,10 @@ namespace Tempest
 		}
 
 		if (Tabs[type].is_active)
+		{
 			func();
+		}
+			
 
 		// Get ready for next render of tab
 		ImGui::SetCursorPos(prev_cursor_pos);
@@ -820,5 +752,126 @@ namespace Tempest
 		Tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ActionTabLit.png"]->GetID());
 		Tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/ActionTabUnlit.png"]->GetWidth()),
 											   static_cast<float>(tex_map["Assets/ActionTabUnlit.png"]->GetHeight()) };
+	}
+
+	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const
+	{
+		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+		Entity StateLineId = UNDEFINED;
+		for (auto id : StatsView)
+			StateLineId = id;
+		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
+
+		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+		ImGui::BeginChild("##UnitsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
+
+		// display the character info
+		float frontPadding = 5.f;
+		ImGui::PushFont(FONT_BODY);
+		ImGui::Dummy({ frontPadding, 0 });
+		ImGui::SameLine();
+		ImGui::Text("Name");
+
+		ImGui::Dummy({ frontPadding, 0 });
+		ImGui::SameLine();
+		ImGui::InputText("##CharacterName", &cs.name);
+		bool NameDisabled = cs.name.size() > 15;
+		ImGui::SameLine();
+		if (NameDisabled)
+		{
+			ImGui::Text("15 Char only");
+		}
+		else
+		{
+			ImGui::Dummy({ 100.f, 10.f });
+		}
+		ImGui::Dummy({ 0, 10.f });
+
+		for (auto i = 0; i < sl->size(); i++)
+		{
+			if ((*sl)(i))
+			{
+				string stat = sl->operator[](i) + " :";
+				string label = "##" + stat;
+				string WeaponData = "";
+				if (cs.weapon != UNDEFINED)
+				{
+					auto weap = instance.ecs.get_if<tc::Weapon>(cs.weapon);
+
+					if (weap->get_stat(i) > 0)
+					{
+						string data = std::to_string(weap->get_stat(i));
+						WeaponData = "( +" + data + " )";
+					}
+					else if (weap->get_stat(i) < 0)
+					{
+						string data = std::to_string(weap->get_stat(i));
+						WeaponData = "( " + data + " )";
+					}
+
+				}
+
+				ImGui::Dummy({ frontPadding, 0 });
+				ImGui::SameLine();
+				ImGui::Text(stat.c_str());
+				ImGui::Dummy({ frontPadding, 0 });
+				ImGui::SameLine();
+				ImGui::PushItemWidth(100.f);
+				ImGui::InputInt(label.c_str(), &cs.get_stat(i), 0);
+				ImGui::PopItemWidth();
+				ImGui::SameLine();
+				ImGui::Text(WeaponData.c_str());
+				ImGui::Dummy({ 0, 10.f });
+			}
+
+		}
+		ImGui::PopFont();
+
+		ImGui::EndChild();
+	}
+
+	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const
+	{
+		float frontPadding = 150.f;
+
+		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+		ImGui::BeginChild("##WeaponsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
+		if (cs.weapon != UNDEFINED) // change this to multiple weapons
+		{
+			auto& weap = instance.ecs.get<tc::Weapon>(cs.weapon);
+			ImGui::Dummy({ frontPadding, 0 });
+			ImGui::SameLine();
+			if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { ImGui::GetCursorPosX(), ImGui::GetCursorPosY()}, { 40.f, 20.f }, FONT_BODY))
+			{
+				//	EditWeaponPopup = true;
+				//	EditWeap = weap;
+			}
+		}
+
+		ImGui::Dummy({ frontPadding, 0 }); // edit this 
+		ImGui::SameLine();
+		if (UI::UIButton_2("+", "+", ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() + 30.0f }, {10,0}, FONT_BODY))
+		{
+			// open weapon page
+		}
+
+		ImGui::EndChild();
+	}
+
+	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const
+	{
+		(void)viewport;
+		(void)instance;
+		(void)cs;
+	}
+
+	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const
+	{
+		(void)instance;
+		(void)cs;
+		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+		ImGui::BeginChild("##ActionsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
+
+		ImGui::EndChild();
 	}
 }
