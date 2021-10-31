@@ -191,6 +191,7 @@
     <ClCompile Include="src\Asset\Texture\TextureAsset.cpp" />
     <ClCompile Include="src\Asset\Texture\TextureLoader.cpp" />
     <ClCompile Include="src\ECS\Test\test_ecs.cpp" />
+    <ClCompile Include="src\ECS\Test\test_scene.cpp" />
     <ClCompile Include="src\Graphics\Basics\FBO.cpp" />
     <ClCompile Include="src\Graphics\Basics\FrameBuffer.cpp" />
     <ClCompile Include="src\Graphics\Basics\GeometryFactory.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\PPS.h" />
     <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
+    <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\ECS\Systems\Systems.h" />
     <ClInclude Include="src\ECS\Test\test_entity.h" />
     <ClInclude Include="src\ECS\Util\coptional.h" />

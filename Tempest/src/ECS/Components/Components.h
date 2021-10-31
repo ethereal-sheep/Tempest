@@ -609,7 +609,7 @@ namespace Tempest
 		}															\
 		else {														\
 			auto c = ecs.emplace<tc::ComponentName>();				\
-			reader.Member("Component", *c);							\
+			if(c) reader.Member("Component", *c);					\
 		}															\
 	}																\
 		break														\

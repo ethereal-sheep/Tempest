@@ -79,7 +79,7 @@ namespace Tempest
 
 			prototype create() const
 			{
-				prototype p(type_info);
+				prototype p(type_info, type_info);
 				for (auto fn : create_fns) fn(p);
 				return p;
 			}

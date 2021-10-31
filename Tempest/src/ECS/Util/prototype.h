@@ -31,17 +31,17 @@ namespace Tempest
 	// designer creates prototype from prototype category
 	class prototype final
 	{
-		friend class prototype_container;
-		string name = "Prototype";
 	public:
+		string cat = "";
+		string name = "Prototype";
 		static const bool is_entity_keyed = false;
 
-		prototype(const string& s = "Prototype") : name{s}
+		prototype(const string& c = "Wall", const string& s = "Prototype") : cat{ c }, name { s }
 		{
 			// empty prototype
 		}
 
-		prototype(const tpath& file) : name{ file.stem().string() }
+		prototype(const tpath& file) : cat{ file.parent_path().stem().string() }, name { file.stem().string() }
 		{
 			// throw if fail
 			Serializer serializer;
@@ -57,6 +57,7 @@ namespace Tempest
 			string proto;
 			reader.StartMeta();
 			reader.Member("Type", proto);
+			reader.Member("Category", cat);
 			reader.EndMeta();
 
 			if (proto != "Prototype")
@@ -96,7 +97,7 @@ namespace Tempest
 		{
 			// if directory doesn't exist, create new_directory
 			if (!std::filesystem::exists(folder))
-				std::filesystem::create_directory(folder);
+				std::filesystem::create_directories(folder);
 
 			// delete existing
 
@@ -105,6 +106,7 @@ namespace Tempest
 			writer.StartObject();
 			writer.StartMeta();
 			writer.Member("Type", "Prototype");
+			writer.Member("Category", cat);
 			writer.EndMeta();
 
 
@@ -125,7 +127,12 @@ namespace Tempest
 
 			writer.EndObject();
 
-			tpath target = folder / (name + ".json");
+
+
+			tpath target = folder;
+			if (fs::is_directory(target))
+				target /= (name + ".json");
+
 			Serializer::SaveJson(target, writer.GetString());
 			return target;
 		}
@@ -138,6 +145,7 @@ namespace Tempest
 		prototype& operator=(const prototype& rhs)
 		{
 			name = rhs.name;
+			cat = rhs.cat;
 			components.clear();
 			for (auto& [hash, ptr] : rhs.components)
 			{
@@ -203,7 +211,8 @@ namespace Tempest
 		{
 			// create a prefab with an instance of this
 			prefab p;
-			p.name = name;
+			p.proto = name;
+			p.cat = cat;
 			for (auto& [hash, ptr] : components)
 				p.components[hash] = ptr->instance();
 			return p;

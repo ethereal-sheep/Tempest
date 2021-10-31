@@ -27,6 +27,7 @@
 #include "Util/GuizmoController.h"
 
 #include "Audio/AudioEngine.h"
+#include "ECS/Test/test_entity.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -70,6 +71,8 @@ namespace Tempest
 			init_file_dialog();
 			init_sounds();
 			init_ui_textures();
+
+			testing_scene();
 		}
 
 		void OnUpdate() override

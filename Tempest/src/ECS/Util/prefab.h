@@ -21,19 +21,28 @@ namespace Tempest
 	class prefab
 	{
 		friend class prototype;
+		friend class Scene;
 
-		string name;
+		string cat;
+		string proto;
+		tc::Transform transform;
 
-		// only prototype can create a prefab
+		// only prototype and scene can create a prefab
 		prefab() = default;
 
 	public:
+		static const bool is_entity_keyed = false;
+
 		prefab(const prefab& rhs)
 		{
 			*this = rhs;
 		}
 		prefab& operator=(const prefab& rhs)
 		{
+			cat = rhs.cat;
+			proto = rhs.proto;
+			transform = rhs.transform;
+
 			components.clear();
 			for (auto& [hash, ptr] : rhs.components)
 			{
@@ -122,6 +131,67 @@ namespace Tempest
 				components.at(t_hash<Component>()).get())->force();
 		}
 
+		template<typename Component>
+		Component* emplace()
+		{
+			if (!has<Component>())
+				return nullptr;
+
+			return static_cast<coptional<Component>*>(
+				components.at(t_hash<Component>()).get())->get_if();
+		}
+
+		
+
+		void serialize(Writer& writer)
+		{
+			writer.StartArray("Components");
+			for (auto& [hash, ptr] : components)
+			{
+				// serialize only if overriding
+				if (ptr->is_overriding())
+				{
+					writer.StartObject();
+					writer.StartMeta();
+					writer.Member("Type", ptr->type_info);
+					writer.EndMeta();
+					ptr->serialize(writer);
+
+					writer.EndObject();
+				}
+			}
+
+			writer.EndArray();
+		}
+
+		void deserialize(Reader& reader)
+		{
+			size_t size;
+			reader.StartArray("Components", &size);
+			for (size_t i = 0; i < size; ++i)
+			{
+				reader.StartObject();
+
+				string typeinfo;
+				reader.StartMeta();
+				reader.Member("Type", typeinfo);
+				reader.EndMeta();
+
+				auto type = magic_enum::enum_cast<ComponentType>(typeinfo);
+				if (!type.has_value())
+				{
+					LOG_WARN("Component of type " + typeinfo + " cannot be found!");
+					reader.EndObject();
+					continue;
+				}
+
+				deserialize_helper(reader, *this, *type);
+
+				reader.EndObject();
+			}
+			reader.EndArray();
+		}
+		
 	private:
 		tmap<size_t, tuptr<c_base>> components;
 	};

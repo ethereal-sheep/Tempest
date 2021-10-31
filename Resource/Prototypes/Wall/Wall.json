@@ -1,6 +1,7 @@
 {
     "Metadata": {
-        "Type": "Prototype"
+        "Type": "Prototype",
+        "Category": "Wall"
     },
     "Components": [
         {

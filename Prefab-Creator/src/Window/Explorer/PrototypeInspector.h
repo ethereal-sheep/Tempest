@@ -6,38 +6,61 @@ namespace Tempest
 {
 	class PrototypeInspector
 	{
-		prototype* _current = nullptr;
-		prototype* _next = nullptr;
+		tuptr<prototype> _current = nullptr;
+
+		tpath _current_path;
+		tpath _next_path;
 
 		string _current_cat;
 		string _next_cat;
 
-		enum struct State {
-			SAVE,
-			UPDATE,
-			LOAD
-		};
-
-		
-
 
 	public:
 
-		void show(tpath path)
+		void show()
 		{
-			if (_current != _next)
+			if (_current_path != _next_path)
 			{
 				// save the current
 				if (_current)
 				{
 					// check if folder exist
-					auto folder = path / _current_cat;
+
+					auto folder = _current_path.parent_path();
 					if (!fs::exists(folder))
 						fs::create_directories(folder);
 
-					_current->save(folder);
+					_current->save(folder / (_current->name + ".json"));
 				}
-				_current = _next;
+
+
+				// if next file exists, create new prototype from file if possible
+				if(fs::exists(_next_path))
+				{
+					try
+					{
+						_current = make_uptr<prototype>(_next_path);
+					}
+					catch (const std::exception&)
+					{
+						LOG_WARN("Could not load prototype file: {}", _next_path.string());
+						_next_path = "";
+						_next_cat = "";
+					}
+				}
+				else if(_next_path != "")
+				{
+					LOG_WARN("Prototype file cannot be found: {}", _next_path.string());
+					_next_path = "";
+					_next_cat = "";
+					_current.reset();
+				}
+				else
+				{
+					_current.reset();
+				}
+
+				_current_path = _next_path;
 				_current_cat = _next_cat;
 			}
 			else
@@ -177,13 +200,13 @@ namespace Tempest
 
 
 						AABB box;
-						box.min.x = -.5f;
-						box.min.z = -.5f;
+						box.min.x = -.5f - (x-1)/2.f;
+						box.min.z = -.5f - (y-1)/2.f;
 						box.min.y = 0;
 
-						box.max.x = .5f + (x-1);
-						box.max.z = .5f + (y-1);
-						box.max.y = a;
+						box.max.x = .5f + (x-1)/2.f;
+						box.max.z = .5f + (y-1)/2.f;
+						box.max.y = (float)a;
 
 						Line l;
 						l.p0 = glm::vec3(-.1, 0, -.1);
@@ -277,22 +300,34 @@ namespace Tempest
 				ImGui::End();
 
 				if (!p_open)
-					select(nullptr, "");
+					select("", "");
 			}
 
 
 
 		}
 
-		void select(prototype* next_ptr, string category)
+		void select(tpath path, string category)
 		{
-			_next = next_ptr;
+			_next_path = std::move(path);
 			_next_cat = std::move(category);
+		}
+
+		bool is_selected(tpath path)
+		{
+			if(!_current)
+				return false;
+
+			auto folder = _current_path.parent_path();
+			if (path == folder / (_current->name + ".json"))
+				return true;
+
+			return false;
 		}
 
 		prototype* current()
 		{
-			return _current;
+			return _current.get();
 		}
 	};
 }

@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Door"
+        "Category": "Obstacle"
     },
     "Components": [
         {
@@ -18,8 +18,8 @@
             },
             "Component": {
                 "Position": [
-                    -0.2317471206188202,
-                    0.10841009765863419,
+                    0.0,
+                    0.0,
                     0.0
                 ],
                 "Rotation": [
@@ -29,18 +29,10 @@
                     1.0
                 ],
                 "Scale": [
-                    0.10000000149011612,
-                    0.10000000149011612,
-                    0.10000000149011612
+                    1.0,
+                    1.0,
+                    1.0
                 ]
-            }
-        },
-        {
-            "Metadata": {
-                "Type": "Mesh"
-            },
-            "Component": {
-                "Code": 1
             }
         }
     ]

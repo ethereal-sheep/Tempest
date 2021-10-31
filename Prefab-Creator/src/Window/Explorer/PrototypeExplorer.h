@@ -40,13 +40,15 @@ namespace Tempest
 				{
 					if (ImGui::BeginMenu(ICON_FA_PLUS "Add Prototype"))
 					{
-						for (auto& [name, proto] : get_prototype_categories())
+						for (auto& [name, proto_cat] : get_prototype_categories())
 						{
 							if (ImGui::MenuItem(name.c_str()))
 							{
-								auto p = categories[name].emplace(proto.create());
+								//auto p = categories[name].emplace(proto.create());
 
-								if (!p)
+								auto proto = make_uptr<prototype>(proto_cat.create());
+
+								if (!proto)
 								{
 									LOG_WARN("Failed to create {} prototype", name);
 									continue;
@@ -57,8 +59,20 @@ namespace Tempest
 								if (!fs::exists(folder))
 									fs::create_directories(folder);
 
+								if (!fs::exists(folder / proto->get_name()))
+								{
+									// get the next name
+									auto begin = fs::directory_iterator(folder);
+									auto end = fs::directory_iterator();
+									auto s = algo::get_next_name(proto->get_name(), begin, end, [](const fs::directory_entry& entry, const string& s) 
+										{
+											return entry.path().stem() == s;
+										});
+									proto->name = s;
+								}
+
 								// try save
-								p->save(folder);
+								proto->save(folder);
 							}
 						}
 						ImGui::EndMenu();
@@ -89,7 +103,14 @@ namespace Tempest
 			}
 			ImGui::End();
 
-			inspector.show(dir);
+			inspector.show();
+
+			// differ delete
+			if (fs::exists(mark_for_delete))
+			{
+				fs::remove(mark_for_delete);
+				mark_for_delete = "";
+			}
 		}
 
 		void draw_category(tpath path)
@@ -106,27 +127,24 @@ namespace Tempest
 					// each of this json files
 					auto name = entry.path().stem().string();
 
-					// check if loaded
-					if (!categories[cat].has(name))
-					{
-						// try to load
-						try
-						{
-							categories[cat].load_file(entry.path());
-						}
-						catch (const std::exception&)
-						{
-							// do nothing if we can't
-							// we can clean if we want as well
-							return;
-						}
-					}
+					//// check if loaded
+					//if (!categories[cat].has(name))
+					//{
+					//	// try to load
+					//	try
+					//	{
+					//		categories[cat].load_file(entry.path());
+					//	}
+					//	catch (const std::exception&)
+					//	{
+					//		// do nothing if we can't
+					//		// we can clean if we want as well
+					//		return;
+					//	}
+					//}
 
 					// display
-					auto ptr = categories[cat].get_if(name);
-					LOG_ASSERT(name.c_str());
-
-					ImGui::PushID(ptr);
+					ImGui::PushID(name.c_str());
 					ImGui::BeginGroup();
 					if (ImGui::ImageButton(
 						reinterpret_cast<ImTextureID>(static_cast<uint64_t>(0)),
@@ -135,11 +153,30 @@ namespace Tempest
 					))
 						/*if(ImGui::Button(name.c_str()))*/
 					{
-						inspector.select(categories[cat].get_if(name), cat);
+						inspector.select(entry.path(), cat);
 					}
 
-					rename_util.show(name, cat + name, icon_size, [](const string& new_name) {
-						LOG(new_name);
+					rename_util.show(name, cat + name, icon_size, [&](const string& new_name) {
+
+						if(name == new_name)
+							return;
+
+						auto begin = fs::directory_iterator(path);
+						auto end = fs::directory_iterator();
+						auto s = algo::get_next_name(new_name, begin, end, 
+							[](const fs::directory_entry& entry, const string& s)
+							{
+								return entry.path().stem() == s;
+							});
+
+						if (inspector.current() && inspector.current()->name == name)
+						{
+							inspector.current()->name = s;
+						}
+
+						fs::rename(entry.path(), path / (s + ".json"));
+
+
 					});
 
 					//ImGui::Text(name.c_str());
@@ -162,6 +199,12 @@ namespace Tempest
 						{
 							rename_util.rename(name, cat + name);
 						}
+						if (ImGui::MenuItem(ICON_FA_TRASH " Delete"))
+						{
+							if(inspector.is_selected(entry.path()))
+								inspector.select("", "");
+							mark_for_delete = entry.path();
+						}
 
 						ImGui::EndPopup();
 
@@ -171,9 +214,9 @@ namespace Tempest
 				}
 
 				// if the file is gone, delete
-				categories[cat].erase_if([&](const string& s) {
+				/*categories[cat].erase_if([&](const string& s) {
 					return !fs::exists(path / (s + ".json"));
-					});
+					});*/
 
 				ImGui::EndTabItem();
 			}
@@ -184,10 +227,10 @@ namespace Tempest
 		}
 
 	private:
-		tmap<string, prototype_container> categories;
 		PrototypeInspector inspector;
 		RenameUtil rename_util;
 
+		tpath mark_for_delete;
 		float icon_size = 50.f;
 	};
 }

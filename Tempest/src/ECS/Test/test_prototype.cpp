@@ -100,7 +100,7 @@ namespace Tempest
 		const char* s = R"(S:\Development\Projects)";
 		prototype p;
 		auto meta = p.emplace<tc::Meta>();
-		auto transform = p.emplace<tc::Transform>();
+		//auto transform = p.emplace<tc::Transform>();
 		meta->name = "LOL";
 		
 		auto target = p.save(s);
@@ -179,20 +179,20 @@ namespace Tempest
 
 	void testing_prefab_serialize()
 	{
-		prototype p;
-		const char* s = R"(S:\Development\Projects)";
-		auto meta = p.emplace<tc::Meta>();
+		//prototype p;
+		//const char* s = R"(S:\Development\Projects)";
+		//auto meta = p.emplace<tc::Meta>();
 
-		// serialize
-		{
-			auto prefab1 = p.instance(); // instanced
-			auto prefab2 = prefab1; // cloned
-		}
+		//// serialize
+		//{
+		//	auto prefab1 = p.instance(); // instanced
+		//	auto prefab2 = prefab1; // cloned
+		//}
 
-		// deserialize
-		{
+		//// deserialize
+		//{
 
-		}
+		//}
 	}
 
 	void testing_prototype()

@@ -13,4 +13,5 @@ namespace Tempest
 {
 	void testing_ecs();
 	void testing_prototype();
+	void testing_scene();
 }

@@ -438,10 +438,10 @@ namespace Tempest
 			ImGui::End();
 		}
 
-		void force_look_at(Camera& cam, glm::vec3 point)
+		/*void force_look_at(Camera& cam, glm::vec3 point)
 		{
 
-		}
+		}*/
 
 		void look_at(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
@@ -473,10 +473,10 @@ namespace Tempest
 			easing = EasingMode::INOUTSINE;
 		}
 
-		void move(Camera& cam, glm::vec3 point, float time = 1.f)
+		/*void move(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
 
-		}
+		}*/
 
 		void set_orbit_camera(Camera& cam, glm::vec3 axis)
 		{

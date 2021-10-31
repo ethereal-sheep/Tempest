@@ -1,6 +1,7 @@
 {
     "Metadata": {
-        "Type": "Prototype"
+        "Type": "Prototype",
+        "Category": "Tile"
     },
     "Components": [
         {
@@ -17,8 +18,8 @@
             },
             "Component": {
                 "Position": [
-                    -0.0907299816608429,
-                    0.8428590893745422,
+                    0.0,
+                    0.0,
                     0.0
                 ],
                 "Rotation": [
@@ -28,18 +29,10 @@
                     1.0
                 ],
                 "Scale": [
-                    0.20000000298023225,
-                    0.20000000298023225,
-                    0.20000000298023225
+                    1.0,
+                    1.0,
+                    1.0
                 ]
-            }
-        },
-        {
-            "Metadata": {
-                "Type": "Mesh"
-            },
-            "Component": {
-                "Code": 1
             }
         }
     ]

@@ -70,6 +70,7 @@
     <ClCompile Include="src\Graphics\Basics\FBO.cpp" />
     <ClCompile Include="src\Graphics\Basics\RenderBuffer.cpp" />
     <ClCompile Include="src\ECS\Test\test_prototype.cpp" />
+    <ClCompile Include="src\ECS\Test\test_scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="src\ECS\PPS.h" />
     <ClInclude Include="src\ECS\Util\prototype_container.h" />
     <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
+    <ClInclude Include="src\ECS\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
