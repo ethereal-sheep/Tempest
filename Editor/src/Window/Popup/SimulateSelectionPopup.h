@@ -42,6 +42,7 @@ namespace Tempest
                 {
                     unsigned i = 0;
                     unsigned j = 0;
+                    const ImVec2 cursor{ ImGui::GetCursorPosX() + 100, ImGui::GetCursorPosY() + 60 };
 
                     switch (type)
                     {
@@ -49,9 +50,7 @@ namespace Tempest
                     {
                         auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
 
-                       
                         // TODO: store selected item
-                        const ImVec2 cursor{ ImGui::GetCursorPosX() + 100, ImGui::GetCursorPosY() + 60 };
                         for (auto id : view)
                         {
                             auto& charac = instance.ecs.get<tc::Character>(id);
@@ -62,7 +61,10 @@ namespace Tempest
 
                             // display in rows of 3
                             if (i / 3)
+                            {
+                                i = 0;
                                 j++;
+                            }
                         }
 
                         // create units here
@@ -77,19 +79,57 @@ namespace Tempest
                     case SIMULATE_POPUP_TYPE::WEAPON:
                     {
                         // for testing here
-                      /*  auto view = instance.ecs.view<Components::Weapon>(exclude_t<tc::Destroyed>());
+                        auto view = instance.ecs.view<Components::Weapon>(exclude_t<tc::Destroyed>());
 
                         for (auto id : view)
                         {
-                            if (data == UNDEFINED)
+                            auto& weapon = instance.ecs.get<tc::Weapon>(id);
+                            if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 120, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA))
                             {
                                 data = id;
-                                break;
                             }
-                        }*/
+
+                            // display in rows of 2
+                            if (i / 2)
+                            {
+                                i = 0;
+                                j++;
+                            }
+                        }
+
+                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        {
+                            enable_popup = false;
+                         //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
+                        }
                     }
                         break;
                     case SIMULATE_POPUP_TYPE::ACTION:
+                    {
+                        for (auto id : instance.ecs.view<tc::ActionGraph>())
+                        {
+                            auto& action = instance.ecs.get<tc::Graph>(id);
+
+                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA))
+                            {
+                                data = id;
+                            }
+
+                            // display in rows of 2
+                            if (i / 2)
+                            {
+                                i = 0;
+                                j++;
+                            }
+                              
+                        }
+
+                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        {
+                            enable_popup = false;
+                            //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
+                        }
+                    }
                         break;
                     default:
                         break;

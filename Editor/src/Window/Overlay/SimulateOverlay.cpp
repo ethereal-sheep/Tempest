@@ -423,7 +423,8 @@ namespace Tempest
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 7.0f });
 		if (UI::UIButton_2("SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
-
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::ACTION, is_attacker, is_attacker ? attacker.action : defender.action);
 		}
 	}
 }
