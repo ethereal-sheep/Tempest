@@ -214,23 +214,47 @@ namespace Tempest
 		}
 		ImGui::Dummy({ 0, 10.f });
 
+		bool NextLine = false;
+		ImVec2 PrevPos{ 0.f ,0.f };
 		for (auto i = 0; i < sl->size(); i++)
 		{
 			if ((*sl)(i))
 			{
 				string stat = sl->operator[](i) + " :";
 				string label = "##" + stat;
-				string WeaponData = std::to_string(weap.get_stat(i));
 
-				ImGui::Dummy({ frontPadding, 0 });
-				ImGui::SameLine();
-				ImGui::Text(stat.c_str());
-				ImGui::Dummy({ frontPadding, 0 });
-				ImGui::SameLine();
-				ImGui::PushItemWidth(100.f);
-				ImGui::InputInt(label.c_str(), &weap.get_stat(i), 0);
-				ImGui::PopItemWidth();
-				ImGui::Dummy({ 0, 10.f });
+				if (!NextLine)
+				{
+					ImGui::Dummy({ frontPadding, 0 });
+					ImGui::SameLine();
+					PrevPos = ImGui::GetCursorPos();
+					ImGui::Text(stat.c_str());
+					ImGui::Dummy({ frontPadding, 0 });
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.f);
+					ImGui::InputInt(label.c_str(), &weap.get_stat(i), 0);
+					ImGui::PopItemWidth();
+				}
+
+				else
+				{
+					ImGui::SetCursorPos(PrevPos);
+					ImGui::Dummy({ 250.f - frontPadding, 0.f });
+					ImGui::SameLine();
+
+					ImGui::Text(stat.c_str());
+					ImGui::Dummy({ 250 + frontPadding, 0 });
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.f);
+					ImGui::InputInt(label.c_str(), &weap.get_stat(i), 0);
+					ImGui::PopItemWidth();
+
+					ImGui::SetCursorPos(PrevPos);
+					ImGui::Dummy({ 0, 100.f });
+				}
+			
+
+				NextLine = !NextLine;
 			}
 
 		}

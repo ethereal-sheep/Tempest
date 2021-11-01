@@ -102,7 +102,7 @@ namespace Tempest
 						}
 
 						
-						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 100 }, { 30,20 }, FONT_PARA))
+						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 100 }, { 55,30 }, FONT_PARA))
 						{
 							// add new unit
 						}
@@ -787,6 +787,8 @@ namespace Tempest
 		}
 		ImGui::Dummy({ 0, 10.f });
 
+		bool NextLine = false;
+		ImVec2 PrevPos{ 0.f ,0.f };
 		for (auto i = 0; i < sl->size(); i++)
 		{
 			if ((*sl)(i))
@@ -811,17 +813,42 @@ namespace Tempest
 
 				}
 
-				ImGui::Dummy({ frontPadding, 0 });
-				ImGui::SameLine();
-				ImGui::Text(stat.c_str());
-				ImGui::Dummy({ frontPadding, 0 });
-				ImGui::SameLine();
-				ImGui::PushItemWidth(100.f);
-				ImGui::InputInt(label.c_str(), &cs.get_stat(i), 0);
-				ImGui::PopItemWidth();
-				ImGui::SameLine();
-				ImGui::Text(WeaponData.c_str());
-				ImGui::Dummy({ 0, 10.f });
+				if (!NextLine)
+				{
+					ImGui::Dummy({ frontPadding, 0 });
+					ImGui::SameLine();
+					PrevPos = ImGui::GetCursorPos();
+					ImGui::Text(stat.c_str());
+					ImGui::Dummy({ frontPadding, 0 });
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.f);
+					ImGui::InputInt(label.c_str(), &cs.get_stat(i), 0);
+					ImGui::PopItemWidth();
+					ImGui::SameLine();
+					ImGui::Text(WeaponData.c_str());
+				}
+
+				else
+				{
+					ImGui::SetCursorPos(PrevPos);
+					ImGui::Dummy({ 250.f - frontPadding, 0.f });
+					ImGui::SameLine();
+
+					ImGui::Text(stat.c_str());
+					ImGui::Dummy({ 250 + frontPadding, 0 });
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.f);
+					ImGui::InputInt(label.c_str(), &cs.get_stat(i), 0);
+					ImGui::PopItemWidth();
+					ImGui::SameLine();
+					ImGui::Text(WeaponData.c_str());
+
+					ImGui::SetCursorPos(PrevPos);
+					ImGui::Dummy({ 0, 100.f });
+				}
+
+				NextLine = !NextLine;
+
 			}
 
 		}
