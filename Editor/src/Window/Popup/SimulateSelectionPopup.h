@@ -84,7 +84,7 @@ namespace Tempest
                         for (auto id : view)
                         {
                             auto& weapon = instance.ecs.get<tc::Weapon>(id);
-                            if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 120, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA))
+                            if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 120, cursor.y + j * 100 }, { 100, 10 }, FONT_PARA))
                             {
                                 data = id;
                             }
@@ -100,7 +100,7 @@ namespace Tempest
                         if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
-                         //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
+                            Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(true, instance);
                         }
                     }
                         break;

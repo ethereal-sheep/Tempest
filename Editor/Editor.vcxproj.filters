@@ -117,6 +117,9 @@
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\Overlay\WeaponSheetOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h">
@@ -342,6 +345,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Popup\SimulateSelectionPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\WeaponSheetOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

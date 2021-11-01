@@ -75,11 +75,19 @@ namespace Tempest
 		Entity id = UNDEFINED;
 		Instance& instance;
 	};
+
 	struct OpenUnitSheetTrigger : public Event 
 	{
 		OpenUnitSheetTrigger(bool isAddUnit, Instance& in, Entity id = UNDEFINED) : addUnit{ isAddUnit }, instance{ in }, entityID{ id } {}
 		bool addUnit = false;
 		Entity entityID = UNDEFINED;
+		Instance& instance;
+	};
+
+	struct OpenWeaponSheetTrigger : public Event
+	{
+		OpenWeaponSheetTrigger(bool isAddUnit, Instance& in) : addUnit{ isAddUnit }, instance{ in } {}
+		bool addUnit = false;
 		Instance& instance;
 	};
 
