@@ -140,6 +140,30 @@ namespace Tempest
 					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(attacker.unit_id, defender.unit_id, sequence);
 				}	
 
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+				tex = tex_map["Assets/BackMenuBtn.png"];
+
+				if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+				{
+					// do what here?
+				}
+
+				ImGui::SameLine();
+				ImGui::Dummy(ImVec2{ 20.0f, 0.0f });
+				ImGui::SameLine();
+
+				tex = tex_map["Assets/QuickMenuBtn.png"];
+
+				if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+				{
+					Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+				}
+
+				ImGui::PopStyleColor(3);
+
 				{
 					//// Drag drop section
 			//{

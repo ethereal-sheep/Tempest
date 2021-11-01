@@ -295,6 +295,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Popup\ExportProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\NewProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\OpenProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\QuickMenuPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveCurrentBeforeOpenPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\SimulateSelectionPopup.h" />

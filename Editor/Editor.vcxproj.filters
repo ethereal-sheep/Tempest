@@ -350,6 +350,9 @@
     <ClInclude Include="src\Window\Overlay\WeaponSheetOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\Popup\QuickMenuPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Extern\imgui\imgui_bezier_math.inl">

@@ -35,6 +35,7 @@ namespace Tempest
 
 	//Popup Trigger
 	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION};
+	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCE,WEAPONS,ITEMS};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
 	struct SimulatePopupTrigger : public Event
@@ -44,6 +45,12 @@ namespace Tempest
 		SIMULATE_POPUP_TYPE type;
 		bool is_attacker;
 		Entity data;
+	};
+
+	struct QuickMenuPopupTrigger : public Event
+	{
+		QuickMenuPopupTrigger(QUICKMENU_POPUP_TYPE current) : current{ current } {}
+		QUICKMENU_POPUP_TYPE current;
 	};
 
 	//Confirm Trigger
