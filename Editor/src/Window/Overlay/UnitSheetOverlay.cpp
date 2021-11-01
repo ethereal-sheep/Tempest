@@ -28,19 +28,7 @@ namespace Tempest
 
 		if (a.addUnit)
 		{
-			// TODO: shift this to a function
-			tc::Character* cs = &NewCharacter;
-			auto entity = a.instance.ecs.create();
-			auto meta = a.instance.ecs.emplace<tc::Meta>(entity);
-			meta->name = cs->name;
-			auto character = a.instance.ecs.emplace<tc::Character>(entity);
-			character->name = cs->name;
-
-			for (auto i = 0; i < tc::STAT_TOTAL; i++)
-				character->set_stat(i, cs->get_stat(i));
-
-			NewCharacter = tc::Character();
-			SelectedID = entity;
+			create_new_unit(a.instance);
 		}
 		
 		else if (a.entityID != UNDEFINED)
@@ -100,12 +88,12 @@ namespace Tempest
 						{
 							cs = &charac;
 						}
+					}
 
-						
-						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 100 }, { 55,30 }, FONT_PARA))
-						{
-							// add new unit
-						}
+					if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 100 }, { 55,30 }, FONT_PARA))
+					{
+						create_new_unit(instance);
+						cs = instance.ecs.get_if<tc::Character>(SelectedID);
 					}
 				}
 
@@ -694,6 +682,22 @@ namespace Tempest
 	void UnitSheetOverlay::pop_button_style() const
 	{
 		ImGui::PopStyleColor(3);
+	}
+
+	void UnitSheetOverlay::create_new_unit(Instance& instance)
+	{
+		tc::Character* cs = &NewCharacter;
+		auto entity = instance.ecs.create();
+		auto meta = instance.ecs.emplace<tc::Meta>(entity);
+		meta->name = cs->name;
+		auto character = instance.ecs.emplace<tc::Character>(entity);
+		character->name = cs->name;
+
+		for (auto i = 0; i < tc::STAT_TOTAL; i++)
+			character->set_stat(i, cs->get_stat(i));
+
+		NewCharacter = tc::Character();
+		SelectedID = entity;
 	}
 
 	template<typename F>

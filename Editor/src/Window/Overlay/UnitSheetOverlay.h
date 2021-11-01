@@ -58,6 +58,8 @@ namespace Tempest
 
         void show(Instance&) override;
 
+        void create_new_unit(Instance& instance);
+
         // helpers
         void push_button_style() const;
         void pop_button_style() const;

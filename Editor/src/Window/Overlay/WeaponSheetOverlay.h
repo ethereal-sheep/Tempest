@@ -55,6 +55,7 @@ namespace Tempest
 
         void show(Instance&) override;
 
+        void create_new_weapon(Instance& instance);
         void initialise_tabs();
         void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weap) const;
         void display_use_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weap) const;

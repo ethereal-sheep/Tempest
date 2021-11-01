@@ -16,19 +16,7 @@ namespace Tempest
 
 		if (a.addUnit)
 		{
-			// TODO: shift this to a function
-			tc::Weapon* weap = &NewWeapon;
-			auto entity = a.instance.ecs.create();
-			auto meta = a.instance.ecs.emplace<tc::Meta>(entity);
-			meta->name = weap->name;
-			auto character = a.instance.ecs.emplace<tc::Weapon>(entity);
-			character->name = weap->name;
-
-			for (auto i = 0; i < tc::STAT_TOTAL; i++)
-				character->set_stat(i, weap->get_stat(i));
-
-			NewWeapon = tc::Weapon();
-			SelectedID = entity;
+			create_new_weapon(a.instance);
 		}
 
 		// get the first weapon
@@ -87,16 +75,16 @@ namespace Tempest
 					for (auto id : view)
 					{
 						auto& weapon = instance.ecs.get<tc::Weapon>(id);
-						if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x , cursor.y + i++ * 100 }, { 120,10 }, FONT_PARA))
+						if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x , cursor.y + i++ * 70 }, { 120,10 }, FONT_PARA))
 						{
 							weap = &weapon;
 						}
+					}
 
-
-						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 100 }, { 160,10 }, FONT_PARA))
-						{
-							// add new weapon
-						}
+					if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 70 }, { 160,10 }, FONT_PARA))
+					{
+						create_new_weapon(instance);
+						weap = instance.ecs.get_if<tc::Weapon>(SelectedID);
 					}
 				}
 
@@ -134,6 +122,22 @@ namespace Tempest
 			ImGui::PopStyleVar();
 			ImGui::End();
 		}
+	}
+
+	void WeaponSheetOverlay::create_new_weapon(Instance &instance)
+	{
+		tc::Weapon* weap = &NewWeapon;
+		auto entity = instance.ecs.create();
+		auto meta = instance.ecs.emplace<tc::Meta>(entity);
+		meta->name = weap->name;
+		auto character = instance.ecs.emplace<tc::Weapon>(entity);
+		character->name = weap->name;
+
+		for (auto i = 0; i < tc::STAT_TOTAL; i++)
+			character->set_stat(i, weap->get_stat(i));
+
+		NewWeapon = tc::Weapon();
+		SelectedID = entity;
 	}
 
 	void WeaponSheetOverlay::initialise_tabs()
