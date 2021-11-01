@@ -18,6 +18,27 @@ namespace Tempest
 {
     class WeaponSheetOverlay : public Window
     {
+        enum TABS_TYPE
+        {
+            WEAPON,
+            USE,
+            TOTAL
+        };
+
+        struct TabImageData
+        {
+            enum STATE
+            {
+                UNHOVER,
+                HOVER
+            };
+
+            std::array< void*, 2> image_id;
+            STATE current_state{ UNHOVER };
+            ImVec2 size{ 0,0 };
+            bool is_active{ false };
+        };
+
         const char* window_name() override
         {
             return "";
@@ -28,14 +49,21 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenWeaponSheetTrigger>(&WeaponSheetOverlay::open_popup, this);
-
+            initialise_tabs();
         }
         void open_popup(const Event& e);
 
         void show(Instance&) override;
 
-        tsptr<Texture> UseInfo;
-        tsptr<Texture> WeaponInfo;
+        void initialise_tabs();
+        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weap) const;
+        void display_use_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weap) const;
+
+        template<typename F>
+        void render_tabs(TABS_TYPE type, F&& func);
+
+        std::array<TabImageData, TOTAL> Tabs;
+        TABS_TYPE CurrentTab{ TABS_TYPE::WEAPON };
         bool OverlayOpen = false;
         tc::Weapon NewWeapon;
         Entity SelectedID = INVALID;
