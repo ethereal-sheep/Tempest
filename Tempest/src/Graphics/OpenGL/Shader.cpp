@@ -31,6 +31,7 @@ namespace Tempest
 		else
 		{
 			LOG("Failed to open shader file");
+			LOG(fileName.c_str());
 		}
 
 		in_file.close();
@@ -214,5 +215,10 @@ namespace Tempest
 	void Shader::SetIntArray(int* values, GLuint count, const std::string& name)
 	{
 		glUniform1iv(glGetUniformLocation(id, name.c_str()), count, values);
+	}
+
+	GLint Shader::GetUniformLoc(const std::string& name)
+	{
+		return glGetUniformLocation(id, name.c_str());
 	}
 }

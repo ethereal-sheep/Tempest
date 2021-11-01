@@ -71,6 +71,12 @@
     <ClCompile Include="src\Graphics\Basics\RenderBuffer.cpp" />
     <ClCompile Include="src\ECS\Test\test_prototype.cpp" />
     <ClCompile Include="src\ECS\Test\test_scene.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MaterialPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\TexturePBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\Skybox.cpp" />
+    <ClCompile Include="src\Graphics\PBR\ModelPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -217,6 +223,12 @@
     <ClInclude Include="src\ECS\Util\prototype_container.h" />
     <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
     <ClInclude Include="src\ECS\Scene.h" />
+    <ClInclude Include="src\Graphics\PBR\MaterialPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\TexturePBR.h" />
+    <ClInclude Include="src\Graphics\PBR\Skybox.h" />
+    <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

@@ -23,6 +23,13 @@
 #include "Graphics/OpenGL/Texture.h"
 #include "Graphics/Basics/ShadowBuffer.h"
 
+#include "Graphics/PBR/ShapePBR.h"
+
+#include "Graphics/PBR/TexturePBR.h"
+
+#include "Graphics/PBR/MaterialPBR.h"
+
+#include "Graphics/PBR/ModelPBR.h"
 /**
  * @brief 
  * @param RenderSystem Umbrella interface  
@@ -95,7 +102,89 @@ namespace Tempest
         float specularStrength = 0.5f;
         const GLfloat near_plane = 1.0f, far_plane = 25.0f;
 
- 
+        //Testing
+        GLuint screenQuadVAO, screenQuadVBO;
+        GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects;
+        GLuint saoFBO, saoBlurFBO, saoBuffer, saoBlurBuffer;
+        GLuint postprocessFBO, postprocessBuffer;
+        GLuint envToCubeFBO, irradianceFBO, prefilterFBO, brdfLUTFBO, envToCubeRBO, irradianceRBO, prefilterRBO, brdfLUTRBO;
+
+        GLint gBufferView = 1;
+        GLint tonemappingMode = 1;
+        GLint lightDebugMode = 3;
+        GLint attenuationMode = 2;
+        GLint saoSamples = 12;
+        GLint saoTurns = 7;
+        GLint saoBlurSize = 4;
+        GLint motionBlurMaxSamples = 32;
+
+        GLfloat lastX = 1600 / 2;
+        GLfloat lastY = 900 / 2;
+        GLfloat deltaTime = 0.0f;
+        GLfloat lastFrame = 0.0f;
+        GLfloat deltaGeometryTime = 0.0f;
+        GLfloat deltaLightingTime = 0.0f;
+        GLfloat deltaSAOTime = 0.0f;
+        GLfloat deltaPostprocessTime = 0.0f;
+        GLfloat deltaForwardTime = 0.0f;
+        GLfloat deltaGUITime = 0.0f;
+        GLfloat materialRoughness = 0.01f;
+        GLfloat materialMetallicity = 0.02f;
+        GLfloat ambientIntensity = 0.005f;
+        GLfloat saoRadius = 0.3f;
+        GLfloat saoBias = 0.001f;
+        GLfloat saoScale = 0.7f;
+        GLfloat saoContrast = 0.8f;
+        GLfloat lightPointRadius1 = 3.0f;
+        GLfloat lightPointRadius2 = 3.0f;
+        GLfloat lightPointRadius3 = 3.0f;
+        GLfloat cameraAperture = 16.0f;
+        GLfloat cameraShutterSpeed = 0.5f;
+        GLfloat cameraISO = 1000.0f;
+        GLfloat modelRotationSpeed = 0.0f;
+
+        bool cameraMode;
+        bool pointMode = true;
+        bool directionalMode = true;
+        bool iblMode = true;
+        bool saoMode = false;
+        bool fxaaMode = false;
+        bool motionBlurMode = false;
+        bool screenMode = false;
+        bool firstMouse = true;
+        bool guiIsOpen = true;
+        bool keys[1024];
+
+        glm::vec3 albedoColor = glm::vec3(1.0f);
+        glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric
+
+
+        // 1 fixed model first
+        glm::vec3 modelPosition = glm::vec3(0.0f);
+        glm::vec3 modelRotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 modelScale = glm::vec3(0.1f);
+
+        glm::mat4 projViewModel;
+        glm::mat4 prevProjViewModel = projViewModel;
+        glm::mat4 envMapProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+
+        ShapePBR quadRender;
+        ShapePBR envCubeRender;
+
+        ModelPBR objectModel;
+
+        TexturePBR objectAlbedo;
+        TexturePBR objectNormal;
+        TexturePBR objectRoughness;
+        TexturePBR objectMetalness;
+        TexturePBR objectAO;
+        TexturePBR envMapHDR;
+        TexturePBR envMapCube;
+        TexturePBR envMapIrradiance;
+        TexturePBR envMapPrefilter;
+        TexturePBR envMapLUT;
+
+        MaterialPBR pbrMat;
 
     private:        
        
@@ -105,5 +194,10 @@ namespace Tempest
         void DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num = -1);                                        // Render Sprites of different meshes
         void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType, int pt_light_num = -1);     // Render Sprites of different meshes
         void RenderAAGrid();                                                                                 // Render Anti-Aliased Grid
+
+        void gBufferSetup();
+        void saoSetup();
+        void postprocessSetup();
+        void iblSetup();
     };
 }
