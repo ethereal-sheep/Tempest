@@ -141,7 +141,8 @@ namespace Tempest
         GLfloat cameraAperture = 16.0f;
         GLfloat cameraShutterSpeed = 0.5f;
         GLfloat cameraISO = 1000.0f;
-        GLfloat modelRotationSpeed = 0.0f;
+        GLfloat modelRotationSpeed = 1.0f;
+        GLfloat fps = 60.f;
 
         bool cameraMode;
         bool pointMode = true;
@@ -149,7 +150,7 @@ namespace Tempest
         bool iblMode = true;
         bool saoMode = false;
         bool fxaaMode = false;
-        bool motionBlurMode = false;
+        bool motionBlurMode = true;
         bool screenMode = false;
         bool firstMouse = true;
         bool guiIsOpen = true;
@@ -178,6 +179,8 @@ namespace Tempest
         TexturePBR objectRoughness;
         TexturePBR objectMetalness;
         TexturePBR objectAO;
+
+
         TexturePBR envMapHDR;
         TexturePBR envMapCube;
         TexturePBR envMapIrradiance;
@@ -186,6 +189,7 @@ namespace Tempest
 
         MaterialPBR pbrMat;
 
+        void iblSetup();
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);
@@ -198,6 +202,5 @@ namespace Tempest
         void gBufferSetup();
         void saoSetup();
         void postprocessSetup();
-        void iblSetup();
     };
 }

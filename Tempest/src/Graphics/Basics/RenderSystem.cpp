@@ -358,7 +358,14 @@ namespace Tempest
 
 
         objectModel.loadModel("models/shaderball/shaderball.obj");
+        
+        objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
+        objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
+        objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
+        objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
+        objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
 
+        materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
 
 
         //---------------
@@ -480,20 +487,25 @@ namespace Tempest
         m_LineRenderer.SubmitBuffer();
         m_LineRenderer.ClearBuffer();
 
-        m_FrameBuffer.Bind();
+ /*       m_FrameBuffer.Bind();*/
 
-        m_Renderer.EnableDepthMask(true);
-        m_Renderer.EnableDepthTest(true);
-        m_Renderer.EnableCulling(false, false, false);
-        m_Renderer.EnableBlend(true);
+        //m_Renderer.EnableDepthMask(true);
+        //m_Renderer.EnableDepthTest(true);
+        //m_Renderer.EnableCulling(false, false, false);
+        //m_Renderer.EnableBlend(true);
 
-        m_Renderer.ClearColour(0.4f, 0.5f, 0.6f, 0.0f);
+        m_Renderer.ClearColour(0.0f, 0.0f, 0.0f, 1.0f);
         m_Renderer.ClearColorDepth();      
+        glViewport(0, 0, 1600, 900);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     }
 
     void RenderSystem::Render()
     {    
         
+
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -504,18 +516,21 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
 
         glm::mat4 model;
-        GLfloat rotationAngle = 1 / 5.0f * modelRotationSpeed;
-        model = glm::mat4();
+        deltaTime += 0.01f;
+        GLfloat rotationAngle = deltaTime / 5.0f * modelRotationSpeed;
+        model = glm::mat4(1);
         model = glm::translate(model, modelPosition);
         model = glm::rotate(model, rotationAngle, modelRotationAxis);
         model = glm::scale(model, modelScale);
 
         projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * model;
 
+     
         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(projViewModel, "projViewModel");
         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(prevProjViewModel, "prevProjViewModel");
         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(model, "model");
         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
+        prevProjViewModel = projViewModel;
 
         // Material
         // pbrMat.renderToShader();
@@ -544,7 +559,6 @@ namespace Tempest
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        prevProjViewModel = projViewModel;
 
 
         //---------------
@@ -621,9 +635,9 @@ namespace Tempest
         glActiveTexture(GL_TEXTURE8);
         envMapLUT.useTexture();
 
-        for (int pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++)
+        for (int pt_light_ = 0; pt_light_ < 1; pt_light_++) //pt_lights.size()
         {
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
+            //m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
             glm::vec3 lightPositionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(pt_lights[pt_light_].Position, 1.0f));
 
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightPositionViewSpace,      ("lightPointArray[" + std::to_string(pt_light_) + "].position").c_str() );
@@ -650,11 +664,11 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(materialF0, "materialF0");
 
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientIntensity, "ambientIntensity");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(gBufferView, "gBufferView");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(pointMode, "pointMode");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(directionalMode, "directionalMode");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(iblMode, "iblMode");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(attenuationMode, "attenuationMode");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(gBufferView, "gBufferView");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointMode, "pointMode");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(directionalMode, "directionalMode");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(iblMode, "iblMode");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(attenuationMode, "attenuationMode");
 
         quadRender.drawShape();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -691,8 +705,8 @@ namespace Tempest
         //glUniform1i(glGetUniformLocation(firstpassPPShader.Program, "tonemappingMode"), tonemappingMode);
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(60.f / 60.0f, "motionBlurMode");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraAperture, "motionBlurScale");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");; //wtf is this like come on dude
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(fps / 144.f, "motionBlurScale");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMaxSamples, "motionBlurMaxSamples");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");;
 
