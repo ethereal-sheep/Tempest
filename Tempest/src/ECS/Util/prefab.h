@@ -132,10 +132,21 @@ namespace Tempest
 		}
 
 		template<typename Component>
-		Component* emplace()
+		Component* force_if()
 		{
 			if (!has<Component>())
 				return nullptr;
+
+			return &force<Component>();
+		}
+
+		template<typename Component>
+		Component* try_emplace()
+		{
+			if (!has<Component>())
+				return nullptr;
+
+			force<Component>();
 
 			return static_cast<coptional<Component>*>(
 				components.at(t_hash<Component>()).get())->get_if();
@@ -192,6 +203,16 @@ namespace Tempest
 			reader.EndArray();
 		}
 		
+		const string& get_category() const
+		{
+			return cat;
+		}
+
+		const string& get_prototype() const
+		{
+			return proto;
+		}
+
 	private:
 		tmap<size_t, tuptr<c_base>> components;
 	};

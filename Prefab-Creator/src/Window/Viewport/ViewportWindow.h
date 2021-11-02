@@ -45,8 +45,6 @@ namespace Tempest
 		{
 
 
-			auto& cam = Service<RenderSystem>::Get().GetCamera();
-			cam_ctrl.show_debug(cam);
 
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -72,174 +70,58 @@ namespace Tempest
 						ImGuiDockNodeFlags_PassthruCentralNode);
 				}
 
-				
-
+				auto& cam = Service<RenderSystem>::Get().GetCamera();
+				cam_ctrl.show_debug(cam);
 				cam_ctrl.update(cam);
-				
-
-				/*const glm::vec3 position(0);
-
-				auto direction = els::to_vec2(io.MouseDelta);
-				auto yaw_speed = 1.f / 4.f;
-				auto pitch_speed = 1.f / 4.f;
-				auto pan_speed = 1.f / 4.f;
-				auto forward_speed = 1.f / 4.f;
-				auto scroll_speed = forward_speed * 2.f;*/
-
-
-				/*auto pos = -cam.GetPosition();
-				auto front = cam.GetFront();
-
-				pos.y = 0;
-				front.y = 0;
-				auto angle = glm::angle(glm::normalize(pos), glm::normalize(front));
-
-				if (abs(angle) > 0.001f)
-				{
-					auto yaw = glm::angleAxis(angle / 200, glm::vec3{ 0, 1, 0 });
-					auto rot = cam.GetQuatRotation();
-					rot = glm::normalize(rot * yaw);
-					cam.SetRotation(rot);
-				}*/
-
-
-
-				//if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
-				//{
-				//	if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
-				//	{
-				//		//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
-				//		//(m_SavedMousePos.x, m_SavedMousePos.y);
-				//	}
-
-				//	if (io.MouseDown[0] && io.MouseDown[1])
-				//	{
-				//		// turn body to the origin
-
-				//		auto rot = cam.GetQuatRotation();
-				//		auto pos = -cam.GetPosition();
-				//		auto front = cam.GetFront();
-
-				//		pos.y = 0;
-				//		front.y = 0;
-				//		auto angle = glm::angle(glm::normalize(pos), glm::normalize(front));
-
-				//		LOG("{}", angle);
-
-				//		auto yaw = glm::angleAxis(angle, glm::vec3{ 0, 1, 0 });
-				//		rot = glm::normalize(rot * yaw);
-				//		cam.SetRotation(rot);
-				//		// tilt head to origin
-
-				//		//pos = -cam.GetPosition();
-				//		//front = cam.GetFront();
-				//		//angle = glm::angle(glm::normalize(pos), glm::normalize(front));
-
-				//		//auto pitch = glm::angleAxis(0.01f, cam.GetLeft());
-				//		//rot = rot * pitch;
-				//		//cam.SetRotation(rot);
-
-				//	}
-				//	else if (io.MouseDown[0]) // rotate translate
-				//	{
-				//		if (!els::is_zero(direction))
-				//		{
-				//			auto rot = cam.GetQuatRotation();
-				//			auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-				//			rot = rot * yaw;
-				//			cam.SetRotation(rot);
-
-				//			auto currentPos = cam.GetPosition();
-				//			auto forward = glm::normalize(glm::cross(glm::vec3{ 0, 1, 0 }, cam.GetLeft())) * io.MouseDelta.y;
-				//			auto newPos = currentPos + forward * forward_speed;
-				//			cam.SetPosition(newPos);
-				//		}
-				//	}
-				//	else if (io.MouseDown[1]) // rotate
-				//	{
-				//		if (!els::is_zero(direction))
-				//		{
-				//			auto rot = cam.GetQuatRotation();
-
-				//			auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-				//			rot = rot * yaw;
-				//			cam.SetRotation(rot);
-				//			auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), cam.GetLeft());
-				//			rot = rot * pitch;
-				//			cam.SetRotation(rot);
-				//		}
-
-				//	}
-				//	else if (io.MouseDown[2]) // Pan
-				//	{
-				//		if (!els::is_zero(direction))
-				//		{
-
-				//			auto up = glm::vec3{ 0, 1, 0 };
-				//			auto right = cam.GetLeft();
-
-				//			auto currentPos = cam.GetPosition();
-				//			auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
-				//			auto newPos = currentPos - worldSpaceDirection * pan_speed;
-
-				//			cam.SetPosition(newPos);
-				//		}
-				//	}
-
-				//	cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
-
-				// }
-
-
 			}
 			ImGui::End();
 			ImGui::PopStyleVar(3);
 
 
-			if (instance.selected != INVALID &&
-				instance.ecs.has<tc::Transform>(instance.selected))
-			{
+			//if (instance.selected != INVALID &&
+			//	instance.ecs.has<tc::Transform>(instance.selected))
+			//{
 
-				ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
-				auto& GC = Service<GuizmoController>::Get();
-				auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+			//	ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
+			//	auto& GC = Service<GuizmoController>::Get();
+			//	auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
 
-				static ImVec2 Min = { 0, 0 };
-				static ImVec2 Max = { 1600, 900 };
+			//	static ImVec2 Min = { 0, 0 };
+			//	static ImVec2 Max = { 1600, 900 };
 
-				GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
-
-
-				vec3 tDelta;
-				vec3 rDelta;
-				vec3 sDelta;
-
-				auto mat =
-					glm::translate(glm::make_vec3(value_ptr(transform.position)))
-					* glm::mat4(transform.rotation)
-					* glm::scale(glm::make_vec3(value_ptr(transform.scale)));
-
-				//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
-				GC.SetTransformMatrix(glm::value_ptr(mat));
-				GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
-				GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
+			//	GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
 
 
+			//	vec3 tDelta;
+			//	vec3 rDelta;
+			//	vec3 sDelta;
 
-				GC.Draw();
+			//	auto mat =
+			//		glm::translate(glm::make_vec3(value_ptr(transform.position)))
+			//		* glm::mat4(transform.rotation)
+			//		* glm::scale(glm::make_vec3(value_ptr(transform.scale)));
 
-				//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
+			//	//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
+			//	GC.SetTransformMatrix(glm::value_ptr(mat));
+			//	GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
+			//	GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
 
-				GC.GetDelta(tDelta, rDelta, sDelta);
 
-				if (tDelta.length2() > els::epsilon<float> ||
-					rDelta.length2() > els::epsilon<float>)
-				{
-					//transform
-					transform.position += tDelta;
-					//transform->scale += sDelta;
-				}
-			}
+
+			//	GC.Draw();
+
+			//	//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
+
+			//	GC.GetDelta(tDelta, rDelta, sDelta);
+
+			//	if (tDelta.length2() > els::epsilon<float> ||
+			//		rDelta.length2() > els::epsilon<float>)
+			//	{
+			//		//transform
+			//		transform.position += tDelta;
+			//		//transform->scale += sDelta;
+			//	}
+			//}
 
 
 

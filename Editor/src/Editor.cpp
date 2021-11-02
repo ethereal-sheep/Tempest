@@ -72,7 +72,7 @@ namespace Tempest
 			init_sounds();
 			init_ui_textures();
 
-			testing_scene();
+			//testing_scene();
 		}
 
 		void OnUpdate() override

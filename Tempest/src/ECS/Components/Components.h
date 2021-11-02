@@ -109,8 +109,8 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh, Model,
-		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph
+		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
+		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, Shape
 		,END
 	};
 
@@ -159,8 +159,45 @@ namespace Tempest
 			}
 
 			vec3 position;
-			quat rotation = {1.f, 0.f, 0.f, 0.f};
-			vec3 scale = {1.f, 1.f, 1.f};
+			quat rotation = { 1.f, 0.f, 0.f, 0.f };
+			vec3 scale = { 1.f, 1.f, 1.f };
+
+		};
+
+		struct Local
+		{
+			static const char* get_type() { return "Local"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Local& component)
+			{
+				ar.StartObject();
+				ar.Member("LocalPosition", component.local_position);
+				ar.Member("LocalRotation", component.local_rotation);
+				ar.Member("LocalScale", component.local_scale);
+				return ar.EndObject();
+			}
+
+			vec3 local_position;
+			quat local_rotation = { 1.f, 0.f, 0.f, 0.f };
+			vec3 local_scale = { 1.f, 1.f, 1.f };
+		};
+
+		struct Shape
+		{
+			static const char* get_type() { return "Shape"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Shape& component)
+			{
+				ar.StartObject();
+				ar.Member("X", component.x);
+				ar.Member("Y", component.y);
+				return ar.EndObject();
+			}
+
+			int x = 1;
+			int y = 1;
 		};
 
 		struct Meta
@@ -608,7 +645,7 @@ namespace Tempest
 			ecs.emplace<tc::ComponentName>(entity, std::move(c));	\
 		}															\
 		else {														\
-			auto c = ecs.emplace<tc::ComponentName>();				\
+			auto c = ecs.try_emplace<tc::ComponentName>();			\
 			if(c) reader.Member("Component", *c);					\
 		}															\
 	}																\
@@ -626,6 +663,7 @@ namespace Tempest
 			COMPONENT_CASE(Example);
 			COMPONENT_CASE(Destroyed);
 			COMPONENT_CASE(Transform);
+			COMPONENT_CASE(Local);
 			COMPONENT_CASE(Meta);
 			COMPONENT_CASE(Script);
 			COMPONENT_CASE(Rigidbody);
@@ -634,6 +672,7 @@ namespace Tempest
 			COMPONENT_CASE(Character);
 			COMPONENT_CASE(Weapon);
 			COMPONENT_CASE(Statline);
+			COMPONENT_CASE(Shape);
 
 			COMPONENT_CASE(ConflictGraph);
 			COMPONENT_CASE(ActionGraph);

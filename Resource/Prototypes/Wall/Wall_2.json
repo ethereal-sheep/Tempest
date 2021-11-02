@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Tile"
+        "Category": "Wall"
     },
     "Components": [
         {
@@ -41,9 +41,9 @@
             },
             "Component": {
                 "LocalPosition": [
+                    -0.16207647323608399,
                     0.0,
-                    0.0,
-                    -0.005793958902359009
+                    -0.33770543336868288
                 ],
                 "LocalRotation": [
                     0.0,
@@ -52,9 +52,9 @@
                     1.0
                 ],
                 "LocalScale": [
-                    1.0,
-                    0.009999999776482582,
-                    4.0
+                    0.7423999309539795,
+                    0.742400050163269,
+                    0.742400050163269
                 ]
             }
         },
@@ -63,7 +63,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Wall.a"
+                "Path": "Models\\Bookshelf.a"
             }
         },
         {

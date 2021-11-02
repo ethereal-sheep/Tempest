@@ -437,7 +437,7 @@ namespace Tempest
 		 */
 		void save(const tpath& root_filepath) const
 		{
-			tpath folder = root_filepath / components_folder;
+			tpath folder = root_filepath / default_folder;
 
 			// if directory doesn't exist, create new_directory
 			if(!std::filesystem::exists(folder))
@@ -461,7 +461,7 @@ namespace Tempest
 		 */
 		void load(const tpath& root_filepath)
 		{
-			tpath folder = root_filepath / components_folder;
+			tpath folder = root_filepath / default_folder;
 
 			// check if file path exists
 			if (!std::filesystem::exists(folder))

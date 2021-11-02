@@ -26,6 +26,9 @@ namespace Tempest
 		virtual Writer& serialize(Writer& writer) const = 0;
 		//virtual Reader& deserialize(Reader& reader) const = 0;
 
+		bool is_special() const { return special; }
+		void specialize() { special = true; }
+
 		virtual bool is_parent() const = 0;
 		virtual bool is_child() const = 0;
 		virtual bool is_overriding() const = 0;
@@ -37,6 +40,7 @@ namespace Tempest
 		virtual tuptr<c_base> instance() const = 0;
 		virtual tuptr<c_base> clone() const = 0;
 
+		bool special = false;
 		string type_info;
 	};
 
@@ -133,7 +137,7 @@ namespace Tempest
 
 		bool has_value() const override
 		{
-			return !parent.lock() && !mine;
+			return mine || parent.lock();
 		}
 
 		operator bool() const override

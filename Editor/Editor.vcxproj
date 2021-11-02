@@ -151,6 +151,8 @@
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mtd.dll" "$(TargetDir)" /q
+
+del /q /s "$(TargetDir)Prototypes"
 xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </CustomBuildStep>
     <CustomBuildStep>
@@ -273,6 +275,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\FileBrowser\FileBrowser.h" />
     <ClInclude Include="src\Window\FileBrowser\NewBrowser.h" />
     <ClInclude Include="src\Window\FileBrowser\SaveBrowser.h" />
+    <ClInclude Include="src\Window\Hierarchy\PrefabList.h" />
     <ClInclude Include="src\Window\MainMenu\MainMenu.h" />
     <ClInclude Include="src\Window\Menubar\EditTimeMenuBar.h" />
     <ClInclude Include="src\Window\Hierarchy\HierarchyWindow.h" />
@@ -299,9 +302,11 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Test\test_window2.h" />
     <ClInclude Include="src\Window\Test\test_window3.h" />
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
+    <ClInclude Include="src\Window\Util\LineDrawing.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Util\SimulationBuilder.h" />
     <ClInclude Include="src\Window\Util\SimulationStart.h" />
+    <ClInclude Include="src\Window\Viewport\CameraControls.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>
   <ItemGroup>

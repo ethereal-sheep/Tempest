@@ -67,6 +67,7 @@ namespace Tempest::UI
 		// Draw a line between the button and the mouse cursor
 	}
 
+
 	bool ConfirmDeletePopup(const char* str)
 	{
 		bool ret = false;

@@ -17,7 +17,7 @@ namespace Tempest
 
 	public:
 
-		void show()
+		void show(Instance& instance)
 		{
 			if (_current_path != _next_path)
 			{
@@ -39,7 +39,9 @@ namespace Tempest
 				{
 					try
 					{
-						_current = make_uptr<prototype>(_next_path);
+						// create from category
+						_current = make_uptr<prototype>(create_new_prototype(_next_cat));
+						_current->load_override(_next_path);
 					}
 					catch (const std::exception&)
 					{
@@ -89,31 +91,45 @@ namespace Tempest
 					}
 
 					// transform data
-					if (auto transform = _current->get_if<tc::Transform>())
+					if (auto transform = _current->get_if<tc::Local>())
 					{
 						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
 						bool header = ImGui::CollapsingHeader("Transform##TransformHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
 
 						if (header)
 						{
-							UI::DragFloat3ColorBox("Position", "##PositionDrag", ImVec2{ padding , 0.f }, transform->position.data(), 0.f, 0.1f);
 
-							auto vec = glm::eulerAngles(transform->rotation);
-							auto [x, y] = UI::DragFloat3ColorBox("Rotation", "##RotationDrag", ImVec2{ padding , 0.f }, &vec.x, 0.f, 0.1f);
-							if (x)
+							ImVec2 selectableSize = { 100.f, 0 };
+							static bool uniformScale = false;
+
 							{
-								transform->rotation = glm::quat(vec);
+								UI::DragFloat3ColorBox("Position", "##PositionDrag", ImVec2{ padding , 0.f }, transform->local_position.data(), 0.f, 0.1f);
+							}
+							{
+								auto vec = glm::degrees(glm::eulerAngles(transform->local_rotation));
+								auto [x, y] = UI::DragFloat3ColorBox("Rotation", "##RotationDrag", ImVec2{ padding , 0.f }, &vec.x, 0.f, 0.1f);
+								if (x)
+								{
+									transform->local_rotation = glm::quat(glm::radians(vec));
+								}
+							}
+							{
+								auto vec = transform->local_scale;
+								auto [x, y] = UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, vec.data(), 1.f, 0.01f, 0.01f, 5.f);
+								transform->local_scale.x = std::max(0.01f, vec.x);
+								transform->local_scale.y = std::max(0.01f, vec.y);
+								transform->local_scale.z = std::max(0.01f, vec.z);
 							}
 
-							UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, transform->scale.data(), 0.f, 0.1f);
-							UI::PaddedSeparator(1.f);
 
 							ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
+
 							auto& GC = Service<GuizmoController>::Get();
 							auto& cam = Service<RenderSystem>::Get().GetCamera();
 
-							static ImVec2 Min = { 0, 0 };
-							static ImVec2 Max = { 1600, 900 };
+							auto vp = cam.GetViewport();
+							ImVec2 Min = { 0, 0 };
+							ImVec2 Max = { vp.z, vp.w };
 
 							GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
 
@@ -123,9 +139,9 @@ namespace Tempest
 							vec3 sDelta;
 
 							auto mat =
-								glm::translate(glm::make_vec3(value_ptr(transform->position)))
-								* glm::mat4(transform->rotation)
-								* glm::scale(glm::make_vec3(value_ptr(transform->scale)));
+								glm::translate(glm::make_vec3(value_ptr(transform->local_position)))
+								* glm::mat4(transform->local_rotation)
+								* glm::scale(glm::make_vec3(value_ptr(transform->local_scale)));
 
 							//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
 							GC.SetTransformMatrix(glm::value_ptr(mat));
@@ -133,22 +149,60 @@ namespace Tempest
 							GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
 
 
+							GC.Enable();
 
-							GC.Draw();
 
-							//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
-
-							GC.GetDelta(tDelta, rDelta, sDelta);
-
-							if (tDelta.length2() > els::epsilon<float> ||
-								rDelta.length2() > els::epsilon<float>)
+							if (GC.GetOperation() != GuizmoController::Operation::SCALE)
 							{
-								//transform
-								transform->position += tDelta;
-								//transform->scale += sDelta;
+
+								ImGui::Dummy({ padding + 5.f, 0.f });
+								ImGui::SameLine();
+
+								if (ImGui::RadioButton("Local##TransfromGizmoLoc", GC.GetMode() == GuizmoController::Mode::LOCAL))
+									GC.SetMode(GuizmoController::Mode::LOCAL);
+								ImGui::SameLine();
+								if (ImGui::RadioButton("World##TransfromGizmoWorld", GC.GetMode() == GuizmoController::Mode::WORLD))
+									GC.SetMode(GuizmoController::Mode::WORLD);
 							}
 
 
+							// edit mode selector
+							if (ImGui::RadioButton("Translate##TransformTranslate", GC.GetOperation() == GuizmoController::Operation::TRANSLATE))
+								GC.SetOperation(GuizmoController::Operation::TRANSLATE);
+							ImGui::SameLine();
+							if (ImGui::RadioButton("Rotate##TransformRotate", GC.GetOperation() == GuizmoController::Operation::ROTATE))
+								GC.SetOperation(GuizmoController::Operation::ROTATE);
+							ImGui::SameLine();
+							if (ImGui::RadioButton("Scale##TransformScale", GC.GetOperation() == GuizmoController::Operation::SCALE))
+								GC.SetOperation(GuizmoController::Operation::SCALE);
+
+
+							GC.Draw();
+							vec3 eulerDeg = els::to_vec3(glm::degrees(glm::eulerAngles(transform->local_rotation)));
+							GC.GetTranslateRotationScale(transform->local_position, eulerDeg, transform->local_scale);
+							transform->local_rotation = glm::radians(to_glvec3(eulerDeg));
+
+							//GC.GetDelta(tDelta, rDelta, sDelta);
+
+							//if (tDelta.length2() > els::epsilon<float>)
+							//{
+							//	//transform
+							//	transform->local_position += tDelta;
+							//	//transform->scale += sDelta;
+							//}
+							//if (rDelta.length2() > els::epsilon<float>)
+							//{
+							//	//transform
+							//	transform->local_rotation *= glm::quat(to_glvec3(rDelta));
+							//	//transform->scale += sDelta;
+							//}
+							//if (sDelta.length2() > els::epsilon<float>)
+							//{
+							//	//transform
+							//	transform->local_scale = sDelta;
+							//	//transform->scale += sDelta;
+							//}
+							UI::PaddedSeparator(1.f);
 						}
 					}
 					if (auto mesh = _current->get_if<tc::Mesh>())
@@ -157,70 +211,110 @@ namespace Tempest
 						if(transform)
 							Service<RenderSystem>::Get().Submit(mesh->code, *transform);
 					}
+					if (auto shape = _current->get_if<tc::Shape>())
+					{
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("Shape##ShapeHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+
+						if (header)
+						{
+							int& x = shape->x;
+							int& y = shape->y;
+							const int one = 1;
+							ImGui::PushItemWidth(padding);
+							if (ImGui::InputScalar("X##xby", ImGuiDataType_S32, &x, &one))
+							{
+								x = std::clamp(x, 1, 3);
+							}
+							ImGui::Text(ICON_FA_TIMES);
+							if (ImGui::InputScalar("Y##yby", ImGuiDataType_S32, &y, &one))
+							{
+								y = std::clamp(y, 1, 3);
+							}
+							ImGui::PopItemWidth();
+
+							static auto a = 0;
+							bool check = a != 0;
+
+							if (ImGui::Checkbox("Bounding" "##ShowBoundingBoxSHape", &check))
+							{
+								if (a != 0)
+									a = 0;
+								else
+									a = 2;
+							}
+
+
+							AABB box;
+							box.min.x = -.5f - (x - 1) / 2.f;
+							box.min.z = -.5f - (y - 1) / 2.f;
+							box.min.y = 0;
+
+							box.max.x = .5f + (x - 1) / 2.f;
+							box.max.z = .5f + (y - 1) / 2.f;
+							box.max.y = (float)a;
+
+							Line l;
+							l.p0 = glm::vec3(-.1, 0, -.1);
+							l.p1 = glm::vec3(.1, 0, .1);
+
+							Line r;
+							r.p0 = glm::vec3(-.1, 0, .1);
+							r.p1 = glm::vec3(.1, 0, -.1);
+
+							Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+							Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+							Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+							UI::PaddedSeparator(1.f);
+						}
+					}
+					if (auto model = _current->get_if<tc::Model>())
+					{
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("Decoration##DecorationHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+						if (header)
+						{
+
+							int index = 0;
+							std::vector<string> resources = { "None" };
+							for (auto entry : fs::directory_iterator(instance.get_full_path() / "Models"))
+							{
+								// only get .a file
+								if (entry.path().extension() != ".a")
+									continue;
+								auto rel = fs::relative(entry.path(), instance.get_full_path()).string();
+								if (model->path == rel) {
+									index = (int)resources.size();
+								}
+								resources.emplace_back(rel);
+							}
+
+							if (ImGui::ComboWithFilter("Decoration", &index, resources))
+							{
+								model->path = resources[index];
+							}
+							ImGui::SameLine();
+							ImGui::Text("Decoration");
+
+							auto local = _current->get<tc::Local>();
+							tc::Transform transform;
+							transform.position = local.local_position;
+							transform.rotation = local.local_rotation;
+							transform.scale = local.local_scale;
+
+
+							Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / model->path).string(), transform);
+
+
+							UI::PaddedSeparator(1.f);
+						}
+					}
 				}
 
 				ImGui::Dummy({ 0.f, 2.f });
 				ImGui::TextWrapped("The below are not serialized because they are not components yet");
 				ImGui::Separator();
 				ImGui::Dummy({ 0.f, 1.f });
-
-				// shape
-				if (true)
-				{
-					//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
-					bool header = ImGui::CollapsingHeader("Shape##ShapeHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
-
-					if (header)
-					{
-						static int x = 1;
-						static int y = 1;
-						const int one = 1;
-						ImGui::PushItemWidth(padding);
-						if (ImGui::InputScalar("X##xby", ImGuiDataType_S32, &x, &one))
-						{
-							x = std::clamp(x, 1, 3);
-						}
-						ImGui::Text(ICON_FA_TIMES);
-						if (ImGui::InputScalar("Y##yby", ImGuiDataType_S32, &y, &one))
-						{
-							y = std::clamp(y, 1, 3);
-						}
-						ImGui::PopItemWidth();
-
-						static auto a = 0;
-						bool check = a != 0;
-						
-						if (ImGui::Checkbox("Bounding" "##ShowBoundingBoxSHape", &check))
-						{
-							if (a != 0)
-								a = 0;
-							else
-								a = 2;
-						}
-
-
-						AABB box;
-						box.min.x = -.5f - (x-1)/2.f;
-						box.min.z = -.5f - (y-1)/2.f;
-						box.min.y = 0;
-
-						box.max.x = .5f + (x-1)/2.f;
-						box.max.z = .5f + (y-1)/2.f;
-						box.max.y = (float)a;
-
-						Line l;
-						l.p0 = glm::vec3(-.1, 0, -.1);
-						l.p1 = glm::vec3(.1, 0, .1);
-
-						Line r;
-						r.p0 = glm::vec3(-.1, 0, .1);
-						r.p1 = glm::vec3(.1, 0, -.1);
-						
-						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
-						Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
-					}
-				}
 
 				// health
 				if (true)
@@ -248,28 +342,7 @@ namespace Tempest
 						UI::PaddedSeparator(1.f);
 					}
 				}
-				// decoration
-				if (true)
-				{
-					//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
-					bool header = ImGui::CollapsingHeader("Decoration##DecorationHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
-
-					if (header)
-					{
-						const static std::vector<string> resources = { "This", "Will", "Be", "Filled", "With", "Compiled", "Resources" };
-						static int current = 0;
-						if (ImGui::ComboWithFilter("Decoration", &current, resources))
-						{
-
-						}
-						ImGui::SameLine();
-						ImGui::Text("Decoration");
-
-
-
-					}
-				}
-
+				
 				// states
 				if (true)
 				{

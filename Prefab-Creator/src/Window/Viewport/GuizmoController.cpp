@@ -32,6 +32,7 @@ namespace Tempest
 				els::value_ptr(m_DeltaTransform)
 			);
 
+
 			switch (m_State)
 			{
 			case Tempest::GuizmoController::State::NOT_IN_USE:

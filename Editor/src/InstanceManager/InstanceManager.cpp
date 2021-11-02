@@ -13,6 +13,7 @@
 // windows
 #include "Window/Diagnostics/DiagnosticsWindow.h"
 #include "Window/Hierarchy/HierarchyWindow.h"
+#include "Window/Hierarchy/PrefabList.h"
 #include "Window/Inspector/InspectorWindow.h"
 #include "Window/Menubar/EditTimeMenuBar.h"
 #include "Window/Menubar/RunTimeMenuBar.h"
@@ -93,10 +94,14 @@ namespace Tempest
 	{
 		// assume instance is valid here
 		instance->register_window<ViewportWindow>();
-		instance->register_window<DiagnosticsWindow>();
-		instance->register_window<HierarchyWindow>();
-		instance->register_window<InspectorWindow>();
-		//instance->register_window<AssetManagerWindow>();
+		
+		instance->register_window<PrefabList>();
+		instance->register_window<AssetManagerWindow>();
+		instance->register_window<DiagnosticsWindow>()->visible = false;
+		instance->register_window<HierarchyWindow>()->visible = false;
+		instance->register_window<InspectorWindow>()->visible = false;
+		instance->register_window<test_window>()->visible = false;
+		instance->register_window<test_window2>()->visible = false;
 
 		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();
@@ -123,9 +128,6 @@ namespace Tempest
 		
 
 		instance->register_always<ShowRecent>();
-		instance->register_window<test_window>();
-		instance->register_window<test_window2>();
-		instance->register_window<test_window3>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{
