@@ -8,12 +8,19 @@ out vec3 envMapCoords;
 
 uniform mat4 inverseView;
 uniform mat4 inverseProj;
+uniform mat4 lightSpaceMatrix;
 
+out vec4 FragPosLightSpace;
+out vec3 vs_pos;
 void main()
 {
     TexCoords = texCoords;
     vec4 unprojCoords = (inverseProj * vec4(position, vec2(1.0f)));
     envMapCoords = (inverseView * unprojCoords).xyz;
 
+	
+	FragPosLightSpace = lightSpaceMatrix * vec4(position, 1.0);
+	
     gl_Position = vec4(position, 1.0f);
+	vs_pos = position;
 }

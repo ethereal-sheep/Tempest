@@ -2,6 +2,9 @@
 
 in vec2 TexCoords;
 in vec3 envMapCoords;
+
+in vec4 FragPosLightSpace;
+in vec3 vs_pos;
 out vec4 colorOutput;
 
 
@@ -33,6 +36,8 @@ uniform sampler2D envMap;
 uniform samplerCube envMapIrradiance;
 uniform samplerCube envMapPrefilter;
 uniform sampler2D envMapLUT;
+uniform sampler2D shadowMap;
+uniform samplerCube shadowCube;
 
 uniform int gBufferView;
 uniform bool pointMode;
@@ -44,6 +49,9 @@ uniform float materialMetallicity;
 uniform float ambientIntensity;
 uniform vec3 materialF0;
 uniform mat4 view;
+uniform float far_plane;
+uniform int dirShadowBool;
+uniform vec3 camPos;
 
 vec3 colorLinear(vec3 colorVector);
 float saturate(float f);
@@ -54,8 +62,8 @@ vec3 computeFresnelSchlick(float NdotV, vec3 F0);
 vec3 computeFresnelSchlickRoughness(float NdotV, vec3 F0, float roughness);
 float computeDistributionGGX(vec3 N, vec3 H, float roughness);
 float computeGeometryAttenuationGGXSmith(float NdotL, float NdotV, float roughness);
-
-
+float computeShadowDir();
+float computeShadow(int ptnum);
 void main()
 {
     // Retrieve G-Buffer informations
@@ -67,14 +75,14 @@ void main()
     float ao = texture(gEffects, TexCoords).r;
     vec2 velocity = texture(gEffects, TexCoords).gb;
     float depth = texture(gPosition, TexCoords).a;
-
+	
     float sao = texture(sao, TexCoords).r;
     vec3 envColor = texture(envMap, getSphericalCoord(normalize(envMapCoords))).rgb;
 
     vec3 color = vec3(0.0f);
     vec3 diffuse = vec3(0.0f);
     vec3 specular = vec3(0.0f);
-
+	
     if(depth == 1.0f)
     {
         color = envColor;
@@ -134,8 +142,11 @@ void main()
 
                 // Specular component computation
                 specular = (F * D * G) / (4.0f * NdotL * NdotV + 0.0001f);
-
-                color += (diffuse * kD + specular) * kRadiance * NdotL;
+				float shadow = 0.0f;
+				if(dirShadowBool == 1)
+					shadow = computeShadow(0);
+				
+                color += ( ((diffuse * kD) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
             }
         }
 
@@ -165,8 +176,13 @@ void main()
 
                 // Specular component computation
                 specular = (F * D * G) / (4.0f * NdotL * NdotV + 0.0001f);
+				float shadow = 0.0f;
+				if(dirShadowBool == 1)
+					shadow = computeShadowDir();
 
-                color += (diffuse * kD + specular) * lightColor * NdotL;
+					
+				//color += ((diffuse) * kD + specular ) * lightColor * NdotL;
+                color += (((diffuse * kD) * (1.0f - shadow))  + ((specular * lightColor * NdotL )  * (1.0f - shadow)));
             }
         }
 
@@ -306,4 +322,78 @@ float computeGeometryAttenuationGGXSmith(float NdotL, float NdotV, float roughne
     float ggxV = (2.0f * NdotV) / (NdotV + sqrt(NdotV2 + kRough2 * (1.0f - NdotV2)));
 
     return ggxL * ggxV;
+}
+vec3 gridSamplingDisk[20] = vec3[]
+(
+	vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1),
+	vec3(1, 1, -1), vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+	vec3(1, 1, 0), vec3(1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
+	vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
+	vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
+	);
+float computeShadowDir()
+{
+
+	// perform perspective divide
+	vec3 normalizedCoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
+	
+	// Transform to [0,1] range
+	normalizedCoords = normalizedCoords * 0.5 + 0.5;
+	
+	// Get closest depth value from light's perspective
+	float closestDepth = texture(shadowMap, normalizedCoords.xy).r;
+	
+	// Get depth of current fragment from light's perspective
+	float currentDepth = normalizedCoords.z;
+	
+	//vec3 normal = normalize(vs_normal);
+	vec3 normal = texture(gNormal, TexCoords).rgb;
+	vec3 dir = normalize(lightDirectionalArray[0].direction);
+	//dir.y *= -1.f;
+	float bias = max(0.05 * (1.0f - dot(normal, dir)), 0.005f);
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	for (int x = -1; x <= 1; ++x)
+	{
+		for (int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(shadowMap, normalizedCoords.xy + vec2(x, y) * texelSize).r;
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+		}
+	}
+	shadow /= 9.0;
+	
+	if (normalizedCoords.z > 1.0f)
+		return 0.0f;
+		
+	return shadow;
+	//return 0.0f;
+}
+
+
+
+
+// Shadow calulations for point lights
+float computeShadow(int ptnum)
+{
+	vec3 viewPos = texture(gPosition, TexCoords).rgb;
+	vec3 fragToLight = viewPos - lightPointArray[ptnum].position;
+	float currentDepth = length(fragToLight);
+	float shadow = 0.0f;
+	float bias = 0.15f;
+	int samples = 20;
+	
+	float viewDistance = length(camPos - viewPos);
+	float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+
+	for (int i = 0; i < samples; ++i)
+	{
+		float closestDepth = texture(shadowCube, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+		closestDepth *= far_plane;   // undo mapping [0;1]
+		if (currentDepth - bias > closestDepth)
+			shadow += 1.0;
+	}
+	shadow /= float(samples);
+
+	return shadow;
 }

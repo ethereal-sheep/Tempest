@@ -361,6 +361,8 @@ namespace Tempest
 				UI::DragFloat3ColorBox("Position", "##ModelPosDrag", ImVec2{ padding , 0.f }, value_ptr(m_pos), 0.f, 0.1f).first;
 			}
 
+			auto& dirShadowBool = Service<RenderSystem>::Get().dirShadowBool;
+			ImGui::Checkbox("shadow", &dirShadowBool);
 			/// Um ill make that later. G buffer
 			/*auto& gBufferView = Service<RenderSystem>::Get().gBufferView;
 			const auto padding = 80.f;

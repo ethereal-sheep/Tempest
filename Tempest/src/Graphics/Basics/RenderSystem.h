@@ -118,16 +118,16 @@ namespace Tempest
         GLint saoBlurSize = 4;
         GLint motionBlurMaxSamples = 32;
 
-        GLfloat lastX = 1600 / 2;
-        GLfloat lastY = 900 / 2;
+        //GLfloat lastX = 1600 / 2;
+        //GLfloat lastY = 900 / 2;
         GLfloat deltaTime = 0.0f;
-        GLfloat lastFrame = 0.0f;
-        GLfloat deltaGeometryTime = 0.0f;
-        GLfloat deltaLightingTime = 0.0f;
-        GLfloat deltaSAOTime = 0.0f;
-        GLfloat deltaPostprocessTime = 0.0f;
-        GLfloat deltaForwardTime = 0.0f;
-        GLfloat deltaGUITime = 0.0f;
+        //GLfloat lastFrame = 0.0f;
+        //GLfloat deltaGeometryTime = 0.0f;
+        //GLfloat deltaLightingTime = 0.0f;
+        //GLfloat deltaSAOTime = 0.0f;
+        //GLfloat deltaPostprocessTime = 0.0f;
+        //GLfloat deltaForwardTime = 0.0f;
+        //GLfloat deltaGUITime = 0.0f;
         GLfloat materialRoughness = 0.01f;
         GLfloat materialMetallicity = 0.02f;
         GLfloat ambientIntensity = 0.005f;
@@ -146,11 +146,11 @@ namespace Tempest
 
         bool cameraMode;
         bool pointMode = true;
-        bool directionalMode = true;
-        bool iblMode = true;
+        bool directionalMode = false;
+        bool iblMode = false;
         bool saoMode = false;
         bool fxaaMode = false;
-        bool motionBlurMode = true;
+        bool motionBlurMode = false;
         bool screenMode = false;
         bool firstMouse = true;
         bool guiIsOpen = true;
@@ -162,6 +162,7 @@ namespace Tempest
 
         // 1 fixed model first
         glm::vec3 modelPosition = glm::vec3(0.0f);
+        glm::vec3 modelPosition2 = glm::vec3(0.0f);
         glm::vec3 modelRotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
         glm::vec3 modelScale = glm::vec3(0.1f);
 
@@ -180,6 +181,14 @@ namespace Tempest
         TexturePBR objectMetalness;
         TexturePBR objectAO;
 
+        ModelPBR objectModel2;
+
+        TexturePBR objectAlbedo2;
+        TexturePBR objectNormal2;
+        TexturePBR objectRoughness2;
+        TexturePBR objectMetalness2;
+        TexturePBR objectAO2;
+
 
         TexturePBR envMapHDR;
         TexturePBR envMapCube;
@@ -189,7 +198,16 @@ namespace Tempest
 
         MaterialPBR pbrMat;
 
+
+
+        
         void iblSetup();
+
+        bool dirShadowBool = true;
+
+        // to de
+        glm::mat4 model1;
+        glm::mat4 model2;
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);

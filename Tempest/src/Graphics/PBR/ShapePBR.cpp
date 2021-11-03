@@ -120,7 +120,7 @@ namespace Tempest
         glBindVertexArray(0);
     }
 
-
+    // not used
     void ShapePBR::drawShape(const tuptr<Shader>& lightingShader, glm::mat4& view, glm::mat4& projection, Camera& camera)
     {
         lightingShader->Bind();

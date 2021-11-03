@@ -341,6 +341,7 @@ namespace Tempest
             pt_lights.emplace_back(Point_Light{});
             pt_lights[makePointLight].Position = glm::vec3( (float)makePointLight * 0.5f, 0.5f, 0.5f);
         }
+        pt_lights[0].hide = false;
 
         objectAlbedo.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
         objectNormal.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
@@ -359,11 +360,13 @@ namespace Tempest
 
         objectModel.loadModel("models/shaderball/shaderball.obj");
         
-        objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
-        objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
-        objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
-        objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
-        objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+        objectAlbedo2.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
+        objectNormal2.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
+        objectRoughness2.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
+        objectMetalness2.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
+        objectAO2.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+
+        objectModel2.loadModel("models/shaderball/shaderball.obj");
 
         materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
 
@@ -505,59 +508,77 @@ namespace Tempest
     void RenderSystem::Render()
     {    
         
+            glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            for (int rep = 0; rep < 2; rep++)
+            {
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
+
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+
+            glm::mat4 model;
+            deltaTime += 0.01f;
+            GLfloat rotationAngle = deltaTime / 5.0f * modelRotationSpeed;
+            model = glm::mat4(1);
+            if (rep == 0 )
+                model = glm::translate(model, modelPosition);
+            if (rep == 1)
+                model = glm::translate(model, modelPosition2);
+            model = glm::rotate(model, rotationAngle, modelRotationAxis);
+            model = glm::scale(model, modelScale);
+
+            if (rep == 0)
+                model1 = model;
+            if (rep == 1)
+                model2 = model;;
 
 
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
-        
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+            projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * model;
 
-        glm::mat4 model;
-        deltaTime += 0.01f;
-        GLfloat rotationAngle = deltaTime / 5.0f * modelRotationSpeed;
-        model = glm::mat4(1);
-        model = glm::translate(model, modelPosition);
-        model = glm::rotate(model, rotationAngle, modelRotationAxis);
-        model = glm::scale(model, modelScale);
 
-        projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * model;
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(projViewModel, "projViewModel");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(prevProjViewModel, "prevProjViewModel");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(model, "model");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
+            prevProjViewModel = projViewModel;
 
-     
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(projViewModel, "projViewModel");
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(prevProjViewModel, "prevProjViewModel");
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(model, "model");
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
-        prevProjViewModel = projViewModel;
+            // Material
+            // pbrMat.renderToShader();
 
-        // Material
-        // pbrMat.renderToShader();
+            glActiveTexture(GL_TEXTURE0);
+            objectAlbedo.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
 
-        glActiveTexture(GL_TEXTURE0);
-        objectAlbedo.useTexture();
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
+            glActiveTexture(GL_TEXTURE1);
+            objectNormal.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
 
-        glActiveTexture(GL_TEXTURE1);
-        objectNormal.useTexture();
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
+            glActiveTexture(GL_TEXTURE2);
+            objectRoughness.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
 
-        glActiveTexture(GL_TEXTURE2);
-        objectRoughness.useTexture();
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
+            glActiveTexture(GL_TEXTURE3);
+            objectMetalness.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
 
-        glActiveTexture(GL_TEXTURE3);
-        objectMetalness.useTexture();
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
+            glActiveTexture(GL_TEXTURE4);
+            objectAO.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
-        glActiveTexture(GL_TEXTURE4);
-        objectAO.useTexture();
-        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
+            //objectModel.Draw();
+            //objectModel2.Draw();
 
-        objectModel.Draw();
+            if (rep == 0)
+                objectModel.Draw();
+            if (rep == 1)
+                objectModel2.Draw();
+            }
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+       
+       
 
 
 
@@ -579,11 +600,11 @@ namespace Tempest
             glBindTexture(GL_TEXTURE_2D, gNormal);
 
             m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoSamples, "saoSamples");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoRadius, "saoRadius");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoRadius, "saoRadius");
             m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoTurns, "saoTurns");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoBias, "saoBias");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoScale, "saoScale");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoContrast, "saoContrast");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoBias, "saoBias");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoScale, "saoScale");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoContrast, "saoContrast");
             m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(1600, "viewportWidth");
             m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(900, "viewportHeight");
 
@@ -605,6 +626,122 @@ namespace Tempest
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+        // Directional light depth map
+    
+        if (!dir_lights[0].hide)
+        {
+            dir_lights[0].Bind();
+
+            lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+            lightView = glm::lookAt(10.f * dir_lights[0].Direction,
+                glm::vec3(0.0f, 0.0f, 0.0f),
+                glm::vec3(0.0f, 1.0f, 0.0f));
+            lightSpaceMatrix = lightProjection * lightView;
+
+            for (int rep = 0; rep < 2; rep++)
+            {
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(9, "shadowMap"); // Set Shadow map for directional light to be slot 6 
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+                if(rep == 0)
+                {
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(model1, "ModelMatrix");
+                    objectModel.Draw();
+                }
+                  
+                if (rep == 1)
+                {
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(model2, "ModelMatrix");
+                    objectModel2.Draw();
+                }
+            }
+            //objectModel.Draw();
+            //objectModel2.Draw();
+            glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+            glViewport(0, 0, 1600, 900);
+        }
+        
+
+
+
+
+
+
+        // render all pt lights to depth buffer
+        if (GetActivePt_lightsNum())
+        {
+            for (int numPt = 0; numPt < pt_lights.size(); numPt++)
+            {
+                if (pt_lights[numPt].hide)
+                    continue;
+
+                // Bind Point Light FBO
+                pt_lights[numPt].Bind();
+
+           /*     DrawSprites(MeshCode::CUBE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+                DrawSprites(MeshCode::SPHERE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+                DrawSprites(MeshCode::PLANE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+                DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::POINT_LIGHT_DEPTH, numPt);*/
+
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
+                // Send in uniform values
+                glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
+                std::vector<glm::mat4> shadowTransforms;
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                for (unsigned int shadowxform = 0; shadowxform < 6; ++shadowxform)
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(shadowTransforms[shadowxform], ("shadowMatrices[" + std::to_string(shadowxform) + "]").c_str());
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1f(far_plane, "far_plane");
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetVec3f(pt_lights[numPt].Position, "lightPos");
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+
+             /*   for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+                {
+                    for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
+                    {
+                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+                        mesh.Bind();
+                        glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+                        mesh.Unbind();
+                    }
+                }  */   
+                for (int rep = 0; rep < 2; rep++)
+                {
+                    if (rep == 0)
+                    {
+                        //m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(model1, "ModelMatrix");
+                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(model1, "ModelMatrix");
+                        objectModel.Draw();
+                    }
+
+                    if (rep == 1)
+                    {
+                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(model2, "ModelMatrix");
+                        objectModel2.Draw();
+                    }
+                }
+
+            }
+            //glActiveTexture(GL_TEXTURE0);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+            //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            glViewport(0, 0, 1600, 900);
+        }
+
+
+
+
+
+
+
+
 
 
         //------------------------
@@ -612,7 +749,7 @@ namespace Tempest
         //------------------------
         
         glBindFramebuffer(GL_FRAMEBUFFER, postprocessFBO);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
@@ -634,7 +771,16 @@ namespace Tempest
         envMapPrefilter.useTexture();
         glActiveTexture(GL_TEXTURE8);
         envMapLUT.useTexture();
+        
+        
+        glActiveTexture(GL_TEXTURE9);
+        glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
 
+        glActiveTexture(GL_TEXTURE10);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
+        
         for (int pt_light_ = 0; pt_light_ < 1; pt_light_++) //pt_lights.size()
         {
             //m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
@@ -670,6 +816,14 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(iblMode, "iblMode");
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(attenuationMode, "attenuationMode");
 
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "proj");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(GetCamera().GetPosition(), "camPos");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(far_plane, "far_plane");
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(dirShadowBool, "dirShadowBool");
+
         quadRender.drawShape();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -682,27 +836,15 @@ namespace Tempest
         glClear(GL_COLOR_BUFFER_BIT);
 
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Bind();
-        //glUniform1i(glGetUniformLocation(firstpassPPShader.Program, "gBufferView"), gBufferView);
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(gBufferView, "gBufferView");;
 
-        //glUniform2f(glGetUniformLocation(firstpassPPShader.Program, "screenTextureSize"), 1.0f / WIDTH, 1.0f / HEIGHT);
 
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->SetVec2f(glm::vec2{1.0f / 1600.f , 1.0f/ 900.f}, "screenTextureSize");;
 
-      /*  glUniform1f(glGetUniformLocation(firstpassPPShader.Program, "cameraAperture"), cameraAperture);
-        glUniform1f(glGetUniformLocation(firstpassPPShader.Program, "cameraShutterSpeed"), cameraShutterSpeed);
-        glUniform1f(glGetUniformLocation(firstpassPPShader.Program, "cameraISO"), cameraISO);*/
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraAperture, "cameraAperture");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraShutterSpeed, "cameraShutterSpeed");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraISO, "cameraISO");;
 
-
-        //glUniform1i(glGetUniformLocation(firstpassPPShader.Program, "saoMode"), saoMode);
-        //glUniform1i(glGetUniformLocation(firstpassPPShader.Program, "fxaaMode"), fxaaMode);
-        //glUniform1i(glGetUniformLocation(firstpassPPShader.Program, "motionBlurMode"), motionBlurMode);
-        //glUniform1f(glGetUniformLocation(firstpassPPShader.Program, "motionBlurScale"), int(ImGui::GetIO().Framerate) / 60.0f);
-        //glUniform1i(glGetUniformLocation(firstpassPPShader.Program, "motionBlurMaxSamples"), motionBlurMaxSamples);
-        //glUniform1i(glGetUniformLocation(firstpassPPShader.Program, "tonemappingMode"), tonemappingMode);
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");; //wtf is this like come on dude
