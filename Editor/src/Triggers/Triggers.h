@@ -34,8 +34,8 @@ namespace Tempest
 	struct ImportAssetTrigger : public Event {};
 
 	//Popup Trigger
-	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION};
-	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCE,WEAPONS,ITEMS};
+	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION, SEQUENCE};
+	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCES,WEAPONS,ITEMS};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
 	struct SimulatePopupTrigger : public Event
@@ -67,7 +67,7 @@ namespace Tempest
 	struct OpenSimulateTrigger : public Event {};
 	struct OpenSimulateResultTrigger : public Event
 	{
-		OpenSimulateResultTrigger(Entity a, Entity d, Entity c) :
+		OpenSimulateResultTrigger(Entity a, Entity d, Entity c :
 			atk(a), def(d), conflict(c){}
 		Entity atk;
 		Entity def;

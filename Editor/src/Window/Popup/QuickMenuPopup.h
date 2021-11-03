@@ -18,7 +18,7 @@ namespace Tempest
             Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.png"];
             Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.png"];
             Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.png"];
-            Tabs[QUICKMENU_POPUP_TYPE::SEQUENCE] = tex_map["Assets/SequenceMainUnlit.png"];
+            Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.png"];
             Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.png"];
             Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.png"];
             button_size = ImVec2{ Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() * 0.75f, Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() * 0.75f};
@@ -116,15 +116,15 @@ namespace Tempest
 
                     ImGui::SameLine();
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCE]->GetID()), button_size))
+                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size))
                     {
-                        current = QUICKMENU_POPUP_TYPE::SEQUENCE;
+                        current = QUICKMENU_POPUP_TYPE::SEQUENCES;
                     }
 
                     if (ImGui::IsItemHovered())
-                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCE] = tex_map["Assets/SequenceMainLit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainLit.png"];
                     else
-                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCE] = tex_map["Assets/SequenceMainUnlit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.png"];
 
                     ImGui::SameLine();
 

@@ -25,6 +25,8 @@ namespace Tempest
 		sequence = UNDEFINED;
 
 		padding = ImGui::GetMainViewport()->Size.y * 0.02f;
+		win = 0;
+		lose = 0;
 	}
 
 	void SimulateOverlay::confirm_data(const Event& e)
@@ -41,6 +43,9 @@ namespace Tempest
 			break;
 		case SIMULATE_POPUP_TYPE::ACTION:
 			owner.action = a.data;
+			break;
+		case SIMULATE_POPUP_TYPE::SEQUENCE:
+			sequence = a.data;
 			break;
 		default:
 			break;
@@ -60,85 +65,92 @@ namespace Tempest
 
 			if (ImGui::Begin("Select Unit Sheet", nullptr, window_flags))
 			{
-				// title
-				const float contentSize = ImGui::GetContentRegionAvailWidth() * 0.9f;
-				string text = "Simulate";
-
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
-				UI::SubHeader("Simulate");
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f});
-
-				// simulate backdrop
-				const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
-
-				auto tex = tex_map["Assets/SimulationBackdrop.png"];
-				//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
-				ImVec2 point = ImGui::GetCursorPos();
+				auto tex = tex_map["Assets/SimulationBG.png"];
 				{
 
-					ImVec2 Min{ point.x, point.y };
-					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y * 0.73f };
+					ImVec2 Min{ 0,0 };
+					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y};
 					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
 				}
 
+				// title
+				ImGui::SetCursorPos(ImVec2{ 0,0 });
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+				UI::SubHeader("Simulate");
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+
 				// sequence display
-				ImGui::PushFont(FONT_HEAD);
-				const std::string seq_title{ "Sequence List" };
+				ImGui::PushFont(FONT_BODY);
+				const std::string seq_title{ "Sequence" };
 				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - (ImGui::CalcTextSize(seq_title.c_str()).x  + ImGui::GetFontSize() * 0.5f) * 0.5f, viewport->Size.y * 0.2f });
-				ImGui::Text("Sequence List");
+				ImGui::Text(seq_title.c_str());
 				ImGui::PopFont();
 
-				const ImVec2 childSize{ viewport->Size.x * 0.2f, viewport->Size.y * 0.5f }; //SHIFT to local
-				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - childSize.x * 0.5f,viewport->Size.y * 0.5f - childSize.y * 0.5f});
-				ImGui::BeginChild("##SequenceSection", childSize, true);
+				// display chosen sequence
+				std::string seq_name{ "SELECT SEQUENCE" };
+				if (sequence != UNDEFINED)
+					seq_name = instance.ecs.get<tc::Graph>(sequence).g.name;
+
+				if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), { viewport->Size.x * 0.5f, viewport->Size.x * 0.15f }, { 0,0 }, FONT_PARA))
 				{
-					const ImVec2 cursor{ ImGui::GetCursorPosX() + 180, ImGui::GetCursorPosY() + 30 };
-
-					unsigned i = 0;
-					for (auto id : instance.ecs.view<tc::ConflictGraph>())
-					{
-						ImGui::PushID(id);
-						//ImGui::BeginGroup();
-						const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
-
-						auto& conflict = instance.ecs.get<tc::Graph>(id);
-
-						if (UI::UIButton_2(conflict.g.name + ": " + std::to_string(i), conflict.g.name + ": " + std::to_string(i), pos, {70.0f,20.0f}, FONT_PARA))
-						{
-							sequence = id;
-						}
-
-						ImGui::PopID();
-					}
+					Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+						SIMULATE_POPUP_TYPE::SEQUENCE, false, sequence);
 				}
-				ImGui::EndChild();
 
+				// success title
+				const std::string success_title{ "Chance of Success" };
+				ImGui::PushFont(FONT_HEAD);
+				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - (ImGui::CalcTextSize(success_title.c_str()).x + ImGui::GetFontSize() * 0.5f) * 0.5f, viewport->Size.y * 0.4f });
+				ImGui::Text(success_title.c_str());
+				ImGui::PopFont();
 
+				// display number percentage
+				float result = 0.0f;
+
+				// display number percentage
+				if (win && lose)
+				{
+					result = 100.f * win / (win + lose);
+					ImGui::SetCursorPos({ viewport->Size.x * 0.465f, viewport->Size.y * 0.55f });
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(232, 137, 64, 255));
+					ImGui::Text("%.1f %%", result);
+					ImGui::PopStyleColor();
+					ImGui::PopFont();
+				}
+
+				// render progress bar
+				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - 350.0f * 0.5f, viewport->Size.y * 0.45f });
+				ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(232, 137, 64, 255));
+				ImGui::ProgressBar(result * 0.01f, { 350.0f, 50.0f });
+				ImGui::PopStyleColor();
+
+				ImGui::SetCursorPos({ viewport->Size.x * 0.45f, viewport->Size.y * 0.65f });
+				ImGui::PushFont(FONT_PARA);
+				ImGui::Text("Frequency ");
+				ImGui::PopFont();
+				ImGui::SameLine();
+				ImGui::PushItemWidth(100.f);
+				ImGui::InputScalar("", ImGuiDataType_U32, &freq, 0);
+				freq = std::clamp(freq, 1u, 100u);
+				ImGui::PopItemWidth();
+				
 				// attack section
 				DisplayUnitSection({ viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
 				DisplayUnitSection({ viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, false);
 
-
-				if (UI::UIButton_2("Back", "Back", { viewport->Size.x * 0.1f, viewport->Size.y * 0.9f }, { 0,0 }, FONT_PARA))
+				if (UI::UIButton_2("Simulate", "Simulate", { viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))
 				{
-					OverlayOpen = false;
+					// TODO: check for invalid inputs
+					freq = std::clamp(freq, 1u, 100000u);
+
+					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, sequence, freq, win, lose);
 				}
 
-				if (UI::UIButton_2("Next", "Next", { viewport->Size.x * 0.9f, viewport->Size.y * 0.9f }, { 0,0 }, FONT_PARA))
+				if (UI::UIButton_2("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))
 				{
-					// for testing here
-					//auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
-
-					//// for testing here
-					//for (auto id : view)
-					//{
-					//	if (attacker.unit_id == UNDEFINED)
-					//		attacker.unit_id = id;
-					//	else if (defender.unit_id == UNDEFINED)
-					//		defender.unit_id = id;
-					//}
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(attacker.unit_id, defender.unit_id, sequence);
-				}	
+					// open testing combat in map
+				}
 
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });

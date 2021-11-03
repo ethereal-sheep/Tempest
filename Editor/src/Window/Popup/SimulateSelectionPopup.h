@@ -25,8 +25,17 @@ namespace Tempest
             type = a.type;
             is_attacker = a.is_attacker;
             data = a.data;
-            position = is_attacker ? ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.5f } :
-                                     ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.5f };
+            if (type == SIMULATE_POPUP_TYPE::SEQUENCE)
+            {
+                position = ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f };
+            }
+
+            else
+            {
+                position = is_attacker ? ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.5f } :
+                                         ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.5f };
+            }
+           
         }
 
         void show(Instance& instance) override
@@ -127,6 +136,35 @@ namespace Tempest
                         if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
+                            // goto actions page and create additional actions
+                            //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
+                        }
+                    }
+                        break;
+                    case SIMULATE_POPUP_TYPE::SEQUENCE:
+                    {
+                        for (auto id : instance.ecs.view<tc::ConflictGraph>())
+                        {
+                            auto& action = instance.ecs.get<tc::Graph>(id);
+
+                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA))
+                            {
+                                data = id;
+                            }
+
+                            // display in rows of 2
+                            if (i / 2)
+                            {
+                                i = 0;
+                                j++;
+                            }
+
+                        }
+
+                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        {
+                            enable_popup = false;
+                            // goto sequence page and create additional sequence
                             //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
                         }
                     }

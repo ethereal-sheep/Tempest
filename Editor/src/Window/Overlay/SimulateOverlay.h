@@ -59,6 +59,10 @@ namespace Tempest
         UnitData defender{};
         Entity sequence{ UNDEFINED };
 
+        uint32_t freq = 100000u;
+        uint32_t win;
+        uint32_t lose;
+
         float padding{ 0.0f };
     };
 }
