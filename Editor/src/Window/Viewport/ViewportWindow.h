@@ -12,11 +12,15 @@
 #include "Instance/Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
 #include "Util/GuizmoController.h"
+#include "CameraControls.h"
 
 namespace Tempest
 {
 	class ViewportWindow : public Window
 	{
+		CameraControls cam_ctrl;
+		id_t current = INVALID;
+
 		const char* window_name() override
 		{
 			return "Viewport";
@@ -63,78 +67,6 @@ namespace Tempest
 						ImGuiDockNodeFlags_NoDockingInCentralNode);
 				}
 
-				auto& cam = Service<RenderSystem>::Get().GetCamera();
-				if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
-				{
-					auto direction = els::to_vec2(io.MouseDelta);
-					auto yaw_speed = 1.f / 4.f;
-					auto pitch_speed = 1.f / 4.f;
-					auto pan_speed = 1.f / 4.f;
-					auto forward_speed = 1.f / 4.f;
-					auto scroll_speed = forward_speed * 2.f;
-
-					if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
-					{
-						//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
-						//(m_SavedMousePos.x, m_SavedMousePos.y);
-					}
-
-					if (io.MouseDown[0] && io.MouseDown[1])
-					{
-						// Do Nothing UwU
-					}
-					else if (io.MouseDown[0]) // rotate translate
-					{
-						if (!els::is_zero(direction))
-						{
-							auto rot = cam.GetQuatRotation();
-							auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-							rot = rot * yaw;
-							cam.SetRotation(rot);
-
-							auto currentPos = cam.GetPosition();
-							auto forward = glm::normalize(glm::cross(glm::vec3{ 0, 1, 0 }, cam.GetLeft())) * io.MouseDelta.y;
-							auto newPos = currentPos + forward * forward_speed;
-							cam.SetPosition(newPos);
-						}
-
-
-
-					}
-					else if (io.MouseDown[1]) // rotate
-					{
-						if (!els::is_zero(direction))
-						{
-							auto rot = cam.GetQuatRotation();
-
-							auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-							rot = rot * yaw;
-							cam.SetRotation(rot);
-							auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), cam.GetLeft());
-							rot = rot * pitch;
-							cam.SetRotation(rot);
-						}
-
-					}
-					else if (io.MouseDown[2]) // Pan
-					{
-						if (!els::is_zero(direction))
-						{
-
-							auto up = glm::vec3{ 0, 1, 0 };
-							auto right = cam.GetLeft();
-
-							auto currentPos = cam.GetPosition();
-							auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
-							auto newPos = currentPos - worldSpaceDirection * pan_speed;
-
-							cam.SetPosition(newPos);
-						}
-					}
-
-					cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
-				}
-
 
 
 			}
@@ -142,26 +74,52 @@ namespace Tempest
 			ImGui::PopStyleVar(3);
 
 
-			if (instance.selected != INVALID && 
-				instance.ecs.has<tc::Transform>(instance.selected))
-			{
 
+			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			cam_ctrl.show_debug(cam);
+			cam_ctrl.update(cam);
+
+
+			// if there is transform
+			if (current != instance.selected)
+			{
+				if (instance.scene.get_map().exist(instance.selected) && instance.scene.get_map().get(instance.selected).has<tc::Transform>())
+				{
+					auto& pf = instance.scene.get_map().get(instance.selected);
+					auto& transform = pf.force<tc::Transform>();
+					cam_ctrl.set_world_camera();
+					cam_ctrl.set_orbit_camera(cam, to_glvec3(transform.position));
+				}
+				else
+				{
+					cam_ctrl.set_world_camera();
+				}
+
+
+				current = instance.selected;
+			}
+
+
+			if (instance.scene.get_map().exist(current) && instance.scene.get_map().get(current).has<tc::Transform>())
+			{
+				auto& pf = instance.scene.get_map().get(instance.selected);
 				ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
 				auto& GC = Service<GuizmoController>::Get();
-				auto& cam = Service<RenderSystem>::Get().GetCamera();
-				auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+				auto& transform = pf.force<tc::Transform>();
 
-				static ImVec2 Min = { 0, 0 };
-				static ImVec2 Max = { 1600, 900 };
+				cam_ctrl.set_orbit_axis(to_glvec3(transform.position));
+
+				auto vp = cam.GetViewport();
+				ImVec2 Min = { 0, 0 };
+				ImVec2 Max = { vp.z, vp.w };
 
 				GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
-
 
 				vec3 tDelta;
 				vec3 rDelta;
 				vec3 sDelta;
 
-				auto mat = 
+				auto mat =
 					glm::translate(glm::make_vec3(value_ptr(transform.position)))
 					* glm::mat4(transform.rotation)
 					* glm::scale(glm::make_vec3(value_ptr(transform.scale)));
@@ -171,25 +129,69 @@ namespace Tempest
 				GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
 				GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
 
-
-
 				GC.Draw();
 
 				//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
 
 				GC.GetDelta(tDelta, rDelta, sDelta);
 
+				tDelta.x = std::round(tDelta.x);
+				tDelta.y = 0;
+				tDelta.z = std::round(tDelta.z);
+
 				if (tDelta.length2() > els::epsilon<float> ||
 					rDelta.length2() > els::epsilon<float>)
 				{
 					//transform
-					transform.position += tDelta;
+
+					if (io.KeyAlt)
+					{
+						auto [it, b] = instance.scene.get_map().create(pf);
+						instance.selected = it->first;
+						current = instance.selected;
+						if (auto new_transform = it->second.force_if<tc::Transform>())
+						{
+							new_transform->position = transform.position + tDelta;
+						}
+					}
+					else
+					{
+						transform.position += tDelta;
+					}
+					//cam_ctrl.look_at(cam, to_glvec3(transform.position));
 					//transform->scale += sDelta;
+				}
+
+				if (auto shape = pf.get_if<tc::Shape>())
+				{
+					const int& x = shape->x;
+					const int& y = shape->y;
+					const int one = 1;
+
+					AABB box;
+					box.min.x = transform.position.x - .5f - (x - 1) / 2.f;
+					box.min.z = transform.position.z - .5f - (y - 1) / 2.f;
+					box.min.y = 0;
+
+					box.max.x = transform.position.x + .5f + (x - 1) / 2.f;
+					box.max.z = transform.position.z + .5f + (y - 1) / 2.f;
+					box.max.y = 0;
+
+					/*Line l;
+					l.p0 = glm::vec3(-.1, 0, -.1);
+					l.p1 = glm::vec3(.1, 0, .1);
+
+					Line r;
+					r.p0 = glm::vec3(-.1, 0, .1);
+					r.p1 = glm::vec3(.1, 0, -.1);*/
+
+					Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+					//Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+					//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 				}
 			}
 
-
-
+			
 
 			// change this to instance cam
 

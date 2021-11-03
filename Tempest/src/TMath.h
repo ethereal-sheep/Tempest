@@ -29,6 +29,9 @@
 #include <glm.hpp>
 #include <gtc/type_ptr.hpp>
 #include <gtx/transform.hpp>
+#include <gtx/vector_angle.hpp>
+#include <gtx/easing.hpp>
+#include <gtx/intersect.hpp> 
 
 
 namespace Tempest

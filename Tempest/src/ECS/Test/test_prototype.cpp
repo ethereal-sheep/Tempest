@@ -14,6 +14,8 @@
 #include "../Prototypes/Prototype_Category.h"
 #include "ECS/ECS.h"
 
+#include <rttr/registration>
+
 
 namespace Tempest
 {
@@ -98,7 +100,7 @@ namespace Tempest
 		const char* s = R"(S:\Development\Projects)";
 		prototype p;
 		auto meta = p.emplace<tc::Meta>();
-		auto transform = p.emplace<tc::Transform>();
+		//auto transform = p.emplace<tc::Transform>();
 		meta->name = "LOL";
 		
 		auto target = p.save(s);
@@ -177,25 +179,25 @@ namespace Tempest
 
 	void testing_prefab_serialize()
 	{
-		prototype p;
-		const char* s = R"(S:\Development\Projects)";
-		auto meta = p.emplace<tc::Meta>();
+		//prototype p;
+		//const char* s = R"(S:\Development\Projects)";
+		//auto meta = p.emplace<tc::Meta>();
 
-		// serialize
-		{
-			auto prefab1 = p.instance(); // instanced
-			auto prefab2 = prefab1; // cloned
-		}
+		//// serialize
+		//{
+		//	auto prefab1 = p.instance(); // instanced
+		//	auto prefab2 = prefab1; // cloned
+		//}
 
-		// deserialize
-		{
+		//// deserialize
+		//{
 
-		}
+		//}
 	}
 
 	void testing_prototype()
 	{
-		testing_coptional1();
+		/*testing_coptional1();
 		testing_prototype1();
 		testing_prototype2();
 		testing_prototype_serialize();
@@ -206,6 +208,6 @@ namespace Tempest
 
 
 		testing_prefab_copy();
-		testing_prefab_serialize();
+		testing_prefab_serialize();*/
 	}
 }

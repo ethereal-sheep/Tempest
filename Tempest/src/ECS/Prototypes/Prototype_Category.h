@@ -21,6 +21,7 @@ detail::proto_category category_name(#category_name, categories, []( \
 
 
 
+
 namespace Tempest
 {
 	namespace detail
@@ -30,7 +31,7 @@ namespace Tempest
 		{
 			tmap<string, proto_category> categories;
 
-			proto_category_container();
+			inline proto_category_container();
 		};
 
 		static proto_category_container proto_categories;
@@ -39,7 +40,6 @@ namespace Tempest
 		struct proto_category
 		{
 			string type_info;
-
 			tvector<std::function<bool(const prototype&)>> verify_fns;
 			tvector<std::function<void(prototype&)>> create_fns;
 
@@ -79,7 +79,7 @@ namespace Tempest
 
 			prototype create() const
 			{
-				prototype p;
+				prototype p(type_info, type_info);
 				for (auto fn : create_fns) fn(p);
 				return p;
 			}
@@ -88,14 +88,53 @@ namespace Tempest
 
 	DEFINE_PROTO_CATEGORIES
 	{
+		PROTO_CATEGORY(Door)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
+		});
+
 		PROTO_CATEGORY(Wall)
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
+		});
+
+		PROTO_CATEGORY(Tile)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
+		});
+
+		PROTO_CATEGORY(Decoration)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
+		});
+
+		PROTO_CATEGORY(Obstacle)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
 		});
 	}
 
-	[[no_discard]]
+	[[nodiscard]]
 	inline static prototype create_new_prototype(const string& category)
 	{
 		if (!detail::proto_categories.categories.count(category))
@@ -104,13 +143,13 @@ namespace Tempest
 			return detail::proto_categories.categories.at(category).create();
 	}
 
-	[[no_discard]]
+	[[nodiscard]]
 	inline static auto get_prototype_categories()
 	{
 		return const_range(detail::proto_categories.categories);
 	}
 
-	[[no_discard]]
+	[[nodiscard]]
 	inline static bool verify(const string& category, const prototype& p)
 	{
 		if (!detail::proto_categories.categories.count(category))
@@ -118,7 +157,7 @@ namespace Tempest
 
 		detail::proto_categories.categories.at(category).verify(p);
 	}
-	[[no_discard]]
+	[[nodiscard]]
 	inline static bool verify_strict(const string& category, const prototype& p)
 	{
 		if (!detail::proto_categories.categories.count(category))

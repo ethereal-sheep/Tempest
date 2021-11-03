@@ -11,6 +11,7 @@
 #include "Graphics/Basics/Model.h"
 #include "Logger/Log.h"
 #include "Core.h"
+#include "TMath.h"
 
 namespace Tempest
 {
@@ -20,98 +21,252 @@ namespace Tempest
 
 	Model::Model(const char* file) : m_File(file)
 	{
-		s_Scene = s_Importer.ReadFile(file,
-			aiProcess_Triangulate |
-			aiProcess_GenSmoothNormals |
-			aiProcess_JoinIdenticalVertices);
+		//s_Scene = s_Importer.ReadFile(file,
+		//	aiProcess_Triangulate |
+		//	aiProcess_GenSmoothNormals |
+		//	aiProcess_JoinIdenticalVertices);
+		//
+		//// create a list of material
+		//tvector<tsptr<Material>> materials;
+		////auto tex = s_Scene->GetEmbeddedTexture(m_File.string().c_str());
+		//
+		//// pass in materials to be processed
+		//for (id_t i = 0; i < s_Scene->mNumMaterials; ++i)
+		//{
+		//	Material m;
+		//	aiString atex;
+		//	const auto* pMaterial = s_Scene->mMaterials[i];
+		//	// turn into Tempest::Material
+		//	//auto& m = *materials[i];
+		//	pMaterial->Get(AI_MATKEY_REFRACTI, m.Refraction);
+		//	pMaterial->Get(AI_MATKEY_REFLECTIVITY, m.Reflection);
+		//	pMaterial->Get(AI_MATKEY_SHININESS, m.Shininess);
+		//	pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, m.ShininessStrength);
+		//	pMaterial->Get(AI_MATKEY_OPACITY, m.Opacity);
+		//
+		//	pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, m.Diffuse.data(), nullptr);
+		//	pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, m.Ambient.data(), nullptr);
+		//	pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, m.Specular.data(), nullptr);
+		//	pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, m.Emissive.data(), nullptr);
+		//	pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, m.Transparent.data(), nullptr);
+		//	pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, m.Reflective.data(), nullptr);
+		//	pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), atex);
+		//	if (atex.length)
+		//	{
+		//		string full_path{ atex.data };
+		//		string lower_path{ atex.data };
+		//		std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+		//			[](char c) { return (char)std::tolower((int)c); });
+		//
+		//		auto check = lower_path.find("models");
+		//		if (check == string::npos) continue;
+		//
+		//		string tex_path = full_path.substr(check, full_path.length());
+		//		//auto file2 = m_File.parent_path() / tex_path;
+		//
+		//		try
+		//		{
+		//			m.BaseTexture = make_sptr<Texture>(tex_path);
+		//		}
+		//		catch (const std::exception& e)
+		//		{
+		//			LOG_ERROR(e.what());
+		//		}
+		//	}
+		//	//else
+		//	//{
+		//	//	m.BaseTexture = nullptr;
+		//	//}
+		//
+		//	for (uint32_t j = 0; j < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); ++j)
+		//	{
+		//		aiString path;
+		//		if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
+		//		{
+		//			string full_path{ path.data };
+		//			string lower_path{ path.data };
+		//			std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+		//				[](char c) { return (char)std::tolower((int)c); });
+		//
+		//			auto check = lower_path.find("textures");
+		//			if (check == string::npos) continue;
+		//
+		//			string tex_path = full_path.substr(check, full_path.length());
+		//			auto tfile = m_File.parent_path() / tex_path;
+		//
+		//			try
+		//			{
+		//				m.DiffuseMap = make_sptr<Texture>(tfile.string().c_str());
+		//			}
+		//			catch (const std::exception& e)
+		//			{
+		//				LOG_ERROR(e.what());
+		//			}
+		//
+		//			//auto tex_path = m_File.parent_path() / path.data;
+		//			//m.DiffuseMap = make_sptr<Texture>(tex.path);
+		//		}
+		//	}
+		//	materials.push_back(make_sptr<Material>(m));
+		//}
+		//
+		//// nodes and meshes
+		//// recursive into the scene graph
+		//ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, materials);
 
-		// create a list of material
-		tvector<tsptr<Material>> materials;
-		//auto tex = s_Scene->GetEmbeddedTexture(m_File.string().c_str());
+		tpair<Vertices, Indices> vi;
+		Vertices& vertex = vi.first;
+		Indices& index = vi.second;
+		Material m;
 
-		// pass in materials to be processed
-		for (id_t i = 0; i < s_Scene->mNumMaterials; ++i)
+		std::string temp_x, temp_y, temp_z;
+
+		std::ifstream in_file{ file, std::ios::in };
+		std::string line;
+		std::string prefix;
+
+		// Check if file was opened properly, else return false
+		if (!in_file)
 		{
-			Material m;
-			aiString atex;
-			const auto* pMaterial = s_Scene->mMaterials[i];
-			// turn into Tempest::Material
-			//auto& m = *materials[i];
-			pMaterial->Get(AI_MATKEY_REFRACTI, m.Refraction);
-			pMaterial->Get(AI_MATKEY_REFLECTIVITY, m.Reflection);
-			pMaterial->Get(AI_MATKEY_SHININESS, m.Shininess);
-			pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, m.ShininessStrength);
-			pMaterial->Get(AI_MATKEY_OPACITY, m.Opacity);
-
-			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, m.Diffuse.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, m.Ambient.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, m.Specular.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, m.Emissive.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, m.Transparent.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, m.Reflective.data(), nullptr);
-			pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), atex);
-			if (atex.length)
-			{
-				string full_path{ atex.data };
-				string lower_path{ atex.data };
-				std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
-					[](char c) { return (char)std::tolower((int)c); });
-
-				auto check = lower_path.find("models");
-				if (check == string::npos) continue;
-
-				string tex_path = full_path.substr(check, full_path.length());
-				//auto file2 = m_File.parent_path() / tex_path;
-
-				try
-				{
-					m.BaseTexture = make_sptr<Texture>(tex_path);
-				}
-				catch (const std::exception& e)
-				{
-					LOG_ERROR(e.what());
-				}
-			}
-			//else
-			//{
-			//	m.BaseTexture = nullptr;
-			//}
-
-			for (uint32_t j = 0; j < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); ++j)
-			{
-				aiString path;
-				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
-				{
-					string full_path{ path.data };
-					string lower_path{ path.data };
-					std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
-						[](char c) { return (char)std::tolower((int)c); });
-
-					auto check = lower_path.find("textures");
-					if (check == string::npos) continue;
-
-					string tex_path = full_path.substr(check, full_path.length());
-					auto tfile = m_File.parent_path() / tex_path;
-
-					try
-					{
-						m.DiffuseMap = make_sptr<Texture>(tfile.string().c_str());
-					}
-					catch (const std::exception& e)
-					{
-						LOG_ERROR(e.what());
-					}
-
-					//auto tex_path = m_File.parent_path() / path.data;
-					//m.DiffuseMap = make_sptr<Texture>(tex.path);
-				}
-			}
-			materials.push_back(make_sptr<Material>(m));
+			LOG_WARN("File Not Found");
 		}
 
-		// nodes and meshes
-		// recursive into the scene graph
-		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, materials);
+		in_file.seekg(0, std::ios::beg);
+
+		while (std::getline(in_file, line))
+		{
+			std::istringstream file_line{ line };
+			glm::vec3 pos;
+			file_line >> prefix;
+			if (prefix == "v" && line != "")
+			{
+				file_line >> pos.x >> pos.y >> pos.z;
+
+				vertex.position.push_back(pos);
+			}
+
+			else if (prefix == "n" && line != "")
+			{
+				glm::vec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+
+				vertex.normal.push_back(temp);
+			}
+
+			else if (prefix == "t" && line != "")
+			{
+				glm::vec2 temp;
+				file_line >> temp.x >> temp.y;
+
+				vertex.texCoord.push_back(temp);
+			}
+
+			else if (prefix == "f" && line != "")
+			{
+				glm::ivec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+
+				index.push_back(temp.x);
+				index.push_back(temp.y);
+				index.push_back(temp.z);
+			}
+
+			else if (prefix == "p" && line != "")
+			{
+				std::string temp;
+				file_line >> temp;
+				m.BaseTexture = make_sptr<Texture>(temp);
+			}
+
+			else if (prefix == "Ambient" && line != "")
+			{
+				vec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+				m.Ambient = temp;
+			}
+
+			else if (prefix == "Diffuse" && line != "")
+			{
+				vec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+				m.Diffuse = temp;
+			}
+
+			else if (prefix == "Specular" && line != "")
+			{
+				vec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+				m.Specular = temp;
+			}
+
+			else if (prefix == "Emissive" && line != "")
+			{
+				vec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+				m.Emissive = temp;
+			}
+
+			else if (prefix == "Transparent" && line != "")
+			{
+				vec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+				m.Transparent = temp;
+			}
+
+			else if (prefix == "Reflective" && line != "")
+			{
+				vec3 temp;
+				file_line >> temp.x >> temp.y >> temp.z;
+				m.Reflective = temp;
+			}
+
+			else if (prefix == "Refraction" && line != "")
+			{
+				float temp;
+				file_line >> temp;
+				m.Refraction = temp;
+			}
+
+			else if (prefix == "Reflection" && line != "")
+			{
+				float temp;
+				file_line >> temp;
+				m.Reflection = temp;
+			}
+
+			else if (prefix == "Shininess" && line != "")
+			{
+				float temp;
+				file_line >> temp;
+				m.Shininess = temp;
+			}
+
+			else if (prefix == "ShininessStrength" && line != "")
+			{
+				float temp;
+				file_line >> temp;
+				m.ShininessStrength = temp;
+			}
+
+			else if (prefix == "Opacity" && line != "")
+			{
+				float temp;
+				file_line >> temp;
+				m.Opacity = temp;
+			}
+
+			glm::vec3 n = normalize(pos);
+			glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
+			glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
+			
+			glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
+			glm::vec3 b = cross(t, n);
+
+			vertex.tangent.emplace_back(t);
+			vertex.bitangent.emplace_back(b);
+		}
+
+		m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(m));
 	}
 
 	/*Model::Model(Model&& model)
@@ -195,4 +350,4 @@ namespace Tempest
 
 	//	
 	//}
-}
+}	

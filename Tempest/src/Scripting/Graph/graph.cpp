@@ -27,9 +27,14 @@ namespace Tempest
 			// attacking/defending entities
 			auto atker = add_var("Attacker", pin_type::Int64);
 			auto defer = add_var("Defender", pin_type::Int64);
+			auto atk_act = add_var("AttackAction", pin_type::Int64);
+			auto def_act = add_var("DefendAction", pin_type::Int64);
 			auto win_lose = add_var("Win", pin_type::Int);
+
 			LOG_ASSERT(atker);
 			LOG_ASSERT(defer);
+			LOG_ASSERT(atk_act);
+			LOG_ASSERT(def_act);
 			LOG_ASSERT(win_lose);
 
 			// start nodes
@@ -99,41 +104,72 @@ namespace Tempest
 				d62->get_output_pin(0)->get_id(),
 				compare->get_input_pin(2)->get_id()
 			));
-
-
 		}
 			break;
 		case Tempest::graph_type::action:
 		{
 			// for output
 			auto var = add_var("Output", pin_type::Int);
-			auto atker = add_var("Attacker", pin_type::Int64);
-			auto defer = add_var("Defender", pin_type::Int64);
+			auto owner = add_var("Owner", pin_type::Int64);
+			auto enemy = add_var("Enemy", pin_type::Int64);
 
-			auto input = add_node(ActionNode::create_node("Input"));
-			auto output = add_node(ActionNode::create_node("Output"));
+			auto roll = add_node(ActionNode::create_node("Roll"));
+			auto res = add_node(ActionNode::create_node("Resolve"));
+			auto out1 = add_node(ActionNode::create_node("Output"));
+			auto out2 = add_node(ActionNode::create_node("Output"));
 
 			LOG_ASSERT(var);
-			LOG_ASSERT(atker);
-			LOG_ASSERT(defer);
-			LOG_ASSERT(input);
-			LOG_ASSERT(output);
+			LOG_ASSERT(owner);
+			LOG_ASSERT(enemy);
+			LOG_ASSERT(roll);
+			LOG_ASSERT(res);
+			LOG_ASSERT(out1);
+			LOG_ASSERT(out2);
 
-			output->position.x = 300.f;
+			// move roll
+			// roll stay same
 
-			auto flow = add_link(
-				input->get_output_pin(0)->get_id(),
-				output->get_input_pin(0)->get_id()
-			);
+			// move res
+			res->position.y = 150.f;
 
-			auto i = add_link(
-				input->get_output_pin(1)->get_id(),
-				output->get_input_pin(1)->get_id()
-			);
+			// move out1
+			out1->position.x = 300.f;
 
-			LOG_ASSERT(flow);
-			LOG_ASSERT(i);
+			// move out2
+			out2->position.x = 300.f;
+			out2->position.y = 150.f;
 
+			// connect roll and out1
+			{
+				auto flow = add_link(
+					roll->get_output_pin(0)->get_id(),
+					out1->get_input_pin(0)->get_id()
+				);
+
+				auto i = add_link(
+					roll->get_output_pin(1)->get_id(),
+					out1->get_input_pin(1)->get_id()
+				);
+
+				LOG_ASSERT(flow);
+				LOG_ASSERT(i);
+			}
+
+			// connect res and out2
+			{
+				auto flow = add_link(
+					res->get_output_pin(0)->get_id(),
+					out2->get_input_pin(0)->get_id()
+				);
+
+				auto i = add_link(
+					res->get_output_pin(1)->get_id(),
+					out2->get_input_pin(1)->get_id()
+				);
+
+				LOG_ASSERT(flow);
+				LOG_ASSERT(i);
+			}
 		}
 			break;
 		case Tempest::graph_type::resolution:

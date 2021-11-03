@@ -108,7 +108,8 @@ namespace Tempest
 
 		if (wglChoosePixelFormatARB && wglCreateContextAttribsARB)
 		{
-			m_WND = CreateWindowW(L"Tempest",
+			m_WND = CreateWindowEx( WS_EX_ACCEPTFILES,
+									L"Tempest",
 									pApp->GetTitle(),
 									WS_OVERLAPPEDWINDOW,
 									CW_USEDEFAULT,

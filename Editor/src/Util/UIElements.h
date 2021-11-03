@@ -27,12 +27,15 @@ namespace Tempest::UI
 		return label + "##" + a;
 	}
 
-	void PaddedSeparator(float padding = 0.f);
+	void PaddedSeparator(float padding = 1.f);
 	void PaddedSeparator(float up, float down);
 
 	void DrawLine();
 
 	void HelpMarker(const char* str);
+
+	bool BeginNodeCombo(const char* label, const char* preview_value, ImGuiComboFlags flags = 0);
+	bool BeginNodeComboPopup(ImGuiID popup_id, const ImRect& bb, ImGuiComboFlags flags);
 
 	void Tooltip(const char* label, const char* str, bool enabled = true);
 

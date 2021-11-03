@@ -60,8 +60,9 @@ namespace Tempest
         Entity sequence{ UNDEFINED };
 
         uint32_t freq = 100000u;
-        uint32_t win;
-        uint32_t lose;
+        std::atomic_uint32_t win;
+        std::atomic_uint32_t lose;
+        std::atomic_bool finish;
 
         float padding{ 0.0f };
     };

@@ -38,13 +38,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{DD6A
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asset-Compiler", "Asset-Compiler\Asset-Compiler.vcxproj", "{937F1BAD-CD47-4148-B993-6934A4CD3598}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3DFCC228-6442-4ECF-A665-CAF9E34053A9} = {3DFCC228-6442-4ECF-A665-CAF9E34053A9}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prefab-Creator", "Prefab-Creator\Prefab-Creator.vcxproj", "{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3DFCC228-6442-4ECF-A665-CAF9E34053A9} = {3DFCC228-6442-4ECF-A665-CAF9E34053A9}
+		{937F1BAD-CD47-4148-B993-6934A4CD3598} = {937F1BAD-CD47-4148-B993-6934A4CD3598}
 	EndProjectSection
 EndProject
 Global

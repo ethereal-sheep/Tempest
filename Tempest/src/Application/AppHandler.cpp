@@ -183,6 +183,7 @@ namespace Tempest
 					return 0;
 				}
 			}
+
 		}
 
 		return DefWindowProc(hWnd, message, wParam, lParam);

@@ -53,9 +53,9 @@ namespace Tempest
 			Service<EventManager>::Get().register_listener<SimulateConflict>(&SimulationBuilder::start_simulation, this);
 		}
 
-		void start_simulation(const Event& e)
+		void start_simulation(const Event& )
 		{
-			if (state == State::DONE)
+			/*if (state == State::DONE)
 			{
 				auto& a = event_cast<SimulateConflict>(e);
 				state = State::LOAD;
@@ -68,7 +68,7 @@ namespace Tempest
 
 				num_win = 0;
 				num_lose = 0;
-			}
+			}*/
 		}
 
 
@@ -138,7 +138,7 @@ namespace Tempest
 			auto running = [&, var]() {
 				for (unsigned i = 0; i < frequency; ++i)
 				{
-					instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending);
+					//instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending);
 					var->get<int>() ? ++num_win : ++num_lose;
 				}
 			};

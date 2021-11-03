@@ -15,6 +15,7 @@
 #include "WindowManager.h"
 #include "Actions/ActionHistory.h"
 #include "Scripting/SRM.h"
+#include "ECS/Scene.h"
 
 namespace Tempest
 {
@@ -71,6 +72,7 @@ namespace Tempest
 			memory_object(strategy),
 
 			po(memory_object.get()),
+			scene(),
 			ecs(memory_object.get()),
 			srm(memory_object.get()),
 
@@ -89,6 +91,7 @@ namespace Tempest
 				strategy
 			)
 		{
+			scene.load(root);
 			ecs.load(root);
 		}
 
@@ -183,6 +186,7 @@ namespace Tempest
 		
 	public:
 		PhysicsObject po;
+		Scene scene;
 		ECS ecs;
 		SRM srm;
 		Camera cam;

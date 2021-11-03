@@ -59,6 +59,7 @@ namespace Tempest
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
+        void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight, const Transform& transform);           // Submitting Point Light {Transform to be used for pos}
@@ -94,6 +95,8 @@ namespace Tempest
         float ambientStrength = 0.05f;
         float specularStrength = 0.5f;
         const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+
+ 
 
     private:        
        

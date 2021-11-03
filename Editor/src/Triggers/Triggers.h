@@ -67,7 +67,7 @@ namespace Tempest
 	struct OpenSimulateTrigger : public Event {};
 	struct OpenSimulateResultTrigger : public Event
 	{
-		OpenSimulateResultTrigger(Entity a, Entity d, Entity c :
+		OpenSimulateResultTrigger(Entity a, Entity d, Entity c):
 			atk(a), def(d), conflict(c){}
 		Entity atk;
 		Entity def;

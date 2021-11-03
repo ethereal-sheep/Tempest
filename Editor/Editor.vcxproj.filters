@@ -351,6 +351,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Popup\QuickMenuPopup.h">
+	<Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Hierarchy\PrefabList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Viewport\CameraControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Util\LineDrawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

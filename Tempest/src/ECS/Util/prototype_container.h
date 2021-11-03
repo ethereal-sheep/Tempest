@@ -80,11 +80,13 @@ namespace Tempest
 		prototype* emplace(prototype proto)
 		{
 			string name = proto.name;
-			if (has(name))
-				return nullptr;
+			if (has(name)) {
+				name = algo::get_next_name(name, prototypes);
+				proto.name = name; // rename
+			}
 
-			prototypes.emplace(std::make_pair(std::move(name), std::move(proto)));
-			return get_if(proto.name);
+			prototypes.emplace(std::make_pair(name, std::move(proto)));
+			return get_if(name);
 		}
 
 		prototype* emplace(const string& name)
@@ -98,7 +100,7 @@ namespace Tempest
 		{
 			// if the stem exists, we do not add it in
 			auto name = file.stem().string();
-			if (!has(name))
+			if (has(name))
 				return nullptr;
 
 			prototypes.emplace(std::make_pair(name, prototype(file)));
@@ -109,6 +111,19 @@ namespace Tempest
 		{
 			if (!has(name)) return;
 			prototypes.erase(name);
+		}
+		template<typename Pred>
+		void erase_if(Pred pred)
+		{
+			tvector<string> v;
+			for (auto& [s, p] : prototypes)
+			{
+				if (pred(s))
+					v.push_back(s);
+			}
+
+			for(auto& s : v)
+				prototypes.erase(s);
 		}
 
 		prototype& get(const string& s)
@@ -139,15 +154,10 @@ namespace Tempest
 			return next;
 		}
 
-		auto begin()
-		{
-			return prototypes.begin();
-		}
-
-		auto end()
-		{
-			return prototypes.end();
-		}
+		auto begin() const { return prototypes.begin(); }
+		auto end() const { return prototypes.end(); }
+		auto begin() { return prototypes.begin(); }
+		auto end() { return prototypes.end(); }
 
 	private:
 	};
