@@ -144,7 +144,6 @@
     <ClInclude Include="src\Resolution\Statline.h" />
     <ClInclude Include="src\Scripting\GMS.h" />
     <ClInclude Include="src\Scripting\Graph\graph.h" />
-    <ClInclude Include="src\Scripting\resolution.h" />
     <ClInclude Include="src\Scripting\SRM.h" />
     <ClInclude Include="src\Scripting\Util\sparse_scripts.h" />
     <ClInclude Include="src\Scripting\Util\split_view.h" />

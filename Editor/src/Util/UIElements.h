@@ -34,6 +34,9 @@ namespace Tempest::UI
 
 	void HelpMarker(const char* str);
 
+	bool BeginNodeCombo(const char* label, const char* preview_value, ImGuiComboFlags flags = 0);
+	bool BeginNodeComboPopup(ImGuiID popup_id, const ImRect& bb, ImGuiComboFlags flags);
+
 	void Tooltip(const char* label, const char* str, bool enabled = true);
 
 	bool ConfirmDeletePopup(const char* str);

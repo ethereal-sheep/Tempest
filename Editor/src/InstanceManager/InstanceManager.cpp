@@ -44,6 +44,7 @@
 #include "Window/Popup/DefineStatsPopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
+#include "Window/Util/SimulationStart.h"
 
 // Overlays
 #include "Window/Overlay/UnitSheetOverlay.h"
@@ -124,7 +125,7 @@ namespace Tempest
 		instance->register_always<AttackSystemOverlay>();
 		instance->register_always<MainMenuOverlay>();
 
-		instance->register_always<SimulationBuilder>();
+		instance->register_always<SimulationStart>();
 		
 
 		instance->register_always<ShowRecent>();

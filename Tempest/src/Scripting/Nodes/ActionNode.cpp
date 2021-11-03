@@ -47,6 +47,16 @@ namespace Tempest
             node.add_input(pin_type::Flow, "");
             node.add_input(pin_type::Int, "");
             break;
+        case Tempest::ActionNode::inner_type::Roll:
+            node.set_name("Roll");
+            node.add_output(pin_type::Flow, "");
+            node.add_output(pin_type::Int, "");
+            break;
+        case Tempest::ActionNode::inner_type::Resolve:
+            node.set_name("Resolve");
+            node.add_output(pin_type::Flow, "");
+            node.add_output(pin_type::Int, "");
+            break;
         default:
             return nullptr;
             break;
@@ -90,7 +100,6 @@ namespace Tempest
             return script;
         }
         break;
-            break;
         case Tempest::ActionNode::inner_type::Output:
         {
             return instance.srm.add_script(
@@ -104,7 +113,76 @@ namespace Tempest
                 }, std::placeholders::_1));
         }
         break;
-            break;
+        case Tempest::ActionNode::inner_type::Roll:
+        {
+            auto script = instance.srm.add_script(
+                CreateEventScript([&instance, entity](const Event& e) {
+                    auto a = event_cast<Roll>(e);
+
+                    // must have owner, enemy, and output 
+                    LOG_ASSERT(instance.srm.get_variable_to_id(entity, "Owner"));
+                    LOG_ASSERT(instance.srm.get_variable_to_id(entity, "Enemy"));
+                    LOG_ASSERT(instance.srm.get_variable_to_id(entity, "Output"));
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Owner"))
+                    {
+                        var->get<int64_t>() = static_cast<int64_t>(a.owner);
+                    }
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Enemy"))
+                    {
+                        var->get<int64_t>() = static_cast<int64_t>(a.enemy);
+                    }
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Output"))
+                    {
+                        var->get<int>() = static_cast<int64_t>(a.input);
+                    }
+
+                    return std::make_tuple(a.input);
+                }
+            ));
+
+            instance.srm.register_listener<Roll>(entity, script);
+
+            return script;
+        }
+        break;
+        case Tempest::ActionNode::inner_type::Resolve:
+        {
+            auto script = instance.srm.add_script(
+                CreateEventScript([&instance, entity](const Event& e) {
+                    auto a = event_cast<Resolve>(e);
+
+                    // must have owner, enemy, and output 
+                    LOG_ASSERT(instance.srm.get_variable_to_id(entity, "Owner"));
+                    LOG_ASSERT(instance.srm.get_variable_to_id(entity, "Enemy"));
+                    LOG_ASSERT(instance.srm.get_variable_to_id(entity, "Output"));
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Owner"))
+                    {
+                        var->get<int64_t>() = static_cast<int64_t>(a.owner);
+                    }
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Enemy"))
+                    {
+                        var->get<int64_t>() = static_cast<int64_t>(a.enemy);
+                    }
+
+                    if (auto var = instance.srm.get_variable_to_id(entity, "Output"))
+                    {
+                        var->get<int>() = static_cast<int64_t>(a.input);
+                    }
+
+                    return std::make_tuple(a.input);
+                }
+            ));
+
+            instance.srm.register_listener<Resolve>(entity, script);
+
+            return script;
+        }
+        break;
         default:
             break;
         }

@@ -188,6 +188,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mt.dll" "$(TargetDir)" /q
+del /q /s "$(TargetDir)Prototypes"
 xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </CustomBuildStep>
     <CustomBuildStep>

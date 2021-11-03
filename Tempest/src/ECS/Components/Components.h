@@ -309,6 +309,8 @@ namespace Tempest
 				ar.Member("Charater_Name", component.name);
 				ar.Member("Weapon_Id", component.weapon);
 				ar.Vector("Charater_Stats", component.stats);
+				ar.Vector("Actions", component.actions);
+
 				return ar.EndObject();
 			}
 
@@ -360,7 +362,8 @@ namespace Tempest
 
 			string name = "Char";
 			Entity weapon = UNDEFINED;
-			Entity system = UNDEFINED;
+			tvector<Entity> actions;
+
 		private:
 			tvector<int> stats;
 

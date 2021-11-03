@@ -58,7 +58,7 @@ namespace Tempest
 		void try_system(Instance& instance)
 		{
 			// assuming built
-			instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending);
+			//instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending);
 			if (auto var = instance.srm.get_variable_to_id(conflict, "Win"))
 			{
 				LOG_ASSERT(var->get_type() == pin_type::Int);
@@ -445,13 +445,14 @@ namespace Tempest
 				ImGui::Dummy({ 10.f, 1.f });
 				ImGui::SameLine();
 
-				if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
+				/*if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
 				{
 					auto gid = gn->graph_entity;
 
 					ImGui::Text("%s: %u", instance.ecs.get<tc::Graph>(gid).g.get_name().c_str(), gid);
 				}
-				else if (auto gsn = dynamic_cast<GetStatNode*>(n.get()))
+				else */
+				if (auto gsn = dynamic_cast<GetStatNode*>(n.get()))
 				{
 					tc::Statline* statline = nullptr;
 					for (auto i : instance.ecs.view<tc::Statline>())
@@ -710,7 +711,7 @@ namespace Tempest
 				}
 				else if (g.get_type() == graph_type::conflict)
 				{
-					if (ImGui::TreeNodeEx("Action Graphs"))
+					/*if (ImGui::TreeNodeEx("Action Graphs"))
 					{
 						for (auto i : instance.ecs.view<tc::ActionGraph>())
 						{
@@ -732,7 +733,7 @@ namespace Tempest
 							ImGui::Unindent(10.f);
 						}
 						ImGui::TreePop();
-					}
+					}*/
 
 					if (ImGui::Selectable("Win"))
 					{

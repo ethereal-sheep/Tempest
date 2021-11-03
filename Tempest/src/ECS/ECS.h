@@ -349,7 +349,7 @@ namespace Tempest
 		[[nodiscard]] Entity clone(Entity entity, exclude_t<Exclude...> = {})
 		{
 			// make sure unique
-			static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
+			//static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
 			// create new entity
 			Entity new_e = entity_registry.create();
 			// package exclude components
