@@ -187,7 +187,7 @@ void main()
 
 
 	vec3 color = min((ambient + diffuse) + specular, 1.0f);
-		color *= DiffuseColour;
+		//color *= DiffuseColour;
 	// gamma correction
 	if (GammaCorrection > 0)
 		color = pow(color, vec3(1.0 / 2.2));
