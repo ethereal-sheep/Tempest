@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Wall"
+        "Category": "Door"
     },
     "Components": [
         {
@@ -41,9 +41,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.16207647323608399,
+                    1.0488216876983643,
                     0.0,
-                    -0.33770543336868288
+                    -0.021382465958595277
                 ],
                 "LocalRotation": [
                     0.0,
@@ -52,9 +52,9 @@
                     1.0
                 ],
                 "LocalScale": [
-                    0.7423999309539795,
-                    0.742400050163269,
-                    0.742400050163269
+                    1.2685625553131104,
+                    0.9992724061012268,
+                    1.0
                 ]
             }
         },
@@ -63,7 +63,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bookshelf.a"
+                "Path": "Models\\Door.a"
             }
         },
         {

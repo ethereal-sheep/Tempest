@@ -43,9 +43,6 @@ namespace Tempest
 
 		void show([[maybe_unused]]Instance& instance) override
 		{
-
-
-
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -71,7 +68,8 @@ namespace Tempest
 				}
 
 				auto& cam = Service<RenderSystem>::Get().GetCamera();
-				cam_ctrl.show_debug(cam);
+				//cam_ctrl.show_debug(cam);
+				cam_ctrl.set_orbit_camera(cam, { 0,0,0 });
 				cam_ctrl.update(cam);
 			}
 			ImGui::End();

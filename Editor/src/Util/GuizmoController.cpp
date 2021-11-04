@@ -179,7 +179,7 @@ namespace Tempest
 	{
 		return m_SDelta;
 	}
-	tc::Transform GuizmoController::GetInitial() const
+	const tc::Transform& GuizmoController::GetInitial() const
 	{
 		return m_Initial;
 	}

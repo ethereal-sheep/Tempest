@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Wall"
+        "Category": "Obstacle"
     },
     "Components": [
         {
@@ -41,9 +41,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.00005310773849487305,
+                    0.14213034510612489,
                     0.0,
-                    -0.400151789188385
+                    0.06532078981399536
                 ],
                 "LocalRotation": [
                     0.0,
@@ -52,9 +52,9 @@
                     1.0
                 ],
                 "LocalScale": [
-                    1.0,
-                    0.8032689094543457,
-                    1.0
+                    0.6599999666213989,
+                    0.6599999666213989,
+                    0.6599999666213989
                 ]
             }
         },
@@ -63,7 +63,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Wall.a"
+                "Path": "Models\\Bed_Sci-Fi.a"
             }
         },
         {
@@ -71,8 +71,8 @@
                 "Type": "Shape"
             },
             "Component": {
-                "X": 1,
-                "Y": 1
+                "X": 2,
+                "Y": 2
             }
         }
     ]

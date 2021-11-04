@@ -162,9 +162,15 @@ namespace Tempest
 			quat rotation = { 1.f, 0.f, 0.f, 0.f };
 			vec3 scale = { 1.f, 1.f, 1.f };
 
-			//friend bool operator==(const Transform& lhs, const Transform& rhs) {
-			//	//glm::epsilonEqual(lhs.position)
-			//}
+			friend bool operator==(const Transform& lhs, const Transform& rhs) {
+				return 
+					glm::all(glm::epsilonEqual(lhs.position, rhs.position, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.rotation, rhs.rotation, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.scale, rhs.scale, glm::epsilon<float>()));
+			}
+			friend bool operator!=(const Transform& lhs, const Transform& rhs) {
+				return !(lhs == rhs);
+			}
 
 		};
 

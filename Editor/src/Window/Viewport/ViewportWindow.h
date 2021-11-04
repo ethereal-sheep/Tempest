@@ -104,6 +104,17 @@ namespace Tempest
 						instance.action_history.Redo(instance);
 					}
 					break;
+					case 's':
+					{
+						instance.action_history.Redo(instance);
+					}
+					break;
+					case 'd':
+					{
+						// deselect
+						current = INVALID;
+					}
+					break;
 					default:
 						break;
 					}
@@ -154,7 +165,10 @@ namespace Tempest
 
 				if (GC.IsEnd())
 				{
-					
+					if (GC.GetInitial() != transform)
+					{
+						instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
+					}
 				}
 
 
