@@ -162,6 +162,10 @@ namespace Tempest
 			quat rotation = { 1.f, 0.f, 0.f, 0.f };
 			vec3 scale = { 1.f, 1.f, 1.f };
 
+			//friend bool operator==(const Transform& lhs, const Transform& rhs) {
+			//	//glm::epsilonEqual(lhs.position)
+			//}
+
 		};
 
 		struct Local

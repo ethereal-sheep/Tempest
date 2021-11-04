@@ -13,6 +13,8 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "Util/GuizmoController.h"
 #include "CameraControls.h"
+#include "Actions/EditorAction.h"
+
 
 namespace Tempest
 {
@@ -80,6 +82,35 @@ namespace Tempest
 			cam_ctrl.update(cam);
 
 
+			if (io.KeyCtrl)
+			{
+				for (auto c : io.InputQueueCharacters)
+				{
+					c += 'a' - 1;
+					switch (c)
+					{
+					case 'h':
+					{
+						Service<EventManager>::Get().instant_dispatch<ToggleMenuBar>();
+					}
+					break;
+					case 'z':
+					{
+						instance.action_history.Undo(instance);
+					}
+					break;
+					case 'y':
+					{
+						instance.action_history.Redo(instance);
+					}
+					break;
+					default:
+						break;
+					}
+				}
+			}
+
+
 			// if there is transform
 			if (current != instance.selected)
 			{
@@ -88,14 +119,12 @@ namespace Tempest
 					auto& pf = instance.scene.get_map().get(instance.selected);
 					auto& transform = pf.force<tc::Transform>();
 					cam_ctrl.set_world_camera();
-					cam_ctrl.set_orbit_camera(cam, to_glvec3(transform.position));
+					cam_ctrl.set_orbit_camera(cam, transform.position);
 				}
 				else
 				{
 					cam_ctrl.set_world_camera();
 				}
-
-
 				current = instance.selected;
 			}
 
@@ -107,31 +136,14 @@ namespace Tempest
 				auto& GC = Service<GuizmoController>::Get();
 				auto& transform = pf.force<tc::Transform>();
 
-				cam_ctrl.set_orbit_axis(to_glvec3(transform.position));
-
-				auto vp = cam.GetViewport();
-				ImVec2 Min = { 0, 0 };
-				ImVec2 Max = { vp.z, vp.w };
-
-				GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
+				cam_ctrl.set_orbit_axis(transform.position);
+				GC.SetRotateSnapping(90.f);
+				GC.SetTranslateSnapping(1.f);
+				GC.Draw(cam, transform);
 
 				vec3 tDelta;
 				vec3 rDelta;
 				vec3 sDelta;
-
-				auto mat =
-					glm::translate(glm::make_vec3(value_ptr(transform.position)))
-					* glm::mat4(transform.rotation)
-					* glm::scale(glm::make_vec3(value_ptr(transform.scale)));
-
-				//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
-				GC.SetTransformMatrix(glm::value_ptr(mat));
-				GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
-				GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
-
-				GC.Draw();
-
-				//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
 
 				GC.GetDelta(tDelta, rDelta, sDelta);
 
@@ -139,28 +151,86 @@ namespace Tempest
 				tDelta.y = 0;
 				tDelta.z = std::round(tDelta.z);
 
-				if (tDelta.length2() > els::epsilon<float> ||
-					rDelta.length2() > els::epsilon<float>)
-				{
-					//transform
 
-					if (io.KeyAlt)
-					{
-						auto [it, b] = instance.scene.get_map().create(pf);
-						instance.selected = it->first;
-						current = instance.selected;
-						if (auto new_transform = it->second.force_if<tc::Transform>())
-						{
-							new_transform->position = transform.position + tDelta;
-						}
-					}
-					else
-					{
-						transform.position += tDelta;
-					}
-					//cam_ctrl.look_at(cam, to_glvec3(transform.position));
-					//transform->scale += sDelta;
+				if (GC.IsEnd())
+				{
+					
 				}
+
+
+				for (auto c : io.InputQueueCharacters)
+				{
+					switch (c)
+					{
+					case 'w':
+					{
+						GC.SetOperation(GuizmoController::Operation::TRANSLATE);
+						
+					}
+					break;
+					case 'r':
+					{
+						GC.SetOperation(GuizmoController::Operation::ROTATE);
+					}
+					break;
+					case 'q':
+					{
+
+					}
+					break;
+					default:
+						break;
+					}
+				}
+
+
+				switch (GC.GetOperation())
+				{
+				case Tempest::GuizmoController::Operation::TRANSLATE:
+				{
+					if (glm::length2(tDelta) > els::epsilon<float>)
+					{
+						if (io.KeyAlt)
+						{
+							auto [it, b] = instance.scene.get_map().create(pf);
+							instance.selected = it->first;
+							current = instance.selected;
+							if (auto new_transform = it->second.force_if<tc::Transform>())
+								new_transform->position = transform.position + tDelta;
+							instance.action_history.Commit<CreatePrefab>(it->first);
+							GC.ForceEnd();
+						}
+						else
+						{
+							transform.position += tDelta;
+						}
+						//cam_ctrl.look_at(cam, to_glvec3(transform.position));
+						//transform->scale += sDelta;
+					}
+				}
+					break;
+				case Tempest::GuizmoController::Operation::ROTATE:
+				{
+
+					if (glm::length2(rDelta) > els::epsilon<float>)
+					{
+						//transform
+						transform.rotation *= glm::angleAxis(glm::radians(rDelta.y), glm::vec3{ 0, 1, 0 });
+						//cam_ctrl.look_at(cam, to_glvec3(transform.position));
+						//transform->scale += sDelta;
+					}
+				}
+					break;
+				case Tempest::GuizmoController::Operation::SCALE:
+				{
+
+				}
+					break;
+				default:
+					break;
+				}
+
+
 
 				if (auto shape = pf.get_if<tc::Shape>())
 				{

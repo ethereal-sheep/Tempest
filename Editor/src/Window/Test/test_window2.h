@@ -351,7 +351,7 @@ namespace Tempest
 
 				for (auto& [node_id, node_ptr] : g.get_nodes())
 				{
-					ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position));
+					ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position.x, node_ptr->position.y));
 				}
 
 				// -----------------------------------------------------------------
@@ -408,7 +408,9 @@ namespace Tempest
 
 				for (auto& [node_id, node_ptr] : g.get_nodes())
 				{
-					node_ptr->position = els::to_vec2(ax::NodeEditor::GetNodePosition(node_id));
+					auto v = ax::NodeEditor::GetNodePosition(node_id);
+					node_ptr->position.x = v.x;
+					node_ptr->position.y = v.y;
 				}
 			}
 		}

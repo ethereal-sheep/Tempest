@@ -282,7 +282,7 @@ namespace Tempest
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(material->Diffuse, "DiffuseColour");
                     material->DiffuseMap->Bind(0);
                 }
 
@@ -293,7 +293,7 @@ namespace Tempest
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(material->Diffuse, "DiffuseColour");
                     material->BaseTexture->Bind(0);
                     //const GLfloat near_plane = 1.0f, far_plane = 25.0f;
 
@@ -388,7 +388,7 @@ namespace Tempest
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(shininess, "shininess");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(specularStrength, "specularStrength");
                     m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(dir_lights[0].hide ? 0 : 1, "DirectionalLightOn");
-                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(material->Diffuse, "DiffuseColour");
                 }
 
                 mesh.Bind();

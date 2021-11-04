@@ -134,7 +134,7 @@ namespace Tempest
 
 			for (auto& [node_id, node_ptr] : g.get_nodes())
 			{
-				ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position));
+				ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position.x, node_ptr->position.y));
 			}
 
 			// -----------------------------------------------------------------
@@ -192,7 +192,10 @@ namespace Tempest
 
 			for (auto& [node_id, node_ptr] : g.get_nodes())
 			{
-				node_ptr->position = els::to_vec2(ax::NodeEditor::GetNodePosition(node_id));
+				auto v = ax::NodeEditor::GetNodePosition(node_id);
+				node_ptr->position.x = v.x;
+				node_ptr->position.y = v.y;
+
 			}
 		}
 	}
@@ -371,18 +374,18 @@ namespace Tempest
 
 			if (a)
 			{
-				auto v1 = (ImVec4)(vec4(196, 8, 93, 255) / 255.f);
-				auto v2 = (ImVec4)(vec4(221, 9, 105, 255) / 255.f);
-				auto v3 = (ImVec4)(vec4(245, 10, 117, 255) / 255.f);
+				auto v1 = ImVec4(196, 8, 93, 255) * ImVec4(1/255.f, 1/255.f, 1/255.f, 1/255.f);
+				auto v2 = ImVec4(221, 9, 105, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				auto v3 = ImVec4(245, 10, 117, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
 				ImGui::PushStyleColor(ImGuiCol_Button, v1);
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, v2);
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, v3);
 			}
 			else
 			{
-				auto v1 = (ImVec4)(vec4(196, 111, 8, 255) / 255.f);
-				auto v2 = (ImVec4)(vec4(221, 125, 9, 255) / 255.f);
-				auto v3 = (ImVec4)(vec4(245, 139, 10, 255) / 255.f);
+				auto v1 = ImVec4(196, 111, 8, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				auto v2 = ImVec4(221, 125, 9, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				auto v3 = ImVec4(245, 139, 10, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
 				ImGui::PushStyleColor(ImGuiCol_Button, v1);
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, v2);
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, v3);

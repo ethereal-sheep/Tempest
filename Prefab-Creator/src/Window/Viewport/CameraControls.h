@@ -124,7 +124,7 @@ namespace Tempest
 							start_rot = end_rotation;
 						}*/
 
-						auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+						auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
 						auto rot = start_rot * yaw;
 						auto left = glm::conjugate(rot)* glm::vec3{ -1.f, 0.f, 0.f };
 
@@ -159,11 +159,11 @@ namespace Tempest
 							start_rot = end_rotation;
 						}*/
 
-						auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+						auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
 						auto rot = end_rotation * yaw;
 						auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
 						//cam.SetRotation(rot);
-						auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), left);
+						auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
 						rot = rot * pitch;
 						//cam.SetRotation(rot);
 
@@ -246,12 +246,12 @@ namespace Tempest
 				{
 					if (!els::is_zero(direction))
 					{
-						const float max_angle = glm::radians(270.f);
+						constexpr float max_angle = glm::radians(270.f);
 						auto rel_pos = orbit_axis - cam.GetPosition();
 
 						start_rotation = cam.GetQuatRotation();
 
-						auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+						auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
 						auto rot = end_rotation * yaw;
 
 						end_rotation = rot;
@@ -265,17 +265,17 @@ namespace Tempest
 				{
 					if (!els::is_zero(direction))
 					{
-						const float max_angle = glm::radians(270.f);
+						constexpr float max_angle = glm::radians(270.f);
 						auto rel_pos = orbit_axis - cam.GetPosition();
 
 						
 
 						start_rotation = cam.GetQuatRotation();
 
-						auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+						auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
 						auto rot = end_rotation * yaw;
 						auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
-						auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), left);
+						auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
 						rot = rot * pitch;
 
 						end_rotation = rot;
@@ -290,13 +290,13 @@ namespace Tempest
 				{
 					if (!els::is_zero(direction))
 					{
-						const float max_angle = glm::radians(270.f);
+						constexpr float max_angle = glm::radians(270.f);
 						auto rel_pos = orbit_axis - cam.GetPosition();
 
 						start_rotation = cam.GetQuatRotation();
 						auto rot = end_rotation;
 						auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
-						auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), left);
+						auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
 						rot = end_rotation * pitch;
 
 						end_rotation = rot;

@@ -9,7 +9,7 @@
 **********************************************************************************/
 
 #include "EditTimeInstance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
+#include "Graphics/Basics/RenderSystem.h"
 #include "ECS/Components/Components.h"
 #include <Physics/Util/px_math.h>
 
@@ -41,22 +41,41 @@ namespace Tempest
 
 		}
 	}
-	void EditTimeInstance::_update(float dt)
+	void EditTimeInstance::_update(float)
 	{
-		po.advance(dt);
+		//po.advance(dt);
 
-		// we can do someother shit here
+		//// we can do someother shit here
 
-		po.fetch();
-		auto view = ecs.view<Components::Rigidbody, tc::Transform>(exclude_t<tc::Destroyed>());
-		for (auto id : view)
+		//po.fetch();
+		//auto view = ecs.view<Components::Rigidbody, tc::Transform>(exclude_t<tc::Destroyed>());
+		//for (auto id : view)
+		//{
+		//	auto& rb = ecs.get<Components::Rigidbody>(id);
+		//	auto& transform = ecs.get<Components::Transform>(id);
+		//	rb.internal_rb.get()->setGlobalPose({ transform.position.x, transform.position.y, transform.position.z });
+
+		//}
+
+		for (auto& [id, pf] : scene.get_map())
 		{
-			auto& rb = ecs.get<Components::Rigidbody>(id);
-			auto& transform = ecs.get<Components::Transform>(id);
-			rb.internal_rb.get()->setGlobalPose({ transform.position.x, transform.position.y, transform.position.z });
+			
+			if (auto model = pf.get_if<tc::Model>())
+			{
+				auto transform = pf.get_if<tc::Transform>();
+				auto local = pf.get_if<tc::Local>();
 
+				auto test = glm::translate(transform->position)
+					* glm::mat4(transform->rotation)
+					* glm::translate(local->local_position)
+					* glm::mat4(local->local_rotation)
+					* glm::scale(local->local_scale)
+					* glm::scale(transform->scale);
+
+
+				Service<RenderSystem>::Get().SubmitModel(model->path, test);
+			}
 		}
-		
 	}
 	void EditTimeInstance::_render()
 	{

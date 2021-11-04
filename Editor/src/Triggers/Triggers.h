@@ -107,5 +107,5 @@ namespace Tempest
 
 	struct ShowRecentUtil : public Event {};
 	struct AddRecentUtil : public Event {};
-
+	struct ToggleMenuBar : public Event {};
 }

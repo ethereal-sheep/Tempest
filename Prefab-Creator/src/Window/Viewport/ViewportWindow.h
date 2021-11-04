@@ -41,7 +41,7 @@ namespace Tempest
 			Service<GuizmoController>::Register();
 		}
 
-		void show(Instance& instance) override
+		void show([[maybe_unused]]Instance& instance) override
 		{
 
 

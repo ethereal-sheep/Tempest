@@ -64,7 +64,7 @@ namespace Tempest
 
 				if (header)
 				{
-					UI::DragFloat3ColorBox("Position", "##TransformPosDrag", ImVec2{ padding , 0.f }, transform->position.data(), 0.f, 0.1f);
+					UI::DragFloat3ColorBox("Position", "##TransformPosDrag", ImVec2{ padding , 0.f }, glm::value_ptr(transform->position), 0.f, 0.1f);
 
 					auto& GC = Service<GuizmoController>::Get();
 
@@ -116,7 +116,7 @@ namespace Tempest
 						static vec3 newScale = transform->scale;
 						
 
-						if (UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, newScale.data(), 1.f, 1.f, 1.f, 1000.f).second)
+						if (UI::UniformScaleFloat3("Scale", "##TransformScaDrag", ImVec2{ padding , 0.f }, &uniformScale, glm::value_ptr(newScale), 1.f, 1.f, 1.f, 1000.f).second)
 						{
 							if (rb)
 								rb->isDirty = true;
@@ -140,15 +140,15 @@ namespace Tempest
 				ImGui::Dummy({ 0.f, 1.f });
 				if (header)
 				{
-					UI::DragFloat3ColorBox("Linear Vel", "##RbLVel", ImVec2{ padding , 0.f }, rbConfig.linear_velocity.data(), 0.f, 0.1f);
+					UI::DragFloat3ColorBox("Linear Vel", "##RbLVel", ImVec2{ padding , 0.f }, glm::value_ptr(rbConfig.linear_velocity), 0.f, 0.1f);
 					UI::DragFloat("L_Damping", "##RbLDamping", ImVec2{ padding , 0.f }, &rbConfig.linear_damping, 0.1f, 0.f);
-					UI::DragFloat3ColorBox("Angular Vel", "##RbAVel", ImVec2{ padding , 0.f }, rbConfig.angular_velocity.data(), 0.f, 0.1f);
+					UI::DragFloat3ColorBox("Angular Vel", "##RbAVel", ImVec2{ padding , 0.f }, glm::value_ptr(rbConfig.angular_velocity), 0.f, 0.1f);
 					UI::DragFloat("A_Damping", "##RbADamping", ImVec2{ padding , 0.f }, &rbConfig.angular_damping, 0.1f, 0.f);
 					UI::DragFloat("Mass", "##RbMass", ImVec2{ padding , 0.f }, &rbConfig.mass, 0.1f, 0.f);
 					UI::DragFloat("Density", "##RbDensity", ImVec2{ padding , 0.f }, &rbConfig.density, 0.1f, 0.f);
 					UI::Checkbox("Is_Static", "##RbStatic", ImVec2{ padding , 0.f }, &rbConfig.is_static);
 					UI::Checkbox("Gravity", "##RbGravity", ImVec2{ padding , 0.f }, &rbConfig.gravity);
-					UI::DragFloat3("Physics Mat", "##RbPhysMat", ImVec2{ padding , 0.f }, rbConfig.material.data(), 0.f, 0.1f);
+					UI::DragFloat3("Physics Mat", "##RbPhysMat", ImVec2{ padding , 0.f }, glm::value_ptr(rbConfig.material), 0.f, 0.1f);
 					UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Physics Material: Static Friction , Dynamic Friction, restitution(bounciness)");
 					
 					//bool changed = false;
@@ -176,7 +176,7 @@ namespace Tempest
 					case SHAPE_TYPE::CAPSULE:
 					{
 						vec2 temp = { rb->shape_data.shapeData.x, rb->shape_data.shapeData.y };
-						rb->isDirty |= UI::DragFloat2("Radius&Height", "##RbRadius&Height", ImVec2{ padding , 0.f }, temp.data(), 0.1f, 0.5f).second;
+						rb->isDirty |= UI::DragFloat2("Radius&Height", "##RbRadius&Height", ImVec2{ padding , 0.f }, glm::value_ptr(temp), 0.1f, 0.5f).second;
 						rb->shape_data.shapeData.x = temp.x ;
 						rb->shape_data.shapeData.y = temp.y;
 						break;
@@ -184,7 +184,7 @@ namespace Tempest
 					break;
 					case SHAPE_TYPE::BOX:
 					{
-						rb->isDirty |= UI::DragFloat3("X,Y,Z", "##RbRadius&Height", ImVec2{ padding , 0.f }, rb->shape_data.shapeData.data(), 0.1f, 0.5f).second;
+						rb->isDirty |= UI::DragFloat3("X,Y,Z", "##RbRadius&Height", ImVec2{ padding , 0.f }, glm::value_ptr(rb->shape_data.shapeData), 0.1f, 0.5f).second;
 					}
 					break;
 					case SHAPE_TYPE::NONE:
