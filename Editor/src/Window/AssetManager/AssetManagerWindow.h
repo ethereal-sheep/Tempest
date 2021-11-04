@@ -104,7 +104,8 @@ namespace Tempest
 							auto height = vp.w;
 
 							auto& io = ImGui::GetIO();
-
+							if (io.WantCaptureMouse)
+								return;
 
 							glm::vec4 lRayStart_NDC(
 								((float)io.MousePos.x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
@@ -141,8 +142,9 @@ namespace Tempest
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
 								{
-									transform->position = els::to_vec3(inter);
+									transform->position = inter;
 								}
+								instance.action_history.Commit<CreatePrefab>(it->first);
 
 
 							}

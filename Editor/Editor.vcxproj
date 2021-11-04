@@ -196,7 +196,6 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Actions\Action.cpp" />
     <ClCompile Include="src\Editor.cpp" />
     <ClCompile Include="src\Extern\imgui\crude_json.cpp" />
     <ClCompile Include="src\Extern\imgui\drawing.cpp" />
@@ -232,7 +231,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\UnitSheetOverlay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Actions\Action.h" />
+    <ClInclude Include="src\Actions\EditorAction.h" />
     <ClInclude Include="src\Extern\imgui\crude_json.h" />
     <ClInclude Include="src\Extern\imgui\drawing.h" />
     <ClInclude Include="src\Extern\imgui\imconfig.h" />

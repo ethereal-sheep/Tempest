@@ -103,7 +103,7 @@ namespace Tempest
 							static bool uniformScale = false;
 
 							{
-								UI::DragFloat3ColorBox("Position", "##PositionDrag", ImVec2{ padding , 0.f }, transform->local_position.data(), 0.f, 0.1f);
+								UI::DragFloat3ColorBox("Position", "##PositionDrag", ImVec2{ padding , 0.f }, glm::value_ptr(transform->local_position), 0.f, 0.1f);
 							}
 							{
 								auto vec = glm::degrees(glm::eulerAngles(transform->local_rotation));
@@ -115,7 +115,7 @@ namespace Tempest
 							}
 							{
 								auto vec = transform->local_scale;
-								auto [x, y] = UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, vec.data(), 1.f, 0.01f, 0.01f, 5.f);
+								auto [x, y] = UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 1.f, 0.01f, 0.01f, 5.f);
 								transform->local_scale.x = std::max(0.01f, vec.x);
 								transform->local_scale.y = std::max(0.01f, vec.y);
 								transform->local_scale.z = std::max(0.01f, vec.z);
@@ -126,31 +126,6 @@ namespace Tempest
 
 							auto& GC = Service<GuizmoController>::Get();
 							auto& cam = Service<RenderSystem>::Get().GetCamera();
-
-							auto vp = cam.GetViewport();
-							ImVec2 Min = { 0, 0 };
-							ImVec2 Max = { vp.z, vp.w };
-
-							GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
-
-
-							vec3 tDelta;
-							vec3 rDelta;
-							vec3 sDelta;
-
-							auto mat =
-								glm::translate(glm::make_vec3(value_ptr(transform->local_position)))
-								* glm::mat4(transform->local_rotation)
-								* glm::scale(glm::make_vec3(value_ptr(transform->local_scale)));
-
-							//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
-							GC.SetTransformMatrix(glm::value_ptr(mat));
-							GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
-							GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
-
-
-							GC.Enable();
-
 
 							if (GC.GetOperation() != GuizmoController::Operation::SCALE)
 							{
@@ -164,8 +139,6 @@ namespace Tempest
 								if (ImGui::RadioButton("World##TransfromGizmoWorld", GC.GetMode() == GuizmoController::Mode::WORLD))
 									GC.SetMode(GuizmoController::Mode::WORLD);
 							}
-
-
 							// edit mode selector
 							if (ImGui::RadioButton("Translate##TransformTranslate", GC.GetOperation() == GuizmoController::Operation::TRANSLATE))
 								GC.SetOperation(GuizmoController::Operation::TRANSLATE);
@@ -177,31 +150,12 @@ namespace Tempest
 								GC.SetOperation(GuizmoController::Operation::SCALE);
 
 
-							GC.Draw();
-							vec3 eulerDeg = els::to_vec3(glm::degrees(glm::eulerAngles(transform->local_rotation)));
+							GC.Enable();
+							GC.Draw(cam, *transform);
+							vec3 eulerDeg = glm::degrees(glm::eulerAngles(transform->local_rotation));
 							GC.GetTranslateRotationScale(transform->local_position, eulerDeg, transform->local_scale);
-							transform->local_rotation = glm::radians(to_glvec3(eulerDeg));
+							transform->local_rotation = glm::radians(eulerDeg);
 
-							//GC.GetDelta(tDelta, rDelta, sDelta);
-
-							//if (tDelta.length2() > els::epsilon<float>)
-							//{
-							//	//transform
-							//	transform->local_position += tDelta;
-							//	//transform->scale += sDelta;
-							//}
-							//if (rDelta.length2() > els::epsilon<float>)
-							//{
-							//	//transform
-							//	transform->local_rotation *= glm::quat(to_glvec3(rDelta));
-							//	//transform->scale += sDelta;
-							//}
-							//if (sDelta.length2() > els::epsilon<float>)
-							//{
-							//	//transform
-							//	transform->local_scale = sDelta;
-							//	//transform->scale += sDelta;
-							//}
 							UI::PaddedSeparator(1.f);
 						}
 					}

@@ -167,18 +167,18 @@ namespace Tempest
 
 		if (rb_config.is_static)
 		{
-			actor = px_make(physx::PxCreateStatic(*physics, PxTransform(PxVec3{ pos }), *newShape));
-			actor->setGlobalPose(PxTransform(PxVec3{ pos }, math_cast(rot)));
+			actor = px_make(physx::PxCreateStatic(*physics, PxTransform(math_cast( pos )), *newShape));
+			actor->setGlobalPose(PxTransform(math_cast(pos), math_cast(rot)));
 		}
 		else
 		{
 			tsptr<PxRigidBody> dynamicBody;
-			dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *newShape, rb_config.density));
-			dynamicBody->setGlobalPose(PxTransform(PxVec3{ pos }, math_cast(rot)));
+			dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(math_cast(pos)), *newShape, rb_config.density));
+			dynamicBody->setGlobalPose(PxTransform(math_cast(pos), math_cast(rot)));
 			dynamicBody->setLinearDamping(rb_config.linear_damping);
 			dynamicBody->setAngularDamping(rb_config.angular_damping);
-			dynamicBody->setLinearVelocity(PxVec3{ rb_config.linear_velocity });
-			dynamicBody->setAngularVelocity(PxVec3{ rb_config.angular_velocity });
+			dynamicBody->setLinearVelocity(math_cast( rb_config.linear_velocity ));
+			dynamicBody->setAngularVelocity(math_cast( rb_config.angular_velocity ));
 			dynamicBody->setMass(rb_config.mass);
 			dynamicBody->attachShape(*newShape);
 			physx::PxRigidBodyExt::updateMassAndInertia(*dynamicBody, rb_config.density);
@@ -206,7 +206,7 @@ namespace Tempest
 	{
 		PxRaycastBuffer result;
 		auto max_dist = 100.f;
-		if (scene->raycast(PxVec3{ origin }, PxVec3{ dir }, max_dist, result))
+		if (scene->raycast(math_cast( origin ), math_cast( dir ), max_dist, result))
 		{
 			auto* actor = result.getAnyHit(0).actor;
 			if (actor != static_cast<PxRigidActor*>(ground_plane))

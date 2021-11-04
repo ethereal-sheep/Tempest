@@ -1033,8 +1033,8 @@ namespace ImGui
 		if (window->SkipItems)
 			return false;
 
-		const ImGuiStyle& style = g.Style;
-		int items_count = items.size();
+		//const ImGuiStyle& style = g.Style;
+		auto items_count = items.size();
 
 		// Call the getter to obtain the preview string which is a parameter to BeginCombo()
 		const char* preview_value = NULL;
@@ -1071,9 +1071,9 @@ namespace ImGui
 			isNewOpen = true;
 		}
 		g.Style.ButtonTextAlign.x = ButtonTextAlignX;
-		bool hovered = IsItemHovered();
-		bool active = IsItemActivated();
-		bool pressed = IsItemClicked();
+		//bool hovered = IsItemHovered();
+		//bool active = IsItemActivated();
+		// bool pressed = IsItemClicked();
 
 		// Render
 		//const ImU32 bg_col = GetColorU32((active && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
@@ -1122,8 +1122,8 @@ namespace ImGui
 				std::sort(itemScoreVector.begin(), itemScoreVector.end(), sortbysec_desc);
 			}
 
-			int show_count = isNeedFilter ? itemScoreVector.size() : items_count;
-			if (ImGui::ListBoxHeader("##ComboWithFilter_itemList", show_count))
+			auto show_count = isNeedFilter ? itemScoreVector.size() : items_count;
+			if (ImGui::ListBoxHeader("##ComboWithFilter_itemList", (int)show_count))
 			{
 				for (int i = 0; i < show_count; i++)
 				{

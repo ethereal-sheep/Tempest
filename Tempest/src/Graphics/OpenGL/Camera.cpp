@@ -23,8 +23,8 @@ namespace Tempest
 		{
 		case CameraType::CAMERA_PERSPECTIVE:
 		{
-			const float f = 1.0f / tan(to_rad(fov) / 2.0f);
-			const float r = to_rad(fov);
+			const float f = 1.0f / tan(glm::radians(fov) / 2.0f);
+			const float r = glm::radians(fov);
 			projection = glm::perspective(r, aspect_ratio, near_clip_distance, far_clip_distance);
 			reverseDepthProjection = {
 				f / aspect_ratio,	0.0f,		0.0f,					0.0f,

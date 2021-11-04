@@ -2,6 +2,7 @@
 #include "Instance/Instance.h"
 #include "Util/UIElements.h"
 #include "Graphics/Basics/RenderSystem.h"
+#include "Actions/EditorAction.h"
 
 namespace Tempest
 {
@@ -74,29 +75,12 @@ namespace Tempest
 							{
 								destroyed_list.emplace_back(id);
 							}
-
-							if (auto model = pf.get_if<tc::Model>())
-							{
-
-								auto transform = pf.get_if<tc::Transform>();
-								auto local = pf.get_if<tc::Local>();
-
-								auto test = glm::translate(glm::make_vec3(value_ptr(transform->position)))
-									* glm::mat4(transform->rotation)
-									* glm::translate(to_glvec3(local->local_position))
-									* glm::mat4(local->local_rotation)
-									* glm::scale(glm::make_vec3(value_ptr(local->local_scale)))
-									* glm::scale(glm::make_vec3(value_ptr(transform->scale)));
-
-
-								Service<RenderSystem>::Get().SubmitModel(model->path, test);
-							}
-
 						}
 
-						/*for (auto id : destroyed_list)
+						for (auto id : destroyed_list)
 						{
-						}*/
+							instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(id));
+						}
 
 						ImGui::EndTable();
 					}

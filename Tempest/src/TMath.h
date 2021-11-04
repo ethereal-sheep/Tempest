@@ -36,15 +36,15 @@
 
 namespace Tempest
 {
-	using vec2 = els::vec2f;
-	using vec3 = els::vec3f;
-	using vec4 = els::vec4f;
-	using mat3 = els::mat3f;
-	using mat4 = els::mat4f;
+	using vec2 = glm::vec2;
+	using vec3 = glm::vec3;
+	using vec4 = glm::vec4;
+	using mat3 = glm::mat3;
+	using mat4 = glm::mat4;
 	using quat = glm::quat;
 
 
-	template <typename T = float>
+	/*template <typename T = float>
 	constexpr T to_rad(T degree)
 	{
 		return els::deg_to_rad(degree);
@@ -74,9 +74,9 @@ namespace Tempest
 			els::rad_to_deg(radians.y),
 			els::rad_to_deg(radians.z)
 		};
-	}
+	}*/
 
-	template <typename T>
+	/*template <typename T>
 	glm::vec3 to_glvec2(const T& v)
 	{
 		return glm::make_vec2(v.data());
@@ -105,7 +105,7 @@ namespace Tempest
 	glm::quat to_glquat(const T& v)
 	{
 		return glm::make_quat(v.data());
-	}
+	}*/
 
 
 	template <typename Archive>

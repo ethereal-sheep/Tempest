@@ -342,7 +342,7 @@ namespace Tempest
 				ImGui::Text("Not facing plane!");
 			}
 
-			auto [id, check] = instance.po.raycast(els::to_vec3(cam.GetPosition()), els::to_vec3(lRayDir_world));
+			auto [id, check] = instance.po.raycast(cam.GetPosition(), lRayDir_world);
 			if (check)
 			{
 				ImGui::Text("HIT! id: %u", id);
