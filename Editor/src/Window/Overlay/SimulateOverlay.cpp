@@ -32,6 +32,9 @@ namespace Tempest
 	void SimulateOverlay::confirm_data(const Event& e)
 	{
 		auto a = event_cast<SimulateSelectionConfirm>(e);
+		if (a.data == UNDEFINED)
+			return;
+
 		UnitData& owner = a.is_attacker ? attacker : defender;
 		switch (a.type)
 		{

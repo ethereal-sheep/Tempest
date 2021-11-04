@@ -51,14 +51,20 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<OpenWeaponSheetTrigger>(&WeaponSheetOverlay::open_popup, this);
             initialise_tabs();
         }
+
+    /*    ~WeaponSheetOverlay() override
+        {
+            weap = nullptr;
+        }*/
+
         void open_popup(const Event& e);
 
         void show(Instance&) override;
 
         void create_new_weapon(Instance& instance);
         void initialise_tabs();
-        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weap) const;
-        void display_use_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weap) const;
+        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weapon) const;
+        void display_use_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weapon) const;
 
         template<typename F>
         void render_tabs(TABS_TYPE type, F&& func);
@@ -67,6 +73,7 @@ namespace Tempest
         TABS_TYPE CurrentTab{ TABS_TYPE::WEAPON };
         bool OverlayOpen = false;
         tc::Weapon NewWeapon;
+        tc::Weapon* weap = nullptr; // help
         Entity SelectedID = INVALID;
     };
 }

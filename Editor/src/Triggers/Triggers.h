@@ -40,10 +40,11 @@ namespace Tempest
 	struct ConfirmationTrigger : public Event {};
 	struct SimulatePopupTrigger : public Event
 	{
-		SimulatePopupTrigger(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data) :
-			type{ type }, is_attacker{ is_attacker }, data{ data }{}
+		SimulatePopupTrigger(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data, bool for_unitpage = false) :
+			type{ type }, is_attacker{ is_attacker }, data{ data }, for_unitpage{ for_unitpage }{}
 		SIMULATE_POPUP_TYPE type;
 		bool is_attacker;
+		bool for_unitpage;
 		Entity data;
 	};
 

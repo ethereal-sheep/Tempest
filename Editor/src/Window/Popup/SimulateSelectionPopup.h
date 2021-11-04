@@ -24,8 +24,9 @@ namespace Tempest
             auto a = event_cast<SimulatePopupTrigger>(e);
             type = a.type;
             is_attacker = a.is_attacker;
-            data = a.data;
-            if (type == SIMULATE_POPUP_TYPE::SEQUENCE)
+            data = UNDEFINED;
+            for_unitpage = a.for_unitpage;
+            if (type == SIMULATE_POPUP_TYPE::SEQUENCE || for_unitpage)
             {
                 position = ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f };
             }
@@ -189,6 +190,7 @@ namespace Tempest
         Entity data;
         bool enable_popup = false;
         bool is_attacker = false;
+        bool for_unitpage = false;
         ImVec2 position{ 0,0 };
         SIMULATE_POPUP_TYPE type{ SIMULATE_POPUP_TYPE::UNIT};
         ImGuiWindowFlags flags{ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |

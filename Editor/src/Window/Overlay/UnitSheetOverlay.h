@@ -51,10 +51,18 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenUnitSheetTrigger>(&UnitSheetOverlay::open_popup, this);
+            Service<EventManager>::Get().register_listener<SimulateSelectionConfirm>(&UnitSheetOverlay::confirm_data, this);
 
             initialise_tabs();
         }
+
+       /* ~UnitSheetOverlay() override
+        {
+            cs = nullptr;
+        }*/
+
         void open_popup(const Event& e);
+        void confirm_data(const Event& e);
 
         void show(Instance&) override;
 
@@ -64,10 +72,11 @@ namespace Tempest
         void push_button_style() const;
         void pop_button_style() const;
         void initialise_tabs();
-        void display_unit_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const;
-        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const;
-        void display_items(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const;
-        void display_actions(const ImGuiViewport& viewport, Instance& instance, tc::Character& cs) const;
+        void display_unit_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const;
+        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const;
+        void display_items(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const;
+        void display_actions(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const;
+       
 
         template<typename F>
         void render_tabs(TABS_TYPE type, F&& func);
@@ -77,7 +86,10 @@ namespace Tempest
         std::array<TabImageData, TOTAL> Tabs;
         TABS_TYPE CurrentTab{ TABS_TYPE::UNIT };
         tc::Character NewCharacter;
+        tc::Character* cs = nullptr; //help
         Entity SelectedID = INVALID;
+        Entity TempWeapon = UNDEFINED;
+        Entity TempAction = UNDEFINED;
 
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;
