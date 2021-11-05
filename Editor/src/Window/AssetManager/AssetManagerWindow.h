@@ -130,18 +130,21 @@ namespace Tempest
 							float dist = 0;
 							if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 							{
-								auto inter = cam.GetPosition() + lRayDir_world * dist;
-								ImGui::Text("Intersect:   %.3f , %.3f,  %.3f", inter.x, inter.y, inter.z);
-
-								inter.x = std::round(inter.x);
-								inter.y = 0;
-								inter.z = std::round(inter.z);
 
 
 								auto [it, b] = instance.scene.get_map().create(proto);
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
 								{
+									auto inter = cam.GetPosition() + lRayDir_world * dist;
+
+									if (auto shape = it->second.get_if<tc::Shape>())
+									{
+										inter.x = shape->x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+										inter.y = 0;
+										inter.z = shape->y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
+									}
+
 									transform->position = inter;
 								}
 								instance.action_history.Commit<CreatePrefab>(it->first);
@@ -181,17 +184,18 @@ namespace Tempest
 						float dist = 0;
 						if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 						{
-							auto inter = cam.GetPosition() + lRayDir_world * dist;
 
-							inter.x = std::round(inter.x);
-							inter.y = 0;
-							inter.z = std::round(inter.z);
+							auto inter = cam.GetPosition() + lRayDir_world * dist;
 
 							if (auto shape = proto.get_if<tc::Shape>())
 							{
 								const int& x = shape->x;
 								const int& y = shape->y;
 								const int one = 1;
+
+								inter.x = shape->x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+								inter.y = 0;
+								inter.z = shape->y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
 
 								AABB box;
 								box.min.x = inter.x - .5f - (x - 1) / 2.f;

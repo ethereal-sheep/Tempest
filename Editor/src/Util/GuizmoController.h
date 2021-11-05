@@ -65,7 +65,7 @@ namespace Tempest
         vec3 GetTDelta() const;
         vec3 GetRDelta() const;
         vec3 GetSDelta() const;
-        tc::Transform GetInitial() const;
+        const tc::Transform& GetInitial() const;
 
         Operation GetOperation() const { return m_Operation; }
         Mode GetMode() const { return m_Mode; }

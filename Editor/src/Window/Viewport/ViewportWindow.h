@@ -104,6 +104,21 @@ namespace Tempest
 						instance.action_history.Redo(instance);
 					}
 					break;
+					case 's':
+					{
+						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
+						{
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>(); 
+						}
+					}
+					break;
+					case 'd':
+					{
+						// deselect
+						current = INVALID;
+					}
+					break;
 					default:
 						break;
 					}
@@ -154,7 +169,10 @@ namespace Tempest
 
 				if (GC.IsEnd())
 				{
-					
+					if (GC.GetInitial() != transform)
+					{
+						instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
+					}
 				}
 
 

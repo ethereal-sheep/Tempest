@@ -12,6 +12,8 @@
 #include "Instance/Instance.h"
 #include "Graphics/OpenGL/RenderSystem.h"
 #include "Util/UIElements.h"
+#include "rttr/type.h"
+#include "rttr/registration.h"
 
 namespace Tempest
 {
@@ -36,144 +38,169 @@ namespace Tempest
 			style->Colors[ImGuiCol_ButtonActive] = ImColor(40, 40, 40, 255);
 			style->Colors[ImGuiCol_ButtonHovered] = ImColor(30, 30, 30, 255);
 		}
+		void RenderBaseType(const std::string& prop_name,
+			rttr::type& prop_type,
+			rttr::variant& value)
+		{
+			const auto padding = 80.f;
+			if (prop_type == rttr::type::get<float>())
+				UI::DragFloat(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ padding , 0.f }, &value.get_value<float>(), 0.01f);
+			else if (prop_type == rttr::type::get<int>())
+				UI::DragInt(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ padding , 0.f }, &value.get_value<int>(), 1);	
+		}
+		void RenderClassType(const std::string& prop_name,
+			rttr::type& prop_type,
+			rttr::variant& value)
+		{
+			if (prop_type == rttr::type::get<vec3>())
+				UI::DragFloat3ColorBox(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ padding , 0.f }, glm::value_ptr(value.get_value<vec3>()), 0.f, 0.1f);
+			else if (prop_type == rttr::type::get<quat>())
+			{
+				auto euler = glm::eulerAngles(value.get_value<quat>());
+				UI::DragFloat3ColorBox(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ padding , 0.f }, glm::value_ptr(euler), 0.f, 0.1f);
+			}
+			else if (prop_type == rttr::type::get<rigidbody_config>())
+			{
+				using namespace rttr;
+				type t = type::get_by_name("rigidbody_config");
+				auto var = variant(value);
+
+				for (auto property : prop_type.get_properties())
+				{
+					auto prop_type = property.get_type();
+					auto prop_name = property.get_name().to_string();
+
+					auto value = property.get_value(var);
+					if (property.get_type().is_arithmetic())
+						RenderBaseType(prop_name, prop_type, value);
+					else if (property.get_type().is_class())
+						RenderClassType(prop_name, prop_type, value);
+					else
+						LOG("UNKNOWN");
+
+					property.set_value(var, value);
+				}
+			}
+				
+		}
+		void RenderProperties(rttr::type instance, rttr::variant var)
+		{
+			auto instance_name = instance.get_name().to_string();
+			//auto var = instance.create();
+			ImGui::PushItemWidth(ImGui::GetWindowWidth() - 30.0f);
+			ImGui::BeginGroup();
+			if (ImGui::CollapsingHeader(instance_name.c_str(), ImGuiTreeNodeFlags_FramePadding & ImGuiTreeNodeFlags_AllowItemOverlap))
+			{
+				ImGui::Dummy({ 0.0f, 8.0f });
+				// Loop through the properties of this object type
+				for (auto property : instance.get_properties())
+				{
+					auto prop_type = property.get_type();
+					auto prop_name = property.get_name().to_string();
+
+					auto value = property.get_value(var);
+					if (property.get_type().is_arithmetic())
+						RenderBaseType(prop_name, prop_type, value);
+					else if (property.get_type().is_class())
+						RenderClassType(prop_name, prop_type, value);
+					else
+						LOG("UNKNOWN");
+
+					property.set_value(var, value);
+				}
+				ImGui::Dummy({ 0.0f, 8.0f });
+			}
+			ImGui::EndGroup();
+			ImGui::PopItemWidth();
+		}
 
 		void show(Instance& instance [[maybe_unused]] ) override
 		{
-			/*if (ImGui::Begin(window_name(), &visible, window_flags))
+			if (ImGui::Begin(window_name(), &visible, window_flags))
 			{
-				static ImVec4 active{ 0.2f, 0.2f, 0.2f, 1.f };
-				static ImVec4 inactive{ 0.062f, 0.062f, 0.062f, 1.f };
-				static const ImVec2 buttonSize{ 70, 7.5 };
+				/*UI::UIButton_2("TEST", "TEST", { 100.f,50.f }, { 0,0 }, FONT_PARA,false);
+				UI::UIButton_2("TEST", "TEST", { 300.f,50.f }, { 0,0 }, FONT_PARA,true);
 
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding);
-				Tempest::UI::SubHeader({ ImGui::GetWindowWidth() / 3.f , padding }, "Conflict Resolutions");
+				UI::UIButton_3("TEST", "TEST", { 100.f,100.f }, { 0,0 }, FONT_PARA,false);
+				UI::UIButton_3("TEST", "TEST", { 300.f,100.f }, { 0,0 }, FONT_PARA,true);
 
-				ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoScrollbar;
-				windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
+				UI::UIButton_4("TEST", "TEST", { 100.f,150.f }, { 0,0 }, FONT_PARA,false);
+				UI::UIButton_4("TEST", "TEST", { 300.f,150.f }, { 0,0 }, FONT_PARA,true);
 
-				ImGui::BeginChild("##ContentSection", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoScrollWithMouse);
+				UI::UIButton_5("TEST", "TEST", { 100.f,200.f }, { 0,0 }, FONT_PARA,false);
+				UI::UIButton_5("TEST", "TEST", { 300.f,200.f }, { 0,0 }, FONT_PARA,true);*/
+				auto CharIcon = tex_map["Assets/CharacterIcon.png"];
+				static bool selected = false;
+				static vec2 a = { 100,0.f };
 
-				const auto regoinAvailWidth = ImGui::GetContentRegionAvailWidth() / 3.0f - padding;
-				const auto regoinAvailHeight = ImGui::GetContentRegionAvail().y;
-
-				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (ImGui::GetContentRegionAvailWidth() - regoinAvailWidth * 3 - padding) * 0.25f);
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + halfPadding);
-
+				ImGui::Dummy({ a.x,a.y });
+				ImGui::SameLine();
+				if (UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() },"Char 1", selected, {0,0}, {1,1}).second)
 				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##LeftSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), true, windowFlags);
-					if (!ImGui::IsWindowHovered())
-						bgColor = IM_COL32(0, 0, 0, 100);
-					else
-						bgColor = IM_COL32(20, 20, 20, 100);
-					{
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
-						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
-
-						ImGui::BeginChild("ChildUnit", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
-						auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
-
-						unsigned i = 0;
-						for (auto id : view)
-						{
-							auto& Charac = instance.ecs.get<tc::Character>(id);
-							if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y + i++ * 80 }, { 140, 15 }, FONT_PARA))
-							{
-								tab = i;
-							}
-						}
-
-						ImGui::EndChild();
-					}
-
-					if (UI::UIButton_1("Add Units", "Add Units", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA))
-					{
-						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true);
-					}
-
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-				
+					selected = !selected;
+					LOG("CHAR CLICKED");
 				}
-				
-				ImGui::SameLine();
-				ImGui::Dummy({ halfPadding, 0 });
-				ImGui::SameLine();
-
+				ImGui::DragFloat2("a", glm::value_ptr(a));
+				if (ImGui::Button("TEST"))
 				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##MiddleSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), true, windowFlags);
-					if (!ImGui::IsWindowHovered())
-						bgColor = IM_COL32(0, 0, 0, 100);
-					else
-						bgColor = IM_COL32(20, 20, 20, 100);
-					{
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
-						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
-
-						ImGui::BeginChild("ChildAction", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
-						for (unsigned i = 0; i < numOfButtons; i++)
-						{
-							if (UI::UIButton_1("Test Action" + std::to_string(i), "Test Action" + std::to_string(i), { cursor.x , cursor.y + i * 80}, { 140, 15 }, FONT_PARA))
-								tab = i + numOfButtons;
-						}
-
-						ImGui::EndChild();
-					}
-
-					if (UI::UIButton_1("Add Actions", "Add Actions", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
-					
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-					
+					ImGui::OpenPopup("TT");
+					selected = !selected;
 				}
-				
+				UI::ConfirmDeletePopup("TT", "Delete this character?");
+				if(selected)
+					
 
-				ImGui::SameLine();
-				ImGui::Dummy({ halfPadding, 0 });
-				ImGui::SameLine();
-
+				//ImGui::ImageButton()
+				/*if (UI::UIButtonWithDelete("TEST", "TEST", { 100.f,300.f }, { 0,0 }, FONT_PARA, false).second)
 				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##RightSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), true, windowFlags);
-					if (!ImGui::IsWindowHovered())
-						bgColor = IM_COL32(0, 0, 0, 100);
-					else
-						bgColor = IM_COL32(20, 20, 20, 100);
+					LOG("BRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+				}*/
+				/*if(ImGui::Button("T"))
+				{
+					using namespace rttr;
+					type t = type::get_by_name("Test");
+					rttr::instance var = t.create();
+					auto type = var.get_type();
+					for (auto prop : t.get_properties())
 					{
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
-						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
+						auto prop_type = prop.get_type();
+						auto prop_name = prop.get_name().to_string();
 
-						ImGui::BeginChild("ChildLink", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-						for (unsigned i = 0; i < numOfButtons; i++)
-						{
-							if (UI::UIButton_1("Test Link" + std::to_string(i), "Test Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 140, 15 }, FONT_PARA))
-								tab = i + numOfButtons * 2;
-						}
-
-						ImGui::EndChild();
-					}
-
-					if (UI::UIButton_1("Add Link", "Add Links", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
-					
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
+						LOG("this is {0}", prop_name);
 				}
-				
+				}*/
 
-				ImGui::EndChild();
+				if (instance.selected == INVALID)
+				{
+					//ImGui::Text("NO ENTITY SELECTED");
+					ImGui::End(); return;
+				}
+				if (auto example = instance.ecs.get_if<tc::Example>(instance.selected))
+				{
+					using namespace rttr;
+					type t = type::get_by_name(tc::Example::get_type());
+					auto var = variant(example);
+					RenderProperties(t, var);
+				}
+
+				if (auto transform = instance.ecs.get_if<tc::Transform>(instance.selected))
+				{
+					using namespace rttr;
+					type t = type::get_by_name(tc::Transform::get_type());
+					auto var = variant(transform);
+					RenderProperties(t, var);
+				}
+
+				if (auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected))
+				{
+					using namespace rttr;
+					type t = type::get_by_name(tc::Rigidbody::get_type());
+					auto var = variant(rb);
+					RenderProperties(t, var);
+				}
 			}
 
-			ImGui::End();*/
+			ImGui::End();
 	
 		}
 	};
