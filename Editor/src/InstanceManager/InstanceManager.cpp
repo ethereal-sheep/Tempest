@@ -103,6 +103,7 @@ namespace Tempest
 		instance->register_window<InspectorWindow>()->visible = false;
 		instance->register_window<test_window>()->visible = false;
 		instance->register_window<test_window2>()->visible = false;
+		instance->register_window<test_window3>()->visible = false;
 
 		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();
