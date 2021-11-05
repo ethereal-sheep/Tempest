@@ -114,6 +114,9 @@
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\Overlay\WeaponSheetOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h">
@@ -337,6 +340,15 @@
     </ClInclude>
     <ClInclude Include="src\Window\Util\SimulationStart.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Popup\SimulateSelectionPopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\WeaponSheetOverlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Popup\QuickMenuPopup.h">
+	<Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Hierarchy\PrefabList.h">
       <Filter>Header Files</Filter>

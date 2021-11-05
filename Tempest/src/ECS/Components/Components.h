@@ -317,7 +317,7 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("Charater_Name", component.name);
-				ar.Member("Weapon_Id", component.weapon);
+				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
 				ar.Vector("Actions", component.actions);
 
@@ -371,7 +371,8 @@ namespace Tempest
 
 
 			string name = "Char";
-			Entity weapon = UNDEFINED;
+			Entity chosen_weapon = UNDEFINED; // no need to serialize this
+			tvector<Entity> weapons;
 			tvector<Entity> actions;
 
 		private:
