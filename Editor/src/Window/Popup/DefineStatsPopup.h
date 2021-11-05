@@ -59,6 +59,7 @@ namespace Tempest
                 PopUpClose = false;
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding , 0.f);
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
                 ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
 				if (ImGui::BeginPopupModal("Add Stat", NULL, flags))
 				{
@@ -74,11 +75,12 @@ namespace Tempest
                     }
                         
                     string te = "DEFINE STATS";
-                    ImGui::GetForegroundDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+                    //ImGui::GetForegroundDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+                    ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
                     ImGui::PushFont(FONT_OPEN);
-                    ImGui::GetForegroundDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
+                    ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
                     ImGui::PopFont();
-                    //ImGui::GetWindowDrawList()->AddRectFilled({winMin.x, winMin.y}, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+                    
                     //drawlist->AddImage((void*)static_cast<size_t>(test->GetID()), { winMin.x, winMin.y }, { winMax.x, winMax.y });
 
                     
@@ -157,7 +159,7 @@ namespace Tempest
 				}
 
 				
-                ImGui::PopStyleVar(2);
+                ImGui::PopStyleVar(3);
                 ImGui::PopStyleColor();
             }
         }

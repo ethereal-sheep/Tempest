@@ -138,13 +138,14 @@ namespace Tempest
 				ImGui::SameLine();
 				if (UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() },"Char 1", selected, {0,0}, {1,1}).second)
 				{
-					selected = !selected;
+					ImGui::OpenPopup("TT");
+					//selected = !selected;
 					LOG("CHAR CLICKED");
 				}
 				ImGui::DragFloat2("a", glm::value_ptr(a));
 				if (ImGui::Button("TEST"))
 				{
-					ImGui::OpenPopup("TT");
+					
 					selected = !selected;
 				}
 				UI::ConfirmDeletePopup("TT", "Delete this character?");
