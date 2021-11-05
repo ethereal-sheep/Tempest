@@ -9,8 +9,7 @@ namespace Tempest
 	void WeaponSheetOverlay::open_popup(const Event& e)
 	{
 		OverlayOpen = true;
-		Tabs[TABS_TYPE::WEAPON].current_state = TabImageData::STATE::HOVER;
-		Tabs[TABS_TYPE::WEAPON].is_active = true;
+		Tabs[TABS_TYPE::WEAPON].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::USE].current_state = TabImageData::STATE::UNHOVER;
 
 		auto a = event_cast<OpenWeaponSheetTrigger>(e);
@@ -33,6 +32,15 @@ namespace Tempest
 
 		weap = a.instance.ecs.get_if<tc::Weapon>(SelectedID);
 
+		if (weap)
+			Tabs[TABS_TYPE::WEAPON].is_active = true;
+	}
+
+	void WeaponSheetOverlay::close_popup(const Event& e)
+	{
+		auto a = event_cast<CloseOverlayTrigger>(e);
+		if (a.current == QUICKMENU_POPUP_TYPE::WEAPONS)
+			OverlayOpen = false;
 	}
 
 	void WeaponSheetOverlay::show(Instance& instance)
@@ -85,6 +93,11 @@ namespace Tempest
 					{
 						create_new_weapon(instance);
 						weap = instance.ecs.get_if<tc::Weapon>(SelectedID);
+						Tabs[CurrentTab].current_state = TabImageData::STATE::UNHOVER;
+						Tabs[CurrentTab].is_active = false;
+						Tabs[TABS_TYPE::WEAPON].is_active = true;
+
+						CurrentTab = TABS_TYPE::WEAPON;
 					}
 				}
 
@@ -189,7 +202,7 @@ namespace Tempest
 			CurrentTab = type;
 		}
 
-		if (ImGui::IsItemHovered())
+		if (ImGui::IsItemHovered() || Tabs[type].is_active)
 			Tabs[type].current_state = TabImageData::STATE::HOVER;
 		else
 			Tabs[type].current_state = TabImageData::STATE::UNHOVER;

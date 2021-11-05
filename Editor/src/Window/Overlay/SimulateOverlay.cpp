@@ -29,6 +29,13 @@ namespace Tempest
 		lose = 0;
 	}
 
+	void SimulateOverlay::close_popup(const Event& e)
+	{
+		auto a = event_cast<CloseOverlayTrigger>(e);
+		if (a.current == QUICKMENU_POPUP_TYPE::SIMULATE)
+			OverlayOpen = false;
+	}
+
 	void SimulateOverlay::confirm_data(const Event& e)
 	{
 		auto a = event_cast<SimulateSelectionConfirm>(e);

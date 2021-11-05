@@ -51,6 +51,7 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenUnitSheetTrigger>(&UnitSheetOverlay::open_popup, this);
+            Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&UnitSheetOverlay::close_popup, this);
             Service<EventManager>::Get().register_listener<SimulateSelectionConfirm>(&UnitSheetOverlay::confirm_data, this);
 
             initialise_tabs();
@@ -63,6 +64,7 @@ namespace Tempest
 
         void open_popup(const Event& e);
         void confirm_data(const Event& e);
+        void close_popup(const Event& e);
 
         void show(Instance&) override;
 

@@ -54,6 +54,12 @@ namespace Tempest
 		QUICKMENU_POPUP_TYPE current;
 	};
 
+	struct CloseOverlayTrigger : public Event
+	{
+		CloseOverlayTrigger(QUICKMENU_POPUP_TYPE current) : current{ current } {}
+		QUICKMENU_POPUP_TYPE current;
+	};
+
 	//Confirm Trigger
 	struct SimulateSelectionConfirm : public Event
 	{

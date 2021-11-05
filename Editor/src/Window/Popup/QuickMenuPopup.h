@@ -84,6 +84,7 @@ namespace Tempest
                     {
                         enable_popup = false;
                         ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
                     }
 
@@ -98,6 +99,7 @@ namespace Tempest
                     {
                         enable_popup = false;
                         ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
                     }
 
@@ -134,6 +136,7 @@ namespace Tempest
                     {
                         enable_popup = false;
                         ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
                     }
 
@@ -164,7 +167,7 @@ namespace Tempest
         bool enable_popup = false;
         ImVec2 button_size{ 0.f,0.f };
         std::array<tsptr<Texture>, 6> Tabs;
-        QUICKMENU_POPUP_TYPE current;
+        QUICKMENU_POPUP_TYPE current{ QUICKMENU_POPUP_TYPE::SIMULATE};
         ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
                          ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
     };

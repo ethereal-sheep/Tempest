@@ -19,8 +19,7 @@ namespace Tempest
 	{
 		OverlayOpen = true;
 
-		Tabs[TABS_TYPE::UNIT].current_state = TabImageData::STATE::HOVER;
-		Tabs[TABS_TYPE::UNIT].is_active = true;
+		Tabs[TABS_TYPE::UNIT].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::WEAPON].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::ITEM].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::ACTION].current_state = TabImageData::STATE::UNHOVER;
@@ -39,6 +38,16 @@ namespace Tempest
 		TempWeapon = UNDEFINED;
 
 		cs = a.instance.ecs.get_if<tc::Character>(SelectedID);
+
+		if (cs)
+			Tabs[TABS_TYPE::UNIT].is_active = true;
+	}
+
+	void UnitSheetOverlay::close_popup(const Event& e)
+	{
+		auto a = event_cast<CloseOverlayTrigger>(e);
+		if (a.current == QUICKMENU_POPUP_TYPE::UNITS)
+			OverlayOpen = false;
 	}
 
 	void UnitSheetOverlay::confirm_data(const Event& e)
@@ -116,7 +125,12 @@ namespace Tempest
 					if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 100 }, { 55,30 }, FONT_PARA))
 					{
 						create_new_unit(instance);
-						cs =instance.ecs.get_if<tc::Character>(SelectedID);
+						cs = instance.ecs.get_if<tc::Character>(SelectedID);
+						Tabs[CurrentTab].current_state = TabImageData::STATE::UNHOVER;
+						Tabs[CurrentTab].is_active = false;
+						Tabs[TABS_TYPE::UNIT].is_active = true;
+
+						CurrentTab = TABS_TYPE::UNIT;
 					}
 				}
 
@@ -751,7 +765,7 @@ namespace Tempest
 			CurrentTab = type;
 		}
 
-		if (ImGui::IsItemHovered())
+		if (ImGui::IsItemHovered() || Tabs[type].is_active)
 			Tabs[type].current_state = TabImageData::STATE::HOVER;
 		else
 			Tabs[type].current_state = TabImageData::STATE::UNHOVER;
