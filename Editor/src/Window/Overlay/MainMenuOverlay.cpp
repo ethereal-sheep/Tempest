@@ -169,7 +169,7 @@ namespace Tempest
 			if (UI::UISelectable("Create New", false, 0))
 			{
 				MainMenuUI = UI_SHOW::NONE;
-				Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 			}
 		
 

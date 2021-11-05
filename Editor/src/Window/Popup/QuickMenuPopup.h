@@ -31,7 +31,7 @@ namespace Tempest
             current = a.current;
         }
 
-        void show(Instance&) override
+        void show(Instance& instance) override
         {
             if (enable_popup)
             {
@@ -82,10 +82,12 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetID()), button_size))
                     {
-                        current = QUICKMENU_POPUP_TYPE::SIMULATE;
+                        enable_popup = false;
+                        ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
                     }
 
-                    if (ImGui::IsItemHovered())
+                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SIMULATE)
                         Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainLit.png"];
                     else
                         Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.png"];
@@ -94,10 +96,12 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::UNITS]->GetID()), button_size))
                     {
-                        current = QUICKMENU_POPUP_TYPE::UNITS;
+                        enable_popup = false;
+                        ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
                     }
 
-                    if (ImGui::IsItemHovered())
+                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::UNITS)
                         Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainLit.png"];
                     else
                         Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.png"];
@@ -106,10 +110,9 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ACTIONS]->GetID()), button_size))
                     {
-                        current = QUICKMENU_POPUP_TYPE::ACTIONS;
                     }
 
-                    if (ImGui::IsItemHovered())
+                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ACTIONS)
                         Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainLit.png"];
                     else
                         Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.png"];
@@ -118,10 +121,9 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size))
                     {
-                        current = QUICKMENU_POPUP_TYPE::SEQUENCES;
                     }
 
-                    if (ImGui::IsItemHovered())
+                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SEQUENCES)
                         Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainLit.png"];
                     else
                         Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.png"];
@@ -130,10 +132,12 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::WEAPONS]->GetID()), button_size))
                     {
-                        current = QUICKMENU_POPUP_TYPE::WEAPONS;
+                        enable_popup = false;
+                        ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
                     }
 
-                    if (ImGui::IsItemHovered())
+                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::WEAPONS)
                         Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainLit.png"];
                     else
                         Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.png"];
@@ -142,10 +146,9 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ITEMS]->GetID()), button_size))
                     {
-                        current = QUICKMENU_POPUP_TYPE::ITEMS;
                     }
 
-                    if (ImGui::IsItemHovered())
+                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ITEMS)
                         Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainLit.png"];
                     else
                         Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.png"];

@@ -82,7 +82,7 @@ namespace Tempest
                         {
                             // TODO: take out id/data
                             enable_popup = false;
-                            Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
+                            Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, UNDEFINED);
                         }
                     }
                         break;

@@ -112,10 +112,32 @@ namespace Tempest
 					ImGui::PopStyleColor(3);
 				}
 
-				if (UI::UIButton_2("Back", "Back", { viewport->Size.x * 0.1f, viewport->Size.y * 0.05f }, { 0,0 }, FONT_PARA))
+				// display top buttons
 				{
-					OverlayOpen = false;
-					ImGui::CloseCurrentPopup();
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+					tex = tex_map["Assets/BackMenuBtn.png"];
+
+					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					{
+						OverlayOpen = false;
+						ImGui::CloseCurrentPopup();
+					}
+
+					ImGui::SameLine();
+					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
+					ImGui::SameLine();
+
+					tex = tex_map["Assets/QuickMenuBtn.png"];
+
+					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					{
+						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::WEAPONS);
+					}
+
+					ImGui::PopStyleColor(3);
 				}
 			}
 
