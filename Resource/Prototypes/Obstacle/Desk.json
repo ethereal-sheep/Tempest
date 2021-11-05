@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Tile"
+        "Category": "Obstacle"
     },
     "Components": [
         {
@@ -41,20 +41,20 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.18786315619945527,
-                    0.009063145145773888,
-                    0.4983026385307312
+                    0.0,
+                    0.0,
+                    0.0
                 ],
                 "LocalRotation": [
-                    -0.7071066498756409,
-                    -0.0,
                     0.0,
-                    0.7071069478988648
+                    0.0,
+                    0.0,
+                    1.0
                 ],
                 "LocalScale": [
-                    0.8500000238418579,
-                    0.5,
-                    0.009999999776482582
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             }
         },
@@ -63,7 +63,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bookshelf.a"
+                "Path": "Models\\Desk_Sci-Fi.a"
             }
         },
         {
@@ -71,7 +71,7 @@
                 "Type": "Shape"
             },
             "Component": {
-                "X": 1,
+                "X": 2,
                 "Y": 1
             }
         }

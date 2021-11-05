@@ -106,7 +106,11 @@ namespace Tempest
 					break;
 					case 's':
 					{
-						instance.action_history.Redo(instance);
+						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
+						{
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>(); 
+						}
 					}
 					break;
 					case 'd':
