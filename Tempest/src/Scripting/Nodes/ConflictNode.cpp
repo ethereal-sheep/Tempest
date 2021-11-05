@@ -49,6 +49,36 @@ namespace Tempest
 			node.set_name("Lose");
 			node.add_input(pin_type::Flow, "");
 			break;
+		case Tempest::ConflictNode::inner_type::AttackRoll:
+			node.set_name("Attack Roll");
+			node.add_input(pin_type::Flow, "");
+			node.add_input(pin_type::Int, "");
+			node.add_output(pin_type::Flow, "");
+			node.add_output(pin_type::Int, "");
+			break;
+		case Tempest::ConflictNode::inner_type::DefendRoll:
+			node.set_name("Defend Roll");
+			node.add_input(pin_type::Flow, "");
+			node.add_input(pin_type::Int, "");
+			node.add_output(pin_type::Flow, "");
+			node.add_output(pin_type::Int, "");
+			break;
+		case Tempest::ConflictNode::inner_type::AttackResolve:
+			node.set_name("Resolve Attack");
+			node.add_input(pin_type::Flow, "");
+			node.add_input(pin_type::Int, "");
+			node.add_output(pin_type::Flow, "");
+			node.add_output(pin_type::Int, "");
+			break;
+		case Tempest::ConflictNode::inner_type::DefendResolve:
+			node.set_name("Resolve Defend");
+			node.add_input(pin_type::Flow, "");
+			node.add_input(pin_type::Int, "");
+			node.add_output(pin_type::Flow, "");
+			node.add_output(pin_type::Int, "");
+			break;
+		case Tempest::ConflictNode::inner_type::END:
+			break;
 		default:
 			break;
 		}
@@ -74,6 +104,16 @@ namespace Tempest
 					if (auto var = instance.srm.get_variable_to_id(entity, "Defender"))
 					{
 						var->get<int64_t>() = static_cast<int64_t>(a.defender);
+					}
+
+					if (auto var = instance.srm.get_variable_to_id(entity, "AttackAction"))
+					{
+						var->get<int64_t>() = static_cast<int64_t>(a.attack_action);
+					}
+
+					if (auto var = instance.srm.get_variable_to_id(entity, "DefendAction"))
+					{
+						var->get<int64_t>() = static_cast<int64_t>(a.defend_action);
 					}
 
 					}));
@@ -107,7 +147,143 @@ namespace Tempest
 						var->get<int>() = 0;
 					}
 
-				}));
+					}));
+		}
+		break;
+		case Tempest::ConflictNode::inner_type::AttackRoll:
+		{
+			return instance.srm.add_script(
+				CreateRuntimeScript<std::tuple<int>(int)>([&instance, entity](int x) {
+
+					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
+					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
+					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
+					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
+
+					LOG_ASSERT(atker);
+					LOG_ASSERT(defer);
+					LOG_ASSERT(atk_act);
+					LOG_ASSERT(def_act);
+
+					Entity atk_e = (Entity)atker->get<int64_t>();
+					Entity def_e = (Entity)defer->get<int64_t>();
+					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
+					Entity def_act_e = (Entity)def_act->get<int64_t>();
+
+					// dispatch to action graph
+					instance.srm.instant_dispatch_to_id<Roll>(atk_act_e, atk_e, def_e, x);
+					if (auto var = instance.srm.get_variable_to_id(atk_act_e, "Output"))
+					{
+						LOG_ASSERT(var->get_type() == pin_type::Int);
+						// return the output of the graph
+						return std::make_tuple(var->get<int>());
+					}
+					// if no output, just return x
+					return std::make_tuple(x);
+
+					}, std::placeholders::_1));
+		}
+		break;
+		case Tempest::ConflictNode::inner_type::DefendRoll:
+		{
+			return instance.srm.add_script(
+				CreateRuntimeScript<std::tuple<int>(int)>([&instance, entity](int x) {
+
+					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
+					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
+					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
+					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
+
+					LOG_ASSERT(atker);
+					LOG_ASSERT(defer);
+					LOG_ASSERT(atk_act);
+					LOG_ASSERT(def_act);
+
+					Entity atk_e = (Entity)atker->get<int64_t>();
+					Entity def_e = (Entity)defer->get<int64_t>();
+					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
+					Entity def_act_e = (Entity)def_act->get<int64_t>();
+
+					// dispatch to action graph
+					instance.srm.instant_dispatch_to_id<Roll>(def_act_e, def_e, atk_e, x);
+					if (auto var = instance.srm.get_variable_to_id(def_act_e, "Output"))
+					{
+						LOG_ASSERT(var->get_type() == pin_type::Int);
+						// return the output of the graph
+						return std::make_tuple(var->get<int>());
+					}
+					// if no output, just return x
+					return std::make_tuple(x);
+
+					}, std::placeholders::_1));
+		}
+		break;
+		case Tempest::ConflictNode::inner_type::AttackResolve:
+		{
+			return instance.srm.add_script(
+				CreateRuntimeScript<std::tuple<int>(int)>([&instance, entity](int x) {
+
+					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
+					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
+					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
+					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
+
+					LOG_ASSERT(atker);
+					LOG_ASSERT(defer);
+					LOG_ASSERT(atk_act);
+					LOG_ASSERT(def_act);
+
+					Entity atk_e = (Entity)atker->get<int64_t>();
+					Entity def_e = (Entity)defer->get<int64_t>();
+					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
+					Entity def_act_e = (Entity)def_act->get<int64_t>();
+
+					// dispatch to action graph
+					instance.srm.instant_dispatch_to_id<Resolve>(atk_act_e, atk_e, def_e, x);
+					if (auto var = instance.srm.get_variable_to_id(atk_act_e, "Output"))
+					{
+						LOG_ASSERT(var->get_type() == pin_type::Int);
+						// return the output of the graph
+						return std::make_tuple(var->get<int>());
+					}
+					// if no output, just return x
+					return std::make_tuple(x);
+
+					}, std::placeholders::_1));
+		}
+		break;
+		case Tempest::ConflictNode::inner_type::DefendResolve:
+		{
+			return instance.srm.add_script(
+				CreateRuntimeScript<std::tuple<int>(int)>([&instance, entity](int x) {
+
+					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
+					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
+					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
+					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
+
+					LOG_ASSERT(atker);
+					LOG_ASSERT(defer);
+					LOG_ASSERT(atk_act);
+					LOG_ASSERT(def_act);
+
+					Entity atk_e = (Entity)atker->get<int64_t>();
+					Entity def_e = (Entity)defer->get<int64_t>();
+					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
+					Entity def_act_e = (Entity)def_act->get<int64_t>();
+
+					// dispatch to action graph
+					instance.srm.instant_dispatch_to_id<Resolve>(def_act_e, def_e, atk_e, x);
+					if (auto var = instance.srm.get_variable_to_id(def_act_e, "Output"))
+					{
+						LOG_ASSERT(var->get_type() == pin_type::Int);
+						// return the output of the graph
+						return std::make_tuple(var->get<int>());
+					}
+					// if no output, just return x
+					return std::make_tuple(x);
+
+					}, std::placeholders::_1));
 		}
 		break;
 		default:

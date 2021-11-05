@@ -69,9 +69,6 @@
     <ClCompile Include="src\Extern\imgui\ImGuizmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Actions\Action.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Extern\imgui\implot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -248,7 +245,7 @@
     <ClInclude Include="src\Extern\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Actions\Action.h">
+    <ClInclude Include="src\Actions\EditorAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Extern\imgui\implot.h">
@@ -339,6 +336,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Util\SimulationStart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Hierarchy\PrefabList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Viewport\CameraControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Util\LineDrawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

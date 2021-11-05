@@ -175,7 +175,20 @@ namespace Tempest
 			{
 				std::string temp;
 				file_line >> temp;
-				m.BaseTexture = make_sptr<Texture>(temp);
+				std::filesystem::path parent{ file };
+				std::string p = parent.parent_path().string();
+				p.erase(p.end() - 6, p.end());
+				p += temp;
+				try
+				{
+					m.BaseTexture = make_sptr<Texture>(p);
+				}
+
+				catch (...)
+				{
+					LOG_WARN("Texture File Not Found!");
+				}
+				
 			}
 
 			else if (prefix == "Ambient" && line != "")

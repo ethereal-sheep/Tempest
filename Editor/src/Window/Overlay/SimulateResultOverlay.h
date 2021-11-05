@@ -65,9 +65,6 @@ namespace Tempest
                     UI::SubHeader("Simulate");
                     ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
-
-
-                    
                     const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
 
                     auto tex = tex_map["Assets/SimulationBackdrop.png"];
@@ -108,10 +105,10 @@ namespace Tempest
                     ImGui::PushItemWidth(150.f);
                     ImGui::SetCursorPos({ ImGui::GetCursorPosX(), (Max.y - Min.y) * 0.11f });
                     ImGui::InputScalar("", ImGuiDataType_U32, &freq, 0);
-                    freq = std::clamp(freq, 1u, 50000u);
+                    freq = std::clamp(freq, 1u, 500000u);
                     ImGui::PopItemWidth();
                     ImGui::PushFont(FONT_HEAD);
-                    if (win + lose != 0)
+                    if (win+lose != 0)
                     {
                         //ImGui::SetCursorPos({ 0,0 }); //reset curson pos
                         ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f , (Max.y - Min.y) * 0.4f });
@@ -130,9 +127,7 @@ namespace Tempest
 
                     if (UI::UIButton_2("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
                     {
-                        freq = std::clamp(freq, 1u, 100000u);
-
-                        Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, conflict, freq, win, lose);
+                        Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, atk_act, def_act, conflict, freq, win, lose, finish);
                     }
                     if (UI::UIButton_2("Back", "Back", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.75f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
                     {
@@ -146,16 +141,153 @@ namespace Tempest
                     }
                 }
                 ImGui::End();
+
+                if (ImGui::Begin("Test"))
+                {
+                    ImGui::InputScalar("Conflict", ImGuiDataType_U32, &conflict);
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectConflict"))
+                        {
+                            IM_ASSERT(payload->DataSize == sizeof(Entity));
+                            conflict = *static_cast<Entity*>(payload->Data);
+                        }
+                    }
+
+                    UI::PaddedSeparator(0.5f);
+
+
+                    ImGui::InputScalar("Attacking", ImGuiDataType_U32, &atk);
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectUnit"))
+                        {
+                            IM_ASSERT(payload->DataSize == sizeof(Entity));
+                            atk = *static_cast<Entity*>(payload->Data);
+                        }
+                    }
+                    ImGui::InputScalar("Attack Action", ImGuiDataType_U32, &atk_act);
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectAction"))
+                        {
+                            IM_ASSERT(payload->DataSize == sizeof(Entity));
+                            atk_act = *static_cast<Entity*>(payload->Data);
+                        }
+                    }
+
+                    UI::PaddedSeparator(0.5f);
+
+                    ImGui::InputScalar("Defending", ImGuiDataType_U32, &def);
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectUnit"))
+                        {
+                            IM_ASSERT(payload->DataSize == sizeof(Entity));
+                            def = *static_cast<Entity*>(payload->Data);
+                        }
+                    }
+
+                    ImGui::InputScalar("Defend Action", ImGuiDataType_U32, &def_act);
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectAction"))
+                        {
+                            IM_ASSERT(payload->DataSize == sizeof(Entity));
+                            def_act = *static_cast<Entity*>(payload->Data);
+                        }
+                    }
+
+                    UI::PaddedSeparator(1.f);
+
+
+                    if (ImGui::TreeNodeEx("Conflict Graphs"))
+                    {
+                        for (auto id : instance.ecs.view<tc::ConflictGraph>())
+                        {
+                            std::string text = std::to_string(id);
+                            ImGui::Indent(10.f);
+                            if (ImGui::Selectable(text.c_str(), conflict == id))
+                            {
+                                conflict = id;
+                            }
+                            if (ImGui::BeginDragDropSource())
+                            {
+
+                                static Entity payload = 0;
+                                payload = id;
+                                ImGui::SetDragDropPayload("SelectConflict", &payload, sizeof(Entity));
+
+                                ImGui::Text("%u", id);
+                                ImGui::EndDragDropSource();
+                            }
+                            ImGui::Unindent(10.f);
+                        }
+                        ImGui::TreePop();
+                    }
+
+                    if (ImGui::TreeNodeEx("Action Graphs"))
+                    {
+                        for (auto id : instance.ecs.view<tc::ActionGraph>())
+                        {
+                            std::string text = std::to_string(id);
+                            ImGui::Indent(10.f);
+                            ImGui::Selectable(text.c_str());
+                            if (ImGui::BeginDragDropSource())
+                            {
+                                static Entity payload = 0;
+                                payload = id;
+                                ImGui::SetDragDropPayload("SelectAction", &payload, sizeof(Entity));
+
+                                ImGui::Text("%u", id);
+                                ImGui::EndDragDropSource();
+                            }
+                            ImGui::Unindent(10.f);
+                        }
+                        ImGui::TreePop();
+                    }
+
+                    UI::PaddedSeparator(0.5f);
+
+                    if (ImGui::TreeNodeEx("Units"))
+                    {
+                        for (auto id : instance.ecs.view<tc::Character>())
+                        {
+                            std::string text = std::to_string(id);
+                            ImGui::Indent(10.f);
+                            ImGui::Selectable(text.c_str());
+                            if (ImGui::BeginDragDropSource())
+                            {
+                                static Entity payload = 0;
+                                payload = id;
+                                ImGui::SetDragDropPayload("SelectUnit", &payload, sizeof(Entity));
+
+                                ImGui::Text("%u", id);
+                                ImGui::EndDragDropSource();
+                            }
+                            ImGui::Unindent(10.f);
+                        }
+                        ImGui::TreePop();
+                    }
+
+                }
+                ImGui::End();
             }
         }
 
         Entity atk;
         Entity def;
+        Entity atk_act;
+        Entity def_act;
         Entity conflict;
         uint32_t freq = 100000u;
 
-        uint32_t win;
-        uint32_t lose;
+        std::atomic_uint32_t win;
+        std::atomic_uint32_t lose;
+        std::atomic_bool finish;
 
 
         bool OverlayOpen = false;

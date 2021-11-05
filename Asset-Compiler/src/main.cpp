@@ -11,6 +11,7 @@
 #include <fstream>
 #include <glm.hpp>
 #include <sstream>
+#include <cstring>
 #include "Tempest/src/Logger/Log.h"
 
 thread_local Assimp::Importer s_Importer;
@@ -307,7 +308,7 @@ int main(int argc, char* argv[])
 	int t = argc;
 	std::filesystem::path pt{ argv[1] };
 	std::string ext = pt.extension().string();
-	if (ext != ".fbx" || ext != ".3ds")
+	if (strcmp(ext.c_str(), ".fbx"))
 	{
 		//LOG("Incorrect File Type!");
 		std::cout << "Incorrect File Type" << std::endl;

@@ -17,6 +17,7 @@ namespace Tempest
 {
 	void CreatorInstance::_init()
 	{
+
 	}
 	void CreatorInstance::_update(float )
 	{

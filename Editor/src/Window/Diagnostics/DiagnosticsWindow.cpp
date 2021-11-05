@@ -330,10 +330,21 @@ namespace Tempest
 			auto start = cam.GetPosition();
 			auto end = cam.GetPosition() + lRayDir_world * 1000.0f;
 
-			ImGui::Text("Start: %.3f , %.3f,  %.3f", start.x, start.y, start.z);
-			ImGui::Text("End:   %.3f , %.3f,  %.3f", end.x, end.y, end.z);
+			ImGui::Text("Start:       %.3f , %.3f,  %.3f", start.x, start.y, start.z);
+			ImGui::Text("End:         %.3f , %.3f,  %.3f", end.x, end.y, end.z);
 
-			auto [id, check] = instance.po.raycast(els::to_vec3(cam.GetPosition()), els::to_vec3(lRayDir_world));
+			float dist = 0;
+			if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+			{
+				auto inter = cam.GetPosition() + lRayDir_world * dist;
+				ImGui::Text("Intersect:   %.3f , %.3f,  %.3f", inter.x, inter.y, inter.z);
+			}
+			else
+			{
+				ImGui::Text("Not facing plane!");
+			}
+
+			auto [id, check] = instance.po.raycast(cam.GetPosition(), lRayDir_world);
 			if (check)
 			{
 				ImGui::Text("HIT! id: %u", id);

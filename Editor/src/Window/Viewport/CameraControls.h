@@ -246,7 +246,7 @@ namespace Tempest
 				{
 					if (!els::is_zero(direction))
 					{
-						constexpr float max_angle = glm::radians(270.f);
+						const float max_angle = glm::radians(270.f);
 						auto rel_pos = orbit_axis - cam.GetPosition();
 
 						start_rotation = cam.GetQuatRotation();
@@ -265,7 +265,7 @@ namespace Tempest
 				{
 					if (!els::is_zero(direction))
 					{
-						constexpr float max_angle = glm::radians(270.f);
+						const float max_angle = glm::radians(270.f);
 						auto rel_pos = orbit_axis - cam.GetPosition();
 
 						
@@ -290,7 +290,7 @@ namespace Tempest
 				{
 					if (!els::is_zero(direction))
 					{
-						constexpr float max_angle = glm::radians(270.f);
+						const float max_angle = glm::radians(270.f);
 						auto rel_pos = orbit_axis - cam.GetPosition();
 
 						start_rotation = cam.GetQuatRotation();
@@ -407,6 +407,8 @@ namespace Tempest
 				ImGui::Text("Controls");
 				ImGui::Separator();
 				{
+
+
 					bool check = mode == CameraControlMode::WORLD;
 					if (check)
 					{

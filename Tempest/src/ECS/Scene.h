@@ -36,10 +36,9 @@ namespace Tempest
 			return prefabs.insert_or_assign(idgen::generate(), proto.instance());
 		}
 
-		auto force_create(id_t id, const prototype& proto)
+		auto create(const prefab& pf)
 		{
-			// if id exist, overwrite
-			return prefabs.insert_or_assign(id, proto.instance());
+			return prefabs.insert_or_assign(idgen::generate(), pf);
 		}
 
 		prefab& get(id_t id)
@@ -56,7 +55,7 @@ namespace Tempest
 
 		auto extract(id_t t) { return prefabs.extract(t); }
 		auto insert(tmap<id_t, prefab>::node_type&& n) { return prefabs.insert(std::move(n)); }
-		bool exist(id_t id) const { return prefabs.contains(id); }
+		bool exist(id_t id) const { return prefabs.count(id); }
 		size_t count(id_t id) const { return prefabs.count(id); }
 		size_t size() const { return prefabs.size(); }
 		auto begin() { return prefabs.begin(); }
@@ -74,6 +73,10 @@ namespace Tempest
 		void load_prototypes(const tpath& proto_folder)
 		{
 			categories.clear();
+
+			if (!fs::exists(proto_folder))
+				return;
+
 			for (auto folder : fs::directory_iterator(proto_folder))
 			{
 				if (!fs::is_directory(folder))
@@ -104,6 +107,38 @@ namespace Tempest
 			}
 		}
 
+		void override_prototypes(const tpath& proto_folder)
+		{
+			if (!fs::exists(proto_folder))
+				return;
+
+			for (auto folder : fs::directory_iterator(proto_folder))
+			{
+				if (!fs::is_directory(folder))
+					continue;
+				// each of this are folders
+				auto cat = folder.path().filename().string();
+
+				for (auto entry : fs::directory_iterator(folder))
+				{
+					if (entry.path().extension() != ".json")
+						continue;
+					// each of this json files
+					auto name = entry.path().stem().string();
+
+					// check if the prototype exist
+					// if no then do nothing
+					if (!categories[cat].has(name))
+					{
+						LOG_WARN("The prototype {0} has been deprecated from the system", name);
+						continue;
+					}
+
+					categories[cat].get(name).load_override(entry.path());
+				}
+			}
+		}
+
 		void load_map(Reader& reader, Map& map_to_load)
 		{
 			reader.StartObject();
@@ -122,10 +157,11 @@ namespace Tempest
 				// check if proto exist
 				if (categories.count(cat) && categories.at(cat).has(proto))
 				{
-					map_to_load.create(categories.at(cat).get(proto));
+					auto [it, b] = map_to_load.create(categories.at(cat).get(proto));
+					it->second.deserialize(reader);
 				}
 				else
-					LOG_WARN("prototype {0} of {1}");
+					LOG_WARN("prototype {0} of {1} not found!");
 
 				reader.EndObject();
 			}
@@ -170,9 +206,8 @@ namespace Tempest
 			load_prototypes("Prototypes");
 		}
 
-		Scene(const tpath& file)
-		{
-			tpath root;
+		/*
+		tpath root;
 			tpath scene_json;
 			if(!fs::exists(file))
 				throw scene_exception(file.string() + " does not exist!");
@@ -200,8 +235,8 @@ namespace Tempest
 				throw scene_exception(file.string() + " cannot be opened!");
 
 			load_map(reader, map);
-		}
-
+		
+		*/
 
 		void save(const tpath& root_folder)
 		{
@@ -213,7 +248,7 @@ namespace Tempest
 			{
 				for (auto& [name, proto] : proto_cat)
 				{
-					proto.save(root_folder / "Prototypes" / cat_name);
+					proto.save_override(root_folder / "Prototypes" / cat_name);
 				}
 			}
 
@@ -222,6 +257,52 @@ namespace Tempest
 			save_map(writer, map);
 			Serializer::SaveJson(root_folder / "scene.json", writer.GetString());
 
+		}
+
+		void load(const tpath& root_folder)
+		{
+			// assume all the base prototypes are loaded already
+			// so if we try to load any other prototypes
+			// it is an override function
+			// over all existing
+
+			if (root_folder == "")
+				return;
+
+			auto file = root_folder;
+
+			tpath root;
+			tpath scene_json;
+			if (!fs::exists(file))
+				return;
+
+			if (fs::is_directory(file))
+			{
+				root = file;
+				scene_json = file / "scene.json";
+			}
+			else if (file.filename() == "scene.json")
+			{
+				root = file.parent_path();
+				scene_json = file;
+			}
+			else
+				return;
+
+			if (!fs::exists(scene_json))
+				return;
+
+			override_prototypes(root / "Prototypes");
+
+
+			Serializer serializer;
+			string json = serializer.GetJson(scene_json);
+
+			Reader reader(json.c_str());
+			if (reader.HasError())
+				throw scene_exception(file.string() + " cannot be opened!");
+
+			load_map(reader, map);
 		}
 
 		auto create(const prototype& p)

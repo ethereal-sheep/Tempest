@@ -111,42 +111,7 @@ namespace Tempest
 	{
 		if (instance)
 		{
-			// for debugging only (remove on release)
-			if (demo_visible)
-				ImGui::ShowDemoWindow();
-			if (implot_demo_visible)
-			{
-				ImPlot::ShowDemoWindow();
-				ImPlot::ShowStyleEditor();
-			}
-
 			instance->OnRender();
-		}
-	}
-	// global menu bar
-	void menubar()
-	{
-		if (instance)
-		{
-			if (ImGui::BeginMainMenuBar())
-			{
-				if (ImGui::BeginMenu("Windows"))
-				{
-					for (auto& window : instance->window_manager.get_windows())
-					{
-						ImGui::MenuItem(window->window_name(), nullptr, &window->visible);
-					}
-					ImGui::EndMenu();
-				}
-				// for debugging only (remove on release)
-				if (ImGui::BeginMenu("Demo"))
-				{
-					ImGui::MenuItem("ImGui Demo", nullptr, &demo_visible);
-					ImGui::MenuItem("imPlot Demo", nullptr, &implot_demo_visible);
-					ImGui::EndMenu();
-				}
-			}
-			ImGui::EndMainMenuBar();
 		}
 	}
 
@@ -222,8 +187,5 @@ private:
 
 	tuptr<Instance> instance = nullptr;
 
-	// for debugging only (remove on release)
-	bool demo_visible = false;
-	bool implot_demo_visible = false;
 };
 }
