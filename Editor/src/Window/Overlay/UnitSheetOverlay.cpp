@@ -60,7 +60,7 @@ namespace Tempest
 		{
 		case SIMULATE_POPUP_TYPE::ACTION:
 			TempAction = a.data;
-			cs->weapons.emplace_back(TempAction);
+			cs->actions.emplace_back(TempAction);
 			TempAction = UNDEFINED;
 			break;
 		case SIMULATE_POPUP_TYPE::WEAPON:
@@ -103,7 +103,7 @@ namespace Tempest
 
 				// Display the created units
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.03f, viewport->Size.y * 0.15f });
-				ImGui::BeginChild("##UnitsDisplay", { viewport->Size.x * 0.1f, viewport->Size.y * 0.65f }, true);
+				ImGui::BeginChild("##UnitsDisplay", { viewport->Size.x * 0.15f, viewport->Size.y * 0.7f }, true);
 
 				{
 					unsigned i = 0;
@@ -111,18 +111,37 @@ namespace Tempest
 
 
 					// TODO: store selected item
-					const ImVec2 cursor{ ImGui::GetCursorPosX() + 100, ImGui::GetCursorPosY() + 60 };
+					const ImVec2 cursor{ ImGui::GetCursorPosX() + 60, ImGui::GetCursorPosY() + 20 };
 					for (auto id : view)
 					{
 						auto& charac = instance.ecs.get<tc::Character>(id);
-						if (UI::UIButton_1(charac.name.c_str(), charac.name.c_str(), { cursor.x , cursor.y + i++ * 100 }, { 50,50 }, FONT_PARA))
+						ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 170 });
+						auto CharIcon = tex_map["Assets/CharacterIcon.png"];
+						auto PairResult = UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), SelectedID == id, { 0,0 }, { 1,1 });
+						if (PairResult.first)
 						{
 							SelectedID = id;
 							cs = &charac;
 						}
+						else if (PairResult.second)
+						{
+							ImGui::OpenPopup("DeleteCharacter");
+						}
+
+						if (UI::ConfirmDeletePopup("TT", "Delete this character?"))
+						{
+							// mark for deletion
+						}
+						
+						/*if (UI::UIButton_1(charac.name.c_str(), charac.name.c_str(), { cursor.x , cursor.y + i++ * 100 }, { 50,50 }, FONT_PARA))
+						{
+							SelectedID = id;
+							cs = &charac;
+						}*/
 					}
 
-					if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 100 }, { 55,30 }, FONT_PARA))
+					// just try with get cursor pos
+					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 110, ImGui::GetCursorPos().y + 60 }, { 55,30 }, FONT_PARA))
 					{
 						create_new_unit(instance);
 						cs = instance.ecs.get_if<tc::Character>(SelectedID);
@@ -924,7 +943,7 @@ namespace Tempest
 		ImGui::BeginChild("##WeaponsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 		unsigned i = 0;
 		unsigned j = 0;
-		const ImVec2 cursor{ ImGui::GetCursorPosX() + 200, ImGui::GetCursorPosY() + 60 };
+		const ImVec2 cursor{ ImGui::GetCursorPosX() + 130, ImGui::GetCursorPosY() + 60 };
 
 		for (auto weap_id : cs->weapons)
 		{
@@ -966,9 +985,36 @@ namespace Tempest
 		if (!cs)
 			return;
 
-		(void)instance;
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
 		ImGui::BeginChild("##ActionsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
+		unsigned i = 0;
+		unsigned j = 0;
+		unsigned action_num = 1;
+		const ImVec2 cursor{ ImGui::GetCursorPosX() + 130, ImGui::GetCursorPosY() + 60 };
+
+		for (auto id : cs->actions)
+		{
+			auto& action = instance.ecs.get<tc::Graph>(id);
+			if (UI::UIButton_2(action.g.name + ": " + std::to_string(action_num), action.g.name + ": " + std::to_string(action_num), { cursor.x + i++ * 300.0f,cursor.y + j * 100.0f }, { 40.f, 20.f }, FONT_BODY))
+			{
+				//	EditWeaponPopup = true;
+				//	EditWeap = weap;
+			}
+
+			// display in rows of 2
+			if (i / 3)
+			{
+				i = 0;
+				j++;
+			}
+			++action_num;
+		}
+
+		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
+		{
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::ACTION, false, TempWeapon, true);
+		}
 
 		ImGui::EndChild();
 	}
