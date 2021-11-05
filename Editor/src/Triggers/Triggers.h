@@ -63,10 +63,11 @@ namespace Tempest
 	//Confirm Trigger
 	struct SimulateSelectionConfirm : public Event
 	{
-		SimulateSelectionConfirm(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data) :
-			type{ type }, is_attacker{ is_attacker }, data{ data }{}
+		SimulateSelectionConfirm(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data, bool for_unitpage = false) :
+			type{ type }, is_attacker{ is_attacker }, data{ data }, for_unitpage{ for_unitpage }{}
 		SIMULATE_POPUP_TYPE type;
 		bool is_attacker;
+		bool for_unitpage;
 		Entity data;
 	};
 

@@ -101,7 +101,7 @@ namespace Tempest
 				if (sequence != UNDEFINED)
 					seq_name = instance.ecs.get<tc::Graph>(sequence).g.name;
 
-				if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), { viewport->Size.x * 0.5f, viewport->Size.x * 0.15f }, { 0,0 }, FONT_PARA))
+				if (UI::UIButton_5(seq_name.c_str(), seq_name.c_str(), { viewport->Size.x * 0.5f, viewport->Size.x * 0.15f }, { 0,0 }, FONT_PARA))
 				{
 					Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 						SIMULATE_POPUP_TYPE::SEQUENCE, false, sequence);
@@ -464,13 +464,13 @@ namespace Tempest
 		ImGui::Text(char_name.c_str());
 
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 4.0f });
-		if (UI::UIButton_2("SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		if (UI::UIButton_3("SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, is_attacker ? attacker.weapon : defender.weapon);
 		}
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 7.0f });
-		if (UI::UIButton_2("SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		if (UI::UIButton_4("SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::ACTION, is_attacker, is_attacker ? attacker.action : defender.action);

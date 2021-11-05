@@ -83,13 +83,29 @@ namespace Tempest
 					for (auto id : view)
 					{
 						auto& weapon = instance.ecs.get<tc::Weapon>(id);
-						if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x , cursor.y + i++ * 70 }, { 120,10 }, FONT_PARA))
+						auto PairResult = UI::UIButtonWithDelete(weapon.name.c_str(), weapon.name.c_str(), { cursor.x , cursor.y + i++ * 90 }, { 10,20 }, FONT_PARA, SelectedID == id);
+						if (PairResult.first)
 						{
+							SelectedID = id;
 							weap = &weapon;
 						}
+						if (PairResult.second)
+						{
+							ImGui::OpenPopup("DeleteWeapon");
+						}
+
+						if (UI::ConfirmDeletePopup("DeleteWeapon", "Delete this weapon?"))
+						{
+							// mark for deletion
+						}
+
+						/*if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x , cursor.y + i++ * 70 }, { 120,10 }, FONT_PARA))
+						{
+							weap = &weapon;
+						}*/
 					}
 
-					if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 70 }, { 160,10 }, FONT_PARA))
+					if (UI::UIButton_1("+", "+", { ImGui::GetCursorPosX() + 99,  ImGui::GetCursorPosY() + 80 }, { 160,20 }, FONT_PARA))
 					{
 						create_new_weapon(instance);
 						weap = instance.ecs.get_if<tc::Weapon>(SelectedID);

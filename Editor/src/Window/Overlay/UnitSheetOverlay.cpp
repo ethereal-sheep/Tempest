@@ -53,7 +53,7 @@ namespace Tempest
 	void UnitSheetOverlay::confirm_data(const Event& e)
 	{
 		auto a = event_cast<SimulateSelectionConfirm>(e);
-		if (a.data == UNDEFINED)
+		if (!a.for_unitpage || a.data == UNDEFINED)
 			return; 
 
 		switch (a.type)
@@ -123,12 +123,12 @@ namespace Tempest
 							SelectedID = id;
 							cs = &charac;
 						}
-						else if (PairResult.second)
+						if (PairResult.second)
 						{
 							ImGui::OpenPopup("DeleteCharacter");
 						}
 
-						if (UI::ConfirmDeletePopup("TT", "Delete this character?"))
+						if (UI::ConfirmDeletePopup("DeleteCharacter", "Delete this character?"))
 						{
 							// mark for deletion
 						}

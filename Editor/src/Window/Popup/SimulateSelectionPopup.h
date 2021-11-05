@@ -179,7 +179,7 @@ namespace Tempest
                         ImGui::CloseCurrentPopup();
                         enable_popup = false;
 
-                        Service<EventManager>::Get().instant_dispatch<SimulateSelectionConfirm>(type, is_attacker, data);
+                        Service<EventManager>::Get().instant_dispatch<SimulateSelectionConfirm>(type, is_attacker, data, for_unitpage);
                     }
                 }
 
