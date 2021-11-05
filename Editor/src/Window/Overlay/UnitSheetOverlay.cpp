@@ -19,7 +19,8 @@ namespace Tempest
 	{
 		OverlayOpen = true;
 
-		Tabs[TABS_TYPE::UNIT].current_state = TabImageData::STATE::UNHOVER;
+		Tabs[TABS_TYPE::UNIT].current_state = TabImageData::STATE::HOVER;
+		Tabs[TABS_TYPE::UNIT].is_active = true;
 		Tabs[TABS_TYPE::WEAPON].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::ITEM].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::ACTION].current_state = TabImageData::STATE::UNHOVER;
@@ -65,11 +66,7 @@ namespace Tempest
 	}
 
 	void UnitSheetOverlay::show(Instance& instance)
-	{
-		//const ImVec4 GrabCol = { 117.f / 255.f,117.f / 255.f,117.f / 255.f,1.f };
-		//const ImVec4 HoverCol = { 99.f / 255.f,99.f / 255.f,99.f / 255.f,1.f };
-		//const ImVec4 ActiveCol = { 65.f / 255.f,65.f / 255.f,65.f / 255.f,1.f };
-		
+	{	
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		
 		ImGui::SetNextWindowPos(viewport->Pos);
@@ -136,30 +133,24 @@ namespace Tempest
 					push_button_style();
 
 					render_tabs(TABS_TYPE::UNIT, [&]() {
-						UnitSheetOverlay::display_unit_stats(*viewport, instance, *cs);
+						UnitSheetOverlay::display_unit_stats(*viewport, instance);
 					});
 
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
-						UnitSheetOverlay::display_weapon_stats(*viewport, instance, *cs);
+						UnitSheetOverlay::display_weapon_stats(*viewport, instance);
 					});
 
 					render_tabs(TABS_TYPE::ITEM, [&]() {
 						// not using, i no on-hover item picture :(
-						UnitSheetOverlay::display_items(*viewport, instance, *cs);
+						UnitSheetOverlay::display_items(*viewport, instance);
 					});
 
 					render_tabs(TABS_TYPE::ACTION, [&]() {
-						UnitSheetOverlay::display_actions(*viewport, instance, *cs);
+						UnitSheetOverlay::display_actions(*viewport, instance);
 					});
 
 					pop_button_style();
 				}
-
-				// display unit information function
-			/*	ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.25f });
-				ImGui::BeginChild("##UnitsInformationDisplay", { viewport->Size.x * 0.6f, viewport->Size.y * 0.55f }, true);
-
-				ImGui::EndChild();*/
 
 
 				// scuff back button
@@ -784,8 +775,11 @@ namespace Tempest
 											   static_cast<float>(tex_map["Assets/ActionTabUnlit.png"]->GetHeight()) };
 	}
 
-	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const
+	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance) const
 	{
+		if (!cs)
+			return; 
+
 		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
 		Entity StateLineId = UNDEFINED;
 		for (auto id : StatsView)
@@ -804,8 +798,8 @@ namespace Tempest
 
 		ImGui::Dummy({ frontPadding, 0 });
 		ImGui::SameLine();
-		ImGui::InputText("##CharacterName", &character.name);
-		bool NameDisabled = character.name.size() > 15;
+		ImGui::InputText("##CharacterName", &cs->name);
+		bool NameDisabled = cs->name.size() > 15;
 		ImGui::SameLine();
 		if (NameDisabled)
 		{
@@ -852,7 +846,7 @@ namespace Tempest
 					ImGui::Dummy({ frontPadding, 0 });
 					ImGui::SameLine();
 					ImGui::PushItemWidth(100.f);
-					ImGui::InputInt(label.c_str(), &character.get_stat(i), 0);
+					ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
 					ImGui::PopItemWidth();
 					ImGui::SameLine();
 					ImGui::Text(WeaponData.c_str());
@@ -868,13 +862,13 @@ namespace Tempest
 					ImGui::Dummy({ 250 + frontPadding, 0 });
 					ImGui::SameLine();
 					ImGui::PushItemWidth(100.f);
-					ImGui::InputInt(label.c_str(), &character.get_stat(i), 0);
+					ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
 					ImGui::PopItemWidth();
 					ImGui::SameLine();
 					ImGui::Text(WeaponData.c_str());
 
 					ImGui::SetCursorPos(PrevPos);
-					ImGui::Dummy({ 0, 100.f });
+					ImGui::Dummy({ 0, 55.f });
 				}
 
 				NextLine = !NextLine;
@@ -887,27 +881,35 @@ namespace Tempest
 		ImGui::EndChild();
 	}
 
-	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const
+	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance) const
 	{
-		float frontPadding = 150.f;
+		if (!cs)
+			return;
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
 		ImGui::BeginChild("##WeaponsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
-		for (auto weap_id : character.weapons)
+		unsigned i = 0;
+		unsigned j = 0;
+		const ImVec2 cursor{ ImGui::GetCursorPosX() + 200, ImGui::GetCursorPosY() + 60 };
+
+		for (auto weap_id : cs->weapons)
 		{
 			auto& weap = instance.ecs.get<tc::Weapon>(weap_id);
-			ImGui::Dummy({ frontPadding, 0 });
-			ImGui::SameLine();
-			if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { ImGui::GetCursorPosX(), ImGui::GetCursorPosY() }, { 40.f, 20.f }, FONT_BODY))
+			if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { cursor.x + i++ * 300.0f,cursor.y + j * 100.0f }, { 40.f, 20.f }, FONT_BODY))
 			{
 				//	EditWeaponPopup = true;
 				//	EditWeap = weap;
 			}
+
+			// display in rows of 2
+			if (i / 3)
+			{
+				i = 0;
+				j++;
+			}
 		}
 
-		ImGui::Dummy({ frontPadding, 0 }); // edit this 
-		ImGui::SameLine();
-		if (UI::UIButton_2("+", "+", ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() + 30.0f }, {10,0}, FONT_BODY))
+		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, false, TempWeapon, true);
@@ -916,17 +918,21 @@ namespace Tempest
 		ImGui::EndChild();
 	}
 
-	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const
+	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance) const
 	{
+		if (!cs)
+			return;
+
 		(void)viewport;
 		(void)instance;
-		(void)character;
 	}
 
-	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance, tc::Character& character) const
+	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance) const
 	{
+		if (!cs)
+			return;
+
 		(void)instance;
-		(void)character;
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
 		ImGui::BeginChild("##ActionsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 

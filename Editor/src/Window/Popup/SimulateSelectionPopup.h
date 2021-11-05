@@ -134,7 +134,7 @@ namespace Tempest
                               
                         }
 
-                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
                             // goto actions page and create additional actions
@@ -162,7 +162,7 @@ namespace Tempest
 
                         }
 
-                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
                             // goto sequence page and create additional sequence

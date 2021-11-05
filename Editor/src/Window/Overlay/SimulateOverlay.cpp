@@ -101,11 +101,9 @@ namespace Tempest
 				}
 
 				// success title
-				const std::string success_title{ "Chance of Success" };
-				ImGui::PushFont(FONT_HEAD);
-				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - (ImGui::CalcTextSize(success_title.c_str()).x + ImGui::GetFontSize() * 0.5f) * 0.5f, viewport->Size.y * 0.4f });
-				ImGui::Text(success_title.c_str());
-				ImGui::PopFont();
+				tex = tex_map["Assets/CoSTitle.png"];
+				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.4f - tex->GetHeight() * 0.5f });
+				ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2((float)tex->GetWidth(), (float)tex->GetHeight()));
 
 				// display number percentage
 				float result = 0.0f;

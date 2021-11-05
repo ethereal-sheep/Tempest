@@ -9,7 +9,8 @@ namespace Tempest
 	void WeaponSheetOverlay::open_popup(const Event& e)
 	{
 		OverlayOpen = true;
-		Tabs[TABS_TYPE::WEAPON].current_state = TabImageData::STATE::UNHOVER;
+		Tabs[TABS_TYPE::WEAPON].current_state = TabImageData::STATE::HOVER;
+		Tabs[TABS_TYPE::WEAPON].is_active = true;
 		Tabs[TABS_TYPE::USE].current_state = TabImageData::STATE::UNHOVER;
 
 		auto a = event_cast<OpenWeaponSheetTrigger>(e);
@@ -101,11 +102,11 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
-						WeaponSheetOverlay::display_weapon_stats(*viewport, instance, *weap);
+						WeaponSheetOverlay::display_weapon_stats(*viewport, instance);
 					});
 
 					render_tabs(TABS_TYPE::USE, [&]() {
-						WeaponSheetOverlay::display_use_stats(*viewport, instance, *weap);
+						WeaponSheetOverlay::display_use_stats(*viewport, instance);
 					});
 
 					ImGui::PopStyleColor(3);
@@ -184,8 +185,11 @@ namespace Tempest
 		ImGui::SetCursorPos(prev_cursor_pos);
 	}
 
-	void WeaponSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weapon) const
+	void WeaponSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance)
 	{
+		if (!weap)
+			return; 
+
 		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
 		Entity StateLineId = UNDEFINED;
 		for (auto id : StatsView)
@@ -204,8 +208,8 @@ namespace Tempest
 
 		ImGui::Dummy({ frontPadding, 0 });
 		ImGui::SameLine();
-		ImGui::InputText("##WeaponName", &weapon.name);
-		bool NameDisabled = weapon.name.size() > 15;
+		ImGui::InputText("##WeaponName", &weap->name);
+		bool NameDisabled = weap->name.size() > 15;
 		ImGui::SameLine();
 		if (NameDisabled)
 		{
@@ -235,7 +239,7 @@ namespace Tempest
 					ImGui::Dummy({ frontPadding, 0 });
 					ImGui::SameLine();
 					ImGui::PushItemWidth(100.f);
-					ImGui::InputInt(label.c_str(), &weapon.get_stat(i), 0);
+					ImGui::InputInt(label.c_str(), &weap->get_stat(i), 0);
 					ImGui::PopItemWidth();
 				}
 
@@ -249,11 +253,11 @@ namespace Tempest
 					ImGui::Dummy({ 250 + frontPadding, 0 });
 					ImGui::SameLine();
 					ImGui::PushItemWidth(100.f);
-					ImGui::InputInt(label.c_str(), &weapon.get_stat(i), 0);
+					ImGui::InputInt(label.c_str(), &weap->get_stat(i), 0);
 					ImGui::PopItemWidth();
 
 					ImGui::SetCursorPos(PrevPos);
-					ImGui::Dummy({ 0, 100.f });
+					ImGui::Dummy({ 0, 55.f });
 				}
 			
 
@@ -266,10 +270,12 @@ namespace Tempest
 		ImGui::EndChild();
 	}
 
-	void WeaponSheetOverlay::display_use_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weapon) const
+	void WeaponSheetOverlay::display_use_stats(const ImGuiViewport& viewport, Instance& instance)
 	{
+		if (!weap)
+			return;
+
 		(void)viewport;
 		(void)instance;
-		(void)weapon;
 	}
 }

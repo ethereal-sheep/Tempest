@@ -63,8 +63,8 @@ namespace Tempest
 
         void create_new_weapon(Instance& instance);
         void initialise_tabs();
-        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weapon) const;
-        void display_use_stats(const ImGuiViewport& viewport, Instance& instance, tc::Weapon& weapon) const;
+        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance);
+        void display_use_stats(const ImGuiViewport& viewport, Instance& instance);
 
         template<typename F>
         void render_tabs(TABS_TYPE type, F&& func);
