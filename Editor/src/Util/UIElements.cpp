@@ -77,6 +77,7 @@ namespace Tempest::UI
 		ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 		ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
 		if (ImGui::BeginPopupModal(popupName, nullptr, flags))
 		{
@@ -95,10 +96,10 @@ namespace Tempest::UI
 			auto warnImg = tex_map["Assets/WarningIco.png"];
 			string te = "CONFIRMATION";
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
-			ImGui::GetForegroundDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+			ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
 
 			ImGui::PushFont(FONT_OPEN);
-			ImGui::GetForegroundDrawList()->AddText({ TextMin.x, TextMin.y }
+			ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }
 			, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
 			ImGui::PopFont();
 
@@ -128,7 +129,7 @@ namespace Tempest::UI
 			ImGui::SetCursorPosY(0);
 			if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.355f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 			{
-				ImGui::PopStyleVar(2);
+				ImGui::PopStyleVar(3);
 				ImGui::PopStyleColor();
 				ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
@@ -138,7 +139,7 @@ namespace Tempest::UI
 			ImGui::SetCursorPosY(0);
 			if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.645f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 			{
-				ImGui::PopStyleVar(2);
+				ImGui::PopStyleVar(3);
 				ImGui::PopStyleColor();
 				ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
@@ -147,7 +148,7 @@ namespace Tempest::UI
 			ImGui::EndPopup();
 		}
 
-		ImGui::PopStyleVar(2);
+		ImGui::PopStyleVar(3);
 		ImGui::PopStyleColor();
 		return false;
 	}
@@ -161,6 +162,7 @@ namespace Tempest::UI
 		ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 		ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
 		if (ImGui::BeginPopupModal(popupName, nullptr, flags))
 		{
@@ -179,10 +181,10 @@ namespace Tempest::UI
 			auto warnImg = tex_map["Assets/WarningIco.png"];
 			string te = "CONFIRMATION";
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
-			ImGui::GetForegroundDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+			ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
 			//ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
 			ImGui::PushFont(FONT_OPEN);
-			ImGui::GetForegroundDrawList()->AddText({ TextMin.x, TextMin.y }
+			ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }
 			, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
 			ImGui::PopFont();
 
@@ -217,7 +219,7 @@ namespace Tempest::UI
 			ImGui::SetCursorPosY(0);
 			if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.355f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 			{
-				ImGui::PopStyleVar(2);
+				ImGui::PopStyleVar(3);
 				ImGui::PopStyleColor();
 				ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
@@ -227,7 +229,7 @@ namespace Tempest::UI
 			ImGui::SetCursorPosY(0);
 			if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.645f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 			{
-				ImGui::PopStyleVar(2);
+				ImGui::PopStyleVar(3);
 				ImGui::PopStyleColor();
 				ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
@@ -236,7 +238,7 @@ namespace Tempest::UI
 			ImGui::EndPopup();
 		}
 
-		ImGui::PopStyleVar(2);
+		ImGui::PopStyleVar(3);
 		ImGui::PopStyleColor();
 		return false;
 	}
