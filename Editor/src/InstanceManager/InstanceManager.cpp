@@ -44,6 +44,10 @@
 #include "Window/Popup/DefineStatsPopup.h"
 #include "Window/Popup/SimulateSelectionPopup.h"
 #include "Window/Popup/QuickMenuPopup.h" 
+#include "Window/Popup/AddWeaponPopup.h"
+#include "Window/Popup/AddUnitsPopup.h"
+#include "Window/Popup/AddActionPopup.h"
+#include "Window/Popup/SelectSequencePopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
 #include "Window/Util/SimulationStart.h"
@@ -118,7 +122,10 @@ namespace Tempest
 		instance->register_always<DefineStatsPopup>();
 		instance->register_always<SimulateSelectionPopup>();
 		instance->register_always<QuickMenuPopup>();
-
+		instance->register_always<AddWeaponPopup>();
+		instance->register_always<AddUnitsPopup>();
+		instance->register_always<AddActionPopup>();
+		instance->register_always<SelectSequencePopup>();
 
 		instance->register_always<SaveBrowser>();
 		instance->register_always<ErrorMsgPopup>();

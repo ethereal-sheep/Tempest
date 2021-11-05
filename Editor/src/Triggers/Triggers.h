@@ -32,7 +32,7 @@ namespace Tempest
 	struct CloseProjectTrigger : public Event {};
 	struct ExportProjectTrigger : public Event {};
 	struct ImportAssetTrigger : public Event {};
-
+	
 	//Popup Trigger
 	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION, SEQUENCE};
 	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCES,WEAPONS,ITEMS};
@@ -69,6 +69,20 @@ namespace Tempest
 		bool is_attacker;
 		bool for_unitpage;
 		Entity data;
+	};
+	struct AddingUnitsTrigger : public Event {};
+	struct AddingWeaponsTrigger : public Event {};
+	struct AddingActionsTrigger : public Event {};
+	struct SelectSequenceTrigger : public Event {};
+	struct CharacterStatsTrigger : public Event
+	{
+		CharacterStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
+	};
+	struct WeaponStatsTrigger : public Event 
+	{
+		WeaponStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
 	};
 
 	//Overlay Trigger

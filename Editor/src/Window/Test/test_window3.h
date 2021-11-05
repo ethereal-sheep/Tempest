@@ -139,14 +139,25 @@ namespace Tempest
 				if (UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() },"Char 1", selected, {0,0}, {1,1}).second)
 				{
 					ImGui::OpenPopup("TT");
-					//selected = !selected;
+					selected = !selected;
 					LOG("CHAR CLICKED");
 				}
 				ImGui::DragFloat2("a", glm::value_ptr(a));
-				if (ImGui::Button("TEST"))
+				if (ImGui::Button("Weapon"))
 				{
-					
-					selected = !selected;
+					Service<EventManager>::Get().instant_dispatch<AddingWeaponsTrigger>();
+				}
+				if (ImGui::Button("Action"))
+				{
+					Service<EventManager>::Get().instant_dispatch<AddingActionsTrigger>();
+				}
+				if (ImGui::Button("Unit"))
+				{
+					Service<EventManager>::Get().instant_dispatch<AddingUnitsTrigger>();
+				}
+				if (ImGui::Button("Sequence"))
+				{
+					Service<EventManager>::Get().instant_dispatch<SelectSequenceTrigger>();
 				}
 				UI::ConfirmDeletePopup("TT", "Delete this character?");
 				if(selected)
