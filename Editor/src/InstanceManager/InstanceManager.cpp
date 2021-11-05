@@ -42,6 +42,10 @@
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
 #include "Window/Popup/DefineStatsPopup.h"
+#include "Window/Popup/AddWeaponPopup.h"
+#include "Window/Popup/AddUnitsPopup.h"
+#include "Window/Popup/AddActionPopup.h"
+#include "Window/Popup/SelectSequencePopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
 #include "Window/Util/SimulationStart.h"
@@ -113,6 +117,10 @@ namespace Tempest
 		instance->register_always<ImportAssetPopup>();
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 		instance->register_always<DefineStatsPopup>();
+		instance->register_always<AddWeaponPopup>();
+		instance->register_always<AddUnitsPopup>();
+		instance->register_always<AddActionPopup>();
+		instance->register_always<SelectSequencePopup>();
 
 
 		instance->register_always<SaveBrowser>();

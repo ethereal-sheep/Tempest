@@ -32,9 +32,24 @@ namespace Tempest
 	struct CloseProjectTrigger : public Event {};
 	struct ExportProjectTrigger : public Event {};
 	struct ImportAssetTrigger : public Event {};
+	
 	//Popup Trigger
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
+	struct AddingUnitsTrigger : public Event {};
+	struct AddingWeaponsTrigger : public Event {};
+	struct AddingActionsTrigger : public Event {};
+	struct SelectSequenceTrigger : public Event {};
+	struct CharacterStatsTrigger : public Event
+	{
+		CharacterStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
+	};
+	struct WeaponStatsTrigger : public Event 
+	{
+		WeaponStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
+	};
 
 	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};
