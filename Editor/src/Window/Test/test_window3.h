@@ -138,7 +138,7 @@ namespace Tempest
 				ImGui::BeginChild("TESTING CHILD", { 700, 500 });
 				for (auto i = 0; i < 20; i++)
 				{
-					if (UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, "Char 1", "##"+std::to_string(i), selected, {0,0}, {1,1}).second)
+					if (UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, "Char 1", "##"+std::to_string(i), selected, {0,0}, {1,1}).second)
 					{
 						ImGui::OpenPopup((string("TT##") + std::to_string(i)).c_str());
 						selected = !selected;
@@ -150,7 +150,7 @@ namespace Tempest
 				ImGui::Dummy({ 0,a.y });
 				ImGui::Dummy({ a.x ,0});
 				ImGui::SameLine();
-				if (UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, "Char 1","##TESTINGCA", selected, {0,0}, {1,1}).second)
+				if (UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, "Char 1","##TESTINGCA", selected, {0,0}, {1,1}).first)
 				{
 					ImGui::OpenPopup("TT");
 					selected = !selected;

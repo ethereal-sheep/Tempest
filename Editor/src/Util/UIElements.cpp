@@ -2143,7 +2143,7 @@ namespace Tempest::UI
 	}
 
 	
-	std::pair<bool, bool> UICharButtonEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	std::pair<bool, bool> UICharButton_WithDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -2157,8 +2157,6 @@ namespace Tempest::UI
 		
 		ImVec4 selectedCol = { 0.980f, 0.768f, 0.509f, alpha };
 		ImVec4 arrowTint_col = { 1.f,1.f,1.f,alpha };
-		
-		//ImGui::SetCursorPos({ bb.Max.x - window->Pos.x - padding.x - 10.f, bb.Min.y - window->Pos.y - padding.y });
 
 		ImVec2 frameMin = { bb.Min.x, bb.Min.y + arrowSize.y };
 		
@@ -2192,21 +2190,12 @@ namespace Tempest::UI
 		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
 
 		ImGui::RenderNavHighlight(bb, id);
-
-
-		
-
-
 		if (bg_col.w > 0.0f)
 			window->DrawList->AddRectFilled({ bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, ImGui::GetColorU32(bg_col));
 
-
-		
-		
-		
 		return { pressed,remove };
 	}
-	std::pair<bool, bool> UICharButton(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	std::pair<bool, bool> UICharButton_WithDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = g.CurrentWindow;
@@ -2220,7 +2209,7 @@ namespace Tempest::UI
 		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
 
 		ImGui::BeginGroup();
-		auto res = UICharButtonEx(id, user_texture_id, label, size, selected, uv0, uv1, padding, bg_col, tint_col);
+		auto res = UICharButton_WithDeleteEx(id, user_texture_id, label, size, selected, uv0, uv1, padding, bg_col, tint_col);
 		ImGui::PushFont(FONT_BODY);
 		auto textWidth = ImGui::CalcTextSize(charName.c_str()).x;
 		ImGui::Dummy({ 0, 5.f });
