@@ -12,6 +12,8 @@
 #include "TMath.h"
 #include "Font.h"
 #include <Tempest/src/Core.h>
+#include <Tempest/src/ECS/Entity.h>
+#include "Instance/Instance.h"
 
 namespace Tempest::UI
 {
@@ -147,15 +149,19 @@ namespace Tempest::UI
 
 	// Button size will not scale with Text
 	// Blueish Button for Select Weapon Btn
-	bool UIButton_3(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+	bool UIButton_Weapon(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 
 	// Button size will not scale with Text
 	// Greenish Button for Select Action Btn
-	bool UIButton_4(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+	bool UIButton_Action(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 
 	// Button size will not scale with Text
 	// Beige Button for Select Sequence Btn
-	bool UIButton_5(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+	bool UIButton_Sequence(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
+	// Button size will not scale with Text
+	// Beige Button for Select Sequence Btn
+	bool UIButton_Simulate(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 
 	//return (IsButtonClick, IsDeleteClicked)
 	std::pair<bool, bool> UIButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected);
