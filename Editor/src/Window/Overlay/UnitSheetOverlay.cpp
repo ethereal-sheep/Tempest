@@ -117,7 +117,7 @@ namespace Tempest
 						auto& charac = instance.ecs.get<tc::Character>(id);
 						ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 170 });
 						auto CharIcon = tex_map["Assets/CharacterIcon.png"];
-						auto PairResult = UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), SelectedID == id, { 0,0 }, { 1,1 });
+						std::pair<bool,bool> PairResult = { false,false };//UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), SelectedID == id, { 0,0 }, { 1,1 });
 						if (PairResult.first)
 						{
 							SelectedID = id;
