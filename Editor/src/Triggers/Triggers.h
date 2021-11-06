@@ -38,6 +38,20 @@ namespace Tempest
 	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCES,WEAPONS,ITEMS};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
+	struct AddingUnitsTrigger : public Event {};
+	struct AddingWeaponsTrigger : public Event {};
+	struct AddingActionsTrigger : public Event {};
+	struct SelectSequenceTrigger : public Event {};
+	struct CharacterStatsTrigger : public Event
+	{
+		CharacterStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
+	};
+	struct WeaponStatsTrigger : public Event 
+	{
+		WeaponStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
+	};
 	struct SimulatePopupTrigger : public Event
 	{
 		SimulatePopupTrigger(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data, bool for_unitpage = false) :

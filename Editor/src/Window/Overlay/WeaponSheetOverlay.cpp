@@ -83,7 +83,7 @@ namespace Tempest
 					for (auto id : view)
 					{
 						auto& weapon = instance.ecs.get<tc::Weapon>(id);
-						auto PairResult = UI::UIButtonWithDelete(weapon.name.c_str(), weapon.name.c_str(), { cursor.x , cursor.y + i++ * 90 }, { 10,20 }, FONT_PARA, SelectedID == id);
+						auto PairResult = UI::UIButtonWithDelete(weapon.name.c_str(), string("##"+std::to_string(i)), {cursor.x , cursor.y + i++ * 90}, {10,20}, FONT_PARA, SelectedID == id);
 						if (PairResult.first)
 						{
 							SelectedID = id;
@@ -91,10 +91,10 @@ namespace Tempest
 						}
 						if (PairResult.second)
 						{
-							ImGui::OpenPopup("DeleteWeapon");
+							ImGui::OpenPopup(string("DeleteWeapon##" + std::to_string(i)).c_str() );
 						}
 
-						if (UI::ConfirmDeletePopup("DeleteWeapon", "Delete this weapon?"))
+						if (UI::ConfirmDeletePopup(string("DeleteWeapon##" + std::to_string(i)).c_str(), "Delete this weapon?"))
 						{
 							// mark for deletion
 						}

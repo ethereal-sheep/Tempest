@@ -1588,7 +1588,7 @@ namespace Tempest::UI
 		return false;
 	}
 
-	std::pair<bool, bool> UIButtonWithDelete(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	std::pair<bool, bool> UIButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
 	{
 		const float default_padding_x = 8.f;
 		const float default_padding_y = 8.f;
@@ -1647,8 +1647,8 @@ namespace Tempest::UI
 			ImGui::PopStyleColor(4);
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12.f);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f });
-			if (ImGui::Button(ICON_FA_TRASH))
+			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f + 10.f });
+			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				ImGui::PopStyleVar();
 				return{ false, true };
@@ -1657,7 +1657,7 @@ namespace Tempest::UI
 
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushFont(font);
-			ImGui::Text(hover.c_str());
+			ImGui::Text(unselected.c_str());
 			ImGui::PopFont();
 			auto io = ImGui::GetIO();
 			if (hovered && ImGui::IsMouseClicked(0))
@@ -1679,8 +1679,8 @@ namespace Tempest::UI
 			ImGui::PopStyleColor(4);
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12.f);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f });
-			if (ImGui::Button(ICON_FA_TRASH))
+			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f + 10.f });
+			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				ImGui::PopStyleVar();
 				return{ false, true };
@@ -1706,8 +1706,8 @@ namespace Tempest::UI
 			ImGui::PopStyleColor(4);
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12.f);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f });
-			if (ImGui::Button(ICON_FA_TRASH))
+			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f + 10.f });
+			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				ImGui::PopStyleVar();
 				return{ false, true };
@@ -1716,7 +1716,7 @@ namespace Tempest::UI
 
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushFont(font);
-			ImGui::Text(hover.c_str());
+			ImGui::Text(unselected.c_str());
 			ImGui::PopFont();
 
 			auto io = ImGui::GetIO();
@@ -2142,8 +2142,8 @@ namespace Tempest::UI
 		return false;
 	}
 
-
-	std::pair<bool, bool> UICharButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	
+	std::pair<bool, bool> UICharButton_WithDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -2154,6 +2154,30 @@ namespace Tempest::UI
 		ImVec2 arrowSize = { (float)arrowImg->GetWidth(), (float)arrowImg->GetHeight() };
 		ImVec2 newsize = { size.x, size.y + arrowSize.y };
 		const ImRect bb(window->DC.CursorPos, { window->DC.CursorPos.x + newsize.x + padding.x * 2, window->DC.CursorPos.y + newsize.y + padding.y * 2 });
+		
+		ImVec4 selectedCol = { 0.980f, 0.768f, 0.509f, alpha };
+		ImVec4 arrowTint_col = { 1.f,1.f,1.f,alpha };
+
+		ImVec2 frameMin = { bb.Min.x, bb.Min.y + arrowSize.y };
+		
+		ImGui::RenderFrame(frameMin, bb.Max, ImGui::GetColorU32(selectedCol), true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+		window->DrawList->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y - size.y }, uv0, uv1, ImGui::GetColorU32(arrowTint_col));
+		window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y + arrowSize.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
+		
+		//DELETE BTN
+		auto pos = ImGui::GetCursorPos();
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12.f);
+		bool remove = false;
+		ImGui::Dummy({ 0, newsize.y * 0.2f });
+		ImGui::Dummy({ newsize.x * 0.75f,0 });
+		ImGui::SameLine();
+		if (ImGui::Button((string(ICON_FA_TRASH) + label).c_str()))
+		{
+			//ImGui::PopStyleVar();
+			remove = true;
+		}
+		ImGui::PopStyleVar();
+		ImGui::SetCursorPos(pos);
 
 		ImGui::ItemSize(bb);
 		if (!ImGui::ItemAdd(bb, id))
@@ -2164,37 +2188,14 @@ namespace Tempest::UI
 
 		// Render
 		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
-		ImVec4 selectedCol = { 0.980f, 0.768f, 0.509f, alpha };
-		ImVec4 arrowTint_col = { 1.f,1.f,1.f,alpha };
 
 		ImGui::RenderNavHighlight(bb, id);
-
-
-
-		ImVec2 frameMin = { bb.Min.x, bb.Min.y + arrowSize.y };
-		ImGui::RenderFrame(frameMin, bb.Max, ImGui::GetColorU32(selectedCol), true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
-
 		if (bg_col.w > 0.0f)
 			window->DrawList->AddRectFilled({ bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, ImGui::GetColorU32(bg_col));
 
-
-		window->DrawList->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y - size.y }, uv0, uv1, ImGui::GetColorU32(arrowTint_col));
-		window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y + arrowSize.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12.f);
-		auto t = ImGui::GetCursorPos();
-		bool remove = false;
-		ImGui::SetCursorPos({ bb.Max.x - window->Pos.x - padding.x - 10.f, frameMin.y - window->Pos.y - 10.f });
-		if (ImGui::Button(ICON_FA_TRASH))
-		{
-			//ImGui::PopStyleVar();
-			remove = true;
-		}
-		ImGui::PopStyleVar();
-		ImGui::SetCursorPos(t);
 		return { pressed,remove };
 	}
-	std::pair<bool, bool> UICharButton(ImTextureID user_texture_id, const ImVec2& size, string charName, bool selected, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	std::pair<bool, bool> UICharButton_WithDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = g.CurrentWindow;
@@ -2202,13 +2203,69 @@ namespace Tempest::UI
 			return { false, false };
 
 		// Default to using texture ID as ID. User can still push string/integer prefixes.
-		ImGui::PushID((void*)(intptr_t)user_texture_id);
+		ImGui::PushID(label.c_str());
 		const ImGuiID id = window->GetID("#image");
 		ImGui::PopID();
 		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
 
 		ImGui::BeginGroup();
-		auto res = UICharButtonEx(id, user_texture_id, size, selected, uv0, uv1, padding, bg_col, tint_col);
+		auto res = UICharButton_WithDeleteEx(id, user_texture_id, label, size, selected, uv0, uv1, padding, bg_col, tint_col);
+		ImGui::PushFont(FONT_BODY);
+		auto textWidth = ImGui::CalcTextSize(charName.c_str()).x;
+		ImGui::Dummy({ 0, 5.f });
+		ImGui::Dummy({ (size.x - textWidth) * 0.5f, 0.f });
+		ImGui::SameLine();
+		ImGui::Text(charName.c_str());
+		ImGui::PopFont();
+		ImGui::EndGroup();
+		return res;
+	}
+
+	bool UICharButton_NoDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		float alpha = selected ? 1 : 0;
+		if (window->SkipItems)
+			return false;
+		const ImRect bb(window->DC.CursorPos, { window->DC.CursorPos.x + size.x + padding.x * 2, window->DC.CursorPos.y + size.y + padding.y * 2 });
+
+		ImGui::ItemSize(bb);
+		if (!ImGui::ItemAdd(bb, id))
+			return false;
+
+		bool hovered, held;
+		bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+		// Render
+		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+		ImVec4 selectedCol = { 0.980f, 0.768f, 0.509f, alpha };
+
+		ImGui::RenderNavHighlight(bb, id);
+		ImGui::RenderFrame(bb.Min, bb.Max, ImGui::GetColorU32(selectedCol), true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+
+		if (bg_col.w > 0.0f)
+			window->DrawList->AddRectFilled({ bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, ImGui::GetColorU32(bg_col));
+
+		window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y}, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
+
+		return pressed;
+	}
+
+	bool UICharButton_NoDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = g.CurrentWindow;
+		if (window->SkipItems)
+			return false;
+
+		// Default to using texture ID as ID. User can still push string/integer prefixes.
+		ImGui::PushID(label.c_str());
+		const ImGuiID id = window->GetID("#image");
+		ImGui::PopID();
+		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
+
+		ImGui::BeginGroup();
+		auto res = UICharButton_NoDeleteEx(id, user_texture_id, label, size, selected, uv0, uv1, padding, bg_col, tint_col);
 		ImGui::PushFont(FONT_BODY);
 		auto textWidth = ImGui::CalcTextSize(charName.c_str()).x;
 		ImGui::Dummy({ 0, 5.f });
