@@ -115,9 +115,9 @@ namespace Tempest
 					for (auto id : view)
 					{
 						auto& charac = instance.ecs.get<tc::Character>(id);
-						ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 170 });
+						ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 165 });
 						auto CharIcon = tex_map["Assets/CharacterIcon.png"];
-						std::pair<bool,bool> PairResult = { false,false };//UI::UICharButton((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), SelectedID == id, { 0,0 }, { 1,1 });
+						std::pair<bool,bool> PairResult = UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), "##" + std::to_string(i), SelectedID == id, { 0,0 }, { 1,1 });
 						if (PairResult.first)
 						{
 							SelectedID = id;
@@ -125,23 +125,17 @@ namespace Tempest
 						}
 						if (PairResult.second)
 						{
-							ImGui::OpenPopup("DeleteCharacter");
+							ImGui::OpenPopup(string("DeleteCharacter##" + std::to_string(i)).c_str());
 						}
 
-						if (UI::ConfirmDeletePopup("DeleteCharacter", "Delete this character?"))
+						if (UI::ConfirmDeletePopup(string("DeleteCharacter##" + std::to_string(i)).c_str(), "Delete this character?"))
 						{
 							// mark for deletion
 						}
-						
-						/*if (UI::UIButton_1(charac.name.c_str(), charac.name.c_str(), { cursor.x , cursor.y + i++ * 100 }, { 50,50 }, FONT_PARA))
-						{
-							SelectedID = id;
-							cs = &charac;
-						}*/
 					}
 
 					// just try with get cursor pos
-					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 110, ImGui::GetCursorPos().y + 60 }, { 55,30 }, FONT_PARA))
+					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 110, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
 					{
 						create_new_unit(instance);
 						cs = instance.ecs.get_if<tc::Character>(SelectedID);

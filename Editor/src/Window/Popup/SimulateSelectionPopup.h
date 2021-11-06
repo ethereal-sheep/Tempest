@@ -116,12 +116,15 @@ namespace Tempest
                     case SIMULATE_POPUP_TYPE::UNIT:
                     {
                         auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
-
+                        cursor.x -= 30.0f;
                         cursor.y += 20.0f;
+
                         for (auto id : view)
                         {
                             auto& charac = instance.ecs.get<tc::Character>(id);
-                            if (UI::UIButton_1(charac.name.c_str(), charac.name.c_str(), { cursor.x + i++ * 120, cursor.y + j * 100 }, { 50,50 }, FONT_PARA))
+                            auto charc_icon = tex_map["Assets/CharacterIcon.png"];
+                            ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 120, cursor.y + j * 140 });
+                            if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(charc_icon->GetID()), { 90,90 }, charac.name.c_str(), "##" + std::to_string(id)))
                             {
                                 data = id;
                             }
@@ -133,9 +136,9 @@ namespace Tempest
                                 j++;
                             }
                         }
-
+                        
                         // create units here
-                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 120, cursor.y + j * 100 }, { 55,30 }, FONT_HEAD))
+                        if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPosX() + (i + 1) * 120.0f, cursor.y + (!j ? 60.0f : j * 190.0f) }, { 55,30 }, FONT_HEAD))
                         {
                             // TODO: take out id/data
                             enable_popup = false;
