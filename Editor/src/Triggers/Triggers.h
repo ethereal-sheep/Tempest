@@ -34,7 +34,7 @@ namespace Tempest
 	struct ImportAssetTrigger : public Event {};
 	
 	//Popup Trigger
-	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION, SEQUENCE};
+	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION, SEQUENCE, EDIT_UNIT, EDIT_WEAPON};
 	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCES,WEAPONS,ITEMS};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};

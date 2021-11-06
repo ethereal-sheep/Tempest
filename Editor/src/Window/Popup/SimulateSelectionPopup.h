@@ -39,19 +39,19 @@ namespace Tempest
 
             switch (type)
             {
-            case Tempest::UNIT:
+            case SIMULATE_POPUP_TYPE::UNIT:
                 popup_title = "ADDING UNITS";
                 img = tex_map["Assets/Charac.png"];
                 break;
-            case Tempest::WEAPON:
+            case SIMULATE_POPUP_TYPE::WEAPON:
                 popup_title = "ADDING WEAPONS";
                 img = tex_map["Assets/Sword.png"];
                 break;
-            case Tempest::ACTION:
+            case SIMULATE_POPUP_TYPE::ACTION:
                 popup_title = "ADDING ACTIONS";
                 img = tex_map["Assets/Actions.png"];
                 break;
-            case Tempest::SEQUENCE:
+            case SIMULATE_POPUP_TYPE::SEQUENCE:
                 popup_title = "ADDING SEQUENCE";
                 img = tex_map["Assets/Chain.png"];
                 break;
@@ -91,18 +91,23 @@ namespace Tempest
                         col = { 0.980f, 0.768f, 0.509f, 0.7f };
                         textcol = { 0,0,0,0.7 };
                     }
+                    
+                    if (type != SIMULATE_POPUP_TYPE::EDIT_UNIT && type != SIMULATE_POPUP_TYPE::EDIT_WEAPON)
+                    {
+                        ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+                        ImGui::PushFont(FONT_OPEN);
+                        ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), popup_title.c_str());
+                        ImGui::PopFont();
 
-                    ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
-                    ImGui::PushFont(FONT_OPEN);
-                    ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), popup_title.c_str());
-                    ImGui::PopFont();
+                        ImVec2 imgMin = { winMin.x + ImGui::GetWindowWidth() * 0.15f, winMin.y + ImGui::GetWindowHeight() * 0.1f };
+                        ImVec2 imgMax = { imgMin.x + img->GetWidth() * 0.7f, imgMin.y + img->GetHeight() * 0.7f };
+                        ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(img->GetID()), imgMin, imgMax);
+                    }
+                   
 
                     auto halfToneImg = tex_map["Assets/HalftoneWhite.png"];
-                    ImVec2 imgMin = { winMin.x + ImGui::GetWindowWidth() * 0.15f, winMin.y + ImGui::GetWindowHeight() * 0.1f };
-                    ImVec2 imgMax = { imgMin.x + img->GetWidth() * 0.7f, imgMin.y + img->GetHeight() * 0.7f };
                     ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
                     ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
-                    ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(img->GetID()), imgMin, imgMax);
                     ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);
 
                     unsigned i = 0;
@@ -110,7 +115,7 @@ namespace Tempest
                     ImGui::Dummy(ImVec2{ 0, 22.0f });
                     ImVec2 cursor{ ImGui::GetCursorPosX() + 120.0f, ImGui::GetCursorPosY() + 20.0f};
 
-                    ImGui::BeginChild("##SimualteStuff", ImVec2{ 500,480 });
+                    ImGui::BeginChild("##SimualteStuff", ImVec2{ 500,470 });
                     switch (type)
                     {
                     case SIMULATE_POPUP_TYPE::UNIT:
@@ -228,6 +233,154 @@ namespace Tempest
                             // goto sequence page and create additional sequence
                             //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
                         }
+                    }
+                        break;
+                    case SIMULATE_POPUP_TYPE::EDIT_UNIT:
+                    {
+                        auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+                        Entity StateLineId = UNDEFINED;
+                        for (auto id : StatsView)
+                            StateLineId = id;
+                        auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
+
+                        auto& cs = instance.ecs.get<tc::Character>(data);
+                        float frontPadding = 5.f;
+                        ImGui::PushFont(FONT_BODY);
+                        ImGui::Dummy({ frontPadding * 15, 0 });
+                        ImGui::SameLine();
+                        ImGui::Text("Name");
+                        ImGui::Dummy({ frontPadding * 15, 0 });
+                        ImGui::SameLine();
+                        ImGui::PushItemWidth(320.f);
+                        ImGui::InputText("##Name", &cs.name);
+                        ImGui::PopItemWidth();
+                        bool NameDisabled = cs.name.size() > 15;
+                        ImGui::SameLine();
+
+                        if (NameDisabled)
+                            ImGui::Text("15 Char only");
+                        else
+                            ImGui::Dummy({ 100.f, 10.f });
+
+                        ImGui::Dummy({ 0, 10.f });
+                        bool NextLine = false;
+                        ImVec2 PrevPos{ 0.f ,0.f };
+                        for (auto counter = 0; counter < sl->size(); counter++)
+                        {
+                            if ((*sl)(counter))
+                            {
+                                string stat = sl->operator[](counter) + " :";
+                                string label = "##" + stat;
+
+                                if (!NextLine)
+                                {
+                                    ImGui::Dummy({ frontPadding * 15, 0 });
+                                    ImGui::SameLine();
+                                    PrevPos = ImGui::GetCursorPos();
+                                    ImGui::Text(stat.c_str());
+                                    ImGui::Dummy({ frontPadding * 15, 0 });
+                                    ImGui::SameLine();
+                                    ImGui::PushItemWidth(100.f);
+                                    ImGui::InputInt(label.c_str(), &cs.get_stat(counter), 0);
+                                    ImGui::PopItemWidth();
+                                }
+
+                                else
+                                {
+                                    ImGui::SetCursorPos(PrevPos);
+                                    ImGui::Dummy({ 250.f - frontPadding * 15, 0.f });
+                                    ImGui::SameLine();
+
+                                    ImGui::Text(stat.c_str());
+                                    ImGui::Dummy({ 250 + frontPadding, 0 });
+                                    ImGui::SameLine();
+                                    ImGui::PushItemWidth(100.f);
+                                    ImGui::InputInt(label.c_str(), &cs.get_stat(counter), 0);
+                                    ImGui::PopItemWidth();
+
+                                    ImGui::SetCursorPos(PrevPos);
+                                    ImGui::Dummy({ 0, 70.f });
+                                }
+
+                                NextLine = !NextLine;
+
+                            }
+
+                        }
+                        ImGui::PopFont();
+                    }
+                        break;
+                    case SIMULATE_POPUP_TYPE::EDIT_WEAPON:
+                    {
+                        auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+                        Entity StateLineId = UNDEFINED;
+                        for (auto id : StatsView)
+                            StateLineId = id;
+                        auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
+
+                        auto& weap = instance.ecs.get<tc::Weapon>(data);
+                        float frontPadding = 5.f;
+                        ImGui::PushFont(FONT_BODY);
+                        ImGui::Dummy({ frontPadding * 15, 0 });
+                        ImGui::SameLine();
+                        ImGui::Text("Name");
+                        ImGui::Dummy({ frontPadding * 15, 0 });
+                        ImGui::SameLine();
+                        ImGui::PushItemWidth(320.f);
+                        ImGui::InputText("##Name", &weap.name);
+                        ImGui::PopItemWidth();
+                        bool NameDisabled = weap.name.size() > 15;
+                        ImGui::SameLine();
+
+                        if (NameDisabled)
+                            ImGui::Text("15 Char only");
+                        else
+                            ImGui::Dummy({ 100.f, 10.f });
+
+                        ImGui::Dummy({ 0, 10.f });
+                        bool NextLine = false;
+                        ImVec2 PrevPos{ 0.f ,0.f };
+                        for (auto counter = 0; counter < sl->size(); counter++)
+                        {
+                            if ((*sl)(counter))
+                            {
+                                string stat = sl->operator[](counter) + " :";
+                                string label = "##" + stat;
+
+                                if (!NextLine)
+                                {
+                                    ImGui::Dummy({ frontPadding * 15, 0 });
+                                    ImGui::SameLine();
+                                    PrevPos = ImGui::GetCursorPos();
+                                    ImGui::Text(stat.c_str());
+                                    ImGui::Dummy({ frontPadding * 15, 0 });
+                                    ImGui::SameLine();
+                                    ImGui::PushItemWidth(100.f);
+                                    ImGui::InputInt(label.c_str(), &weap.get_stat(counter), 0);
+                                    ImGui::PopItemWidth();
+                                }
+
+                                else
+                                {
+                                    ImGui::SetCursorPos(PrevPos);
+                                    ImGui::Dummy({ 250.f - frontPadding * 15, 0.f });
+                                    ImGui::SameLine();
+
+                                    ImGui::Text(stat.c_str());
+                                    ImGui::Dummy({ 250 + frontPadding, 0 });
+                                    ImGui::SameLine();
+                                    ImGui::PushItemWidth(100.f);
+                                    ImGui::InputInt(label.c_str(), &weap.get_stat(counter), 0);
+                                    ImGui::PopItemWidth();
+
+                                    ImGui::SetCursorPos(PrevPos);
+                                    ImGui::Dummy({ 0, 70.f });
+                                }
+
+                                NextLine = !NextLine;
+                            }
+                        }
+                        ImGui::PopFont();
                     }
                         break;
                     default:

@@ -131,6 +131,8 @@ namespace Tempest
 						if (UI::ConfirmDeletePopup(string("DeleteCharacter##" + std::to_string(i)).c_str(), "Delete this character?"))
 						{
 							instance.ecs.emplace<tc::Destroyed>(id);
+							SelectedID = UNDEFINED;
+							cs = nullptr;
 						}
 					}
 
@@ -916,7 +918,7 @@ namespace Tempest
 					ImGui::Text(WeaponData.c_str());
 
 					ImGui::SetCursorPos(PrevPos);
-					ImGui::Dummy({ 0, 55.f });
+					ImGui::Dummy({ 0, 70.f });
 				}
 
 				NextLine = !NextLine;

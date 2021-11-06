@@ -109,10 +109,12 @@ namespace Tempest
 				}
 				push_button_style();
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.24f });
+				ImGui::PushID("seq");
 				if (sequence != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 				{
 					// draw smth out
 				}
+				ImGui::PopID();
 				pop_button_style();
 
 				// success title
@@ -472,17 +474,20 @@ namespace Tempest
 		ImGui::SameLine();
 		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 40.0f, ImGui::GetCursorPosY() - 15.0f});
 		push_button_style();
+		ImGui::PushID("chara" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
-			// draw smth out
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::EDIT_UNIT, is_attacker, *temp);
 		}
+		ImGui::PopID();
 		pop_button_style();
-
 
 		// character mame
 		const std::string char_name{ "Character Name" };
 		ImGui::SetCursorPos({ start_pos.x - (ImGui::CalcTextSize(char_name.c_str()).x + ImGui::GetFontSize()) * 0.5f, start_pos.y + padding });
 		ImGui::Text(char_name.c_str());
+
 
 		// weapon
 		temp = is_attacker ? &attacker.weapon : &defender.weapon;
@@ -495,22 +500,26 @@ namespace Tempest
 		ImGui::SameLine();
 		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
 		push_button_style();
+		ImGui::PushID("weapon" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 		{
-			// draw smth out
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::EDIT_WEAPON, is_attacker, *temp);
 		}
+		ImGui::PopID();
 		pop_button_style();
 
 
 		// action
 		temp =  is_attacker ? &attacker.action : &defender.action;
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 7.0f });
+		ImGui::PushID("action" + is_attacker);
 		if (UI::UIButton_Action(instance, *temp,"SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::ACTION, is_attacker, *temp);
 		}
-
+		ImGui::PopID();
 		ImGui::SameLine();
 		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
 		push_button_style();

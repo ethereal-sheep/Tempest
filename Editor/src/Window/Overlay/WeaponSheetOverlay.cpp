@@ -97,6 +97,8 @@ namespace Tempest
 						if (UI::ConfirmDeletePopup(string("DeleteWeapon##" + std::to_string(i)).c_str(), "Delete this weapon?"))
 						{
 							instance.ecs.emplace<tc::Destroyed>(id);
+							SelectedID = UNDEFINED;
+							weap = nullptr;
 						}
 					}
 
@@ -304,7 +306,7 @@ namespace Tempest
 					ImGui::PopItemWidth();
 
 					ImGui::SetCursorPos(PrevPos);
-					ImGui::Dummy({ 0, 55.f });
+					ImGui::Dummy({ 0, 70.f });
 				}
 			
 
