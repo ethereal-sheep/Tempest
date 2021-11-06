@@ -36,6 +36,28 @@ namespace Tempest
                 position = is_attacker ? ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.5f } :
                                          ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.5f };
             }
+
+            switch (type)
+            {
+            case Tempest::UNIT:
+                popup_title = "ADDING UNITS";
+                img = tex_map["Assets/Charac.png"];
+                break;
+            case Tempest::WEAPON:
+                popup_title = "ADDING WEAPONS";
+                img = tex_map["Assets/Sword.png"];
+                break;
+            case Tempest::ACTION:
+                popup_title = "ADDING ACTIONS";
+                img = tex_map["Assets/Actions.png"];
+                break;
+            case Tempest::SEQUENCE:
+                popup_title = "ADDING SEQUENCE";
+                img = tex_map["Assets/Chain.png"];
+                break;
+            default:
+                break;
+            }
            
         }
 
@@ -43,24 +65,59 @@ namespace Tempest
         {
             if (enable_popup)
             {
+                ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
                 // what happens if you have multiple popup open, need a way to check
                 ImGui::OpenPopup("Simulate Select");
                 ImGui::SetNextWindowPos(position, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-                ImGui::SetNextWindowSize(ImVec2(500, 500));
+                ImGui::SetNextWindowSize(ImVec2(500, 550));
 
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+                ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
+                ImGui::PushStyleColor(ImGuiCol_PopupBg, { 0.06f,0.06f, 0.06f, 0.85f });
+
+         
                 if (ImGui::BeginPopupModal("Simulate Select", NULL, flags))
                 {
+                    // draw the background here
+                    ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+                    ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
+                    ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.35f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
+                    ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+                    ImVec4 textcol = { 0,0,0,1 };
+                    if (ImGui::IsWindowFocused() == false)
+                    {
+                        col = { 0.980f, 0.768f, 0.509f, 0.7f };
+                        textcol = { 0,0,0,0.7 };
+                    }
+
+                    ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+                    ImGui::PushFont(FONT_OPEN);
+                    ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), popup_title.c_str());
+                    ImGui::PopFont();
+
+                    auto halfToneImg = tex_map["Assets/HalftoneWhite.png"];
+                    ImVec2 imgMin = { winMin.x + ImGui::GetWindowWidth() * 0.15f, winMin.y + ImGui::GetWindowHeight() * 0.1f };
+                    ImVec2 imgMax = { imgMin.x + img->GetWidth() * 0.7f, imgMin.y + img->GetHeight() * 0.7f };
+                    ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
+                    ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
+                    ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(img->GetID()), imgMin, imgMax);
+                    ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);
+
                     unsigned i = 0;
                     unsigned j = 0;
-                    const ImVec2 cursor{ ImGui::GetCursorPosX() + 100, ImGui::GetCursorPosY() + 60 };
+                    ImGui::Dummy(ImVec2{ 0, 22.0f });
+                    ImVec2 cursor{ ImGui::GetCursorPosX() + 120.0f, ImGui::GetCursorPosY() + 20.0f};
 
+                    ImGui::BeginChild("##SimualteStuff", ImVec2{ 500,480 });
                     switch (type)
                     {
                     case SIMULATE_POPUP_TYPE::UNIT:
                     {
                         auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
 
-                        // TODO: store selected item
+                        cursor.y += 20.0f;
                         for (auto id : view)
                         {
                             auto& charac = instance.ecs.get<tc::Character>(id);
@@ -107,7 +164,7 @@ namespace Tempest
                             }
                         }
 
-                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 160,-20 }, FONT_HEAD))
+                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
                             Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(true, instance);
@@ -174,16 +231,22 @@ namespace Tempest
                         break;
                     }
 
-                    if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionAvailWidth() * 0.8f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.9f }, { 0.f, 0.f }, FONT_PARA))
+                    ImGui::EndChild();
+
+                    if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionAvailWidth() * 0.75f, ImGui::GetCursorPosY() }, { 0.f, 0.f }, FONT_PARA))
                     {
                         ImGui::CloseCurrentPopup();
                         enable_popup = false;
 
                         Service<EventManager>::Get().instant_dispatch<SimulateSelectionConfirm>(type, is_attacker, data, for_unitpage);
                     }
+                   
                 }
 
                 ImGui::EndPopup();
+
+                ImGui::PopStyleVar(3);
+                ImGui::PopStyleColor(2);
             }
         }
 
@@ -191,6 +254,8 @@ namespace Tempest
         bool enable_popup = false;
         bool is_attacker = false;
         bool for_unitpage = false;
+        std::string popup_title{ "" };
+        tsptr<Texture> img;
         ImVec2 position{ 0,0 };
         SIMULATE_POPUP_TYPE type{ SIMULATE_POPUP_TYPE::UNIT};
         ImGuiWindowFlags flags{ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |

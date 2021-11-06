@@ -14,7 +14,7 @@
 #include "Util/UIElements.h"
 #include "rttr/type.h"
 #include "rttr/registration.h"
-#include "ECS/Rttr_Register.h"
+//#include "ECS/Rttr_Register.h"
 
 namespace Tempest
 {
