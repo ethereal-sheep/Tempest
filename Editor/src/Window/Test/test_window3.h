@@ -138,7 +138,7 @@ namespace Tempest
 				ImGui::BeginChild("TESTING CHILD", { 700, 500 });
 				for (auto i = 0; i < 20; i++)
 				{
-					if (UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, "Char 1", "##"+std::to_string(i), selected, {0,0}, {1,1}).second)
+					if (UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, "Char 1", "##"+std::to_string(i), selected, {0,0}, {1,1}).first)
 					{
 						ImGui::OpenPopup((string("TT##") + std::to_string(i)).c_str());
 						selected = !selected;
@@ -157,6 +157,8 @@ namespace Tempest
 					LOG("CHAR CLICKED");
 				}
 				
+
+
 				ImGui::DragFloat2("a", glm::value_ptr(a));
 				if (ImGui::Button("Weapon"))
 				{
