@@ -27,6 +27,7 @@ namespace Tempest
 		padding = ImGui::GetMainViewport()->Size.y * 0.02f;
 		win = 0;
 		lose = 0;
+		enter_button = tex_map["Assets/EnterButton.png"];
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -101,11 +102,18 @@ namespace Tempest
 				if (sequence != UNDEFINED)
 					seq_name = instance.ecs.get<tc::Graph>(sequence).g.name;
 
-				if (UI::UIButton_Sequence(instance, UNDEFINED, seq_name.c_str(), seq_name.c_str(), { viewport->Size.x * 0.5f, viewport->Size.x * 0.15f }, { 0,0 }, FONT_PARA))
+				if (UI::UIButton_Sequence(instance, sequence, seq_name.c_str(), seq_name.c_str(), { viewport->Size.x * 0.5f, viewport->Size.x * 0.15f }, { 0,0 }, FONT_PARA))
 				{
 					Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 						SIMULATE_POPUP_TYPE::SEQUENCE, false, sequence);
 				}
+				push_button_style();
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.24f });
+				if (sequence != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
+				{
+					// draw smth out
+				}
+				pop_button_style();
 
 				// success title
 				tex = tex_map["Assets/CoSTitle.png"];
@@ -144,8 +152,8 @@ namespace Tempest
 				ImGui::PopItemWidth();
 				
 				// attack section
-				DisplayUnitSection(instance, { viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
-				DisplayUnitSection(instance, { viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, false);
+				display_unit_section(instance, { viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
+				display_unit_section(instance, { viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, false);
 
 				if (UI::UIButton_2("Simulate", "Simulate", { viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))
 				{
@@ -448,32 +456,80 @@ namespace Tempest
 
 		}
 	}
-	void SimulateOverlay::DisplayUnitSection(Instance& instance, const ImVec2 start_pos, bool is_attacker)
+	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{
-		ImGui::SetCursorPos(start_pos);
+		Entity* temp = is_attacker ? &attacker.unit_id : &defender.unit_id;
 
+		// character display
+		ImGui::SetCursorPos(start_pos);
 		if (UI::UIButton_2("CHARA", "CHARA", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
+			
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
-				SIMULATE_POPUP_TYPE::UNIT, is_attacker, is_attacker ? attacker.unit_id : defender.unit_id);
+				SIMULATE_POPUP_TYPE::UNIT, is_attacker, *temp);
 		}
+
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 40.0f, ImGui::GetCursorPosY() - 15.0f});
+		push_button_style();
+		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
+		{
+			// draw smth out
+		}
+		pop_button_style();
+
 
 		// character mame
 		const std::string char_name{ "Character Name" };
 		ImGui::SetCursorPos({ start_pos.x - (ImGui::CalcTextSize(char_name.c_str()).x + ImGui::GetFontSize()) * 0.5f, start_pos.y + padding });
 		ImGui::Text(char_name.c_str());
 
+		// weapon
+		temp = is_attacker ? &attacker.weapon : &defender.weapon;
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 4.0f });
-		if (UI::UIButton_Weapon(instance, UNDEFINED,"SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		if (UI::UIButton_Weapon(instance, *temp, "SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
-				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, is_attacker ? attacker.weapon : defender.weapon);
+				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, *temp);
 		}
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
+		push_button_style();
+		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
+		{
+			// draw smth out
+		}
+		pop_button_style();
+
+
+		// action
+		temp =  is_attacker ? &attacker.action : &defender.action;
 		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 7.0f });
-		if (UI::UIButton_Action(instance, UNDEFINED,"SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		if (UI::UIButton_Action(instance, *temp,"SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
-				SIMULATE_POPUP_TYPE::ACTION, is_attacker, is_attacker ? attacker.action : defender.action);
+				SIMULATE_POPUP_TYPE::ACTION, is_attacker, *temp);
 		}
+
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
+		push_button_style();
+		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
+		{
+			// draw smth out
+		}
+		pop_button_style();
+	}
+
+	void SimulateOverlay::push_button_style() const
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+	}
+
+	void SimulateOverlay::pop_button_style() const
+	{
+		ImGui::PopStyleColor(3);
 	}
 }

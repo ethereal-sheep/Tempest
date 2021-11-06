@@ -142,7 +142,7 @@ namespace Tempest
                         {
                             // TODO: take out id/data
                             enable_popup = false;
-                            Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, UNDEFINED);
+                            Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
                         }
                     }
                         break;
@@ -170,7 +170,7 @@ namespace Tempest
                         if (UI::UIButton_1("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
-                            Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(true, instance);
+                            Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
                         }
                     }
                         break;

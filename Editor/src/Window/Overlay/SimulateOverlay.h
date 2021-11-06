@@ -36,7 +36,9 @@ namespace Tempest
 
         void show(Instance&) override;
 
-        void DisplayUnitSection(Instance& instance, const ImVec2 start_pos, bool is_attacker);
+        void display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker);
+        void push_button_style() const;
+        void pop_button_style() const;
 
         bool OverlayOpen = false;
         unsigned Tab = 0;
@@ -65,6 +67,7 @@ namespace Tempest
         std::atomic_uint32_t win;
         std::atomic_uint32_t lose;
         std::atomic_bool finish;
+        tsptr<Texture> enter_button;
 
         float padding{ 0.0f };
     };
