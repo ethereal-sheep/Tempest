@@ -36,7 +36,7 @@ namespace Tempest
 
         void show(Instance&) override;
 
-        void DisplayUnitSection(const ImVec2 start_pos, bool is_attacker); 
+        void DisplayUnitSection(Instance& instance, const ImVec2 start_pos, bool is_attacker);
 
         bool OverlayOpen = false;
         unsigned Tab = 0;
