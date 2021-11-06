@@ -28,6 +28,7 @@ namespace Tempest
         {
             enable_popup = true;
             auto a = event_cast<QuickMenuPopupTrigger>(e);
+            previous = a.current;
             current = a.current;
         }
 
@@ -168,6 +169,7 @@ namespace Tempest
         ImVec2 button_size{ 0.f,0.f };
         std::array<tsptr<Texture>, 6> Tabs;
         QUICKMENU_POPUP_TYPE current{ QUICKMENU_POPUP_TYPE::SIMULATE};
+        QUICKMENU_POPUP_TYPE previous{ QUICKMENU_POPUP_TYPE::SIMULATE };
         ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
                          ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
     };

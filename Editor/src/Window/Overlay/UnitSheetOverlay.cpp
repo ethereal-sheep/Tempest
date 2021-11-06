@@ -130,7 +130,7 @@ namespace Tempest
 
 						if (UI::ConfirmDeletePopup(string("DeleteCharacter##" + std::to_string(i)).c_str(), "Delete this character?"))
 						{
-							// mark for deletion
+							instance.ecs.emplace<tc::Destroyed>(id);
 						}
 					}
 
@@ -191,6 +191,7 @@ namespace Tempest
 					{
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
+						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 					}
 
 					ImGui::SameLine();

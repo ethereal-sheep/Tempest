@@ -24,7 +24,7 @@ namespace Tempest
             auto a = event_cast<SimulatePopupTrigger>(e);
             type = a.type;
             is_attacker = a.is_attacker;
-            data = UNDEFINED;
+            data = a.data;
             for_unitpage = a.for_unitpage;
             if (type == SIMULATE_POPUP_TYPE::SEQUENCE || for_unitpage)
             {
@@ -124,7 +124,7 @@ namespace Tempest
                             auto& charac = instance.ecs.get<tc::Character>(id);
                             auto charc_icon = tex_map["Assets/CharacterIcon.png"];
                             ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 120, cursor.y + j * 140 });
-                            if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(charc_icon->GetID()), { 90,90 }, charac.name.c_str(), "##" + std::to_string(id)))
+                            if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(charc_icon->GetID()), { 90,90 }, charac.name.c_str(), "##" + std::to_string(id), data == id))
                             {
                                 data = id;
                             }
@@ -154,7 +154,7 @@ namespace Tempest
                         for (auto id : view)
                         {
                             auto& weapon = instance.ecs.get<tc::Weapon>(id);
-                            if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 100, 10 }, FONT_PARA))
+                            if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 100, 10 }, FONT_PARA, data == id))
                             {
                                 data = id;
                             }
@@ -180,7 +180,7 @@ namespace Tempest
                         {
                             auto& action = instance.ecs.get<tc::Graph>(id);
 
-                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA))
+                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA, data == id))
                             {
                                 data = id;
                             }
@@ -208,7 +208,7 @@ namespace Tempest
                         {
                             auto& action = instance.ecs.get<tc::Graph>(id);
 
-                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA))
+                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA, data == id))
                             {
                                 data = id;
                             }
