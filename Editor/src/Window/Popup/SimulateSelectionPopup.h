@@ -202,8 +202,7 @@ namespace Tempest
                         if (UI::UIButton_1("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
-                            // goto actions page and create additional actions
-                            //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
+                               Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(UNDEFINED, instance);
                         }
                     }
                         break;

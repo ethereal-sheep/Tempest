@@ -19,15 +19,24 @@ namespace Tempest
 	void AttackSystemOverlay::open_popup(const Event& e)
 	{
 		auto a = event_cast<OpenActionGraphTrigger>(e);
+		OverlayOpen = true;
 
 		if (a.instance.ecs.has<tc::Graph>(a.id))
 		{
 			id = a.id;
-			OverlayOpen = true;
 			temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
 		}
 
-
+		else
+		{
+			//take in a bool
+			for (auto thisGraph : a.instance.ecs.view<tc::ActionGraph>())
+			{
+				id = thisGraph;
+				temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
+				break;
+			}
+		}
 	}
 	void AttackSystemOverlay::show(Instance& instance)
 	{
@@ -44,80 +53,153 @@ namespace Tempest
 				const float title_top_padding = 40.f;
 				const float title_left_padding = 40.f;
 				const float title_bottom_padding = 10.f;
-				const float graph_context_height = ImGui::GetWindowHeight() * 0.7f;
+				const float graph_context_height = viewport->Size.y * 0.95f;
 
 				//auto& g = instance.ecs.get<tc::Graph>(id);
 				
-				if (ImGui::BeginTable("graph header table", 3))
+				//if (ImGui::BeginTable("graph header table", 3))
+				//{
+				//	ImGui::TableNextRow();
+
+				//	ImGui::TableSetColumnIndex(1);
+				//	UI::Header_1("Attack System");
+
+				//	ImGui::PushFont(FONT_HEAD);
+
+				//	ImGui::TableSetColumnIndex(0);
+				//	ImGui::Dummy({ 0.1f, title_top_padding });
+				//	ImGui::Dummy({ title_left_padding, 0.1f });
+				//	ImGui::SameLine();
+				//	static string test = "Testing";
+				//	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
+				//	ImGui::InputText("##testing", &temp_graph.name);
+				//	ImGui::PopStyleColor();
+				//	//ImGui::Text(g.g.get_name().c_str());
+				//	ImGui::PopFont();
+
+
+				//	ImGui::TableNextRow();
+				//	ImGui::TableSetColumnIndex(0);
+				//	ImGui::Dummy({ 0.1f, title_bottom_padding });
+
+				//	ImGui::EndTable();
+				//}
+				//ImGui::Separator();
+
+				auto tex = tex_map["Assets/GraphBG.png"];
 				{
-					ImGui::TableNextRow();
 
-					ImGui::TableSetColumnIndex(1);
-					UI::Header_1("Attack System");
-
-					ImGui::PushFont(FONT_HEAD);
-
-					ImGui::TableSetColumnIndex(0);
-					ImGui::Dummy({ 0.1f, title_top_padding });
-					ImGui::Dummy({ title_left_padding, 0.1f });
-					ImGui::SameLine();
-					static string test = "Testing";
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
-					ImGui::InputText("##testing", &temp_graph.name);
-					ImGui::PopStyleColor();
-					//ImGui::Text(g.g.get_name().c_str());
-					ImGui::PopFont();
-
-
-					ImGui::TableNextRow();
-					ImGui::TableSetColumnIndex(0);
-					ImGui::Dummy({ 0.1f, title_bottom_padding });
-
-					ImGui::EndTable();
+					ImVec2 Min{ 0,0 };
+					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
 				}
-
-
-				ImGui::Separator();
 
 				// draw the context
 				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				draw_context(instance, graph_context_height);
 				ImGui::PopStyleColor();
-				ImGui::Separator();
+				//ImGui::Separator();
 
 
-				float button_y = ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f;
-				// first button pos
-				ImVec2 pos1 = {ImGui::GetContentRegionAvailWidth() - 480.f, button_y};
+				//float button_y = ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f;
+				//// first button pos
+				//ImVec2 pos1 = {ImGui::GetContentRegionAvailWidth() - 480.f, button_y};
 
-				// second button pos
-				ImVec2 pos2 = { ImGui::GetContentRegionAvailWidth() - 300.f, button_y };
+				//// second button pos
+				//ImVec2 pos2 = { ImGui::GetContentRegionAvailWidth() - 300.f, button_y };
 
-				// third button pos
-				ImVec2 pos3 = { ImGui::GetContentRegionAvailWidth() - 120.f, button_y };
+				//// third button pos
+				//ImVec2 pos3 = { ImGui::GetContentRegionAvailWidth() - 120.f, button_y };
 
+				//if (UI::UIButton_2("Navigate to Content", "Navigate to Content", pos1, { 0.f, 10.f }, FONT_PARA))
+				//{
+				//	ax::NodeEditor::NavigateToContent();
+				//}
+				//if (UI::UIButton_2("Save & Close", "Save & Close", pos2, { 0.f, 10.f }, FONT_PARA))
+				//{
+				//	OverlayOpen = false;
+				//	instance.ecs.get<tc::Graph>(id).g = temp_graph;
+				//	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				//}
 
+				//if (UI::UIButton_2("Close", "Close", pos3, { 0.f, 10.f }, FONT_PARA))
+				//{
+				//	OverlayOpen = false;
+				////	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				//}
 
-				if (UI::UIButton_2("Navigate to Content", "Navigate to Content", pos1, { 0.f, 10.f }, FONT_PARA))
+				// title
+				ImGui::SetCursorPos(ImVec2{ 0,0 });
+				ImGui::Dummy(ImVec2{ 0.f, viewport->Size.y * 0.05f });
+				UI::SubHeader("Editing Action");
+				ImGui::Dummy(ImVec2{ 0.f, viewport->Size.y * 0.05f });
+
+				// side bar
+				const ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
+				ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 2.f);
+				ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+				ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
+				ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.06f,0.06f, 0.06f, 0.85f });
+
+				const ImVec2 ChildSize{ viewport->Size.x * 0.2f, viewport->Size.y * 0.75f };
+				ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.5f - ChildSize.y * 0.5f});
+				if (ImGui::BeginChild("Editing graph", ChildSize, true))
 				{
-					ax::NodeEditor::NavigateToContent();
+					ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+					ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
+					ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.35f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
+					ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+					ImVec4 textcol = { 0,0,0,1 };
+					if (ImGui::IsWindowFocused() == false)
+					{
+						col = { 0.980f, 0.768f, 0.509f, 0.7f };
+						textcol = { 0,0,0,0.7 };
+					}
+
+					ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+					ImGui::PushFont(FONT_OPEN);
+					ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), "ACTIONS");
+					ImGui::PopFont();
 				}
-				if (UI::UIButton_2("Save & Close", "Save & Close", pos2, { 0.f, 10.f }, FONT_PARA))
+				ImGui::EndChild();
+
+				ImGui::PopStyleVar(3);
+				ImGui::PopStyleColor(2);
+
+				// display top buttons
 				{
-					OverlayOpen = false;
-					instance.ecs.get<tc::Graph>(id).g = temp_graph;
-					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+					ImGui::SetCursorPos(ImVec2{ 0,0 });
+					if (ImGui::BeginChild("Top Buttons", ImVec2{ 400.0f, 100.0f }, true))
+					{
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+						tex = tex_map["Assets/BackMenuBtn.png"];
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						}
+
+						ImGui::SameLine();
+						ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
+						ImGui::SameLine();
+
+						tex = tex_map["Assets/QuickMenuBtn.png"];
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+						{
+							Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
+						}
+
+						ImGui::PopStyleColor(3);
+					}
+					ImGui::EndChild();
 				}
-
-				if (UI::UIButton_2("Close", "Close", pos3, { 0.f, 10.f }, FONT_PARA))
-				{
-					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				}
-
-				
-
-				//ImGui::SameLine();
+			
 			}
 			ImGui::End();
 		}
