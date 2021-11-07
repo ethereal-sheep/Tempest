@@ -134,10 +134,16 @@ namespace Tempest
 				UI::UIButton_Simulate("TEST", "TEST", { 100.f,250.f }, { 0,0 }, FONT_PARA,false);
 				UI::UIButton_Simulate("TEST", "TEST", { 300.f,250.f }, { 0,0 }, FONT_PARA,true);
 
+				
+
 				auto CharIcon = tex_map["Assets/CharacterIcon.png"];
 				static bool selected = false;
 				static vec2 a = { 100,0.f };
-				
+
+				if (UI::UICharButton_Toggle((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth() * 0.7f, (float)CharIcon->GetHeight() * 0.7f }, "Char 1", "##TESTINGCA", selected, { 0,0 }, { 1,1 }))
+				{
+					selected = !selected;
+				}
 				/*
 				ImGui::BeginChild("TESTING CHILD", { 700, 500 });
 				for (auto i = 0; i < 20; i++)
