@@ -181,7 +181,7 @@ namespace Tempest
                         break;
                     case SIMULATE_POPUP_TYPE::ACTION:
                     {
-                        for (auto id : instance.ecs.view<tc::ActionGraph>())
+                        for (auto id : instance.ecs.view<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
                         {
                             auto& action = instance.ecs.get<tc::Graph>(id);
 
@@ -202,13 +202,13 @@ namespace Tempest
                         if (UI::UIButton_1("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
-                               Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(UNDEFINED, instance);
+                            Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
                         }
                     }
                         break;
                     case SIMULATE_POPUP_TYPE::SEQUENCE:
                     {
-                        for (auto id : instance.ecs.view<tc::ConflictGraph>())
+                        for (auto id : instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
                         {
                             auto& action = instance.ecs.get<tc::Graph>(id);
 
@@ -229,8 +229,7 @@ namespace Tempest
                         if (UI::UIButton_1("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
                         {
                             enable_popup = false;
-                            // goto sequence page and create additional sequence
-                            //   Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true, instance, INVALID);
+                            Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
                         }
                     }
                         break;

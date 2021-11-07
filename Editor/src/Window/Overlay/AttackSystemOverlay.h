@@ -27,7 +27,7 @@ namespace Tempest
             window_flags =
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar;
 
-            Service<EventManager>::Get().register_listener<OpenActionGraphTrigger>(&AttackSystemOverlay::open_popup, this);
+            Service<EventManager>::Get().register_listener<OpenGraphTrigger>(&AttackSystemOverlay::open_popup, this);
 
             context = ax::NodeEditor::CreateEditor();
             ax::NodeEditor::SetCurrentEditor(context);
@@ -70,7 +70,9 @@ namespace Tempest
         ax::NodeEditor::EditorContext* context;
 		ImVec2 mouse = ImVec2(0, 0);
 		bool OverlayOpen = false;
-
+        std::string overlay_title{""};
+        std::string sidebar_title{""};
+        OPEN_GRAPH_TYPE type{ OPEN_GRAPH_TYPE::GRAPH_ACTION };
         ImGuiTextFilter filter;
     };
 }

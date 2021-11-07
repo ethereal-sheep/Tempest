@@ -99,11 +99,21 @@ namespace Tempest
 	struct OpenCombatModeTrigger : public Event {};
 	struct OpenConflictResTrigger : public Event {};
 	struct OpenMainMenuTrigger : public Event {};
-	struct OpenActionGraphTrigger : public Event 
+	struct OpenActionGraphTrigger : public Event // not using for new change
 	{
 		OpenActionGraphTrigger(Entity entityid, Instance& in) : id{ entityid }, instance{in} {}
 		Entity id = UNDEFINED;
 		Instance& instance;
+	};
+
+	enum OPEN_GRAPH_TYPE{GRAPH_ACTION, GRAPH_SEQUENCE};
+	struct OpenGraphTrigger : public Event
+	{
+		OpenGraphTrigger(Entity entityid, Instance& in, OPEN_GRAPH_TYPE type) :
+			id{ entityid }, instance{ in }, type{type} {}
+		Entity id = UNDEFINED;
+		Instance& instance;
+		OPEN_GRAPH_TYPE type;
 	};
 
 	struct OpenUnitSheetTrigger : public Event 

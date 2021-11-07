@@ -18,8 +18,11 @@ namespace Tempest
 {
 	void AttackSystemOverlay::open_popup(const Event& e)
 	{
-		auto a = event_cast<OpenActionGraphTrigger>(e);
+		auto a = event_cast<OpenGraphTrigger>(e);
 		OverlayOpen = true;
+		type = a.type;
+
+		id = UNDEFINED;
 
 		if (a.instance.ecs.has<tc::Graph>(a.id))
 		{
@@ -29,13 +32,37 @@ namespace Tempest
 
 		else
 		{
-			//take in a bool
-			for (auto thisGraph : a.instance.ecs.view<tc::ActionGraph>())
+			if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 			{
-				id = thisGraph;
-				temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
-				break;
+				for (auto thisGraph : a.instance.ecs.view<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
+				{
+					id = thisGraph;
+					temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
+					break;
+				}
 			}
+			
+			else
+			{
+				for (auto thisGraph : a.instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
+				{
+					id = thisGraph;
+					temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
+					break;
+				}
+			}
+		}
+
+		if (a.type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+		{
+			overlay_title = "Editing Action";
+			sidebar_title = "ACTIONS";
+		}
+
+		else
+		{
+			overlay_title = "Editing Sequence";
+			sidebar_title = "SEQUENCES";
 		}
 	}
 	void AttackSystemOverlay::show(Instance& instance)
@@ -131,7 +158,7 @@ namespace Tempest
 				// title
 				ImGui::SetCursorPos(ImVec2{ 0,0 });
 				ImGui::Dummy(ImVec2{ 0.f, viewport->Size.y * 0.05f });
-				UI::SubHeader("Editing Action");
+				UI::SubHeader(overlay_title.c_str());
 				ImGui::Dummy(ImVec2{ 0.f, viewport->Size.y * 0.05f });
 
 				// side bar
@@ -142,16 +169,28 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
 				ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.06f,0.06f, 0.06f, 0.85f });
 
-				const ImVec2 ChildSize{ viewport->Size.x * 0.2f, viewport->Size.y * 0.75f };
+
+				// graph name, need child here
+				if (id)
+				{
+					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.1f });
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
+					ImGui::InputText("##testing", &temp_graph.name);
+					ImGui::PopStyleColor();
+					ImGui::PopFont();
+				}
+
+				const ImVec2 ChildSize{ viewport->Size.x * 0.15f, viewport->Size.y * 0.75f };
 				ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.5f - ChildSize.y * 0.5f});
-				if (ImGui::BeginChild("Editing graph", ChildSize, true))
+				if (ImGui::BeginChild("Editing graph", ChildSize, false))
 				{
 					ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
 					ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
 					ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.35f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
 					ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
 					ImVec4 textcol = { 0,0,0,1 };
-					if (ImGui::IsWindowFocused() == false)
+					if (!ImGui::IsWindowFocused())
 					{
 						col = { 0.980f, 0.768f, 0.509f, 0.7f };
 						textcol = { 0,0,0,0.7 };
@@ -159,18 +198,106 @@ namespace Tempest
 
 					ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
 					ImGui::PushFont(FONT_OPEN);
-					ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), "ACTIONS");
+					ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), sidebar_title.c_str());
 					ImGui::PopFont();
+
+					ImGui::Dummy(ImVec2{0.f,25.0f});
+					ImVec2 cursor{ ImGui::GetCursorPosX() + 120.0f, ImGui::GetCursorPosY() + 20.0f };
+
+					// render the buttons here
+					if (ImGui::BeginChild("Graph content", ImVec2{ ImGui::GetContentRegionAvailWidth() * 1.0f, ImGui::GetContentRegionAvail().y * 0.92f}, true))
+					{
+						if (id != UNDEFINED)
+							instance.ecs.get<tc::Graph>(id).g = temp_graph;
+
+						unsigned i = 0;
+						if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+						{
+							for (auto current_graph : instance.ecs.view<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
+							{
+								auto& action = instance.ecs.get<tc::Graph>(current_graph);
+								auto PairResult = UI::UIButtonWithDelete(action.g.name, string("##Actiongraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 15, 20 }, FONT_PARA, id == current_graph);
+								if (PairResult.first)
+								{
+									id = current_graph;
+									temp_graph = action.g;
+								}
+
+								if (PairResult.second)
+								{
+									ImGui::OpenPopup(string("DeleteAction##" + std::to_string(i)).c_str());
+								}
+
+								if (UI::ConfirmDeletePopup(string("DeleteAction##" + std::to_string(i)).c_str(), "Delete this action?"))
+								{
+									instance.ecs.emplace<tc::Destroyed>(id);
+									id = UNDEFINED;
+								}
+
+								++i;
+							}
+						}
+
+						else
+						{
+							for (auto current_graph : instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
+							{
+								auto& sequence = instance.ecs.get<tc::Graph>(current_graph);
+								auto PairResult = UI::UIButtonWithDelete(sequence.g.name, string("##Sequencegraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 15, 20 }, FONT_PARA, id == current_graph);
+								if (PairResult.first)
+								{
+									id = current_graph;
+									temp_graph = sequence.g;
+								}
+								if (PairResult.second)
+								{
+									ImGui::OpenPopup(string("DeleteSequence##" + std::to_string(i)).c_str());
+								}
+
+								if (UI::ConfirmDeletePopup(string("DeleteSequence##" + std::to_string(i)).c_str(), "Delete this sequence?"))
+								{
+									instance.ecs.emplace<tc::Destroyed>(id);
+									id = UNDEFINED;
+								}
+
+								++i;
+							}
+						}
+
+						// create new graphs
+						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 80 }, { 150,-10 }, FONT_HEAD))
+						{
+							auto i = instance.ecs.create();
+
+							if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+							{
+								instance.ecs.emplace<tc::ActionGraph>(i);
+								instance.ecs.emplace<tc::Graph>(i, "ACTION", graph_type::action);
+								
+							}
+
+							else
+							{
+								instance.ecs.emplace<tc::ConflictGraph>(i);
+								instance.ecs.emplace<tc::Graph>(i, "SEQUENCE", graph_type::conflict);
+							}
+
+							id = i;
+							temp_graph = instance.ecs.get<tc::Graph>(id).g;
+						}
+					}
+
+					ImGui::EndChild();
 				}
 				ImGui::EndChild();
 
 				ImGui::PopStyleVar(3);
 				ImGui::PopStyleColor(2);
 
-				// display top buttons
+				// display top buttons (why doesn't this work w simulate -- add the close graph triggger
 				{
 					ImGui::SetCursorPos(ImVec2{ 0,0 });
-					if (ImGui::BeginChild("Top Buttons", ImVec2{ 400.0f, 100.0f }, true))
+					if (ImGui::BeginChild("Top Buttons", ImVec2{ 400.0f, 100.0f }, false))
 					{
 						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
