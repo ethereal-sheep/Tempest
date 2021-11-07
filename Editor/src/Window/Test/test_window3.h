@@ -131,6 +131,7 @@ namespace Tempest
 				UI::UIButton_Sequence(instance, UNDEFINED, "TEST", "TEST", { 100.f,200.f }, { 0,0 }, FONT_PARA,false);
 				UI::UIButton_Sequence(instance, 2, "TEST", "TEST", { 300.f,200.f }, { 0,0 }, FONT_PARA,true);
 
+				UI::UIButton_Simulate("TEST", "TEST", { 100.f,250.f }, { 0,0 }, FONT_PARA,false);
 				UI::UIButton_Simulate("TEST", "TEST", { 300.f,250.f }, { 0,0 }, FONT_PARA,true);
 
 				auto CharIcon = tex_map["Assets/CharacterIcon.png"];

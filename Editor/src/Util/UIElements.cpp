@@ -1282,7 +1282,7 @@ namespace Tempest::UI
 
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
 		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
-		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
+		ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 		
 
@@ -1301,6 +1301,9 @@ namespace Tempest::UI
 			if (hovered)
 				col = hovered_border_col;
 			
+			test = ImGui::CalcTextSize(character->name.c_str(), nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
+
 			ImGui::SetCursorPos(new_pos);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
@@ -1423,7 +1426,7 @@ namespace Tempest::UI
 
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
 		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
-		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
+		ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
@@ -1439,6 +1442,13 @@ namespace Tempest::UI
 			ImVec4 col = default_border_col;
 			if (hovered)
 				col = hovered_border_col;
+
+			if(action)
+				test = ImGui::CalcTextSize(action->g.name.c_str(), nullptr, true);
+			else
+				test = ImGui::CalcTextSize("NAN", nullptr, true);
+			
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 			ImGui::SetCursorPos(new_pos);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
@@ -1562,7 +1572,7 @@ namespace Tempest::UI
 
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
 		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
-		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
+		ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 
 		ImGui::SetCursorPos(new_pos);
@@ -1581,6 +1591,12 @@ namespace Tempest::UI
 			ImVec4 col = default_border_col;
 			if (hovered)
 				col = hovered_border_col;
+
+			if (action)
+				test = ImGui::CalcTextSize(action->g.name.c_str(), nullptr, true);
+			else
+				test = ImGui::CalcTextSize("NAN", nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 			ImGui::SetCursorPos(new_pos);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
@@ -1720,23 +1736,55 @@ namespace Tempest::UI
 
 
 		ImGui::SetCursorPos(new_pos);
-		if (!ImGui::IsItemHovered())
+		if (selected)
 		{
-			// default
+			ImVec4 col = default_border_col;
+			if (hovered)
+				col = hovered_border_col;
+
 			ImGui::SetCursorPos(new_pos);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
-			ImGui::PushStyleColor(ImGuiCol_Border, default_border_col);
-			ImGui::PushStyleColor(ImGuiCol_Button, default_border_col);
+
+			ImGui::PushStyleColor(ImGuiCol_Border, col);
+			ImGui::PushStyleColor(ImGuiCol_Button, col);
 			ImGui::Button("##NiceButton_Dummy", button_size);
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(2);
 
-
+			//Text
 			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.3f - test.x * 0.5f, text_pos.y });
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1.f });
 			ImGui::PushFont(font);
 			ImGui::Text(unselected.c_str());
 			ImGui::PopFont();
+			ImGui::PopStyleColor();
+			auto io = ImGui::GetIO();
+			if (hovered && ImGui::IsMouseClicked(0))
+			{
+				res = true;
+			}
+		}
+		else if (!ImGui::IsItemHovered())
+		{
+			// default
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, default_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushStyleColor(ImGuiCol_Text, default_border_col);
+			ImGui::PushFont(font);
+			ImGui::Text(unselected.c_str());
+			ImGui::PopFont();
+			ImGui::PopStyleColor();
 		}
 		else
 		{
@@ -1744,17 +1792,19 @@ namespace Tempest::UI
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
 			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
-			ImGui::PushStyleColor(ImGuiCol_Button, hovered_border_col);
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hovered_border_col);
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
 			ImGui::Button("##NiceButton_Dummy", button_size);
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
-			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.3f - test.x * 0.5f, text_pos.y });
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushStyleColor(ImGuiCol_Text, hovered_border_col);
 			ImGui::PushFont(font);
 			ImGui::Text(unselected.c_str());
 			ImGui::PopFont();
+			ImGui::PopStyleColor();
 
 			auto io = ImGui::GetIO();
 			if (ImGui::IsMouseClicked(0))
@@ -1762,13 +1812,16 @@ namespace Tempest::UI
 				res = true;
 			}
 		}
+		if (selected)
+		{
+			auto SearchIcon = tex_map["Assets/Loading.png"];
+			ImVec2 iconMin = { pos.x,  pos.y };
+			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
+			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
+			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.5f, new_pos.y - 1.f });
+			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f });
+		}
 
-		auto SearchIcon = tex_map["Assets/Loading.png"];
-		ImVec2 iconMin = { pos.x,  pos.y };
-		ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
-		//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
-		ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.5f, new_pos.y - 1.f });
-		ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f });
 		
 
 		return res;
