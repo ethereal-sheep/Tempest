@@ -134,7 +134,7 @@ namespace Tempest
 
 			for (auto& [node_id, node_ptr] : g.get_nodes())
 			{
-				ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position));
+				ax::NodeEditor::SetNodePosition(node_id, ImVec2(node_ptr->position.x, node_ptr->position.y));
 			}
 
 			// -----------------------------------------------------------------
@@ -172,7 +172,7 @@ namespace Tempest
 			// ---------
 			for (auto& [node_id, node_ptr] : g.get_nodes())
 			{
-				draw_node(node_ptr, instance);
+				draw_node(node_ptr, g, instance);
 			}
 			// ---------
 
@@ -192,12 +192,15 @@ namespace Tempest
 
 			for (auto& [node_id, node_ptr] : g.get_nodes())
 			{
-				node_ptr->position = els::to_vec2(ax::NodeEditor::GetNodePosition(node_id));
+				auto v = ax::NodeEditor::GetNodePosition(node_id);
+				node_ptr->position.x = v.x;
+				node_ptr->position.y = v.y;
+
 			}
 		}
 	}
 
-	void AttackSystemOverlay::draw_node(node_ptr n, Instance& instance)
+	void AttackSystemOverlay::draw_node(node_ptr n, const graph& g, Instance& instance)
 	{
 		ax::NodeEditor::BeginNode(n->get_id());
 
@@ -228,13 +231,14 @@ namespace Tempest
 			ImGui::Dummy({ 10.f, 1.f });
 			ImGui::SameLine();
 
-			if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
+			/*if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
 			{
 				auto gid = gn->graph_entity;
 
 				ImGui::Text("%s: %u", instance.ecs.get<tc::Graph>(gid).g.get_name().c_str(), gid);
 			}
-			else if (auto gsn = dynamic_cast<GetStatNode*>(n.get()))
+			else */
+			if (auto gsn = dynamic_cast<StatNode*>(n.get()))
 			{
 				tc::Statline* statline = nullptr;
 				for (auto i : instance.ecs.view<tc::Statline>())
@@ -242,8 +246,27 @@ namespace Tempest
 
 				string s = magic_enum::enum_name(gsn->get_type()).data();
 				auto index = std::stoi(gsn->get_name());
+				
+				string name;
+				switch (gsn->get_type())
+				{
+				case Tempest::StatNode::inner_type::GetStat:
+					name = "Get " + (*statline)[index];
+					break;
+				case Tempest::StatNode::inner_type::SetStat:
+					name = "Set " + (*statline)[index];
+					break;
+				case Tempest::StatNode::inner_type::GetMain:
+					name = "Get Main";
+					break;
+				case Tempest::StatNode::inner_type::SetMain:
+					name = "Set Main";
+					break;
+				default:
+					name = "If you see this, the node is corrupted";
+					break;
+				}
 
-				string name = "Get " + s + " " + (*statline)[index];
 				ImGui::Text(name.c_str());
 				twidth = ImGui::CalcTextSize(name.c_str()).x;
 			}
@@ -256,7 +279,7 @@ namespace Tempest
 		ImGui::BeginGroup();
 		for (const auto& input : n->get_inputs())
 		{
-			draw_input_pin(input);
+			draw_input_pin(input, g);
 		}
 
 		float extra_offset = 0.f;
@@ -286,7 +309,7 @@ namespace Tempest
 		ax::NodeEditor::Link(l, from, to, color, 2.f);
 	}
 
-	void AttackSystemOverlay::draw_input_pin(const input_pin& p)
+	void AttackSystemOverlay::draw_input_pin(const input_pin& p, const graph& g)
 	{
 		int alpha = 255;
 
@@ -310,7 +333,7 @@ namespace Tempest
 		if (p.get_type() == pin_type::Int && !p.is_linked())
 		{
 			ImGui::SameLine();
-			static int uone = 1;
+			int uone = 1;
 			int& a = p.default_var.get<int>();
 			string s = "##";
 			s += std::to_string(p.get_id());
@@ -322,6 +345,77 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 250,250,250,255 });*/
 			ImGui::InputScalar(s.c_str(), ImGuiDataType_S32, &a, &uone);
 			//ImGui::PopStyleColor(4);
+		}
+		else if (p.get_type() == pin_type::Byte && !p.is_linked())
+		{
+			// get all variables of this type
+			tvector<string> strs;
+			if (g.get_type() == graph_type::action)
+			{
+				strs.push_back("Owner");
+				strs.push_back("Enemy");
+			}
+			else if (g.get_type() == graph_type::conflict)
+			{
+				strs.push_back("Attacker");
+				strs.push_back("Defender");
+			}
+			else
+			{
+				strs.push_back("None");
+			}
+
+			ImGui::SameLine();
+			uint8_t& a = p.default_var.get<uint8_t>();
+			string s = strs[a];
+			s += "##";
+			s += std::to_string(p.get_id());
+			//ImGui::SetNextItemWidth(90);
+
+			if (a)
+			{
+				auto v1 = ImVec4(196, 8, 93, 255) * ImVec4(1/255.f, 1/255.f, 1/255.f, 1/255.f);
+				auto v2 = ImVec4(221, 9, 105, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				auto v3 = ImVec4(245, 10, 117, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				ImGui::PushStyleColor(ImGuiCol_Button, v1);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, v2);
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, v3);
+			}
+			else
+			{
+				auto v1 = ImVec4(196, 111, 8, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				auto v2 = ImVec4(221, 125, 9, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				auto v3 = ImVec4(245, 139, 10, 255) * ImVec4(1 / 255.f, 1 / 255.f, 1 / 255.f, 1 / 255.f);
+				ImGui::PushStyleColor(ImGuiCol_Button, v1);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, v2);
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, v3);
+			}
+			if (ImGui::Button(s.c_str(), {90, 0}))
+			{
+				a ? a = 0 : a = (uint8_t)strs.size()-1;
+			}
+			ImGui::PopStyleColor(3);
+
+			//if (UI::BeginNodeCombo("##combo 1", strs[a].c_str()))
+			//{
+			//	for (int n = 0; n < strs.size(); n++)
+			//	{
+			//		const bool is_selected = (a == n);
+			//		if (ImGui::Selectable(strs[n].c_str(), is_selected))
+			//			a = n;
+
+			//	
+			//		// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			//		if (is_selected)
+			//			ImGui::SetItemDefaultFocus();
+			//	}
+			//	ImGui::EndCombo();
+			//}
+
+			//ImGui::Combo("##no_label", &i, strs.data(), strs.size());
+
+			/*if (ImGui::InputScalar(s.c_str(), ImGuiDataType_U8, &a, &uone))
+				a = std::clamp(a, (uint8_t)0, (uint8_t)1);*/
 		}
 		else
 		{
@@ -452,70 +546,7 @@ namespace Tempest
 			// attacker stats
 			if (filter_string.empty())
 			{
-				if (ImGui::TreeNodeEx("Get Attacker Stats"))
-				{
-					tc::Statline* statline = nullptr;
-					for (auto i : instance.ecs.view<tc::Statline>())
-						statline = instance.ecs.get_if<tc::Statline>(i);
-
-					for (auto i = 0; i < statline->size(); ++i)
-					{
-						if (!(*statline)(i)) continue;
-
-						std::string text = "Get Attacker " + (*statline)[i];
-						ImGui::Indent(10.f);
-						if (ImGui::Selectable(text.c_str()))
-						{
-							auto node = g.add_node(GetStatNode::create_node(string("Attacker:") + std::to_string(i)));
-
-							if (node)
-							{
-								ax::NodeEditor::SetNodePosition(
-									node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
-								);
-							}
-							ImGui::CloseCurrentPopup();
-						}
-						ImGui::Unindent(10.f);
-					}
-					ImGui::TreePop();
-				}
-			}
-			else
-			{
-				tc::Statline* statline = nullptr;
-				for (auto i : instance.ecs.view<tc::Statline>())
-					statline = instance.ecs.get_if<tc::Statline>(i);
-
-				LOG_ASSERT(statline);
-
-				for (auto i = 0; i < statline->size(); ++i)
-				{
-					if (!(*statline)(i)) continue;
-
-					std::string text = "Get Attacker " + (*statline)[i];
-					if (!filter.PassFilter(text.c_str())) continue;
-
-
-					if (ImGui::Selectable(text.c_str()))
-					{
-						auto node = g.add_node(GetStatNode::create_node(string("Attacker:") + std::to_string(i)));
-
-						if (node)
-						{
-							ax::NodeEditor::SetNodePosition(
-								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
-							);
-						}
-						ImGui::CloseCurrentPopup();
-					}
-				}
-			}
-
-			// defender stats
-			if (filter_string.empty())
-			{
-				if (ImGui::TreeNodeEx("Get Defender Stats"))
+				if (ImGui::TreeNodeEx("Get Stats"))
 				{
 					tc::Statline* statline = nullptr;
 					for (auto i : instance.ecs.view<tc::Statline>())
@@ -523,15 +554,31 @@ namespace Tempest
 
 					LOG_ASSERT(statline);
 
+					std::string text = "Get Main";
+					ImGui::Indent(10.f);
+					if (ImGui::Selectable(text.c_str()))
+					{
+						auto node = g.add_node(StatNode::create_node(string("GetMain:0")));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::Unindent(10.f);
+
 					for (auto i = 0; i < statline->size(); ++i)
 					{
 						if (!(*statline)(i)) continue;
 
-						std::string text = "Get Defender " + (*statline)[i];
+						text = "Get " + (*statline)[i];
 						ImGui::Indent(10.f);
 						if (ImGui::Selectable(text.c_str()))
 						{
-							auto node = g.add_node(GetStatNode::create_node(string("Defender:") + std::to_string(i)));
+							auto node = g.add_node(StatNode::create_node(string("GetStat:") + std::to_string(i)));
 
 							if (node)
 							{
@@ -554,15 +601,35 @@ namespace Tempest
 
 				LOG_ASSERT(statline);
 
+				std::string text = "Get Main";
+				if (filter.PassFilter(text.c_str()))
+				{
+					if (ImGui::Selectable(text.c_str()))
+					{
+						auto node = g.add_node(StatNode::create_node(string("GetMain:0")));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+				}
+
+
 				for (auto i = 0; i < statline->size(); ++i)
 				{
 					if (!(*statline)(i)) continue;
 
-					std::string text = "Get Defender " + (*statline)[i];
+					text = "Get " + (*statline)[i];
 					if (!filter.PassFilter(text.c_str())) continue;
+
+
 					if (ImGui::Selectable(text.c_str()))
 					{
-						auto node = g.add_node(GetStatNode::create_node(string("Defender:") + std::to_string(i)));
+						auto node = g.add_node(StatNode::create_node(string("GetStat:") + std::to_string(i)));
 
 						if (node)
 						{
@@ -575,11 +642,9 @@ namespace Tempest
 				}
 			}
 
-
 			// graph specific context
 			if (g.get_type() == graph_type::action)
 			{
-
 				if (filter_string.empty())
 				{
 					if (ImGui::TreeNodeEx("Output"))
@@ -626,31 +691,6 @@ namespace Tempest
 
 				if (filter_string.empty())
 				{
-					if (ImGui::TreeNodeEx("Action Graphs"))
-					{
-						for (auto i : instance.ecs.view<tc::ActionGraph>())
-						{
-							auto& agtc = instance.ecs.get<tc::Graph>(i);
-							std::string text = agtc.g.get_name() + ": " + std::to_string(i);
-							ImGui::Indent(10.f);
-							if (ImGui::Selectable(text.c_str()))
-							{
-								auto node = g.add_node(ActionGraphNode::create_node(std::to_string(i)));
-
-								if (node)
-								{
-									ax::NodeEditor::SetNodePosition(
-										node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
-									);
-								}
-								ImGui::CloseCurrentPopup();
-							}
-							ImGui::Unindent(10.f);
-						}
-						ImGui::TreePop();
-					}
-
-
 					if (ImGui::TreeNodeEx("Resolution"))
 					{
 						ImGui::Indent(10.f);
@@ -678,23 +718,9 @@ namespace Tempest
 							}
 							ImGui::CloseCurrentPopup();
 						}
-						ImGui::Unindent(10.f);
-						ImGui::TreePop();
-					}
-				}
-				else
-				{
-
-					for (auto i : instance.ecs.view<tc::ActionGraph>())
-					{
-						auto& agtc = instance.ecs.get<tc::Graph>(i);
-						std::string text = agtc.g.get_name() + ": " + std::to_string(i);
-
-						if (!filter.PassFilter(text.c_str())) continue;
-
-						if (ImGui::Selectable(text.c_str()))
+						if (ImGui::Selectable("Attack Roll"))
 						{
-							auto node = g.add_node(ActionGraphNode::create_node(std::to_string(i)));
+							auto node = g.add_node(ConflictNode::create_node("AttackRoll"));
 
 							if (node)
 							{
@@ -704,8 +730,48 @@ namespace Tempest
 							}
 							ImGui::CloseCurrentPopup();
 						}
-					}
+						if (ImGui::Selectable("Defend Roll"))
+						{
+							auto node = g.add_node(ConflictNode::create_node("DefendRoll"));
 
+							if (node)
+							{
+								ax::NodeEditor::SetNodePosition(
+									node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+								);
+							}
+							ImGui::CloseCurrentPopup();
+						}
+						if (ImGui::Selectable("Resolve Attack"))
+						{
+							auto node = g.add_node(ConflictNode::create_node("AttackResolve"));
+
+							if (node)
+							{
+								ax::NodeEditor::SetNodePosition(
+									node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+								);
+							}
+							ImGui::CloseCurrentPopup();
+						}
+						if (ImGui::Selectable("Resolve Defend"))
+						{
+							auto node = g.add_node(ConflictNode::create_node("DefendResolve"));
+
+							if (node)
+							{
+								ax::NodeEditor::SetNodePosition(
+									node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+								);
+							}
+							ImGui::CloseCurrentPopup();
+						}
+						ImGui::Unindent(10.f);
+						ImGui::TreePop();
+					}
+				}
+				else
+				{
 					if (filter.PassFilter("Win") && ImGui::Selectable("Win"))
 					{
 						auto node = g.add_node(ConflictNode::create_node("Win"));
@@ -730,11 +796,55 @@ namespace Tempest
 						}
 						ImGui::CloseCurrentPopup();
 					}
+					if (filter.PassFilter("Attack Roll") && ImGui::Selectable("Attack Roll"))
+					{
+						auto node = g.add_node(ConflictNode::create_node("AttackRoll"));
 
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+					if (filter.PassFilter("Defend Roll") && ImGui::Selectable("Defend Roll"))
+					{
+						auto node = g.add_node(ConflictNode::create_node("DefendRoll"));
 
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+					if (filter.PassFilter("Resolve Attack") && ImGui::Selectable("Resolve Attack"))
+					{
+						auto node = g.add_node(ConflictNode::create_node("AttackResolve"));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+					if (filter.PassFilter("Resolve Defend") && ImGui::Selectable("Resolve Defend"))
+					{
+						auto node = g.add_node(ConflictNode::create_node("DefendResolve"));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
 				}
-
-
 
 			}
 			ImGui::EndChild();
@@ -860,7 +970,10 @@ namespace Tempest
 				{
 					// no deletion of input nodes
 					auto n = g.get_node((node_id_t)nodeId.Get());
-					bool non_delete_nodes = n->get_name() != "Input" && n->get_name() != "Start";
+					tvector<string> non_deletables = { "Input", "Start", "Resolve", "Roll" };
+					bool non_delete_nodes = true;
+
+					for (auto& s : non_deletables) non_delete_nodes &= n->get_name() != s;
 
 					if (non_delete_nodes)
 						g.remove_node((node_id_t)nodeId.Get());
@@ -876,7 +989,7 @@ namespace Tempest
 		{
 		case pin_type::Flow: return ImColor(192, 192, 192);
 		case pin_type::Bool: return ImColor(128, 0, 0); // maroon
-		case pin_type::Byte: return ImColor(0, 82, 83); // sherpa blue
+		case pin_type::Byte: return ImColor(9, 105, 221); // neon blue
 		case pin_type::Int: return ImColor(250, 196, 130); // some orange
 		case pin_type::Int64: return ImColor(173, 223, 173); // moss green
 		case pin_type::Float: return ImColor(154, 205, 50); // yellow green
@@ -896,7 +1009,7 @@ namespace Tempest
 		{
 		case pin_type::Flow: return ax::Drawing::IconType::Flow;				break;
 		case pin_type::Bool: return ax::Drawing::IconType::Diamond;				break;
-		case pin_type::Byte: return ax::Drawing::IconType::Circle;				break;
+		case pin_type::Byte: return ax::Drawing::IconType::RoundSquare;			break;
 		case pin_type::Int: return ax::Drawing::IconType::Circle;				break;
 		case pin_type::Int64: return ax::Drawing::IconType::Circle;				break;
 		case pin_type::Float: return ax::Drawing::IconType::Square;				break;

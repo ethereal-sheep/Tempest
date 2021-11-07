@@ -70,7 +70,7 @@ namespace Tempest
         glGenFramebuffers(1, &gBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 
-        int WIDTH = 1600, HEIGHT = 900;
+        int WIDTH = getWidth(), HEIGHT = getHeight();
         // Position
         glGenTextures(1, &gPosition);
         glBindTexture(GL_TEXTURE_2D, gPosition);
@@ -122,7 +122,7 @@ namespace Tempest
 
     void RenderSystem::saoSetup()
     {
-        int WIDTH = 1600, HEIGHT = 900;
+        int WIDTH = getWidth(), HEIGHT = getHeight();
         // SAO Buffer
         glGenFramebuffers(1, &saoFBO);
         glBindFramebuffer(GL_FRAMEBUFFER, saoFBO);
@@ -153,7 +153,7 @@ namespace Tempest
     }
     void RenderSystem::postprocessSetup()
     {
-        int WIDTH = 1600, HEIGHT = 900;
+        int WIDTH = getWidth(), HEIGHT = getHeight();
         // Post-processing Buffer
         glGenFramebuffers(1, &postprocessFBO);
         glBindFramebuffer(GL_FRAMEBUFFER, postprocessFBO);
@@ -173,7 +173,7 @@ namespace Tempest
 
     void RenderSystem::iblSetup()
     {
-        int WIDTH = 1600, HEIGHT = 900;
+        int WIDTH = getWidth(), HEIGHT = getHeight();
         // Latlong to Cubemap conversion
         glGenFramebuffers(1, &envToCubeFBO);
         glGenRenderbuffers(1, &envToCubeRBO);
@@ -253,8 +253,8 @@ namespace Tempest
 
         for (unsigned int mip = 0; mip < maxMipLevels; ++mip)
         {
-            unsigned int mipWidth = envMapPrefilter.getTexWidth() * std::pow(0.5, mip);
-            unsigned int mipHeight = envMapPrefilter.getTexHeight() * std::pow(0.5, mip);
+            unsigned int mipWidth = (unsigned int)(envMapPrefilter.getTexWidth() * std::pow(0.5, mip));
+            unsigned int mipHeight = (unsigned int)(envMapPrefilter.getTexHeight() * std::pow(0.5, mip));
 
             glBindRenderbuffer(GL_RENDERBUFFER, prefilterRBO);
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
@@ -265,8 +265,8 @@ namespace Tempest
             
 
             m_Pipeline.m_Shaders[ShaderCode::prefilterIBLShader]->Set1f(roughness, "roughness");
-            m_Pipeline.m_Shaders[ShaderCode::prefilterIBLShader]->Set1f(envMapPrefilter.getTexWidth(), "cubeResolutionWidth");
-            m_Pipeline.m_Shaders[ShaderCode::prefilterIBLShader]->Set1f(envMapPrefilter.getTexHeight(), "cubeResolutionHeight");
+            m_Pipeline.m_Shaders[ShaderCode::prefilterIBLShader]->Set1f((float)envMapPrefilter.getTexWidth(), "cubeResolutionWidth");
+            m_Pipeline.m_Shaders[ShaderCode::prefilterIBLShader]->Set1f((float)envMapPrefilter.getTexHeight(), "cubeResolutionHeight");
 
 
             for (unsigned int i = 0; i < 6; ++i)
@@ -343,11 +343,11 @@ namespace Tempest
         }
         pt_lights[0].hide = false;
 
-        objectAlbedo.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
-        objectNormal.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
-        objectRoughness.setTexture("textures/pbr/rustediron/rustediron_roughness.png", "ironRoughness", true);
-        objectMetalness.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);
-        objectAO.setTexture("textures/pbr/rustediron/rustediron_ao.png", "ironAO", true);
+        objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
+        objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
+        objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
+        objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
+        objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
 
         envMapHDR.setTextureHDR("textures/hdr/appart.hdr", "appartHDR", true);
 
@@ -358,19 +358,19 @@ namespace Tempest
         envMapLUT.setTextureHDR(512, 512, GL_RG, GL_RG16F, GL_FLOAT, GL_LINEAR);
 
 
-        objectModel.loadModel("models/shaderball/shaderball.obj");
+        objectModel.loadModel("models/shaderball/shaderball.a");
         
-        objectAlbedo2.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
-        objectNormal2.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
-        objectRoughness2.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
-        objectMetalness2.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
-        objectAO2.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+        objectAlbedo2.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
+        objectNormal2.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
+        objectRoughness2.setTexture("textures/pbr/rustediron/rustediron_roughness.png", "ironRoughness", true);
+        objectMetalness2.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);
+        objectAO2.setTexture("textures/pbr/rustediron/rustediron_ao.png", "ironAO", true);
 
-        objectModel2.loadModel("models/shaderball/shaderball.obj");
+        objectModel2.loadModel("models/shaderball/shaderball.a");
 
-        materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
-
-
+       // materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
+        materialF0 = glm::vec3(0.04f);
+        //materialF0 = glm::vec3(.0f, .0f, .0f);
         //---------------
         // Shape(s)
         //---------------
@@ -498,8 +498,10 @@ namespace Tempest
         //m_Renderer.EnableBlend(true);
 
         m_Renderer.ClearColour(0.0f, 0.0f, 0.0f, 1.0f);
-        m_Renderer.ClearColorDepth();      
-        glViewport(0, 0, 1600, 900);
+        m_Renderer.ClearColorDepth();     
+
+        int WIDTH = getWidth(), HEIGHT = getHeight();
+        glViewport(0, 0, WIDTH, HEIGHT);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -507,73 +509,76 @@ namespace Tempest
 
     void RenderSystem::Render()
     {    
-        
-            glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        int WIDTH = getWidth(), HEIGHT = getHeight();
+        glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             for (int rep = 0; rep < 2; rep++)
             {
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
 
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
 
-            glm::mat4 model;
-            deltaTime += 0.01f;
-            GLfloat rotationAngle = deltaTime / 5.0f * modelRotationSpeed;
-            model = glm::mat4(1);
-            if (rep == 0 )
-                model = glm::translate(model, modelPosition);
-            if (rep == 1)
-                model = glm::translate(model, modelPosition2);
-            model = glm::rotate(model, rotationAngle, modelRotationAxis);
-            model = glm::scale(model, modelScale);
+                glm::mat4 model;
+                deltaTime += 0.01f;
+                GLfloat rotationAngle = deltaTime / 5.0f * modelRotationSpeed;
+                model = glm::mat4(1);
+                if (rep == 0 )
+                    model = glm::translate(model, modelPosition);
+                if (rep == 1)
+                    model = glm::translate(model, modelPosition2);
+                model = glm::rotate(model, rotationAngle, modelRotationAxis);
 
-            if (rep == 0)
-                model1 = model;
-            if (rep == 1)
-                model2 = model;;
+                if (rep == 0 )
+                    model = glm::scale(model, modelScale);
+                if (rep == 1)
+                    model = glm::scale(model, modelScale2);
+
+                if (rep == 0)
+                    model1 = model;
+                if (rep == 1)
+                    model2 = model;;
 
 
-            projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * model;
+                projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * model;
 
 
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(projViewModel, "projViewModel");
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(prevProjViewModel, "prevProjViewModel");
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(model, "model");
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
-            prevProjViewModel = projViewModel;
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(projViewModel, "projViewModel");
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(prevProjViewModel, "prevProjViewModel");
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(model, "model");
+                //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
+                prevProjViewModel = projViewModel;
 
-            // Material
-            // pbrMat.renderToShader();
+                // Material
+                glActiveTexture(GL_TEXTURE0);
+                objectAlbedo.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
 
-            glActiveTexture(GL_TEXTURE0);
-            objectAlbedo.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
+                glActiveTexture(GL_TEXTURE1);
+                objectNormal.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
 
-            glActiveTexture(GL_TEXTURE1);
-            objectNormal.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
+                glActiveTexture(GL_TEXTURE2);
+                objectRoughness.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
 
-            glActiveTexture(GL_TEXTURE2);
-            objectRoughness.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
+                glActiveTexture(GL_TEXTURE3);
+                objectMetalness.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
 
-            glActiveTexture(GL_TEXTURE3);
-            objectMetalness.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
+                glActiveTexture(GL_TEXTURE4);
+                objectAO.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
-            glActiveTexture(GL_TEXTURE4);
-            objectAO.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
+                //objectModel.Draw();
+                //objectModel2.Draw();
 
-            //objectModel.Draw();
-            //objectModel2.Draw();
-
-            if (rep == 0)
-                objectModel.Draw();
-            if (rep == 1)
-                objectModel2.Draw();
+                if (rep == 0)
+                    objectModel.Draw();
+                if (rep == 1)
+                    objectModel2.Draw();
             }
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -605,8 +610,8 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoBias, "saoBias");
             m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoScale, "saoScale");
             m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoContrast, "saoContrast");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(1600, "viewportWidth");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(900, "viewportHeight");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(WIDTH, "viewportWidth");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(HEIGHT, "viewportHeight");
 
             quadRender.drawShape();
 
@@ -659,7 +664,7 @@ namespace Tempest
             //objectModel.Draw();
             //objectModel2.Draw();
             glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-            glViewport(0, 0, 1600, 900);
+            glViewport(0, 0, WIDTH, HEIGHT);
         }
         
 
@@ -678,13 +683,8 @@ namespace Tempest
 
                 // Bind Point Light FBO
                 pt_lights[numPt].Bind();
-
-           /*     DrawSprites(MeshCode::CUBE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
-                DrawSprites(MeshCode::SPHERE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
-                DrawSprites(MeshCode::PLANE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
-                DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::POINT_LIGHT_DEPTH, numPt);*/
-
                 m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
+
                 // Send in uniform values
                 glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
                 std::vector<glm::mat4> shadowTransforms;
@@ -701,16 +701,6 @@ namespace Tempest
                 m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
                 m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
 
-             /*   for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
-                {
-                    for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
-                    {
-                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                        mesh.Bind();
-                        glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-                        mesh.Unbind();
-                    }
-                }  */   
                 for (int rep = 0; rep < 2; rep++)
                 {
                     if (rep == 0)
@@ -728,21 +718,9 @@ namespace Tempest
                 }
 
             }
-            //glActiveTexture(GL_TEXTURE0);
             glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-            //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            glViewport(0, 0, 1600, 900);
+            glViewport(0, 0, WIDTH, HEIGHT);
         }
-
-
-
-
-
-
-
-
-
 
         //------------------------
         // Lighting Pass rendering
@@ -772,7 +750,6 @@ namespace Tempest
         glActiveTexture(GL_TEXTURE8);
         envMapLUT.useTexture();
         
-        
         glActiveTexture(GL_TEXTURE9);
         glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
@@ -781,15 +758,16 @@ namespace Tempest
         glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
         
-        for (int pt_light_ = 0; pt_light_ < 1; pt_light_++) //pt_lights.size()
+        for (int pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
         {
-            //m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
             glm::vec3 lightPositionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(pt_lights[pt_light_].Position, 1.0f));
 
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightPositionViewSpace,      ("lightPointArray[" + std::to_string(pt_light_) + "].position").c_str() );
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(pt_lights[pt_light_].Color, ("lightPointArray[" + std::to_string(pt_light_) + "].color").c_str());
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(pt_lights[pt_light_].radius, ("lightPointArray[" + std::to_string(pt_light_) + "].radius").c_str());
 
+            std::string pointLightHide     = "pointLightHide[" + std::to_string(pt_light_) + "]";
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pt_lights[pt_light_].hide, pointLightHide.data());
         }
 
         for (int dLight = 0; dLight < dir_lights.size(); dLight++)
@@ -823,12 +801,12 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(far_plane, "far_plane");
 
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(dirShadowBool, "dirShadowBool");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointShadowBool, "pointShadowBool");
 
         quadRender.drawShape();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         //glClear(GL_COLOR_BUFFER_BIT);
-
         //-------------------------------
         // Post-processing Pass rendering
         //-------------------------------
@@ -839,7 +817,7 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(gBufferView, "gBufferView");;
 
 
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->SetVec2f(glm::vec2{1.0f / 1600.f , 1.0f/ 900.f}, "screenTextureSize");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->SetVec2f(glm::vec2{1.0f / (float)WIDTH , 1.0f/ (float)HEIGHT}, "screenTextureSize");;
 
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraAperture, "cameraAperture");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraShutterSpeed, "cameraShutterSpeed");;
@@ -870,7 +848,7 @@ namespace Tempest
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
         // Copy the depth informations from the Geometry Pass into the default framebuffer
-        glBlitFramebuffer(0, 0, 1600, 900, 0, 0, 1600, 900, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // Shape(s) rendering
@@ -1330,5 +1308,14 @@ namespace Tempest
     void RenderSystem::SetGammaCorrection(int gamma)
     {
         GammaCorrection = gamma;
+    }
+
+    uint32_t RenderSystem::getHeight()
+    {
+       return m_FrameBuffer.GetHeight();
+    }
+    uint32_t RenderSystem::getWidth()
+    {
+       return m_FrameBuffer.GetWidth();
     }
 }

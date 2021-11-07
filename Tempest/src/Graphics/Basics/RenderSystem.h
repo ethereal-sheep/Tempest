@@ -66,6 +66,7 @@ namespace Tempest
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
+        void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight, const Transform& transform);           // Submitting Point Light {Transform to be used for pos}
@@ -103,76 +104,58 @@ namespace Tempest
         const GLfloat near_plane = 1.0f, far_plane = 25.0f;
 
         //Testing
-        GLuint screenQuadVAO, screenQuadVBO;
         GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects;
         GLuint saoFBO, saoBlurFBO, saoBuffer, saoBlurBuffer;
         GLuint postprocessFBO, postprocessBuffer;
         GLuint envToCubeFBO, irradianceFBO, prefilterFBO, brdfLUTFBO, envToCubeRBO, irradianceRBO, prefilterRBO, brdfLUTRBO;
 
-        GLint gBufferView = 1;
-        GLint tonemappingMode = 1;
-        GLint lightDebugMode = 3;
-        GLint attenuationMode = 2;
-        GLint saoSamples = 12;
-        GLint saoTurns = 7;
-        GLint saoBlurSize = 4;
+        
+        GLint gBufferView = 1;     // To see the different buffers
+        GLint tonemappingMode = 1; // Tonemapping types 
+        GLint attenuationMode = 2; // Attenuation type
+
+        // Motion Blur settings
         GLint motionBlurMaxSamples = 32;
 
-        //GLfloat lastX = 1600 / 2;
-        //GLfloat lastY = 900 / 2;
+        // Just literally only used for auto rotation ( can be removed - remove in rendersystem.cpp too)
         GLfloat deltaTime = 0.0f;
-        //GLfloat lastFrame = 0.0f;
-        //GLfloat deltaGeometryTime = 0.0f;
-        //GLfloat deltaLightingTime = 0.0f;
-        //GLfloat deltaSAOTime = 0.0f;
-        //GLfloat deltaPostprocessTime = 0.0f;
-        //GLfloat deltaForwardTime = 0.0f;
-        //GLfloat deltaGUITime = 0.0f;
-        GLfloat materialRoughness = 0.01f;
-        GLfloat materialMetallicity = 0.02f;
-        GLfloat ambientIntensity = 0.005f;
+
+        // SAO
         GLfloat saoRadius = 0.3f;
         GLfloat saoBias = 0.001f;
         GLfloat saoScale = 0.7f;
         GLfloat saoContrast = 0.8f;
-        GLfloat lightPointRadius1 = 3.0f;
-        GLfloat lightPointRadius2 = 3.0f;
-        GLfloat lightPointRadius3 = 3.0f;
+        GLint saoSamples = 12;
+        GLint saoTurns = 7;
+        GLint saoBlurSize = 4;
+
+        // Additonal Camera things
         GLfloat cameraAperture = 16.0f;
         GLfloat cameraShutterSpeed = 0.5f;
         GLfloat cameraISO = 1000.0f;
+
         GLfloat modelRotationSpeed = 1.0f;
         GLfloat fps = 60.f;
 
-        bool cameraMode;
-        bool pointMode = true;
-        bool directionalMode = false;
-        bool iblMode = false;
-        bool saoMode = false;
-        bool fxaaMode = false;
-        bool motionBlurMode = false;
-        bool screenMode = false;
-        bool firstMouse = true;
-        bool guiIsOpen = true;
-        bool keys[1024];
+        // Mode toggles
+        bool pointMode = true;         // Point light 
+        bool directionalMode = true;  // Directional Light
+        bool iblMode = true;          // Image based lighting 
+        bool saoMode = true;          // SAO 
+        bool fxaaMode = true;         // FXAA
+        bool motionBlurMode = false;   // Motion Blur
+        bool dirShadowBool = false;    // Direcitonal shadows toggle
+        bool pointShadowBool = true;   // Point light shadows toggle
 
-        glm::vec3 albedoColor = glm::vec3(1.0f);
         glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric
 
-
         // 1 fixed model first
-        glm::vec3 modelPosition = glm::vec3(0.0f);
-        glm::vec3 modelPosition2 = glm::vec3(0.0f);
+        glm::vec3 modelPosition = glm::vec3(0.0f);      
         glm::vec3 modelRotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
         glm::vec3 modelScale = glm::vec3(0.1f);
 
-        glm::mat4 projViewModel;
-        glm::mat4 prevProjViewModel = projViewModel;
-        glm::mat4 envMapProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
 
-        ShapePBR quadRender;
-        ShapePBR envCubeRender;
-
+        // Model 1
         ModelPBR objectModel;
 
         TexturePBR objectAlbedo;
@@ -180,7 +163,17 @@ namespace Tempest
         TexturePBR objectRoughness;
         TexturePBR objectMetalness;
         TexturePBR objectAO;
+        glm::mat4 model1;
+        
+        glm::mat4 projViewModel;
+        glm::mat4 prevProjViewModel = projViewModel;
 
+        GLfloat materialRoughness = 0.01f;   // Global for now (but should be per object/material).
+        GLfloat materialMetallicity = 0.02f; // Global for now (but should be per object/material).
+        GLfloat ambientIntensity = 0.005f;   // Global for now (but should be per object/material).
+
+        // Model 2 for testing, using same as model 1 rot and scale (also same prevMVP so motion blur does not work) 
+        glm::vec3 modelPosition2 = glm::vec3(-2.0f, 0.0f, 0.0f);
         ModelPBR objectModel2;
 
         TexturePBR objectAlbedo2;
@@ -188,26 +181,59 @@ namespace Tempest
         TexturePBR objectRoughness2;
         TexturePBR objectMetalness2;
         TexturePBR objectAO2;
+        glm::mat4 model2;
+        glm::vec3 modelScale2 = glm::vec3(0.1f);
 
+        ShapePBR quadRender; // FBO to draw the scene
 
+        // Enviroment Map 
+        ShapePBR envCubeRender; // FBO to draw env
         TexturePBR envMapHDR;
         TexturePBR envMapCube;
         TexturePBR envMapIrradiance;
         TexturePBR envMapPrefilter;
         TexturePBR envMapLUT;
+        glm::mat4 envMapProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
 
-        MaterialPBR pbrMat;
+        // for ref what an object needs
+        struct PBRobject
+        {
+            // model (could be saved in another place then this will just be std::string)
+            ModelPBR model; 
 
+            // texture (5 Texture but also can be saved in a Texture container then refererenced)
+            TexturePBR objectAlbedo;
+            TexturePBR objectNormal;
+            TexturePBR objectRoughness;
+            TexturePBR objectMetalness;
+            TexturePBR objectAO;
 
+            // Should be just the transform/rigid body component 
+            glm::vec3 modelPosition = glm::vec3(0.0f);
+            glm::vec3 modelRotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+            glm::vec3 modelScale = glm::vec3(0.1f);
+            GLfloat modelRotationSpeed = 1.0f;
+            glm::mat4 modelMat; //model mat
+
+            // Ususally just set 0.04 as base but can be adjusted
+            glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric
+            GLfloat materialRoughness = 0.01f;
+            GLfloat materialMetallicity = 0.02f;
+            GLfloat ambientIntensity = 0.005f;
+
+            // The model current MVP
+            glm::mat4 projViewModel;
+            // The model Previous MVP for motion blur
+            glm::mat4 prevProjViewModel = projViewModel;
+        };
 
         
         void iblSetup();
 
-        bool dirShadowBool = true;
+        uint32_t getHeight();
+        uint32_t getWidth();
 
-        // to de
-        glm::mat4 model1;
-        glm::mat4 model2;
+
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);

@@ -154,15 +154,10 @@ namespace Tempest
 			return next;
 		}
 
-		auto begin()
-		{
-			return prototypes.begin();
-		}
-
-		auto end()
-		{
-			return prototypes.end();
-		}
+		auto begin() const { return prototypes.begin(); }
+		auto end() const { return prototypes.end(); }
+		auto begin() { return prototypes.begin(); }
+		auto end() { return prototypes.end(); }
 
 	private:
 	};

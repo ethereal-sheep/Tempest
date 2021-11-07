@@ -49,9 +49,9 @@ namespace Tempest
         void show(Instance&) override;
 
 		void draw_context(Instance& instance, float height);
-		void draw_node(node_ptr n, Instance& instance);
+		void draw_node(node_ptr n, const graph& g, Instance& instance);
 		void draw_link(link l, pin_id_t from, pin_id_t to, pin_type type);
-        void draw_input_pin(const input_pin& p);
+        void draw_input_pin(const input_pin& p, const graph& g);
 		void draw_output_pin(const output_pin& p, float owidth);
 
 		template <typename TNode>

@@ -85,7 +85,6 @@ namespace Tempest
 			}
 
 			reader.EndArray();
-
 			reader.EndObject();
 		}
 
@@ -137,6 +136,106 @@ namespace Tempest
 			return target;
 		}
 
+		tpath save_override(const tpath& folder) const
+		{
+			// if directory doesn't exist, create new_directory
+			if (!std::filesystem::exists(folder))
+				std::filesystem::create_directories(folder);
+
+			// delete existing
+
+			Writer writer;
+
+			writer.StartObject();
+			writer.StartMeta();
+			writer.Member("Type", "Prototype");
+			writer.Member("Category", cat);
+			writer.EndMeta();
+
+
+			writer.StartArray("Components");
+			for (auto& [hash, ptr] : components)
+			{
+				if (ptr->is_special())
+				{
+					writer.StartObject();
+					writer.StartMeta();
+					writer.Member("Type", ptr->type_info);
+					writer.EndMeta();
+					ptr->serialize(writer);
+					writer.EndObject();
+				}
+			}
+
+			writer.EndArray();
+			writer.EndObject();
+
+			tpath target = folder;
+			if (fs::is_directory(target))
+				target /= (name + ".json");
+
+			Serializer::SaveJson(target, writer.GetString());
+			return target;
+		}
+
+		void load_override(const tpath& file)
+		{
+			name = file.stem().string();
+
+			// throw if fail
+			Serializer serializer;
+			string json = serializer.GetJson(file);
+
+			Reader reader(json.c_str());
+			if (reader.HasError())
+			{
+				LOG_WARN("Cleaning of prototype {} has failed!", name);
+				return;
+			}
+
+			reader.StartObject();
+
+			// Meta Info
+			string proto;
+			reader.StartMeta();
+			reader.Member("Type", proto);
+			reader.Member("Category", cat);
+			reader.EndMeta();
+
+			if (proto != "Prototype")
+			{
+				LOG_WARN("Cleaning of prototype {0} has failed! {1} is corrupted!", name, file.string() + " is corrupted!");
+				return;
+			}
+
+			size_t size;
+			reader.StartArray("Components", &size);
+			for (size_t i = 0; i < size; ++i)
+			{
+				reader.StartObject();
+
+				string typeinfo;
+				reader.StartMeta();
+				reader.Member("Type", typeinfo);
+				reader.EndMeta();
+
+				auto type = magic_enum::enum_cast<ComponentType>(typeinfo);
+				if (!type.has_value())
+				{
+					LOG_WARN("Component of type " + typeinfo + " cannot be found!");
+					reader.EndObject();
+					continue;
+				}
+
+				deserialize_helper(reader, *this, *type);
+
+				reader.EndObject();
+			}
+
+			reader.EndArray();
+			reader.EndObject();
+		}
+
 		prototype(const prototype& rhs)
 		{
 			*this = rhs;
@@ -185,25 +284,48 @@ namespace Tempest
 
 		}
 
+
+		template <typename Component>
+		Component* try_emplace()
+		{
+			if (!has<Component>())
+			{
+				components.emplace(
+					make_tpair(
+						t_hash<Component>(),
+						make_uptr<coptional<Component>>()));
+			}
+
+			return get_if<Component>();
+		}
+
 		template <typename Component>
 		Component* emplace()
 		{
-			if(has<Component>())
+			if (has<Component>())
 				return nullptr;
 
 			components.emplace(
 				make_tpair(
-					t_hash<Component>(), 
+					t_hash<Component>(),
 					make_uptr<coptional<Component>>()));
 
 			return get_if<Component>();
 		}
+
 
 		template<typename Component>
 		void erase()
 		{
 			if (!has<Component>()) return;
 			components.erase(t_hash<Component>());
+		}
+
+		template<typename Component>
+		void specialize()
+		{
+			if (!has<Component>()) return;
+			components.at(t_hash<Component>())->specialize();
 		}
 
 		// create an instance of this 
@@ -217,19 +339,6 @@ namespace Tempest
 				p.components[hash] = ptr->instance();
 			return p;
 		}
-
-		
-
-		template <typename Archiver>
-		friend Archiver& operator&(Archiver& ar, prototype& p)
-		{
-			ar.StartObject();
-			/*ar.Member("Weapon_Name", component.name);
-			ar.Member("Main_Stat", component.main_stat);
-			ar.Vector("Weapon_Stats", component.stats);*/
-			return ar.EndObject();
-		}
-
 
 	private:
 

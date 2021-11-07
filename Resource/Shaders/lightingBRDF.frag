@@ -20,10 +20,11 @@ struct LightObject
     float radius;
 };
 
-uniform int lightPointCounter = 3;
+uniform int lightPointCounter = 10;
 uniform int lightDirectionalCounter = 1;
-uniform LightObject lightPointArray[3];
+uniform LightObject lightPointArray[10];
 uniform LightObject lightDirectionalArray[1];
+uniform int pointLightHide[10];
 
 // G-Buffer
 uniform sampler2D gPosition;
@@ -36,6 +37,7 @@ uniform sampler2D envMap;
 uniform samplerCube envMapIrradiance;
 uniform samplerCube envMapPrefilter;
 uniform sampler2D envMapLUT;
+
 uniform sampler2D shadowMap;
 uniform samplerCube shadowCube;
 
@@ -48,12 +50,15 @@ uniform float materialRoughness;
 uniform float materialMetallicity;
 uniform float ambientIntensity;
 uniform vec3 materialF0;
+
 uniform mat4 view;
 uniform mat4 inverseView;
 uniform float far_plane;
 uniform int dirShadowBool;
+uniform int pointShadowBool;
 uniform vec3 camPos;
 uniform mat4 lightSpaceMatrix;
+
 
 vec3 colorLinear(vec3 colorVector);
 float saturate(float f);
@@ -64,8 +69,10 @@ vec3 computeFresnelSchlick(float NdotV, vec3 F0);
 vec3 computeFresnelSchlickRoughness(float NdotV, vec3 F0, float roughness);
 float computeDistributionGGX(vec3 N, vec3 H, float roughness);
 float computeGeometryAttenuationGGXSmith(float NdotL, float NdotV, float roughness);
-float computeShadowDir(float depth);
+
+float computeShadowDir();
 float computeShadow(int ptnum);
+
 void main()
 {
     // Retrieve G-Buffer informations
@@ -112,6 +119,9 @@ void main()
             // Point light(s) computation
             for (int i = 0; i < lightPointCounter; i++)
             {
+				if(pointLightHide[i] > 0)
+					continue;
+					
                 vec3 L = normalize(lightPointArray[i].position - viewPos);
                 vec3 H = normalize(L + V);
 
@@ -144,8 +154,10 @@ void main()
 
                 // Specular component computation
                 specular = (F * D * G) / (4.0f * NdotL * NdotV + 0.0001f);
+						
+				// Shadow Calulation
 				float shadow = 0.0f;
-				if(dirShadowBool == 1)
+				if(pointShadowBool == 1)
 					shadow = computeShadow(0);
 				
                 color += ( ((diffuse * kD) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
@@ -178,9 +190,11 @@ void main()
 
                 // Specular component computation
                 specular = (F * D * G) / (4.0f * NdotL * NdotV + 0.0001f);
+				
+				// Shadow Calulation
 				float shadow = 0.0f;
 				if(dirShadowBool == 1)
-					shadow = computeShadowDir(depth);
+					shadow = computeShadowDir();
 
 					
 				color += ((diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);
@@ -333,7 +347,7 @@ vec3 gridSamplingDisk[20] = vec3[]
 	vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
 	vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
 	);
-float computeShadowDir(float depth)
+float computeShadowDir()
 {
 	
 	vec3 viewPos = texture(gPosition, TexCoords).rgb;

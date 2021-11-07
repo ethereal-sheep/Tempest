@@ -60,8 +60,6 @@ namespace Tempest
 				{
 					cb(name);
 					state = State::TEXT;
-					
-
 				}
 			}
 			else

@@ -72,7 +72,7 @@ namespace Tempest
 			init_sounds();
 			init_ui_textures();
 
-			testing_scene();
+			//testing_scene();
 		}
 
 		void OnUpdate() override
@@ -127,9 +127,7 @@ namespace Tempest
 			//}
 			//ImGui::End();
 
-
 			instance_manager.render();
-			instance_manager.menubar();
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();
@@ -368,8 +366,6 @@ namespace Tempest
 				LOG_WARN("{0} cannot be loaded!", entry.path().string());
 			}
 		}
-		LOG_ASSERT(fs::exists("Assets/dds_test.dds"));
-
 	}
 	void clear_ui_textures()
 	{

@@ -21,6 +21,7 @@ detail::proto_category category_name(#category_name, categories, []( \
 
 
 
+
 namespace Tempest
 {
 	namespace detail
@@ -39,7 +40,6 @@ namespace Tempest
 		struct proto_category
 		{
 			string type_info;
-
 			tvector<std::function<bool(const prototype&)>> verify_fns;
 			tvector<std::function<void(prototype&)>> create_fns;
 
@@ -92,31 +92,45 @@ namespace Tempest
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)
-			REQUIRE(Mesh)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
 		});
 
 		PROTO_CATEGORY(Wall)
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
 		});
 
 		PROTO_CATEGORY(Tile)
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
 		});
 
 		PROTO_CATEGORY(Decoration)
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
 		});
 
 		PROTO_CATEGORY(Obstacle)
 		{
 			REQUIRE(Meta)
 			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
 		});
 	}
 

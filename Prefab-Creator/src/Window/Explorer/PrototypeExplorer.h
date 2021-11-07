@@ -103,7 +103,7 @@ namespace Tempest
 			}
 			ImGui::End();
 
-			inspector.show();
+			inspector.show(instance);
 
 			// differ delete
 			if (fs::exists(mark_for_delete))
@@ -120,6 +120,14 @@ namespace Tempest
 
 			if(ImGui::BeginTabItem(cat.c_str()))
 			{
+				/*string s = "Clean All##CleanAll";
+				s += cat;
+				if (ImGui::Button(s.c_str()))
+				{
+
+				}*/
+
+				UI::PaddedSeparator(1.0f);
 				for (auto entry : fs::directory_iterator(path))
 				{
 					if (entry.path().extension() != ".json")
@@ -201,9 +209,12 @@ namespace Tempest
 						}
 						if (ImGui::MenuItem(ICON_FA_TRASH " Delete"))
 						{
-							if(inspector.is_selected(entry.path()))
+							if (inspector.is_selected(entry.path()))
 								inspector.select("", "");
 							mark_for_delete = entry.path();
+						}
+						if (ImGui::MenuItem(ICON_FA_TRASH " Clean"))
+						{
 						}
 
 						ImGui::EndPopup();

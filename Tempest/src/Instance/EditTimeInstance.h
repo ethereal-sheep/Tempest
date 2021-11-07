@@ -42,6 +42,7 @@ namespace Tempest
 
 		void save()
 		{
+			scene.save(root);
 			ecs.save(root);
 			//graph_manager.save_all_to(root);
 		}

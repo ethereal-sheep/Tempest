@@ -330,10 +330,21 @@ namespace Tempest
 			auto start = cam.GetPosition();
 			auto end = cam.GetPosition() + lRayDir_world * 1000.0f;
 
-			ImGui::Text("Start: %.3f , %.3f,  %.3f", start.x, start.y, start.z);
-			ImGui::Text("End:   %.3f , %.3f,  %.3f", end.x, end.y, end.z);
+			ImGui::Text("Start:       %.3f , %.3f,  %.3f", start.x, start.y, start.z);
+			ImGui::Text("End:         %.3f , %.3f,  %.3f", end.x, end.y, end.z);
 
-			auto [id, check] = instance.po.raycast(els::to_vec3(cam.GetPosition()), els::to_vec3(lRayDir_world));
+			float dist = 0;
+			if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+			{
+				auto inter = cam.GetPosition() + lRayDir_world * dist;
+				ImGui::Text("Intersect:   %.3f , %.3f,  %.3f", inter.x, inter.y, inter.z);
+			}
+			else
+			{
+				ImGui::Text("Not facing plane!");
+			}
+
+			auto [id, check] = instance.po.raycast(cam.GetPosition(), lRayDir_world);
 			if (check)
 			{
 				ImGui::Text("HIT! id: %u", id);
@@ -362,13 +373,12 @@ namespace Tempest
 			}
 
 			auto& dirShadowBool = Service<RenderSystem>::Get().dirShadowBool;
-			ImGui::Checkbox("shadow", &dirShadowBool);
-			/// Um ill make that later. G buffer
-			/*auto& gBufferView = Service<RenderSystem>::Get().gBufferView;
-			const auto padding = 80.f;
-			{
-				UI::DragFloat3ColorBox("Position", "##ModelPosDrag", ImVec2{ padding , 0.f }, value_ptr(gBufferView), 0.f, 0.1f).first;
-			}*/
+			ImGui::Checkbox("Directional shadow", &dirShadowBool);
+			auto& pointShadowBool = Service<RenderSystem>::Get().pointShadowBool;
+			ImGui::Checkbox("Point shadow", &pointShadowBool);
+
+			auto& materialF0 = Service<RenderSystem>::Get().materialF0;
+			UI::DragFloat3ColorBox("MaterialF0", "##MaterialF0", ImVec2{ padding , 0.f }, value_ptr(materialF0), 0.f, 0.1f).first;
 			if(ImGui::TreeNode("Gbuffer Mode"))
 			{
 				auto& gBufferView = Service<RenderSystem>::Get().gBufferView;
@@ -399,85 +409,54 @@ namespace Tempest
 
 					ImGui::TreePop();
 				}
-				if (ImGui::TreeNode("Point Lights"))
+				
+
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Point Lights"))
+			{
+				auto& pt_lights = Service<RenderSystem>::Get().pt_lights;
+
+				if (ImGui::TreeNode("Variables"))
 				{
-					auto& pt_lights = Service<RenderSystem>::Get().pt_lights;
-
-					if (ImGui::TreeNode("Position"))
+					for(int pt_light_num = 0; pt_light_num < pt_lights.size(); pt_light_num++)
 					{
-						for(int pt_light_num = 0; pt_light_num < pt_lights.size(); pt_light_num++)
+
+						if (pt_lights[pt_light_num].hide)
 						{
+							if (ImGui::Button( (std::string("Turn on Point Light ") + std::to_string(pt_light_num)).c_str()))
+							{
+								pt_lights[pt_light_num].hide = !pt_lights[pt_light_num].hide;
+							}
 
-							if (pt_lights[pt_light_num].hide)
-							{
-								if (ImGui::Button( (std::string("Turn on Point Light ") + std::to_string(pt_light_num)).c_str()))
-								{
-									pt_lights[pt_light_num].hide = !pt_lights[pt_light_num].hide;
-								}
-								
-							}
-							else
-							{
-								if (ImGui::Button((std::string("Turn off Point Light ") + std::to_string(pt_light_num)).c_str()))
-								{
-									pt_lights[pt_light_num].hide = !pt_lights[pt_light_num].hide;
-								}
-								std::string PointLightPosition = "Point Light" + std::to_string(pt_light_num);
-								std::string PointLightPositionID = "##Pos" + std::to_string(pt_light_num);
-								UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Position), 0.f, 0.1f, -10.f, 10.f);
-							}
 						}
-
-						ImGui::TreePop();
-					}
-
-					if (ImGui::TreeNode("Color"))
-					{
-						for (int pt_light_num = 0; pt_light_num < pt_lights.size(); pt_light_num++)
+						else
 						{
-							if (!pt_lights[pt_light_num].hide)
+							if (ImGui::Button((std::string("Turn off Point Light ") + std::to_string(pt_light_num)).c_str()))
 							{
-								std::string PointLightPosition = "Point Light" + std::to_string(pt_light_num);
-								std::string PointLightPositionID = "##Color" + std::to_string(pt_light_num);
-								UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Color), 0.f, 0.1f, -10.f, 10.f);
-
+								pt_lights[pt_light_num].hide = !pt_lights[pt_light_num].hide;
 							}
+							std::string PointLightPosition = "Point Light" + std::to_string(pt_light_num);
+							std::string PointLightPositionID = "##Pos" + std::to_string(pt_light_num);
+							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Position), 0.f, 0.1f, -10.f, 10.f);
+							
+							PointLightPosition = "Point Light" + std::to_string(pt_light_num);
+							PointLightPositionID = "##Color" + std::to_string(pt_light_num);
+							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Color), 0.f, 0.1f, -10.f, 10.f);
+
+
+							ImGui::SliderFloat((std::string("Point Light Radius ") + std::to_string(pt_light_num)).c_str(), &pt_lights[pt_light_num].radius, 0.0f, 10.0f);
 						}
-						//ImGui::ColorEdit3("Point 1", (float*)&lightPointColor1);
-						//ImGui::ColorEdit3("Point 2", (float*)&lightPointColor2);
-						//ImGui::ColorEdit3("Point 3", (float*)&lightPointColor3);
-
-						ImGui::TreePop();
 					}
 
-					if (ImGui::TreeNode("Radius"))
-					{
-						for (int pt_light_num = 0; pt_light_num < pt_lights.size(); pt_light_num++)
-						{
-							if (!pt_lights[pt_light_num].hide)
-							{
-								ImGui::SliderFloat((std::string("Point Light ") + std::to_string(pt_light_num)).c_str(), &pt_lights[pt_light_num].radius, 0.0f, 10.0f);
-							/*	std::string PointLightPosition = "Point Light" + std::to_string(pt_light_num);
-								std::string PointLightPositionID = "##Radius" + std::to_string(pt_light_num);
-								UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].radius), 0.f, 0.1f, -10.f, 10.f);*/
+					ImGui::TreePop();
+				}
 
-							}
-						}
-						/*ImGui::SliderFloat("Point 1", &lightPointRadius1, 0.0f, 10.0f);
-						ImGui::SliderFloat("Point 2", &lightPointRadius2, 0.0f, 10.0f);
-						ImGui::SliderFloat("Point 3", &lightPointRadius3, 0.0f, 10.0f);*/
-
-						ImGui::TreePop();
-					}
-
-					if (ImGui::TreeNode("Attenuation"))
-					{
-						auto& attenuationMode = Service<RenderSystem>::Get().attenuationMode;
-						ImGui::RadioButton("Quadratic", &attenuationMode, 1);
-						ImGui::RadioButton("UE4", &attenuationMode, 2);
-
-						ImGui::TreePop();
-					}
+				if (ImGui::TreeNode("Attenuation"))
+				{
+					auto& attenuationMode = Service<RenderSystem>::Get().attenuationMode;
+					ImGui::RadioButton("Quadratic", &attenuationMode, 1);
+					ImGui::RadioButton("UE4", &attenuationMode, 2);
 
 					ImGui::TreePop();
 				}
@@ -487,7 +466,6 @@ namespace Tempest
 
 			if (ImGui::TreeNode("Directional Light"))
 			{
-
 				auto& dir_lights = Service<RenderSystem>::Get().dir_lights;
 				
 				if (ImGui::TreeNode("Direction"))
@@ -659,21 +637,21 @@ namespace Tempest
 					if (ImGui::Button("Sphere"))
 					{
 						objectModel.~ModelPBR();
-						objectModel.loadModel("models/sphere/sphere.obj");
-						modelScale = glm::vec3(0.6f);
+						objectModel.loadModel("models/sphere/sphere.a");
+						modelScale = glm::vec3(0.5f);
 					}
 
 					if (ImGui::Button("Teapot"))
 					{
 						objectModel.~ModelPBR();
-						objectModel.loadModel("models/teapot/teapot.obj");
-						modelScale = glm::vec3(0.6f);
+						objectModel.loadModel("models/teapot/teapot.a");
+						modelScale = glm::vec3(0.5f);
 					}
 
 					if (ImGui::Button("Shader ball"))
 					{
 						objectModel.~ModelPBR();
-						objectModel.loadModel("models/shaderball/shaderball.obj");
+						objectModel.loadModel("models/shaderball/shaderball.a");
 						modelScale = glm::vec3(0.1f);
 					}
 
@@ -689,7 +667,6 @@ namespace Tempest
 				auto& objectRoughness = Service<RenderSystem>::Get().objectRoughness;
 				auto& objectMetalness = Service<RenderSystem>::Get().objectMetalness;
 				auto& objectAO = Service<RenderSystem>::Get().objectAO;
-				auto& materialF0 = Service<RenderSystem>::Get().materialF0;
 
 				if (ImGui::Button("Rusted iron"))
 				{
@@ -724,6 +701,29 @@ namespace Tempest
 					materialF0 = glm::vec3(0.04f);
 				}
 
+				if (ImGui::Button("Terrazzo"))
+				{
+					objectAlbedo.setTexture("textures/pbr/terrazzo/terrazzo_albedo.png", "terrazzoAlbedo", true);
+					objectNormal.setTexture("textures/pbr/terrazzo/terrazzo_normal.png", "terrazzoNormal", true);
+					objectRoughness.setTexture("textures/pbr/terrazzo/terrazzo_roughness.png", "terrazzoRoughness", true);
+					objectMetalness.setTexture("textures/pbr/terrazzo/terrazzo_metalness.png", "terrazzoMetalness", true);
+					objectAO.setTexture("textures/pbr/terrazzo/terrazzo_ao.png", "terrazzoAO", true);
+
+					materialF0 = glm::vec3(0.04f);
+				}
+
+
+				if (ImGui::Button("Porcelain"))
+				{
+					objectAlbedo.setTexture("textures/pbr/porcelain/porcelain_albedo.png", "porcelainAlbedo", true);
+					objectNormal.setTexture("textures/pbr/porcelain/porcelain_normal.png", "porcelainNormal", true);
+					objectRoughness.setTexture("textures/pbr/porcelain/porcelain_roughness.png", "porcelainRoughness", true);
+					objectMetalness.setTexture("textures/pbr/porcelain/porcelain_metalness.png", "porcelainMetalness", true);
+					objectAO.setTexture("textures/pbr/porcelain/porcelain_ao.png", "porcelainAO", true);
+
+
+					materialF0 = glm::vec3(0.04f);
+				}
 				ImGui::TreePop();
 			}
 		

@@ -25,12 +25,15 @@ namespace Tempest
 	class SimulationStart : public Window
 	{
 		const int max_thread = 10;
-		Entity attacking = INVALID;
-		Entity defending = INVALID;
+		Entity attacker = INVALID;
+		Entity defender = INVALID;
+		Entity attack_action = INVALID;
+		Entity defend_action = INVALID;
 		Entity conflict = INVALID;
 		uint32_t frequency = 1;
 		std::atomic_uint32_t* win = nullptr;
 		std::atomic_uint32_t* lose = nullptr;
+		std::atomic_bool* finish = nullptr;
 
 		enum struct State {
 			DONE,
@@ -43,9 +46,12 @@ namespace Tempest
 		tvector<future_bool> futures;
 		tvector<uint32_t> wins;
 		tvector<uint32_t> loses;
+		tvector<std::function<void()>> fn;
 
 		// graphs to clear up after we are done
 		tvector<Entity> extra;
+
+		// 
 
 		const char* window_name() override
 		{
@@ -63,31 +69,19 @@ namespace Tempest
 			{
 				auto& a = event_cast<SimulateConflict>(e);
 				state = State::LOAD;
-				attacking = a.atk;
-				defending = a.def;
+				attacker = a.atker;
+				defender = a.defer;
+				attack_action = a.atk_act;
+				defend_action = a.def_act;
 				conflict = a.conflict;
 				frequency = a.freq;
 				win = &a.win;
 				lose = &a.lose;
-				win->store(0);
-				lose->store(0);
-			}
-		}
+				finish = &a.finish;
 
-		void build(const Event& e)
-		{
-			if (state == State::DONE)
-			{
-				auto& a = event_cast<SimulateConflict>(e);
-				state = State::LOAD;
-				attacking = a.atk;
-				defending = a.def;
-				conflict = a.conflict;
-				frequency = a.freq;
-				win = &a.win;
-				lose = &a.lose;
 				win->store(0);
 				lose->store(0);
+				finish->store(false);
 			}
 		}
 
@@ -98,7 +92,6 @@ namespace Tempest
 			case State::DONE:
 				break;
 			case State::LOAD:
-				try_build_all(instance);
 				setup_simulate(instance);
 				state = State::RUN;
 
@@ -132,8 +125,8 @@ namespace Tempest
 				{
 					if (futures[i].wait_for(std::chrono::seconds(0)) == std::future_status::ready)
 					{
-						if (win) *win += wins[i];
-						if (lose) *lose += loses[i];
+						/*if (win) *win += wins[i];
+						if (lose) *lose += loses[i];*/
 					}
 					else
 						still_running = true;
@@ -142,6 +135,8 @@ namespace Tempest
 				if (!still_running)
 				{
 					state = State::DONE;
+					if(finish) finish->store(true);
+					clean_simulate(instance);
 					ImGui::CloseCurrentPopup();
 				}
 
@@ -160,40 +155,62 @@ namespace Tempest
 
 		void setup_simulate(Instance& instance)
 		{
-			auto var = instance.srm.get_variable_to_id(conflict, "Win");
-			LOG_ASSERT(var);
-			LOG_ASSERT(var->get_type() == pin_type::Int);
-
-
 			// setup 10 vars for 10 threads
 			futures.resize(max_thread);
+			fn.resize(max_thread);
 			wins.resize(max_thread);
 			loses.resize(max_thread);
 
 			for (int i = 0; i < max_thread; ++i)
 			{
-				// create 3 entities
-				auto a = instance.ecs.clone(attacking); // atker entity
-				auto d = instance.ecs.clone(defending); // defender entity
+				// create 5 entities
+				auto a = instance.ecs.clone(attacker); // atker entity
+				auto d = instance.ecs.clone(defender); // defender entity
+				auto aa = instance.ecs.clone(attack_action); // atker entity
+				auto da = instance.ecs.clone(defend_action); // defender entity
 				auto s = instance.ecs.clone(conflict); // sequence entity
 
 				extra.push_back(a);
 				extra.push_back(d);
 				extra.push_back(s);
+				extra.push_back(aa);
+				extra.push_back(da);
 
 
-				auto running = [&, &num_win = wins[i], &num_lose = loses[i], var]() {
-					for (unsigned i = 0; i < frequency; ++i)
+				fn[i] = [&instance, &num_win = *win, &num_lose = *lose, freq = frequency / max_thread, a, d, aa, da, s]() {
+					for (unsigned i = 0; i < freq; ++i)
 					{
-						instance.srm.instant_dispatch_to_id<Simulate>(s, a, d);
-						var->get<int>() ? ++num_win : ++num_lose;
+						instance.srm.instant_dispatch_to_id<Simulate>(s, a, d, aa, da);
+						if (auto var = instance.srm.get_variable_to_id(s, "Win"))
+						{
+							var->get<int>() ? ++num_win : ++num_lose;
+						}
 					}
 				};
-
-				futures[i] = Service<thread_pool>::Get().submit_task(running);
 			}
 
+			// build all extras
+			try_build_all(instance);
 
+			// for all fns we submit
+			for (int i = 0; i < max_thread; ++i)
+			{
+				futures[i] = Service<thread_pool>::Get().submit_task(fn[i]);
+			}
+
+		}
+
+		void clean_simulate(Instance& instance)
+		{
+			for (auto id : extra)
+			{
+				instance.ecs.destroy(id);
+			}
+			extra.clear();
+			futures.clear();
+			fn.clear();
+			wins.clear();
+			loses.clear();
 		}
 
 		void try_system(Instance&)

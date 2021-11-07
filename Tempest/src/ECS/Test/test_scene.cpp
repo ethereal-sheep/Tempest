@@ -26,7 +26,8 @@ namespace Tempest
 		}
 		{
 			tpath t = root;
-			Scene s(t);
+			Scene s;
+			s.load(t);
 			LOG_ASSERT(s.get_prototype_categories().size() == cat_size);
 		}
 	}
