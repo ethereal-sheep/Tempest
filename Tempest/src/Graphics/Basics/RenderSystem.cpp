@@ -633,7 +633,7 @@ namespace Tempest
             dir_lights[0].Bind();
 
             lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-            lightView = glm::lookAt(10.f * dir_lights[0].Direction,
+            lightView = glm::lookAt(10.f * -dir_lights[0].Direction,
                 glm::vec3(0.0f, 0.0f, 0.0f),
                 glm::vec3(0.0f, 1.0f, 0.0f));
             lightSpaceMatrix = lightProjection * lightView;

@@ -49,9 +49,11 @@ uniform float materialMetallicity;
 uniform float ambientIntensity;
 uniform vec3 materialF0;
 uniform mat4 view;
+uniform mat4 inverseView;
 uniform float far_plane;
 uniform int dirShadowBool;
 uniform vec3 camPos;
+uniform mat4 lightSpaceMatrix;
 
 vec3 colorLinear(vec3 colorVector);
 float saturate(float f);
@@ -62,7 +64,7 @@ vec3 computeFresnelSchlick(float NdotV, vec3 F0);
 vec3 computeFresnelSchlickRoughness(float NdotV, vec3 F0, float roughness);
 float computeDistributionGGX(vec3 N, vec3 H, float roughness);
 float computeGeometryAttenuationGGXSmith(float NdotL, float NdotV, float roughness);
-float computeShadowDir();
+float computeShadowDir(float depth);
 float computeShadow(int ptnum);
 void main()
 {
@@ -178,11 +180,11 @@ void main()
                 specular = (F * D * G) / (4.0f * NdotL * NdotV + 0.0001f);
 				float shadow = 0.0f;
 				if(dirShadowBool == 1)
-					shadow = computeShadowDir();
+					shadow = computeShadowDir(depth);
 
 					
-				//color += ((diffuse) * kD + specular ) * lightColor * NdotL;
-                color += (((diffuse * kD) * (1.0f - shadow))  + ((specular * lightColor * NdotL )  * (1.0f - shadow)));
+				color += ((diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);
+                //color += (((diffuse * kD) * (1.0f - shadow))  + ((specular * lightColor * NdotL )  * (1.0f - shadow)));
             }
         }
 
@@ -331,9 +333,16 @@ vec3 gridSamplingDisk[20] = vec3[]
 	vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
 	vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
 	);
-float computeShadowDir()
+float computeShadowDir(float depth)
 {
-
+	
+	vec3 viewPos = texture(gPosition, TexCoords).rgb;
+	viewPos = vec3(inverseView * vec4(viewPos, 1.0));
+	//viewPos.z = depth;
+	
+	vec3 position = viewPos + camPos;
+	vec4 FragPosLightSpace = lightSpaceMatrix * vec4(position, 1.0);
+	
 	// perform perspective divide
 	vec3 normalizedCoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
 	
@@ -348,7 +357,7 @@ float computeShadowDir()
 	
 	//vec3 normal = normalize(vs_normal);
 	vec3 normal = texture(gNormal, TexCoords).rgb;
-	vec3 dir = normalize(lightDirectionalArray[0].direction);
+	vec3 dir = normalize(-lightDirectionalArray[0].direction);
 	//dir.y *= -1.f;
 	float bias = max(0.05 * (1.0f - dot(normal, dir)), 0.005f);
 	float shadow = 0.0;

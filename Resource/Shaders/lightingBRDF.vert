@@ -8,9 +8,9 @@ out vec3 envMapCoords;
 
 uniform mat4 inverseView;
 uniform mat4 inverseProj;
-uniform mat4 lightSpaceMatrix;
+//uniform mat4 lightSpaceMatrix;
 
-out vec4 FragPosLightSpace;
+//out vec4 FragPosLightSpace;
 out vec3 vs_pos;
 void main()
 {
@@ -19,7 +19,7 @@ void main()
     envMapCoords = (inverseView * unprojCoords).xyz;
 
 	
-	FragPosLightSpace = lightSpaceMatrix * vec4(position, 1.0);
+	//FragPosLightSpace = lightSpaceMatrix * vec4(position, 1.0);
 	
     gl_Position = vec4(position, 1.0f);
 	vs_pos = position;
