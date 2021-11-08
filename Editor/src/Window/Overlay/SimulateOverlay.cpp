@@ -112,7 +112,8 @@ namespace Tempest
 				ImGui::PushID("seq");
 				if (sequence != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 				{
-					// draw smth out
+					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+					Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(sequence, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
 				}
 				ImGui::PopID();
 				pop_button_style();
@@ -463,16 +464,20 @@ namespace Tempest
 		Entity* temp = is_attacker ? &attacker.unit_id : &defender.unit_id;
 
 		// character display
-		ImGui::SetCursorPos(start_pos);
-		if (UI::UIButton_2("CHARA", "CHARA", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		ImGui::SetCursorPos(ImVec2{start_pos.x - 35.0f, start_pos.y - 60.0f });
+		auto tex = tex_map["Assets/CharacterIcon.png"];
+		std::string chara_name{ "CHARACTER" };
+		if (*temp != UNDEFINED)
+			chara_name = instance.ecs.get<tc::Character>(*temp).name;
+		if (UI::UICharButton_Toggle((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f },
+			chara_name, "##charaname" + is_attacker, *temp != UNDEFINED, { 0, 0 }, { 1,1 }))
 		{
-			
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::UNIT, is_attacker, *temp);
 		}
 
 		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 40.0f, ImGui::GetCursorPosY() - 15.0f});
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() - 15.0f, ImGui::GetCursorPosY() + 15.0f});
 		push_button_style();
 		ImGui::PushID("chara" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
@@ -482,12 +487,6 @@ namespace Tempest
 		}
 		ImGui::PopID();
 		pop_button_style();
-
-		// character mame
-		const std::string char_name{ "Character Name" };
-		ImGui::SetCursorPos({ start_pos.x - (ImGui::CalcTextSize(char_name.c_str()).x + ImGui::GetFontSize()) * 0.5f, start_pos.y + padding });
-		ImGui::Text(char_name.c_str());
-
 
 		// weapon
 		temp = is_attacker ? &attacker.weapon : &defender.weapon;
@@ -525,7 +524,8 @@ namespace Tempest
 		push_button_style();
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
-			// draw smth out
+			Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+			Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(*temp, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
 		}
 		pop_button_style();
 	}

@@ -113,6 +113,10 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ACTIONS]->GetID()), button_size))
                     {
+                        enable_popup = false;
+                        ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
+                        Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ACTIONS)
@@ -124,6 +128,10 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size))
                     {
+                        enable_popup = false;
+                        ImGui::CloseCurrentPopup();
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
+                        Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SEQUENCES)

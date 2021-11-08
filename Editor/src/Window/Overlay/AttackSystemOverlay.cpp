@@ -64,6 +64,8 @@ namespace Tempest
 			overlay_title = "Editing Sequence";
 			sidebar_title = "SEQUENCES";
 		}
+
+		ax::NodeEditor::NavigateToContent();
 	}
 	void AttackSystemOverlay::show(Instance& instance)
 	{
@@ -170,7 +172,7 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.06f,0.06f, 0.06f, 0.85f });
 
 
-				// graph name, need child here
+				// graph name (got bug, first letter always hidden when entering new name)
 				if (id)
 				{
 					ImGui::PushFont(FONT_HEAD);
