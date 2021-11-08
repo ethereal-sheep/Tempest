@@ -135,8 +135,9 @@ namespace Tempest
 				UI::UIButton_Simulate("TEST", "TEST", { 300.f,250.f }, { 0,0 }, FONT_PARA,true);
 
 				
-				UI::CharacterTurn(instance, UNDEFINED, { 0.f,600.f });
-				UI::CharacterTurn(instance, UNDEFINED, { 0.f,700.f },true);
+				UI::CharacterTurn(instance, UNDEFINED, { 0.f,300.f });
+				UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f },true);
+				UI::CharacterTurnData(instance, 3, { 0.f,500.f });
 				auto CharIcon = tex_map["Assets/CharacterIcon.png"];
 				static bool selected = false;
 				static vec2 a = { 100,0.f };
@@ -168,27 +169,7 @@ namespace Tempest
 					LOG("CHAR CLICKED");
 				}*/
 				
-
-
-				ImGui::DragFloat2("a", glm::value_ptr(a));
-				if (ImGui::Button("Weapon"))
-				{
-					Service<EventManager>::Get().instant_dispatch<AddingWeaponsTrigger>();
-				}
-				if (ImGui::Button("Action"))
-				{
-					Service<EventManager>::Get().instant_dispatch<AddingActionsTrigger>();
-				}
-				if (ImGui::Button("Unit"))
-				{
-					Service<EventManager>::Get().instant_dispatch<AddingUnitsTrigger>();
-				}
-				if (ImGui::Button("Sequence"))
-				{
-					Service<EventManager>::Get().instant_dispatch<SelectSequenceTrigger>();
-				}
 				UI::ConfirmDeletePopup("TT", "Delete this character?");
-				if(selected)
 					
 
 				//ImGui::ImageButton()

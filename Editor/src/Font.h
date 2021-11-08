@@ -40,7 +40,7 @@ static const float global_font_scale = 5.f / 6.f;
 static const float global_icon_scale = 13.f / 15.f;
 
 static const float open_text_size = 24.f;
-static const float open_text_turn_size = 18.f;
+static const float open_text_turn_size = 36.f;
 
 static const float header_text_size = 48.f;
 static const float subheader_text_size = 36.f;

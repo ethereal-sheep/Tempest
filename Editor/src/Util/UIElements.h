@@ -186,8 +186,14 @@ namespace Tempest::UI
 	bool UICharButton_NoDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 	bool UICharButton_Toggle(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 
+	// Pos is from top left 
 	void CharacterTurn(Instance& instance, Entity id, const ImVec2 pos, bool selected = false);
+	// Pos is from top left 
+	void CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos);
+
+
 }
+
 namespace Tempest
 {
 	static inline ImVec2 operator*(const ImVec2& lhs, const float rhs) { return ImVec2(lhs.x * rhs, lhs.y * rhs); }
