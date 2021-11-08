@@ -298,6 +298,10 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", open_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", open_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 
+		// 7 Sub button
+		io.Fonts->AddFontFromFileTTF(open_f.string().c_str(), open_text_turn_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", open_text_turn_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", open_text_turn_size * global_font_scale * global_icon_scale, &config, fa_range);
 
 		//// 6 fk 
 		//static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };

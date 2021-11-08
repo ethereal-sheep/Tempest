@@ -14,7 +14,7 @@
 #include "Util/UIElements.h"
 #include "rttr/type.h"
 #include "rttr/registration.h"
-//#include "ECS/Rttr_Register.h"
+#include "ECS/Rttr_Register.h"
 
 namespace Tempest
 {
@@ -135,15 +135,16 @@ namespace Tempest
 				UI::UIButton_Simulate("TEST", "TEST", { 300.f,250.f }, { 0,0 }, FONT_PARA,true);
 
 				
-
+				UI::CharacterTurn(instance, UNDEFINED, { 0.f,600.f });
+				UI::CharacterTurn(instance, UNDEFINED, { 0.f,700.f },true);
 				auto CharIcon = tex_map["Assets/CharacterIcon.png"];
 				static bool selected = false;
 				static vec2 a = { 100,0.f };
 
-				if (UI::UICharButton_Toggle((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth() * 0.7f, (float)CharIcon->GetHeight() * 0.7f }, "Char 1", "##TESTINGCA", selected, { 0,0 }, { 1,1 }))
+				/*if (UI::UICharButton_Toggle((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth() * 0.7f, (float)CharIcon->GetHeight() * 0.7f }, "Char 1", "##TESTINGCA", selected, { 0,0 }, { 1,1 }))
 				{
 					selected = !selected;
-				}
+				}*/
 				/*
 				ImGui::BeginChild("TESTING CHILD", { 700, 500 });
 				for (auto i = 0; i < 20; i++)

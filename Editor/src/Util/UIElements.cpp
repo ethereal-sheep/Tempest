@@ -2538,7 +2538,7 @@ namespace Tempest::UI
 		ImVec4 selectedCol = { 0.980f, 0.768f, 0.509f, 1 };
 		ImVec4 emptyCol = { 0.1f, 0.1f, 0.1f, 1 };
 		hovered ? emptyCol = { 0.2f, 0.2f, 0.2f, 1 } : emptyCol;
-		
+
 		//ImVec4 hoverCol = { 0.4f, 0.4f, 0.4f, 1 };
 
 		ImGui::RenderNavHighlight(bb, id);
@@ -2579,6 +2579,52 @@ namespace Tempest::UI
 		ImGui::PopFont();
 		ImGui::EndGroup();
 		return res;
+	}
+
+	void CharacterTurn(Instance& instance, Entity id, const ImVec2 pos, bool selected)
+	{
+		auto window = ImGui::GetWindowDrawList();
+		auto windowPos = ImGui::GetCurrentWindow()->Pos;
+		
+		
+		ImVec2 Min = { windowPos.x + pos.x, windowPos.y + pos.y };
+		
+		
+		auto character = instance.ecs.get_if<tc::Character>(id);
+
+		if (selected)
+		{
+			auto selectedImg = tex_map["Assets/TurnSelected.png"];
+			ImVec2 selectedMax = { Min.x + selectedImg->GetWidth(), Min.y + selectedImg->GetHeight() };
+			window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), Min, selectedMax);
+			ImVec2 TextStartPos = { Min.x + selectedImg->GetWidth() * 0.53f, Min.y + selectedImg->GetHeight() * 0.17f };
+			ImGui::PushFont(FONT_OPEN);
+
+			if (character)
+				window->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
+			else
+				window->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
+
+			ImGui::PopFont();
+		}
+		else
+		{
+			auto unselectedImg = tex_map["Assets/TurnUnselected.png"];
+			ImVec2 unselectedMax = { Min.x + unselectedImg->GetWidth(), Min.y + unselectedImg->GetHeight() };
+			window->AddImage((void*)static_cast<size_t>(unselectedImg->GetID()), Min, unselectedMax);
+			ImVec2 TextStartPos = { Min.x + unselectedImg->GetWidth() * 0.45f, Min.y + unselectedImg->GetHeight() * 0.17f };
+			ImGui::PushFont(FONT_OPEN);
+
+			if (character)
+				window->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
+			else
+				window->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
+
+			ImGui::PopFont();
+		}
+
+		
+
 	}
 }
 

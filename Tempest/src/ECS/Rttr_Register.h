@@ -41,7 +41,7 @@ namespace Tempest
 		.property("Rb_config", &tc::Rigidbody::rb_config)
 		.property("Shape", &tc::Rigidbody::shape_data);
 
-	/*registration::class_<rigidbody_config>("rigidbody_config")
+	registration::class_<rigidbody_config>("rigidbody_config")
 		.constructor<>()
 		.property("Mass", &rigidbody_config::mass)
 		.property("Density", &rigidbody_config::density)
@@ -51,13 +51,13 @@ namespace Tempest
 		.property("Gravity", &rigidbody_config::gravity)
 		.property("Linear_velocity", &rigidbody_config::linear_velocity)
 		.property("Angular_velocity", &rigidbody_config::angular_velocity)
-		.property("Material", &rigidbody_config::material);*/
-	/*registration::class_<shape>("shape")
+		.property("Material", &rigidbody_config::material);
+	registration::class_<shape>("shape")
 		.constructor<>()
 		.property("Shape Type", &shape::type)
 		.property("ShapeData", &shape::shapeData);
 
-	*/
+	
 	}
 
 	
