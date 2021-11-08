@@ -46,6 +46,13 @@ namespace Tempest
 			//}
 			
 		}
+
+		// for each prefab, send it to hell
+		for (auto& [id, pf] : scene.get_map())
+		{
+			ecs.create(pf);
+		}
+
 	}
 	void RuntimeInstance::_update(float dt)
 	{

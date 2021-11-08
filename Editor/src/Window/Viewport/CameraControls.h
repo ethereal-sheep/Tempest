@@ -508,9 +508,49 @@ namespace Tempest
 			return orbit_axis;
 		}
 
-		void reset()
+		void reset(Camera& cam, vec3 pos, vec3 look)
 		{
+			set_world_camera();
 
+			auto ideal_pos = pos;
+			auto ideal_look_at = look - ideal_pos;
+
+			auto front = cam.GetFront();
+
+			glm::vec2 v1{ ideal_look_at.x, ideal_look_at.z };
+			glm::vec2 v2{ front.x, front.z };
+
+			auto angle = glm::orientedAngle(glm::normalize(v2), glm::normalize(v1));
+			auto yaw = glm::epsilonEqual(angle, 0.f, 0.01f) ? quat{ 1,0,0,0 } : glm::angleAxis(angle, glm::vec3{ 0, 1, 0 });
+			auto rot = cam.GetQuatRotation() * yaw;
+
+			front = glm::conjugate(rot) * glm::vec3{ 0.f, 0.f, -1.f };
+			auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+
+			angle = glm::orientedAngle(glm::normalize(ideal_look_at), glm::normalize(front), left);
+
+			auto pitch = glm::epsilonEqual(angle, 0.f, 0.01f) ? quat{ 1,0,0,0 } : glm::angleAxis(angle, left);
+			rot = rot * pitch;
+
+			start_rotation = cam.GetQuatRotation();
+			end_rotation = rot;
+
+			current_rot_time = 0.f;
+			total_rot_time = 1.f;
+
+			start_position = cam.GetPosition();
+			end_position = ideal_pos;
+
+			current_pos_time = 0.f;
+			total_pos_time = 1.f;
+
+
+			easing = EasingMode::INOUTSINE;
+		}
+
+		void reset(Camera& cam)
+		{
+			reset(cam, vec3{ 7,7,-7 }, vec3{});
 		}
 	};
 

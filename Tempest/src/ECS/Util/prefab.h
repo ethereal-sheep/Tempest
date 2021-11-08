@@ -21,6 +21,7 @@ namespace Tempest
 	class prefab
 	{
 		friend class prototype;
+		friend class ECS;
 		friend class Scene;
 
 		string cat;

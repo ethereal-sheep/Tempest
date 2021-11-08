@@ -134,11 +134,11 @@ namespace Tempest
 	{
 		// assume instance is valid here
 		instance->register_window<ViewportWindow>();
-		instance->register_window<HierarchyWindow>();
-		instance->register_window<InspectorWindow>();
+		instance->register_window<HierarchyWindow>()->visible = false;
+		instance->register_window<InspectorWindow>()->visible = false;
 		instance->register_window<DiagnosticsWindow>()->visible = false;
-		instance->register_window<test_window>();
-		instance->register_window<test_window3>();
+		instance->register_window<test_window>()->visible = false;
+		instance->register_window<test_window3>()->visible = false;
 
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();

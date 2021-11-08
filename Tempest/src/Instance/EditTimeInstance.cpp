@@ -72,7 +72,6 @@ namespace Tempest
 					* glm::scale(local->local_scale)
 					* glm::scale(transform->scale);
 
-
 				Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}
 		}

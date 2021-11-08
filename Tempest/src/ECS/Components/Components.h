@@ -109,7 +109,7 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
+		Example, Destroyed, Transform, Local, PickerObject, Meta, Script, Rigidbody, Mesh, Model,
 		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, Shape
 		,END
 	};
@@ -163,12 +163,42 @@ namespace Tempest
 			vec3 scale = { 1.f, 1.f, 1.f };
 
 			friend bool operator==(const Transform& lhs, const Transform& rhs) {
-				return 
+				return
 					glm::all(glm::epsilonEqual(lhs.position, rhs.position, glm::epsilon<float>())) &&
 					glm::all(glm::epsilonEqual(lhs.rotation, rhs.rotation, glm::epsilon<float>())) &&
 					glm::all(glm::epsilonEqual(lhs.scale, rhs.scale, glm::epsilon<float>()));
 			}
 			friend bool operator!=(const Transform& lhs, const Transform& rhs) {
+				return !(lhs == rhs);
+			}
+
+		};
+
+		struct PickerObject
+		{
+			static const char* get_type() { return "PickerObject"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, PickerObject& component)
+			{
+				ar.StartObject();
+				ar.Member("Position", component.position);
+				ar.Member("Rotation", component.rotation);
+				ar.Member("Scale", component.scale);
+				return ar.EndObject();
+			}
+
+			vec3 position;
+			quat rotation = { 1.f, 0.f, 0.f, 0.f };
+			vec3 scale = { 1.f, 1.f, 1.f };
+
+			friend bool operator==(const PickerObject& lhs, const PickerObject& rhs) {
+				return
+					glm::all(glm::epsilonEqual(lhs.position, rhs.position, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.rotation, rhs.rotation, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.scale, rhs.scale, glm::epsilon<float>()));
+			}
+			friend bool operator!=(const PickerObject& lhs, const PickerObject& rhs) {
 				return !(lhs == rhs);
 			}
 
@@ -677,6 +707,7 @@ namespace Tempest
 			COMPONENT_CASE(Destroyed);
 			COMPONENT_CASE(Transform);
 			COMPONENT_CASE(Local);
+			COMPONENT_CASE(PickerObject);
 			COMPONENT_CASE(Meta);
 			COMPONENT_CASE(Script);
 			COMPONENT_CASE(Rigidbody);

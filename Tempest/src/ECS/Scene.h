@@ -28,8 +28,69 @@ namespace Tempest
 	{
 		tmap<id_t, prefab> prefabs;
 
+		tmap<int, tmap<int, tvector<id_t>>> map;
+
 	public:
 		Map() = default; // empty map
+
+		void update()
+		{
+			// just to clean up
+			// might be sufficient
+			map.clear();
+			for (auto& [id, pf] : prefabs)
+			{
+				if (pf.has<tc::Transform>() && pf.has<tc::Shape>())
+				{
+					auto shape = pf.get_if<tc::Shape>();
+					auto transform = pf.get_if<tc::Transform>();
+
+					const int& x = shape->x;
+					const int& y = shape->y;
+
+					int a_x = x, a_y = y, e_x = 0, e_y = 0;
+
+					if (a_x % 2 != a_y % 2)
+					{
+						a_x = a_y = std::min(x, y);
+						e_x = x - a_x;
+						e_y = y - a_y;
+					}
+
+					vec3 min, max;
+
+					min.x = -.5f - (a_x - 1) / 2.f;
+					min.z = -.5f - (a_y - 1) / 2.f;
+					min.y = 0;
+
+					max.x = .5f + (a_x - 1) / 2.f + e_x;
+					max.z = .5f + (a_y - 1) / 2.f + e_y;
+					max.y = 0;
+
+					auto rot = transform->rotation;
+					min = rot * min;
+					max = rot * max;
+
+					if (max.x < min.x) std::swap(min.x, max.x);
+					if (max.z < min.z) std::swap(min.z, max.z);
+
+					min += transform->position;
+					max += transform->position;
+
+					for (int i = (int)std::floor(min.x); i < (int)std::floor(max.x); ++i)
+						for (int j = (int)std::floor(min.z); j < (int)std::floor(max.z); ++j)
+							map[i][j].push_back(id);
+				}
+			}
+		}
+
+		id_t find(int x, int y)
+		{
+			if (map.count(x) && map[x].count(y) && map[x][y].size())
+				return map[x][y].front();
+			return INVALID;
+		}
+
 
 		auto create(const prototype& proto)
 		{
@@ -52,6 +113,8 @@ namespace Tempest
 				return nullptr;
 			return &prefabs.at(id);
 		}
+
+		
 
 		auto extract(id_t t) { return prefabs.extract(t); }
 		auto insert(tmap<id_t, prefab>::node_type&& n) { return prefabs.insert(std::move(n)); }

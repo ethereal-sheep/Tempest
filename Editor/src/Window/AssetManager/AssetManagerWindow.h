@@ -140,9 +140,23 @@ namespace Tempest
 
 									if (auto shape = it->second.get_if<tc::Shape>())
 									{
-										inter.x = shape->x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+										const int& x = shape->x;
+										const int& y = shape->y;
+
+										int a_x = x, a_y = y, e_x = 0, e_y = 0;
+										if (a_x % 2 != a_y % 2)
+										{
+											a_x = a_y = std::min(x, y);
+											e_x = x - a_x;
+											e_y = y - a_y;
+
+										}
+
+										inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
 										inter.y = 0;
-										inter.z = shape->y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
+										inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
+
+
 									}
 
 									transform->position = inter;
@@ -193,19 +207,28 @@ namespace Tempest
 								const int& y = shape->y;
 								const int one = 1;
 
-								inter.x = shape->x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
-								inter.y = 0;
-								inter.z = shape->y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
-
 								AABB box;
-								box.min.x = inter.x - .5f - (x - 1) / 2.f;
-								box.min.z = inter.z - .5f - (y - 1) / 2.f;
+
+								int a_x = x, a_y = y, e_x = 0, e_y = 0;
+								if (a_x % 2 != a_y % 2)
+								{
+									a_x = a_y = std::min(x, y);
+									e_x = x - a_x;
+									e_y = y - a_y;
+
+								}
+
+								inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+								inter.y = 0;
+								inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
+
+								box.min.x = inter.x -.5f - (a_x - 1) / 2.f;
+								box.min.z = inter.z -.5f - (a_y - 1) / 2.f;
 								box.min.y = 0;
 
-								box.max.x = inter.x + .5f + (x - 1) / 2.f;
-								box.max.z = inter.z + .5f + (y - 1) / 2.f;
+								box.max.x = inter.x + .5f + (a_x - 1) / 2.f + e_x;
+								box.max.z = inter.z + .5f + (a_y - 1) / 2.f + e_y;
 								box.max.y = 0;
-
 
 								Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
 							}
