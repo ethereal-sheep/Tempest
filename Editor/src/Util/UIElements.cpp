@@ -2618,7 +2618,7 @@ namespace Tempest::UI
 			if (character)
 				window->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
 			else
-				window->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), "CHARACTER 1");
+				window->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
 
 			ImGui::PopFont();
 		}
