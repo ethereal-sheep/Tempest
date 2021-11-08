@@ -96,7 +96,11 @@ namespace Tempest
 		Entity def;
 		Entity conflict;
 	};
-	struct OpenCombatModeTrigger : public Event {};
+	struct OpenCombatModeTrigger : public Event 
+	{
+		OpenCombatModeTrigger(Instance& in) :instance{in}  {}
+		Instance& instance;
+	};
 	struct OpenConflictResTrigger : public Event {};
 	struct OpenMainMenuTrigger : public Event {};
 	struct OpenActionGraphTrigger : public Event // not using for new change

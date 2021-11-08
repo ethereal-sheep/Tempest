@@ -18,6 +18,12 @@ namespace Tempest
 {
     class CombatModeOverlay : public Window
     {
+        enum class INFO_TYPE
+        {
+            CHAR,
+            ACTIONS,
+            WEAPONS
+        };
         const char* window_name() override
         {
             return "";
@@ -32,7 +38,12 @@ namespace Tempest
         void open_popup(const Event& e);
 
         void show(Instance&) override;
-
+        void render_more_info(Instance& instance, const ImGuiViewport& viewport, INFO_TYPE type);
         bool OverlayOpen = false;
+
+        Entity curr_entity = UNDEFINED;
+        bool display_curr_stat{ false };
+        bool display_other_stat{ false };
+        INFO_TYPE info_type{};
     };
 }
