@@ -138,7 +138,6 @@ namespace Tempest
 				UI::CharacterTurn(instance, UNDEFINED, { 0.f,300.f });
 				UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f },true);
 				UI::CharacterTurnData(instance, 3, { 0.f,500.f });
-				UI::CharacterTurnData(instance, 3, { 0.f,700.f },true);
 				auto CharIcon = tex_map["Assets/CharacterIcon.png"];
 				static bool selected = false;
 				static vec2 a = { 100,0.f };
