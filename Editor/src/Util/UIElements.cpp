@@ -2581,6 +2581,84 @@ namespace Tempest::UI
 		return res;
 	}
 
+	bool UIActionButtonEx(ImGuiID id, string actionName, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+
+		
+		auto defaultImg = tex_map["Assets/SkillUnselected.png"];
+		auto selectedImg = tex_map["Assets/SkillSelected.png"];
+		ImVec2 size = { 0,0 };
+		ImTextureID texture_id = 0;
+		if (selected)
+		{
+			size = { (float)selectedImg->GetWidth(), (float)selectedImg->GetHeight() };
+			texture_id = (void*)static_cast<size_t>(selectedImg->GetID());
+		}
+		else
+		{
+			size = { (float)defaultImg->GetWidth(), (float)defaultImg->GetHeight() };
+			texture_id = (void*)static_cast<size_t>(defaultImg->GetID());
+		}
+
+
+		if (window->SkipItems)
+			return false;
+		const ImRect bb(window->DC.CursorPos, { window->DC.CursorPos.x + size.x + padding.x * 2, window->DC.CursorPos.y + size.y + padding.y * 2 });
+
+		
+
+		ImGui::ItemSize(bb);
+		if (!ImGui::ItemAdd(bb, id))
+			return false;
+
+		bool hovered, held;
+		bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+		// Render
+		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+		ImVec4 selectedCol = { 0.980f, 0.768f, 0.509f, 1 };
+		ImVec4 emptyCol = { 0.1f, 0.1f, 0.1f, 1 };
+		hovered ? emptyCol = { 0.2f, 0.2f, 0.2f, 1 } : emptyCol;
+
+		//ImVec4 hoverCol = { 0.4f, 0.4f, 0.4f, 1 };
+
+		ImGui::RenderNavHighlight(bb, id);
+		//ImGui::RenderFrame(bb.Min, bb.Max, ImGui::GetColorU32(selectedCol), true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+
+		//window->DrawList->AddRectFilled({ bb.Min.x + padding.x, bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, ImGui::GetColorU32(emptyCol));
+		
+		if (bg_col.w > 0.0f)
+			window->DrawList->AddRectFilled({ bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, ImGui::GetColorU32(bg_col));
+		if(hovered && !selected)
+			window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32({ 0.980f, 0.768f, 0.509f, 1.f }));
+		else
+			window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
+
+		ImVec2 textPos = { bb.Min.x + size.x * 0.35f, bb.Min.y + size.y * 0.25f };
+		ImGui::PushFont(FONT_TURN);
+		window->DrawList->AddText(textPos, ImGui::GetColorU32({ 1,1,1,1 }), actionName.c_str());
+		ImGui::PopFont();
+		return pressed;
+	}
+
+	bool UIActionButton(string actionName, string labelID, bool selected, const ImVec2& uv0, const ImVec2& uv1 , int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = g.CurrentWindow;
+		if (window->SkipItems)
+			return false;
+
+		// Default to using texture ID as ID. User can still push string/integer prefixes.
+		ImGui::PushID(labelID.c_str());
+		const ImGuiID id = window->GetID("#image");
+		ImGui::PopID();
+
+		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
+		return UIActionButtonEx(id, actionName, selected, uv0, uv1, padding, bg_col, tint_col);
+	}
+
+
 	void CharacterTurn(Instance& instance, Entity id, const ImVec2 pos, bool selected)
 	{
 		auto window = ImGui::GetWindowDrawList();
@@ -2688,11 +2766,23 @@ namespace Tempest::UI
 			window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 			ImGui::PopFont();
 		}
-			
+	}
 
-		
-		
+	void ActionUI(const ImVec2 pos, string title)
+	{
+		auto window = ImGui::GetWindowDrawList();
+		auto windowPos = ImGui::GetCurrentWindow()->Pos;
+		auto actionImg = tex_map["Assets/ActionBackdrop.png"];
 
+		ImVec2 topleft = { pos.x - actionImg->GetWidth(), pos.y };
+		ImVec2 Min = { windowPos.x + topleft.x, windowPos.y + topleft.y };
+		ImVec2 Max = { Min.x + actionImg->GetWidth(), Min.y + actionImg->GetHeight() };
+		ImVec2 titlePos = { Min.x + actionImg->GetWidth() * 0.18f, Min.y + actionImg->GetHeight() * 0.08f };
+
+		window->AddImage((void*)static_cast<size_t>(actionImg->GetID()), Min, Max);
+		ImGui::PushFont(FONT_TURN);
+		window->AddText(titlePos, ImGui::GetColorU32({ 0,0,0,1 }), title.c_str());
+		ImGui::PopFont();
 	}
 }
 
