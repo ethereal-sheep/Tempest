@@ -2626,5 +2626,73 @@ namespace Tempest::UI
 		
 
 	}
+
+	void CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos)
+	{
+		auto window = ImGui::GetWindowDrawList();
+		auto windowPos = ImGui::GetCurrentWindow()->Pos;
+
+
+		ImVec2 Min = { windowPos.x + pos.x, windowPos.y + pos.y };
+
+
+		auto character = instance.ecs.get_if<tc::Character>(id);
+
+		auto selectedImg = tex_map["Assets/CharacterBackdrop.png"];
+		auto characterImg = tex_map["Assets/Placeholder_Character.png"];
+		
+		
+		ImVec2 charImgMax = { Min.x + characterImg->GetWidth(), Min.y + characterImg->GetHeight() };
+		ImVec2 selectedMin = { Min.x, Min.y + characterImg->GetHeight() * 0.45f };
+		ImVec2 selectedMax = { selectedMin.x + selectedImg->GetWidth(), selectedMin.y + selectedImg->GetHeight() };
+
+		window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax);
+		window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, charImgMax);
+
+		
+		
+		ImVec2 namePos = { selectedMin.x + selectedImg->GetWidth() * 0.55f, selectedMin.y + selectedImg->GetHeight() * 0.08f };
+		ImVec2 hpPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.3f };
+		ImVec2 atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
+		ImVec2 defPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.7f };
+
+		
+
+		if (character)
+		{
+			ImGui::PushFont(FONT_TURN);
+			window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
+			ImGui::PopFont();
+
+			ImGui::PushFont(FONT_OPEN);
+			string str = "  HP  " + std::to_string(character->get_stat(0));
+			window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
+			str = "ATK  " + std::to_string(character->get_stat(1));
+			window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+			str = "DEF  " + std::to_string(character->get_stat(2));
+			window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+			ImGui::PopFont();
+		}	
+		else
+		{
+			ImGui::PushFont(FONT_TURN);
+			window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
+			ImGui::PopFont();
+
+			ImGui::PushFont(FONT_OPEN);
+			string str = " HP  NAN";
+			window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
+			str = "ATK  NAN" + std::to_string(character->get_stat(1));
+			window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+			str = "DEF  NAN" + std::to_string(character->get_stat(2));
+			window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+			ImGui::PopFont();
+		}
+			
+
+		
+		
+
+	}
 }
 
