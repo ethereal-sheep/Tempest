@@ -173,17 +173,28 @@ namespace Tempest
 				// graph name, need child here
 				if (id)
 				{
-					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.1f });
 					ImGui::PushFont(FONT_HEAD);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
-					ImGui::InputText("##testing", &temp_graph.name);
+					ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
+					ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.f,0.f,0.f, 0.f });
+					const ImVec2 text_size{ ImGui::CalcTextSize(temp_graph.name.c_str()) };
+					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.8f - text_size.x * 0.5f, viewport->Size.y * 0.1f });
+					if (ImGui::BeginChild("Editing name", ImVec2{ text_size.x * 2.0f, text_size.y + 5.0f}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
+					{
+						ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
+						ImGui::PushItemWidth(text_size.x * 2.0f);
+						ImGui::InputText("##testing", &temp_graph.name);
+						ImGui::PopItemWidth();
+						ImGui::PopStyleColor();
+					}
+					ImGui::EndChild();
+					ImGui::PopStyleVar();
 					ImGui::PopStyleColor();
 					ImGui::PopFont();
 				}
 
 				const ImVec2 ChildSize{ viewport->Size.x * 0.15f, viewport->Size.y * 0.75f };
 				ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.5f - ChildSize.y * 0.5f});
-				if (ImGui::BeginChild("Editing graph", ChildSize, false))
+				if (ImGui::BeginChild("Editing graph", ChildSize, true))
 				{
 					ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
 					ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
@@ -205,7 +216,7 @@ namespace Tempest
 					ImVec2 cursor{ ImGui::GetCursorPosX() + 120.0f, ImGui::GetCursorPosY() + 20.0f };
 
 					// render the buttons here
-					if (ImGui::BeginChild("Graph content", ImVec2{ ImGui::GetContentRegionAvailWidth() * 1.0f, ImGui::GetContentRegionAvail().y * 0.92f}, true))
+					if (ImGui::BeginChild("Graph content", ImVec2{ ImGui::GetContentRegionAvailWidth() * 1.0f, ImGui::GetContentRegionAvail().y * 0.92f}, false))
 					{
 						if (id != UNDEFINED)
 							instance.ecs.get<tc::Graph>(id).g = temp_graph;
