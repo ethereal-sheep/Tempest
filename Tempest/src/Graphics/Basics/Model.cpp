@@ -114,15 +114,9 @@ namespace Tempest
 		//// recursive into the scene graph
 		//ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, materials);
 
-		std::vector<glm::vec3> pos;
-		std::vector<glm::vec3> norm;
-		std::vector<glm::vec2> tex;
-		std::vector<glm::ivec3> faces;
-		std::vector<std::string> textures;
-		std::vector<uint32_t> sizes;
-		std::vector<uint32_t> sides;
-		std::vector<uint32_t> mats;
-		std::vector<Material> mm;
+		tpair<Vertices, Indices> vi;
+		Vertices& vertex = vi.first;
+		Indices& index = vi.second;
 		Material m;
 
 		std::string temp_x, temp_y, temp_z;
@@ -142,13 +136,13 @@ namespace Tempest
 		while (std::getline(in_file, line))
 		{
 			std::istringstream file_line{ line };
-			glm::vec3 r;
+			glm::vec3 pos;
 			file_line >> prefix;
 			if (prefix == "v" && line != "")
 			{
-				file_line >> r.x >> r.y >> r.z;
+				file_line >> pos.x >> pos.y >> pos.z;
 
-				pos.push_back(r);
+				vertex.position.push_back(pos);
 			}
 
 			else if (prefix == "n" && line != "")
@@ -156,7 +150,7 @@ namespace Tempest
 				glm::vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
 
-				norm.push_back(temp);
+				vertex.normal.push_back(temp);
 			}
 
 			else if (prefix == "t" && line != "")
@@ -164,7 +158,7 @@ namespace Tempest
 				glm::vec2 temp;
 				file_line >> temp.x >> temp.y;
 
-				tex.push_back(temp);
+				vertex.texCoord.push_back(temp);
 			}
 
 			else if (prefix == "f" && line != "")
@@ -172,7 +166,9 @@ namespace Tempest
 				glm::ivec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
 
-				faces.push_back(temp);
+				index.push_back(temp.x);
+				index.push_back(temp.y);
+				index.push_back(temp.z);
 			}
 
 			else if (prefix == "p" && line != "")
@@ -193,33 +189,6 @@ namespace Tempest
 					LOG_WARN("Texture File Not Found!");
 				}
 				
-			}
-
-			else if (prefix == "m" && line != "")
-			{
-				unsigned int temp;
-				file_line >> temp;
-
-				sizes.push_back(temp);
-
-			}
-
-			else if (prefix == "w" && line != "")
-			{
-				unsigned int temp;
-				file_line >> temp;
-
-				sides.push_back(temp);
-
-			}
-
-			else if (prefix == "g" && line != "")
-			{
-				unsigned int temp;
-				file_line >> temp;
-
-				mats.push_back(temp);
-
 			}
 
 			else if (prefix == "Ambient" && line != "")
@@ -298,64 +267,19 @@ namespace Tempest
 				file_line >> temp;
 				m.Opacity = temp;
 			}
-			//glm::vec3 n = normalize(pos);
-			//glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
-			//glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
-			//
-			//glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
-			//glm::vec3 b = cross(t, n);
-			//
-			//vertex.tangent.emplace_back(t);
-			//vertex.bitangent.emplace_back(b);
+
+			glm::vec3 n = normalize(pos);
+			glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
+			glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
+			
+			glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
+			glm::vec3 b = cross(t, n);
+
+			vertex.tangent.emplace_back(t);
+			vertex.bitangent.emplace_back(b);
 		}
-		mm.push_back(m);
 
-		int count = 0;
-		int joints = 0;
-		for (int i = 0; i < sizes.size(); ++i)
-		{
-			tpair<Vertices, Indices> vi;
-			Vertices& vertex = vi.first;
-			Indices& index = vi.second;
-
-			int ind = sizes[i] + count;
-			for (int j = count; j < ind; ++j)
-			{
-				vertex.position.push_back(pos[j]);
-				vertex.normal.push_back(norm[j]);
-				vertex.texCoord.push_back(tex[j]);
-				glm::vec3 n = normalize(pos[j]);
-				glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
-				glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
-				
-				glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
-				glm::vec3 b = cross(t, n);
-				
-				vertex.tangent.emplace_back(t);
-				vertex.bitangent.emplace_back(b);
-			}
-			 
-			for (int j = joints; j < joints + sides[i]; ++j)
-			{
-				index.push_back(faces[j].x);
-				index.push_back(faces[j].y);
-				index.push_back(faces[j].z);
-			}
-
-			joints += sides[i];
-			count += sizes[i];
-
-			if (mats[i] >= mm.size())
-			{
-				Material t;
-				t.BaseTexture = nullptr;
-				m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(t));
-			}
-
-			else
-				m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(m));
-		}
-		//m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(m));
+		m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(m));
 	}
 
 	/*Model::Model(Model&& model)

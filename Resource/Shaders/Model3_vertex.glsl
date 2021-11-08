@@ -21,7 +21,7 @@ uniform mat4 NormMatrix;
 void main()
 {
 	vs_position = (ModelMatrix * vec4(vertex_position, 1.0)).xyz;
-	vs_normal = normal.xzy; 
+	vs_normal = normalize(NormMatrix * vec4(normalize(vertex_position), 1.0)).xyz; 
 	vs_color = normal;
 	vs_tex = texCoord;
 	FragPosLightSpace = lightSpaceMatrix * vec4(vs_position, 1.0);
