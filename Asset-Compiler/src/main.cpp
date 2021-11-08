@@ -22,7 +22,10 @@ struct Mesh
 	std::vector<glm::vec3> pos;
 	std::vector<glm::vec3> norm;
 	std::vector<glm::vec2> tex;
-	std::vector<glm::ivec3> indices;
+	std::vector<glm::ivec3> indices;	
+	std::vector<unsigned int> nvertices;
+	std::vector<unsigned int> nfaces;
+	std::vector<unsigned int> matindex;
 
 	std::vector<std::string> textures;
 
@@ -69,14 +72,16 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 
 		//std::cout << "Normals: " << pNormal->x << ", " << pNormal->y << ", " << pNormal->z << std::endl;
 	}
+	m.nvertices.push_back(mesh->mNumVertices);
 
 	for (size_t i = 0; i < mesh->mNumFaces; ++i)
 	{
 		const aiFace& face = mesh->mFaces[i];
 		m.indices.push_back(glm::ivec3(offset + (int32_t)face.mIndices[0], offset + (int32_t)face.mIndices[1], offset + (int32_t)face.mIndices[2]));
 	}
-
-	offset += mesh->mNumVertices;
+	m.nfaces.push_back(mesh->mNumFaces);
+	m.matindex.push_back(mesh->mMaterialIndex);
+	//offset += mesh->mNumVertices;
 }
 
 /*
@@ -148,6 +153,33 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 		{
 			std::stringstream ss;
 			ss << "p ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.nvertices)
+		{
+			std::stringstream ss;
+			ss << "m ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.nfaces)
+		{
+			std::stringstream ss;
+			ss << "w ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.matindex)
+		{
+			std::stringstream ss;
+			ss << "g ";
 			ss << i;
 
 			file << ss.str() << "\n";
