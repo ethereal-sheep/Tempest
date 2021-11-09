@@ -3000,7 +3000,7 @@ namespace Tempest::UI
 		ImGui::PopFont();
 	}
 
-	void AttackSuccessUI(const ImVec2 pos, int successVal)
+	void AttackSuccessUI(string name, const ImVec2 pos, int successVal)
 	{
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
@@ -3012,7 +3012,7 @@ namespace Tempest::UI
 		window->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), arrowMin, arrowMax);
 
 		ImGui::PushFont(FONT_HEAD);
-		string atkStr = "Attack";
+		string atkStr = name.c_str();
 		auto atkTextSize = ImGui::CalcTextSize(atkStr.c_str());
 		ImVec2 atkTextPos = { arrowMin.x, arrowMin.y - atkTextSize.y *0.5f };
 		window->AddText(atkTextPos, ImGui::GetColorU32({ 1,1,1,1 }), atkStr.c_str());
