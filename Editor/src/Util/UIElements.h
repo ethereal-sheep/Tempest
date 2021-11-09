@@ -163,6 +163,8 @@ namespace Tempest::UI
 	// Beige Button for Select Sequence Btn
 	bool UIButton_Simulate(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 
+	bool UIButton_EndTurn(ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
 	//return (IsButtonClick, IsDeleteClicked)
 	std::pair<bool, bool> UIButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected);
 
@@ -174,6 +176,7 @@ namespace Tempest::UI
 	bool UICheckBox_1(const char* label, bool* v);
 
 	std::pair<bool, bool> UICharButton_WithDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
+	bool UICharButton_ArrowEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
 	bool UICharButton_NoDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
 	bool UICharButton_ToggleEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
 	bool UIActionButtonEx (ImGuiID id, string actionName, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
@@ -184,6 +187,7 @@ namespace Tempest::UI
 	label - ID of the delete Btn (MUST BE UNIQUE)
 	*/
 	std::pair<bool, bool> UICharButton_WithDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+	bool UICharButton_Arrow(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 	bool UICharButton_NoDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 	bool UICharButton_Toggle(ImTextureID user_texture_id, const ImVec2& size, string charName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 	bool UIActionButton(string actionName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
