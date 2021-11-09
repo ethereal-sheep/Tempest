@@ -40,6 +40,7 @@ static const float global_font_scale = 5.f / 6.f;
 static const float global_icon_scale = 13.f / 15.f;
 
 static const float open_text_size = 24.f;
+static const float open_text_size30 = 30.f;
 static const float open_text_turn_size = 36.f;
 
 static const float header_text_size = 48.f;
@@ -62,6 +63,7 @@ inline auto font_button() { return ImGui::GetIO().Fonts->Fonts[4]; } // button
 inline auto font_subbutton() { return ImGui::GetIO().Fonts->Fonts[5]; } // subbutton
 inline auto font_open() { return ImGui::GetIO().Fonts->Fonts[6]; } // opensans
 inline auto font_open_turn() { return ImGui::GetIO().Fonts->Fonts[7]; } // opensans for turn order
+inline auto font_open_30() { return ImGui::GetIO().Fonts->Fonts[8]; } // opensans for size 30
 
 
 
@@ -73,6 +75,7 @@ inline auto font_open_turn() { return ImGui::GetIO().Fonts->Fonts[7]; } // opens
 #define FONT_SBTN		font_subbutton()
 #define FONT_OPEN		font_open()
 #define FONT_TURN		font_open_turn()
+#define FONT_OPEN_30	font_open_30()
 
 #define FONT_DEFAULT	FONT_PARA
 #define FONT_BOLD		FONT_BODY
