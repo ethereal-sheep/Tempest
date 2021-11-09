@@ -136,14 +136,14 @@ namespace Tempest
 				UI::UIButton_EndTurn({ 300.f,300.f }, { 0,0 }, FONT_PARA, true);
 
 
-				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,300.f });
-				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f },true);
-				UI::AttackSuccessUI("Defend",{ 300.f, 400.f }, 50);
+				UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f });
+				UI::CharacterTurn(instance, UNDEFINED, { 0.f,500.f },true);
+				/*UI::AttackSuccessUI("Defend",{ 300.f, 400.f }, 50);
 				UI::CharacterTurnData(instance, 3, { 0.f,500.f }, false, true);
 				if (UI::CharacterTurnData(instance, 3, { ImGui::GetWindowWidth(),500.f }, true, true))
 				{
 					LOG("CLICKED");
-				}
+				}*/
 				static bool selected = false;
 				/*auto pos = ImGui::GetCurrentWindow()->Pos;
 

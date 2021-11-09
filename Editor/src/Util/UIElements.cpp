@@ -2846,12 +2846,16 @@ namespace Tempest::UI
 		
 		
 		auto character = instance.ecs.get_if<tc::Character>(id);
+		auto characterImg = tex_map["Assets/Unit_Black.png"];
 
 		if (selected)
 		{
 			auto selectedImg = tex_map["Assets/TurnSelected.png"];
 			ImVec2 selectedMax = { Min.x + selectedImg->GetWidth(), Min.y + selectedImg->GetHeight() };
+			ImVec2 characterImgMin = { Min.x + selectedImg->GetWidth() * 0.1f, Min.y };
+			ImVec2 characterImgMax = { characterImgMin.x + characterImg->GetWidth(), characterImgMin.y + characterImg->GetHeight() };
 			window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), Min, selectedMax);
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), characterImgMin, characterImgMax);
 			ImVec2 TextStartPos = { Min.x + selectedImg->GetWidth() * 0.53f, Min.y + selectedImg->GetHeight() * 0.17f };
 			ImGui::PushFont(FONT_OPEN);
 
@@ -2866,7 +2870,9 @@ namespace Tempest::UI
 		{
 			auto unselectedImg = tex_map["Assets/TurnUnselected.png"];
 			ImVec2 unselectedMax = { Min.x + unselectedImg->GetWidth(), Min.y + unselectedImg->GetHeight() };
+			ImVec2 characterImgMax = { Min.x + characterImg->GetWidth(), Min.y + characterImg->GetHeight() };
 			window->AddImage((void*)static_cast<size_t>(unselectedImg->GetID()), Min, unselectedMax);
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, characterImgMax);
 			ImVec2 TextStartPos = { Min.x + unselectedImg->GetWidth() * 0.45f, Min.y + unselectedImg->GetHeight() * 0.17f };
 			ImGui::PushFont(FONT_OPEN);
 
