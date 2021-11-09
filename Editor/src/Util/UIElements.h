@@ -195,7 +195,7 @@ namespace Tempest::UI
 	// Pos is from top left 
 	void CharacterTurn(Instance& instance, Entity id, const ImVec2 pos, bool selected = false);
 	// Pos is from top left 
-	void CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos, bool isRightSide = false);
+	bool CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos, bool isRightSide = false, bool isRoll = false);
 
 
 	// Pos is from top right
