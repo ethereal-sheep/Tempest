@@ -12,6 +12,8 @@
 #include "TMath.h"
 #include "Font.h"
 #include <Tempest/src/Core.h>
+#include <Tempest/src/ECS/Entity.h>
+#include "Instance/Instance.h"
 
 namespace Tempest::UI
 {
@@ -34,12 +36,10 @@ namespace Tempest::UI
 
 	void HelpMarker(const char* str);
 
-	bool BeginNodeCombo(const char* label, const char* preview_value, ImGuiComboFlags flags = 0);
-	bool BeginNodeComboPopup(ImGuiID popup_id, const ImRect& bb, ImGuiComboFlags flags);
-
 	void Tooltip(const char* label, const char* str, bool enabled = true);
 
-	bool ConfirmDeletePopup(const char* str);
+	bool ConfirmDeletePopup(const char* popupName, string str);
+	bool ConfirmDeletePopup_DefineStat(const char* popupName);
 
 	void ShowLabel(const char* label, ImColor color);
 
@@ -78,7 +78,7 @@ namespace Tempest::UI
 	// Pressing the button will reset the value
 	std::pair<bool, bool> DragFloat3ColorBox(const char* label, const char* ID, ImVec2 padding, float v[3], float resetValue = 0, float v_speed = 1.0f,
 		float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", ImGuiSliderFlags flags = 0);
-	
+
 	// Draw DragFloat3 with X Y Z Colored button
 	// Text Display will be on the Left
 	// Pressing the button will reset the value
@@ -125,7 +125,7 @@ namespace Tempest::UI
 		float step = 0.0f, float step_fast = 0.0f, const char* format = "%.3f", ImGuiInputTextFlags flags = 0);
 
 	std::pair<bool, bool> ColorEdit4(const char* label, const char* ID, ImVec2 padding, float col[4], ImGuiColorEditFlags flags = 0);
-	
+
 	std::pair<bool, bool> ColorEdit3(const char* label, const char* ID, ImVec2 padding, float col[3], ImGuiColorEditFlags flags = 0);
 
 	// Draw Checkbox
@@ -135,16 +135,39 @@ namespace Tempest::UI
 	// Draw InputText
 	// Text Display will be on the Left
 	bool InputText(const char* label, const char* ID, ImVec2 padding, std::string* str, ImGuiInputTextFlags flags = 0,
-			ImGuiInputTextCallback callback = NULL, void* user_data = NULL);
+		ImGuiInputTextCallback callback = NULL, void* user_data = NULL);
 
 	void SubHeader(const char* str);
 	void Header_1(const char* str);
 	void Header_2(const char* str);
 	// Button size will Scale with Text
-	bool UIButton_1(string unselected, string hover,ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+	bool UIButton_1(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 
 	// Button size will not scale with Text
-	bool UIButton_2(string unselected, string hover,ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+	// Default Btn Color
+	bool UIButton_2(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
+	// Button size will not scale with Text
+	// Blueish Button for Select Weapon Btn
+	bool UIButton_Weapon(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
+	// Button size will not scale with Text
+	// Greenish Button for Select Action Btn
+	bool UIButton_Action(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
+	// Button size will not scale with Text
+	// Beige Button for Select Sequence Btn
+	bool UIButton_Sequence(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
+	// Button size will not scale with Text
+	// Beige Button for Select Sequence Btn
+	bool UIButton_Simulate(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
+	bool UIButton_EndTurn(ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+
+	//return (IsButtonClick, IsDeleteClicked)
+	std::pair<bool, bool> UIButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected);
+
 	void AddUnderline(ImU32 col, ImVec2 min = { 0, 0 }, ImVec2 max = { 0, 0 });
 	bool UISelectable(const char* label, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	bool UISelectable(const char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
@@ -152,6 +175,34 @@ namespace Tempest::UI
 	bool UIMapSelectable(ImTextureID tex, const char* name, const char* date, const char* unitData, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	bool UICheckBox_1(const char* label, bool* v);
 
+	std::pair<bool, bool> UICharButton_WithDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
+	bool UICharButton_ArrowEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
+	bool UICharButton_NoDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
+	bool UICharButton_ToggleEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
+	bool UIActionButtonEx (ImGuiID id, string actionName, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
+	/*
+	user_texture_id - Id of texture
+	size - Size of Img
+	charName - Display Name for the Character
+	label - ID of the delete Btn (MUST BE UNIQUE)
+	*/
+	std::pair<bool, bool> UICharButton_WithDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+	bool UICharButton_Arrow(ImTextureID user_texture_id, const ImVec2& size, string charName, string label, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+	bool UICharButton_NoDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+	bool UICharButton_Toggle(ImTextureID user_texture_id, const ImVec2& size, string charName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+	bool UIActionButton(string actionName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+
+	// Pos is from top left 
+	void CharacterTurn(Instance& instance, Entity id, const ImVec2 pos, bool selected = false);
+	// Pos is from top left 
+	bool CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos, bool isRightSide = false, bool isRoll = false);
+
+
+	// Pos is from top right
+	void ActionUI(const ImVec2 pos, string title);
+
+	// Pos is from Middle of arrow 
+	void AttackSuccessUI(string name, const ImVec2 pos, int successVal);
 
 }
 

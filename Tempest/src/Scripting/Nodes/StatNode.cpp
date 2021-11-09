@@ -86,7 +86,7 @@ namespace Tempest
                         {
                             auto& stat = character->get_stat(sid);
 
-                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                             {
                                 return stat + weapon->get_stat(sid);
                             }
@@ -111,7 +111,7 @@ namespace Tempest
                         {
                             auto& stat = character->get_stat(sid);
 
-                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                             {
                                 return stat + weapon->get_stat(sid);
                             }
@@ -298,7 +298,7 @@ namespace Tempest
 
                         if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                         {
-                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                             {
                                 auto sid = weapon->get_main_stat();
                                 return  weapon->get_stat(sid) + character->get_stat(sid);
@@ -321,7 +321,7 @@ namespace Tempest
 
                         if (auto character = instance.ecs.get_if<tc::Character>(def_e))
                         {
-                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                            if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                             {
                                 auto sid = weapon->get_main_stat();
                                 return  weapon->get_stat(sid) + character->get_stat(sid);
@@ -442,7 +442,7 @@ namespace Tempest
                                 if (auto character = instance.ecs.get_if<tc::Character>(own_e))
                                 {
                                     auto& stat = character->get_stat(sid);
-                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                     {
                                         return stat + weapon->get_stat(sid);
                                     }
@@ -458,7 +458,7 @@ namespace Tempest
                                 if (auto character = instance.ecs.get_if<tc::Character>(own_e))
                                 {
                                     auto& stat = character->get_stat(sid);
-                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                     {
                                         return stat + weapon->get_stat(sid);
                                     }
@@ -477,7 +477,7 @@ namespace Tempest
                                 if (auto character = instance.ecs.get_if<tc::Character>(own_e))
                                 {
                                     auto& stat = character->get_stat(sid);
-                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                     {
                                         return stat + weapon->get_stat(sid);
                                     }
@@ -493,7 +493,7 @@ namespace Tempest
                                 if (auto character = instance.ecs.get_if<tc::Character>(own_e))
                                 {
                                     auto& stat = character->get_stat(sid);
-                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                    if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                     {
                                         return stat + weapon->get_stat(sid);
                                     }
@@ -584,7 +584,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             return  weapon->get_stat(sid) + character->get_stat(sid);
@@ -599,7 +599,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             return  weapon->get_stat(sid) + character->get_stat(sid);
@@ -617,7 +617,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             return  weapon->get_stat(sid) + character->get_stat(sid);
@@ -632,7 +632,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             return  weapon->get_stat(sid) + character->get_stat(sid);
@@ -658,7 +658,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             auto& stat = character->get_stat(sid);
@@ -674,7 +674,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             auto& stat = character->get_stat(sid);
@@ -693,7 +693,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             auto& stat = character->get_stat(sid);
@@ -709,7 +709,7 @@ namespace Tempest
 
                                     if (auto character = instance.ecs.get_if<tc::Character>(atk_e))
                                     {
-                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->weapon))
+                                        if (auto weapon = instance.ecs.get_if<tc::Weapon>(character->chosen_weapon))
                                         {
                                             auto sid = weapon->get_main_stat();
                                             auto& stat = character->get_stat(sid);

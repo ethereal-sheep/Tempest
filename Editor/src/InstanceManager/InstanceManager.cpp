@@ -26,6 +26,7 @@
 #include "Window/Test/test_window2.h"
 #include "Window/Test/test_window3.h"
 #include "Window/Test/test_window4.h"
+#include "Window/Test/Test_UIWindow.h"
 
 
 // filebrowsers (maybe dn)
@@ -43,12 +44,20 @@
 #include "Window/Popup/SaveCurrentBeforeOpenPopup.h"
 #include "Window/Popup/BottomRightOverlayPopup.h"
 #include "Window/Popup/DefineStatsPopup.h"
+#include "Window/Popup/SimulateSelectionPopup.h"
+#include "Window/Popup/QuickMenuPopup.h" 
+#include "Window/Popup/AddWeaponPopup.h"
+#include "Window/Popup/AddUnitsPopup.h"
+#include "Window/Popup/AddActionPopup.h"
+#include "Window/Popup/SelectSequencePopup.h"
+
 
 #include "Window/Util/SimulationBuilder.h"
 #include "Window/Util/SimulationStart.h"
 
 // Overlays
 #include "Window/Overlay/UnitSheetOverlay.h"
+#include "Window/Overlay/WeaponSheetOverlay.h"
 #include "Window/Overlay/SimulateOverlay.h"
 #include "Window/Overlay/CombatModeOverlay.h"
 #include "Window/Overlay/ConflictResOverlay.h"
@@ -98,12 +107,16 @@ namespace Tempest
 		instance->register_window<ViewportWindow>();
 		
 		instance->register_window<PrefabList>();
+		
 		instance->register_window<AssetManagerWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 		instance->register_window<HierarchyWindow>()->visible = false;
 		instance->register_window<InspectorWindow>()->visible = false;
+
 		instance->register_window<test_window>()->visible = false;
 		instance->register_window<test_window2>()->visible = false;
+		instance->register_window<Test_UIWindow>();
+		instance->register_window<test_window3>()->visible = false;
 
 		instance->register_always<EditTimeMenuBar>();
 		instance->register_always<NewProjectPopup>();
@@ -113,12 +126,19 @@ namespace Tempest
 		instance->register_always<ImportAssetPopup>();
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 		instance->register_always<DefineStatsPopup>();
+		instance->register_always<SimulateSelectionPopup>();
+		instance->register_always<QuickMenuPopup>();
+		instance->register_always<AddWeaponPopup>();
+		instance->register_always<AddUnitsPopup>();
+		instance->register_always<AddActionPopup>();
+		instance->register_always<SelectSequencePopup>();
 
 
 		instance->register_always<SaveBrowser>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
 		instance->register_always<UnitSheetOverlay>();
+		instance->register_always<WeaponSheetOverlay>();
 		instance->register_always<SimulateOverlay>();
 		instance->register_always<SimulateResultOverlay>();
 		instance->register_always<CombatModeOverlay>();

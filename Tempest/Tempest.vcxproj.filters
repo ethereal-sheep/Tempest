@@ -214,6 +214,8 @@
     <ClInclude Include="src\ECS\Util\prototype_container.h" />
     <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
     <ClInclude Include="src\ECS\Scene.h" />
+    <ClInclude Include="src\ECS\Rttr_Register.h" />
+    <ClInclude Include="src\ECS\Rttr_reg.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

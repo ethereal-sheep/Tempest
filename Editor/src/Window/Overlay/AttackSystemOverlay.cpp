@@ -18,16 +18,54 @@ namespace Tempest
 {
 	void AttackSystemOverlay::open_popup(const Event& e)
 	{
-		auto a = event_cast<OpenActionGraphTrigger>(e);
+		auto a = event_cast<OpenGraphTrigger>(e);
+		OverlayOpen = true;
+		type = a.type;
+
+		id = UNDEFINED;
 
 		if (a.instance.ecs.has<tc::Graph>(a.id))
 		{
 			id = a.id;
-			OverlayOpen = true;
 			temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
 		}
 
+		else
+		{
+			if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+			{
+				for (auto thisGraph : a.instance.ecs.view<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
+				{
+					id = thisGraph;
+					temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
+					break;
+				}
+			}
+			
+			else
+			{
+				for (auto thisGraph : a.instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
+				{
+					id = thisGraph;
+					temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
+					break;
+				}
+			}
+		}
 
+		if (a.type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+		{
+			overlay_title = "Editing Action";
+			sidebar_title = "ACTIONS";
+		}
+
+		else
+		{
+			overlay_title = "Editing Sequence";
+			sidebar_title = "SEQUENCES";
+		}
+
+		ax::NodeEditor::NavigateToContent();
 	}
 	void AttackSystemOverlay::show(Instance& instance)
 	{
@@ -44,80 +82,264 @@ namespace Tempest
 				const float title_top_padding = 40.f;
 				const float title_left_padding = 40.f;
 				const float title_bottom_padding = 10.f;
-				const float graph_context_height = ImGui::GetWindowHeight() * 0.7f;
+				const float graph_context_height = viewport->Size.y * 0.95f;
 
 				//auto& g = instance.ecs.get<tc::Graph>(id);
 				
-				if (ImGui::BeginTable("graph header table", 3))
+				//if (ImGui::BeginTable("graph header table", 3))
+				//{
+				//	ImGui::TableNextRow();
+
+				//	ImGui::TableSetColumnIndex(1);
+				//	UI::Header_1("Attack System");
+
+				//	ImGui::PushFont(FONT_HEAD);
+
+				//	ImGui::TableSetColumnIndex(0);
+				//	ImGui::Dummy({ 0.1f, title_top_padding });
+				//	ImGui::Dummy({ title_left_padding, 0.1f });
+				//	ImGui::SameLine();
+				//	static string test = "Testing";
+				//	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
+				//	ImGui::InputText("##testing", &temp_graph.name);
+				//	ImGui::PopStyleColor();
+				//	//ImGui::Text(g.g.get_name().c_str());
+				//	ImGui::PopFont();
+
+
+				//	ImGui::TableNextRow();
+				//	ImGui::TableSetColumnIndex(0);
+				//	ImGui::Dummy({ 0.1f, title_bottom_padding });
+
+				//	ImGui::EndTable();
+				//}
+				//ImGui::Separator();
+
+				auto tex = tex_map["Assets/GraphBG.png"];
 				{
-					ImGui::TableNextRow();
 
-					ImGui::TableSetColumnIndex(1);
-					UI::Header_1("Attack System");
-
-					ImGui::PushFont(FONT_HEAD);
-
-					ImGui::TableSetColumnIndex(0);
-					ImGui::Dummy({ 0.1f, title_top_padding });
-					ImGui::Dummy({ title_left_padding, 0.1f });
-					ImGui::SameLine();
-					static string test = "Testing";
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
-					ImGui::InputText("##testing", &temp_graph.name);
-					ImGui::PopStyleColor();
-					//ImGui::Text(g.g.get_name().c_str());
-					ImGui::PopFont();
-
-
-					ImGui::TableNextRow();
-					ImGui::TableSetColumnIndex(0);
-					ImGui::Dummy({ 0.1f, title_bottom_padding });
-
-					ImGui::EndTable();
+					ImVec2 Min{ 0,0 };
+					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
 				}
-
-
-				ImGui::Separator();
 
 				// draw the context
 				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				draw_context(instance, graph_context_height);
 				ImGui::PopStyleColor();
-				ImGui::Separator();
+				//ImGui::Separator();
 
 
-				float button_y = ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f;
-				// first button pos
-				ImVec2 pos1 = {ImGui::GetContentRegionAvailWidth() - 480.f, button_y};
+				//float button_y = ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f;
+				//// first button pos
+				//ImVec2 pos1 = {ImGui::GetContentRegionAvailWidth() - 480.f, button_y};
 
-				// second button pos
-				ImVec2 pos2 = { ImGui::GetContentRegionAvailWidth() - 300.f, button_y };
+				//// second button pos
+				//ImVec2 pos2 = { ImGui::GetContentRegionAvailWidth() - 300.f, button_y };
 
-				// third button pos
-				ImVec2 pos3 = { ImGui::GetContentRegionAvailWidth() - 120.f, button_y };
+				//// third button pos
+				//ImVec2 pos3 = { ImGui::GetContentRegionAvailWidth() - 120.f, button_y };
+
+				//if (UI::UIButton_2("Navigate to Content", "Navigate to Content", pos1, { 0.f, 10.f }, FONT_PARA))
+				//{
+				//	ax::NodeEditor::NavigateToContent();
+				//}
+				//if (UI::UIButton_2("Save & Close", "Save & Close", pos2, { 0.f, 10.f }, FONT_PARA))
+				//{
+				//	OverlayOpen = false;
+				//	instance.ecs.get<tc::Graph>(id).g = temp_graph;
+				//	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				//}
+
+				//if (UI::UIButton_2("Close", "Close", pos3, { 0.f, 10.f }, FONT_PARA))
+				//{
+				//	OverlayOpen = false;
+				////	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				//}
+
+				// title
+				ImGui::SetCursorPos(ImVec2{ 0,0 });
+				ImGui::Dummy(ImVec2{ 0.f, viewport->Size.y * 0.05f });
+				UI::SubHeader(overlay_title.c_str());
+				ImGui::Dummy(ImVec2{ 0.f, viewport->Size.y * 0.05f });
+
+				// side bar
+				const ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
+				ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 2.f);
+				ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+				ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
+				ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.06f,0.06f, 0.06f, 0.85f });
 
 
-
-				if (UI::UIButton_2("Navigate to Content", "Navigate to Content", pos1, { 0.f, 10.f }, FONT_PARA))
+				// graph name (got bug, first letter always hidden when entering new name)
+				if (id)
 				{
-					ax::NodeEditor::NavigateToContent();
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
+					ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.f,0.f,0.f, 0.f });
+					const ImVec2 text_size{ ImGui::CalcTextSize(temp_graph.name.c_str()) };
+					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.8f - text_size.x * 0.5f, viewport->Size.y * 0.1f });
+					if (ImGui::BeginChild("Editing name", ImVec2{ text_size.x * 2.0f, text_size.y + 5.0f}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
+					{
+						ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
+						ImGui::PushItemWidth(text_size.x * 2.0f);
+						ImGui::InputText("##testing", &temp_graph.name);
+						ImGui::PopItemWidth();
+						ImGui::PopStyleColor();
+					}
+					ImGui::EndChild();
+					ImGui::PopStyleVar();
+					ImGui::PopStyleColor();
+					ImGui::PopFont();
 				}
-				if (UI::UIButton_2("Save & Close", "Save & Close", pos2, { 0.f, 10.f }, FONT_PARA))
+
+				const ImVec2 ChildSize{ viewport->Size.x * 0.15f, viewport->Size.y * 0.75f };
+				ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.5f - ChildSize.y * 0.5f});
+				if (ImGui::BeginChild("Editing graph", ChildSize, true))
 				{
-					OverlayOpen = false;
-					instance.ecs.get<tc::Graph>(id).g = temp_graph;
-					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				}
+					ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+					ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
+					ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.35f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
+					ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+					ImVec4 textcol = { 0,0,0,1 };
+					if (!ImGui::IsWindowFocused())
+					{
+						col = { 0.980f, 0.768f, 0.509f, 0.7f };
+						textcol = { 0,0,0,0.7 };
+					}
 
-				if (UI::UIButton_2("Close", "Close", pos3, { 0.f, 10.f }, FONT_PARA))
+					ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+					ImGui::PushFont(FONT_OPEN);
+					ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), sidebar_title.c_str());
+					ImGui::PopFont();
+
+					ImGui::Dummy(ImVec2{0.f,25.0f});
+					ImVec2 cursor{ ImGui::GetCursorPosX() + 120.0f, ImGui::GetCursorPosY() + 20.0f };
+
+					// render the buttons here
+					if (ImGui::BeginChild("Graph content", ImVec2{ ImGui::GetContentRegionAvailWidth() * 1.0f, ImGui::GetContentRegionAvail().y * 0.92f}, false))
+					{
+						if (id != UNDEFINED)
+							instance.ecs.get<tc::Graph>(id).g = temp_graph;
+
+						unsigned i = 0;
+						if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+						{
+							for (auto current_graph : instance.ecs.view<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
+							{
+								auto& action = instance.ecs.get<tc::Graph>(current_graph);
+								auto PairResult = UI::UIButtonWithDelete(action.g.name, string("##Actiongraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 15, 20 }, FONT_PARA, id == current_graph);
+								if (PairResult.first)
+								{
+									id = current_graph;
+									temp_graph = action.g;
+								}
+
+								if (PairResult.second)
+								{
+									ImGui::OpenPopup(string("DeleteAction##" + std::to_string(i)).c_str());
+								}
+
+								if (UI::ConfirmDeletePopup(string("DeleteAction##" + std::to_string(i)).c_str(), "Delete this action?"))
+								{
+									instance.ecs.emplace<tc::Destroyed>(id);
+									id = UNDEFINED;
+								}
+
+								++i;
+							}
+						}
+
+						else
+						{
+							for (auto current_graph : instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
+							{
+								auto& sequence = instance.ecs.get<tc::Graph>(current_graph);
+								auto PairResult = UI::UIButtonWithDelete(sequence.g.name, string("##Sequencegraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 15, 20 }, FONT_PARA, id == current_graph);
+								if (PairResult.first)
+								{
+									id = current_graph;
+									temp_graph = sequence.g;
+								}
+								if (PairResult.second)
+								{
+									ImGui::OpenPopup(string("DeleteSequence##" + std::to_string(i)).c_str());
+								}
+
+								if (UI::ConfirmDeletePopup(string("DeleteSequence##" + std::to_string(i)).c_str(), "Delete this sequence?"))
+								{
+									instance.ecs.emplace<tc::Destroyed>(id);
+									id = UNDEFINED;
+								}
+
+								++i;
+							}
+						}
+
+						// create new graphs
+						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 80 }, { 150,-10 }, FONT_HEAD))
+						{
+							auto i = instance.ecs.create();
+
+							if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+							{
+								instance.ecs.emplace<tc::ActionGraph>(i);
+								instance.ecs.emplace<tc::Graph>(i, "ACTION", graph_type::action);
+								
+							}
+
+							else
+							{
+								instance.ecs.emplace<tc::ConflictGraph>(i);
+								instance.ecs.emplace<tc::Graph>(i, "SEQUENCE", graph_type::conflict);
+							}
+
+							id = i;
+							temp_graph = instance.ecs.get<tc::Graph>(id).g;
+						}
+					}
+
+					ImGui::EndChild();
+				}
+				ImGui::EndChild();
+
+				ImGui::PopStyleVar(3);
+				ImGui::PopStyleColor(2);
+
+				// display top buttons (why doesn't this work w simulate -- add the close graph triggger
 				{
-					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+					ImGui::SetCursorPos(ImVec2{ 0,0 });
+					if (ImGui::BeginChild("Top Buttons", ImVec2{ 400.0f, 100.0f }, false))
+					{
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+						tex = tex_map["Assets/BackMenuBtn.png"];
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						}
+
+						ImGui::SameLine();
+						ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
+						ImGui::SameLine();
+
+						tex = tex_map["Assets/QuickMenuBtn.png"];
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+						{
+							Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
+						}
+
+						ImGui::PopStyleColor(3);
+					}
+					ImGui::EndChild();
 				}
-
-				
-
-				//ImGui::SameLine();
+			
 			}
 			ImGui::End();
 		}

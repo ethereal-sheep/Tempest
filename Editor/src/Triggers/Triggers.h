@@ -32,34 +32,107 @@ namespace Tempest
 	struct CloseProjectTrigger : public Event {};
 	struct ExportProjectTrigger : public Event {};
 	struct ImportAssetTrigger : public Event {};
+	
 	//Popup Trigger
+	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION, SEQUENCE, EDIT_UNIT, EDIT_WEAPON};
+	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCES,WEAPONS,ITEMS};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
+	struct AddingUnitsTrigger : public Event {};
+	struct AddingWeaponsTrigger : public Event {};
+	struct AddingActionsTrigger : public Event {};
+	struct SelectSequenceTrigger : public Event {};
+	struct CharacterStatsTrigger : public Event
+	{
+		CharacterStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
+	};
+	struct WeaponStatsTrigger : public Event 
+	{
+		WeaponStatsTrigger(Entity a) : entity{ a } {}
+		Entity entity;
+	};
+	struct SimulatePopupTrigger : public Event
+	{
+		SimulatePopupTrigger(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data, bool for_unitpage = false) :
+			type{ type }, is_attacker{ is_attacker }, data{ data }, for_unitpage{ for_unitpage }{}
+		SIMULATE_POPUP_TYPE type;
+		bool is_attacker;
+		bool for_unitpage;
+		Entity data;
+	};
+
+	struct QuickMenuPopupTrigger : public Event
+	{
+		QuickMenuPopupTrigger(QUICKMENU_POPUP_TYPE current) : current{ current } {}
+		QUICKMENU_POPUP_TYPE current;
+	};
+
+	struct CloseOverlayTrigger : public Event
+	{
+		CloseOverlayTrigger(QUICKMENU_POPUP_TYPE current) : current{ current } {}
+		QUICKMENU_POPUP_TYPE current;
+	};
+
+	//Confirm Trigger
+	struct SimulateSelectionConfirm : public Event
+	{
+		SimulateSelectionConfirm(SIMULATE_POPUP_TYPE type, bool is_attacker, Entity data, bool for_unitpage = false) :
+			type{ type }, is_attacker{ is_attacker }, data{ data }, for_unitpage{ for_unitpage }{}
+		SIMULATE_POPUP_TYPE type;
+		bool is_attacker;
+		bool for_unitpage;
+		Entity data;
+	};
+
 
 	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};
 	struct OpenSimulateResultTrigger : public Event
 	{
-		OpenSimulateResultTrigger(Entity a, Entity d, Entity c) :
+		OpenSimulateResultTrigger(Entity a, Entity d, Entity c):
 			atk(a), def(d), conflict(c){}
 		Entity atk;
 		Entity def;
 		Entity conflict;
 	};
-	struct OpenCombatModeTrigger : public Event {};
+	struct OpenCombatModeTrigger : public Event 
+	{
+		OpenCombatModeTrigger(Instance& in) :instance{in}  {}
+		Instance& instance;
+	};
 	struct OpenConflictResTrigger : public Event {};
 	struct OpenMainMenuTrigger : public Event {};
-	struct OpenActionGraphTrigger : public Event 
+	struct OpenActionGraphTrigger : public Event // not using for new change
 	{
 		OpenActionGraphTrigger(Entity entityid, Instance& in) : id{ entityid }, instance{in} {}
 		Entity id = UNDEFINED;
 		Instance& instance;
 	};
+
+	enum OPEN_GRAPH_TYPE{GRAPH_ACTION, GRAPH_SEQUENCE};
+	struct OpenGraphTrigger : public Event
+	{
+		OpenGraphTrigger(Entity entityid, Instance& in, OPEN_GRAPH_TYPE type) :
+			id{ entityid }, instance{ in }, type{type} {}
+		Entity id = UNDEFINED;
+		Instance& instance;
+		OPEN_GRAPH_TYPE type;
+	};
+
 	struct OpenUnitSheetTrigger : public Event 
 	{
-		OpenUnitSheetTrigger(bool isAddUnit, Entity id = UNDEFINED) : addUnit{ isAddUnit }, entityID{ id } {}
+		OpenUnitSheetTrigger(bool isAddUnit, Instance& in, Entity id = UNDEFINED) : addUnit{ isAddUnit }, instance{ in }, entityID{ id } {}
 		bool addUnit = false;
 		Entity entityID = UNDEFINED;
+		Instance& instance;
+	};
+
+	struct OpenWeaponSheetTrigger : public Event
+	{
+		OpenWeaponSheetTrigger(bool isAddUnit, Instance& in) : addUnit{ isAddUnit }, instance{ in } {}
+		bool addUnit = false;
+		Instance& instance;
 	};
 
 	
@@ -71,6 +144,5 @@ namespace Tempest
 
 	struct ShowRecentUtil : public Event {};
 	struct AddRecentUtil : public Event {};
-
 	struct ToggleMenuBar : public Event {};
 }

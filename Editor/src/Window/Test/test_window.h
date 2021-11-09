@@ -62,7 +62,7 @@ namespace Tempest
 				UI::UICheckBox_1("TS", &test);
 				if(ImGui::Button("COMBAT MODE"))
 				{
-					Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>();
+					Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(instance);
 				}
 
 				if (ImGui::Button("CONFLICT RES"))

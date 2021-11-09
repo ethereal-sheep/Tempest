@@ -27,10 +27,18 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenSimulateTrigger>(&SimulateOverlay::open_popup, this);
+            Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&SimulateOverlay::close_popup, this);
+            Service<EventManager>::Get().register_listener<SimulateSelectionConfirm>(&SimulateOverlay::confirm_data, this);
         }
         void open_popup(const Event& e);
+        void confirm_data(const Event& e);
+        void close_popup(const Event& e);
 
         void show(Instance&) override;
+
+        void display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker);
+        void push_button_style() const;
+        void pop_button_style() const;
 
         bool OverlayOpen = false;
         unsigned Tab = 0;
@@ -39,9 +47,28 @@ namespace Tempest
         const float HalfPadding = Padding * 0.5f;
         const unsigned NumOfButtons = 6;
 
-        Entity Attacker = UNDEFINED;
-        Entity Defender = UNDEFINED;
-        Entity ActionID = UNDEFINED;
-        Entity LinkID = UNDEFINED;
+        struct UnitData
+        {
+            Entity unit_id{ UNDEFINED };
+            Entity weapon{ UNDEFINED };
+            Entity action{ UNDEFINED };
+            void Reset() {
+                unit_id = UNDEFINED;
+                weapon = UNDEFINED;
+                action = UNDEFINED;
+            }
+        };
+
+        UnitData attacker{};
+        UnitData defender{};
+        Entity sequence{ UNDEFINED };
+
+        uint32_t freq = 100000u;
+        std::atomic_uint32_t win;
+        std::atomic_uint32_t lose;
+        std::atomic_bool finish;
+        tsptr<Texture> enter_button;
+
+        float padding{ 0.0f };
     };
 }

@@ -231,6 +231,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\UnitSheetOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\WeaponSheetOverlay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\EditorAction.h" />
@@ -290,6 +291,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Overlay\SimulateOverlay.h" />
     <ClInclude Include="src\Window\Overlay\SimulateResultOverlay.h" />
     <ClInclude Include="src\Window\Overlay\UnitSheetOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\WeaponSheetOverlay.h" />
     <ClInclude Include="src\Window\Popup\BottomRightOverlayPopup.h" />
     <ClInclude Include="src\Window\Popup\CloseProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\ConfirmationPopup.h" />
@@ -298,8 +300,11 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Popup\ExportProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\NewProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\OpenProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\QuickMenuPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveCurrentBeforeOpenPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\SimulateSelectionPopup.h" />
+    <ClInclude Include="src\Window\Test\Test_UIWindow.h" />
     <ClInclude Include="src\Window\Test\test_window.h" />
     <ClInclude Include="src\Window\Test\test_window2.h" />
     <ClInclude Include="src\Window\Test\test_window3.h" />
