@@ -112,7 +112,7 @@ namespace Tempest
 
 					if (battle_state == BATTLE_STATE::CURR_TURN || battle_state == BATTLE_STATE::SELECT_ACTION || battle_state == BATTLE_STATE::SELECT_WEAPON)
 					{
-						UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, "SELECT AN ACTION");
+						UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
 						ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f , viewport->Size.y - action_background_size.y * 0.7f });
 						if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, true, ImGuiWindowFlags_NoScrollbar))
 						{
@@ -140,7 +140,7 @@ namespace Tempest
 								}
 							}
 							break;
-							case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_ACTION:
+							case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_ACTION: // TODO: account for no actions
 							{
 								auto& charac = instance.ecs.get<tc::Character>(curr_entity);
 								unsigned i = 0;
@@ -158,7 +158,7 @@ namespace Tempest
 								}
 							}
 							break;
-							case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_WEAPON:
+							case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_WEAPON: // TODO: account for no weapons
 							{
 								auto& charac = instance.ecs.get<tc::Character>(curr_entity);
 								unsigned i = 0;
@@ -239,6 +239,7 @@ namespace Tempest
 						}
 
 						// display chance of success
+						UI::AttackSuccessUI(instance.ecs.get<tc::Graph>(selected_action).g.name.c_str(), ImVec2{viewport->Size.x * 0.5f, viewport->Size.y * 0.72f },100);
 
 						if (UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 						{
@@ -249,7 +250,8 @@ namespace Tempest
 
 						if (UI::UIButton_2("Cancel", "Cancel", ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 						{
-							battle_state = BATTLE_STATE::SELECT_OTHER;
+							//battle_state = BATTLE_STATE::SELECT_OTHER;
+							battle_state = BATTLE_STATE::CURR_TURN; // temp testing
 						}
 					}
 					break;
@@ -296,8 +298,13 @@ namespace Tempest
 						// only trigger this if no more rolls
 						if (UI::UIButton_2("Confirm", "Confirm", ImVec2{viewport->Size.x * 0.5f, viewport->Size.y * 0.55f}, { 0,0 }, FONT_BODY))
 						{
-							// affect the entities
+							// TODO: affect the entities
+
 							battle_state = BATTLE_STATE::CURR_TURN;
+
+							//  TODO: change to the next entity turn
+							selected_action = UNDEFINED;
+							selected_weapon = UNDEFINED;
 						}
 
 					}
