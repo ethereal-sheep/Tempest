@@ -2700,32 +2700,43 @@ namespace Tempest::UI
 
 			ImGui::PopFont();
 		}
-
-		
-
 	}
 
-	void CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos)
+	void CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos, bool isRightSide)
 	{
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
-
-
-		ImVec2 Min = { windowPos.x + pos.x, windowPos.y + pos.y };
-
-
 		auto character = instance.ecs.get_if<tc::Character>(id);
 
 		auto selectedImg = tex_map["Assets/CharacterBackdrop.png"];
 		auto characterImg = tex_map["Assets/Placeholder_Character.png"];
+
+		ImVec2 Min = { windowPos.x + pos.x, windowPos.y + pos.y };
 		
-		
+
+		if (isRightSide)
+		{
+			selectedImg = tex_map["Assets/ActionBackdrop.png"];
+			Min = { Min.x - selectedImg->GetWidth(), Min.y };
+		}
 		ImVec2 charImgMax = { Min.x + characterImg->GetWidth(), Min.y + characterImg->GetHeight() };
 		ImVec2 selectedMin = { Min.x, Min.y + characterImg->GetHeight() * 0.45f };
 		ImVec2 selectedMax = { selectedMin.x + selectedImg->GetWidth(), selectedMin.y + selectedImg->GetHeight() };
 
-		window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax);
-		window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, charImgMax);
+		if (isRightSide)
+		{
+			ImVec2 charImgMin = { windowPos.x + pos.x - characterImg->GetWidth(), windowPos.y + pos.y };
+			charImgMax = { charImgMin.x + characterImg->GetWidth(), charImgMin.y + characterImg->GetHeight() };
+			//window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax, { 1,0 }, { 0,1 });
+			window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax);
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), charImgMin, charImgMax, { 1,0 }, { 0,1 });
+		}
+		else
+		{
+			window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax);
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, charImgMax);
+		}
+		
 
 		
 		
@@ -2734,7 +2745,13 @@ namespace Tempest::UI
 		ImVec2 atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
 		ImVec2 defPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.7f };
 
-		
+		if (isRightSide)
+		{
+			namePos = { selectedMin.x + selectedImg->GetWidth() * 0.18f, selectedMin.y + selectedImg->GetHeight() * 0.08f };
+			hpPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.3f };
+			atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
+			defPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.7f };
+		}
 
 		if (character)
 		{
@@ -2742,7 +2759,7 @@ namespace Tempest::UI
 			window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
 			ImGui::PopFont();
 
-			ImGui::PushFont(FONT_OPEN);
+			ImGui::PushFont(FONT_OPEN_30);
 			string str = "  HP  " + std::to_string(character->get_stat(0));
 			window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
 			str = "ATK  " + std::to_string(character->get_stat(1));
@@ -2757,7 +2774,7 @@ namespace Tempest::UI
 			window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
 			ImGui::PopFont();
 
-			ImGui::PushFont(FONT_OPEN);
+			ImGui::PushFont(FONT_OPEN_30);
 			string str = " HP  NAN";
 			window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
 			str = "ATK  NAN" + std::to_string(character->get_stat(1));
