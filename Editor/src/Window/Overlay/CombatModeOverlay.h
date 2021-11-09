@@ -24,6 +24,17 @@ namespace Tempest
             ACTIONS,
             WEAPONS
         };
+
+        enum class BATTLE_STATE
+        {
+            CURR_TURN,       // display character information and action options
+            SELECT_ACTION,   // select performable actions of character
+            SELECT_WEAPON,   // select weapons from inventory 
+            SELECT_OTHER,    // select enemy to perform action on
+            BATTLE_GLIMPSE,  // display chance of success of selected action
+            COMMENCE_BATTLE  // simulate battle
+        };
+
         const char* window_name() override
         {
             return "";
@@ -42,8 +53,14 @@ namespace Tempest
         bool OverlayOpen = false;
 
         Entity curr_entity = UNDEFINED;
+        Entity selected_action = UNDEFINED;
+        Entity selected_weapon = UNDEFINED;
+        float action_button_diff = 0.0f;
+        float placeholder_height = 0.0f;
+        ImVec2 action_background_size{0.f,0.f};
         bool display_curr_stat{ false };
         bool display_other_stat{ false };
-        INFO_TYPE info_type{};
+        INFO_TYPE info_type{ INFO_TYPE::CHAR};
+        BATTLE_STATE battle_state{ BATTLE_STATE::CURR_TURN };
     };
 }
