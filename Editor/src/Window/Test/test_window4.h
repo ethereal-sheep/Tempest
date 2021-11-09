@@ -105,6 +105,9 @@ namespace Tempest
 					//	//Service<EventManager>::Get().instant_dispatch<Fight>();
 					//}
 
+					// selected
+					glm::ivec2 mouse = { -INT_MAX, -INT_MAX };
+
 					// highlight stuff on viewport
 					{
 						auto ray = cam.GetMouseRay();
@@ -116,6 +119,9 @@ namespace Tempest
 
 							int w_x = (int)std::round(inter.x - .5f);
 							int w_y = (int)std::round(inter.z - .5f);
+
+							mouse.x = w_x;
+							mouse.y = w_y;
 
 							id_t id = INVALID;
 							if (runtime.collision_map.count(w_x) && runtime.collision_map[w_x].count(w_y))
@@ -207,7 +213,6 @@ namespace Tempest
 
 									Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
 								}
-
 							}
 						}
 					}
@@ -244,14 +249,15 @@ namespace Tempest
 								}
 								ImGui::PopFont();
 							}
+							ImGui::SetCursorPos(temp);
 
 							// draw bfs if unit
+							tmap<int, tmap<int, bool>> visited;
+							tmap<int, tmap<int, uint32_t>> distance;
 							{
 								//bfs
-								const uint32_t range = 5;
+								const uint32_t range = 4;
 								const tvector<tpair<int,int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
-								tmap<int, tmap<int, bool>> visited;
-								tmap<int, tmap<int, uint32_t>> distance;
 								std::queue<glm::ivec2> q;
 								q.push({ w_x, w_y });
 
@@ -272,9 +278,9 @@ namespace Tempest
 
 									for (auto [x, y] : dir)
 									{
-										if (visited[p.x + x][p.y + y])
-											continue;
 										if (runtime.collision_map[p.x + x][p.y + y])
+											continue;
+										if (visited[p.x + x][p.y + y])
 											continue;
 
 										distance[p.x + x][p.y + y] = new_dist;
@@ -286,6 +292,7 @@ namespace Tempest
 								for(auto& [x, m] : visited)
 									for (auto [y, b] : m)
 									{
+										if (!b) continue;
 										AABB box;
 
 										int a_x = 1, a_y = 1, e_x = 0, e_y = 0;
@@ -304,7 +311,16 @@ namespace Tempest
 
 							}
 
-							ImGui::SetCursorPos(temp);
+							auto& io = ImGui::GetIO();
+							if (io.MouseClicked[0])
+							{
+								// check if within range
+								if (visited[mouse.x][mouse.y])
+								{
+
+								}
+							}
+
 						}
 
 					}
