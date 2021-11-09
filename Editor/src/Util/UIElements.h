@@ -201,7 +201,7 @@ namespace Tempest::UI
 	// Pos is from top right
 	void ActionUI(const ImVec2 pos, string title);
 
-	// Pos is from top left 
+	// Pos is from Middle of arrow 
 	void AttackSuccessUI(const ImVec2 pos, int successVal);
 
 }

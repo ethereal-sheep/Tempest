@@ -3005,7 +3005,9 @@ namespace Tempest::UI
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
 		auto arrowImg = tex_map["Assets/SuccessArrow.png"];
-		ImVec2 arrowMin = { windowPos.x + pos.x, windowPos.y + pos.y };
+
+		//ImVec2 arrowMin = { windowPos.x + pos.x, windowPos.y + pos.y };
+		ImVec2 arrowMin = { windowPos.x + pos.x - arrowImg->GetWidth() * 0.5f, windowPos.y + pos.y - arrowImg->GetHeight() * 0.5f };
 		ImVec2 arrowMax = { arrowMin.x + arrowImg->GetWidth(), arrowMin.y + arrowImg->GetHeight() };
 		window->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), arrowMin, arrowMax);
 
