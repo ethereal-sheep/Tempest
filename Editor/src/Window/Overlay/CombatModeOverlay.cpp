@@ -80,9 +80,10 @@ namespace Tempest
 							}
 						}
 					
-						if (battle_state != BATTLE_STATE::SELECT_OTHER)
+						if (battle_state != BATTLE_STATE::SELECT_OTHER && battle_state != BATTLE_STATE::COMMENCE_BATTLE)
 						{
 							UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height });
+
 							if (UI::UIButton_2("More Information >", "More Information >", ImVec2{ action_background_size.x * 0.72f, viewport->Size.y - action_background_size.y * 1.2f }, { 0.f, 8.0f }, FONT_BODY))
 							{
 								display_curr_stat = true;
@@ -211,7 +212,7 @@ namespace Tempest
 						if (!display_other_stat)
 						{
 							UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true);
-							if (UI::UIButton_2("More Information >", "More Information >", ImVec2{ viewport->Size.x - action_background_size.x * 0.72f, viewport->Size.y - action_background_size.y * 1.2f }, { 0.f, 8.0f }, FONT_BODY))
+							if (UI::UIButton_2("< More Information", "< More Information", ImVec2{ viewport->Size.x - action_background_size.x * 0.6f, viewport->Size.y - action_background_size.y * 1.2f }, { 0.f, 8.0f }, FONT_BODY))
 							{
 								display_other_stat = true;
 							}
@@ -219,7 +220,7 @@ namespace Tempest
 
 						else
 						{
-							if (UI::UIButton_2("< Hide", "< Hide", ImVec2{ viewport->Size.x * 0.7f, viewport->Size.y * 0.15f }, { 0.f, 8.0f }, FONT_BODY))
+							if (UI::UIButton_2("Hide >", "Hide >", ImVec2{ viewport->Size.x * 0.7f, viewport->Size.y * 0.15f }, { 0.f, 8.0f }, FONT_BODY))
 							{
 								display_other_stat = false;
 							}
@@ -242,6 +243,8 @@ namespace Tempest
 						if (UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 						{
 							battle_state = BATTLE_STATE::COMMENCE_BATTLE;
+							display_other_stat = false;
+							display_curr_stat = false;
 						}
 
 						if (UI::UIButton_2("Cancel", "Cancel", ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
@@ -252,6 +255,50 @@ namespace Tempest
 					break;
 					case Tempest::CombatModeOverlay::BATTLE_STATE::COMMENCE_BATTLE:
 					{
+						if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, true))
+						{
+							// attacker roll
+						}
+
+						if (UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true, true))
+						{
+							// defender roll
+						}
+						
+						// draw the combat roll
+						auto tex = tex_map["Assets/CombatRollBG.png"];
+						ImVec2 point{ 0.0f,viewport->Size.y * 0.2f };
+						{
+							ImVec2 Min{ point.x, point.y };
+							ImVec2 Max{ Min.x + viewport->Size.x , Min.y + viewport->Size.y * 0.3f};
+							ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
+						}
+
+						auto& attacker = instance.ecs.get<tc::Character>(curr_entity);
+						auto& defender = instance.ecs.get<tc::Character>(curr_entity);
+
+						// display the character name and rolls
+						ImGui::PushFont(FONT_HEAD);
+
+						std::string roll = "34";
+						ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.4f - ImGui::CalcTextSize(attacker.name.c_str()).x, viewport->Size.y * 0.27f });
+						ImGui::Text(attacker.name.c_str());
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.4f - ImGui::CalcTextSize(roll.c_str()).x, viewport->Size.y * 0.35f });
+						ImGui::Text(roll.c_str());
+
+						roll = "9";
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.6f - ImGui::CalcTextSize(defender.name.c_str()).x, viewport->Size.y * 0.27f });
+						ImGui::Text(defender.name.c_str());
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.6f - ImGui::CalcTextSize(roll.c_str()).x, viewport->Size.y * 0.35f });
+						ImGui::Text(roll.c_str());
+						ImGui::PopFont();
+
+						// only trigger this if no more rolls
+						if (UI::UIButton_2("Confirm", "Confirm", ImVec2{viewport->Size.x * 0.5f, viewport->Size.y * 0.55f}, { 0,0 }, FONT_BODY))
+						{
+							// affect the entities
+							battle_state = BATTLE_STATE::CURR_TURN;
+						}
 
 					}
 					break;
