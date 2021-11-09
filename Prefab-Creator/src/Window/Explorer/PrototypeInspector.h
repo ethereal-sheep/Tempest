@@ -162,7 +162,7 @@ namespace Tempest
 					if (auto mesh = _current->get_if<tc::Mesh>())
 					{
 						auto transform = _current->get_if<tc::Transform>();
-						if(transform)
+						if (transform)
 							Service<RenderSystem>::Get().Submit(mesh->code, *transform);
 					}
 					if (auto shape = _current->get_if<tc::Shape>())
@@ -200,13 +200,25 @@ namespace Tempest
 
 
 							AABB box;
-							box.min.x = -.5f - (x - 1) / 2.f;
-							box.min.z = -.5f - (y - 1) / 2.f;
+
+							int a_x = x, a_y = y, e_x = 0, e_y = 0;
+
+							if (a_x % 2 != a_y % 2)
+							{
+								a_x = a_y = std::min(x, y);
+								e_x = x - a_x;
+								e_y = y - a_y;
+							}
+
+							box.min.x = -.5f - (a_x - 1) / 2.f;
+							box.min.z = -.5f - (a_y - 1) / 2.f;
 							box.min.y = 0;
 
-							box.max.x = .5f + (x - 1) / 2.f;
-							box.max.z = .5f + (y - 1) / 2.f;
+							box.max.x = .5f + (a_x - 1) / 2.f + e_x;
+							box.max.z = .5f + (a_y - 1) / 2.f + e_y;
 							box.max.y = (float)a;
+
+
 
 							Line l;
 							l.p0 = glm::vec3(-.1, 0, -.1);
@@ -263,6 +275,59 @@ namespace Tempest
 							UI::PaddedSeparator(1.f);
 						}
 					}
+
+
+					//if (auto rb = _current->get_if<tc::Rigidbody>())
+					//{
+					//	//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+					//	bool header = ImGui::CollapsingHeader("ObjectPicking##OP", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+
+					//	if (header)
+					//	{
+					//		auto& rbConfig = rb->rb_config;
+					//		static tc::Transform transform;
+
+					//		ImGui::PushID("Collider Type");
+					//		int collider_current = static_cast<int>(rb->shape_data.type);
+					//		const char* Colliders[] = { "NONE", "SPHERE", "BOX", "CAPSULE" };
+					//		ImGui::Text("ShapeT");
+					//		ImGui::SameLine();
+					//		ImGui::Dummy(ImVec2{ 60.f - ImGui::GetItemRectSize().x, 0.f });
+					//		ImGui::SameLine();
+					//		ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth() - 20.f);
+					//		if (ImGui::Combo("", &collider_current, Colliders, IM_ARRAYSIZE(Colliders)))
+					//		{
+					//			rb->shape_data.type = static_cast<SHAPE_TYPE>(collider_current);
+					//			rb->isDirty = true;
+					//		}
+					//		ImGui::PopID();
+
+					//		//Collider Size
+					//		switch (rb->shape_data.type)
+					//		{
+					//		case SHAPE_TYPE::SPHERE:
+					//			rb->isDirty |= UI::DragFloat("Radius", "##RbRadius", ImVec2{ padding , 0.f }, &rb->shape_data.shapeData.x, 0.1f, 0.5f).second;
+					//			break;
+					//		case SHAPE_TYPE::CAPSULE:
+					//		{
+					//			vec2 temp = { rb->shape_data.shapeData.x, rb->shape_data.shapeData.y };
+					//			rb->isDirty |= UI::DragFloat2("Radius&Height", "##RbRadius&Height", ImVec2{ padding , 0.f }, glm::value_ptr(temp), 0.1f, 0.5f).second;
+					//			rb->shape_data.shapeData.x = temp.x;
+					//			rb->shape_data.shapeData.y = temp.y;
+					//			break;
+					//		}
+					//		break;
+					//		case SHAPE_TYPE::BOX:
+					//		{
+					//			rb->isDirty |= UI::DragFloat3("X,Y,Z", "##RbRadius&Height", ImVec2{ padding , 0.f }, glm::value_ptr(rb->shape_data.shapeData), 0.1f, 0.5f).second;
+					//		}
+					//		break;
+					//		case SHAPE_TYPE::NONE:
+					//			LOG_ERROR("No shape data");
+					//			break;
+					//		}
+					//	}
+					//}
 				}
 
 				ImGui::Dummy({ 0.f, 2.f });

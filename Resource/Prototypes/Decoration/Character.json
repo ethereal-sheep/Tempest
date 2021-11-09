@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Obstacle"
+        "Category": "Decoration"
     },
     "Components": [
         {
@@ -37,19 +37,13 @@
         },
         {
             "Metadata": {
-                "Type": "Collision"
-            },
-            "Component": {}
-        },
-        {
-            "Metadata": {
                 "Type": "Local"
             },
             "Component": {
                 "LocalPosition": [
-                    0.25569194555282595,
                     0.0,
-                    0.06532078981399536
+                    0.0,
+                    0.0
                 ],
                 "LocalRotation": [
                     0.0,
@@ -66,16 +60,10 @@
         },
         {
             "Metadata": {
-                "Type": "Obstacle"
-            },
-            "Component": {}
-        },
-        {
-            "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bed_Sci-Fi.a"
+                "Path": "Models/Chair.fbx"
             }
         },
         {
@@ -83,8 +71,8 @@
                 "Type": "Shape"
             },
             "Component": {
-                "X": 3,
-                "Y": 3
+                "X": 1,
+                "Y": 1
             }
         }
     ]

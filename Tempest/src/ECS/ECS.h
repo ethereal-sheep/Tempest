@@ -17,6 +17,7 @@
 
 #include "Components/Components.h"
 #include "Entity.h"
+#include "Util/prefab.h"
 
 #include "Util.h"
 
@@ -334,6 +335,23 @@ namespace Tempest
 		[[nodiscard]] Entity create()
 		{
 			return entity_registry.create();
+		}
+
+		/**
+		 * @brief Creates a new entity from prefab
+		 * @return New entity identifier
+		 */
+		[[nodiscard]] Entity create(const prefab& p)
+		{
+			auto e = create();
+			for (auto& [hash, compo] : p.components)
+			{
+				if (!compo)
+					continue;
+
+				compo->create(e, component_pools[hash], memory_resource);
+			}
+			return e;
 		}
 
 		/**

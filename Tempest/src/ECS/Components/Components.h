@@ -110,7 +110,8 @@ namespace Tempest
 	enum struct ComponentType
 	{
 		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
-		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, Shape
+		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, 
+		Tile, Wall, Shape, Door, Obstacle, Unit, Collision
 		,END
 	};
 
@@ -123,6 +124,53 @@ namespace Tempest
 		*		ALL COMPONENTS MUST BE DEFAULT, COPY, AND MOVE CONSTRUCTABLE
 		*		(therefore please use ids instead of pointers)
 		*/
+		struct Tile
+		{
+			static const char* get_type() { return "Tile"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Tile&) { ar.StartObject(); return ar.EndObject(); }
+		};
+
+		struct Door
+		{
+			static const char* get_type() { return "Door"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Door&) { ar.StartObject(); return ar.EndObject(); }
+		};
+
+		struct Obstacle
+		{
+			static const char* get_type() { return "Obstacle"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Obstacle&) { ar.StartObject(); return ar.EndObject(); }
+		};
+
+		struct Unit
+		{
+			static const char* get_type() { return "Unit"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Unit&) { ar.StartObject(); return ar.EndObject(); }
+		};
+		struct Wall
+		{
+			static const char* get_type() { return "Wall"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Wall&) { ar.StartObject(); return ar.EndObject(); }
+		};
+		struct Collision
+		{
+			static const char* get_type() { return "Collision"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Collision&) { ar.StartObject(); return ar.EndObject(); }
+		};
+
+
 		struct Example
 		{
 			static const char* get_type() { return "Example"; }
@@ -163,7 +211,7 @@ namespace Tempest
 			vec3 scale = { 1.f, 1.f, 1.f };
 
 			friend bool operator==(const Transform& lhs, const Transform& rhs) {
-				return 
+				return
 					glm::all(glm::epsilonEqual(lhs.position, rhs.position, glm::epsilon<float>())) &&
 					glm::all(glm::epsilonEqual(lhs.rotation, rhs.rotation, glm::epsilon<float>())) &&
 					glm::all(glm::epsilonEqual(lhs.scale, rhs.scale, glm::epsilon<float>()));
@@ -173,6 +221,7 @@ namespace Tempest
 			}
 
 		};
+
 
 		struct Local
 		{
@@ -657,11 +706,11 @@ namespace Tempest
 			reader.Member("Component", c);							\
 			ecs.force_create(entity);								\
 			ecs.emplace<tc::ComponentName>(entity, std::move(c));	\
-		}															\
+		}				\
 		else {														\
 			auto c = ecs.try_emplace<tc::ComponentName>();			\
 			if(c) reader.Member("Component", *c);					\
-		}															\
+		}												\
 	}																\
 		break														\
 
@@ -686,6 +735,13 @@ namespace Tempest
 			COMPONENT_CASE(Character);
 			COMPONENT_CASE(Weapon);
 			COMPONENT_CASE(Statline);
+
+			COMPONENT_CASE(Unit);
+			COMPONENT_CASE(Obstacle);
+			COMPONENT_CASE(Door);
+			COMPONENT_CASE(Tile);
+			COMPONENT_CASE(Wall);
+			COMPONENT_CASE(Collision);
 			COMPONENT_CASE(Shape);
 
 			COMPONENT_CASE(ConflictGraph);

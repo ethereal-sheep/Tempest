@@ -37,6 +37,12 @@
         },
         {
             "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
                 "Type": "Local"
             },
             "Component": {

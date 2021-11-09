@@ -37,11 +37,17 @@
         },
         {
             "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
                 "Type": "Local"
             },
             "Component": {
                 "LocalPosition": [
-                    0.0,
+                    0.5078310966491699,
                     0.0,
                     0.0
                 ],
@@ -57,6 +63,12 @@
                     1.0
                 ]
             }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
         },
         {
             "Metadata": {

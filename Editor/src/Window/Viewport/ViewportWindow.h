@@ -42,6 +42,7 @@ namespace Tempest
 				;
 
 			Service<GuizmoController>::Register();
+			cam_ctrl.reset(Service<RenderSystem>::Get().GetCamera());
 		}
 
 		void show(Instance& instance) override
@@ -78,7 +79,7 @@ namespace Tempest
 
 
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
-			cam_ctrl.show_debug(cam);
+			cam_ctrl.controls(cam);
 			cam_ctrl.update(cam);
 
 
@@ -146,6 +147,7 @@ namespace Tempest
 
 			if (instance.scene.get_map().exist(current) && instance.scene.get_map().get(current).has<tc::Transform>())
 			{
+
 				auto& pf = instance.scene.get_map().get(instance.selected);
 				ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
 				auto& GC = Service<GuizmoController>::Get();
@@ -175,6 +177,16 @@ namespace Tempest
 					}
 				}
 
+				if (io.KeysDown[io.KeyMap[ImGuiKey_Delete]])
+				{
+					if (GC.GetInitial() != transform)
+					{
+						instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
+					}
+					instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
+					instance.selected = INVALID;
+					return;
+				}
 
 				for (auto c : io.InputQueueCharacters)
 				{
@@ -234,6 +246,9 @@ namespace Tempest
 					{
 						//transform
 						transform.rotation *= glm::angleAxis(glm::radians(rDelta.y), glm::vec3{ 0, 1, 0 });
+						// check if it is still on the correct boundary
+
+
 						//cam_ctrl.look_at(cam, to_glvec3(transform.position));
 						//transform->scale += sDelta;
 					}
@@ -257,13 +272,34 @@ namespace Tempest
 					const int one = 1;
 
 					AABB box;
-					box.min.x = transform.position.x - .5f - (x - 1) / 2.f;
-					box.min.z = transform.position.z - .5f - (y - 1) / 2.f;
+
+					int a_x = x, a_y = y, e_x = 0, e_y = 0;
+					if (a_x % 2 != a_y % 2)
+					{
+						a_x = a_y = std::min(x, y);
+						e_x = x - a_x;
+						e_y = y - a_y;
+
+					}
+
+					box.min.x = - .5f - (a_x - 1) / 2.f;
+					box.min.z = - .5f - (a_y - 1) / 2.f;
+
+					box.max.x = + .5f + (a_x - 1) / 2.f + e_x;
+					box.max.z = + .5f + (a_y - 1) / 2.f + e_y;
+
+					auto rot = transform.rotation;
+					box.min = rot * box.min;
+					box.max = rot * box.max;
+
+					box.min.x += transform.position.x;
+					box.min.z += transform.position.z;
 					box.min.y = 0;
 
-					box.max.x = transform.position.x + .5f + (x - 1) / 2.f;
-					box.max.z = transform.position.z + .5f + (y - 1) / 2.f;
+					box.max.x += transform.position.x;
+					box.max.z += transform.position.z;
 					box.max.y = 0;
+
 
 					/*Line l;
 					l.p0 = glm::vec3(-.1, 0, -.1);
@@ -278,8 +314,136 @@ namespace Tempest
 					//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 				}
 			}
-
 			
+			// highlights
+			if(!io.MouseDown[0])
+			{
+
+				if (io.WantCaptureMouse)
+					return;
+
+				auto ray = cam.GetMouseRay();
+				auto start = cam.GetPosition();
+				float dist = 0;
+				if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+				{
+					auto inter = cam.GetPosition() + ray * dist;
+					id_t id = instance.scene.get_map().find((int)std::round(inter.x-.5f), (int)std::round(inter.z - .5f));
+					
+					if (id && instance.scene.get_map().exist(id))
+					{
+						auto& pf = instance.scene.get_map().get(id);
+						
+						if (pf.has<tc::Shape>() && pf.has<tc::Transform>())
+						{
+							auto shape = pf.get_if<tc::Shape>();
+							auto& transform = pf.get<tc::Transform>();
+
+							const int& x = shape->x;
+							const int& y = shape->y;
+							const int one = 1;
+
+							AABB box;
+
+							int a_x = x, a_y = y, e_x = 0, e_y = 0;
+							if (a_x % 2 != a_y % 2)
+							{
+								a_x = a_y = std::min(x, y);
+								e_x = x - a_x;
+								e_y = y - a_y;
+
+							}
+
+							box.min.x = -.5f - (a_x - 1) / 2.f;
+							box.min.z = -.5f - (a_y - 1) / 2.f;
+
+							box.max.x = +.5f + (a_x - 1) / 2.f + e_x;
+							box.max.z = +.5f + (a_y - 1) / 2.f + e_y;
+
+							auto rot = transform.rotation;
+							box.min = rot * box.min;
+							box.max = rot * box.max;
+
+							box.min.x += transform.position.x;
+							box.min.z += transform.position.z;
+							box.min.y = 0;
+
+							box.max.x += transform.position.x;
+							box.max.z += transform.position.z;
+							box.max.y = 0;
+
+							Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+						}
+					}
+					else
+					{
+						AABB box;
+
+						int a_x = 1, a_y = 1, e_x = 0, e_y = 0;
+						if (a_x % 2 != a_y % 2)
+						{
+							a_x = a_y = std::min(1, 1);
+							e_x = 1 - a_x;
+							e_y = 1 - a_y;
+
+						}
+
+						inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+						inter.y = 0;
+						inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
+
+						box.min.x = inter.x - .5f - (a_x - 1) / 2.f;
+						box.min.z = inter.z - .5f - (a_y - 1) / 2.f;
+						box.min.y = 0;
+
+						box.max.x = inter.x + .5f + (a_x - 1) / 2.f + e_x;
+						box.max.z = inter.z + .5f + (a_y - 1) / 2.f + e_y;
+						box.max.y = 0;
+
+						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+					}
+
+
+				}
+			}
+			
+			// click
+			if (io.MouseClicked[0])
+			{
+				auto vp = cam.GetViewport();
+				auto width = vp.z;
+				auto height = vp.w;
+
+				if (io.WantCaptureMouse)
+					return;
+
+				glm::vec4 lRayStart_NDC(
+					((float)io.MousePos.x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
+					((float)io.MousePos.y / (float)height - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
+					-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
+					1.0f
+				);
+				glm::vec4 lRayEnd_NDC(
+					((float)io.MousePos.x / (float)width - 0.5f) * 2.0f,
+					((float)io.MousePos.y / (float)height - 0.5f) * -2.0f,
+					0.0,
+					1.0f
+				);
+
+				glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
+				glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
+				glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
+				glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
+				lRayDir_world = glm::normalize(lRayDir_world);
+
+				auto start = cam.GetPosition();
+				float dist = 0;
+				if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+				{
+					auto inter = cam.GetPosition() + lRayDir_world * dist;
+					instance.selected = instance.scene.get_map().find((int)std::round(inter.x - .5f), (int)std::round(inter.z - .5f));
+				}
+			}
 
 			// change this to instance cam
 

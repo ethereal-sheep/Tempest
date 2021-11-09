@@ -131,6 +131,7 @@
       </PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,6 +162,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\stb;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\rttr\src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

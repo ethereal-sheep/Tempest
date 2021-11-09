@@ -126,12 +126,14 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Prefab-Creator\src;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\rttr\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\fmod\fmod_vc.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mtd.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;$(SolutionDir)Dep\rttr\$(Configuration)\rttr_core_s.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
@@ -154,6 +156,7 @@ xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Prefab-Creator\src;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\rttr\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -162,14 +165,14 @@ xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\fmod\fmod_vc.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mt.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;$(SolutionDir)Dep\rttr\$(Configuration)\rttr_core_s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mt.dll" "$(TargetDir)" /q
-xcopy /y /d "..\Dep\rttr\$(Configuration)\rttr_core.dll" "$(TargetDir)" /q
-xcopy /y /d /s "..\Resource\Fonts" "$(TargetDir)" /q
-xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)" /q</Command>
+xcopy /y /d /s "..\Resource\Fonts" "$(TargetDir)Fonts\" /q
+xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q</Command>
       <Outputs>output;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
