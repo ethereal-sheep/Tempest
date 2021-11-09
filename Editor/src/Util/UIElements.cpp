@@ -2879,7 +2879,7 @@ namespace Tempest::UI
 		}
 	}
 
-	void CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos, bool isRightSide)
+	bool CharacterTurnData(Instance& instance, Entity id, const ImVec2 pos, bool isRightSide, bool isRoll)
 	{
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
@@ -2887,7 +2887,7 @@ namespace Tempest::UI
 
 		auto selectedImg = tex_map["Assets/CharacterBackdrop.png"];
 		auto characterImg = tex_map["Assets/Placeholder_Character.png"];
-
+		bool ret = false;
 		ImVec2 Min = { windowPos.x + pos.x, windowPos.y + pos.y };
 		
 
@@ -2914,9 +2914,6 @@ namespace Tempest::UI
 			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, charImgMax);
 		}
 		
-
-		
-		
 		ImVec2 namePos = { selectedMin.x + selectedImg->GetWidth() * 0.55f, selectedMin.y + selectedImg->GetHeight() * 0.08f };
 		ImVec2 hpPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.3f };
 		ImVec2 atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
@@ -2929,37 +2926,61 @@ namespace Tempest::UI
 			atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
 			defPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.7f };
 		}
-
-		if (character)
+		
+		if (!isRoll)
 		{
-			ImGui::PushFont(FONT_TURN);
-			window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
-			ImGui::PopFont();
+			if (character)
+			{
+				ImGui::PushFont(FONT_TURN);
+				window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
+				ImGui::PopFont();
 
-			ImGui::PushFont(FONT_OPEN_30);
-			string str = "  HP  " + std::to_string(character->get_stat(0));
-			window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
-			str = "ATK  " + std::to_string(character->get_stat(1));
-			window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-			str = "DEF  " + std::to_string(character->get_stat(2));
-			window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-			ImGui::PopFont();
-		}	
+				ImGui::PushFont(FONT_OPEN_30);
+				string str = "  HP  " + std::to_string(character->get_stat(0));
+				window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
+				str = "ATK  " + std::to_string(character->get_stat(1));
+				window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				str = "DEF  " + std::to_string(character->get_stat(2));
+				window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				ImGui::PopFont();
+			}
+			else
+			{
+				ImGui::PushFont(FONT_TURN);
+				window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
+				ImGui::PopFont();
+
+				ImGui::PushFont(FONT_OPEN_30);
+				string str = " HP  NAN";
+				window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
+				str = "ATK  NAN" + std::to_string(character->get_stat(1));
+				window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				str = "DEF  NAN" + std::to_string(character->get_stat(2));
+				window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				ImGui::PopFont();
+			}
+		}
 		else
 		{
-			ImGui::PushFont(FONT_TURN);
-			window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
-			ImGui::PopFont();
+			ImVec2 btnPos = { pos.x + selectedImg->GetWidth() * 0.67f, pos.y + characterImg->GetHeight() * 0.75f };
+			if(isRightSide)
+				btnPos = { pos.x - selectedImg->GetWidth() * 0.70f, pos.y + characterImg->GetHeight() * 0.75f };
 
-			ImGui::PushFont(FONT_OPEN_30);
-			string str = " HP  NAN";
-			window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
-			str = "ATK  NAN" + std::to_string(character->get_stat(1));
-			window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-			str = "DEF  NAN" + std::to_string(character->get_stat(2));
-			window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-			ImGui::PopFont();
+			if (character)
+			{
+				ImGui::PushFont(FONT_TURN);
+				window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
+				ImGui::PopFont();
+			}
+			else
+			{
+				ImGui::PushFont(FONT_TURN);
+				window->AddText(namePos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
+				ImGui::PopFont();
+			}
+			ret = UI::UIButton_2("Roll", "Roll", btnPos, { -50.f, 15.f }, FONT_BODY);
 		}
+		return ret;
 	}
 
 	void ActionUI(const ImVec2 pos, string title)
