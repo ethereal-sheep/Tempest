@@ -21,6 +21,8 @@ namespace Tempest
 	{
 		bool OverlayOpen = true;
 		CameraControls cam_ctrl;
+		int selected = -1;
+		tvector<Entity> chars;
 
 		const char* window_name() override
 		{
@@ -42,6 +44,7 @@ namespace Tempest
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
 			cam_ctrl.set_fixed_camera(cam);
 
+			chars.assign(4, INVALID);
 		}
 
 		void show(Instance& instance [[maybe_unused]] ) override
@@ -63,8 +66,6 @@ namespace Tempest
 				if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 				{
 
-					static int selected = -1;
-					static tvector<Entity> chars(4, INVALID);
 					bool selectable_hovered = false;
 					auto& cam = Service<RenderSystem>::Get().GetCamera();
 
@@ -189,7 +190,7 @@ namespace Tempest
 								}
 
 								auto& io = ImGui::GetIO();
-								if (!selectable_hovered && io.MouseClicked[0])
+								if (io.MouseClicked[0] && !ImGui::IsAnyItemHovered())
 								{
 									// create or move
 									if (chars[selected])
@@ -215,7 +216,16 @@ namespace Tempest
 
 										auto& transform = instance.ecs.get<tc::Transform>(entity);
 										auto& model = instance.ecs.get<tc::Model>(entity);
-										//auto& character = instance.ecs.get<tc::Transform>(entity);
+
+										/* ===========================================
+										* NOTE TO UI!!!!
+										* ADD CHARACTER SHEET HERE TO THE CHARACTER!!
+										* JUST ASSIGN THE COMPONENT
+										* instance.ecs.get<tc::Character>(entity) = instance.ecs.get<tc::Character>(char_sheet_id)
+										* ============================================
+										*/
+
+										auto& character = instance.ecs.get<tc::Character>(entity);
 
 										transform.position = inter;
 										model.path = "Models\\Character.a";

@@ -38,6 +38,41 @@ namespace Tempest
 		void show(Instance& instance) override
 		{
             auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
+			auto& io = ImGui::GetIO();
+			if (io.KeyCtrl)
+			{
+				for (auto c : io.InputQueueCharacters)
+				{
+					c += 'a' - 1;
+					switch (c)
+					{
+					case 'h':
+					{
+						Service<EventManager>::Get().instant_dispatch<ToggleMenuBar>();
+					}
+					break;
+					case 'z':
+					{
+					}
+					break;
+					case 'y':
+					{
+					}
+					break;
+					case 's':
+					{
+					}
+					break;
+					case 'd':
+					{
+					}
+					break;
+					default:
+						break;
+					}
+				}
+			}
+
 
 			if (toggle && ImGui::BeginMainMenuBar())
 			{
