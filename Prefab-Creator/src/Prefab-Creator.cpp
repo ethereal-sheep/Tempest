@@ -108,8 +108,10 @@ namespace Tempest
 
 		void OnUpdate() override
 		{
-			// need to use dt
-			// fps controller can be done in instance manager
+			auto& io = ImGui::GetIO();
+			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			cam.SetMousePosition((int)io.MousePos.x, (int)io.MousePos.y);
+
 			instance.OnUpdate(1.f);
 
 

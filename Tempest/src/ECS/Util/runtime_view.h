@@ -62,7 +62,11 @@ namespace Tempest
 				return !pools.count(i);
 			};
 
-			include.erase(std::remove_if(include.begin(), include.end(), lambda), include.end());
+			for (auto i : include)
+				if (lambda(i))
+					return;
+
+			//include.erase(std::remove_if(include.begin(), include.end(), lambda), include.end());
 			exclude.erase(std::remove_if(exclude.begin(), exclude.end(), lambda), exclude.end());
 
 			// guaranteed all hash exist

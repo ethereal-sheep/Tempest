@@ -24,7 +24,6 @@ namespace Tempest
 	}
 	void Instance::internal_update()
 	{
-
 	}
 	void Instance::internal_render()
 	{
@@ -38,13 +37,33 @@ namespace Tempest
 			auto& transform = ecs.get<tc::Transform>(id);
 			Service<RenderSystem>::Get().Submit(mesh.code, transform);
 		}
-
-		auto view2 = ecs.view<tc::Model>(exclude_t<tc::Destroyed>());
+		// without local
+		auto view2 = ecs.view<tc::Model, tc::Transform>(exclude_t<tc::Destroyed, tc::Local>());
 		for (auto id : view2)
 		{
 			auto& model = ecs.get<tc::Model>(id);
 			auto& transform = ecs.get<tc::Transform>(id);
 			Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
+		}
+
+		// with local
+		auto view3 = ecs.view<tc::Model, tc::Local, tc::Transform>(exclude_t<tc::Destroyed>());
+		for (auto id : view3)
+		{
+			auto model = ecs.get_if<tc::Model>(id);
+			auto transform = ecs.get_if<tc::Transform>(id);
+			auto local = ecs.get_if<tc::Local>(id);
+
+			auto test = glm::translate(transform->position)
+				* glm::mat4(transform->rotation)
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale)
+				* glm::scale(transform->scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+
+			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
 		}
 	}
 	void Instance::internal_exit()

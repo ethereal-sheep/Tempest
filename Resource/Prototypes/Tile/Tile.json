@@ -37,6 +37,12 @@
         },
         {
             "Metadata": {
+                "Type": "Tile"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
                 "Type": "Local"
             },
             "Component": {

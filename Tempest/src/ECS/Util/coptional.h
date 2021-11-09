@@ -13,10 +13,12 @@
 #include "../../Memory.h"
 #include "../Entity.h"
 #include "ECS/Components/Components.h"
+#include "sparse_set.h"
 #include "Util.h"
 
 namespace Tempest
 {
+
 	struct c_base
 	{
 		c_base() = delete;
@@ -39,6 +41,10 @@ namespace Tempest
 		virtual void toggle() = 0;
 		virtual tuptr<c_base> instance() const = 0;
 		virtual tuptr<c_base> clone() const = 0;
+		virtual void create(
+			Entity entity, 
+			tuptr<sparse_set>& ss, 
+			m_resource* memory_resource) const = 0;
 
 		bool special = false;
 		string type_info;
@@ -153,6 +159,14 @@ namespace Tempest
 		tuptr<c_base> clone() const override
 		{
 			return make_uptr<coptional<Component>>(*this);
+		}
+
+		void create(Entity entity, tuptr<sparse_set>& ss, m_resource* memory_resource) const override
+		{
+			if (!ss)
+				ss = make_uptr<sparse_set_t<Component>>(memory_resource);
+			
+			static_cast<sparse_set_t<Component>*>(ss.get())->emplace(entity, get());
 		}
 
 		Component& operator*()

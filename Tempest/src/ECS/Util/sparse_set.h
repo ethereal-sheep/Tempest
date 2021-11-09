@@ -86,6 +86,7 @@ namespace Tempest
 		 */
 		virtual void clone(Entity old_e, Entity new_e) = 0;
 
+
 		/**
 		 * @brief Clears all entities in the sparse set
 		 */
@@ -232,6 +233,8 @@ namespace Tempest
 				componentList.push_back(componentList[sparse[old_e]]);
 			}
 		}
+
+
 
 		/**
 		 * @brief Clears all entities in the sparse set

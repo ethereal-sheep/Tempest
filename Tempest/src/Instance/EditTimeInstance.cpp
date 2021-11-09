@@ -43,19 +43,7 @@ namespace Tempest
 	}
 	void EditTimeInstance::_update(float)
 	{
-		//po.advance(dt);
-
-		//// we can do someother shit here
-
-		//po.fetch();
-		//auto view = ecs.view<Components::Rigidbody, tc::Transform>(exclude_t<tc::Destroyed>());
-		//for (auto id : view)
-		//{
-		//	auto& rb = ecs.get<Components::Rigidbody>(id);
-		//	auto& transform = ecs.get<Components::Transform>(id);
-		//	rb.internal_rb.get()->setGlobalPose({ transform.position.x, transform.position.y, transform.position.z });
-
-		//}
+		scene.get_map().update();
 
 		for (auto& [id, pf] : scene.get_map())
 		{
@@ -71,7 +59,6 @@ namespace Tempest
 					* glm::mat4(local->local_rotation)
 					* glm::scale(local->local_scale)
 					* glm::scale(transform->scale);
-
 
 				Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}

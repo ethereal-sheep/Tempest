@@ -152,6 +152,7 @@ namespace Tempest
 					}
 					ImGui::EndMenu();
 				}
+
 				// for debugging only (remove on release)
 				if (ImGui::BeginMenu("Demo"))
 				{

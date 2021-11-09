@@ -53,7 +53,7 @@ namespace ImGuizmo
      return static_cast<int>(lhs) != rhs;
    }
 
-   static bool operator==(OPERATION lhs, int rhs)
+   inline static bool operator==(OPERATION lhs, int rhs)
    {
      return static_cast<int>(lhs) == rhs;
    }

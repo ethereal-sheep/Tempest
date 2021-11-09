@@ -95,6 +95,8 @@ namespace Tempest
 			REQUIRE(Local)
 			REQUIRE(Shape)
 			REQUIRE(Model)
+			REQUIRE(Door)
+			REQUIRE(Collision)
 		});
 
 		PROTO_CATEGORY(Wall)
@@ -104,6 +106,8 @@ namespace Tempest
 			REQUIRE(Local)
 			REQUIRE(Shape)
 			REQUIRE(Model)
+			REQUIRE(Wall)
+			REQUIRE(Collision)
 		});
 
 		PROTO_CATEGORY(Tile)
@@ -113,6 +117,7 @@ namespace Tempest
 			REQUIRE(Local)
 			REQUIRE(Shape)
 			REQUIRE(Model)
+			REQUIRE(Tile)
 		});
 
 		PROTO_CATEGORY(Decoration)
@@ -131,6 +136,20 @@ namespace Tempest
 			REQUIRE(Local)
 			REQUIRE(Shape)
 			REQUIRE(Model)
+			REQUIRE(Obstacle)
+			REQUIRE(Collision)
+		});
+
+		PROTO_CATEGORY(Unit)
+		{
+			REQUIRE(Meta)
+			REQUIRE(Transform)
+			REQUIRE(Local)
+			REQUIRE(Shape)
+			REQUIRE(Model)
+			REQUIRE(Unit)
+			REQUIRE(Collision)
+			REQUIRE(Character)
 		});
 	}
 
