@@ -97,7 +97,7 @@ namespace Tempest
 					// character list
 					if (ImGui::Button("Fight!"))
 					{
-						Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(instance);
 						OverlayOpen = false;
 					}
 
