@@ -133,15 +133,16 @@ namespace Tempest
 
 				UI::UIButton_Simulate("TEST", "TEST", { 100.f,250.f }, { 0,0 }, FONT_PARA,false);
 				UI::UIButton_Simulate("TEST", "TEST", { 300.f,250.f }, { 0,0 }, FONT_PARA,true);
+				UI::UIButton_EndTurn( { 300.f,300.f }, { 0,0 }, FONT_PARA,true);
 
 				
 				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,300.f });
 				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f },true);
 				UI::CharacterTurnData(instance, 3, { 0.f,500.f });
 				UI::CharacterTurnData(instance, 3, { ImGui::GetWindowWidth(),500.f }, true);
-
-				/*auto pos = ImGui::GetCurrentWindow()->Pos;
 				static bool selected = false;
+				/*auto pos = ImGui::GetCurrentWindow()->Pos;
+				
 				auto defaultImg = tex_map["Assets/SkillUnselected.png"];
 				auto selectedImg = tex_map["Assets/SkillSelected.png"];
 				auto xpos = 100.f;
@@ -160,15 +161,15 @@ namespace Tempest
 				ImGui::SetCursorPosX(100.f);
 				UI::UIActionButton("TEST", "TEST", true);
 
-				UI::ActionUI({ ImGui::GetWindowWidth(),ImGui::GetWindowHeight()*0.5f }, "SELECT AN ACTION");
+				UI::ActionUI({ ImGui::GetWindowWidth(),ImGui::GetWindowHeight()*0.5f }, "SELECT AN ACTION");*/
 				auto CharIcon = tex_map["Assets/CharacterIcon.png"];
-				*/
+				
 				static vec2 a = { 100,0.f };
 
-				/*if (UI::UICharButton_Toggle((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth() * 0.7f, (float)CharIcon->GetHeight() * 0.7f }, "Char 1", "##TESTINGCA", selected, { 0,0 }, { 1,1 }))
+				if (UI::UICharButton_Arrow((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth() * 0.7f, (float)CharIcon->GetHeight() * 0.7f }, "Char 1", "##TESTINGCA", selected))
 				{
 					selected = !selected;
-				}*/
+				}
 				/*
 				ImGui::BeginChild("TESTING CHILD", { 700, 500 });
 				for (auto i = 0; i < 20; i++)
