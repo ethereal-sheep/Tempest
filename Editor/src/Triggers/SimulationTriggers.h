@@ -30,8 +30,15 @@ namespace Tempest
 
 	struct SimulateConflict : public Event 
 	{
-		SimulateConflict(id_t a, id_t d, id_t aa, id_t da, id_t c, uint32_t f, std::atomic_uint32_t& w, std::atomic_uint32_t& l, std::atomic_bool& fin) :
-			atker(a), defer(d), atk_act(aa), def_act(da), conflict(c), freq(f), win(w), lose(l), finish(fin) {}
+		SimulateConflict(
+			id_t a, id_t d, id_t aa, id_t da, id_t c, uint32_t f,
+			std::atomic_uint32_t& w, std::atomic_uint32_t& l,
+			std::atomic_int32_t& ak, std::atomic_int32_t& dk,
+			std::atomic_bool& fin) :
+			atker(a), defer(d), atk_act(aa), def_act(da), conflict(c), freq(f),
+			win(w), lose(l),
+			attack(ak), defend(dk),
+			finish(fin) {}
 
 		id_t atker;
 		id_t defer;
@@ -41,6 +48,8 @@ namespace Tempest
 		uint32_t freq;
 		std::atomic_uint32_t& win;
 		std::atomic_uint32_t& lose;
+		std::atomic_int32_t& attack;
+		std::atomic_int32_t& defend;
 		std::atomic_bool& finish;
 	};
 

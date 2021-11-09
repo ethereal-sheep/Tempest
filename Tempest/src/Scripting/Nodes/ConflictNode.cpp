@@ -116,6 +116,16 @@ namespace Tempest
 						var->get<int64_t>() = static_cast<int64_t>(a.defend_action);
 					}
 
+					if (auto var = instance.srm.get_variable_to_id(entity, "AttackRollOutput"))
+					{
+						var->get<int>() = static_cast<int>(0);
+					}
+
+					if (auto var = instance.srm.get_variable_to_id(entity, "DefendRollOutput"))
+					{
+						var->get<int>() = static_cast<int>(0);
+					}
+
 					}));
 
 			instance.srm.register_listener<Simulate>(entity, script);
@@ -158,17 +168,17 @@ namespace Tempest
 					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
 					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
 					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
-					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
+					auto aro = instance.srm.get_variable_to_id(entity, "AttackRollOutput"); // attack output
 
 					LOG_ASSERT(atker);
 					LOG_ASSERT(defer);
 					LOG_ASSERT(atk_act);
-					LOG_ASSERT(def_act);
+					LOG_ASSERT(aro);
 
 					Entity atk_e = (Entity)atker->get<int64_t>();
 					Entity def_e = (Entity)defer->get<int64_t>();
 					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
-					Entity def_act_e = (Entity)def_act->get<int64_t>();
+					int& aro_v = aro->get<int>();
 
 					// dispatch to action graph
 					instance.srm.instant_dispatch_to_id<Roll>(atk_act_e, atk_e, def_e, x);
@@ -176,6 +186,8 @@ namespace Tempest
 					{
 						LOG_ASSERT(var->get_type() == pin_type::Int);
 						// return the output of the graph
+						aro_v = var->get<int>();
+
 						return std::make_tuple(var->get<int>());
 					}
 					// if no output, just return x
@@ -191,24 +203,25 @@ namespace Tempest
 
 					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
 					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
-					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
 					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
+					auto dro = instance.srm.get_variable_to_id(entity, "DefendRollOutput"); // attack output
 
 					LOG_ASSERT(atker);
 					LOG_ASSERT(defer);
-					LOG_ASSERT(atk_act);
 					LOG_ASSERT(def_act);
+					LOG_ASSERT(dro);
 
 					Entity atk_e = (Entity)atker->get<int64_t>();
 					Entity def_e = (Entity)defer->get<int64_t>();
-					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
 					Entity def_act_e = (Entity)def_act->get<int64_t>();
+					int& dro_v = dro->get<int>();
 
 					// dispatch to action graph
 					instance.srm.instant_dispatch_to_id<Roll>(def_act_e, def_e, atk_e, x);
 					if (auto var = instance.srm.get_variable_to_id(def_act_e, "Output"))
 					{
 						LOG_ASSERT(var->get_type() == pin_type::Int);
+						dro_v = var->get<int>();
 						// return the output of the graph
 						return std::make_tuple(var->get<int>());
 					}

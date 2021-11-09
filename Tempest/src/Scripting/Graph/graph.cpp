@@ -29,6 +29,9 @@ namespace Tempest
 			auto defer = add_var("Defender", pin_type::Int64);
 			auto atk_act = add_var("AttackAction", pin_type::Int64);
 			auto def_act = add_var("DefendAction", pin_type::Int64);
+
+			auto aro = add_var("AttackRollOutput", pin_type::Int);
+			auto dro = add_var("DefendRollOutput", pin_type::Int);
 			auto win_lose = add_var("Win", pin_type::Int);
 
 			LOG_ASSERT(atker);
@@ -36,6 +39,8 @@ namespace Tempest
 			LOG_ASSERT(atk_act);
 			LOG_ASSERT(def_act);
 			LOG_ASSERT(win_lose);
+			LOG_ASSERT(aro);
+			LOG_ASSERT(dro);
 
 			// start nodes
 

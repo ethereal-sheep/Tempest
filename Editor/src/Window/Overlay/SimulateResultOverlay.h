@@ -127,7 +127,7 @@ namespace Tempest
 
                     if (UI::UIButton_2("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
                     {
-                        Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, atk_act, def_act, conflict, freq, win, lose, finish);
+                        Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, atk_act, def_act, conflict, freq, win, lose, attack, defend, finish);
                     }
                     if (UI::UIButton_2("Back", "Back", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.75f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
                     {
@@ -287,6 +287,8 @@ namespace Tempest
 
         std::atomic_uint32_t win;
         std::atomic_uint32_t lose;
+        std::atomic_int32_t attack;
+        std::atomic_int32_t defend;
         std::atomic_bool finish;
 
 
