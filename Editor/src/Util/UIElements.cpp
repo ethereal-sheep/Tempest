@@ -2999,5 +2999,37 @@ namespace Tempest::UI
 		window->AddText(titlePos, ImGui::GetColorU32({ 0,0,0,1 }), title.c_str());
 		ImGui::PopFont();
 	}
+
+	void AttackSuccessUI(const ImVec2 pos, int successVal)
+	{
+		auto window = ImGui::GetWindowDrawList();
+		auto windowPos = ImGui::GetCurrentWindow()->Pos;
+		auto arrowImg = tex_map["Assets/SuccessArrow.png"];
+		ImVec2 arrowMin = { windowPos.x + pos.x, windowPos.y + pos.y };
+		ImVec2 arrowMax = { arrowMin.x + arrowImg->GetWidth(), arrowMin.y + arrowImg->GetHeight() };
+		window->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), arrowMin, arrowMax);
+
+		ImGui::PushFont(FONT_HEAD);
+		string atkStr = "Attack";
+		auto atkTextSize = ImGui::CalcTextSize(atkStr.c_str());
+		ImVec2 atkTextPos = { arrowMin.x, arrowMin.y - atkTextSize.y *0.5f };
+		window->AddText(atkTextPos, ImGui::GetColorU32({ 1,1,1,1 }), atkStr.c_str());
+		ImGui::PopFont();
+
+		ImGui::PushFont(FONT_BODY);
+		string succStr = "Success";
+		auto succTextSize = ImGui::CalcTextSize(succStr.c_str());
+		ImVec2 succTextPos = { arrowMin.x + arrowImg->GetWidth() * 0.55f, arrowMin.y  };
+		window->AddText(succTextPos, ImGui::GetColorU32({ 1,1,1,1 }), succStr.c_str());
+		ImGui::PopFont();
+
+		ImGui::PushFont(FONT_SHEAD);
+		string val = (std::to_string(successVal) + "%");
+		auto valTextSize = ImGui::CalcTextSize(val.c_str());
+		ImVec2 valTextPos = { arrowMin.x + arrowImg->GetWidth() * 0.7f, arrowMin.y - valTextSize.y * 0.2f };
+		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
+		ImGui::PopFont();
+		
+	}
 }
 
