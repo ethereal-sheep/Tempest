@@ -138,6 +138,7 @@ namespace Tempest
 
 				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,300.f });
 				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f },true);
+				UI::AttackSuccessUI({ 50.f, 400.f }, 50);
 				UI::CharacterTurnData(instance, 3, { 0.f,500.f }, false, true);
 				if (UI::CharacterTurnData(instance, 3, { ImGui::GetWindowWidth(),500.f }, true, true))
 				{
