@@ -6,7 +6,8 @@ namespace Tempest
 
 	enum struct CameraControlMode {
 		WORLD,
-		ORBIT
+		ORBIT,
+		FIXED
 	};
 
 	enum struct EasingMode {
@@ -64,26 +65,7 @@ namespace Tempest
 		float current_pos_time = 1.f;
 
 
-		void controls(Camera& cam)
-		{
-			switch (mode)
-			{
-			case Tempest::CameraControlMode::WORLD:
-				world_controls(cam);
-				// update cam to new rotation or position
-				update_rotation(cam);
-				update_position(cam);
-				break;
-			case Tempest::CameraControlMode::ORBIT:
-				orbit_controls(cam);
-				update_rotation(cam);
-				update_position(cam);
-				update_orbit(cam);
-				break;
-			default:
-				break;
-			}
-		}
+
 
 		void world_controls(Camera& cam)
 		{
@@ -268,7 +250,7 @@ namespace Tempest
 						const float max_angle = glm::radians(270.f);
 						auto rel_pos = orbit_axis - cam.GetPosition();
 
-						
+
 
 						start_rotation = cam.GetQuatRotation();
 
@@ -333,6 +315,121 @@ namespace Tempest
 				//cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
 			}
 		}
+		
+		void fixed_controls(Camera& cam)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			if (true)
+			{
+				auto direction = els::to_vec2(io.MouseDelta);
+				//auto yaw_speed = 1.f / 4;
+				//auto pitch_speed = 1.f / 4;
+				auto pan_speed = 1.f / 4.f;
+				auto forward_speed = 1.f / 4.f;
+				auto scroll_speed = forward_speed * 4.f;
+
+				auto pan_time = .01f;
+				auto other_pan_time = .05f;
+				//auto rotate_time = .05f;
+				auto zoom_time = .05f;
+
+				if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
+				{
+					//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+					//(m_SavedMousePos.x, m_SavedMousePos.y);
+				}
+
+				if (io.MouseDown[0] && io.MouseDown[1])
+				{
+
+				}
+				else if (io.MouseDown[0]) // pan parellel to plane
+				{
+					
+				}
+				else if (io.MouseDown[1]) // rotate
+				{
+					if (!els::is_zero(direction))
+					{
+						auto currentPos = cam.GetPosition();
+						auto now = cam.GetMouseRay();
+						auto prev = cam.MousePositionToWorldRay((int)io.MousePosPrev.x, (int)io.MousePosPrev.y);
+
+						float prev_dist = 0, now_dist = 0;
+
+						bool now_intersect = glm::intersectRayPlane(currentPos, now, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
+						bool prev_intersect = glm::intersectRayPlane(currentPos, prev, glm::vec3{}, glm::vec3{ 0,1,0 }, prev_dist);
+
+						if (now_intersect && prev_intersect)
+						{
+							auto now_pos = currentPos + now * now_dist;
+							auto prev_pos = currentPos + prev * prev_dist;
+
+							current_pos_time = 0.f;
+							total_pos_time = pan_time;
+
+							start_position = currentPos;
+							end_position = currentPos + now_pos - prev_pos;
+
+							easing = EasingMode::LINEAR;
+						}
+					}
+				}
+				else if (io.MouseDown[2]) // Pan
+				{
+					if (!els::is_zero(direction))
+					{
+						auto up = glm::vec3{ 0, 1, 0 };
+						auto right = cam.GetLeft();
+
+						auto currentPos = cam.GetPosition();
+						auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
+						auto newPos = end_position - worldSpaceDirection * pan_speed;
+
+
+
+						current_pos_time = 0.f;
+						total_pos_time = other_pan_time;
+
+						start_position = currentPos;
+						end_position = newPos;
+
+						easing = EasingMode::LINEAR;
+						//cam.SetPosition(newPos);
+					}
+				}
+
+				else if (abs(io.MouseWheel) > 0.001f) // mouse feel
+				{
+					auto currentPos = cam.GetPosition();
+					auto front = cam.GetFront();
+
+					auto newPos = currentPos + (front * (io.MouseWheel * scroll_speed));
+
+					float now_dist = 0;
+					bool now_intersect = glm::intersectRayPlane(currentPos, front, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
+
+					if (now_intersect)
+					{
+						const auto max_dolly = 1.f;
+						const auto max_dolly2 = max_dolly * max_dolly;
+						if (now_dist < max_dolly)
+						{
+							newPos = currentPos + front * now_dist + -front * max_dolly;
+						}
+					}
+
+
+					current_pos_time = 0.f;
+					total_pos_time = zoom_time;
+
+					start_position = currentPos;
+					end_position = newPos;
+
+					easing = EasingMode::LINEAR;
+				}
+			}
+		}
 
 		void update_rotation(Camera& cam)
 		{
@@ -379,9 +476,45 @@ namespace Tempest
 	public:
 		CameraControls(CameraControlMode _mode = CameraControlMode::WORLD) : mode(_mode) {}
 
+
+		void controls(Camera& cam)
+		{
+			switch (mode)
+			{
+			case Tempest::CameraControlMode::WORLD:
+				world_controls(cam);
+				break;
+			case Tempest::CameraControlMode::ORBIT:
+				orbit_controls(cam);
+				break;
+			case Tempest::CameraControlMode::FIXED:
+				fixed_controls(cam);
+				break;
+			default:
+				break;
+			}
+		}
+
 		void update(Camera& cam)
 		{
-			controls(cam);
+			switch (mode)
+			{
+			case Tempest::CameraControlMode::WORLD:
+				// update cam to new rotation or position
+				update_rotation(cam);
+				update_position(cam);
+				break;
+			case Tempest::CameraControlMode::ORBIT:
+				update_rotation(cam);
+				update_position(cam);
+				update_orbit(cam);
+			case Tempest::CameraControlMode::FIXED:
+				update_rotation(cam);
+				update_position(cam);
+				break;
+			default:
+				break;
+			}
 		}
 
 		void show_debug(Camera& cam)
@@ -473,10 +606,14 @@ namespace Tempest
 			easing = EasingMode::INOUTSINE;
 		}
 
-		/*void move(Camera& cam, glm::vec3 point, float time = 1.f)
+		void move(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
+			start_position = cam.GetPosition();
+			end_rotation = point;
 
-		}*/
+			current_pos_time = 0.f;
+			total_pos_time = time;
+		}
 
 		void set_orbit_camera(Camera& cam, glm::vec3 axis)
 		{
@@ -487,6 +624,27 @@ namespace Tempest
 				look_at(cam, axis, 0.5);
 			}
 		}
+
+		void set_fixed_camera(Camera& cam, float yaw = 0.f, float pitch = 45.f)
+		{
+			if (mode != CameraControlMode::FIXED)
+			{
+				auto rot = glm::angleAxis(glm::radians(yaw), vec3{ 0, 1 ,0 });
+				auto left = glm::conjugate(rot) * vec3 { 1, 0, 0 };
+
+				rot = glm::angleAxis(glm::radians(pitch), left) * rot;
+
+				start_rotation = cam.GetQuatRotation();
+				end_rotation = rot;
+
+				current_rot_time = 0.f;
+				total_rot_time = 1.f;
+
+				mode = CameraControlMode::FIXED;
+			}
+		}
+
+
 
 		void set_world_camera()
 		{

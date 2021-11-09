@@ -150,6 +150,11 @@ namespace Tempest
 		far_clip_distance = far_clip;
 	}
 
+	void Camera::SetMousePosition(int x, int y)
+	{
+		mouse_ray = MousePositionToWorldRay(x,y);
+	}
+
 	CameraType Camera::GetType() const
 	{
 		return camtype;
@@ -178,6 +183,11 @@ namespace Tempest
 	glm::vec3 Camera::GetPosition() const
 	{
 		return camera_position;
+	}
+
+	glm::vec3 Camera::GetMouseRay() const
+	{
+		return mouse_ray;
 	}
 
 	glm::vec3 Camera::GetFront() const
@@ -259,6 +269,32 @@ namespace Tempest
 		vector.z /= vector.w;
 
 		return glm::vec3{ vector };
+	}
+
+	glm::vec3 Camera::MousePositionToWorldRay(int x, int y) const
+	{
+		auto vp = GetViewport();
+		auto width = vp.z;
+		auto height = vp.w;
+
+		glm::vec4 lRayStart_NDC(
+			((float)x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
+			((float)y / (float)height - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
+			-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
+			1.0f
+		);
+		glm::vec4 lRayEnd_NDC(
+			((float)x / (float)width - 0.5f) * 2.0f,
+			((float)y / (float)height - 0.5f) * -2.0f,
+			0.0,
+			1.0f
+		);
+
+		glm::mat4 M = glm::inverse(GetViewProjectionMatrix());
+		glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
+		glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
+		glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
+		return glm::normalize(lRayDir_world);
 	}
 
 	glm::vec2 Camera::WorldspaceToScreenspace(const glm::vec3& test) const

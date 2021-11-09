@@ -50,66 +50,112 @@ namespace Tempest
 		// for each prefab, send it to hell
 		for (auto& [id, pf] : scene.get_map())
 		{
-			ecs.create(pf);
+			auto entity = ecs.create(pf);
 		}
 
 	}
+
+	void collision_helper(id_t id, const tc::Transform& t, const tc::Shape& s, tmap<int, tmap<int, id_t>>& m)
+	{
+		const auto transform = &t;
+		const auto shape = &s;
+
+
+		const int& x = shape->x;
+		const int& y = shape->y;
+
+		int a_x = x, a_y = y, e_x = 0, e_y = 0;
+
+		if (a_x % 2 != a_y % 2)
+		{
+			a_x = a_y = std::min(x, y);
+			e_x = x - a_x;
+			e_y = y - a_y;
+		}
+
+		vec3 min, max;
+
+		min.x = -.5f - (a_x - 1) / 2.f;
+		min.z = -.5f - (a_y - 1) / 2.f;
+		min.y = 0;
+
+		max.x = .5f + (a_x - 1) / 2.f + e_x;
+		max.z = .5f + (a_y - 1) / 2.f + e_y;
+		max.y = 0;
+
+		auto rot = transform->rotation;
+		min = rot * min;
+		max = rot * max;
+
+		if (max.x < min.x) std::swap(min.x, max.x);
+		if (max.z < min.z) std::swap(min.z, max.z);
+
+		min += transform->position;
+		max += transform->position;
+
+		for (int i = (int)std::floor(min.x); i < (int)std::floor(max.x); ++i)
+			for (int j = (int)std::floor(min.z); j < (int)std::floor(max.z); ++j) {
+				m[i][j] = id;
+			}
+	}
+
 	void RuntimeInstance::_update(float dt)
 	{
-		po.advance(dt);
+		collision_map.clear();
+		character_map.clear();
 
-		// we can do someother shit here
-
-		po.fetch();
-		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
-		for (auto id : view)
+		for (auto id : ecs.view<tc::Collision, tc::Transform, tc::Shape>())
 		{
-			auto& rb = ecs.get<Components::Rigidbody>(id);
-			auto& transform = ecs.get<Components::Transform>(id);
-			if (!rb.rb_config.is_static)
-			{
-				auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get());
-				auto& rbConfig = rb.rb_config;
+			auto& transform = ecs.get<tc::Transform>(id);
+			auto& shape = ecs.get<tc::Shape>(id);
 
-				rbConfig.linear_velocity = { dynamicRb->getLinearVelocity().x,  dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z };
-				rbConfig.angular_velocity = { dynamicRb->getAngularVelocity().x,  dynamicRb->getAngularVelocity().y, dynamicRb->getAngularVelocity().z };
-				rbConfig.linear_damping = dynamicRb->getLinearDamping();
-				rbConfig.angular_damping = dynamicRb->getAngularDamping();
-				
-			}
-			
-			
-			transform.position = { rb.internal_rb->getGlobalPose().p.x, rb.internal_rb->getGlobalPose().p.y, rb.internal_rb->getGlobalPose().p.z };
-			transform.rotation = math_cast(rb.internal_rb->getGlobalPose().q);  //{ rb.internal_rb->getGlobalPose().q., rb.internal_rb->getGlobalPose().p.y, rb.internal_rb->getGlobalPose().p.z };
-			/*LOG("{0} Current Velocity [{1}, {2}, {3}]", id, dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
-			LOG("{0} Current Position [{1}, {2}, {3}]", id, dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z);*/
+			collision_helper(id, transform, shape, collision_map);
 		}
+
+		for (auto id : ecs.view<tc::Unit, tc::Transform, tc::Shape>())
+		{
+			auto& transform = ecs.get<tc::Transform>(id);
+			auto& shape = ecs.get<tc::Shape>(id);
+
+			collision_helper(id, transform, shape, character_map);
+		}
+
+
+
+		//po.advance(dt);
+
+		//// we can do someother shit here
+
+		//po.fetch();
+		//auto view = ecs.view<Components::Rigidbody, tc::Transform>();
+		//for (auto id : view)
+		//{
+		//	auto& rb = ecs.get<Components::Rigidbody>(id);
+		//	auto& transform = ecs.get<Components::Transform>(id);
+		//	if (!rb.rb_config.is_static)
+		//	{
+		//		auto dynamicRb = static_cast<physx::PxRigidBody*>(rb.internal_rb.get());
+		//		auto& rbConfig = rb.rb_config;
+
+		//		rbConfig.linear_velocity = { dynamicRb->getLinearVelocity().x,  dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z };
+		//		rbConfig.angular_velocity = { dynamicRb->getAngularVelocity().x,  dynamicRb->getAngularVelocity().y, dynamicRb->getAngularVelocity().z };
+		//		rbConfig.linear_damping = dynamicRb->getLinearDamping();
+		//		rbConfig.angular_damping = dynamicRb->getAngularDamping();
+		//		
+		//	}
+		//	
+		//	
+		//	transform.position = { rb.internal_rb->getGlobalPose().p.x, rb.internal_rb->getGlobalPose().p.y, rb.internal_rb->getGlobalPose().p.z };
+		//	transform.rotation = math_cast(rb.internal_rb->getGlobalPose().q);  //{ rb.internal_rb->getGlobalPose().q., rb.internal_rb->getGlobalPose().p.y, rb.internal_rb->getGlobalPose().p.z };
+		//	/*LOG("{0} Current Velocity [{1}, {2}, {3}]", id, dynamicRb->getLinearVelocity().x, dynamicRb->getLinearVelocity().y, dynamicRb->getLinearVelocity().z);
+		//	LOG("{0} Current Position [{1}, {2}, {3}]", id, dynamicRb->getGlobalPose().p.x, dynamicRb->getGlobalPose().p.y, dynamicRb->getGlobalPose().p.z);*/
+		//}
 	}
 	void RuntimeInstance::_render()
 	{
 	}
 	void RuntimeInstance::_exit()
 	{
-	}
-	void RuntimeInstance::build_scripts(const tpath& root_directory)
-	{
-		// for every file in graphs folder
-		tpath folder = root_directory / graphs_folder;
-
-		// if directory doesn't exist, warn and return
-		if (!std::filesystem::exists(folder))
-		{
-			// no exception as its not malformed
-			LOG_WARN("{} does not exist!", folder.string());
-			return;
-		}
-		
-		//for (auto id : ecs.view<tc::Script>())
-		{
-			//auto& s = ecs.get<tc::Script>(id);
-			// build scripts here
-
-		}
 	}
 
 }

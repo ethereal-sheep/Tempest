@@ -99,44 +99,21 @@ namespace Tempest
 						[](){}, [&]()
 						{
 							auto& cam = Service<RenderSystem>::Get().GetCamera();
-							auto vp = cam.GetViewport();
-							auto width = vp.z;
-							auto height = vp.w;
 
 							auto& io = ImGui::GetIO();
 							if (io.WantCaptureMouse)
 								return;
 
-							glm::vec4 lRayStart_NDC(
-								((float)io.MousePos.x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
-								((float)io.MousePos.y / (float)height - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
-								-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
-								1.0f
-							);
-							glm::vec4 lRayEnd_NDC(
-								((float)io.MousePos.x / (float)width - 0.5f) * 2.0f,
-								((float)io.MousePos.y / (float)height - 0.5f) * -2.0f,
-								0.0,
-								1.0f
-							);
-
-							glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
-							glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
-							glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
-							glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
-							lRayDir_world = glm::normalize(lRayDir_world);
-
+							auto ray = cam.GetMouseRay();
 							auto start = cam.GetPosition();
 							float dist = 0;
-							if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+							if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 							{
-
-
 								auto [it, b] = instance.scene.get_map().create(proto);
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
 								{
-									auto inter = cam.GetPosition() + lRayDir_world * dist;
+									auto inter = cam.GetPosition() + ray * dist;
 
 									if (auto shape = it->second.get_if<tc::Shape>())
 									{
@@ -169,37 +146,14 @@ namespace Tempest
 					))
 					{
 						auto& cam = Service<RenderSystem>::Get().GetCamera();
-						auto vp = cam.GetViewport();
-						auto width = vp.z;
-						auto height = vp.w;
-
-						auto& io = ImGui::GetIO();
-
-						glm::vec4 lRayStart_NDC(
-							((float)io.MousePos.x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
-							((float)io.MousePos.y / (float)height - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
-							-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
-							1.0f
-						);
-						glm::vec4 lRayEnd_NDC(
-							((float)io.MousePos.x / (float)width - 0.5f) * 2.0f,
-							((float)io.MousePos.y / (float)height - 0.5f) * -2.0f,
-							0.0,
-							1.0f
-						);
-
-						glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
-						glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
-						glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
-						glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
-						lRayDir_world = glm::normalize(lRayDir_world);
-
+						
+						auto ray = cam.GetMouseRay();
 						auto start = cam.GetPosition();
 						float dist = 0;
-						if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+						if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 						{
 
-							auto inter = cam.GetPosition() + lRayDir_world * dist;
+							auto inter = cam.GetPosition() + ray * dist;
 
 							if (auto shape = proto.get_if<tc::Shape>())
 							{
@@ -215,7 +169,6 @@ namespace Tempest
 									a_x = a_y = std::min(x, y);
 									e_x = x - a_x;
 									e_y = y - a_y;
-
 								}
 
 								inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);

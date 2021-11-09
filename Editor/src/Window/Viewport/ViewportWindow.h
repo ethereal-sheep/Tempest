@@ -79,7 +79,7 @@ namespace Tempest
 
 
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
-			//cam_ctrl.show_debug(cam);
+			cam_ctrl.controls(cam);
 			cam_ctrl.update(cam);
 
 
@@ -173,14 +173,16 @@ namespace Tempest
 				{
 					if (GC.GetInitial() != transform)
 					{
-
 						instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
-
 					}
 				}
 
 				if (io.KeysDown[io.KeyMap[ImGuiKey_Delete]])
 				{
+					if (GC.GetInitial() != transform)
+					{
+						instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
+					}
 					instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 					instance.selected = INVALID;
 					return;
@@ -316,37 +318,16 @@ namespace Tempest
 			// highlights
 			if(!io.MouseDown[0])
 			{
-				auto vp = cam.GetViewport();
-				auto width = vp.z;
-				auto height = vp.w;
 
 				if (io.WantCaptureMouse)
 					return;
 
-				glm::vec4 lRayStart_NDC(
-					((float)io.MousePos.x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
-					((float)io.MousePos.y / (float)height - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
-					-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
-					1.0f
-				);
-				glm::vec4 lRayEnd_NDC(
-					((float)io.MousePos.x / (float)width - 0.5f) * 2.0f,
-					((float)io.MousePos.y / (float)height - 0.5f) * -2.0f,
-					0.0,
-					1.0f
-				);
-
-				glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
-				glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
-				glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
-				glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
-				lRayDir_world = glm::normalize(lRayDir_world);
-
+				auto ray = cam.GetMouseRay();
 				auto start = cam.GetPosition();
 				float dist = 0;
-				if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+				if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 				{
-					auto inter = cam.GetPosition() + lRayDir_world * dist;
+					auto inter = cam.GetPosition() + ray * dist;
 					id_t id = instance.scene.get_map().find((int)std::round(inter.x-.5f), (int)std::round(inter.z - .5f));
 					
 					if (id && instance.scene.get_map().exist(id))
@@ -391,18 +372,7 @@ namespace Tempest
 							box.max.z += transform.position.z;
 							box.max.y = 0;
 
-
-							/*Line l;
-							l.p0 = glm::vec3(-.1, 0, -.1);
-							l.p1 = glm::vec3(.1, 0, .1);
-
-							Line r;
-							r.p0 = glm::vec3(-.1, 0, .1);
-							r.p1 = glm::vec3(.1, 0, -.1);*/
-
 							Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
-							//Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-							//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 						}
 					}
 					else

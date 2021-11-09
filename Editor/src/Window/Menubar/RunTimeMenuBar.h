@@ -18,15 +18,28 @@ namespace Tempest
 {
 	class RunTimeMenuBar : public Window
 	{
+		bool toggle = false;
+
 		const char* window_name() override
 		{
 			return "RunTimeMenuBar";
 		}
+
+		void init(Instance&) override
+		{
+			Service<EventManager>::Get().register_listener<ToggleMenuBar>(&RunTimeMenuBar::toggle_menu, this);
+		}
+
+		void toggle_menu(const Event&)
+		{
+			toggle = !toggle;
+		}
+
 		void show(Instance& instance) override
 		{
             auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
 
-			if(ImGui::BeginMainMenuBar())
+			if (toggle && ImGui::BeginMainMenuBar())
 			{
 				if (ImGui::Button(ICON_FA_STOP, {25.f, 25.f}))
 				{
@@ -36,7 +49,18 @@ namespace Tempest
 						InstanceType::EDIT_TIME);
 				}
 
-				if (ImGui::BeginMenu("Project"))
+
+				if (ImGui::BeginMenu("Windows"))
+				{
+					for (auto& window : instance.window_manager.get_windows())
+					{
+						ImGui::MenuItem(window->window_name(), nullptr, &window->visible);
+					}
+					ImGui::EndMenu();
+				}
+
+
+				/*if (ImGui::BeginMenu("Project"))
 				{
 					if (ImGui::MenuItem(ICON_FA_FILE_MEDICAL " New", "Ctrl+N", false)){}
 
@@ -59,7 +83,7 @@ namespace Tempest
 
 					
 					ImGui::EndMenu();
-				}
+				}*/
 
 
 

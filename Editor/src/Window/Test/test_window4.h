@@ -17,9 +17,9 @@
 
 namespace Tempest
 {
-	class test_window3 : public Window
+	class test_window4 : public Window
 	{
-		bool OverlayOpen = true;
+		bool OverlayOpen = false;
 		CameraControls cam_ctrl;
 
 		const char* window_name() override
@@ -39,9 +39,15 @@ namespace Tempest
 			// remember to do this
 			window_flags |= ImGuiWindowFlags_NoTitleBar;
 
+
+			Service<EventManager>::Get().register_listener<OpenCombatModeTrigger>(&test_window4::open_popup, this);
+		}
+
+		void open_popup(const Event&)
+		{
+			OverlayOpen = true;
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
 			cam_ctrl.set_fixed_camera(cam);
-
 		}
 
 		void show(Instance& instance [[maybe_unused]] ) override
@@ -63,16 +69,16 @@ namespace Tempest
 				if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 				{
 
-					static int selected = -1;
-					static tvector<Entity> chars(4, INVALID);
-					bool selectable_hovered = false;
+					//static int selected = -1;
+					//static tvector<Entity> chars(4, INVALID);
+					//bool selectable_hovered = false;
 					auto& cam = Service<RenderSystem>::Get().GetCamera();
 
 					cam_ctrl.controls(cam);
 					cam_ctrl.update(cam);
 
 					// character list
-					{
+					{/*
 						for (int i = 0; i < (int)chars.size(); ++i)
 						{
 							string name = "Character_";
@@ -83,7 +89,7 @@ namespace Tempest
 								selected = i;
 							}
 
-							if(ImGui::IsItemHovered())
+							if (ImGui::IsItemHovered())
 								selectable_hovered = true;
 
 							if (i == selected)
@@ -91,14 +97,13 @@ namespace Tempest
 								ImGui::SameLine();
 								ImGui::Text(ICON_FA_CIRCLE);
 							}
-						}
+						}*/
 					}
-					// character list
-					if (ImGui::Button("Fight!"))
-					{
-						Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>();
-						OverlayOpen = false;
-					}
+					//// character list
+					//if (ImGui::Button("Fight!"))
+					//{
+					//	//Service<EventManager>::Get().instant_dispatch<Fight>();
+					//}
 
 					// highlight stuff on viewport
 					{
@@ -156,12 +161,27 @@ namespace Tempest
 									box.max.z += transform.position.z;
 									box.max.y = 0;
 
-									Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
+									vec4 color = { 1,0,0,1 };
+									if (instance.ecs.has<tc::Door>(id))
+										color = {0,0,1,1};
+									else if (instance.ecs.has<tc::Obstacle>(id))
+										color = { 0,0,1,1 };
+									else if (instance.ecs.has<tc::Unit>(id))
+										color = { 0.1,0.1,0.1,1 };
+
+									Service<RenderSystem>::Get().DrawLine(box, color);
+								}
+
+								auto& io = ImGui::GetIO();
+								if (io.MouseClicked[0])
+								{
+									// click
+									instance.selected = id;
 								}
 							}
-							else if (selected >= 0 && selected < (int)chars.size())
+							else if (instance.selected && instance.ecs.has<tc::Unit>(instance.selected))
 							{
-							// draw one box collider
+								// draw one box collider
 								{
 									AABB box;
 
@@ -188,50 +208,17 @@ namespace Tempest
 									Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
 								}
 
-								auto& io = ImGui::GetIO();
-								if (!selectable_hovered && io.MouseClicked[0])
-								{
-									// create or move
-									if (chars[selected])
-									{
-										// move existing
-										auto& transform = instance.ecs.get<tc::Transform>(chars[selected]);
-										// take note that inter has already been processed
-										transform.position = inter;
-									}
-									else
-									{
-										// create proto
-										// create prefab
-										// then throw it into ecs
-										auto proto = create_new_prototype("Unit");
-										auto prefab = proto.instance();
-										auto entity = instance.ecs.create(prefab);
-
-										chars[selected] = entity;
-										LOG_ASSERT(instance.ecs.has<tc::Character>(entity));
-										LOG_ASSERT(instance.ecs.has<tc::Transform>(entity));
-										LOG_ASSERT(instance.ecs.has<tc::Model>(entity));
-
-										auto& transform = instance.ecs.get<tc::Transform>(entity);
-										auto& model = instance.ecs.get<tc::Model>(entity);
-										//auto& character = instance.ecs.get<tc::Transform>(entity);
-
-										transform.position = inter;
-										model.path = "Models\\Character.a";
-									}
-								}
 							}
 						}
 					}
 					// highlight stuff on viewport
 
-					// draw stuff on units
+					// draw stuff on selected heads
 					{
-						auto view = instance.ecs.view<tc::Unit, tc::Transform>();
-						for (auto id : view)
+
+						if (instance.selected && instance.ecs.has<tc::Unit>(instance.selected) && instance.ecs.has<tc::Transform>(instance.selected))
 						{
-							auto position = instance.ecs.get<tc::Transform>(id).position;
+							auto position = instance.ecs.get<tc::Transform>(instance.selected).position;
 							position.y += 2;
 							auto ss = cam.WorldspaceToScreenspace(position);
 							auto vp = cam.GetViewport();
@@ -239,19 +226,83 @@ namespace Tempest
 							ss.y = vp.w - ((1 + ss.y) / 2 * vp.w);
 							auto temp = ImGui::GetCursorPos();
 
+							int w_x = (int)std::floor(position.x);
+							int w_y = (int)std::floor(position.z);
+
+							LOG_ASSERT(runtime.character_map[w_x][w_y] == instance.selected);
+							LOG_ASSERT(runtime.collision_map[w_x][w_y] == instance.selected);
+
 							// Draw whatever thing on their head
 							{
 
 								ImGui::PushFont(FONT_BOLD);
 								auto text_size = ImGui::CalcTextSize(ICON_FA_ICE_CREAM);
 								auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
-								if (cursor_pos.x < viewport->WorkSize.x && ss.y + text_size.y/2 < viewport->WorkSize.y) {
+								if (cursor_pos.x < viewport->WorkSize.x && ss.y + text_size.y / 2 < viewport->WorkSize.y) {
 									ImGui::SetCursorPos(cursor_pos);
 									ImGui::Text(ICON_FA_ICE_CREAM);
 								}
 								ImGui::PopFont();
 							}
 
+							// draw bfs if unit
+							{
+								//bfs
+								const uint32_t range = 5;
+								const tvector<tpair<int,int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
+								tmap<int, tmap<int, bool>> visited;
+								tmap<int, tmap<int, uint32_t>> distance;
+								std::queue<glm::ivec2> q;
+								q.push({ w_x, w_y });
+
+								//draw
+								while (!q.empty())
+								{
+									auto p = q.front();
+									q.pop();
+
+									if (visited[p.x][p.y])
+										continue;
+
+									visited[p.x][p.y] = true;
+
+									auto new_dist = distance[p.x][p.y] + 1;
+									if (new_dist > range)
+										continue;
+
+									for (auto [x, y] : dir)
+									{
+										if (visited[p.x + x][p.y + y])
+											continue;
+										if (runtime.collision_map[p.x + x][p.y + y])
+											continue;
+
+										distance[p.x + x][p.y + y] = new_dist;
+										q.push({ p.x + x, p.y + y });
+									}
+
+								}
+
+								for(auto& [x, m] : visited)
+									for (auto [y, b] : m)
+									{
+										AABB box;
+
+										int a_x = 1, a_y = 1, e_x = 0, e_y = 0;
+
+										box.min.x = x;
+										box.min.z = y;
+										box.min.y = 0;
+
+										box.max.x = x + 1.f;
+										box.max.z = y + 1.f;
+										box.max.y = 0;
+
+										Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+									}
+
+
+							}
 
 							ImGui::SetCursorPos(temp);
 						}

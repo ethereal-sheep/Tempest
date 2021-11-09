@@ -24,7 +24,6 @@ namespace Tempest
 	}
 	void Instance::internal_update()
 	{
-		scene.get_map().update();
 	}
 	void Instance::internal_render()
 	{

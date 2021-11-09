@@ -28,7 +28,8 @@ namespace Tempest
 	{
 		tmap<id_t, prefab> prefabs;
 
-		tmap<int, tmap<int, tvector<id_t>>> map;
+		tmap<int, tmap<int, tvector<id_t>>> collision_map;
+		tmap<int, tmap<int, tvector<id_t>>> tile_map;
 
 	public:
 		Map() = default; // empty map
@@ -37,7 +38,8 @@ namespace Tempest
 		{
 			// just to clean up
 			// might be sufficient
-			map.clear();
+			collision_map.clear();
+			tile_map.clear();
 			for (auto& [id, pf] : prefabs)
 			{
 				if (pf.has<tc::Transform>() && pf.has<tc::Shape>())
@@ -78,16 +80,21 @@ namespace Tempest
 					max += transform->position;
 
 					for (int i = (int)std::floor(min.x); i < (int)std::floor(max.x); ++i)
-						for (int j = (int)std::floor(min.z); j < (int)std::floor(max.z); ++j)
-							map[i][j].push_back(id);
+						for (int j = (int)std::floor(min.z); j < (int)std::floor(max.z); ++j) {
+							if (pf.has<tc::Tile>())
+								tile_map[i][j].push_back(id);
+							else if (pf.has<tc::Collision>())
+								collision_map[i][j].push_back(id);
+						}
+
 				}
 			}
 		}
 
 		id_t find(int x, int y)
 		{
-			if (map.count(x) && map[x].count(y) && map[x][y].size())
-				return map[x][y].front();
+			if (collision_map.count(x) && collision_map[x].count(y) && collision_map[x][y].size())
+				return collision_map[x][y].front();
 			return INVALID;
 		}
 

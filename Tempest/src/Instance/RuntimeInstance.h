@@ -35,7 +35,6 @@ namespace Tempest
 			Instance(project_path, strategy)
 		{
 
-			build_scripts(root);
 		}
 
 		void _init() override;
@@ -45,9 +44,10 @@ namespace Tempest
 
 		
 	private:
-		void build_scripts(const tpath& root_directory);
 
 	public:
+		tmap<int, tmap<int, id_t>> collision_map;
+		tmap<int, tmap<int, id_t>> character_map;
 	};
 }
 
