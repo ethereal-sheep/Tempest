@@ -106,7 +106,7 @@ namespace Tempest
 			{
 				const auto wrap_width = 10.f;
 				// popup
-				ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+				/*ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 				ImGui::SetNextWindowSize(ImVec2(220.f, 100.f));
 				ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 				if (ImGui::BeginPopupModal("Simulating Conflict", NULL, ImGuiWindowFlags_AlwaysAutoResize))
@@ -124,7 +124,7 @@ namespace Tempest
 					ImGui::Text("\n");
 
 					ImGui::EndPopup();
-				}
+				}*/
 
 				bool still_running = false;
 				for (int i = 0; i < max_thread; ++i)

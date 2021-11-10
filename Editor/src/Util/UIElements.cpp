@@ -91,7 +91,7 @@ namespace Tempest::UI
 			if (ImGui::IsWindowFocused() == false)
 			{
 				col = { 0.980f, 0.768f, 0.509f, 0.7f };
-				textcol = { 0,0,0,0.7 };
+				textcol = { 0,0,0,0.7f };
 			}
 			auto bgImg = tex_map["Assets/Popup_Backdrop.png"];
 			auto warnImg = tex_map["Assets/WarningIco.png"];
@@ -175,7 +175,7 @@ namespace Tempest::UI
 			if (ImGui::IsWindowFocused() == false)
 			{
 				col = { 0.980f, 0.768f, 0.509f, 0.7f };
-				textcol = { 0,0,0,0.7 };
+				textcol = { 0,0,0,0.7f };
 			}
 
 			auto bgImg = tex_map["Assets/Popup_Backdrop.png"];
@@ -1249,7 +1249,7 @@ namespace Tempest::UI
 	}
 
 	//Blueish Button for Select Weapon Btn
-	bool UIButton_Weapon(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	bool UIButton_Weapon(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, [[maybe_unused]] bool selected)
 	{
 		const float default_padding_x = 8.f;
 		const float default_padding_y = 8.f;
@@ -1394,7 +1394,7 @@ namespace Tempest::UI
 	}
 
 	//Greenish Button for Select Action Btn
-	bool UIButton_Action(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	bool UIButton_Action(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, [[maybe_unused]] bool selected)
 	{
 		const float default_padding_x = 8.f;
 		const float default_padding_y = 8.f;
@@ -1540,7 +1540,7 @@ namespace Tempest::UI
 	}
 
 	// Beige Button for Select Sequence Btn
-	bool UIButton_Sequence(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	bool UIButton_Sequence(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, [[maybe_unused]] bool selected)
 	{
 		const float default_padding_x = 8.f;
 		const float default_padding_y = 8.f;
@@ -1869,7 +1869,7 @@ namespace Tempest::UI
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
 		ImGui::PopStyleVar(1);
-		bool hovered = ImGui::IsItemHovered();
+		//bool hovered = ImGui::IsItemHovered();
 		bool res = false;
 
 
@@ -2506,7 +2506,7 @@ namespace Tempest::UI
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
-		float alpha = selected ? 1 : 0;
+		float alpha = selected ? 1.f : 0;
 		if (window->SkipItems)
 			return { false,false };
 		auto arrowImg = tex_map["Assets/SelectArrow.png"];
@@ -2584,7 +2584,7 @@ namespace Tempest::UI
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
-		float alpha = selected ? 1 : 0;
+		float alpha = selected ? 1.f : 0;
 		if (window->SkipItems)
 			return false;
 		const ImRect bb(window->DC.CursorPos, { window->DC.CursorPos.x + size.x + padding.x * 2, window->DC.CursorPos.y + size.y + padding.y * 2 });
@@ -2640,7 +2640,7 @@ namespace Tempest::UI
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
-		float alpha = selected ? 1 : 0;
+		//float alpha = selected ? 1 : 0;
 		if (window->SkipItems)
 			return false;
 		const ImRect bb(window->DC.CursorPos, { window->DC.CursorPos.x + size.x + padding.x * 2, window->DC.CursorPos.y + size.y + padding.y * 2 });
@@ -2703,7 +2703,7 @@ namespace Tempest::UI
 
 	bool UIActionButtonEx(ImGuiID id, string actionName, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 
 		
@@ -2784,7 +2784,7 @@ namespace Tempest::UI
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
-		float alpha = selected ? 1 : 0;
+		float alpha = selected ? 1.f : 0;
 		if (window->SkipItems)
 			return  false;
 		auto arrowImg = tex_map["Assets/Arrow_glow.png"];

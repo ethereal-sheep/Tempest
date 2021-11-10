@@ -239,17 +239,17 @@ namespace Tempest
 					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
 					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
 					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
-					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
+					//auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
 
 					LOG_ASSERT(atker);
 					LOG_ASSERT(defer);
 					LOG_ASSERT(atk_act);
-					LOG_ASSERT(def_act);
+					//LOG_ASSERT(def_act);
 
 					Entity atk_e = (Entity)atker->get<int64_t>();
 					Entity def_e = (Entity)defer->get<int64_t>();
 					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
-					Entity def_act_e = (Entity)def_act->get<int64_t>();
+					//Entity def_act_e = (Entity)def_act->get<int64_t>();
 
 					// dispatch to action graph
 					instance.srm.instant_dispatch_to_id<Resolve>(atk_act_e, atk_e, def_e, x);
@@ -272,17 +272,17 @@ namespace Tempest
 
 					auto atker = instance.srm.get_variable_to_id(entity, "Attacker"); // attacking entity
 					auto defer = instance.srm.get_variable_to_id(entity, "Defender"); // defending entity
-					auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
+					//auto atk_act = instance.srm.get_variable_to_id(entity, "AttackAction"); // attack action
 					auto def_act = instance.srm.get_variable_to_id(entity, "DefendAction"); // attack action
 
 					LOG_ASSERT(atker);
 					LOG_ASSERT(defer);
-					LOG_ASSERT(atk_act);
+					//LOG_ASSERT(atk_act);
 					LOG_ASSERT(def_act);
 
 					Entity atk_e = (Entity)atker->get<int64_t>();
 					Entity def_e = (Entity)defer->get<int64_t>();
-					Entity atk_act_e = (Entity)atk_act->get<int64_t>();
+					//Entity atk_act_e = (Entity)atk_act->get<int64_t>();
 					Entity def_act_e = (Entity)def_act->get<int64_t>();
 
 					// dispatch to action graph

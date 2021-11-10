@@ -29,7 +29,6 @@ namespace Tempest
 			id = a.id;
 			temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
 		}
-
 		else
 		{
 			if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
@@ -41,7 +40,6 @@ namespace Tempest
 					break;
 				}
 			}
-			
 			else
 			{
 				for (auto thisGraph : a.instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
@@ -206,7 +204,7 @@ namespace Tempest
 					if (!ImGui::IsWindowFocused())
 					{
 						col = { 0.980f, 0.768f, 0.509f, 0.7f };
-						textcol = { 0,0,0,0.7 };
+						textcol = { 0,0,0,0.7f };
 					}
 
 					ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
@@ -280,22 +278,21 @@ namespace Tempest
 						// create new graphs
 						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 80 }, { 150,-10 }, FONT_HEAD))
 						{
-							auto i = instance.ecs.create();
+							auto new_graph = instance.ecs.create();
 
 							if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 							{
-								instance.ecs.emplace<tc::ActionGraph>(i);
-								instance.ecs.emplace<tc::Graph>(i, "ACTION", graph_type::action);
+								instance.ecs.emplace<tc::ActionGraph>(new_graph);
+								instance.ecs.emplace<tc::Graph>(new_graph, "ACTION", graph_type::action);
 								
 							}
-
 							else
 							{
-								instance.ecs.emplace<tc::ConflictGraph>(i);
-								instance.ecs.emplace<tc::Graph>(i, "SEQUENCE", graph_type::conflict);
+								instance.ecs.emplace<tc::ConflictGraph>(new_graph);
+								instance.ecs.emplace<tc::Graph>(new_graph, "SEQUENCE", graph_type::conflict);
 							}
 
-							id = i;
+							id = new_graph;
 							temp_graph = instance.ecs.get<tc::Graph>(id).g;
 						}
 					}
@@ -524,9 +521,9 @@ namespace Tempest
 		ax::NodeEditor::EndNode();
 	}
 
-	void AttackSystemOverlay::draw_link(link l, pin_id_t from, pin_id_t to, pin_type type)
+	void AttackSystemOverlay::draw_link(link l, pin_id_t from, pin_id_t to, pin_type pin_t)
 	{
-		auto color = get_pin_color(type);
+		auto color = get_pin_color(pin_t);
 
 		ax::NodeEditor::Link(l, from, to, color, 2.f);
 	}
@@ -1205,9 +1202,9 @@ namespace Tempest
 		ax::NodeEditor::EndDelete();
 	}
 
-	ImColor AttackSystemOverlay::get_pin_color(pin_type type)
+	ImColor AttackSystemOverlay::get_pin_color(pin_type pin_t)
 	{
-		switch (type)
+		switch (pin_t)
 		{
 		case pin_type::Flow: return ImColor(192, 192, 192);
 		case pin_type::Bool: return ImColor(128, 0, 0); // maroon
@@ -1225,9 +1222,9 @@ namespace Tempest
 		}
 	}
 
-	ax::Drawing::IconType AttackSystemOverlay::get_pin_icon(pin_type type)
+	ax::Drawing::IconType AttackSystemOverlay::get_pin_icon(pin_type pin_t)
 	{
-		switch (type)
+		switch (pin_t)
 		{
 		case pin_type::Flow: return ax::Drawing::IconType::Flow;				break;
 		case pin_type::Bool: return ax::Drawing::IconType::Diamond;				break;

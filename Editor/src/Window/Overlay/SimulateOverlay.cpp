@@ -163,7 +163,7 @@ namespace Tempest
 					// TODO: check for invalid inputs
 					freq = std::clamp(freq, 1u, 100000u);
 
-					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, finish);
+					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
 				}
 
 				if (UI::UIButton_2("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))

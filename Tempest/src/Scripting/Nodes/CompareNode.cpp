@@ -40,7 +40,7 @@ namespace Tempest
         case Tempest::CompareNode::inner_type::CompareFlow:
             node.set_name("Compare Flow");
             node.add_input(pin_type::Flow, "");
-            node.add_input(pin_type::Int, "Attacker");
+            node.add_input(pin_type::Int, "Attacker ");
             node.add_input(pin_type::Int, "Defender");
             node.add_output(pin_type::Flow, (const char*)u8"\uf531");
             node.add_output(pin_type::Flow, (const char*)u8"\uf52c");

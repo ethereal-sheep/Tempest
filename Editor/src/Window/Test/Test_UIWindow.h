@@ -43,11 +43,11 @@ namespace Tempest
 			rttr::type& prop_type,
 			rttr::variant& value)
 		{
-			const auto padding = 80.f;
+			const auto rt_padding = 80.f;
 			if (prop_type == rttr::type::get<float>())
-				UI::DragFloat(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ padding , 0.f }, &value.get_value<float>(), 0.01f);
+				UI::DragFloat(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ rt_padding , 0.f }, &value.get_value<float>(), 0.01f);
 			else if (prop_type == rttr::type::get<int>())
-				UI::DragInt(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ padding , 0.f }, &value.get_value<int>(), 1);
+				UI::DragInt(prop_name.c_str(), ("##" + prop_name).c_str(), ImVec2{ rt_padding , 0.f }, &value.get_value<int>(), 1);
 		}
 		void RenderClassType(const std::string& prop_name,
 			rttr::type& prop_type,
@@ -68,18 +68,18 @@ namespace Tempest
 
 				for (auto property : prop_type.get_properties())
 				{
-					auto prop_type = property.get_type();
-					auto prop_name = property.get_name().to_string();
+					auto prop_t= property.get_type();
+					auto prop_n = property.get_name().to_string();
 
-					auto value = property.get_value(var);
+					auto v = property.get_value(var);
 					if (property.get_type().is_arithmetic())
-						RenderBaseType(prop_name, prop_type, value);
+						RenderBaseType(prop_n, prop_t, v);
 					else if (property.get_type().is_class())
-						RenderClassType(prop_name, prop_type, value);
+						RenderClassType(prop_n, prop_t, v);
 					else
 						LOG("UNKNOWN");
 
-					property.set_value(var, value);
+					property.set_value(var, v);
 				}
 			}
 

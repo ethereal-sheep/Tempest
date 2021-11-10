@@ -66,7 +66,10 @@ namespace Tempest
         uint32_t freq = 100000u;
         std::atomic_uint32_t win;
         std::atomic_uint32_t lose;
+        std::atomic_int32_t attack;
+        std::atomic_int32_t defend;
         std::atomic_bool finish;
+
         tsptr<Texture> enter_button;
 
         float padding{ 0.0f };

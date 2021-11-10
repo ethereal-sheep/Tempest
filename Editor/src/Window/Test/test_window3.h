@@ -23,6 +23,7 @@ namespace Tempest
 		CameraControls cam_ctrl;
 		int selected = -1;
 		tvector<Entity> chars;
+		tvector<Entity> sheets;
 
 		const char* window_name() override
 		{
@@ -97,8 +98,14 @@ namespace Tempest
 					// character list
 					if (ImGui::Button("Fight!"))
 					{
-						Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(instance);
-						OverlayOpen = false;
+						bool okay = true;
+						for (auto i : chars)
+							if (i == INVALID) okay = false;
+						if (okay)
+						{
+							Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
+							OverlayOpen = false;
+						}
 					}
 
 					// highlight stuff on viewport
@@ -205,6 +212,8 @@ namespace Tempest
 										// create proto
 										// create prefab
 										// then throw it into ecs
+										
+										auto random_char_id = instance.ecs.view_first<tc::Character>();
 										auto proto = create_new_prototype("Unit");
 										auto prefab = proto.instance();
 										auto entity = instance.ecs.create(prefab);
@@ -224,8 +233,8 @@ namespace Tempest
 										* instance.ecs.get<tc::Character>(entity) = instance.ecs.get<tc::Character>(char_sheet_id)
 										* ============================================
 										*/
-
-										auto& character = instance.ecs.get<tc::Character>(entity);
+										if(random_char_id)
+											instance.ecs.get<tc::Character>(entity) = instance.ecs.get<tc::Character>(random_char_id);
 
 										transform.position = inter;
 										model.path = "Models\\Character.a";
