@@ -1,0 +1,15 @@
+{
+    "Metadata": {
+        "Type": "ActionGraph"
+    },
+    "Components": [
+        {
+            "Entity": 2,
+            "Component": {}
+        },
+        {
+            "Entity": 5,
+            "Component": {}
+        }
+    ]
+}

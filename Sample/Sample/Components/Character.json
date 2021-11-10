@@ -1,0 +1,35 @@
+{
+    "Metadata": {
+        "Type": "Character"
+    },
+    "Components": [
+        {
+            "Entity": 4,
+            "Component": {
+                "Charater_Name": "Test Character",
+                "Weapon_Ids": [
+                    7
+                ],
+                "Charater_Stats": [
+                    10,
+                    5,
+                    15,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    5
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+{
+    "Metadata": {
+        "Type": "Meta"
+    },
+    "Components": [
+        {
+            "Entity": 1,
+            "Component": {
+                "Name": "StatsData"
+            }
+        },
+        {
+            "Entity": 4,
+            "Component": {
+                "Name": "Char"
+            }
+        },
+        {
+            "Entity": 7,
+            "Component": {
+                "Name": "Weapon"
+            }
+        }
+    ]
+}

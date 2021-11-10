@@ -1,0 +1,66 @@
+{
+    "Metadata": {
+        "Type": "Statline"
+    },
+    "Components": [
+        {
+            "Entity": 1,
+            "Component": {
+                "Statline_Data": [
+                    {
+                        "first": true,
+                        "second": "HP"
+                    },
+                    {
+                        "first": true,
+                        "second": "ATK"
+                    },
+                    {
+                        "first": true,
+                        "second": "DEF"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat1"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat2"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat3"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat4"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat5"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat6"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat7"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat8"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat9"
+                    },
+                    {
+                        "first": false,
+                        "second": "Stat10"
+                    }
+                ]
+            }
+        }
+    ]
+}
