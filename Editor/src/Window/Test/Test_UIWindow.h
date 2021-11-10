@@ -177,6 +177,9 @@ namespace Tempest
 				if (UI::UICharTurnButton((void*)static_cast<size_t>(CharIcon2->GetID()), { (float)CharIcon2->GetWidth(), (float)CharIcon2->GetHeight() }, "CHAR", "##TESTAT2", selected,true))
 				{
 					selected = !selected;
+					std::vector<Entity> t;
+					t.push_back(3);
+					Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(t);
 				}
 				static vec2 a = { 100,0.f };
 

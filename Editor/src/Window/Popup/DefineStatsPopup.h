@@ -68,11 +68,6 @@ namespace Tempest
                     vec2 winMax = { winMin.x + ImGui::GetWindowWidth()* 0.2f, winMin.y + ImGui::GetWindowHeight() * 0.05f};
                     ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
                     ImVec4 textcol = { 0,0,0,1 };
-                    if (ImGui::IsWindowFocused() == false)
-                    {
-                        col = { 0.980f, 0.768f, 0.509f, 0.7f };
-                        textcol = { 0,0,0,0.7 };
-                    }
                         
                     string te = "DEFINE STATS";
                     //ImGui::GetForegroundDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
