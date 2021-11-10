@@ -20,6 +20,8 @@ namespace Tempest
 		OverlayOpen = true;
 
 		turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+		character_icon = tex_map["Assets/CharacterIcon.png"]; 
+		unit_black = tex_map["Assets/Unit_Black.png"];
 	}
 
 	void TurnOrderOverlay::show(Instance& instance)
@@ -52,7 +54,7 @@ namespace Tempest
 				// text displays
 				std::string text = "Select and add the units from the list that you want you in the game.";
 				ImGui::PushFont(FONT_BODY);
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - ImGui::CalcTextSize(text.c_str()).x * 0.5f, viewport->Size.y * 0.25f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.05f, viewport->Size.y * 0.25f });
 				ImGui::Text(text.c_str());
 
 				text = "Currently selected units";
@@ -64,19 +66,45 @@ namespace Tempest
 				ImGui::SetCursorPos(ImVec2{0, viewport->Size.y * 0.3f});
 				if (ImGui::BeginChild("Character adding", ImVec2{viewport->Size.x * 0.35f, viewport->Size.y * 0.5f }, true))
 				{
+					unsigned i = 0;
 					for (auto id : instance.ecs.view<Components::Character>())
 					{
-						// render the character buttons
-						// add it to a list please
+						auto& charac = instance.ecs.get<tc::Character>(id);
+						bool found = std::find(added_entities.begin(), added_entities.end(), id) != added_entities.end();
+						if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f},
+							charac.name.c_str(), "##turnordercharc" + std::to_string(i++), found, true))
+						{
+							if (found)
+								added_entities.erase(std::remove(added_entities.begin(), added_entities.end(), id), added_entities.end());
+							else
+								added_entities.emplace_back(id);
+						}
+
+						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
 					}
 				}
 				ImGui::EndChild();
 
 				// character added section
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f, viewport->Size.y * 0.3f });
-				if (ImGui::BeginChild("Character added", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f }, true))
+				const ImVec2 ChildSize{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f };
+				if (ImGui::BeginChild("Character added", ChildSize, true))
 				{
+					unsigned i = 0;
+					float ypos = ImGui::GetCursorPosY();
 					// TODO: loop through the added units here
+					for (auto id : added_entities)
+					{
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + i++ * (ChildSize.x - (character_icon->GetWidth() + 2.0f) * 5) * 0.5f);
+						ImGui::SetCursorPosY(ypos);
+						ImGui::Image((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f });
+						
+						if (i / 5)
+						{
+							i = 0;
+							ypos += character_icon->GetHeight() + (ChildSize.y - (character_icon->GetHeight() - 35.0f) * 3) / 3.0f;
+						}
+					}
 				}
 				ImGui::EndChild();
 
