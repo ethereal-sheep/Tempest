@@ -87,14 +87,15 @@ namespace Tempest
 		min = rot * min;
 		max = rot * max;
 
-		if (max.x < min.x) std::swap(min.x, max.x);
-		if (max.z < min.z) std::swap(min.z, max.z);
-
 		min += transform->position;
 		max += transform->position;
 
-		for (int i = (int)std::floor(min.x); i < (int)std::floor(max.x); ++i)
-			for (int j = (int)std::floor(min.z); j < (int)std::floor(max.z); ++j) {
+		if (max.x < min.x) std::swap(min.x, max.x);
+		if (max.z < min.z) std::swap(min.z, max.z);
+
+
+		for (int i = (int)std::round(min.x); i < (int)std::round(max.x); ++i)
+			for (int j = (int)std::round(min.z); j < (int)std::round(max.z); ++j) {
 				m[i][j] = id;
 			}
 	}

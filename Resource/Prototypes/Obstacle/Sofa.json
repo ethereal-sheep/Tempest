@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Wall"
+        "Category": "Obstacle"
     },
     "Components": [
         {
@@ -47,9 +47,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.00005310773849487305,
                     0.0,
-                    -0.00320318341255188
+                    0.0,
+                    -0.013367235660552979
                 ],
                 "LocalRotation": [
                     0.0,
@@ -58,18 +58,24 @@
                     1.0
                 ],
                 "LocalScale": [
-                    1.0229947566986085,
-                    0.7940360903739929,
-                    3.906510829925537
+                    0.8999999761581421,
+                    0.8999999761581421,
+                    0.8999999761581421
                 ]
             }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
         },
         {
             "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Wall.a"
+                "Path": "Models\\Sofa_Sci-Fi.a"
             }
         },
         {
@@ -77,15 +83,9 @@
                 "Type": "Shape"
             },
             "Component": {
-                "X": 1,
+                "X": 3,
                 "Y": 1
             }
-        },
-        {
-            "Metadata": {
-                "Type": "Wall"
-            },
-            "Component": {}
         }
     ]
 }

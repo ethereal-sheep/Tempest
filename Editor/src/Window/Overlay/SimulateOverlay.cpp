@@ -151,7 +151,7 @@ namespace Tempest
 				ImGui::SameLine();
 				ImGui::PushItemWidth(100.f);
 				ImGui::InputScalar("", ImGuiDataType_U32, &freq, 0);
-				freq = std::clamp(freq, 1u, 100u);
+				freq = std::clamp(freq, 100u, 50000u);
 				ImGui::PopItemWidth();
 				
 				// attack section
@@ -162,6 +162,19 @@ namespace Tempest
 				{
 					// TODO: check for invalid inputs
 					freq = std::clamp(freq, 1u, 100000u);
+
+					// equip your stuff here
+					attacker.unit_id;
+					defender.unit_id;
+
+					if (auto character = instance.ecs.get_if<tc::Character>(attacker.unit_id))
+					{
+						character->chosen_weapon = attacker.weapon;
+					}
+					if (auto character = instance.ecs.get_if<tc::Character>(defender.unit_id))
+					{
+						character->chosen_weapon = defender.weapon;
+					}
 
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
 				}

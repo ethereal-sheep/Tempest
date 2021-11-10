@@ -247,7 +247,7 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 	return true;
 }
 
-bool LoadModel(const std::string& path)
+bool LoadModel(const std::string& path, const std::string& output)
 {
 	s_Scene = s_Importer.ReadFile(path,
 		aiProcess_Triangulate |
@@ -296,7 +296,7 @@ bool LoadModel(const std::string& path)
 		}
 	}
 
-	if (!WriteToFile(mMesh, path))
+	if (!WriteToFile(mMesh, output))
 		return false;
 
 	return true;
@@ -306,7 +306,15 @@ int main(int argc, char* argv[])
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	int t = argc;
+	if (argc != 3)
+	{
+		std::cout << "Invalid Argument!" << std::endl;
+		return -1;
+	}
+
 	std::filesystem::path pt{ argv[1] };
+	std::filesystem::path output{ argv[2] };
+
 	std::string ext = pt.extension().string();
 	if (strcmp(ext.c_str(), ".fbx"))
 	{
@@ -317,15 +325,19 @@ int main(int argc, char* argv[])
 
 	while (t > 1)
 	{	
-		if (!LoadModel(argv[1]))
+		output /= "Models";
+		output /= pt.filename();
+		output = output.replace_extension(".a");
+
+		if (!LoadModel(argv[1], output.string()))
 		{
-			std::cout << "Model Failed to Load : " "[" << argv[1] << "]" << std::endl;
+			std::cout << "Model failed to compile : " "[" << argv[1] << "]" << std::endl;
 			return -1;
 		}
 
 		else
 		{
-			std::cout << "Model Loaded Successfully : " << "[" << argv[1] << "]" << std::endl;
+			std::cout << "Model compiled successfully to : " << "[" << output << "]" << std::endl;
 			return 0;
 		}
 	}

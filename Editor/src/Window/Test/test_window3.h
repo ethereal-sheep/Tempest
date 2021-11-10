@@ -214,8 +214,8 @@ namespace Tempest
 										// then throw it into ecs
 										
 										auto random_char_id = instance.ecs.view_first<tc::Character>();
-										auto proto = create_new_prototype("Unit");
-										auto prefab = proto.instance();
+										auto proto_p = instance.scene.get_prototype_if("Unit", "Unit");
+										auto prefab = proto_p ? proto_p->instance() : create_new_prototype("Unit").instance();
 										auto entity = instance.ecs.create(prefab);
 
 										chars[selected] = entity;
@@ -237,7 +237,6 @@ namespace Tempest
 											instance.ecs.get<tc::Character>(entity) = instance.ecs.get<tc::Character>(random_char_id);
 
 										transform.position = inter;
-										model.path = "Models\\Character.a";
 									}
 								}
 							}

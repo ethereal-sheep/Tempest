@@ -63,7 +63,7 @@ namespace Tempest
         UnitData defender{};
         Entity sequence{ UNDEFINED };
 
-        uint32_t freq = 100000u;
+        uint32_t freq = 10000u;
         std::atomic_uint32_t win;
         std::atomic_uint32_t lose;
         std::atomic_int32_t attack;

@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Decoration"
+        "Category": "Obstacle"
     },
     "Components": [
         {
@@ -37,13 +37,19 @@
         },
         {
             "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
                 "Type": "Local"
             },
             "Component": {
                 "LocalPosition": [
-                    0.0,
-                    0.8283657431602478,
-                    -0.4642261564731598
+                    0.7155662775039673,
+                    0.04842403531074524,
+                    0.0
                 ],
                 "LocalRotation": [
                     0.0,
@@ -52,18 +58,24 @@
                     1.0
                 ],
                 "LocalScale": [
-                    2.049999952316284,
-                    2.049999952316284,
-                    2.049999952316284
+                    0.9681999683380127,
+                    0.9681999683380127,
+                    0.9681999683380127
                 ]
             }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
         },
         {
             "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Cantius_Portrait.a"
+                "Path": "Models\\Shelf.a"
             }
         },
         {
@@ -71,7 +83,7 @@
                 "Type": "Shape"
             },
             "Component": {
-                "X": 1,
+                "X": 2,
                 "Y": 1
             }
         }

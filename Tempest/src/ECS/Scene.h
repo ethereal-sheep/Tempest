@@ -28,8 +28,8 @@ namespace Tempest
 	{
 		tmap<id_t, prefab> prefabs;
 
-		tmap<int, tmap<int, tvector<id_t>>> collision_map;
-		tmap<int, tmap<int, tvector<id_t>>> tile_map;
+		tmap<int, tmap<int, id_t>> collision_map;
+		tmap<int, tmap<int, id_t>> tile_map;
 
 	public:
 		Map() = default; // empty map
@@ -73,18 +73,19 @@ namespace Tempest
 					min = rot * min;
 					max = rot * max;
 
-					if (max.x < min.x) std::swap(min.x, max.x);
-					if (max.z < min.z) std::swap(min.z, max.z);
 
 					min += transform->position;
 					max += transform->position;
 
-					for (int i = (int)std::floor(min.x); i < (int)std::floor(max.x); ++i)
-						for (int j = (int)std::floor(min.z); j < (int)std::floor(max.z); ++j) {
+					if (max.x < min.x) std::swap(min.x, max.x);
+					if (max.z < min.z) std::swap(min.z, max.z);
+
+					for (int i = (int)std::round(min.x); i < (int)std::round(max.x); ++i)
+						for (int j = (int)std::round(min.z); j < (int)std::round(max.z); ++j) {
 							if (pf.has<tc::Tile>())
-								tile_map[i][j].push_back(id);
+								tile_map[i][j] = id;
 							else if (pf.has<tc::Collision>())
-								collision_map[i][j].push_back(id);
+								collision_map[i][j] = id;
 						}
 
 				}
@@ -93,8 +94,8 @@ namespace Tempest
 
 		id_t find(int x, int y)
 		{
-			if (collision_map.count(x) && collision_map[x].count(y) && collision_map[x][y].size())
-				return collision_map[x][y].front();
+			if (collision_map.count(x) && collision_map[x].count(y))
+				return collision_map[x][y];
 			return INVALID;
 		}
 
@@ -378,6 +379,13 @@ namespace Tempest
 		auto create(const prototype& p)
 		{
 			return map.create(p);
+		}
+
+		const prototype* get_prototype_if(const string& cat, const string& name)
+		{
+			if (!categories.count(cat))
+				return nullptr;
+			return categories.at(cat).get_if(name);
 		}
 
 		auto get_prototype_categories()
