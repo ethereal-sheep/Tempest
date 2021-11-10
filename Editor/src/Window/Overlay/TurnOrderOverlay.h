@@ -38,6 +38,7 @@ namespace Tempest
 
             Service<EventManager>::Get().register_listener<OpenTurnOrderOverlay>(&TurnOrderOverlay::open_popup, this);
         }
+
         void open_popup(const Event& e);
 
         void show(Instance&) override;
@@ -46,5 +47,8 @@ namespace Tempest
 
         std::string overlay_title{ "" };
         TURN_ORDER_STATE turn_order_state{ TURN_ORDER_STATE::ORDER_ADD_UNITS };
+        tsptr<Texture> unit_black;
+        tsptr<Texture> character_icon;
+        std::vector<Entity> added_entities; // temp
     };
 }
