@@ -136,8 +136,8 @@ namespace Tempest
 				UI::UIButton_EndTurn({ 300.f,300.f }, { 0,0 }, FONT_PARA, true);
 
 
-				UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f });
-				UI::CharacterTurn(instance, UNDEFINED, { 0.f,500.f },true);
+				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,400.f });
+				//UI::CharacterTurn(instance, UNDEFINED, { 0.f,500.f },true);
 				/*UI::AttackSuccessUI("Defend",{ 300.f, 400.f }, 50);
 				UI::CharacterTurnData(instance, 3, { 0.f,500.f }, false, true);
 				if (UI::CharacterTurnData(instance, 3, { ImGui::GetWindowWidth(),500.f }, true, true))
@@ -167,7 +167,17 @@ namespace Tempest
 
 				UI::ActionUI({ ImGui::GetWindowWidth(),ImGui::GetWindowHeight()*0.5f }, "SELECT AN ACTION");*/
 				auto CharIcon = tex_map["Assets/CharacterIcon.png"];
+				auto CharIcon2 = tex_map["Assets/Unit_Black.png"];
+				//instance.ecs.get_if<tc::Character>(3);
+				if (UI::UICharTurnButton((void*)static_cast<size_t>(CharIcon2->GetID()), { (float)CharIcon2->GetWidth(), (float)CharIcon2->GetHeight() }, "CHAR","##TESTAT", selected))
+				{
+					selected = !selected;
+				}
 
+				if (UI::UICharTurnButton((void*)static_cast<size_t>(CharIcon2->GetID()), { (float)CharIcon2->GetWidth(), (float)CharIcon2->GetHeight() }, "CHAR", "##TESTAT2", selected,true))
+				{
+					selected = !selected;
+				}
 				static vec2 a = { 100,0.f };
 
 				//if (UI::UICharButton_Arrow((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth() * 0.7f, (float)CharIcon->GetHeight() * 0.7f }, "Char 1", "##TESTINGCA", selected))
