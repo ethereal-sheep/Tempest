@@ -85,8 +85,10 @@ namespace Tempest
 	}
 	void PlaceUnitsOverlay::DrawSideBar(Instance& instance, ImVec2 size)
 	{
+		
 		if (ImGui::BeginChild("##PlaceUnitSideBar", size))
 		{
+			
 			for (auto unit : Entities)
 			{
 				auto character = instance.ecs.get_if<tc::Character>(unit);
@@ -94,13 +96,14 @@ namespace Tempest
 					continue;
 
 				auto unitIcon = tex_map["Assets/Unit_Black.png"];
+				ImGui::SetCursorPosX(-10.f);
 				UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, character->name.c_str(), "##PlaceUnit" + std::to_string(unit), false);
 				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.0f);
 			}
 		}
-
-		ImGui::EndChild();
 		
+		
+		ImGui::EndChild();
 
 	}
 }

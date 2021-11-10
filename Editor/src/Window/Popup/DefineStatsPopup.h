@@ -150,6 +150,13 @@ namespace Tempest
                         enable_popup = false;
                         PopUpClose = true;
                     }
+                    if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.65f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+                    {
+                       
+                        ImGui::CloseCurrentPopup();
+                        enable_popup = false;
+                        PopUpClose = true;
+                    }
                     ImGui::EndPopup();
 				}
 
