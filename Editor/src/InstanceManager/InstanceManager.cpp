@@ -64,6 +64,8 @@
 #include "Window/Overlay/AttackSystemOverlay.h"
 #include "Window/Overlay/MainMenuOverlay.h"
 #include "Window/Overlay/SimulateResultOverlay.h"
+#include "Window/Overlay/TurnOrderOverlay.h"
+#include "Window/Overlay/PlaceUnitsOverlay.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -141,7 +143,12 @@ namespace Tempest
 		instance->register_always<WeaponSheetOverlay>();
 		instance->register_always<SimulateOverlay>();
 		instance->register_always<SimulateResultOverlay>();
+
+		// can shift these to rum time?
 		instance->register_always<CombatModeOverlay>();
+		instance->register_always<TurnOrderOverlay>();
+		instance->register_always<PlaceUnitsOverlay>();
+		//=======================================
 		instance->register_always<ConflictResOverlay>();
 		instance->register_always<AttackSystemOverlay>();
 		instance->register_always<MainMenuOverlay>();

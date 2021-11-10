@@ -35,7 +35,12 @@ namespace Tempest
 		placeholder_height = tex_map["Assets/Placeholder_Character.png"]->GetHeight();
 		action_background_size = ImVec2{ tex_map["Assets/ActionBackdrop.png"]->GetWidth() * 1.0f, tex_map["Assets/ActionBackdrop.png"]->GetHeight() * 1.0f};
 		action_button_diff = tex_map["Assets/SkillSelected.png"]->GetWidth() - tex_map["Assets/SkillUnselected.png"]->GetWidth();
-		battle_state = BATTLE_STATE::CURR_TURN;
+		battle_state = BATTLE_STATE::CURR_TURN; 
+	}
+
+	void CombatModeOverlay::visibility(const Event& e)
+	{
+		OverlayOpen = event_cast<CombatModeVisibility>(e).isVisible;
 	}
 
 	void CombatModeOverlay::show(Instance& instance)
@@ -314,7 +319,14 @@ namespace Tempest
 					}
 				}
 				
-				if (UI::UIButton_2("Add Units", "Add Units", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
+
+				if (UI::UIButton_2("Turn Order", "Turn Order", ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
+					Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+				}
+
+				if (UI::UIButton_2("Place Units", "Place Units", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
 				{
 				}
 			}

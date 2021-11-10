@@ -45,8 +45,10 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar;
 
             Service<EventManager>::Get().register_listener<OpenCombatModeTrigger>(&CombatModeOverlay::open_popup, this);
+            Service<EventManager>::Get().register_listener<CombatModeVisibility>(&CombatModeOverlay::visibility, this);
         }
         void open_popup(const Event& e);
+        void visibility(const Event& e);
 
         void show(Instance&) override;
         void push_style_color() const;

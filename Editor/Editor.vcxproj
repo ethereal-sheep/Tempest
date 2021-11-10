@@ -229,7 +229,9 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\CombatModeOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\PlaceUnitsOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\TurnOrderOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\UnitSheetOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\WeaponSheetOverlay.cpp" />
   </ItemGroup>
@@ -288,8 +290,10 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Overlay\CombatModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\ConflictResOverlay.h" />
     <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\PlaceUnitsOverlay.h" />
     <ClInclude Include="src\Window\Overlay\SimulateOverlay.h" />
     <ClInclude Include="src\Window\Overlay\SimulateResultOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\TurnOrderOverlay.h" />
     <ClInclude Include="src\Window\Overlay\UnitSheetOverlay.h" />
     <ClInclude Include="src\Window\Overlay\WeaponSheetOverlay.h" />
     <ClInclude Include="src\Window\Popup\BottomRightOverlayPopup.h" />

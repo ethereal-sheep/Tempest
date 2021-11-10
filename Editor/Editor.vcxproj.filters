@@ -117,6 +117,12 @@
     <ClCompile Include="src\Window\Overlay\WeaponSheetOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\Overlay\TurnOrderOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\Overlay\PlaceUnitsOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h">
@@ -363,6 +369,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Test\Test_UIWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\TurnOrderOverlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\PlaceUnitsOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

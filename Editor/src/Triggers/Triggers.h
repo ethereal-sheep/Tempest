@@ -101,6 +101,12 @@ namespace Tempest
 		OpenCombatModeTrigger(Instance& in) :instance{in}  {}
 		Instance& instance;
 	};
+	struct CombatModeVisibility : public Event
+	{
+		CombatModeVisibility(bool val) : isVisible{ val } {}
+		bool isVisible = false;
+	};
+
 	struct OpenConflictResTrigger : public Event {};
 	struct OpenMainMenuTrigger : public Event {};
 	struct OpenActionGraphTrigger : public Event // not using for new change
@@ -135,7 +141,9 @@ namespace Tempest
 		Instance& instance;
 	};
 
-	
+	struct OpenTurnOrderOverlay : public Event {};
+	struct OpenPlaceUnitsOverlay : public Event {};
+
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}
