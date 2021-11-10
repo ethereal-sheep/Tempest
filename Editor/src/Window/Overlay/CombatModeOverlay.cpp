@@ -274,6 +274,7 @@ namespace Tempest
 	
 	void CombatModeOverlay::attacking(RuntimeInstance& instance, const glm::ivec2& world_mouse)
 	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		if (instance.selected && instance.ecs.has<tc::Unit>(instance.selected) && instance.ecs.has<tc::Transform>(instance.selected))
 		{
@@ -452,7 +453,7 @@ namespace Tempest
 					}
 					else
 					{
-						Line l;
+						/*Line l;
 						l.p0 = glm::vec3(w_x + .5f - .1, 0, w_y + .5f - .1);
 						l.p1 = glm::vec3(w_x + .5f + .1, 0, w_y + .5f + .1);
 
@@ -460,7 +461,51 @@ namespace Tempest
 						r.p0 = glm::vec3(w_x + .5f - .1, 0, w_y + .5f + .1);
 						r.p1 = glm::vec3(w_x + .5f + .1, 0, w_y + .5f - .1);
 						Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });*/
+
+						auto id = instance.character_map[w_x][w_y];
+
+						auto position = instance.ecs.get<tc::Transform>(id).position;
+						position.y += 2;
+						auto ss = cam.WorldspaceToScreenspace(position);
+						auto vp = cam.GetViewport();
+						ss.x = (1 + ss.x) / 2 * vp.z;
+						ss.y = vp.w - ((1 + ss.y) / 2 * vp.w);
+						auto temp = ImGui::GetCursorPos();
+
+						// Draw whatever thing on their head
+						{
+
+							ImGui::PushFont(FONT_BOLD);
+							auto text_size = ImGui::CalcTextSize(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
+							auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+							if (cursor_pos.x < viewport->WorkSize.x && ss.y + text_size.y / 2 < viewport->WorkSize.y) {
+								ImGui::SetCursorPos(cursor_pos);
+								ImGui::Text(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
+							}
+							ImGui::PopFont();
+						}
+
+
+						ImGui::SetCursorPos(temp);
+
+
+
+						auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+
+						// rotate the fella if the 
+						auto front = transform.rotation * vec3{ 0,0,-1 };
+						auto mouse = glm::normalize(vec3{ w_x + .5f, 0, w_y + .5f } - transform.position);
+						auto angle = glm::degrees(glm::orientedAngle(mouse, front, vec3{ 0,1,0 }));
+
+						if (angle < -45.5f)
+						{
+							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(90.f), vec3{ 0,1,0 });
+						}
+						if (angle > 45.5f)
+						{
+							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(-90.f), vec3{ 0,1,0 });
+						}
 
 						if (io.MouseClicked[0])
 						{
@@ -600,10 +645,26 @@ namespace Tempest
 					Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
 					Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 
+					auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+
+					// rotate the fella if the 
+					auto front = transform.rotation * vec3{ 0,0,-1 };
+					auto mouse = glm::normalize(vec3{ w_x + .5f, 0, w_y + .5f } - transform.position);
+					auto angle = glm::degrees(glm::orientedAngle(mouse, front, vec3{0,1,0}));
+
+					if (angle < -45.5f)
+					{
+						transform.rotation = transform.rotation * glm::angleAxis(glm::radians(90.f), vec3{ 0,1,0 });
+					}
+					if (angle > 45.5f)
+					{
+						transform.rotation = transform.rotation * glm::angleAxis(glm::radians(-90.f), vec3{ 0,1,0 });
+					}
+
+
 					if (io.MouseClicked[0])
 					{
 						// move
-						auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
 						transform.position.x = w_x + .5f;
 						transform.position.z = w_y + .5f;
 						instance.selected = INVALID;
