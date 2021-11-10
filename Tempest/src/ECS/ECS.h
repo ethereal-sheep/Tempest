@@ -302,6 +302,33 @@ namespace Tempest
 			return runtime_view(std::move(inc), std::move(exc), component_pools);
 		}
 
+		template<typename... Components, typename... Exclude>
+		[[nodiscard]] Entity view_first(exclude_t<Exclude...> = {})
+		{
+			// check if types are unique
+			//[[maybe_unused]] unique_types<> useless;
+
+			static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
+			static_assert(type_list<Components...>::size != 0, "No empty set");
+
+			tvector<size_t> inc, exc;
+			package<Components...>(inc);
+			package<Exclude...>(exc);
+
+			auto view = runtime_view(std::move(inc), std::move(exc), component_pools);
+
+			if (view.begin() == view.end())
+				return INVALID;
+			return *view.begin();
+		}
+
+		template<typename... Components, typename... Exclude>
+		[[nodiscard]] Entity view_first_or(exclude_t<Exclude...> = {}, Entity id = INVALID)
+		{
+			auto first = view_first<Components..., Exclude...>();
+			return first ? first : id;
+		}
+
 		/**
 		 * @brief Checks if entity is valid or not
 		 * @param entity An entity identifier, either valid or not

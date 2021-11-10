@@ -33,6 +33,8 @@ namespace Tempest
 		uint32_t frequency = 1;
 		std::atomic_uint32_t* win = nullptr;
 		std::atomic_uint32_t* lose = nullptr;
+		std::atomic_int32_t* attack = nullptr;
+		std::atomic_int32_t* defend = nullptr;
 		std::atomic_bool* finish = nullptr;
 
 		enum struct State {
@@ -46,6 +48,8 @@ namespace Tempest
 		tvector<future_bool> futures;
 		tvector<uint32_t> wins;
 		tvector<uint32_t> loses;
+		tvector<int> attacks;
+		tvector<int> defends;
 		tvector<std::function<void()>> fn;
 
 		// graphs to clear up after we are done
@@ -78,6 +82,8 @@ namespace Tempest
 				win = &a.win;
 				lose = &a.lose;
 				finish = &a.finish;
+				attack = &a.attack;
+				defend = &a.defend;
 
 				win->store(0);
 				lose->store(0);
@@ -94,13 +100,13 @@ namespace Tempest
 			case State::LOAD:
 				setup_simulate(instance);
 				state = State::RUN;
-
 				ImGui::OpenPopup("Simulating Conflict");
+				[[fallthrough]];
 			case State::RUN:
 			{
 				const auto wrap_width = 10.f;
 				// popup
-				ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+				/*ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 				ImGui::SetNextWindowSize(ImVec2(220.f, 100.f));
 				ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 				if (ImGui::BeginPopupModal("Simulating Conflict", NULL, ImGuiWindowFlags_AlwaysAutoResize))
@@ -118,7 +124,7 @@ namespace Tempest
 					ImGui::Text("\n");
 
 					ImGui::EndPopup();
-				}
+				}*/
 
 				bool still_running = false;
 				for (int i = 0; i < max_thread; ++i)
@@ -160,6 +166,8 @@ namespace Tempest
 			fn.resize(max_thread);
 			wins.resize(max_thread);
 			loses.resize(max_thread);
+			attacks.resize(max_thread);
+			defends.resize(max_thread);
 
 			for (int i = 0; i < max_thread; ++i)
 			{
@@ -177,13 +185,27 @@ namespace Tempest
 				extra.push_back(da);
 
 
-				fn[i] = [&instance, &num_win = *win, &num_lose = *lose, freq = frequency / max_thread, a, d, aa, da, s]() {
+				fn[i] = [
+					&instance, 
+					&num_win = *win, &num_lose = *lose,
+					&num_attack = *attack, &num_defend = *defend,
+					freq = frequency / max_thread, 
+					a, d, aa, da, s
+				]() {
 					for (unsigned i = 0; i < freq; ++i)
 					{
 						instance.srm.instant_dispatch_to_id<Simulate>(s, a, d, aa, da);
 						if (auto var = instance.srm.get_variable_to_id(s, "Win"))
 						{
 							var->get<int>() ? ++num_win : ++num_lose;
+						}
+						if (auto var = instance.srm.get_variable_to_id(s, "AttackRollOutput"))
+						{
+							num_attack += var->get<int>();
+						}
+						if (auto var = instance.srm.get_variable_to_id(s, "DefendRollOutput"))
+						{
+							num_defend += var->get<int>();
 						}
 					}
 				};

@@ -40,8 +40,8 @@ namespace Tempest
         case Tempest::CompareNode::inner_type::CompareFlow:
             node.set_name("Compare Flow");
             node.add_input(pin_type::Flow, "");
-            node.add_input(pin_type::Int, "lhs");
-            node.add_input(pin_type::Int, "rhs");
+            node.add_input(pin_type::Int, "Attacker ");
+            node.add_input(pin_type::Int, "Defender");
             node.add_output(pin_type::Flow, (const char*)u8"\uf531");
             node.add_output(pin_type::Flow, (const char*)u8"\uf52c");
             node.add_output(pin_type::Flow, (const char*)u8"\uf536");
@@ -60,7 +60,21 @@ namespace Tempest
         case Tempest::CompareNode::inner_type::CompareFlow:
             return instance.srm.add_script(
                 CreateBranchScript<std::tuple<int>(int, int), 3>(
-                    [](int lhs, int rhs) { 
+                    [&instance, entity](int lhs, int rhs) {
+
+
+                        if (auto var = instance.srm.get_variable_to_id(entity, "AttackRollOutput"))
+                        {
+                            LOG_ASSERT(var->get_type() == pin_type::Int);
+                            var->get<int>() = lhs;
+                        } // attack output
+                        if (auto var = instance.srm.get_variable_to_id(entity, "DefendRollOutput"))
+                        {
+                            LOG_ASSERT(var->get_type() == pin_type::Int);
+                            var->get<int>() = rhs;
+                        } // defend output
+
+
                         if (lhs > rhs)
                             return std::make_tuple(0);
                         if (lhs == rhs)

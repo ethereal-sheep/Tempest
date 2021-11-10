@@ -167,7 +167,11 @@ namespace Tempest
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 		//instance->register_window<test_window>()->visible = false;
 		instance->register_window<test_window3>();
-		instance->register_window<test_window4>();
+		instance->register_always<CombatModeOverlay>();
+		instance->register_always<TurnOrderOverlay>();
+		instance->register_always<PlaceUnitsOverlay>();
+		instance->register_always<SimulationStart>();
+		//instance->register_window<test_window4>();
 
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();
