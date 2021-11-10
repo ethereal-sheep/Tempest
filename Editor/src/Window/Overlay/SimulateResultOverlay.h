@@ -127,7 +127,7 @@ namespace Tempest
 
                     if (UI::UIButton_2("Simulate", "Simulate", { viewport->Size.x * 0.5f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))
                     {
-                        Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, atk_act, def_act, conflict, freq, win, lose, finish);
+                        Service<EventManager>::Get().instant_dispatch<SimulateConflict>(atk, def, atk_act, def_act, conflict, freq, win, lose, attack, defend, finish);
                     }
                 
                     if (UI::UIButton_2("Back", "Back", { viewport->Size.x * 0.1f, viewport->Size.y * 0.9f }, { 0,0 }, FONT_PARA))
@@ -405,6 +405,8 @@ namespace Tempest
         float padding{ 0.0f };
         std::atomic_uint32_t win;
         std::atomic_uint32_t lose;
+        std::atomic_int32_t attack;
+        std::atomic_int32_t defend;
         std::atomic_bool finish;
 
         bool OverlayOpen = false;

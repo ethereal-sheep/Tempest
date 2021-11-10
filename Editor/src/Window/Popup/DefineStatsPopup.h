@@ -71,7 +71,7 @@ namespace Tempest
                     if (ImGui::IsWindowFocused() == false)
                     {
                         col = { 0.980f, 0.768f, 0.509f, 0.7f };
-                        textcol = { 0,0,0,0.7 };
+                        textcol = { 0,0,0,0.7f };
                     }
                         
                     string te = "DEFINE STATS";
@@ -108,17 +108,17 @@ namespace Tempest
                     {
                         if ((tempStat)(i))
                         {
-                            ImVec4 col = {0.47f,0.47f,0.47f,0.6f };
+                            ImVec4 color = {0.47f,0.47f,0.47f,0.6f };
                             ImVec4 textCol = { 0.9f,0.9f,0.9f,1.f };
                             
-                            ImGui::PushStyleColor(ImGuiCol_FrameBg, col);
+                            ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
                             ImGui::PushStyleColor(ImGuiCol_Text, textCol);
                         }
                         else
                         {
-                            ImVec4 col = { 0.28f,0.28f,0.28f,0.35f };
+                            ImVec4 color = { 0.28f,0.28f,0.28f,0.35f };
                             ImVec4 textCol = { 0.6f,0.6f,0.6f,1.f };
-                            ImGui::PushStyleColor(ImGuiCol_FrameBg, col);
+                            ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
                             ImGui::PushStyleColor(ImGuiCol_Text, textCol);
                             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
                         }

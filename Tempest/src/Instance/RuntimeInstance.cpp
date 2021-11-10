@@ -50,7 +50,7 @@ namespace Tempest
 		// for each prefab, send it to hell
 		for (auto& [id, pf] : scene.get_map())
 		{
-			auto entity = ecs.create(pf);
+			[[maybe_unused]]auto entity = ecs.create(pf);
 		}
 
 	}
@@ -99,7 +99,7 @@ namespace Tempest
 			}
 	}
 
-	void RuntimeInstance::_update(float dt)
+	void RuntimeInstance::_update(float )
 	{
 		collision_map.clear();
 		character_map.clear();

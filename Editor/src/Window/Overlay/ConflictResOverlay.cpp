@@ -24,7 +24,7 @@ namespace Tempest
 		AddWeaponTex = tex_map["Assets/MainUnitsUnlit.png"];
 		AddItemTex = tex_map["Assets/MainUnitsUnlit.png"];
 	}
-	void ConflictResOverlay::show(Instance& instance)
+	void ConflictResOverlay::show([[maybe_unused]]Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 

@@ -98,8 +98,8 @@ namespace Tempest
 	};
 	struct OpenCombatModeTrigger : public Event 
 	{
-		OpenCombatModeTrigger(Instance& in) :instance{in}  {}
-		Instance& instance;
+		OpenCombatModeTrigger(const tvector<Entity>& _units) : units{ _units }  {}
+		tvector<Entity> units;
 	};
 	struct CombatModeVisibility : public Event
 	{
