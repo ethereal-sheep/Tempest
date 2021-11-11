@@ -181,7 +181,7 @@ namespace Tempest
 					/*t.push_back(3);
 					t.push_back(4);
 					t.push_back(5);*/
-					Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(t);
+					//Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(t);
 				}
 				static vec2 a = { 100,0.f };
 

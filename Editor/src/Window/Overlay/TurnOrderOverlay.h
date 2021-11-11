@@ -37,18 +37,24 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenTurnOrderOverlay>(&TurnOrderOverlay::open_popup, this);
+
+            OverlayOpen = true;
+
+            turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+            character_icon = tex_map["Assets/CharacterIcon.png"];
+            unit_black = tex_map["Assets/Unit_Black.png"];
         }
 
         void open_popup(const Event& e);
 
         void show(Instance&) override;
 
-        bool OverlayOpen = false;
+        bool OverlayOpen = true;
 
         std::string overlay_title{ "" };
         TURN_ORDER_STATE turn_order_state{ TURN_ORDER_STATE::ORDER_ADD_UNITS };
         tsptr<Texture> unit_black;
         tsptr<Texture> character_icon;
-        std::vector<Entity> added_entities; // temp
+        tvector<Entity> added_entities; // temp
     };
 }

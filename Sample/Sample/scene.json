@@ -4035,6 +4035,564 @@
         },
         {
             "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -0.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bookshelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bookshelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bookshelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999999403953552,
+                            0.0,
+                            0.0002442896366119385
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Table"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Tile"
             },
@@ -4054,6 +4612,68 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            0.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
                         ],
                         "Scale": [
                             1.0,
@@ -4107,6 +4727,68 @@
                     },
                     "Component": {
                         "Position": [
+                            4.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             0.5,
                             0.0,
                             -7.5
@@ -4116,6 +4798,68 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
                         ],
                         "Scale": [
                             1.0,
@@ -4171,6 +4915,68 @@
                         "Position": [
                             -3.5,
                             0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
                             -11.5
                         ],
                         "Rotation": [
@@ -4178,6 +4984,68 @@
                             0.9999998807907105,
                             0.0,
                             5.960464477539063e-8
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Desk"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7069342732429504,
+                            0.0,
+                            -0.7072791457176209
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
                         ],
                         "Scale": [
                             1.0,
@@ -4209,6 +5077,68 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bookshelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
                         ],
                         "Scale": [
                             1.0,
@@ -4283,6 +5213,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Tile"
             },
@@ -4345,6 +5306,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999998807907105,
+                            0.0,
+                            5.960464477539063e-8
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Obstacle",
                 "Proto": "Sci fi Chair"
             },
@@ -4395,6 +5387,37 @@
                             -0.7071067094802856,
                             0.0,
                             0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bookshelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
                         ],
                         "Scale": [
                             1.0,
@@ -6990,100 +8013,7 @@
                     },
                     "Component": {
                         "Position": [
-                            -0.5,
-                            0.0,
-                            -4.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
                             0.5,
-                            0.0,
-                            -4.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.5,
-                            0.0,
-                            -4.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            2.5,
                             0.0,
                             -4.5
                         ],
@@ -7123,936 +8053,6 @@
                             0.9999999403953552,
                             0.0,
                             1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            1.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            0.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -0.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -1.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -2.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -3.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -4.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -5.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -6.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -7.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -1.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            0.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            2.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            4.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -8.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            0.5,
-                            0.0,
-                            -9.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            0.5,
-                            0.0,
-                            -8.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -3.5,
-                            0.0,
-                            -7.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -3.5,
-                            0.0,
-                            -8.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999998807907105,
-                            0.0,
-                            5.960464477539063e-8
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bookshelf"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.5,
-                            0.0,
-                            -8.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Desk"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.5,
-                            0.0,
-                            -9.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7069342732429504,
-                            0.0,
-                            -0.7072791457176209
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bookshelf"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            2.5,
-                            0.0,
-                            -10.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bookshelf"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.5,
-                            0.0,
-                            -10.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bookshelf"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            4.5,
-                            0.0,
-                            -10.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bookshelf"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -1.5,
-                            0.0,
-                            -3.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999999403953552,
-                            0.0,
-                            0.0002442896366119385
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Table"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.5,
-                            0.0,
-                            1.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
                         ],
                         "Scale": [
                             1.0,

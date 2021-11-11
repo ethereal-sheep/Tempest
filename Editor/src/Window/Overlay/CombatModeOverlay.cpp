@@ -468,7 +468,6 @@ namespace Tempest
 						auto t_position = instance.ecs.get<tc::Transform>(id).position;
 						t_position.y += 2;
 						auto t_ss = cam.WorldspaceToScreenspace(t_position);
-						auto vp = cam.GetViewport();
 						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
 						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
 						

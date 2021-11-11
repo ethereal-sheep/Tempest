@@ -12,27 +12,27 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "../Viewport/CameraControls.h"
 
 namespace Tempest
 {
     class PlaceUnitsOverlay : public Window
     {
+
+        bool OverlayOpen = true;
+        CameraControls cam_ctrl;
+        int selected = -1;
+        tvector<Entity> chars;
+        //tvector<Entity> sheets;
+
         const char* window_name() override
         {
             return "";
         }
-        void init(Instance&) override
-        {
-            window_flags =
-                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar;
-
-            Service<EventManager>::Get().register_listener<OpenPlaceUnitsOverlay>(&PlaceUnitsOverlay::open_popup, this);
-        }
+        void init(Instance&) override;
         void open_popup(const Event& e);
 
         void show(Instance&) override;
         void DrawSideBar(Instance& instance, ImVec2 size);
-        bool OverlayOpen = false;
-        std::vector<Entity> Entities;
     };
 }
