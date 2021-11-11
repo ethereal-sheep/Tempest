@@ -171,12 +171,17 @@ namespace Tempest
 				//instance.ecs.get_if<tc::Character>(3);
 				if (UI::UICharTurnButton((void*)static_cast<size_t>(CharIcon2->GetID()), { (float)CharIcon2->GetWidth(), (float)CharIcon2->GetHeight() }, "CHAR","##TESTAT", selected))
 				{
-					selected = !selected;
+					//selected = !selected;
 				}
 
 				if (UI::UICharTurnButton((void*)static_cast<size_t>(CharIcon2->GetID()), { (float)CharIcon2->GetWidth(), (float)CharIcon2->GetHeight() }, "CHAR", "##TESTAT2", selected,true))
 				{
 					selected = !selected;
+					std::vector<Entity> t;
+					/*t.push_back(3);
+					t.push_back(4);
+					t.push_back(5);*/
+					//Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(t);
 				}
 				static vec2 a = { 100,0.f };
 

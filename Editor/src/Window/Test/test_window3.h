@@ -32,18 +32,18 @@ namespace Tempest
 
 		void init(Instance&) override
 		{
-			ImGuiStyle* style = &ImGui::GetStyle();
+			//ImGuiStyle* style = &ImGui::GetStyle();
 
-			style->FramePadding = ImVec2(8, 6);
-			style->Colors[ImGuiCol_Button] = ImColor(40, 40, 40, 255);
-			style->Colors[ImGuiCol_ButtonActive] = ImColor(40, 40, 40, 255);
-			style->Colors[ImGuiCol_ButtonHovered] = ImColor(30, 30, 30, 255);
+			//style->FramePadding = ImVec2(8, 6);
+			//style->Colors[ImGuiCol_Button] = ImColor(40, 40, 40, 255);
+			//style->Colors[ImGuiCol_ButtonActive] = ImColor(40, 40, 40, 255);
+			//style->Colors[ImGuiCol_ButtonHovered] = ImColor(30, 30, 30, 255);
 
-			// remember to do this
-			window_flags |= ImGuiWindowFlags_NoTitleBar;
+			//// remember to do this
+			//window_flags |= ImGuiWindowFlags_NoTitleBar;
 
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
-			cam_ctrl.set_fixed_camera(cam);
+			cam_ctrl.set_fixed_camera(cam, 90, 45);
 
 			chars.assign(4, INVALID);
 		}
@@ -95,7 +95,7 @@ namespace Tempest
 							}
 						}
 					}
-					// character list
+
 					if (ImGui::Button("Fight!"))
 					{
 						bool okay = true;
@@ -224,7 +224,7 @@ namespace Tempest
 										LOG_ASSERT(instance.ecs.has<tc::Model>(entity));
 
 										auto& transform = instance.ecs.get<tc::Transform>(entity);
-										auto& model = instance.ecs.get<tc::Model>(entity);
+										//auto& model = instance.ecs.get<tc::Model>(entity);
 
 										/* ===========================================
 										* NOTE TO UI!!!!

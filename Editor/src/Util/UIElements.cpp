@@ -2583,7 +2583,7 @@ namespace Tempest::UI
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
-		float alpha = selected ? 1 : 0;
+		float alpha = selected ? 1.f : 0.f;
 		if (window->SkipItems)
 			return  false;
 		auto arrowImg = tex_map["Assets/Arrow_glow.png"];
@@ -2840,7 +2840,7 @@ namespace Tempest::UI
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		
-		float alpha = selected ? 1.f : 0;
+		
 		if (window->SkipItems)
 			return  false;
 		auto arrowImg = tex_map["Assets/Arrow_glow.png"];
@@ -2888,6 +2888,11 @@ namespace Tempest::UI
 
 		bool hovered, held;
 		bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+
+		if (hovered || pressed)
+		{
+			selectedID = (void*)static_cast<size_t>(selectedImg->GetID());
+		}
 		// Render
 		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
 		ImVec4 selectedCol = { 0.980f, 0.768f, 0.509f, 1 };

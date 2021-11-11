@@ -295,7 +295,7 @@ namespace Tempest
 			if (other_entity)
 			{
 				auto character_id = other_entity;
-				const ImGuiViewport* viewport = ImGui::GetMainViewport();
+				
 				if (battle_state == BATTLE_STATE::CURR_TURN || battle_state == BATTLE_STATE::SELECT_ACTION || battle_state == BATTLE_STATE::SELECT_WEAPON)
 				{
 					UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
@@ -465,29 +465,26 @@ namespace Tempest
 
 						auto id = instance.character_map[w_x][w_y];
 
-						auto position = instance.ecs.get<tc::Transform>(id).position;
-						position.y += 2;
-						auto ss = cam.WorldspaceToScreenspace(position);
-						auto vp = cam.GetViewport();
-						ss.x = (1 + ss.x) / 2 * vp.z;
-						ss.y = vp.w - ((1 + ss.y) / 2 * vp.w);
-						auto temp = ImGui::GetCursorPos();
-
+						auto t_position = instance.ecs.get<tc::Transform>(id).position;
+						t_position.y += 2;
+						auto t_ss = cam.WorldspaceToScreenspace(t_position);
+						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+						
+						auto temp_cursor = ImGui::GetCursorPos();
 						// Draw whatever thing on their head
 						{
 
 							ImGui::PushFont(FONT_BOLD);
-							auto text_size = ImGui::CalcTextSize(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
-							auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
-							if (cursor_pos.x < viewport->WorkSize.x && ss.y + text_size.y / 2 < viewport->WorkSize.y) {
-								ImGui::SetCursorPos(cursor_pos);
+							auto t_text_size = ImGui::CalcTextSize(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
+							auto t_cursor_pos = ImVec2{ t_ss.x - t_text_size.x / 2.f, t_ss.y - t_text_size.y / 2 };
+							if (t_cursor_pos.x < viewport->WorkSize.x && t_ss.y + t_text_size.y / 2 < viewport->WorkSize.y) {
+								ImGui::SetCursorPos(t_cursor_pos);
 								ImGui::Text(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
 							}
 							ImGui::PopFont();
 						}
-
-
-						ImGui::SetCursorPos(temp);
+						ImGui::SetCursorPos(temp_cursor);
 
 
 
@@ -687,7 +684,7 @@ namespace Tempest
 		// display chance of success
 
 		int value = 0;
-		if (win && lose) {
+		if (win + lose) {
 			value = int(100.f * win / (win + lose));
 		}
 
@@ -739,7 +736,7 @@ namespace Tempest
 	void CombatModeOverlay::fight(RuntimeInstance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, true))
+		if (UI::CharacterTurnData(instance, instance.selected, { 0.f, viewport->Size.y - placeholder_height }, false, true))
 		{
 			// attacker roll
 			atk_rolled = true;

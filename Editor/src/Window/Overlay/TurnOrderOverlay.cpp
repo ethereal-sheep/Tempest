@@ -17,11 +17,6 @@ namespace Tempest
 {
 	void TurnOrderOverlay::open_popup(const Event&)
 	{
-		OverlayOpen = true;
-
-		turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
-		character_icon = tex_map["Assets/CharacterIcon.png"]; 
-		unit_black = tex_map["Assets/Unit_Black.png"];
 	}
 
 	void TurnOrderOverlay::show(Instance& instance)
@@ -126,8 +121,9 @@ namespace Tempest
 				// save
 				if (UI::UIButton_2("Next", "Next", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.9f }, {0,0}, FONT_PARA))
 				{
-
 					// change the state
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities);
 				}
 			}
 

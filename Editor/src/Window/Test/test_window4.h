@@ -57,7 +57,7 @@ namespace Tempest
 		{
 			OverlayOpen = true;
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
-			cam_ctrl.set_fixed_camera(cam);
+			cam_ctrl.set_fixed_camera(cam, 45, 70);
 		}
 
 		void show(Instance& instance [[maybe_unused]] ) override

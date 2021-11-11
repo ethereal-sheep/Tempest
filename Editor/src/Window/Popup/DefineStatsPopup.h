@@ -68,11 +68,6 @@ namespace Tempest
                     vec2 winMax = { winMin.x + ImGui::GetWindowWidth()* 0.2f, winMin.y + ImGui::GetWindowHeight() * 0.05f};
                     ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
                     ImVec4 textcol = { 0,0,0,1 };
-                    if (ImGui::IsWindowFocused() == false)
-                    {
-                        col = { 0.980f, 0.768f, 0.509f, 0.7f };
-                        textcol = { 0,0,0,0.7f };
-                    }
                         
                     string te = "DEFINE STATS";
                     //ImGui::GetForegroundDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
@@ -151,6 +146,13 @@ namespace Tempest
                     if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
                         *sl = tempStat;
+                        ImGui::CloseCurrentPopup();
+                        enable_popup = false;
+                        PopUpClose = true;
+                    }
+                    if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.65f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+                    {
+                       
                         ImGui::CloseCurrentPopup();
                         enable_popup = false;
                         PopUpClose = true;

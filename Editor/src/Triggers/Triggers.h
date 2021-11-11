@@ -142,7 +142,11 @@ namespace Tempest
 	};
 
 	struct OpenTurnOrderOverlay : public Event {};
-	struct OpenPlaceUnitsOverlay : public Event {};
+	struct OpenPlaceUnitsOverlay : public Event 
+	{
+		OpenPlaceUnitsOverlay(const tvector<Entity> entity) : entities{ entity } {}
+		tvector<Entity> entities;
+	};
 
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
