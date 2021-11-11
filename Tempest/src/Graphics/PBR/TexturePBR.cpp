@@ -7,11 +7,29 @@
 #include <glew.h>
 
 #include "stb_image.h"
+#include "tinyddsloader.h"
+#include "Logger/Log.h"
 
+#define TINYDDSLOADER_IMPLEMENTATION
+using namespace tinyddsloader;
 namespace Tempest
 {
 
-    TexturePBR::TexturePBR()
+
+    struct GLSwizzle
+    {
+        GLenum m_r, m_g, m_b, m_a;
+    };
+
+    struct GLFormat
+    {
+        DDSFile::DXGIFormat m_dxgiFormat;
+        GLenum m_type;
+        GLenum m_format;
+        GLSwizzle m_swizzle;
+    };
+
+    TexturePBR::TexturePBR() 
     {
 
     }
@@ -22,6 +40,39 @@ namespace Tempest
         glDeleteTextures(1, &this->texID);
     }
 
+    bool TranslateFormat(DDSFile::DXGIFormat fmt, GLFormat* outFormat) {
+        static const GLSwizzle sws[] = {
+            {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA},
+            {GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA},
+            {GL_BLUE, GL_GREEN, GL_RED, GL_ONE},
+            {GL_RED, GL_GREEN, GL_BLUE, GL_ONE},
+            {GL_RED, GL_ZERO, GL_ZERO, GL_ZERO},
+            {GL_RED, GL_GREEN, GL_ZERO, GL_ZERO},
+        };
+        using DXGIFmt = DDSFile::DXGIFormat;
+        static const GLFormat formats[] = {
+            {DXGIFmt::R8G8B8A8_UNorm, GL_UNSIGNED_BYTE, GL_RGBA, sws[0]},
+            {DXGIFmt::B8G8R8A8_UNorm, GL_UNSIGNED_BYTE, GL_RGBA, sws[1]},
+            {DXGIFmt::B8G8R8X8_UNorm, GL_UNSIGNED_BYTE, GL_RGBA, sws[2]},
+            {DXGIFmt::BC1_UNorm, 0, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, sws[0]},
+            {DXGIFmt::BC2_UNorm, 0, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, sws[0]},
+            {DXGIFmt::BC3_UNorm, 0, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, sws[0]},
+            {DXGIFmt::BC4_UNorm, 0, GL_COMPRESSED_RED_RGTC1_EXT, sws[0]},
+            {DXGIFmt::BC4_SNorm, 0, GL_COMPRESSED_SIGNED_RED_RGTC1_EXT, sws[0]},
+            {DXGIFmt::BC5_UNorm, 0, GL_COMPRESSED_RED_GREEN_RGTC2_EXT, sws[0]},
+            {DXGIFmt::BC5_SNorm, 0, GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT,
+            sws[0]},
+        };
+        for (const auto& format : formats) {
+            if (format.m_dxgiFormat == fmt) {
+                if (outFormat) {
+                    *outFormat = format;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     void TexturePBR::setTexture(const char* texPath, std::string texName, bool texFlip)
     {
@@ -78,7 +129,181 @@ namespace Tempest
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+    bool IsCompressed(GLenum fmt) {
+        switch (fmt) {
+        case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
+        case GL_COMPRESSED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_SIGNED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_RED_GREEN_RGTC2_EXT:
+        case GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT:
+            return true;
+        default:
+            return false;
+        }
+    }
 
+    void TexturePBR::setTextureDDS(const char* texPath, std::string texName, bool texFlip)
+    {
+        DDSFile Texture;
+        auto ret = Texture.Load(texPath);
+        if (tinyddsloader::Result::Success != ret) 
+        {
+            std::string errorText = "Failed to load ["; 
+            errorText += texPath;
+            errorText += "]. Result :  ";
+            errorText += int(ret);
+            errorText += ".";
+            LOG_CRITICAL(errorText.c_str());
+            return;
+        }
+
+        GLenum Target = GL_INVALID_ENUM; 
+        bool isArray = false;
+        if (Texture.GetTextureDimension() == DDSFile::TextureDimension::Texture1D) 
+        {
+            if (Texture.GetArraySize() > 1) 
+            {
+                Target = GL_TEXTURE_1D_ARRAY;
+                isArray = true;
+            } 
+            else 
+            {
+                Target = GL_TEXTURE_1D;
+            }
+        } 
+        else if (Texture.GetTextureDimension() ==DDSFile::TextureDimension::Texture2D) 
+        {
+            if (Texture.GetArraySize() > 1) 
+            {
+                if (Texture.IsCubemap()) 
+                {
+                    if (Texture.GetArraySize() > 6) 
+                    {
+                        Target = GL_TEXTURE_CUBE_MAP_ARRAY;
+                        isArray = true;
+                    } 
+                    else 
+                    {
+                        Target = GL_TEXTURE_CUBE_MAP;
+                    }
+                } 
+                else 
+                {
+                    Target = GL_TEXTURE_2D_ARRAY;
+                    isArray = true;
+                }
+            } 
+            else 
+            {
+                Target = GL_TEXTURE_2D;
+            }
+        } 
+        else if (Texture.GetTextureDimension() == DDSFile::TextureDimension::Texture3D) 
+        {
+            Target = GL_TEXTURE_3D;
+        }
+        
+        GLFormat Format;
+        if (!TranslateFormat(Texture.GetFormat(), &Format)) 
+        {
+
+            LOG_CRITICAL("Translate format dds error");
+            return;
+        }
+
+        unsigned int  TextureName = 0;
+        glGenTextures(1, &TextureName);
+        glBindTexture(Target, TextureName);
+        glTexParameteri(Target, GL_TEXTURE_BASE_LEVEL, 0);
+        glTexParameteri(Target, GL_TEXTURE_MAX_LEVEL, Texture.GetMipCount() - 1);
+        glTexParameteri(Target, GL_TEXTURE_SWIZZLE_R, Format.m_swizzle.m_r);
+        glTexParameteri(Target, GL_TEXTURE_SWIZZLE_G, Format.m_swizzle.m_g);
+        glTexParameteri(Target, GL_TEXTURE_SWIZZLE_B, Format.m_swizzle.m_b);
+        glTexParameteri(Target, GL_TEXTURE_SWIZZLE_A, Format.m_swizzle.m_a);
+
+        //glm::tvec3<GLsizei> const Extent(Texture.extent());
+        //GLsizei const FaceTotal = static_cast<GLsizei>(Texture.layers() * Texture.faces());
+
+        switch (Target) {
+        case GL_TEXTURE_1D:
+            glTexStorage1D(Target, Texture.GetMipCount(), Format.m_format, Texture.GetWidth());
+            break;
+        case GL_TEXTURE_1D_ARRAY:
+            glTexStorage2D(Target, Texture.GetMipCount(), Format.m_format, Texture.GetWidth(), Texture.GetArraySize());
+            break;
+        case GL_TEXTURE_2D:
+            glTexStorage2D(Target, Texture.GetMipCount(), Format.m_format, Texture.GetWidth(), Texture.GetHeight());
+            break;
+        case GL_TEXTURE_CUBE_MAP:
+            glTexStorage2D(Target, Texture.GetMipCount(), Format.m_format, Texture.GetWidth(), Texture.GetHeight());
+            break;
+        case GL_TEXTURE_2D_ARRAY:
+            glTexStorage3D(Target, Texture.GetMipCount(), Format.m_format, Texture.GetWidth(), Texture.GetHeight(), Texture.GetArraySize());
+            break;
+        case GL_TEXTURE_3D:
+            glTexStorage3D(Target, Texture.GetMipCount(), Format.m_format, Texture.GetWidth(), Texture.GetHeight(), Texture.GetDepth());
+            break;
+        case GL_TEXTURE_CUBE_MAP_ARRAY:
+            glTexStorage3D(Target, Texture.GetMipCount(), Format.m_format, Texture.GetWidth(), Texture.GetHeight(), Texture.GetArraySize());
+            break;
+        default:
+            glBindTexture(Target, 0);
+
+            LOG_CRITICAL("No target texture in dds");
+            return;
+        }
+        this->texType = Target;
+        Texture.Flip();
+
+        uint32_t numFaces = Texture.IsCubemap() ? 6 : 1;
+        for (uint32_t layer = 0; layer < Texture.GetArraySize(); layer++) 
+        {
+            for (uint32_t face = 0; face < numFaces; face++) 
+            {
+                for (uint32_t level = 0; level < Texture.GetMipCount(); level++) 
+                {
+                    GLenum target2 = Texture.IsCubemap() ? (GL_TEXTURE_CUBE_MAP_POSITIVE_X + face) : Target;
+                    auto imageData = Texture.GetImageData(level, layer * numFaces);
+                    switch (Target) 
+                    {
+                    case GL_TEXTURE_1D:
+                        if (IsCompressed(Format.m_format)) 
+                            glCompressedTexSubImage1D( target2, level, 0, imageData->m_width, Format.m_format, imageData->m_memSlicePitch, imageData->m_mem);
+                        else 
+                            glTexSubImage1D(target2, level, 0, imageData->m_width, Format.m_format, Format.m_type, imageData->m_mem);
+                        break;
+                    case GL_TEXTURE_1D_ARRAY:
+                    case GL_TEXTURE_2D:
+                    case GL_TEXTURE_CUBE_MAP: 
+                    {
+                        auto w = imageData->m_width;
+                        auto h = isArray ? layer : imageData->m_height;
+                        if (IsCompressed(Format.m_format)) 
+                            glCompressedTexSubImage2D( target2, level, 0, 0, w, h, Format.m_format, imageData->m_memSlicePitch, imageData->m_mem);
+                        else
+                            glTexSubImage2D(target2, level, 0, 0, w, h, Format.m_format, Format.m_type,  imageData->m_mem);
+                        break;
+                    }
+                    default:
+                        glBindTexture(Target, 0);
+
+                        LOG_CRITICAL("No target texture in dds");
+                        return ;
+                    }
+                }
+            }
+        }
+        this->texWidth =  Texture.GetWidth();
+        this->texHeight =  Texture.GetHeight();
+        //this->texComponents = Texture.;
+        this->texName = texName;
+        this->texID = TextureName;
+        //return TextureName;
+    }
+    
     void TexturePBR::setTextureHDR(const char* texPath, std::string texName, bool texFlip)
     {
         this->texType = GL_TEXTURE_2D;

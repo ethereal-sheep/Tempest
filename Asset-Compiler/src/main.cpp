@@ -267,6 +267,8 @@ bool LoadModel(const std::string& path)
 
 		const auto* pMaterial = s_Scene->mMaterials[i];
 
+
+
 		pMaterial->Get(AI_MATKEY_REFRACTI, mMesh.Refraction);
 		pMaterial->Get(AI_MATKEY_REFLECTIVITY, mMesh.Reflection);
 		pMaterial->Get(AI_MATKEY_SHININESS, mMesh.Shininess);
@@ -280,7 +282,8 @@ bool LoadModel(const std::string& path)
 		pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, &mMesh.Transparent, nullptr);
 		pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, &mMesh.Reflective, nullptr);
 
-		pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), atex);
+		pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, 0), atex);
+
 		if (atex.length)
 		{
 			std::string full_path{ atex.data };

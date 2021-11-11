@@ -45,7 +45,7 @@ namespace Tempest
 		float near_clip_distance = .1f;
 		float far_clip_distance = 1000.f;
 
-		glm::vec3 camera_position = { 0.f, 0.f, 1.f };
+		glm::vec3 camera_position = { 0.f, 0.f, 3.f };
 		glm::quat orientation = { 1.f, 0.f, 0.f, 0.f };
 		glm::mat4 projection = { };
 		glm::mat4 reverseDepthProjection = { };

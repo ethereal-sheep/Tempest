@@ -104,6 +104,9 @@ namespace Tempest
 			testing_prototype();
 
 			instance.OnInit();
+			auto& prefabMode = Service<RenderSystem>::Get().PREFABMODE;
+			prefabMode = true;
+
 		}
 
 		void OnUpdate() override

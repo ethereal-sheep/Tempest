@@ -232,8 +232,7 @@ namespace Tempest
 
         uint32_t getHeight();
         uint32_t getWidth();
-
-
+        bool PREFABMODE = false;
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);

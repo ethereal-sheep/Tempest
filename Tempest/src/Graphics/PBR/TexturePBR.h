@@ -30,6 +30,7 @@ namespace Tempest
         GLuint getTexHeight();
         std::string getTexName();
         void useTexture();
+        void setTextureDDS(const char* texPath, std::string texName, bool texFlip);
     };
 
 
