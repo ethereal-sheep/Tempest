@@ -9,7 +9,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "meshPBR.h"
+#include "Graphics/PBR/MeshPBR.h"
+#include "Graphics/PBR/MaterialPBR.h"
+
 namespace Tempest
 {
 
@@ -18,7 +20,7 @@ namespace Tempest
     public:
         ModelPBR();
         ~ModelPBR();
-        void loadModel(std::string path);
+        void loadModel(std::string file);
         void Draw();
 
     private:
