@@ -43,7 +43,7 @@ namespace Tempest
 			window_flags |= ImGuiWindowFlags_NoTitleBar;
 
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
-			cam_ctrl.set_fixed_camera(cam);
+			cam_ctrl.set_fixed_camera(cam, 90, 45);
 
 			chars.assign(4, INVALID);
 		}
@@ -224,7 +224,7 @@ namespace Tempest
 										LOG_ASSERT(instance.ecs.has<tc::Model>(entity));
 
 										auto& transform = instance.ecs.get<tc::Transform>(entity);
-										auto& model = instance.ecs.get<tc::Model>(entity);
+										//auto& model = instance.ecs.get<tc::Model>(entity);
 
 										/* ===========================================
 										* NOTE TO UI!!!!
