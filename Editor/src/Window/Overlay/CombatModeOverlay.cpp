@@ -295,7 +295,7 @@ namespace Tempest
 			if (other_entity)
 			{
 				auto character_id = other_entity;
-				const ImGuiViewport* viewport = ImGui::GetMainViewport();
+				
 				if (battle_state == BATTLE_STATE::CURR_TURN || battle_state == BATTLE_STATE::SELECT_ACTION || battle_state == BATTLE_STATE::SELECT_WEAPON)
 				{
 					UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");

@@ -2583,7 +2583,7 @@ namespace Tempest::UI
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
-		float alpha = selected ? 1 : 0;
+		float alpha = selected ? 1.f : 0.f;
 		if (window->SkipItems)
 			return  false;
 		auto arrowImg = tex_map["Assets/Arrow_glow.png"];
@@ -2840,7 +2840,7 @@ namespace Tempest::UI
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		
-		float alpha = selected ? 1.f : 0;
+		
 		if (window->SkipItems)
 			return  false;
 		auto arrowImg = tex_map["Assets/Arrow_glow.png"];
