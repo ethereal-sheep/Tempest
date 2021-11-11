@@ -398,7 +398,7 @@ namespace Tempest
 
 				auto unitIcon = tex_map["Assets/Unit_Black.png"];
 				ImGui::SetCursorPosX(-10.f);
-				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, name.c_str(), "##PlaceUnit" + name, chars[i] == instance.selected|| chars[i] != INVALID))
+				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, name.c_str(), "##PlaceUnit" + name, i == selected || chars[i] != INVALID))
 				{
 					selected = i;
 				}
