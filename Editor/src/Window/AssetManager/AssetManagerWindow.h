@@ -52,6 +52,10 @@ namespace Tempest
 
 		void draw_category(Instance& instance, const string& cat_name, prototype_container& proto_cat)
 		{
+			// skip units
+			if (cat_name == "Unit")
+				return;
+
 			if (ImGui::BeginTabItem(cat_name.c_str()))
 			{
 				for (auto& pair : proto_cat)

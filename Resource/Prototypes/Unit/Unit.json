@@ -1,9 +1,15 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Wall"
+        "Category": "Unit"
     },
     "Components": [
+        {
+            "Metadata": {
+                "Type": "Unit"
+            },
+            "Component": {}
+        },
         {
             "Metadata": {
                 "Type": "Meta"
@@ -47,9 +53,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.00005310773849487305,
+                    14.270000457763672,
                     0.0,
-                    -0.00320318341255188
+                    -9.803088188171387
                 ],
                 "LocalRotation": [
                     0.0,
@@ -58,10 +64,35 @@
                     1.0
                 ],
                 "LocalScale": [
-                    1.0229947566986085,
-                    0.7940360903739929,
-                    3.906510829925537
+                    0.09000000357627869,
+                    0.09000000357627869,
+                    0.09000000357627869
                 ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Character"
+            },
+            "Component": {
+                "Charater_Name": "Char",
+                "Weapon_Ids": [],
+                "Charater_Stats": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": []
             }
         },
         {
@@ -69,7 +100,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Wall.a"
+                "Path": "Models\\test_2.a"
             }
         },
         {
@@ -80,12 +111,6 @@
                 "X": 1,
                 "Y": 1
             }
-        },
-        {
-            "Metadata": {
-                "Type": "Wall"
-            },
-            "Component": {}
         }
     ]
 }

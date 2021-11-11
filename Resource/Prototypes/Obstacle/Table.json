@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Wall"
+        "Category": "Obstacle"
     },
     "Components": [
         {
@@ -47,9 +47,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.00005310773849487305,
+                    0.5864017009735107,
                     0.0,
-                    -0.00320318341255188
+                    0.4870995581150055
                 ],
                 "LocalRotation": [
                     0.0,
@@ -58,18 +58,24 @@
                     1.0
                 ],
                 "LocalScale": [
-                    1.0229947566986085,
-                    0.7940360903739929,
-                    3.906510829925537
+                    0.754599928855896,
+                    0.754599928855896,
+                    0.6169734597206116
                 ]
             }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
         },
         {
             "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Wall.a"
+                "Path": "Models\\Table.a"
             }
         },
         {
@@ -77,15 +83,9 @@
                 "Type": "Shape"
             },
             "Component": {
-                "X": 1,
+                "X": 2,
                 "Y": 1
             }
-        },
-        {
-            "Metadata": {
-                "Type": "Wall"
-            },
-            "Component": {}
         }
     ]
 }
