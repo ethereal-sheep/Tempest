@@ -7,7 +7,8 @@ namespace Tempest
 	enum struct CameraControlMode {
 		WORLD,
 		ORBIT,
-		FIXED
+		FIXED,
+		FIXED_ORBIT,
 	};
 
 	enum struct EasingMode {
@@ -63,8 +64,6 @@ namespace Tempest
 		float current_orbit_time = 1.f;
 		float total_pos_time = 1.f;
 		float current_pos_time = 1.f;
-
-
 
 
 		void world_controls(Camera& cam)
@@ -431,6 +430,91 @@ namespace Tempest
 			}
 		}
 
+		void fixed_orbit_controls(Camera& cam)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
+			{
+				auto direction = els::to_vec2(io.MouseDelta);
+				//auto yaw_speed = 1.f / 4;
+				auto pitch_speed = 1.f / 4;
+				auto forward_speed = 1.f / 4.f;
+				auto scroll_speed = forward_speed * 4.f;
+
+				auto rotate_time = .05f;
+				auto zoom_time = .05f;
+
+				if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
+				{
+					//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+					//(m_SavedMousePos.x, m_SavedMousePos.y);
+				}
+
+				if (io.MouseDown[0] && io.MouseDown[1])
+				{
+
+				}
+				else if (io.MouseDown[0]) // rotate 
+				{
+					if (!els::is_zero(direction))
+					{
+					}
+				}
+				else if (io.MouseDown[1]) // rotate around
+				{
+					if (!els::is_zero(direction))
+					{
+						const float max_angle = glm::radians(270.f);
+						auto rel_pos = orbit_axis - cam.GetPosition();
+
+						start_rotation = cam.GetQuatRotation();
+						auto rot = end_rotation;
+						auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+						auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
+						rot = end_rotation * pitch;
+
+						end_rotation = rot;
+						current_orbit_time = 0.f;
+						total_orbit_time = rotate_time;
+
+						easing = EasingMode::LINEAR;
+					}
+
+				}
+				else if (io.MouseDown[2]) // Pan
+				{
+					if (!els::is_zero(direction))
+					{
+
+						//cam.SetPosition(newPos);
+					}
+				}
+
+				else if (abs(io.MouseWheel) > 0.001f)
+				{
+					auto currentPos = cam.GetPosition();
+					auto front = cam.GetFront();
+
+					auto newPos = currentPos + (front * (io.MouseWheel * scroll_speed));
+
+					const auto max_dolly = 1.f;
+					const auto max_dolly2 = max_dolly * max_dolly;
+					if (glm::dot(newPos - orbit_axis, -front) < max_dolly)
+					{
+						newPos = orbit_axis + -front * max_dolly;
+					}
+
+
+					current_pos_time = 0.f;
+					total_pos_time = zoom_time;
+
+					start_position = currentPos;
+					end_position = newPos;
+				}
+				//cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
+			}
+		}
+
 		void update_rotation(Camera& cam)
 		{
 			if (current_rot_time < total_rot_time)
@@ -476,7 +560,6 @@ namespace Tempest
 	public:
 		CameraControls(CameraControlMode _mode = CameraControlMode::WORLD) : mode(_mode) {}
 
-
 		void controls(Camera& cam)
 		{
 			switch (mode)
@@ -489,6 +572,9 @@ namespace Tempest
 				break;
 			case Tempest::CameraControlMode::FIXED:
 				fixed_controls(cam);
+				break;
+			case Tempest::CameraControlMode::FIXED_ORBIT:
+				fixed_orbit_controls(cam);
 				break;
 			default:
 				break;
@@ -511,6 +597,10 @@ namespace Tempest
 			case Tempest::CameraControlMode::FIXED:
 				update_rotation(cam);
 				update_position(cam);
+			case Tempest::CameraControlMode::FIXED_ORBIT:
+				update_rotation(cam);
+				update_position(cam);
+				update_orbit(cam);
 				break;
 			default:
 				break;
@@ -624,6 +714,15 @@ namespace Tempest
 				look_at(cam, axis, 0.5);
 			}
 		}
+		void set_fixed_orbit_camera(Camera& cam, glm::vec3 axis)
+		{
+			if (mode != CameraControlMode::FIXED_ORBIT)
+			{
+				mode = CameraControlMode::FIXED_ORBIT;
+				orbit_axis = axis;
+				look_at(cam, axis, 0.5);
+			}
+		}
 
 		void set_fixed_camera(Camera& cam, float yaw = 0.f, float pitch = 45.f)
 		{
@@ -632,7 +731,7 @@ namespace Tempest
 				auto rot = glm::angleAxis(glm::radians(yaw), vec3{ 0, 1 ,0 });
 				auto left = glm::conjugate(rot) * vec3 { 1, 0, 0 };
 
-				rot = glm::angleAxis(glm::radians(pitch), left) * rot;
+				rot = rot * glm::angleAxis(glm::radians(pitch), left);
 
 				start_rotation = cam.GetQuatRotation();
 				end_rotation = rot;

@@ -465,29 +465,27 @@ namespace Tempest
 
 						auto id = instance.character_map[w_x][w_y];
 
-						auto position = instance.ecs.get<tc::Transform>(id).position;
-						position.y += 2;
-						auto ss = cam.WorldspaceToScreenspace(position);
+						auto t_position = instance.ecs.get<tc::Transform>(id).position;
+						t_position.y += 2;
+						auto t_ss = cam.WorldspaceToScreenspace(t_position);
 						auto vp = cam.GetViewport();
-						ss.x = (1 + ss.x) / 2 * vp.z;
-						ss.y = vp.w - ((1 + ss.y) / 2 * vp.w);
-						auto temp = ImGui::GetCursorPos();
-
+						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+						
+						auto temp_cursor = ImGui::GetCursorPos();
 						// Draw whatever thing on their head
 						{
 
 							ImGui::PushFont(FONT_BOLD);
-							auto text_size = ImGui::CalcTextSize(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
-							auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
-							if (cursor_pos.x < viewport->WorkSize.x && ss.y + text_size.y / 2 < viewport->WorkSize.y) {
-								ImGui::SetCursorPos(cursor_pos);
+							auto t_text_size = ImGui::CalcTextSize(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
+							auto t_cursor_pos = ImVec2{ t_ss.x - t_text_size.x / 2.f, t_ss.y - t_text_size.y / 2 };
+							if (t_cursor_pos.x < viewport->WorkSize.x && t_ss.y + t_text_size.y / 2 < viewport->WorkSize.y) {
+								ImGui::SetCursorPos(t_cursor_pos);
 								ImGui::Text(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
 							}
 							ImGui::PopFont();
 						}
-
-
-						ImGui::SetCursorPos(temp);
+						ImGui::SetCursorPos(temp_cursor);
 
 
 
