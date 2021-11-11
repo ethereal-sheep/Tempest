@@ -21,7 +21,8 @@ namespace Tempest
 	{
 		OverlayOpen = true;
 		auto a = event_cast<OpenPlaceUnitsOverlay>(e);
-		chars = a.entities;
+		entities = a.entities;
+		chars.assign(entities.size(), INVALID);
 
 		window_flags |= ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoBackground;
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
@@ -156,7 +157,7 @@ namespace Tempest
 					auto ray = cam.GetMouseRay();
 					auto start = cam.GetPosition();
 					float dist = 0;
-					if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+					if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist) && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
 					{
 						auto inter = cam.GetPosition() + ray * dist;
 
@@ -277,7 +278,7 @@ namespace Tempest
 									* ============================================
 									*/
 									if (random_char_id)
-										instance.ecs.get<tc::Character>(entity) = instance.ecs.get<tc::Character>(random_char_id);
+										instance.ecs.get<tc::Character>(entity) = entities[selected] ? instance.ecs.get<tc::Character>(entities[selected]) : instance.ecs.get<tc::Character>(random_char_id);
 
 									transform.position = inter;
 								}
@@ -397,7 +398,7 @@ namespace Tempest
 
 				auto unitIcon = tex_map["Assets/Unit_Black.png"];
 				ImGui::SetCursorPosX(-10.f);
-				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, name.c_str(), "##PlaceUnit" + name, chars[i] == instance.selected|| chars[i] != INVALID))
+				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, name.c_str(), "##PlaceUnit" + name, i == selected || chars[i] != INVALID))
 				{
 					selected = i;
 				}

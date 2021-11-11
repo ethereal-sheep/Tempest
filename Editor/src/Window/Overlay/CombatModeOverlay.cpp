@@ -991,7 +991,7 @@ namespace Tempest
 		battle_state = BATTLE_STATE::CURR_TURN; 
 
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		cam_ctrl.set_fixed_camera(cam);
+		cam_ctrl.set_fixed_camera(cam, 0 , 70);
 
 		selected_action = UNDEFINED;
 		other_selected_action = UNDEFINED;

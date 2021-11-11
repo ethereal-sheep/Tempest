@@ -69,10 +69,7 @@ namespace Tempest
 						if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f},
 							charac.name.c_str(), "##turnordercharc" + std::to_string(i++), found, true))
 						{
-							if (found)
-								added_entities.erase(std::remove(added_entities.begin(), added_entities.end(), id), added_entities.end());
-							else
-								added_entities.emplace_back(id);
+							added_entities.emplace_back(id);
 						}
 
 						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
@@ -83,6 +80,7 @@ namespace Tempest
 				// character added section
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f, viewport->Size.y * 0.3f });
 				const ImVec2 ChildSize{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f };
+				tvector<unsigned> remove;
 				if (ImGui::BeginChild("Character added", ChildSize, true))
 				{
 					unsigned i = 0;
@@ -92,7 +90,12 @@ namespace Tempest
 					{
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + i++ * (ChildSize.x - (character_icon->GetWidth() + 2.0f) * 5) * 0.5f);
 						ImGui::SetCursorPosY(ypos);
-						ImGui::Image((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f });
+						ImGui::PushID(i);
+						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f }))
+						{
+							remove.push_back(i-1);
+						}
+						ImGui::PopID();
 						
 						if (i / 5)
 						{
@@ -101,6 +104,13 @@ namespace Tempest
 						}
 					}
 				}
+				for (auto i : remove)
+				{
+					added_entities.erase(std::begin(added_entities) + i);
+				}
+				remove.clear();
+
+
 				ImGui::EndChild();
 
 				// back button
