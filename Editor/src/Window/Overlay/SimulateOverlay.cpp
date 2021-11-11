@@ -127,7 +127,7 @@ namespace Tempest
 				float result = 0.0f;
 
 				// display number percentage
-				if (win && lose)
+				if (win + lose)
 				{
 					result = 100.f * win / (win + lose);
 					ImGui::SetCursorPos({ viewport->Size.x * 0.465f, viewport->Size.y * 0.55f });

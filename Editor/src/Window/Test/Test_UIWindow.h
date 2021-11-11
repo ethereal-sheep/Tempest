@@ -171,7 +171,7 @@ namespace Tempest
 				//instance.ecs.get_if<tc::Character>(3);
 				if (UI::UICharTurnButton((void*)static_cast<size_t>(CharIcon2->GetID()), { (float)CharIcon2->GetWidth(), (float)CharIcon2->GetHeight() }, "CHAR","##TESTAT", selected))
 				{
-					selected = !selected;
+					//selected = !selected;
 				}
 
 				if (UI::UICharTurnButton((void*)static_cast<size_t>(CharIcon2->GetID()), { (float)CharIcon2->GetWidth(), (float)CharIcon2->GetHeight() }, "CHAR", "##TESTAT2", selected,true))
