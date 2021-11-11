@@ -22,7 +22,8 @@ namespace Tempest
         bool OverlayOpen = true;
         CameraControls cam_ctrl;
         int selected = -1;
-        tvector<Entity> chars;
+        tvector<Entity> chars; 
+        tvector<Entity> entities;
         //tvector<Entity> sheets;
 
         const char* window_name() override
