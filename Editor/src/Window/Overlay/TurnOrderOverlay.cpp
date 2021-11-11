@@ -69,10 +69,7 @@ namespace Tempest
 						if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f},
 							charac.name.c_str(), "##turnordercharc" + std::to_string(i++), found, true))
 						{
-							if (found)
-								added_entities.erase(std::remove(added_entities.begin(), added_entities.end(), id), added_entities.end());
-							else
-								added_entities.emplace_back(id);
+							added_entities.emplace_back(id);
 						}
 
 						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
