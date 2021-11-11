@@ -24,6 +24,9 @@ namespace Tempest
 
 		id = UNDEFINED;
 
+		temp_graph.clear();
+		temp_graph.name = "";
+
 		if (a.instance.ecs.has<tc::Graph>(a.id))
 		{
 			id = a.id;

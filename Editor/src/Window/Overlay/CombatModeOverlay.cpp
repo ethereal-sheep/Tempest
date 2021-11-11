@@ -814,15 +814,15 @@ namespace Tempest
 		ImGui::PushFont(FONT_HEAD);
 
 		std::string roll = atk_rolled ? std::to_string(atk_output) : "";
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.4f - ImGui::CalcTextSize(attacker.name.c_str()).x, viewport->Size.y * 0.27f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.45f - ImGui::CalcTextSize(attacker.name.c_str()).x, viewport->Size.y * 0.27f });
 		ImGui::Text(attacker.name.c_str());
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.4f - ImGui::CalcTextSize(roll.c_str()).x, viewport->Size.y * 0.35f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.4f - ImGui::CalcTextSize(roll.c_str()).x , viewport->Size.y * 0.35f });
 		ImGui::Text(roll.c_str());
 
 		roll = def_rolled ? std::to_string(def_output) : "";
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.6f - ImGui::CalcTextSize(defender.name.c_str()).x, viewport->Size.y * 0.27f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f + ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(defender.name.c_str());
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.6f - ImGui::CalcTextSize(roll.c_str()).x, viewport->Size.y * 0.35f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.6f + ImGui::CalcTextSize(roll.c_str()).x , viewport->Size.y * 0.35f });
 		ImGui::Text(roll.c_str());
 		ImGui::PopFont();
 
@@ -1131,6 +1131,17 @@ namespace Tempest
 				default:
 					break;
 				}
+			}
+
+			if (UI::UIButton_2("Turn Order", "Turn Order", ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
+			{
+				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
+				Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+			}
+
+			if (UI::UIButton_2("Place Units", "Place Units", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
+			{
+
 			}
 
 			ImGui::End();
