@@ -96,7 +96,7 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 bool WriteToFile(const Mesh& m, const std::string& path)
 {
 	std::filesystem::path p{ path };
-	auto name = p.replace_extension(".b");
+	auto name = p.replace_extension(".a");
 	std::ofstream file{ name.string() };
 	if (!file.is_open())
 	{

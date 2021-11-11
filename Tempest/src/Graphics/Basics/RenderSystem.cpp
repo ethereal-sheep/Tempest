@@ -368,7 +368,7 @@ namespace Tempest
         objectMetalness2.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);
         objectAO2.setTexture("textures/pbr/rustediron/rustediron_ao.png", "ironAO", true);
 
-        objectModel2.loadModel("models/Chair.b");
+        objectModel2.loadModel("models/shaderball/shaderball.b");
 
        // materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
         materialF0 = glm::vec3(0.04f);
