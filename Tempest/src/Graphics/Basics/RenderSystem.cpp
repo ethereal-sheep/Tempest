@@ -457,6 +457,18 @@ namespace Tempest
         m_Pipeline.m_Models.push_back(model);
     }
 
+    void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::make_shared<Model>(path.c_str())));
+        }
+        ModelObj model;
+        model.m_Transform = model_matrix;
+        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        m_Pipeline.m_Models.push_back(model);
+    }
+
     void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)
     {
         m_LineRenderer.Submit(line, color);
