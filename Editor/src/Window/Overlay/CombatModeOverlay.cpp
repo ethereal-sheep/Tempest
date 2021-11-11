@@ -1087,6 +1087,17 @@ namespace Tempest
 				}
 			}
 
+			if (UI::UIButton_2("Turn Order", "Turn Order", ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
+			{
+				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
+				Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+			}
+
+			if (UI::UIButton_2("Place Units", "Place Units", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
+			{
+
+			}
+
 			ImGui::End();
 
 			ImGui::PopStyleVar();
