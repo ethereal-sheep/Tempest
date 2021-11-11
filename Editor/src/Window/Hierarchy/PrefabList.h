@@ -53,8 +53,11 @@ namespace Tempest
 							ImGui::TableNextRow();
 							ImGui::TableSetColumnIndex(0);
 
+							auto pos = pf.get<tc::Transform>().position;
+							auto check = instance.scene.get_map().find((int)pos.x, (int)pos.z);
+
 							auto c = UI::CreateLabelWithId("", id);
-							if (ImGui::Selectable(c.c_str(), instance.selected == id,
+							if (ImGui::Selectable(c.c_str(), id == check,
 								ImGuiSelectableFlags_SpanAllColumns |
 								ImGuiSelectableFlags_AllowItemOverlap))
 							{

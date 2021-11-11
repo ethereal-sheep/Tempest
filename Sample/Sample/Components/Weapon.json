@@ -1,0 +1,29 @@
+{
+    "Metadata": {
+        "Type": "Weapon"
+    },
+    "Components": [
+        {
+            "Entity": 7,
+            "Component": {
+                "Weapon_Name": "Sword",
+                "Main_Stat": 1,
+                "Weapon_Stats": [
+                    0,
+                    2,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        }
+    ]
+}
