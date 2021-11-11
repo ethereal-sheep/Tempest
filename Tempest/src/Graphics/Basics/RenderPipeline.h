@@ -30,6 +30,20 @@ namespace Tempest
 		MODEL,
 		MODEL_TEXTURE,
 		MODEL_LIGHT
+
+		, // PBR TEST
+		gBufferShader,
+		latlongToCubeShader,
+		simpleShader,
+		lightingBRDFShader,
+		irradianceIBLShader,
+		prefilterIBLShader,
+		integrateIBLShader,
+
+		firstpassPPShader,
+		saoShader,
+		saoBlurShader
+			
 	};
 
 	struct SpriteObj

@@ -34,6 +34,6 @@ namespace Tempest
 
 	void testing_scene()
 	{
-		testing_scene_proto();
+		//testing_scene_proto();
 	}
 }

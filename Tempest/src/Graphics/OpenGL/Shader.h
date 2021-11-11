@@ -45,6 +45,8 @@ namespace Tempest
 		void SetMat3fv(glm::mat3 value, const GLchar* name, GLboolean transpose = GL_FALSE);
 		void SetMat4fv(glm::mat4 value, const GLchar* name, GLboolean transpose = GL_FALSE);
 		void SetIntArray(int* values, GLuint count, const std::string& name);
+
+		GLint GetUniformLoc(const std::string& name);
 	};
 }
 
