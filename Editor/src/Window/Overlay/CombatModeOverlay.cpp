@@ -354,8 +354,6 @@ namespace Tempest
 									battle_state = BATTLE_STATE::SELECT_WEAPON;
 								}
 							}
-
-
 						}
 						break;
 						case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_WEAPON: // TODO: account for no weapons
@@ -827,7 +825,7 @@ namespace Tempest
 		ImGui::PopFont();
 
 		// only trigger this if no more rolls
-		if (UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
+		if (atk_rolled && def_rolled && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
 		{
 			// TODO: affect the entities
 
