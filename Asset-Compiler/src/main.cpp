@@ -23,6 +23,9 @@ struct Mesh
 	std::vector<glm::vec3> norm;
 	std::vector<glm::vec2> tex;
 	std::vector<glm::ivec3> indices;
+	std::vector<unsigned int> nvertices;
+	std::vector<unsigned int> nfaces;
+	std::vector<unsigned int> matindex;
 
 	std::vector<std::string> textures;
 
@@ -69,19 +72,21 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 
 		//std::cout << "Normals: " << pNormal->x << ", " << pNormal->y << ", " << pNormal->z << std::endl;
 	}
+	m.nvertices.push_back(mesh->mNumVertices);
 
 	for (size_t i = 0; i < mesh->mNumFaces; ++i)
 	{
 		const aiFace& face = mesh->mFaces[i];
 		m.indices.push_back(glm::ivec3(offset + (int32_t)face.mIndices[0], offset + (int32_t)face.mIndices[1], offset + (int32_t)face.mIndices[2]));
 	}
-
-	offset += mesh->mNumVertices;
+	m.nfaces.push_back(mesh->mNumFaces);
+	m.matindex.push_back(mesh->mMaterialIndex);
+	//offset += mesh->mNumVertices;
 }
 
 /*
 *	### File Contents ###
-* 
+*
 *	[v] - Vertices(Positions)
 *	[n] - Normals
 *	[t] - Texture Coordinates
@@ -91,7 +96,7 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 bool WriteToFile(const Mesh& m, const std::string& path)
 {
 	std::filesystem::path p{ path };
-	auto name = p.replace_extension(".a");
+	auto name = p.replace_extension(".b");
 	std::ofstream file{ name.string() };
 	if (!file.is_open())
 	{
@@ -153,12 +158,39 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 			file << ss.str() << "\n";
 		}
 
+		for (auto& i : m.nvertices)
+		{
+			std::stringstream ss;
+			ss << "m ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.nfaces)
+		{
+			std::stringstream ss;
+			ss << "w ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.matindex)
+		{
+			std::stringstream ss;
+			ss << "g ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
 		std::stringstream ss;
 		ss << "Ambient ";
 		ss << m.Ambient.x << " ";
 		ss << m.Ambient.y << " ";
 		ss << m.Ambient.z;
-		
+
 		file << ss.str() << "\n";
 
 		ss.str(std::string());
@@ -243,18 +275,18 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 
 		ss.str(std::string());
 	}
-	
+
 	return true;
 }
 
-bool LoadModel(const std::string& path, const std::string& output)
+bool LoadModel(const std::string& path)
 {
 	s_Scene = s_Importer.ReadFile(path,
 		aiProcess_Triangulate |
 		aiProcess_GenSmoothNormals |
 		aiProcess_JoinIdenticalVertices);
 
-	if (!s_Scene)	
+	if (!s_Scene)
 		return false;
 
 	uint32_t offset = 0;
@@ -299,7 +331,7 @@ bool LoadModel(const std::string& path, const std::string& output)
 		}
 	}
 
-	if (!WriteToFile(mMesh, output))
+	if (!WriteToFile(mMesh, path))
 		return false;
 
 	return true;
@@ -309,38 +341,26 @@ int main(int argc, char* argv[])
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	int t = argc;
-	if (argc != 3)
-	{
-		std::cout << "Invalid Argument!" << std::endl;
-		return -1;
-	}
-
 	std::filesystem::path pt{ argv[1] };
-	std::filesystem::path output{ argv[2] };
-
 	std::string ext = pt.extension().string();
-	if (strcmp(ext.c_str(), ".fbx"))
-	{
-		//LOG("Incorrect File Type!");
-		std::cout << "Incorrect File Type" << std::endl;
-		return -1;
-	}
+	//if (strcmp(ext.c_str(), ".fbx"))
+	//{
+	//	//LOG("Incorrect File Type!");
+	//	std::cout << "Incorrect File Type" << std::endl;
+	//	return -1;
+	//}
 
 	while (t > 1)
-	{	
-		output /= "Models";
-		output /= pt.filename();
-		output = output.replace_extension(".a");
-
-		if (!LoadModel(argv[1], output.string()))
+	{
+		if (!LoadModel(argv[1]))
 		{
-			std::cout << "Model failed to compile : " "[" << argv[1] << "]" << std::endl;
+			std::cout << "Model Failed to Load : " "[" << argv[1] << "]" << std::endl;
 			return -1;
 		}
 
 		else
 		{
-			std::cout << "Model compiled successfully to : " << "[" << output << "]" << std::endl;
+			std::cout << "Model Loaded Successfully : " << "[" << argv[1] << "]" << std::endl;
 			return 0;
 		}
 	}

@@ -360,7 +360,7 @@ namespace Tempest
         envMapLUT.setTextureHDR(512, 512, GL_RG, GL_RG16F, GL_FLOAT, GL_LINEAR);
 
 
-        objectModel.loadModel("models/shaderball/shaderball.a");
+        objectModel.loadModel("models/shaderball/shaderball.b");
         
         objectAlbedo2.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
         objectNormal2.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
@@ -368,7 +368,7 @@ namespace Tempest
         objectMetalness2.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);
         objectAO2.setTexture("textures/pbr/rustediron/rustediron_ao.png", "ironAO", true);
 
-        objectModel2.loadModel("models/shaderball/shaderball.a");
+        objectModel2.loadModel("models/Chair.b");
 
        // materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
         materialF0 = glm::vec3(0.04f);

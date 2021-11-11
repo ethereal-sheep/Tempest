@@ -1,5 +1,7 @@
 #include "ModelPBR.h"
 #include "Logger/Log.h"
+#include <filesystem>
+#include <cstring>
 
 namespace Tempest
 {
@@ -17,9 +19,10 @@ namespace Tempest
 
     void ModelPBR::loadModel(std::string file)
     {
+		std::filesystem::path p{ file };
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
-		if (strcmp(file.c_str(), ".a"))
+		if (strcmp(p.extension().string().c_str(), ".b"))
 		{
 			Assimp::Importer importer;
 			const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
