@@ -685,7 +685,7 @@ namespace Tempest
 		// display chance of success
 
 		int value = 0;
-		if (win && lose) {
+		if (win + lose) {
 			value = int(100.f * win / (win + lose));
 		}
 
@@ -737,7 +737,7 @@ namespace Tempest
 	void CombatModeOverlay::fight(RuntimeInstance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, true))
+		if (UI::CharacterTurnData(instance, instance.selected, { 0.f, viewport->Size.y - placeholder_height }, false, true))
 		{
 			// attacker roll
 			atk_rolled = true;
