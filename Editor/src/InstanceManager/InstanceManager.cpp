@@ -143,8 +143,7 @@ namespace Tempest
 		instance->register_always<WeaponSheetOverlay>();
 		instance->register_always<SimulateOverlay>();
 		instance->register_always<SimulateResultOverlay>();
-
-		// can shift these to rum time?
+		//======================================
 		instance->register_always<CombatModeOverlay>();
 		instance->register_always<TurnOrderOverlay>();
 		instance->register_always<PlaceUnitsOverlay>();
