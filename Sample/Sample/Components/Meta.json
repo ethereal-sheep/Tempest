@@ -20,6 +20,12 @@
             "Component": {
                 "Name": "Weapon"
             }
+        },
+        {
+            "Entity": 3,
+            "Component": {
+                "Name": "Char"
+            }
         }
     ]
 }

@@ -30,6 +30,32 @@
                     5
                 ]
             }
+        },
+        {
+            "Entity": 3,
+            "Component": {
+                "Charater_Name": "Lousy",
+                "Weapon_Ids": [],
+                "Charater_Stats": [
+                    1,
+                    1,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    5
+                ]
+            }
         }
     ]
 }

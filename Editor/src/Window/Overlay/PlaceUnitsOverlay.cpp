@@ -28,9 +28,6 @@ namespace Tempest
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		cam_ctrl.set_fixed_camera(cam, 90, 45);
 
-
-
-
 	}
 	void PlaceUnitsOverlay::init(Instance&)
 	{
@@ -391,14 +388,13 @@ namespace Tempest
 		
 		if (ImGui::BeginChild("##PlaceUnitSideBar", size))
 		{
-			for (int i = 0; i < (int)chars.size(); ++i)
+			for (int i = 0; i < (int)entities.size(); ++i)
 			{
-				string name = "Character_";
-				name += std::to_string(i);
+				auto& character = instance.ecs.get<tc::Character>(entities[i]);
 
 				auto unitIcon = tex_map["Assets/Unit_Black.png"];
 				ImGui::SetCursorPosX(-10.f);
-				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, name.c_str(), "##PlaceUnit" + name, i == selected || chars[i] != INVALID))
+				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, character.name.c_str(), "##PlaceUnit" + std::to_string(i), i == selected || chars[i] != INVALID))
 				{
 					selected = i;
 				}

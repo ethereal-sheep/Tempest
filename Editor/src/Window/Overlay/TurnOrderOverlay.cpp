@@ -65,9 +65,8 @@ namespace Tempest
 					for (auto id : instance.ecs.view<Components::Character>())
 					{
 						auto& charac = instance.ecs.get<tc::Character>(id);
-						bool found = std::find(added_entities.begin(), added_entities.end(), id) != added_entities.end();
 						if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f},
-							charac.name.c_str(), "##turnordercharc" + std::to_string(i++), found, true))
+							charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, true))
 						{
 							added_entities.emplace_back(id);
 						}
