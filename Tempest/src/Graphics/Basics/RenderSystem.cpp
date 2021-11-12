@@ -524,7 +524,7 @@ namespace Tempest
 
     void RenderSystem::Render()
     {
-        if (PREFABMODE)
+        if (PREFABMODE || !pbrMode)
         { 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -619,6 +619,7 @@ namespace Tempest
             m_FrameBuffer.Bind();
             m_FrameBuffer.SetFrameBufferSize();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            m_Renderer.EnableBlend(true);
 
             RenderAAGrid();
 

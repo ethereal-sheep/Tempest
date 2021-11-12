@@ -181,9 +181,9 @@ void main()
 	//diffuse *= texture(diffuseTexture, vs_tex).rgb;
 	//specular *= texture(diffuseTexture, vs_tex).rgb;
 
-	ambient *= DiffuseColour;
-	diffuse *= DiffuseColour;
-	specular *= DiffuseColour;
+	//ambient *= DiffuseColour;
+	//diffuse *= DiffuseColour;
+	//specular *= DiffuseColour;
 
 
 	vec3 color = min((ambient + diffuse) + specular, 1.0f);

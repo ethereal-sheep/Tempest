@@ -376,6 +376,8 @@ namespace Tempest
 			ImGui::Checkbox("Directional shadow", &dirShadowBool);
 			auto& pointShadowBool = Service<RenderSystem>::Get().pointShadowBool;
 			ImGui::Checkbox("Point shadow", &pointShadowBool);
+			auto& pbrBool = Service<RenderSystem>::Get().pbrMode;
+			ImGui::Checkbox("PBR Mode", &pbrBool);
 
 			auto& materialF0 = Service<RenderSystem>::Get().materialF0;
 			UI::DragFloat3ColorBox("MaterialF0", "##MaterialF0", ImVec2{ padding , 0.f }, value_ptr(materialF0), 0.f, 0.1f).first;

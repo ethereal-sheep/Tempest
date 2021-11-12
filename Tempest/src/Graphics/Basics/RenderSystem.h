@@ -146,6 +146,7 @@ namespace Tempest
         bool motionBlurMode = false;   // Motion Blur
         bool dirShadowBool = false;    // Direcitonal shadows toggle
         bool pointShadowBool = true;   // Point light shadows toggle
+        bool pbrMode = false;
 
         glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric
 
