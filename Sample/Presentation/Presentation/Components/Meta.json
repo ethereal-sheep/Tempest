@@ -22,12 +22,6 @@
             }
         },
         {
-            "Entity": 4,
-            "Component": {
-                "Name": "Char"
-            }
-        },
-        {
             "Entity": 5,
             "Component": {
                 "Name": "Weapon"

@@ -23,7 +23,10 @@
                     0,
                     0
                 ],
-                "Actions": []
+                "Actions": [
+                    6,
+                    10
+                ]
             }
         },
         {
@@ -46,30 +49,10 @@
                     0,
                     0
                 ],
-                "Actions": []
-            }
-        },
-        {
-            "Entity": 4,
-            "Component": {
-                "Charater_Name": "Lich",
-                "Weapon_Ids": [],
-                "Charater_Stats": [
-                    15,
-                    7,
-                    0,
-                    2,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                "Actions": []
+                "Actions": [
+                    6,
+                    10
+                ]
             }
         }
     ]
