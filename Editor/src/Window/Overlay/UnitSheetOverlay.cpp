@@ -34,13 +34,15 @@ namespace Tempest
 		else if (a.entityID != UNDEFINED)
 			SelectedID = a.entityID;
 
+		else
+			SelectedID = a.instance.ecs.view_first<Components::Character>(exclude_t<tc::Destroyed>());
+
 		TempAction = UNDEFINED;
 		TempWeapon = UNDEFINED;
 
-		cs = a.instance.ecs.get_if<tc::Character>(SelectedID);
-
-		if (cs)
+		if (SelectedID != INVALID && SelectedID != UNDEFINED)
 		{
+			cs = a.instance.ecs.get_if<tc::Character>(SelectedID);
 			CurrentTab = TABS_TYPE::UNIT;
 			Tabs[TABS_TYPE::UNIT].is_active = true;
 			Tabs[TABS_TYPE::WEAPON].is_active = false;
