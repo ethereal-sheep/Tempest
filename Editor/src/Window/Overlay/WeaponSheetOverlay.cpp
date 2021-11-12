@@ -20,6 +20,11 @@ namespace Tempest
 		}
 
 		// get the first weapon
+		else if (a.entity)
+		{
+			SelectedID = a.entity;
+		}
+
 		else
 		{
 			auto view = a.instance.ecs.view<Components::Weapon>(exclude_t<tc::Destroyed>());

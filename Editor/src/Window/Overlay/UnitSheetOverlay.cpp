@@ -40,7 +40,14 @@ namespace Tempest
 		cs = a.instance.ecs.get_if<tc::Character>(SelectedID);
 
 		if (cs)
+		{
+			CurrentTab = TABS_TYPE::UNIT;
 			Tabs[TABS_TYPE::UNIT].is_active = true;
+			Tabs[TABS_TYPE::WEAPON].is_active = false;
+			Tabs[TABS_TYPE::ITEM].is_active = false;
+			Tabs[TABS_TYPE::ACTION].is_active = false;
+		}
+			
 	}
 
 	void UnitSheetOverlay::close_popup(const Event& e)
@@ -945,10 +952,20 @@ namespace Tempest
 		for (auto weap_id : cs->weapons)
 		{
 			auto& weap = instance.ecs.get<tc::Weapon>(weap_id);
-			if (UI::UIButton_2(weap.name.c_str(), weap.name.c_str(), { cursor.x + i++ * 300.0f,cursor.y + j * 100.0f }, { 40.f, 20.f }, FONT_BODY))
+			auto PairResult = UI::UIButtonWithDelete(weap.name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
+			if (PairResult.first)
 			{
-				//	EditWeaponPopup = true;
-				//	EditWeap = weap;
+				Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+				Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance, weap_id);
+			}
+			if (PairResult.second)
+			{
+				ImGui::OpenPopup(string("RemoveWeap##" + std::to_string(i)).c_str());
+			}
+
+			if (UI::ConfirmDeletePopup(string("RemoveWeap##" + std::to_string(i)).c_str(), "Remove this weapon?"))
+			{
+				cs->weapons.erase(std::remove(cs->weapons.begin(), cs->weapons.end(), weap_id), cs->weapons.end());
 			}
 
 			// display in rows of 2
@@ -986,16 +1003,25 @@ namespace Tempest
 		ImGui::BeginChild("##ActionsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 		unsigned i = 0;
 		unsigned j = 0;
-		unsigned action_num = 1;
 		const ImVec2 cursor{ ImGui::GetCursorPosX() + 130, ImGui::GetCursorPosY() + 60 };
 
 		for (auto id : cs->actions)
 		{
 			auto& action = instance.ecs.get<tc::Graph>(id);
-			if (UI::UIButton_2(action.g.name + ": " + std::to_string(action_num), action.g.name + ": " + std::to_string(action_num), { cursor.x + i++ * 300.0f,cursor.y + j * 100.0f }, { 40.f, 20.f }, FONT_BODY))
+			auto PairResult = UI::UIButtonWithDelete(action.g.name.c_str(), string("##actionn" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
+			if (PairResult.first)
 			{
-				//	EditWeaponPopup = true;
-				//	EditWeap = weap;
+				Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+				Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(id, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
+			}
+			if (PairResult.second)
+			{
+				ImGui::OpenPopup(string("RemoveAction##" + std::to_string(i)).c_str());
+			}
+
+			if (UI::ConfirmDeletePopup(string("RemoveAction##" + std::to_string(i)).c_str(), "Remove this action?"))
+			{
+				cs->actions.erase(std::remove(cs->actions.begin(), cs->actions.end(), id), cs->actions.end());
 			}
 
 			// display in rows of 2
@@ -1004,7 +1030,6 @@ namespace Tempest
 				i = 0;
 				j++;
 			}
-			++action_num;
 		}
 
 		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
