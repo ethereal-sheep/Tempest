@@ -13,6 +13,8 @@
 #include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "Triggers/SimulationTriggers.h"
 #include "Triggers/Triggers.h"
+#include "Instance/EditTimeInstance.h"
+#include "InstanceManager/InstanceConfig.h"
 
 namespace Tempest
 {
@@ -180,6 +182,12 @@ namespace Tempest
 				if (UI::UIButton_2("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))
 				{
 					// open testing combat in map
+					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+					edit.save();
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						edit.get_full_path(),
+						MemoryStrategy{},
+						InstanceType::RUN_TIME);
 				}
 
 				// display top buttons
