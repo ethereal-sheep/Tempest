@@ -20,20 +20,23 @@ namespace Tempest
 		}
 
 		// get the first weapon
-		else
+		else if (a.entity != UNDEFINED)
 		{
-			auto view = a.instance.ecs.view<Components::Weapon>(exclude_t<tc::Destroyed>());
-			for (auto id : view)
-			{
-				SelectedID = id;
-				break;
-			}
+			SelectedID = a.entity;
 		}
 
-		weap = a.instance.ecs.get_if<tc::Weapon>(SelectedID);
+		else
+		{
+			SelectedID = a.instance.ecs.view_first<Components::Weapon>(exclude_t<tc::Destroyed>());
+		}
 
-		if (weap)
-			Tabs[TABS_TYPE::WEAPON].is_active = true;
+		if (SelectedID != INVALID && SelectedID != UNDEFINED)
+		{
+			weap = a.instance.ecs.get_if<tc::Weapon>(SelectedID);
+
+			if (weap)
+				Tabs[TABS_TYPE::WEAPON].is_active = true;
+		}
 	}
 
 	void WeaponSheetOverlay::close_popup(const Event& e)

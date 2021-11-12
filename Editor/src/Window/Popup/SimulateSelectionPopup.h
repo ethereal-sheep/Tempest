@@ -131,7 +131,7 @@ namespace Tempest
                             ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 120, cursor.y + j * 140 });
                             if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(charc_icon->GetID()), { 90,90 }, charac.name.c_str(), "##" + std::to_string(id), data == id))
                             {
-                                data = id;
+                                data = data != id ? id : UNDEFINED;
                             }
 
                             // display in rows of 3
@@ -147,6 +147,7 @@ namespace Tempest
                         {
                             // TODO: take out id/data
                             enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
                         }
                     }
@@ -159,9 +160,9 @@ namespace Tempest
                         for (auto id : view)
                         {
                             auto& weapon = instance.ecs.get<tc::Weapon>(id);
-                            if (UI::UIButton_1(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 100, 10 }, FONT_PARA, data == id))
+                            if (UI::UIButton_2(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             {
-                                data = id;
+                                data = data != id ? id : UNDEFINED;
                             }
 
                             // display in rows of 2
@@ -172,9 +173,10 @@ namespace Tempest
                             }
                         }
 
-                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        if (UI::UIButton_2("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
                         {
                             enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
                         }
                     }
@@ -185,9 +187,9 @@ namespace Tempest
                         {
                             auto& action = instance.ecs.get<tc::Graph>(id);
 
-                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA, data == id))
+                            if (UI::UIButton_2(action.g.name, action.g.name, { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             {
-                                data = id;
+                                data = data != id ? id : UNDEFINED;
                             }
 
                             // display in rows of 2
@@ -199,9 +201,10 @@ namespace Tempest
                               
                         }
 
-                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        if (UI::UIButton_2("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
                         {
                             enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
                         }
                     }
@@ -212,9 +215,9 @@ namespace Tempest
                         {
                             auto& action = instance.ecs.get<tc::Graph>(id);
 
-                            if (UI::UIButton_1(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 120, 20 }, FONT_PARA, data == id))
+                            if (UI::UIButton_2(action.g.name, action.g.name, { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             {
-                                data = id;
+                                data = data != id ? id : UNDEFINED;
                             }
 
                             // display in rows of 2
@@ -226,9 +229,10 @@ namespace Tempest
 
                         }
 
-                        if (UI::UIButton_1("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 140,-10 }, FONT_HEAD))
+                        if (UI::UIButton_2("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
                         {
                             enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
                         }
                     }

@@ -246,6 +246,8 @@ namespace Tempest
 								{
 									instance.ecs.emplace<tc::Destroyed>(id);
 									id = UNDEFINED;
+									temp_graph.clear();
+									temp_graph.name = "";
 								}
 
 								++i;
@@ -272,6 +274,8 @@ namespace Tempest
 								{
 									instance.ecs.emplace<tc::Destroyed>(id);
 									id = UNDEFINED;
+									temp_graph.clear();
+									temp_graph.name = "";
 								}
 
 								++i;

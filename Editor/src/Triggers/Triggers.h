@@ -136,9 +136,11 @@ namespace Tempest
 
 	struct OpenWeaponSheetTrigger : public Event
 	{
-		OpenWeaponSheetTrigger(bool isAddUnit, Instance& in) : addUnit{ isAddUnit }, instance{ in } {}
+		OpenWeaponSheetTrigger(bool isAddUnit, Instance& in, Entity selected = UNDEFINED) :
+			addUnit{ isAddUnit }, instance{ in }, entity{ selected } {}
 		bool addUnit = false;
 		Instance& instance;
+		Entity entity;
 	};
 
 	struct OpenTurnOrderOverlay : public Event {};
