@@ -1,0 +1,15 @@
+{
+    "Metadata": {
+        "Type": "Destroyed"
+    },
+    "Components": [
+        {
+            "Entity": 8,
+            "Component": {}
+        },
+        {
+            "Entity": 7,
+            "Component": {}
+        }
+    ]
+}
