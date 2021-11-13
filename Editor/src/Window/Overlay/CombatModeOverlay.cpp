@@ -170,6 +170,11 @@ namespace Tempest
 
 				if (battle_state == BATTLE_STATE::CURR_TURN || battle_state == BATTLE_STATE::SELECT_ACTION || battle_state == BATTLE_STATE::SELECT_WEAPON)
 				{
+					if (UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA))
+					{
+						// skip the turn
+					}
+
 					UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f , viewport->Size.y - action_background_size.y * 0.7f });
 					if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, true, ImGuiWindowFlags_NoScrollbar))
@@ -812,15 +817,15 @@ namespace Tempest
 		ImGui::PushFont(FONT_HEAD);
 
 		std::string roll = atk_rolled ? std::to_string(atk_output) : "";
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.45f - ImGui::CalcTextSize(attacker.name.c_str()).x, viewport->Size.y * 0.27f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(attacker.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(attacker.name.c_str());
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.4f - ImGui::CalcTextSize(roll.c_str()).x , viewport->Size.y * 0.35f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
 		ImGui::Text(roll.c_str());
 
 		roll = def_rolled ? std::to_string(def_output) : "";
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f + ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(defender.name.c_str());
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.6f + ImGui::CalcTextSize(roll.c_str()).x , viewport->Size.y * 0.35f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
 		ImGui::Text(roll.c_str());
 		ImGui::PopFont();
 
