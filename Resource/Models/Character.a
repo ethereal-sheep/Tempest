@@ -43953,9 +43953,9 @@ f 9135 4635 4642
 m 9136
 w 16544
 g 0
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+Ambient 0.7 0.7 0.7
+Diffuse 0.7 0.7 0.7
+Specular 1 1 1
 Emissive 0 0 0
 Transparent 0 0 0
 Reflective 0 0 0

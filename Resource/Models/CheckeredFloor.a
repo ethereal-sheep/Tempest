@@ -86,9 +86,9 @@ p Models\CheckeredFloor.fbm\Tiles_Desaturated.png
 m 24
 w 12
 g 0
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+Ambient 1 1 1
+Diffuse 1 1 1
+Specular 1 1 1
 Emissive 0 0 0
 Transparent 0 0 0
 Reflective 0 0 0
