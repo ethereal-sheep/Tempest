@@ -24,28 +24,6 @@
                     0
                 ]
             }
-        },
-        {
-            "Entity": 57,
-            "Component": {
-                "Weapon_Name": "Weapon",
-                "Main_Stat": 1,
-                "Weapon_Stats": [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
-                ]
-            }
         }
     ]
 }

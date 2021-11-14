@@ -10,6 +10,10 @@
         {
             "Entity": 5,
             "Component": {}
+        },
+        {
+            "Entity": 54,
+            "Component": {}
         }
     ]
 }
