@@ -809,15 +809,17 @@ namespace Tempest
             //m_Pipeline.m_Models[i].m_Model->Draw();
             for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
             {   
-                glActiveTexture(GL_TEXTURE0);
-                if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
-                {                 
-                    m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
-                    //glBindTexture(GL_TEXTURE_2D,m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID());
-                }
+                //glActiveTexture(GL_TEXTURE0);
+                //if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
+                //{                 
+                //    m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
+                //    //glBindTexture(GL_TEXTURE_2D,m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID());
+                //}
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
-
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                if(m_Pipeline.m_Models[i].m_Model->colours.size())
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                else
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
 
                 glActiveTexture(GL_TEXTURE1);
                 objectNormal.useTexture();
@@ -835,8 +837,8 @@ namespace Tempest
                 objectAO.useTexture();
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID(), "texID");
+                //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID(), "texID");
 
                 
                 m_Pipeline.m_Models[i].m_Model->meshes[j].Draw();

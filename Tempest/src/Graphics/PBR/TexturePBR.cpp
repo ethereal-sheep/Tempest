@@ -162,7 +162,7 @@ namespace Tempest
             std::string errorText = "Failed to load ["; 
             errorText += texPath;
             errorText += "]. Result :  ";
-            errorText += int(ret);
+            errorText += std::to_string(int(ret));
             errorText += ".";
             LOG_CRITICAL(errorText.c_str());
             return;
@@ -380,6 +380,7 @@ namespace Tempest
 
     void TexturePBR::setTextureHDR(GLuint width, GLuint height, GLenum format, GLenum internalFormat, GLenum type, GLenum minFilter)
     {
+        (void)type;
         this->texType = GL_TEXTURE_2D;
         glGenTextures(1, &this->texID);
         glActiveTexture(GL_TEXTURE0);
@@ -403,7 +404,7 @@ namespace Tempest
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLfloat)minFilter);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         glGenerateMipmap(GL_TEXTURE_2D);
