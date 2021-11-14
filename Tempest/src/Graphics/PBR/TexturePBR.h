@@ -15,7 +15,7 @@ namespace Tempest
         GLuint texID, texWidth, texHeight, texComponents;
         GLfloat anisoFilterLevel;
         GLenum texType, texInternalFormat, texFormat;
-        std::string texName;
+        std::string tName;
 
         TexturePBR();
         ~TexturePBR();
@@ -30,7 +30,7 @@ namespace Tempest
         GLuint getTexHeight();
         std::string getTexName();
         void useTexture();
-        void setTextureDDS(const char* texPath, std::string texName, bool texFlip);
+        void setTextureDDS(const char* texPath, std::string texName, [[maybe_unused]] bool texFlip);
     };
 
 

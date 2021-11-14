@@ -104,7 +104,7 @@ namespace Tempest
         this->texWidth = width;
         this->texHeight = height;
         this->texComponents = numComponents;
-        this->texName = texName;
+        this->tName = texName;
 
         if (texData)
         {
@@ -154,6 +154,7 @@ namespace Tempest
 
     void TexturePBR::setTextureDDS(const char* texPath, std::string texName, bool texFlip)
     {
+        (void*)texFlip;
         DDSFile Texture;
         auto ret = Texture.Load(texPath);
         if (tinyddsloader::Result::Success != ret) 
@@ -306,7 +307,7 @@ namespace Tempest
         this->texWidth =  Texture.GetWidth();
         this->texHeight =  Texture.GetHeight();
         //this->texComponents = Texture.;
-        this->texName = texName;
+        this->tName = texName;
         this->texID = TextureName;
         //return TextureName;
     }
@@ -334,7 +335,7 @@ namespace Tempest
             this->texWidth = width;
             this->texHeight = height;
             this->texComponents = numComponents;
-            this->texName = texName;
+            this->tName = texName;
 
             if (texData)
             {
@@ -380,7 +381,6 @@ namespace Tempest
     void TexturePBR::setTextureHDR(GLuint width, GLuint height, GLenum format, GLenum internalFormat, GLenum type, GLenum minFilter)
     {
         this->texType = GL_TEXTURE_2D;
-
         glGenTextures(1, &this->texID);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, this->texID);
@@ -550,7 +550,7 @@ namespace Tempest
 
     std::string TexturePBR::getTexName()
     {
-        return this->texName;
+        return this->tName;
     }
 
 

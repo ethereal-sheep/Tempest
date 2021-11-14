@@ -33,8 +33,8 @@ namespace Tempest
         
         std::string directory;
 
-        void processNode(aiNode* node, const aiScene* scene);
-        MeshPBR processMesh(aiMesh* mesh, const aiScene* scene);
+        void processNode(aiNode* node, [[maybe_unused]] const aiScene* scene);
+        MeshPBR processMesh(aiMesh* mesh);
     };
 
 }

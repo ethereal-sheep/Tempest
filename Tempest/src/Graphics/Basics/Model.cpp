@@ -360,7 +360,7 @@ namespace Tempest
 				vertex.bitangent.emplace_back(b);
 			}
 
-			for (int j = joints; j < joints + sides[i]; ++j)
+			for (int j = joints; j < joints + (int)(sides[i]); ++j)
 			{
 				index.push_back(faces[j].x);
 				index.push_back(faces[j].y);
