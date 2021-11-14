@@ -164,6 +164,7 @@ namespace Tempest
 						std::string text = "Select the dice that you want to use to decide the turn order of the units.";
 						ImGui::TextWrapped(text.c_str());
 						ImGui::PopFont();
+
 						ImGui::Dummy(ImVec2{ 20.f, 100.0f });
 						for (int i = 1; i < 6; ++i)
 						{
@@ -217,6 +218,23 @@ namespace Tempest
 						std::string text = "Select the Dice roll and type of stat that you want to use to decide the turn order of the units.";
 						ImGui::TextWrapped(text.c_str());
 						ImGui::PopFont();
+
+
+						ImGui::Dummy(ImVec2{ 20.f, 100.0f });
+						for (int i = 1; i < 6; ++i)
+						{
+							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".png"];
+							ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
+							ImGui::SameLine();
+							ImGui::Dummy(ImVec2{ 10.f, 0.f });
+							ImGui::SameLine();
+						}
+
+
+						if (UI::UIButton_2("Roll", "Roll", ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.4f }, { 0,0 }, FONT_PARA))
+						{
+
+						}
 					}
 					ImGui::EndChild();
 				}
