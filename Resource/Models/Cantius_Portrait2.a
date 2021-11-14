@@ -168,14 +168,27 @@ f 36 37 38
 f 36 38 39
 f 40 41 42
 f 40 42 43
-f 44 45 46
-f 44 46 47
+f 0 1 2
+f 0 2 3
 p Models\Cantius_Portrait2.fbm\Wood027_2K_Color(Lighter).png
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+p Models\Cantius_Portrait2.fbm\IMG_20210917_141448.jpg
+m 44
+m 4
+w 26
+w 2
+g 0
+g 1
+Ambient 1 1 1
+Ambient 1 1 1
+Diffuse 1 1 1
+Diffuse 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Emissive 0 0 0
 Emissive 0 0 0
 Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
 Reflective 0 0 0
 Refraction 0
 Reflection 0

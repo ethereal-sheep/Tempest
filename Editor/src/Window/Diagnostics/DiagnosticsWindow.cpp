@@ -109,6 +109,8 @@ namespace Tempest
 
 		// dummy data
 		float newValue = io.Framerate;
+		auto& fps_ = Service<RenderSystem>::Get().fps;
+		fps_ = newValue;
 
 		fps_values.push_back(newValue);
 
@@ -361,137 +363,512 @@ namespace Tempest
 
 	void DiagnosticsWindow::Light(Instance& )
 	{
-		auto& shininess = Service<RenderSystem>::Get().shininess;
-		auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;
-		auto& specularStrength = Service<RenderSystem>::Get().specularStrength;
-		std::string shininessID = "Shininess";
-		std::string ambientStrengthID = "Ambient Strength";
-		std::string specularStrengthID = "Specular Stregth";
-		ImGui::Selectable(shininessID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-		ImGui::SameLine();
-		ImGui::PushID(shininessID.data());
-		if (ImGui::DragFloat(" ", &shininess, 1.f, 1.f, 50.f)) {}
-		ImGui::PopID();
-		ImGui::Selectable(ambientStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-		ImGui::SameLine();
-		ImGui::PushID(ambientStrengthID.data());
-		if (ImGui::DragFloat(" ", &ambientStrength, 0.01f, 0.f, 1.f)) {}
-		ImGui::PopID();
-		ImGui::Selectable(specularStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-		ImGui::SameLine();
-		ImGui::PushID(specularStrengthID.data());
-		if (ImGui::DragFloat(" ", &specularStrength, 0.01f, 0.f, 1.f)) {}
-		ImGui::PopID();
-		if (ImGui::Button("Toggle Gamma Correction"))
+		/// TEST
+		if (ImGui::CollapsingHeader("New Graphics"))
 		{
-			int gamma = Service<RenderSystem>::Get().GetGammaCorrection();
-			gamma = (gamma) ? 0 : 1;
-			Service<RenderSystem>::Get().SetGammaCorrection(gamma);
-		}
-		ImGui::Dummy(ImVec2{ 0, 0.25f });
-		ImGui::Separator();
-		ImGui::Dummy(ImVec2{ 0, 0.25f });
-		if (Service<RenderSystem>::Get().dir_lights.size())
-		{
-			auto& light = Service<RenderSystem>::Get().dir_lights[0];
-			if(light.hide)
-			{
-				if (ImGui::Button("Turn on Directional Light"))
-				{
-					light.hide = !light.hide;
-				}
-			}
-			else
-			{
-				if (ImGui::Button("Turn off Directional Light"))
-				{
-					light.hide = !light.hide;
-				}
-				const auto padding = 80.f;
-				UI::DragFloat3ColorBox("Direction", "##LightDirection", ImVec2{ padding , 0.f }, value_ptr(light.Direction), 0.f, 0.1f, -10.f, 10.f);
-				UI::DragFloat3ColorBox("Color", "##LightColor", ImVec2{ padding , 0.f }, value_ptr(light.Color), 0.f, 0.01f, 0.f, 1.f);
-
-				ImGui::Selectable("Intensity", false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-				ImGui::SameLine();
-				ImGui::PushID("Intensity");
-				if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
-				ImGui::PopID();
-			}
-
-		}
-		/*ImGui::Dummy(ImVec2{ 0, 0.25f });
-		ImGui::Separator();
-		ImGui::Dummy(ImVec2{ 0, 0.25f });
-		if (Service<RenderSystem>::Get().pt_lights.size() < 10)
-		{			
-			if (ImGui::Button("Add Point Light"))
-			{
-				int index = Service<RenderSystem>::Get().pt_lights.size();
-				Service<RenderSystem>::Get().pt_lights.emplace_back(Point_Light{});
-				Service<RenderSystem>::Get().pt_lights[index].Position = glm::vec3(0.5f, 0.5f, 0.5f);
-			}
-		}*/
-		if (Service<RenderSystem>::Get().pt_lights.size())
-		{
-			/*if (Service<RenderSystem>::Get().pt_lights.size() > 1)
-			{
-				if (ImGui::Button("Remove Point Light"))
-				{
-					Service<RenderSystem>::Get().pt_lights.pop_back();
-				}
-			}*/
+			auto& m_pos = Service<RenderSystem>::Get().modelPosition;
 			const auto padding = 80.f;
-			for (unsigned int i = 0; i < Service<RenderSystem>::Get().pt_lights.size(); ++i)
 			{
-				ImGui::Dummy(ImVec2{ 0, 0.25f });
-				ImGui::Separator();
-				ImGui::Dummy(ImVec2{ 0, 0.25f });
-				auto& ptlight = Service<RenderSystem>::Get().pt_lights[i];
-				if (ptlight.hide)
+				UI::DragFloat3ColorBox("Position", "##ModelPosDrag", ImVec2{ padding , 0.f }, value_ptr(m_pos), 0.f, 0.1f).first;
+			}
+
+			auto& dirShadowBool = Service<RenderSystem>::Get().dirShadowBool;
+			ImGui::Checkbox("Directional shadow", &dirShadowBool);
+			auto& pointShadowBool = Service<RenderSystem>::Get().pointShadowBool;
+			ImGui::Checkbox("Point shadow", &pointShadowBool);
+			auto& pbrBool = Service<RenderSystem>::Get().pbrMode;
+			ImGui::Checkbox("PBR Mode", &pbrBool);
+			auto& envMapShow = Service<RenderSystem>::Get().envMapShow;
+			ImGui::Checkbox("Env Map Show", &envMapShow);
+			
+			auto& materialF0 = Service<RenderSystem>::Get().materialF0;
+			UI::DragFloat3ColorBox("MaterialF0", "##MaterialF0", ImVec2{ padding , 0.f }, value_ptr(materialF0), 0.f, 0.1f).first;
+			if(ImGui::TreeNode("Gbuffer Mode"))
+			{
+				auto& gBufferView = Service<RenderSystem>::Get().gBufferView;
+				ImGui::RadioButton("Final", &gBufferView, 1);
+				ImGui::RadioButton("Position", &gBufferView, 2);
+				ImGui::RadioButton("Normal", &gBufferView, 3);
+				ImGui::RadioButton("Color", &gBufferView, 4);
+				ImGui::RadioButton("Roughness", &gBufferView, 5);
+				ImGui::RadioButton("Metalness", &gBufferView, 6);
+				ImGui::RadioButton("Depth", &gBufferView, 7);
+				ImGui::RadioButton("SAO", &gBufferView, 8);
+				ImGui::RadioButton("Velocity", &gBufferView, 9);
+				ImGui::TreePop();
+			}
+
+
+			if (ImGui::TreeNode("Lighting"))
+			{
+				auto& pointMode = Service<RenderSystem>::Get().pointMode;
+				auto& directionalMode = Service<RenderSystem>::Get().directionalMode;
+				auto& iblMode = Service<RenderSystem>::Get().iblMode;
+
+				if (ImGui::TreeNode("Mode"))
 				{
-					if (ImGui::Button(("Turn on Point Light" + std::to_string(i)).c_str()))
+					ImGui::Checkbox("Point", &pointMode);
+					ImGui::Checkbox("Directional", &directionalMode);
+					ImGui::Checkbox("Image-Based Lighting(Make sure Env Map Show is ON)", &iblMode);
+
+					ImGui::TreePop();
+				}
+				
+
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Point Lights"))
+			{
+				auto& pt_lights = Service<RenderSystem>::Get().pt_lights;
+
+				if (ImGui::TreeNode("Variables"))
+				{
+					for(int pt_light_num = 0; pt_light_num < pt_lights.size(); pt_light_num++)
 					{
-						ptlight.hide = !ptlight.hide;
+
+						if (pt_lights[pt_light_num].hide)
+						{
+							if (ImGui::Button( (std::string("Turn on Point Light ") + std::to_string(pt_light_num)).c_str()))
+							{
+								pt_lights[pt_light_num].hide = !pt_lights[pt_light_num].hide;
+							}
+
+						}
+						else
+						{
+							if (ImGui::Button((std::string("Turn off Point Light ") + std::to_string(pt_light_num)).c_str()))
+							{
+								pt_lights[pt_light_num].hide = !pt_lights[pt_light_num].hide;
+							}
+							std::string PointLightPosition = "Point Light" + std::to_string(pt_light_num);
+							std::string PointLightPositionID = "##Pos" + std::to_string(pt_light_num);
+							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Position), 0.f, 0.1f, -10.f, 10.f);
+							
+							PointLightPosition = "Point Light" + std::to_string(pt_light_num);
+							PointLightPositionID = "##Color" + std::to_string(pt_light_num);
+							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Color), 0.f, 0.1f, -10.f, 10.f);
+
+
+							ImGui::SliderFloat((std::string("Point Light Radius ") + std::to_string(pt_light_num)).c_str(), &pt_lights[pt_light_num].radius, 0.0f, 10.0f);
+						}
+					}
+
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNode("Attenuation"))
+				{
+					auto& attenuationMode = Service<RenderSystem>::Get().attenuationMode;
+					ImGui::RadioButton("Quadratic", &attenuationMode, 1);
+					ImGui::RadioButton("UE4", &attenuationMode, 2);
+
+					ImGui::TreePop();
+				}
+
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Directional Light"))
+			{
+				auto& dir_lights = Service<RenderSystem>::Get().dir_lights;
+				
+				if (ImGui::TreeNode("Direction"))
+				{
+					for (int dir_lights_num = 0; dir_lights_num < dir_lights.size(); dir_lights_num++)
+					{
+						if (!dir_lights[dir_lights_num].hide)
+						{
+							if (ImGui::Button((std::string("Turn off Directional Light ") + std::to_string(dir_lights_num)).c_str()))
+							{
+								dir_lights[dir_lights_num].hide = !dir_lights[dir_lights_num].hide;
+							}
+							std::string PointLightPosition = "Directional Light" + std::to_string(dir_lights_num);
+							std::string PointLightPositionID = "##Direction" + std::to_string(dir_lights_num);
+							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(dir_lights[dir_lights_num].Direction), 0.f, 0.1f, -10.f, 10.f);
+
+						}
+						else
+						{
+							if (ImGui::Button((std::string("Turn on Directional Light ") + std::to_string(dir_lights_num)).c_str()))
+							{
+								dir_lights[dir_lights_num].hide = !dir_lights[dir_lights_num].hide;
+							}
+						}
+					}
+
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNode("Color"))
+				{
+					for (int dir_lights_num = 0; dir_lights_num < dir_lights.size(); dir_lights_num++)
+					{
+						if (!dir_lights[dir_lights_num].hide)
+						{
+							std::string PointLightPosition = "Directional Light" + std::to_string(dir_lights_num);
+							std::string PointLightPositionID = "##Color" + std::to_string(dir_lights_num);
+							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(dir_lights[dir_lights_num].Color), 0.f, 0.1f, -10.f, 10.f);
+						}
+					}
+					
+
+					ImGui::TreePop();
+				}
+
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Environment map"))
+			{
+				auto& envMapHDR = Service<RenderSystem>::Get().envMapHDR;
+				if (ImGui::Button("Appartment"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/appart.hdr", "appartHDR", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+
+				if (ImGui::Button("Pisa"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/pisa.hdr", "pisaHDR", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+
+				if (ImGui::Button("Canyon"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/canyon.hdr", "canyonHDR", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+
+				if (ImGui::Button("Loft"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/loft.hdr", "loftHDR", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+
+				if (ImGui::Button("Path"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/path.hdr", "pathHDR", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+
+				if (ImGui::Button("Circus"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/circus.hdr", "circusHDR", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Post processing"))
+			{
+				if (ImGui::TreeNode("SAO"))
+				{
+
+					auto& saoMode = Service<RenderSystem>::Get().saoMode;
+					ImGui::Checkbox("Enable", &saoMode);
+
+					auto& saoSamples = Service<RenderSystem>::Get().saoSamples;
+					ImGui::SliderInt("Samples", &saoSamples, 0, 64);
+					auto& saoRadius = Service<RenderSystem>::Get().saoRadius;
+					ImGui::SliderFloat("Radius", &saoRadius, 0.0f, 3.0f);
+					auto& saoTurns = Service<RenderSystem>::Get().saoTurns;
+					ImGui::SliderInt("Turns", &saoTurns, 0, 16);
+					auto& saoBias = Service<RenderSystem>::Get().saoBias;
+					ImGui::SliderFloat("Bias", &saoBias, 0.0f, 0.1f);
+					auto& saoScale = Service<RenderSystem>::Get().saoScale;
+					ImGui::SliderFloat("Scale", &saoScale, 0.0f, 3.0f);
+					auto& saoContrast = Service<RenderSystem>::Get().saoContrast;
+					ImGui::SliderFloat("Contrast", &saoContrast, 0.0f, 3.0f);
+					auto& saoBlurSize = Service<RenderSystem>::Get().saoBlurSize;
+					ImGui::SliderInt("Blur Size", &saoBlurSize, 0, 8);
+
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNode("FXAA"))
+				{
+
+					auto& fxaaMode = Service<RenderSystem>::Get().fxaaMode;
+					ImGui::Checkbox("Enable", &fxaaMode);
+
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNode("Motion Blur"))
+				{
+
+					auto& motionBlurMaxSamples = Service<RenderSystem>::Get().motionBlurMaxSamples;
+
+					auto& motionBlurMode = Service<RenderSystem>::Get().motionBlurMode;
+					ImGui::Checkbox("Enable", &motionBlurMode);
+					ImGui::SliderInt("Max Samples", &motionBlurMaxSamples, 1, 128);
+
+					ImGui::TreePop();
+				}
+
+				
+				if (ImGui::TreeNode("Tonemapping"))
+				{
+					auto& tonemappingMode = Service<RenderSystem>::Get().tonemappingMode;
+					ImGui::RadioButton("Reinhard", &tonemappingMode, 1);
+					ImGui::RadioButton("Filmic", &tonemappingMode, 2);
+					ImGui::RadioButton("Uncharted", &tonemappingMode, 3);
+
+					ImGui::TreePop();
+				}
+
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Object"))
+			{
+
+				auto& modelPosition = Service<RenderSystem>::Get().modelPosition;
+
+				auto& modelRotationSpeed = Service<RenderSystem>::Get().modelRotationSpeed;
+
+				auto& modelRotationAxis = Service<RenderSystem>::Get().modelRotationAxis;
+
+				ImGui::SliderFloat3("Position", (float*)&modelPosition, -5.0f, 5.0f);
+				ImGui::SliderFloat("Rotation Speed", &modelRotationSpeed, 0.0f, 50.0f);
+				ImGui::SliderFloat3("Rotation Axis", (float*)&modelRotationAxis, 0.0f, 1.0f);
+
+				if (ImGui::TreeNode("Model"))
+				{
+
+					auto& objectModel = Service<RenderSystem>::Get().objectModel;
+					auto& modelScale = Service<RenderSystem>::Get().modelScale;
+					if (ImGui::Button("Sphere"))
+					{
+						objectModel.~ModelPBR();
+						objectModel.loadModel("models/sphere/sphere.a");
+						modelScale = glm::vec3(0.5f);
+					}
+
+					if (ImGui::Button("Teapot"))
+					{
+						objectModel.~ModelPBR();
+						objectModel.loadModel("models/teapot/teapot.a");
+						modelScale = glm::vec3(0.5f);
+					}
+
+					if (ImGui::Button("Shader ball"))
+					{
+						objectModel.~ModelPBR();
+						objectModel.loadModel("models/shaderball/shaderball.a");
+						modelScale = glm::vec3(0.1f);
+					}
+
+					ImGui::TreePop();
+				}
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Material"))
+			{
+				auto& objectAlbedo = Service<RenderSystem>::Get().objectAlbedo;
+				auto& objectNormal = Service<RenderSystem>::Get().objectNormal;
+				auto& objectRoughness = Service<RenderSystem>::Get().objectRoughness;
+				auto& objectMetalness = Service<RenderSystem>::Get().objectMetalness;
+				auto& objectAO = Service<RenderSystem>::Get().objectAO;
+
+				if (ImGui::Button("Rusted iron"))
+				{
+					objectAlbedo.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
+					objectNormal.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
+					objectRoughness.setTexture("textures/pbr/rustediron/rustediron_roughness.png", "ironRoughness", true);
+					objectMetalness.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);
+					objectAO.setTexture("textures/pbr/rustediron/rustediron_ao.png", "ironAO", true);
+
+					materialF0 = glm::vec3(0.04f);
+				}
+
+				if (ImGui::Button("Gold"))
+				{
+					objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
+					objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
+					objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
+					objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
+					objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+
+					materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
+				}
+
+				if (ImGui::Button("Woodfloor"))
+				{
+					objectAlbedo.setTexture("textures/pbr/woodfloor/woodfloor_albedo.png", "woodfloorAlbedo", true);
+					objectNormal.setTexture("textures/pbr/woodfloor/woodfloor_normal.png", "woodfloorNormal", true);
+					objectRoughness.setTexture("textures/pbr/woodfloor/woodfloor_roughness.png", "woodfloorRoughness", true);
+					objectMetalness.setTexture("textures/pbr/woodfloor/woodfloor_metalness.png", "woodfloorMetalness", true);
+					objectAO.setTexture("textures/pbr/woodfloor/woodfloor_ao.png", "woodfloorAO", true);
+
+					materialF0 = glm::vec3(0.04f);
+				}
+
+				if (ImGui::Button("Terrazzo"))
+				{
+					objectAlbedo.setTexture("textures/pbr/terrazzo/terrazzo_albedo.png", "terrazzoAlbedo", true);
+					objectNormal.setTexture("textures/pbr/terrazzo/terrazzo_normal.png", "terrazzoNormal", true);
+					objectRoughness.setTexture("textures/pbr/terrazzo/terrazzo_roughness.png", "terrazzoRoughness", true);
+					objectMetalness.setTexture("textures/pbr/terrazzo/terrazzo_metalness.png", "terrazzoMetalness", true);
+					objectAO.setTexture("textures/pbr/terrazzo/terrazzo_ao.png", "terrazzoAO", true);
+
+					materialF0 = glm::vec3(0.04f);
+				}
+
+
+				if (ImGui::Button("Porcelain"))
+				{
+					objectAlbedo.setTexture("textures/pbr/porcelain/porcelain_albedo.png", "porcelainAlbedo", true);
+					objectNormal.setTexture("textures/pbr/porcelain/porcelain_normal.png", "porcelainNormal", true);
+					objectRoughness.setTexture("textures/pbr/porcelain/porcelain_roughness.png", "porcelainRoughness", true);
+					objectMetalness.setTexture("textures/pbr/porcelain/porcelain_metalness.png", "porcelainMetalness", true);
+					objectAO.setTexture("textures/pbr/porcelain/porcelain_ao.png", "porcelainAO", true);
+
+
+					materialF0 = glm::vec3(0.04f);
+				}
+				ImGui::TreePop();
+			}
+		
+
+
+
+		}
+		if (ImGui::CollapsingHeader("Old Lighting"))
+		{
+			auto& shininess = Service<RenderSystem>::Get().shininess;
+			auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;
+			auto& specularStrength = Service<RenderSystem>::Get().specularStrength;
+			std::string shininessID = "Shininess";
+			std::string ambientStrengthID = "Ambient Strength";
+			std::string specularStrengthID = "Specular Stregth";
+			ImGui::Selectable(shininessID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+			ImGui::SameLine();
+			ImGui::PushID(shininessID.data());
+			if (ImGui::DragFloat(" ", &shininess, 1.f, 1.f, 50.f)) {}
+			ImGui::PopID();
+			ImGui::Selectable(ambientStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+			ImGui::SameLine();
+			ImGui::PushID(ambientStrengthID.data());
+			if (ImGui::DragFloat(" ", &ambientStrength, 0.01f, 0.f, 1.f)) {}
+			ImGui::PopID();
+			ImGui::Selectable(specularStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+			ImGui::SameLine();
+			ImGui::PushID(specularStrengthID.data());
+			if (ImGui::DragFloat(" ", &specularStrength, 0.01f, 0.f, 1.f)) {}
+			ImGui::PopID();
+			if (ImGui::Button("Toggle Gamma Correction"))
+			{
+				int gamma = Service<RenderSystem>::Get().GetGammaCorrection();
+				gamma = (gamma) ? 0 : 1;
+				Service<RenderSystem>::Get().SetGammaCorrection(gamma);
+			}
+			ImGui::Dummy(ImVec2{ 0, 0.25f });
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2{ 0, 0.25f });
+			if (Service<RenderSystem>::Get().dir_lights.size())
+			{
+				auto& light = Service<RenderSystem>::Get().dir_lights[0];
+				if(light.hide)
+				{
+					if (ImGui::Button("Turn on Directional Light"))
+					{
+						light.hide = !light.hide;
 					}
 				}
 				else
 				{
-					if (ImGui::Button(("Turn off Point Light" + std::to_string(i)).c_str()))
+					if (ImGui::Button("Turn off Directional Light"))
 					{
-						ptlight.hide = !ptlight.hide;
+						light.hide = !light.hide;
 					}
-					std::string PointLightPosition = "PLightPos" + std::to_string(i);
-					std::string PointLightPositionID = "##Pos" + std::to_string(i);
-					std::string PointLightColor = "Color" + std::to_string(i);
-					std::string PointLightColorID = "##Color" + std::to_string(i);
-					std::string PointLightIntensity = "Intensity" + std::to_string(i);
-					std::string PointLightConstant = "Constant" + std::to_string(i);
-					std::string PointLightLinear = "Linear" + std::to_string(i);
-					std::string PointLightQuadratic = "Quadratic" + std::to_string(i);
-					UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
-					UI::DragFloat3ColorBox(PointLightColor.data(), PointLightColorID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Color), 0.f, 0.01f, 0.f, 1.f);
-					ImGui::Selectable(PointLightIntensity.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+					const auto padding = 80.f;
+					UI::DragFloat3ColorBox("Direction", "##LightDirection", ImVec2{ padding , 0.f }, value_ptr(light.Direction), 0.f, 0.1f, -10.f, 10.f);
+					UI::DragFloat3ColorBox("Color", "##LightColor", ImVec2{ padding , 0.f }, value_ptr(light.Color), 0.f, 0.01f, 0.f, 1.f);
+
+					ImGui::Selectable("Intensity", false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
 					ImGui::SameLine();
-					ImGui::PushID(PointLightIntensity.data());
-					if (ImGui::DragFloat(" ", &ptlight.Intensity, 0.01f, 0.f, 1.f)) {}
-					ImGui::PopID();
-					ImGui::Selectable(PointLightConstant.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-					ImGui::SameLine();
-					ImGui::PushID(PointLightConstant.data());
-					if (ImGui::DragFloat(" ", &ptlight.pointLightConsts, 0.01f, 0.f, 1.f)) {}
-					ImGui::PopID();
-					ImGui::Selectable(PointLightLinear.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-					ImGui::SameLine();
-					ImGui::PushID(PointLightLinear.data());
-					if (ImGui::DragFloat(" ", &ptlight.pointLightLinears, 0.01f, 0.f, 1.f)) {}
-					ImGui::PopID();
-					ImGui::Selectable(PointLightQuadratic.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-					ImGui::SameLine();
-					ImGui::PushID(PointLightQuadratic.data());
-					if (ImGui::DragFloat(" ", &ptlight.pointLightQuads, 0.01f, 0.f, 1.f)) {}
+					ImGui::PushID("Intensity");
+					if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
 					ImGui::PopID();
 				}
+
+			}
+			/*ImGui::Dummy(ImVec2{ 0, 0.25f });
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2{ 0, 0.25f });
+			if (Service<RenderSystem>::Get().pt_lights.size() < 10)
+			{			
+				if (ImGui::Button("Add Point Light"))
+				{
+					int index = Service<RenderSystem>::Get().pt_lights.size();
+					Service<RenderSystem>::Get().pt_lights.emplace_back(Point_Light{});
+					Service<RenderSystem>::Get().pt_lights[index].Position = glm::vec3(0.5f, 0.5f, 0.5f);
+				}
+			}*/
+			if (Service<RenderSystem>::Get().pt_lights.size())
+			{
+				/*if (Service<RenderSystem>::Get().pt_lights.size() > 1)
+				{
+					if (ImGui::Button("Remove Point Light"))
+					{
+						Service<RenderSystem>::Get().pt_lights.pop_back();
+					}
+				}*/
+				const auto padding = 80.f;
+				for (unsigned int i = 0; i < Service<RenderSystem>::Get().pt_lights.size(); ++i)
+				{
+					ImGui::Dummy(ImVec2{ 0, 0.25f });
+					ImGui::Separator();
+					ImGui::Dummy(ImVec2{ 0, 0.25f });
+					auto& ptlight = Service<RenderSystem>::Get().pt_lights[i];
+					if (ptlight.hide)
+					{
+						if (ImGui::Button(("Turn on Point Light" + std::to_string(i)).c_str()))
+						{
+							ptlight.hide = !ptlight.hide;
+						}
+					}
+					else
+					{
+						if (ImGui::Button(("Turn off Point Light" + std::to_string(i)).c_str()))
+						{
+							ptlight.hide = !ptlight.hide;
+						}
+						std::string PointLightPosition = "PLightPos" + std::to_string(i);
+						std::string PointLightPositionID = "##Pos" + std::to_string(i);
+						std::string PointLightColor = "Color" + std::to_string(i);
+						std::string PointLightColorID = "##Color" + std::to_string(i);
+						std::string PointLightIntensity = "Intensity" + std::to_string(i);
+						std::string PointLightConstant = "Constant" + std::to_string(i);
+						std::string PointLightLinear = "Linear" + std::to_string(i);
+						std::string PointLightQuadratic = "Quadratic" + std::to_string(i);
+						UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
+						UI::DragFloat3ColorBox(PointLightColor.data(), PointLightColorID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Color), 0.f, 0.01f, 0.f, 1.f);
+						ImGui::Selectable(PointLightIntensity.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+						ImGui::SameLine();
+						ImGui::PushID(PointLightIntensity.data());
+						if (ImGui::DragFloat(" ", &ptlight.Intensity, 0.01f, 0.f, 1.f)) {}
+						ImGui::PopID();
+						ImGui::Selectable(PointLightConstant.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+						ImGui::SameLine();
+						ImGui::PushID(PointLightConstant.data());
+						if (ImGui::DragFloat(" ", &ptlight.pointLightConsts, 0.01f, 0.f, 1.f)) {}
+						ImGui::PopID();
+						ImGui::Selectable(PointLightLinear.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+						ImGui::SameLine();
+						ImGui::PushID(PointLightLinear.data());
+						if (ImGui::DragFloat(" ", &ptlight.pointLightLinears, 0.01f, 0.f, 1.f)) {}
+						ImGui::PopID();
+						ImGui::Selectable(PointLightQuadratic.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
+						ImGui::SameLine();
+						ImGui::PushID(PointLightQuadratic.data());
+						if (ImGui::DragFloat(" ", &ptlight.pointLightQuads, 0.01f, 0.f, 1.f)) {}
+						ImGui::PopID();
+					}
 			
+				}
 			}
 		}
 	}

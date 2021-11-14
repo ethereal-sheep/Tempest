@@ -511,9 +511,12 @@ f 138 139 136
 f 140 141 142
 f 142 143 140
 p Models\Table.fbm\Wood027_2K_Color(Lighter).png
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+m 144
+w 80
+g 0
+Ambient 1 1 1
+Diffuse 1 1 1
+Specular 1 1 1
 Emissive 0 0 0
 Transparent 0 0 0
 Reflective 0 0 0

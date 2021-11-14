@@ -114,10 +114,29 @@ namespace Tempest
 		//// recursive into the scene graph
 		//ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, materials);
 
-		tpair<Vertices, Indices> vi;
-		Vertices& vertex = vi.first;
-		Indices& index = vi.second;
-		Material m;
+		std::vector<glm::vec3> pos;
+		std::vector<glm::vec3> norm;
+		std::vector<glm::vec2> tex;
+		std::vector<glm::ivec3> faces;
+
+		std::vector<tsptr<Texture>> textures;
+		std::vector<glm::vec3> amb;
+		std::vector<glm::vec3> dif;
+		std::vector<glm::vec3> emi;
+		std::vector<glm::vec3> spec;
+		std::vector<glm::vec3> trans;
+		std::vector<glm::vec3> refl;
+		std::vector<float> refr;
+		std::vector<float> rflct;
+		std::vector<float> shin;
+		std::vector<float> shinstr;
+		std::vector<float> opc;
+
+		std::vector<uint32_t> sizes;
+		std::vector<uint32_t> sides;
+		std::vector<uint32_t> mats;
+
+		std::vector<Material> mm;
 
 		std::string temp_x, temp_y, temp_z;
 
@@ -136,13 +155,13 @@ namespace Tempest
 		while (std::getline(in_file, line))
 		{
 			std::istringstream file_line{ line };
-			glm::vec3 pos;
+			glm::vec3 r;
 			file_line >> prefix;
 			if (prefix == "v" && line != "")
 			{
-				file_line >> pos.x >> pos.y >> pos.z;
+				file_line >> r.x >> r.y >> r.z;
 
-				vertex.position.push_back(pos);
+				pos.push_back(r);
 			}
 
 			else if (prefix == "n" && line != "")
@@ -150,7 +169,7 @@ namespace Tempest
 				glm::vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
 
-				vertex.normal.push_back(temp);
+				norm.push_back(temp);
 			}
 
 			else if (prefix == "t" && line != "")
@@ -158,7 +177,7 @@ namespace Tempest
 				glm::vec2 temp;
 				file_line >> temp.x >> temp.y;
 
-				vertex.texCoord.push_back(temp);
+				tex.push_back(temp);
 			}
 
 			else if (prefix == "f" && line != "")
@@ -166,9 +185,7 @@ namespace Tempest
 				glm::ivec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
 
-				index.push_back(temp.x);
-				index.push_back(temp.y);
-				index.push_back(temp.z);
+				faces.push_back(temp);
 			}
 
 			else if (prefix == "p" && line != "")
@@ -181,105 +198,192 @@ namespace Tempest
 				p += temp;
 				try
 				{
-					m.BaseTexture = make_sptr<Texture>(p);
+					auto t = make_sptr<Texture>(p);
+					textures.push_back(t);
 				}
 
 				catch (...)
 				{
 					LOG_WARN("Texture File Not Found!");
 				}
-				
+
+			}
+
+			else if (prefix == "m" && line != "")
+			{
+				unsigned int temp;
+				file_line >> temp;
+
+				sizes.push_back(temp);
+
+			}
+
+			else if (prefix == "w" && line != "")
+			{
+				unsigned int temp;
+				file_line >> temp;
+
+				sides.push_back(temp);
+
+			}
+
+			else if (prefix == "g" && line != "")
+			{
+				unsigned int temp;
+				file_line >> temp;
+
+				mats.push_back(temp);
+
 			}
 
 			else if (prefix == "Ambient" && line != "")
 			{
 				vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
-				m.Ambient = temp;
+				amb.push_back(temp);
 			}
 
 			else if (prefix == "Diffuse" && line != "")
 			{
 				vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
-				m.Diffuse = temp;
+				dif.push_back(temp);
 			}
 
 			else if (prefix == "Specular" && line != "")
 			{
 				vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
-				m.Specular = temp;
+				spec.push_back(temp);
 			}
 
 			else if (prefix == "Emissive" && line != "")
 			{
 				vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
-				m.Emissive = temp;
+				emi.push_back(temp);
 			}
 
 			else if (prefix == "Transparent" && line != "")
 			{
 				vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
-				m.Transparent = temp;
+				trans.push_back(temp);
 			}
 
 			else if (prefix == "Reflective" && line != "")
 			{
 				vec3 temp;
 				file_line >> temp.x >> temp.y >> temp.z;
-				m.Reflective = temp;
+				refl.push_back(temp);
 			}
 
 			else if (prefix == "Refraction" && line != "")
 			{
 				float temp;
 				file_line >> temp;
-				m.Refraction = temp;
+				refr.push_back(temp);
 			}
 
 			else if (prefix == "Reflection" && line != "")
 			{
 				float temp;
 				file_line >> temp;
-				m.Reflection = temp;
+				rflct.push_back(temp);
 			}
 
 			else if (prefix == "Shininess" && line != "")
 			{
 				float temp;
 				file_line >> temp;
-				m.Shininess = temp;
+				shin.push_back(temp);
 			}
 
 			else if (prefix == "ShininessStrength" && line != "")
 			{
 				float temp;
 				file_line >> temp;
-				m.ShininessStrength = temp;
+				shinstr.push_back(temp);
 			}
 
 			else if (prefix == "Opacity" && line != "")
 			{
 				float temp;
 				file_line >> temp;
-				m.Opacity = temp;
+				opc.push_back(temp);
 			}
+		}
+		
+		for (int i = 0; i < textures.size(); ++i)
+		{
+			Material m;
 
-			glm::vec3 n = normalize(pos);
-			glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
-			glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
-			
-			glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
-			glm::vec3 b = cross(t, n);
+			m.Ambient = amb[0];
+			m.Diffuse = dif[0];
+			m.Emissive = emi[0];
+			m.Specular = spec[0];
+			m.Transparent = trans[0];
+			m.Reflective = refl[0];
 
-			vertex.tangent.emplace_back(t);
-			vertex.bitangent.emplace_back(b);
+			m.Reflection = rflct[0];
+			m.Refraction = refr[0];
+			m.Shininess = shin[0];
+			m.ShininessStrength = shinstr[0];
+			m.Opacity = opc[0];
+
+			m.BaseTexture = textures[i];
+			mm.push_back(m);
 		}
 
-		m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(m));
+		int count = 0;
+		int joints = 0;
+		for (int i = 0; i < sizes.size(); ++i)
+		{
+			tpair<Vertices, Indices> vi;
+			Vertices& vertex = vi.first;
+			Indices& index = vi.second;
+
+			int ind = sizes[i] + count;
+			for (int j = count; j < ind; ++j)
+			{
+				vertex.position.push_back(pos[j]);
+				vertex.normal.push_back(norm[j]);
+				vertex.texCoord.push_back(tex[j]);
+				glm::vec3 n = normalize(pos[j]);
+				glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
+				glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
+
+				glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
+				glm::vec3 b = cross(t, n);
+
+				vertex.tangent.emplace_back(t);
+				vertex.bitangent.emplace_back(b);
+			}
+
+			for (int j = joints; j < joints + (int)(sides[i]); ++j)
+			{
+				index.push_back(faces[j].x);
+				index.push_back(faces[j].y);
+				index.push_back(faces[j].z);
+			}
+
+			joints += sides[i];
+			count += sizes[i];
+
+			if (mats[i] >= mm.size())
+			{
+				Material t;
+				t.BaseTexture = nullptr;
+				m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(t));
+			}
+
+			else
+			{
+				m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(mm[mats[i]]));
+			}	
+		}
+		//m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(m));
+		in_file.close();
 	}
 
 	/*Model::Model(Model&& model)
@@ -302,7 +406,7 @@ namespace Tempest
 	{
 		for (id_t i = 0; i < node->mNumMeshes; ++i)
 			ProcessMeshData(s_Scene->mMeshes[node->mMeshes[i]], transform * node->mTransformation, materials);
-		
+
 		// process all of its children's node meshes (if any)
 		for (id_t i = 0; i < node->mNumChildren; ++i)
 		{
@@ -331,7 +435,7 @@ namespace Tempest
 			glm::vec3 n = normalize(glm::vec3(els::to_vec3(*pPos)));
 			glm::vec3 c1 = cross(n, glm::vec3(0.0, 0.0, 1.0));
 			glm::vec3 c2 = cross(n, glm::vec3(0.0, 1.0, 0.0));
-			
+
 			glm::vec3 t = normalize(length(c1) > length(c2) ? c1 : c2);
 			glm::vec3 b = cross(t, n);
 
@@ -351,9 +455,9 @@ namespace Tempest
 
 		m_Meshes.emplace_back(
 			tpair<Mesh, tsptr<Material>>(
-				std::move(vi), 
+				std::move(vi),
 				materials[mesh->mMaterialIndex])
-			);
+		);
 	}
 
 	//void Model::ProcessMaterialData()
@@ -363,4 +467,4 @@ namespace Tempest
 
 	//	
 	//}
-}	
+}

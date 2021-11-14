@@ -185,6 +185,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\ModelPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\Skybox.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MaterialPBR.cpp" />
     <ClCompile Include="src\Actions\Action.cpp" />
     <ClCompile Include="src\Actions\ActionHistory.cpp" />
     <ClCompile Include="src\Asset\Asset.cpp" />
@@ -254,8 +259,14 @@
     <ClCompile Include="src\Scripting\Test\test_node_functions.cpp" />
     <ClCompile Include="src\Serializer\Reader.cpp" />
     <ClCompile Include="src\Serializer\Writer.cpp" />
+    <ClCompile Include="src\Graphics\PBR\TexturePBR.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
+    <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\Skybox.h" />
+    <ClInclude Include="src\Graphics\PBR\MaterialPBR.h" />
     <ClInclude Include="src\Actions\Action.h" />
     <ClInclude Include="src\Actions\ActionHistory.h" />
     <ClInclude Include="src\Actions\IAction.h" />
@@ -399,6 +410,7 @@
     <ClInclude Include="src\Serializer\Writer.h" />
     <ClInclude Include="src\Util\Service.h" />
     <ClInclude Include="src\Util\view.h" />
+    <ClInclude Include="src\Graphics\PBR\TexturePBR.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

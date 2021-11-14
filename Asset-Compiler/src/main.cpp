@@ -23,15 +23,18 @@ struct Mesh
 	std::vector<glm::vec3> norm;
 	std::vector<glm::vec2> tex;
 	std::vector<glm::ivec3> indices;
+	std::vector<unsigned int> nvertices;
+	std::vector<unsigned int> nfaces;
+	std::vector<unsigned int> matindex;
 
 	std::vector<std::string> textures;
 
-	glm::vec3 Diffuse = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Ambient = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Specular = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Emissive = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Transparent = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Reflective = glm::vec3(0.f, 0.f, 0.f);
+	std::vector<aiColor3D> Diffuse;
+	std::vector<aiColor3D> Ambient;
+	std::vector<aiColor3D> Specular;
+	std::vector<aiColor3D> Emissive;
+	std::vector<aiColor3D> Transparent;
+	std::vector<aiColor3D> Reflective ;
 
 	float Refraction = 0.f;
 	float Reflection = 0.f;
@@ -69,19 +72,21 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 
 		//std::cout << "Normals: " << pNormal->x << ", " << pNormal->y << ", " << pNormal->z << std::endl;
 	}
+	m.nvertices.push_back(mesh->mNumVertices);
 
 	for (size_t i = 0; i < mesh->mNumFaces; ++i)
 	{
 		const aiFace& face = mesh->mFaces[i];
 		m.indices.push_back(glm::ivec3(offset + (int32_t)face.mIndices[0], offset + (int32_t)face.mIndices[1], offset + (int32_t)face.mIndices[2]));
 	}
-
-	offset += mesh->mNumVertices;
+	m.nfaces.push_back(mesh->mNumFaces);
+	m.matindex.push_back(mesh->mMaterialIndex);
+	//offset += mesh->mNumVertices;
 }
 
 /*
 *	### File Contents ###
-* 
+*
 *	[v] - Vertices(Positions)
 *	[n] - Normals
 *	[t] - Texture Coordinates
@@ -153,60 +158,101 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 			file << ss.str() << "\n";
 		}
 
+		for (auto& i : m.nvertices)
+		{
+			std::stringstream ss;
+			ss << "m ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.nfaces)
+		{
+			std::stringstream ss;
+			ss << "w ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.matindex)
+		{
+			std::stringstream ss;
+			ss << "g ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Ambient)
+		{
+			std::stringstream ss;
+			ss << "Ambient ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Diffuse)
+		{
+			std::stringstream ss;
+			ss << "Diffuse ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Specular)
+		{
+			std::stringstream ss;
+			ss << "Specular ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Emissive)
+		{
+			std::stringstream ss;
+			ss << "Emissive ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Transparent)
+		{
+			std::stringstream ss;
+			ss << "Transparent ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Reflective)
+		{
+			std::stringstream ss;
+
+			ss << "Reflective ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
 		std::stringstream ss;
-		ss << "Ambient ";
-		ss << m.Ambient.x << " ";
-		ss << m.Ambient.y << " ";
-		ss << m.Ambient.z;
-		
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Diffuse ";
-		ss << m.Diffuse.x << " ";
-		ss << m.Diffuse.y << " ";
-		ss << m.Diffuse.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Specular ";
-		ss << m.Specular.x << " ";
-		ss << m.Specular.y << " ";
-		ss << m.Specular.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Emissive ";
-		ss << m.Emissive.x << " ";
-		ss << m.Emissive.y << " ";
-		ss << m.Emissive.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Transparent ";
-		ss << m.Transparent.x << " ";
-		ss << m.Transparent.y << " ";
-		ss << m.Transparent.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Reflective ";
-		ss << m.Reflective.x << " ";
-		ss << m.Reflective.y << " ";
-		ss << m.Reflective.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
 
 		ss << "Refraction ";
 		ss << m.Refraction;
@@ -243,18 +289,18 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 
 		ss.str(std::string());
 	}
-	
+
 	return true;
 }
 
-bool LoadModel(const std::string& path, const std::string& output)
+bool LoadModel(const std::string& path)
 {
 	s_Scene = s_Importer.ReadFile(path,
 		aiProcess_Triangulate |
 		aiProcess_GenSmoothNormals |
 		aiProcess_JoinIdenticalVertices);
 
-	if (!s_Scene)	
+	if (!s_Scene)
 		return false;
 
 	uint32_t offset = 0;
@@ -267,20 +313,28 @@ bool LoadModel(const std::string& path, const std::string& output)
 
 		const auto* pMaterial = s_Scene->mMaterials[i];
 
+		aiColor3D tDiffuse;
+		aiColor3D tAmbient;
+		aiColor3D tSpecular;
+		aiColor3D tEmissive;
+		aiColor3D tTransparent;
+		aiColor3D tReflective;
+
 		pMaterial->Get(AI_MATKEY_REFRACTI, mMesh.Refraction);
 		pMaterial->Get(AI_MATKEY_REFLECTIVITY, mMesh.Reflection);
 		pMaterial->Get(AI_MATKEY_SHININESS, mMesh.Shininess);
 		pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, mMesh.ShininessStrength);
 		pMaterial->Get(AI_MATKEY_OPACITY, mMesh.Opacity);
 
-		pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, &mMesh.Diffuse, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, &mMesh.Ambient, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, &mMesh.Specular, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, &mMesh.Emissive, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, &mMesh.Transparent, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, &mMesh.Reflective, nullptr);
+		pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, tDiffuse);
+		pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, tAmbient);
+		pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, tSpecular);
+		pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, tEmissive);
+		pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, tTransparent);
+		pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, tReflective);
 
-		pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), atex);
+		pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, 0), atex);
+
 		if (atex.length)
 		{
 			std::string full_path{ atex.data };
@@ -294,9 +348,18 @@ bool LoadModel(const std::string& path, const std::string& output)
 			std::string tex_path = full_path.substr(check, full_path.length());
 			mMesh.textures.push_back(tex_path);
 		}
+		else
+			mMesh.textures.push_back("NULL");
+
+		mMesh.Diffuse.push_back(tDiffuse);
+		mMesh.Ambient.push_back(tAmbient);
+		mMesh.Emissive.push_back(tEmissive);
+		mMesh.Specular.push_back(tSpecular);
+		mMesh.Reflective.push_back(tReflective);
+		mMesh.Transparent.push_back(tTransparent);
 	}
 
-	if (!WriteToFile(mMesh, output))
+	if (!WriteToFile(mMesh, path))
 		return false;
 
 	return true;
@@ -306,38 +369,26 @@ int main(int argc, char* argv[])
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	int t = argc;
-	if (argc != 3)
-	{
-		std::cout << "Invalid Argument!" << std::endl;
-		return -1;
-	}
-
 	std::filesystem::path pt{ argv[1] };
-	std::filesystem::path output{ argv[2] };
-
 	std::string ext = pt.extension().string();
-	if (strcmp(ext.c_str(), ".fbx"))
-	{
-		//LOG("Incorrect File Type!");
-		std::cout << "Incorrect File Type" << std::endl;
-		return -1;
-	}
+	//if (strcmp(ext.c_str(), ".fbx"))
+	//{
+	//	//LOG("Incorrect File Type!");
+	//	std::cout << "Incorrect File Type" << std::endl;
+	//	return -1;
+	//}
 
 	while (t > 1)
-	{	
-		output /= "Models";
-		output /= pt.filename();
-		output = output.replace_extension(".a");
-
-		if (!LoadModel(argv[1], output.string()))
+	{
+		if (!LoadModel(argv[1]))
 		{
-			std::cout << "Model failed to compile : " "[" << argv[1] << "]" << std::endl;
+			std::cout << "Model Failed to Load : " "[" << argv[1] << "]" << std::endl;
 			return -1;
 		}
 
 		else
 		{
-			std::cout << "Model compiled successfully to : " << "[" << output << "]" << std::endl;
+			std::cout << "Model Loaded Successfully : " << "[" << argv[1] << "]" << std::endl;
 			return 0;
 		}
 	}
