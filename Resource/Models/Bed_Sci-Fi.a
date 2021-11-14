@@ -16616,7 +16616,11 @@ f 16 18 19
 f 19 17 16
 f 18 20 21
 f 21 19 18
+p NULL
 p Models\Bed_Sci-Fi.fbm\Material _2375_Base_color.png
+p NULL
+p NULL
+p NULL
 p Models\Bed_Sci-Fi.fbm\CYBERPUNK19_3.png
 m 448
 m 52
