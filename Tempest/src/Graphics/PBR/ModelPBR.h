@@ -23,8 +23,11 @@ namespace Tempest
         void loadModel(std::string file);
         void Draw();
 
-    private:
         std::vector<MeshPBR> meshes;
+        std::vector<glm::vec3> colours;
+        std::vector<uint32_t> mats;
+    private:
+        
         std::string directory;
 
         void processNode(aiNode* node, const aiScene* scene);

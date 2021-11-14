@@ -29,12 +29,12 @@ struct Mesh
 
 	std::vector<std::string> textures;
 
-	glm::vec3 Diffuse = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Ambient = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Specular = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Emissive = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Transparent = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 Reflective = glm::vec3(0.f, 0.f, 0.f);
+	std::vector<glm::vec3> Diffuse;
+	std::vector<glm::vec3> Ambient;
+	std::vector<glm::vec3> Specular;
+	std::vector<glm::vec3> Emissive;
+	std::vector<glm::vec3> Transparent;
+	std::vector<glm::vec3> Reflective ;
 
 	float Refraction = 0.f;
 	float Reflection = 0.f;
@@ -185,60 +185,74 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 			file << ss.str() << "\n";
 		}
 
+		for (auto& i : m.Ambient)
+		{
+			std::stringstream ss;
+			ss << "Ambient ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Diffuse)
+		{
+			std::stringstream ss;
+			ss << "Diffuse ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Specular)
+		{
+			std::stringstream ss;
+			ss << "Specular ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Emissive)
+		{
+			std::stringstream ss;
+			ss << "Emissive ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Transparent)
+		{
+			std::stringstream ss;
+			ss << "Transparent ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Reflective)
+		{
+			std::stringstream ss;
+
+			ss << "Reflective ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
 		std::stringstream ss;
-		ss << "Ambient ";
-		ss << m.Ambient.x << " ";
-		ss << m.Ambient.y << " ";
-		ss << m.Ambient.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Diffuse ";
-		ss << m.Diffuse.x << " ";
-		ss << m.Diffuse.y << " ";
-		ss << m.Diffuse.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Specular ";
-		ss << m.Specular.x << " ";
-		ss << m.Specular.y << " ";
-		ss << m.Specular.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Emissive ";
-		ss << m.Emissive.x << " ";
-		ss << m.Emissive.y << " ";
-		ss << m.Emissive.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Transparent ";
-		ss << m.Transparent.x << " ";
-		ss << m.Transparent.y << " ";
-		ss << m.Transparent.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
-
-		ss << "Reflective ";
-		ss << m.Reflective.x << " ";
-		ss << m.Reflective.y << " ";
-		ss << m.Reflective.z;
-
-		file << ss.str() << "\n";
-
-		ss.str(std::string());
 
 		ss << "Refraction ";
 		ss << m.Refraction;
@@ -299,7 +313,12 @@ bool LoadModel(const std::string& path)
 
 		const auto* pMaterial = s_Scene->mMaterials[i];
 
-
+		glm::vec3 tDiffuse;
+		glm::vec3 tAmbient;
+		glm::vec3 tSpecular;
+		glm::vec3 tEmissive;
+		glm::vec3 tTransparent;
+		glm::vec3 tReflective;
 
 		pMaterial->Get(AI_MATKEY_REFRACTI, mMesh.Refraction);
 		pMaterial->Get(AI_MATKEY_REFLECTIVITY, mMesh.Reflection);
@@ -307,12 +326,12 @@ bool LoadModel(const std::string& path)
 		pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, mMesh.ShininessStrength);
 		pMaterial->Get(AI_MATKEY_OPACITY, mMesh.Opacity);
 
-		pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, &mMesh.Diffuse, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, &mMesh.Ambient, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, &mMesh.Specular, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, &mMesh.Emissive, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, &mMesh.Transparent, nullptr);
-		pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, &mMesh.Reflective, nullptr);
+		pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, &tDiffuse, nullptr);
+		pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, &tAmbient, nullptr);
+		pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, &tSpecular, nullptr);
+		pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, &tEmissive, nullptr);
+		pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, &tTransparent, nullptr);
+		pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, &tReflective, nullptr);
 
 		pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, 0), atex);
 
@@ -329,6 +348,13 @@ bool LoadModel(const std::string& path)
 			std::string tex_path = full_path.substr(check, full_path.length());
 			mMesh.textures.push_back(tex_path);
 		}
+
+		mMesh.Diffuse.push_back(tDiffuse);
+		mMesh.Ambient.push_back(tAmbient);
+		mMesh.Emissive.push_back(tEmissive);
+		mMesh.Specular.push_back(tSpecular);
+		mMesh.Reflective.push_back(tReflective);
+		mMesh.Transparent.push_back(tTransparent);
 	}
 
 	if (!WriteToFile(mMesh, path))

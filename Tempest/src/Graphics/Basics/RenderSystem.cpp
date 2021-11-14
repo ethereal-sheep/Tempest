@@ -812,7 +812,13 @@ namespace Tempest
             objectAO.useTexture();
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
-            m_Pipeline.m_Models[i].m_Model->Draw();
+            //m_Pipeline.m_Models[i].m_Model->Draw();
+            for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
+            {
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                m_Pipeline.m_Models[i].m_Model->meshes[j].Draw();
+            }
+            
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
