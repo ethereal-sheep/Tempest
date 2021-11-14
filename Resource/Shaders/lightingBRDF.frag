@@ -45,11 +45,13 @@ uniform int gBufferView;
 uniform bool pointMode;
 uniform bool directionalMode;
 uniform bool iblMode;
+uniform bool envMapShow;
 uniform int attenuationMode;
 uniform float materialRoughness;
 uniform float materialMetallicity;
 uniform float ambientIntensity;
 uniform vec3 materialF0;
+uniform vec4 clearColor;
 
 uniform mat4 view;
 uniform mat4 inverseView;
@@ -94,7 +96,10 @@ void main()
 	
     if(depth == 1.0f)
     {
-        color = envColor;
+		if(envMapShow)
+			color = envColor;
+		else
+			color = clearColor.rgb;
     }
 
     else
@@ -202,7 +207,7 @@ void main()
             }
         }
 
-        if (iblMode)
+        if (iblMode && envMapShow)
         {
             F = computeFresnelSchlickRoughness(NdotV, F0, roughness);
 
@@ -218,8 +223,6 @@ void main()
             vec3 specularRadiance = textureLod(envMapPrefilter, R * mat3(view), roughness * prefilterLODLevel).rgb;
             vec2 brdfSampling = texture(envMapLUT, vec2(NdotV, roughness)).rg;
             specularRadiance *= F * brdfSampling.x + brdfSampling.y;
-
-//            vec3 ambientIBL = (diffuseIrradiance * kD);
             vec3 ambientIBL = (diffuseIrradiance * kD) + specularRadiance;
 
             color += ambientIBL;

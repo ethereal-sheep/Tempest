@@ -507,7 +507,7 @@ namespace Tempest
 
         m_FrameBuffer.Bind();
 
-        m_Renderer.ClearColour(0.4f, 0.5f, 0.6f, 1.0f);
+        m_Renderer.ClearColour(clearColor.x,clearColor.y,clearColor.z,clearColor.w);
         m_Renderer.ClearColorDepth();
         if (PREFABMODE)
         {
@@ -772,8 +772,8 @@ namespace Tempest
 
         //else
         //{
-        SubmitModel("models/shaderball/shaderball.a", glm::mat4{});
-        SubmitModel("models/shaderball/shaderball.a", glm::mat4{});
+        SubmitModel("models/shaderball/shaderball.a", glm::mat4{1});
+        //SubmitModel("models/shaderball/shaderball.a", glm::mat4{1});
 
         int WIDTH = getWidth(), HEIGHT = getHeight();
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
@@ -1006,7 +1006,10 @@ namespace Tempest
 
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(dirShadowBool, "dirShadowBool");
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointShadowBool, "pointShadowBool");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(clearColor, "clearColor");
 
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(envMapShow, "envMapShow");
+        
         quadRender.drawShape();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

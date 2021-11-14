@@ -378,7 +378,9 @@ namespace Tempest
 			ImGui::Checkbox("Point shadow", &pointShadowBool);
 			auto& pbrBool = Service<RenderSystem>::Get().pbrMode;
 			ImGui::Checkbox("PBR Mode", &pbrBool);
-
+			auto& envMapShow = Service<RenderSystem>::Get().envMapShow;
+			ImGui::Checkbox("Env Map Show", &envMapShow);
+			
 			auto& materialF0 = Service<RenderSystem>::Get().materialF0;
 			UI::DragFloat3ColorBox("MaterialF0", "##MaterialF0", ImVec2{ padding , 0.f }, value_ptr(materialF0), 0.f, 0.1f).first;
 			if(ImGui::TreeNode("Gbuffer Mode"))
@@ -407,7 +409,7 @@ namespace Tempest
 				{
 					ImGui::Checkbox("Point", &pointMode);
 					ImGui::Checkbox("Directional", &directionalMode);
-					ImGui::Checkbox("Image-Based Lighting", &iblMode);
+					ImGui::Checkbox("Image-Based Lighting(Make sure Env Map Show is ON)", &iblMode);
 
 					ImGui::TreePop();
 				}
