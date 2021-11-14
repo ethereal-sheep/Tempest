@@ -24,6 +24,50 @@
                     0
                 ]
             }
+        },
+        {
+            "Entity": 56,
+            "Component": {
+                "Weapon_Name": "Gun",
+                "Main_Stat": 1,
+                "Weapon_Stats": [
+                    0,
+                    0,
+                    0,
+                    5,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "Entity": 51,
+            "Component": {
+                "Weapon_Name": "Cannon",
+                "Main_Stat": 1,
+                "Weapon_Stats": [
+                    0,
+                    6,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
         }
     ]
 }

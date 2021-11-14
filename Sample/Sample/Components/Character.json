@@ -39,7 +39,7 @@
                 "Charater_Stats": [
                     1,
                     1,
-                    1,
+                    16,
                     0,
                     0,
                     0,
@@ -54,6 +54,36 @@
                 "Actions": [
                     2,
                     5
+                ]
+            }
+        },
+        {
+            "Entity": 57,
+            "Component": {
+                "Charater_Name": "Soldier B",
+                "Weapon_Ids": [
+                    7,
+                    51
+                ],
+                "Charater_Stats": [
+                    5,
+                    5,
+                    5,
+                    5,
+                    5,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    5,
+                    54
                 ]
             }
         }

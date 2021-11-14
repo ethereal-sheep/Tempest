@@ -26,6 +26,24 @@
             "Component": {
                 "Name": "Char"
             }
+        },
+        {
+            "Entity": 51,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 56,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 57,
+            "Component": {
+                "Name": "Char"
+            }
         }
     ]
 }

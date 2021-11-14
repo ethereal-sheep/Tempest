@@ -20,12 +20,12 @@
                         "second": "DEF"
                     },
                     {
-                        "first": false,
-                        "second": "Stat1"
+                        "first": true,
+                        "second": "POW"
                     },
                     {
-                        "first": false,
-                        "second": "Stat2"
+                        "first": true,
+                        "second": "RANGE"
                     },
                     {
                         "first": false,

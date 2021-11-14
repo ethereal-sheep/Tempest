@@ -6,6 +6,14 @@
         {
             "Entity": 6,
             "Component": {}
+        },
+        {
+            "Entity": 10,
+            "Component": {}
+        },
+        {
+            "Entity": 48,
+            "Component": {}
         }
     ]
 }
