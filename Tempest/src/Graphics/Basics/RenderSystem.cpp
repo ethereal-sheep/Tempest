@@ -440,7 +440,7 @@ namespace Tempest
         // IBL setup
         //----------
         iblSetup();
-        AAgridShow = true;
+        //AAgridShow = true;
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -859,7 +859,8 @@ namespace Tempest
             }
             
         }
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         //---------------
         // sao rendering
