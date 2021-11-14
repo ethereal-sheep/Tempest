@@ -51,9 +51,6 @@ namespace Tempest
 			std::vector<std::string> textures;
 			std::vector<uint32_t> sizes;
 			std::vector<uint32_t> sides;
-			
-			std::vector<MaterialPBR> mm;
-			MaterialPBR m;
 
 			std::string temp_x, temp_y, temp_z;
 
@@ -107,24 +104,35 @@ namespace Tempest
 
 				else if (prefix == "p" && line != "")
 				{
+					TexturePBR tex;
 					std::string temp;
 					file_line >> temp;
-					std::filesystem::path parent{ file };
-					std::string p = parent.parent_path().string();
-					p.erase(p.end() - 6, p.end());
-					p += temp;
-					try
+					if (!strcmp(temp.c_str(), "NULL"))
 					{
-						TexturePBR tex;
-						tex.setTexture(p.c_str(), parent.filename().string(), true);
-						m.addTexture(parent.filename().string(), std::move(tex));
+						
+						tex.setTexture("0", "0", true);
 					}
 
-					catch (...)
+					else
 					{
-						LOG_WARN("Texture File Not Found!");
+						std::filesystem::path parent{ file };
+						std::string p = parent.parent_path().string();
+						p.erase(p.end() - 6, p.end());
+						p += temp;
+						try
+						{
+							//MaterialPBR m;
+							tex.setTexture(p.c_str(), parent.filename().string(), true);
+							//m.addTexture(parent.filename().string(), std::move(tex));
+						}
+
+						catch (...)
+						{
+							LOG_WARN("Texture File Not Found!");
+						}
 					}
 
+					mm.push_back(tex);
 				}
 
 				else if (prefix == "m" && line != "")
@@ -162,7 +170,7 @@ namespace Tempest
 					colours.push_back(q);
 				}
 			}
-			mm.push_back(m);
+			//mm.push_back(m);
 
 			int count = 0;
 			int joints = 0;

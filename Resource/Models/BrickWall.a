@@ -435,11 +435,29 @@ g 0
 g 1
 g 2
 g 3
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+Ambient 1 1 1
+Ambient 0.243259 0.262233 0.338129
+Ambient 0.0941176 0.12549 0.211765
+Ambient 0.107914 0.107914 1
+Diffuse 1 1 1
+Diffuse 0.243259 0.262233 0.338129
+Diffuse 0.0941176 0.12549 0.211765
+Diffuse 0.107914 0.107914 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
 Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0.0669 1.6725
 Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
 Reflective 0 0 0
 Refraction 0
 Reflection 0

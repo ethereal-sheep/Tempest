@@ -2480,6 +2480,7 @@ f 16 18 19
 f 20 21 22
 f 20 22 23
 p Models\Chair.fbm\WoodFloor047_2K_Color(Lighter).png
+p NULL
 m 120
 m 24
 m 127

@@ -14910,11 +14910,59 @@ g 7
 g 7
 g 7
 g 8
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+Ambient 0.0863309 0.0863309 0.0863309
+Ambient 0.158273 0.126391 0.101341
+Ambient 0.0287769 0.669096 1
+Ambient 0.0105585 0.0507862 0.122302
+Ambient 0.9 0.9 0.9
+Ambient 0.0503597 0.0264479 0.0264479
+Ambient 1 1 1
+Ambient 0.151079 0.151079 0.151079
+Ambient 0.028777 0.028777 0.028777
+Diffuse 0.0863309 0.0863309 0.0863309
+Diffuse 0.158273 0.126391 0.101341
+Diffuse 0.0287769 0.669096 1
+Diffuse 0.0105585 0.0507862 0.122302
+Diffuse 0.9 0.9 0.9
+Diffuse 0.0503597 0.0264479 0.0264479
+Diffuse 1 1 1
+Diffuse 0.151079 0.151079 0.151079
+Diffuse 0.028777 0.028777 0.028777
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
 Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 2.04617 2.04617 2.04617
 Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
 Reflective 0 0 0
 Refraction 0
 Reflection 0

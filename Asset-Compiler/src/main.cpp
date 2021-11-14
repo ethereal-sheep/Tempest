@@ -348,6 +348,8 @@ bool LoadModel(const std::string& path)
 			std::string tex_path = full_path.substr(check, full_path.length());
 			mMesh.textures.push_back(tex_path);
 		}
+		else
+			mMesh.textures.push_back("NULL");
 
 		mMesh.Diffuse.push_back(tDiffuse);
 		mMesh.Ambient.push_back(tAmbient);

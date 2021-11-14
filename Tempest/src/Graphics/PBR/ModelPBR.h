@@ -12,6 +12,8 @@
 #include "Graphics/PBR/MeshPBR.h"
 #include "Graphics/PBR/MaterialPBR.h"
 
+#include <map>
+
 namespace Tempest
 {
 
@@ -26,6 +28,7 @@ namespace Tempest
         std::vector<MeshPBR> meshes;
         std::vector<glm::vec3> colours;
         std::vector<uint32_t> mats;
+        std::vector<TexturePBR> mm;
     private:
         
         std::string directory;

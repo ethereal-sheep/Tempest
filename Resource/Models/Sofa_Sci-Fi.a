@@ -5474,11 +5474,23 @@ g 2
 g 2
 g 2
 g 2
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+Ambient 0.0196677 0.0426686 0.0719424
+Ambient 1 1 1
+Ambient 0.0287769 0.669096 1
+Diffuse 0.0196677 0.0426686 0.0719424
+Diffuse 1 1 1
+Diffuse 0.0287769 0.669096 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Emissive 0 0 0
+Emissive 0 0 0
 Emissive 0 0 0
 Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
 Reflective 0 0 0
 Refraction 0
 Reflection 0
