@@ -357,7 +357,7 @@ namespace Tempest
         envMapLUT.setTextureHDR(512, 512, GL_RG, GL_RG16F, GL_FLOAT, GL_LINEAR);
 
 
-        objectModel.loadModel("models/shaderball/shaderball.b");
+        objectModel.loadModel("models/shaderball/shaderball.a");
         
         objectAlbedo2.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
         objectNormal2.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
@@ -365,7 +365,7 @@ namespace Tempest
         objectMetalness2.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);
         objectAO2.setTexture("textures/pbr/rustediron/rustediron_ao.png", "ironAO", true);
 
-        objectModel2.loadModel("models/shaderball/shaderball.b");
+        objectModel2.loadModel("models/shaderball/shaderball.a");
 
        // materialF0 = glm::vec3(1.0f, 0.72f, 0.29f);
         materialF0 = glm::vec3(0.04f);
@@ -446,7 +446,9 @@ namespace Tempest
     {
         if (!m_Pipeline.m_ModelLibrary.count(path))
         {
-            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::make_shared<Model>(path.c_str())));
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
         ModelObj model;
         model.m_Transform = to_Model_Matrix(transform);
@@ -458,7 +460,9 @@ namespace Tempest
     {
         if (!m_Pipeline.m_ModelLibrary.count(path))
         {
-            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::make_shared<Model>(path.c_str())));
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
         ModelObj model;
         model.m_Transform = model_matrix;
@@ -524,590 +528,533 @@ namespace Tempest
 
     void RenderSystem::Render()
     {
-        if (PREFABMODE || !pbrMode)
-        { 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //if (PREFABMODE)
+        //{ 
+        //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //
+        //    // Directional light depth map
+        //    if (!dir_lights[0].hide)
+        //    {
+        //        dir_lights[0].Bind();
+        //
+        //        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+        //        lightView = glm::lookAt(10.f * dir_lights[0].Direction,
+        //            glm::vec3(0.0f, 0.0f, 0.0f),
+        //            glm::vec3(0.0f, 1.0f, 0.0f));
+        //        lightSpaceMatrix = lightProjection * lightView;
+        //
+        //        DrawSprites(MeshCode::CUBE, ShaderCode::DIRECTIONAL_SHADOW_MAP);
+        //        DrawSprites(MeshCode::SPHERE, ShaderCode::DIRECTIONAL_SHADOW_MAP);
+        //        DrawSprites(MeshCode::PLANE, ShaderCode::DIRECTIONAL_SHADOW_MAP);
+        //        DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::DIRECTIONAL_SHADOW_MAP);
+        //
+        //        for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+        //        {
+        //            for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
+        //            {
+        //                // Send in uniform values
+        //                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
+        //                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(6, "shadowMap"); // Set Shadow map for directional light to be slot 6 
+        //                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+        //                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+        //                mesh.Bind();
+        //                glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //                mesh.Unbind();
+        //            }
+        //        }
+        //        glActiveTexture(GL_TEXTURE0);
+        //        glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+        //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //    }
+        //
+        //
+        //
+        //    // render all pt lights to depth buffer
+        //    if (GetActivePt_lightsNum())
+        //    {
+        //        for (int numPt = 0; numPt < pt_lights.size(); numPt++)
+        //        {
+        //            if (pt_lights[numPt].hide)
+        //                continue;
+        //
+        //            // Bind Point Light FBO
+        //            pt_lights[numPt].Bind();
+        //
+        //            DrawSprites(MeshCode::CUBE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+        //            DrawSprites(MeshCode::SPHERE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+        //            DrawSprites(MeshCode::PLANE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+        //            DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::POINT_LIGHT_DEPTH, numPt);
+        //
+        //            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
+        //            // Send in uniform values
+        //            glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
+        //            std::vector<glm::mat4> shadowTransforms;
+        //            shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+        //            shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+        //            shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+        //            shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+        //            shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+        //            shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+        //            for (unsigned int shadowxform = 0; shadowxform < 6; ++shadowxform)
+        //                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(shadowTransforms[shadowxform], ("shadowMatrices[" + std::to_string(shadowxform) + "]").c_str());
+        //            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1f(far_plane, "far_plane");
+        //            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetVec3f(pt_lights[numPt].Position, "lightPos");
+        //            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
+        //            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+        //
+        //            for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+        //            {
+        //                for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
+        //                {
+        //                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+        //                    mesh.Bind();
+        //                    glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //                    mesh.Unbind();
+        //                }
+        //            }
+        //        }
+        //        glActiveTexture(GL_TEXTURE0);
+        //        glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+        //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //    }
+        //
+        //    // Bind default FBO
+        //    m_FrameBuffer.Bind();
+        //    m_FrameBuffer.SetFrameBufferSize();
+        //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //    m_Renderer.EnableBlend(true);
+        //
+        //    RenderAAGrid();
+        //
+        //    // Drawing Polygons
+        //    DrawSprites(MeshCode::CUBE, ShaderCode::LIGHTING);
+        //    DrawSprites(MeshCode::SPHERE, ShaderCode::LIGHTING);
+        //    DrawSprites(MeshCode::PLANE, ShaderCode::LIGHTING);
+        //    DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::LIGHTING);
+        //
+        //    glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+        //    m_FrameBuffer.Bind();
+        //    glActiveTexture(GL_TEXTURE0);
+        //
+        //    // Drawing Models
+        //    for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+        //    {
+        //        for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
+        //        {
+        //            if (material->DiffuseMap)
+        //            {
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Bind();
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f((material->Diffuse), "DiffuseColour");
+        //                material->DiffuseMap->Bind(0);
+        //            }
+        //
+        //            else if (material->BaseTexture)
+        //            {
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Bind();
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f((material->Diffuse), "DiffuseColour");
+        //                material->BaseTexture->Bind(0);
+        //                //const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+        //
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(dir_lights[0].Color, "LightColor");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(dir_lights[0].Intensity, "LightIntensity");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(far_plane, "far_plane");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i((int)pt_lights.size(), "PointLightNumber");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        //
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+        //                for (unsigned int ptLight = 0; ptLight < (unsigned int)pt_lights.size(); ++ptLight)
+        //                {
+        //                    std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+        //                    std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+        //                    std::string pointLightColors = "pointLightColors[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(pt_lights[ptLight].Color, pointLightColors.data());
+        //                    std::string pointLightConsts = "pointLightConsts[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightConsts, pointLightConsts.data());
+        //                    std::string pointLightLinears = "pointLightLinears[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
+        //                    std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+        //
+        //                    std::string pointLightHide = "pointLightHide[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(pt_lights[ptLight].hide, pointLightHide.data());
+        //                }
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
+        //
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(ambientStrength, "ambientStrength");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(shininess, "shininess");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(specularStrength, "specularStrength");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(dir_lights[0].hide ? 0 : 1, "DirectionalLightOn");
+        //
+        //            }
+        //
+        //            //else
+        //            //{
+        //            //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->Bind();
+        //            //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+        //            //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
+        //            //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
+        //            //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
+        //            //}
+        //
+        //            //mesh.Bind();
+        //            //glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //            else
+        //            {
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Bind();
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(far_plane, "far_plane");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i((int)pt_lights.size(), "PointLightNumber");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        //
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
+        //                for (unsigned int ptLight = 0; ptLight < (unsigned int)pt_lights.size(); ++ptLight)
+        //                {
+        //                    std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
+        //                    std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
+        //                    std::string pointLightColors = "pointLightColors[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(pt_lights[ptLight].Color, pointLightColors.data());
+        //                    std::string pointLightConsts = "pointLightConsts[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightConsts, pointLightConsts.data());
+        //                    std::string pointLightLinears = "pointLightLinears[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
+        //                    std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
+        //
+        //                    std::string pointLightHide = "pointLightHide[" + std::to_string(ptLight) + "]";
+        //                    m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(pt_lights[ptLight].hide, pointLightHide.data());
+        //                }
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
+        //
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(ambientStrength, "ambientStrength");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(shininess, "shininess");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(specularStrength, "specularStrength");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(dir_lights[0].hide ? 0 : 1, "DirectionalLightOn");
+        //                m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f((material->Diffuse), "DiffuseColour");
+        //            }
+        //
+        //            mesh.Bind();
+        //            glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
+        //            if (material->BaseTexture)
+        //            {
+        //                material->BaseTexture->Unbind(0);
+        //            }
+        //        }
+        //    }
+        //    m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);
+        //    m_FrameBuffer.Unbind();
+        //}
 
-            // Directional light depth map
-            if (!dir_lights[0].hide)
-            {
-                dir_lights[0].Bind();
+        //else
+        //{
+        SubmitModel("models/shaderball/shaderball.a", glm::mat4{});
+        SubmitModel("models/shaderball/shaderball.a", glm::mat4{});
 
-                lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-                lightView = glm::lookAt(10.f * dir_lights[0].Direction,
-                    glm::vec3(0.0f, 0.0f, 0.0f),
-                    glm::vec3(0.0f, 1.0f, 0.0f));
-                lightSpaceMatrix = lightProjection * lightView;
+        int WIDTH = getWidth(), HEIGHT = getHeight();
+        glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                DrawSprites(MeshCode::CUBE, ShaderCode::DIRECTIONAL_SHADOW_MAP);
-                DrawSprites(MeshCode::SPHERE, ShaderCode::DIRECTIONAL_SHADOW_MAP);
-                DrawSprites(MeshCode::PLANE, ShaderCode::DIRECTIONAL_SHADOW_MAP);
-                DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::DIRECTIONAL_SHADOW_MAP);
-
-                for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
-                {
-                    for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
-                    {
-                        // Send in uniform values
-                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
-                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(6, "shadowMap"); // Set Shadow map for directional light to be slot 6 
-                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
-                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                        mesh.Bind();
-                        glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-                        mesh.Unbind();
-                    }
-                }
-                glActiveTexture(GL_TEXTURE0);
-                glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            }
-
-
-
-            // render all pt lights to depth buffer
-            if (GetActivePt_lightsNum())
-            {
-                for (int numPt = 0; numPt < pt_lights.size(); numPt++)
-                {
-                    if (pt_lights[numPt].hide)
-                        continue;
-
-                    // Bind Point Light FBO
-                    pt_lights[numPt].Bind();
-
-                    DrawSprites(MeshCode::CUBE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
-                    DrawSprites(MeshCode::SPHERE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
-                    DrawSprites(MeshCode::PLANE, ShaderCode::POINT_LIGHT_DEPTH, numPt);
-                    DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::POINT_LIGHT_DEPTH, numPt);
-
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
-                    // Send in uniform values
-                    glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
-                    std::vector<glm::mat4> shadowTransforms;
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    for (unsigned int shadowxform = 0; shadowxform < 6; ++shadowxform)
-                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(shadowTransforms[shadowxform], ("shadowMatrices[" + std::to_string(shadowxform) + "]").c_str());
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1f(far_plane, "far_plane");
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetVec3f(pt_lights[numPt].Position, "lightPos");
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
-
-                    for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
-                    {
-                        for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
-                        {
-                            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                            mesh.Bind();
-                            glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-                            mesh.Unbind();
-                        }
-                    }
-                }
-                glActiveTexture(GL_TEXTURE0);
-                glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            }
-
-            // Bind default FBO
-            m_FrameBuffer.Bind();
-            m_FrameBuffer.SetFrameBufferSize();
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            m_Renderer.EnableBlend(true);
-
-            RenderAAGrid();
-
-            // Drawing Polygons
-            DrawSprites(MeshCode::CUBE, ShaderCode::LIGHTING);
-            DrawSprites(MeshCode::SPHERE, ShaderCode::LIGHTING);
-            DrawSprites(MeshCode::PLANE, ShaderCode::LIGHTING);
-            DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::LIGHTING);
-
-            glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-            m_FrameBuffer.Bind();
-            glActiveTexture(GL_TEXTURE0);
-
-            // Drawing Models
-            for (size_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
-            {
-                for (auto& [mesh, material] : m_Pipeline.m_Models[i].m_Model->GetMeshes())
-                {
-                    if (material->DiffuseMap)
-                    {
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Bind();
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f((material->Diffuse), "DiffuseColour");
-                        material->DiffuseMap->Bind(0);
-                    }
-
-                    else if (material->BaseTexture)
-                    {
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Bind();
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f((material->Diffuse), "DiffuseColour");
-                        material->BaseTexture->Bind(0);
-                        //const GLfloat near_plane = 1.0f, far_plane = 25.0f;
-
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(dir_lights[0].Color, "LightColor");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(dir_lights[0].Direction, "LightDirection");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(dir_lights[0].Intensity, "LightIntensity");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(far_plane, "far_plane");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i((int)pt_lights.size(), "PointLightNumber");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-                        for (unsigned int ptLight = 0; ptLight < (unsigned int)pt_lights.size(); ++ptLight)
-                        {
-                            std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
-                            std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
-                            std::string pointLightColors = "pointLightColors[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->SetVec3f(pt_lights[ptLight].Color, pointLightColors.data());
-                            std::string pointLightConsts = "pointLightConsts[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightConsts, pointLightConsts.data());
-                            std::string pointLightLinears = "pointLightLinears[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
-                            std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
-
-                            std::string pointLightHide = "pointLightHide[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(pt_lights[ptLight].hide, pointLightHide.data());
-                        }
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
-
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(ambientStrength, "ambientStrength");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(shininess, "shininess");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1f(specularStrength, "specularStrength");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_TEXTURE]->Set1i(dir_lights[0].hide ? 0 : 1, "DirectionalLightOn");
-
-                    }
-
-                    //else
-                    //{
-                    //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->Bind();
-                    //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                    //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetProjectionMatrix(), "ProjectionMatrix");
-                    //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetMat4fv(m_Pipeline.m_Cameras[0].GetViewMatrix(), "ViewMatrix");
-                    //    m_Pipeline.m_Shaders[ShaderCode::MODEL]->SetVec3f(to_glvec3(material->Diffuse), "DiffuseColour");
-                    //}
-
-                    //mesh.Bind();
-                    //glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-                    else
-                    {
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Bind();
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetProjectionMatrix(), "ProjectionMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Cameras.front().GetViewMatrix(), "ViewMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(glm::transpose(glm::inverse(m_Pipeline.m_Models[i].m_Transform)), "NormMatrix");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(dir_lights[0].Color, "LightColor");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(dir_lights[0].Direction, "LightDirection");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(dir_lights[0].Intensity, "LightIntensity");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(far_plane, "far_plane");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i((int)pt_lights.size(), "PointLightNumber");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(m_Pipeline.m_Cameras.front().GetPosition(), "CamPosition");
-                        for (unsigned int ptLight = 0; ptLight < (unsigned int)pt_lights.size(); ++ptLight)
-                        {
-                            std::string PointLightPositions = "PointLightPositions[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(pt_lights[ptLight].Position, PointLightPositions.data());
-                            std::string PointLightIntensity = "PointLightIntensity[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].Intensity, PointLightIntensity.data());
-                            std::string pointLightColors = "pointLightColors[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f(pt_lights[ptLight].Color, pointLightColors.data());
-                            std::string pointLightConsts = "pointLightConsts[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightConsts, pointLightConsts.data());
-                            std::string pointLightLinears = "pointLightLinears[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightLinears, pointLightLinears.data());
-                            std::string pointLightQuads = "pointLightQuads[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(pt_lights[ptLight].pointLightQuads, pointLightQuads.data());
-
-                            std::string pointLightHide = "pointLightHide[" + std::to_string(ptLight) + "]";
-                            m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(pt_lights[ptLight].hide, pointLightHide.data());
-                        }
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(0, "diffuseTexture");   // Set Point light depth to be slot 
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(5, "depthMap");   // Set Point light depth to be slot 5
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(6, "shadowMap");  // Set Dir Light depthh to be slot 6
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(GammaCorrection, "GammaCorrection"); // Send in if Gamma correction is on
-
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(ambientStrength, "ambientStrength");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(shininess, "shininess");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1f(specularStrength, "specularStrength");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->Set1i(dir_lights[0].hide ? 0 : 1, "DirectionalLightOn");
-                        m_Pipeline.m_Shaders[ShaderCode::MODEL_LIGHT]->SetVec3f((material->Diffuse), "DiffuseColour");
-                    }
-
-                    mesh.Bind();
-                    glDrawElements(GL_TRIANGLES, mesh.GetVertexCount(), GL_UNSIGNED_INT, NULL);
-                    if (material->BaseTexture)
-                    {
-                        material->BaseTexture->Unbind(0);
-                    }
-                }
-            }
-            m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);
-            m_FrameBuffer.Unbind();
-        }
-        else
+        for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
         {
-            int WIDTH = getWidth(), HEIGHT = getHeight();
-            glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * m_Pipeline.m_Models[i].m_Transform;
 
-            for (int rep = 0; rep < 2; rep++)
-            {
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(projViewModel, "projViewModel");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(prevProjViewModel, "prevProjViewModel");
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "model");
+            //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
+            prevProjViewModel = projViewModel;
 
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+            glActiveTexture(GL_TEXTURE0);
+            objectAlbedo.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
 
-                glm::mat4 model;
-                deltaTime += 0.01f;
-                GLfloat rotationAngle = deltaTime / 5.0f * modelRotationSpeed;
-                model = glm::mat4(1);
-                if (rep == 0)
-                    model = glm::translate(model, modelPosition);
-                if (rep == 1)
-                    model = glm::translate(model, modelPosition2);
-                model = glm::rotate(model, rotationAngle, modelRotationAxis);
+            glActiveTexture(GL_TEXTURE1);
+            objectNormal.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
 
-                if (rep == 0)
-                    model = glm::scale(model, modelScale);
-                if (rep == 1)
-                    model = glm::scale(model, modelScale2);
+            glActiveTexture(GL_TEXTURE2);
+            objectRoughness.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
 
-                if (rep == 0)
-                    model1 = model;
-                if (rep == 1)
-                    model2 = model;;
+            glActiveTexture(GL_TEXTURE3);
+            objectMetalness.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
 
+            glActiveTexture(GL_TEXTURE4);
+            objectAO.useTexture();
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
-                projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * model;
+            m_Pipeline.m_Models[i].m_Model->Draw();
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+        //---------------
+        // sao rendering
+        //---------------
+        //glQueryCounter(queryIDSAO[0], GL_TIMESTAMP);
+        glBindFramebuffer(GL_FRAMEBUFFER, saoFBO);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(projViewModel, "projViewModel");
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(prevProjViewModel, "prevProjViewModel");
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(model, "model");
-                //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
-                prevProjViewModel = projViewModel;
+        if (saoMode)
+        {
+            // SAO noisy texture
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Bind();
 
-                // Material
-                glActiveTexture(GL_TEXTURE0);
-                objectAlbedo.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
-
-                glActiveTexture(GL_TEXTURE1);
-                objectNormal.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
-
-                glActiveTexture(GL_TEXTURE2);
-                objectRoughness.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
-
-                glActiveTexture(GL_TEXTURE3);
-                objectMetalness.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
-
-                glActiveTexture(GL_TEXTURE4);
-                objectAO.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
-
-                //objectModel.Draw();
-                //objectModel2.Draw();
-
-                if (rep == 0)
-                    objectModel.Draw();
-                if (rep == 1)
-                    objectModel2.Draw();
-            }
-
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-
-
-
-            //---------------
-            // sao rendering
-            //---------------
-            //glQueryCounter(queryIDSAO[0], GL_TIMESTAMP);
-            glBindFramebuffer(GL_FRAMEBUFFER, saoFBO);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            if (saoMode)
-            {
-                // SAO noisy texture
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Bind();
-
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, gPosition);
-                glActiveTexture(GL_TEXTURE1);
-                glBindTexture(GL_TEXTURE_2D, gNormal);
-
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoSamples, "saoSamples");
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoRadius, "saoRadius");
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoTurns, "saoTurns");
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoBias, "saoBias");
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoScale, "saoScale");
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoContrast, "saoContrast");
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(WIDTH, "viewportWidth");
-                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(HEIGHT, "viewportHeight");
-
-                quadRender.drawShape();
-
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-                // SAO blur pass
-                glBindFramebuffer(GL_FRAMEBUFFER, saoBlurFBO);
-                glClear(GL_COLOR_BUFFER_BIT);
-
-                m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Bind();
-                m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Set1i(saoBlurSize, "saoBlurSize");
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, saoBuffer);
-
-                quadRender.drawShape();
-            }
-
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-            // Directional light depth map
-
-            if (!dir_lights[0].hide)
-            {
-                dir_lights[0].Bind();
-
-                lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-                lightView = glm::lookAt(10.f * -dir_lights[0].Direction,
-                    glm::vec3(0.0f, 0.0f, 0.0f),
-                    glm::vec3(0.0f, 1.0f, 0.0f));
-                lightSpaceMatrix = lightProjection * lightView;
-
-                for (int rep = 0; rep < 2; rep++)
-                {
-                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
-                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(9, "shadowMap"); // Set Shadow map for directional light to be slot 6 
-                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
-                    if (rep == 0)
-                    {
-                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(model1, "ModelMatrix");
-                        objectModel.Draw();
-                    }
-
-                    if (rep == 1)
-                    {
-                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(model2, "ModelMatrix");
-                        objectModel2.Draw();
-                    }
-                }
-                //objectModel.Draw();
-                //objectModel2.Draw();
-                glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-                glViewport(0, 0, WIDTH, HEIGHT);
-            }
-
-
-
-
-
-
-
-            // render all pt lights to depth buffer
-            if (GetActivePt_lightsNum())
-            {
-                for (int numPt = 0; numPt < pt_lights.size(); numPt++)
-                {
-                    if (pt_lights[numPt].hide)
-                        continue;
-
-                    // Bind Point Light FBO
-                    pt_lights[numPt].Bind();
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
-
-                    // Send in uniform values
-                    glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
-                    std::vector<glm::mat4> shadowTransforms;
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                    for (unsigned int shadowxform = 0; shadowxform < 6; ++shadowxform)
-                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(shadowTransforms[shadowxform], ("shadowMatrices[" + std::to_string(shadowxform) + "]").c_str());
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1f(far_plane, "far_plane");
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetVec3f(pt_lights[numPt].Position, "lightPos");
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
-
-                    for (int rep = 0; rep < 2; rep++)
-                    {
-                        if (rep == 0)
-                        {
-                            //m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(model1, "ModelMatrix");
-                            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(model1, "ModelMatrix");
-                            objectModel.Draw();
-                        }
-
-                        if (rep == 1)
-                        {
-                            m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(model2, "ModelMatrix");
-                            objectModel2.Draw();
-                        }
-                    }
-
-                }
-                glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-                glViewport(0, 0, WIDTH, HEIGHT);
-            }
-
-            //------------------------
-            // Lighting Pass rendering
-            //------------------------
-
-            glBindFramebuffer(GL_FRAMEBUFFER, postprocessFBO);
-            //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, gPosition);
             glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, gAlbedo);
-            glActiveTexture(GL_TEXTURE2);
             glBindTexture(GL_TEXTURE_2D, gNormal);
-            glActiveTexture(GL_TEXTURE3);
-            glBindTexture(GL_TEXTURE_2D, gEffects);
-            glActiveTexture(GL_TEXTURE4);
-            glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
-            glActiveTexture(GL_TEXTURE5);
-            envMapHDR.useTexture();
-            glActiveTexture(GL_TEXTURE6);
-            envMapIrradiance.useTexture();
-            glActiveTexture(GL_TEXTURE7);
-            envMapPrefilter.useTexture();
-            glActiveTexture(GL_TEXTURE8);
-            envMapLUT.useTexture();
 
-            glActiveTexture(GL_TEXTURE9);
-            glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
-
-            glActiveTexture(GL_TEXTURE10);
-            glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
-
-            for (int pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
-            {
-                glm::vec3 lightPositionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(pt_lights[pt_light_].Position, 1.0f));
-
-                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightPositionViewSpace, ("lightPointArray[" + std::to_string(pt_light_) + "].position").c_str());
-                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(pt_lights[pt_light_].Color, ("lightPointArray[" + std::to_string(pt_light_) + "].color").c_str());
-                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(pt_lights[pt_light_].radius, ("lightPointArray[" + std::to_string(pt_light_) + "].radius").c_str());
-
-                std::string pointLightHide = "pointLightHide[" + std::to_string(pt_light_) + "]";
-                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pt_lights[pt_light_].hide, pointLightHide.data());
-            }
-
-            for (int dLight = 0; dLight < dir_lights.size(); dLight++)
-            {
-                glm::vec3 lightDirectionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(dir_lights[dLight].Direction, 0.0f));
-
-                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightDirectionViewSpace, ("lightDirectionalArray[" + std::to_string(dLight) + "].direction").c_str());
-                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(dir_lights[dLight].Color, ("lightDirectionalArray[" + std::to_string(dLight) + "].color").c_str());
-            }
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::transpose(GetCamera().GetViewMatrix()), "inverseView");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::inverse(GetCamera().GetProjectionMatrix()), "inverseProj");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialRoughness, "materialRoughness");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialMetallicity, "materialMetallicity");
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(materialF0, "materialF0");
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientIntensity, "ambientIntensity");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(gBufferView, "gBufferView");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointMode, "pointMode");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(directionalMode, "directionalMode");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(iblMode, "iblMode");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(attenuationMode, "attenuationMode");
-
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "proj");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(GetCamera().GetPosition(), "camPos");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(far_plane, "far_plane");
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(dirShadowBool, "dirShadowBool");
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointShadowBool, "pointShadowBool");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoSamples, "saoSamples");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoRadius, "saoRadius");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoTurns, "saoTurns");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoBias, "saoBias");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoScale, "saoScale");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoContrast, "saoContrast");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(WIDTH, "viewportWidth");
+            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(HEIGHT, "viewportHeight");
 
             quadRender.drawShape();
+
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-            //glClear(GL_COLOR_BUFFER_BIT);
-            //-------------------------------
-            // Post-processing Pass rendering
-            //-------------------------------
-
+            // SAO blur pass
+            glBindFramebuffer(GL_FRAMEBUFFER, saoBlurFBO);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(gBufferView, "gBufferView");;
-
-
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->SetVec2f(glm::vec2{ 1.0f / (float)WIDTH , 1.0f / (float)HEIGHT }, "screenTextureSize");;
-
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraAperture, "cameraAperture");;
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraShutterSpeed, "cameraShutterSpeed");;
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraISO, "cameraISO");;
-
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");; //wtf is this like come on dude
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(fps / 144.f, "motionBlurScale");;
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMaxSamples, "motionBlurMaxSamples");;
-            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");;
-
+            m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Set1i(saoBlurSize, "saoBlurSize");
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, postprocessBuffer);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
-            glActiveTexture(GL_TEXTURE2);
-            glBindTexture(GL_TEXTURE_2D, gEffects);
+            glBindTexture(GL_TEXTURE_2D, saoBuffer);
 
             quadRender.drawShape();
-
-
-            //-----------------------
-            // Forward Pass rendering
-            //-----------------------
-            //glQueryCounter(queryIDForward[0], GL_TIMESTAMP);
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-            // Copy the depth informations from the Geometry Pass into the default framebuffer
-            glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Directional light depth map
+
+        if (!dir_lights[0].hide)
+        {
+            dir_lights[0].Bind();
+
+            lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+            lightView = glm::lookAt(10.f * -dir_lights[0].Direction,
+                glm::vec3(0.0f, 0.0f, 0.0f),
+                glm::vec3(0.0f, 1.0f, 0.0f));
+            lightSpaceMatrix = lightProjection * lightView;
+
+            for (uint32_t j = 0; j < m_Pipeline.m_Models.size(); ++j)
+            {
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(9, "shadowMap"); // Set Shadow map for directional light to be slot 6 
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[j].m_Transform, "ModelMatrix");
+
+                m_Pipeline.m_Models[j].m_Model->Draw();
+
+                glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+                glViewport(0, 0, WIDTH, HEIGHT);
+            }          
+        }
+
+        // render all pt lights to depth buffer
+        if (GetActivePt_lightsNum())
+        {
+            for (int numPt = 0; numPt < pt_lights.size(); numPt++)
+            {
+                if (pt_lights[numPt].hide)
+                    continue;
+
+                // Bind Point Light FBO
+                pt_lights[numPt].Bind();
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
+
+                // Send in uniform values
+                glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
+                std::vector<glm::mat4> shadowTransforms;
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                for (unsigned int shadowxform = 0; shadowxform < 6; ++shadowxform)
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(shadowTransforms[shadowxform], ("shadowMatrices[" + std::to_string(shadowxform) + "]").c_str());
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1f(far_plane, "far_plane");
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetVec3f(pt_lights[numPt].Position, "lightPos");
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
+                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+
+                for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+                {
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+                    m_Pipeline.m_Models[i].m_Model->Draw();
+                }
+
+            }
+            glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+            glViewport(0, 0, WIDTH, HEIGHT);
+        }
+
+        //------------------------
+        // Lighting Pass rendering
+        //------------------------
+
+        glBindFramebuffer(GL_FRAMEBUFFER, postprocessFBO);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, gPosition);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, gAlbedo);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, gNormal);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, gEffects);
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
+        glActiveTexture(GL_TEXTURE5);
+        envMapHDR.useTexture();
+        glActiveTexture(GL_TEXTURE6);
+        envMapIrradiance.useTexture();
+        glActiveTexture(GL_TEXTURE7);
+        envMapPrefilter.useTexture();
+        glActiveTexture(GL_TEXTURE8);
+        envMapLUT.useTexture();
+
+        glActiveTexture(GL_TEXTURE9);
+        glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
+
+        glActiveTexture(GL_TEXTURE10);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
+
+        for (int pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
+        {
+            glm::vec3 lightPositionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(pt_lights[pt_light_].Position, 1.0f));
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightPositionViewSpace, ("lightPointArray[" + std::to_string(pt_light_) + "].position").c_str());
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(pt_lights[pt_light_].Color, ("lightPointArray[" + std::to_string(pt_light_) + "].color").c_str());
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(pt_lights[pt_light_].radius, ("lightPointArray[" + std::to_string(pt_light_) + "].radius").c_str());
+
+            std::string pointLightHide = "pointLightHide[" + std::to_string(pt_light_) + "]";
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pt_lights[pt_light_].hide, pointLightHide.data());
+        }
+
+        for (int dLight = 0; dLight < dir_lights.size(); dLight++)
+        {
+            glm::vec3 lightDirectionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(dir_lights[dLight].Direction, 0.0f));
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightDirectionViewSpace, ("lightDirectionalArray[" + std::to_string(dLight) + "].direction").c_str());
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(dir_lights[dLight].Color, ("lightDirectionalArray[" + std::to_string(dLight) + "].color").c_str());
+        }
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::transpose(GetCamera().GetViewMatrix()), "inverseView");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::inverse(GetCamera().GetProjectionMatrix()), "inverseProj");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialRoughness, "materialRoughness");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialMetallicity, "materialMetallicity");
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(materialF0, "materialF0");
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientIntensity, "ambientIntensity");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(gBufferView, "gBufferView");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointMode, "pointMode");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(directionalMode, "directionalMode");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(iblMode, "iblMode");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(attenuationMode, "attenuationMode");
+
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "proj");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(GetCamera().GetPosition(), "camPos");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(far_plane, "far_plane");
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(dirShadowBool, "dirShadowBool");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointShadowBool, "pointShadowBool");
+
+        quadRender.drawShape();
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        //glClear(GL_COLOR_BUFFER_BIT);
+        //-------------------------------
+        // Post-processing Pass rendering
+        //-------------------------------
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Bind();
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(gBufferView, "gBufferView");;
+
+
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->SetVec2f(glm::vec2{ 1.0f / (float)WIDTH , 1.0f / (float)HEIGHT }, "screenTextureSize");;
+
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraAperture, "cameraAperture");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraShutterSpeed, "cameraShutterSpeed");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraISO, "cameraISO");;
+
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");; //wtf is this like come on dude
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(fps / 144.f, "motionBlurScale");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMaxSamples, "motionBlurMaxSamples");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");;
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, postprocessBuffer);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, gEffects);
+
+        quadRender.drawShape();
+
+
+        //-----------------------
+        // Forward Pass rendering
+        //-----------------------
+        //glQueryCounter(queryIDForward[0], GL_TIMESTAMP);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+        // Copy the depth informations from the Geometry Pass into the default framebuffer
+        glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //}
 
 
 

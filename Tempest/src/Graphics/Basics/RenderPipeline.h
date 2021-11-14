@@ -14,6 +14,7 @@
 #include "Graphics/OpenGL/Shader.h"
 #include "Graphics/Basics/Model.h"
 #include "Util.h"
+#include "Graphics/PBR/ModelPBR.h"
 
 namespace Tempest
 {
@@ -54,7 +55,7 @@ namespace Tempest
 
 	struct ModelObj
 	{
-		tsptr<Model> m_Model;
+		tsptr<ModelPBR> m_Model;
 		glm::mat4 m_Transform;
 	};
 
@@ -77,7 +78,7 @@ namespace Tempest
 		/*
 		*	Models
 		*/
-		tmap<string, tsptr<Model>> m_ModelLibrary;
+		tmap<string, tsptr<ModelPBR>> m_ModelLibrary;
 		tvector<ModelObj> m_Models;
 		
 		/*

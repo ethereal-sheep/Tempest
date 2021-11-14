@@ -383,6 +383,7 @@ namespace Tempest
 			}	
 		}
 		//m_Meshes.emplace_back(std::move(vi), make_sptr<Material>(m));
+		in_file.close();
 	}
 
 	/*Model::Model(Model&& model)
