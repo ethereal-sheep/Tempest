@@ -778,7 +778,7 @@ namespace Tempest
         int WIDTH = getWidth(), HEIGHT = getHeight();
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        RenderAAGrid();
         for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
         {
             projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * m_Pipeline.m_Models[i].m_Transform;
@@ -1018,8 +1018,8 @@ namespace Tempest
         // Post-processing Pass rendering
         //-------------------------------
 
-        glClear(GL_COLOR_BUFFER_BIT);
-
+        //glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Bind();
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(gBufferView, "gBufferView");;
 

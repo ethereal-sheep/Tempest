@@ -201,9 +201,9 @@ void main()
 				if(dirShadowBool == 1)
 					shadow = computeShadowDir();
 
-					
-				color += ((diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);
-                //color += (((diffuse * kD) * (1.0f - shadow))  + ((specular * lightColor * NdotL )  * (1.0f - shadow)));
+				vec3 ambient = albedo * 0.1f;
+				color += ambient +(( diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);
+                //color += ambient + ((( diffuse * kD) * (1.0f - shadow))  + ((specular * lightColor * NdotL )  * (1.0f - shadow)));
             }
         }
 

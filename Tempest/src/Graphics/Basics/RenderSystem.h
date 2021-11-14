@@ -147,7 +147,7 @@ namespace Tempest
         bool dirShadowBool = false;    // Direcitonal shadows toggle
         bool pointShadowBool = true;   // Point light shadows toggle
         bool pbrMode = false;
-        bool envMapShow = true;        // Envmap toggle
+        bool envMapShow = false;        // Envmap toggle
         glm::vec4 clearColor{0.4f, 0.5f, 0.6f, 1.0f};
 
 

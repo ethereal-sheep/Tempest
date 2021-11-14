@@ -37,8 +37,11 @@ void main()
     gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
 //    gAlbedo.rgb = vec3(albedoColor);
     gAlbedo.a =  vec3(texture(texRoughness, TexCoords)).r;
-    gNormal.rgb = computeTexNormal(normal, texNormal);
-//    gNormal.rgb = normalize(normal);
+	gAlbedo.a =  0.0f;
+	
+    //gNormal.rgb = computeTexNormal(normal, texNormal);
+    gNormal.rgb = normalize(normal);
+	
     gNormal.a = vec3(texture(texMetalness, TexCoords)).r;
     gEffects.r = vec3(texture(texAO, TexCoords)).r;
     gEffects.gb = fragPosA - fragPosB;
