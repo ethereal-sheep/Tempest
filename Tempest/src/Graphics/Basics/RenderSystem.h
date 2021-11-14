@@ -121,13 +121,13 @@ namespace Tempest
         GLfloat deltaTime = 0.0f;
 
         // SAO
-        GLfloat saoRadius = 0.3f;
+        GLfloat saoRadius = 0.762f;
         GLfloat saoBias = 0.001f;
-        GLfloat saoScale = 0.7f;
-        GLfloat saoContrast = 0.8f;
-        GLint saoSamples = 12;
-        GLint saoTurns = 7;
-        GLint saoBlurSize = 4;
+        GLfloat saoScale = 0.713f;
+        GLfloat saoContrast = 0.836f;
+        GLint saoSamples = 42;
+        GLint saoTurns = 6;
+        GLint saoBlurSize = 6;
 
         // Additonal Camera things
         GLfloat cameraAperture = 16.0f;
