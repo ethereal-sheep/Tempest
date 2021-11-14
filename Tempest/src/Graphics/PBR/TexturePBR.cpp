@@ -9,6 +9,7 @@
 #include "stb_image.h"
 #include "tinyddsloader.h"
 #include "Logger/Log.h"
+#include <cstring>
 
 #define TINYDDSLOADER_IMPLEMENTATION
 using namespace tinyddsloader;
@@ -76,6 +77,12 @@ namespace Tempest
 
     void TexturePBR::setTexture(const char* texPath, std::string texName, bool texFlip)
     {
+        if (!strcmp(texName.c_str(), "0"))
+        {
+            this->texID = 0;
+            return;
+        }
+
         this->texType = GL_TEXTURE_2D;
 
         std::string tempPath = std::string(texPath);
