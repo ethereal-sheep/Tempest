@@ -22,7 +22,7 @@ uniform sampler2D texMetalness;
 uniform sampler2D texAO;
 uniform vec3 colour;
 uniform int texID;
-
+uniform int TestPBR;
 float LinearizeDepth(float depth);
 vec3 computeTexNormal(vec3 viewNormal, vec3 texNormal);
 
@@ -46,7 +46,14 @@ void main()
 	//{
 	//	gAlbedo.rgb = vec3(colour);
 	//}
-	gAlbedo.rgb = vec3(colour);
+	if(TestPBR == 1)
+	{
+		gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
+	}
+	else
+	{
+		gAlbedo.rgb = vec3(colour);
+	}
     gAlbedo.a =  vec3(texture(texRoughness, TexCoords)).r;
 	gAlbedo.a =  0.0f;
 	

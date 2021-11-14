@@ -148,6 +148,9 @@ namespace Tempest
         bool pointShadowBool = true;   // Point light shadows toggle
         bool pbrMode = false;
         bool envMapShow = false;        // Envmap toggle
+
+        bool AAgridShow = true;
+        bool TestPBR = false;
         glm::vec4 clearColor{0.4f, 0.5f, 0.6f, 1.0f};
 
 

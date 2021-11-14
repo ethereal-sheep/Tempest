@@ -344,18 +344,18 @@ namespace Tempest
         }
         pt_lights[0].hide = false;
 
-        //objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
-        ////objectAlbedo.setTextureDDS( "Assets/dds_test.dds" , "goldAlbedo", true);
-        //objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
-        //objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
-        //objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
-        //objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+        objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
+        //objectAlbedo.setTextureDDS( "Assets/dds_test.dds" , "goldAlbedo", true);
+        objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
+        objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
+        objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
+        objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
 
-        objectAlbedo.setTexture("textures/pbr/porcelain/porcelain_albedo.png", "porcelainAlbedo", true);
-        objectNormal.setTexture("textures/pbr/porcelain/porcelain_normal.png", "porcelainNormal", true);
-        objectRoughness.setTexture("textures/pbr/porcelain/porcelain_roughness.png", "porcelainRoughness", true);
-        objectMetalness.setTexture("textures/pbr/porcelain/porcelain_metalness.png", "porcelainMetalness", true);
-        objectAO.setTexture("textures/pbr/porcelain/porcelain_ao.png", "porcelainAO", true);
+        //objectAlbedo.setTexture("textures/pbr/porcelain/porcelain_albedo.png", "porcelainAlbedo", true);
+        //objectNormal.setTexture("textures/pbr/porcelain/porcelain_normal.png", "porcelainNormal", true);
+        //objectRoughness.setTexture("textures/pbr/porcelain/porcelain_roughness.png", "porcelainRoughness", true);
+        //objectMetalness.setTexture("textures/pbr/porcelain/porcelain_metalness.png", "porcelainMetalness", true);
+        //objectAO.setTexture("textures/pbr/porcelain/porcelain_ao.png", "porcelainAO", true);
 
 
         materialF0 = glm::vec3(0.04f);
@@ -440,6 +440,7 @@ namespace Tempest
         // IBL setup
         //----------
         iblSetup();
+        AAgridShow = true;
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -786,13 +787,15 @@ namespace Tempest
 
         //else
         //{
-        SubmitModel("models/Chair.a", glm::mat4{1});
+        //SubmitModel("models/Chair.a", glm::mat4{1});
         //SubmitModel("models/shaderball/shaderball.a", glm::mat4{1});
 
         int WIDTH = getWidth(), HEIGHT = getHeight();
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        RenderAAGrid();
+
+        if(AAgridShow)
+            RenderAAGrid();
         for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
         {
             projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * m_Pipeline.m_Models[i].m_Transform;
@@ -820,11 +823,16 @@ namespace Tempest
                 //    m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
                 //    //glBindTexture(GL_TEXTURE_2D,m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID());
                 //}
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
+                
                 if(m_Pipeline.m_Models[i].m_Model->colours.size())
                     m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
                 else
                     m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
+
+
+                glActiveTexture(GL_TEXTURE0);
+                objectAlbedo.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
 
                 glActiveTexture(GL_TEXTURE1);
                 objectNormal.useTexture();
@@ -845,7 +853,8 @@ namespace Tempest
                 //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
                 //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID(), "texID");
 
-                
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(TestPBR, "TestPBR");
+
                 m_Pipeline.m_Models[i].m_Model->meshes[j].Draw();
             }
             

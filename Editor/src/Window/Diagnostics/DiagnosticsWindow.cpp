@@ -381,6 +381,12 @@ namespace Tempest
 			auto& envMapShow = Service<RenderSystem>::Get().envMapShow;
 			ImGui::Checkbox("Env Map Show", &envMapShow);
 			
+			auto& TestPBR = Service<RenderSystem>::Get().TestPBR;
+			ImGui::Checkbox("Test PBR", &TestPBR);
+
+			auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
+			ImGui::Checkbox("AA grid Show ", &AAgridShow);
+
 			auto& materialF0 = Service<RenderSystem>::Get().materialF0;
 			UI::DragFloat3ColorBox("MaterialF0", "##MaterialF0", ImVec2{ padding , 0.f }, value_ptr(materialF0), 0.f, 0.1f).first;
 			if(ImGui::TreeNode("Gbuffer Mode"))
