@@ -20,6 +20,7 @@ uniform sampler2D texNormal;
 uniform sampler2D texRoughness;
 uniform sampler2D texMetalness;
 uniform sampler2D texAO;
+uniform vec3 colour;
 
 float LinearizeDepth(float depth);
 vec3 computeTexNormal(vec3 viewNormal, vec3 texNormal);

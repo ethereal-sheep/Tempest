@@ -19520,11 +19520,53 @@ g 7
 g 7
 g 7
 g 7
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
+Ambient 1 0.74964 0.582734
+Ambient 0.380392 0.396078 0.72549
+Ambient 0.9 0.9 0.9
+Ambient 0.964029 0.87297 0.45774
+Ambient 0.111744 0.654053 0.913669
+Ambient 1 0.122302 0.122302
+Ambient 0.0105585 0.0507862 0.122302
+Ambient 0.2 0.2 0.2
+Diffuse 1 0.74964 0.582734
+Diffuse 0.380392 0.396078 0.72549
+Diffuse 0.9 0.9 0.9
+Diffuse 0.964029 0.87297 0.45774
+Diffuse 0.111744 0.654053 0.913669
+Diffuse 1 0.122302 0.122302
+Diffuse 0.0105585 0.0507862 0.122302
+Diffuse 0.2 0.2 0.2
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
 Emissive 0 0 0
 Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
 Reflective 0 0 0
 Refraction 0
 Reflection 0
