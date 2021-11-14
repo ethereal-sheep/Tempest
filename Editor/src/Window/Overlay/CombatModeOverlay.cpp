@@ -125,8 +125,9 @@ namespace Tempest
 
 	void CombatModeOverlay::menu(RuntimeInstance& instance, const glm::ivec2& world_mouse)
 	{
+		(void)world_mouse;
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		auto& io = ImGui::GetIO();
+		//auto& io = ImGui::GetIO();
 		// draw stuff on selected heads
 		{
 			if (instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
