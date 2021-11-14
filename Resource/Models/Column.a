@@ -338,6 +338,12 @@ f 0 1 2
 f 0 2 3
 f 0 1 2
 f 0 2 3
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
 m 56
 m 24
 m 4

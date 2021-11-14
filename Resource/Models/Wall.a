@@ -238,6 +238,9 @@ f 32 33 34
 f 34 35 32
 f 0 1 2
 f 2 3 0
+p NULL
+p NULL
+p NULL
 m 28
 m 36
 m 4

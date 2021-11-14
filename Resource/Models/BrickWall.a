@@ -423,6 +423,9 @@ f 10 11 8
 f 12 13 14
 f 14 15 12
 p Models\BrickWall.fbm\BrickWall.png
+p NULL
+p NULL
+p NULL
 m 52
 m 16
 m 36
