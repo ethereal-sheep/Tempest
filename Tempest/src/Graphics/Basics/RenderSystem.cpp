@@ -339,12 +339,21 @@ namespace Tempest
         }
         pt_lights[0].hide = false;
 
-        objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
-        //objectAlbedo.setTextureDDS( "Assets/dds_test.dds" , "goldAlbedo", true);
-        objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
-        objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
-        objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
-        objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+        //objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
+        ////objectAlbedo.setTextureDDS( "Assets/dds_test.dds" , "goldAlbedo", true);
+        //objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
+        //objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
+        //objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
+        //objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+
+        objectAlbedo.setTexture("textures/pbr/porcelain/porcelain_albedo.png", "porcelainAlbedo", true);
+        objectNormal.setTexture("textures/pbr/porcelain/porcelain_normal.png", "porcelainNormal", true);
+        objectRoughness.setTexture("textures/pbr/porcelain/porcelain_roughness.png", "porcelainRoughness", true);
+        objectMetalness.setTexture("textures/pbr/porcelain/porcelain_metalness.png", "porcelainMetalness", true);
+        objectAO.setTexture("textures/pbr/porcelain/porcelain_ao.png", "porcelainAO", true);
+
+
+        materialF0 = glm::vec3(0.04f);
 
         envMapHDR.setTextureHDR("textures/hdr/appart.hdr", "appartHDR", true);
 
@@ -792,34 +801,44 @@ namespace Tempest
             //m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(albedoColor, "albedoColor");
             prevProjViewModel = projViewModel;
 
-            glActiveTexture(GL_TEXTURE0);
-            objectAlbedo.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
+            
+            //objectAlbedo.useTexture();
 
-            glActiveTexture(GL_TEXTURE1);
-            objectNormal.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
 
-            glActiveTexture(GL_TEXTURE2);
-            objectRoughness.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
-
-            glActiveTexture(GL_TEXTURE3);
-            objectMetalness.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
-
-            glActiveTexture(GL_TEXTURE4);
-            objectAO.useTexture();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
             //m_Pipeline.m_Models[i].m_Model->Draw();
             for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
-            {
+            {   
+                glActiveTexture(GL_TEXTURE0);
                 if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
-                {
-                    //asd
+                {                 
+                    m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
+                    //glBindTexture(GL_TEXTURE_2D,m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID());
                 }
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
+
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+
+                glActiveTexture(GL_TEXTURE1);
+                objectNormal.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
+
+                glActiveTexture(GL_TEXTURE2);
+                objectRoughness.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
+
+                glActiveTexture(GL_TEXTURE3);
+                objectMetalness.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
+
+                glActiveTexture(GL_TEXTURE4);
+                objectAO.useTexture();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
+
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID(), "texID");
+
+                
                 m_Pipeline.m_Models[i].m_Model->meshes[j].Draw();
             }
             

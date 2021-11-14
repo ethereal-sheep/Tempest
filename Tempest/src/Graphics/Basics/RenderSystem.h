@@ -231,7 +231,6 @@ namespace Tempest
             glm::mat4 prevProjViewModel = projViewModel;
         };
 
-        
         void iblSetup();
 
         uint32_t getHeight();
