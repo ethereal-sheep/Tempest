@@ -99,6 +99,13 @@ namespace Tempest
 
 						if (UI::ConfirmDeletePopup(string("DeleteWeapon##" + std::to_string(i)).c_str(), "Delete this weapon?"))
 						{
+							auto charac_view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
+							for (auto charac_id : charac_view)
+							{
+								auto& charac = instance.ecs.get<tc::Character>(charac_id);
+								charac.weapons.erase(std::remove(charac.weapons.begin(), charac.weapons.end(), id), charac.weapons.end());
+							}
+
 							instance.ecs.emplace<tc::Destroyed>(id);
 							SelectedID = UNDEFINED;
 							weap = nullptr;

@@ -78,13 +78,13 @@ namespace Tempest
 			ImGui::PushFont(FONT_BTN);
 			ImGui::SetCursorPos(buttonPos);
 			buttonPos.y += 40.0f;
-			if (UI::UISelectable("Maps", false, 0))
-				MainMenuUI = UI_SHOW::MAP_UI;
+			if (UI::UISelectable("Conflict Resolutions", false, 0))
+				MainMenuUI = UI_SHOW::CONFLICT_UI;
 
 			ImGui::SetCursorPos(buttonPos);
 			buttonPos.y += 40.0f;
-			if (UI::UISelectable("Conflict Resolutions", false, 0))
-				MainMenuUI = UI_SHOW::CONFLICT_UI;
+			if (UI::UISelectable("Maps", false, 0))
+				MainMenuUI = UI_SHOW::MAP_UI;
 
 			ImGui::SetCursorPos(buttonPos);
 			buttonPos.y += 40.0f;
