@@ -772,7 +772,7 @@ namespace Tempest
 
         //else
         //{
-        SubmitModel("models/shaderball/shaderball.a", glm::mat4{1});
+        SubmitModel("models/Chair.a", glm::mat4{1});
         //SubmitModel("models/shaderball/shaderball.a", glm::mat4{1});
 
         int WIDTH = getWidth(), HEIGHT = getHeight();
@@ -1057,6 +1057,21 @@ namespace Tempest
         // Copy the depth informations from the Geometry Pass into the default framebuffer
         glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        //m_FrameBuffer.Bind();
+        //m_FrameBuffer.SetFrameBufferSize();
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //m_Renderer.EnableBlend(true);
+        //
+        //RenderAAGrid();
+        //
+        //// Drawing Polygons
+        //DrawSprites(MeshCode::CUBE, ShaderCode::LIGHTING);
+        //DrawSprites(MeshCode::SPHERE, ShaderCode::LIGHTING);
+        //DrawSprites(MeshCode::PLANE, ShaderCode::LIGHTING);
+        //DrawSprites(MeshCode::ICOSAHEDRON, ShaderCode::LIGHTING);
+        //
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
         //}
 
 

@@ -22,7 +22,7 @@ namespace Tempest
 		std::filesystem::path p{ file };
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
-		if (strcmp(p.extension().string().c_str(), ".b"))
+		if (strcmp(p.extension().string().c_str(), ".a"))
 		{
 			Assimp::Importer importer;
 			const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
