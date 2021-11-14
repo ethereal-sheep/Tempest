@@ -2525,12 +2525,18 @@ g 0
 g 0
 g 0
 g 0
-Ambient 0 0 0
-Diffuse 0 0 0
-Specular 0 0 0
-Emissive 0 0 0
-Transparent 0 0 0
-Reflective 0 0 0
+Ambient -1.07374e+08 -1.07374e+08 -1.07374e+08
+Ambient -1.07374e+08 -1.07374e+08 -1.07374e+08
+Diffuse -1.07374e+08 -1.07374e+08 -1.07374e+08
+Diffuse -1.07374e+08 -1.07374e+08 -1.07374e+08
+Specular -1.07374e+08 -1.07374e+08 -1.07374e+08
+Specular -1.07374e+08 -1.07374e+08 -1.07374e+08
+Emissive -1.07374e+08 -1.07374e+08 -1.07374e+08
+Emissive -1.07374e+08 -1.07374e+08 -1.07374e+08
+Transparent -1.07374e+08 -1.07374e+08 -1.07374e+08
+Transparent -1.07374e+08 -1.07374e+08 -1.07374e+08
+Reflective -1.07374e+08 -1.07374e+08 -1.07374e+08
+Reflective -1.07374e+08 -1.07374e+08 -1.07374e+08
 Refraction 0
 Reflection 0
 Shininess 1

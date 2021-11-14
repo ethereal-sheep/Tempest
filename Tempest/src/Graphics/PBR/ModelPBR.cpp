@@ -51,7 +51,7 @@ namespace Tempest
 			std::vector<std::string> textures;
 			std::vector<uint32_t> sizes;
 			std::vector<uint32_t> sides;
-			std::vector<uint32_t> mats;
+			
 			std::vector<MaterialPBR> mm;
 			MaterialPBR m;
 
@@ -152,6 +152,14 @@ namespace Tempest
 
 					mats.push_back(temp);
 
+				}
+
+				else if (prefix == "Diffuse" && line != "")
+				{
+					glm::vec3 q;
+					file_line >> q.x >> q.y >> q.z;
+
+					colours.push_back(q);
 				}
 			}
 			mm.push_back(m);
