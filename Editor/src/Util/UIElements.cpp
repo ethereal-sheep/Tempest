@@ -2837,7 +2837,7 @@ namespace Tempest::UI
 
 	bool UICharTurnButtonEx(ImGuiID id, ImTextureID texture_id, string characterName, const ImVec2& size, bool selected, bool isBig, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		
 		

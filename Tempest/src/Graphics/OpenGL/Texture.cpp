@@ -347,7 +347,7 @@ namespace Tempest
 
 		glBindTexture(target, 0);
 	}
-	Texture::Texture(const std::string& file, int d)
+	Texture::Texture(const std::string& , int )
 	{
 		
 	}

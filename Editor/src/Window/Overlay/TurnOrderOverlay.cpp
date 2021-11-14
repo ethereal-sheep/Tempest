@@ -85,7 +85,7 @@ namespace Tempest
 					unsigned i = 0;
 					float ypos = ImGui::GetCursorPosY();
 					// TODO: loop through the added units here
-					for (auto id : added_entities)
+					for ([[maybe_unused]]auto id : added_entities)
 					{
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + i++ * (ChildSize.x - (character_icon->GetWidth() + 2.0f) * 5) * 0.5f);
 						ImGui::SetCursorPosY(ypos);

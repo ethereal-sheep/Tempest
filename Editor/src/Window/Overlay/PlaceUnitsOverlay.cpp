@@ -61,7 +61,7 @@ namespace Tempest
 			if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 			{
 
-				bool selectable_hovered = false;
+				//bool selectable_hovered = false;
 				auto& cam = Service<RenderSystem>::Get().GetCamera();
 
 				cam_ctrl.controls(cam);

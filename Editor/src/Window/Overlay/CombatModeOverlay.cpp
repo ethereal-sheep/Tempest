@@ -1034,7 +1034,7 @@ namespace Tempest
 		placeholder_height = (float)tex_map["Assets/Placeholder_Character.png"]->GetHeight();
 		action_background_size = ImVec2{ tex_map["Assets/ActionBackdrop.png"]->GetWidth() * 1.0f, tex_map["Assets/ActionBackdrop.png"]->GetHeight() * 1.0f};
 
-		action_button_diff = tex_map["Assets/SkillSelected.png"]->GetWidth() - tex_map["Assets/SkillUnselected.png"]->GetWidth();
+		action_button_diff = (float)tex_map["Assets/SkillSelected.png"]->GetWidth() - (float)tex_map["Assets/SkillUnselected.png"]->GetWidth();
 		battle_state = BATTLE_STATE::CURR_TURN; 
 
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
