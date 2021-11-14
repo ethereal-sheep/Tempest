@@ -64,7 +64,7 @@ namespace Tempest
 
 					// character selection section
 					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.3f });
-					if (ImGui::BeginChild("Character adding", ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.5f }, true))
+					if (ImGui::BeginChild("Character adding", ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.5f }))
 					{
 						unsigned i = 0;
 						for (auto id : instance.ecs.view<Components::Character>())
@@ -91,7 +91,7 @@ namespace Tempest
 					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
-					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
 					{
 						std::string text = "Turn order decides the order in which each entity is able to act in the game. This order can be decided in several ways depending on the mechanics of the tabletop RPG.\n\nEntities with the fastest turn order may have a significant advantage over others.";
 						ImGui::TextWrapped(text.c_str());
@@ -158,7 +158,7 @@ namespace Tempest
 					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
-					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
 					{
 						ImGui::PushFont(FONT_BODY);
 						std::string text = "Select the dice that you want to use to decide the turn order of the units.";
@@ -193,12 +193,38 @@ namespace Tempest
 					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
-					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
 					{
 						ImGui::PushFont(FONT_BODY);
 						std::string text = "Select the stat that you want to use to decide the turn order of the units.";
 						ImGui::TextWrapped(text.c_str());
 						ImGui::PopFont();
+
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - 100.0f,viewport->Size.y * 0.25f });
+						auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+						Entity StateLineId = UNDEFINED;
+						for (auto id : StatsView)
+							StateLineId = id;
+						auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
+						ImGui::PushItemWidth(200.0f);
+						if (ImGui::BeginCombo("##combo", current_stat.c_str())) 
+						{
+							for (int i = 0; i < sl->size(); i++)
+							{
+								if ((*sl)(i))
+								{
+									bool is_selected = (current_stat == sl->operator[](i));
+									if (ImGui::Selectable(sl->operator[](i).c_str(), is_selected))
+										current_stat = sl->operator[](i);
+
+									if (is_selected)
+										ImGui::SetItemDefaultFocus();
+								}
+								
+							}
+							ImGui::EndCombo();
+						}
+						ImGui::PopItemWidth();
 					}
 					ImGui::EndChild();
 				}
@@ -212,7 +238,7 @@ namespace Tempest
 					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
-					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
 					{
 						ImGui::PushFont(FONT_BODY);
 						std::string text = "Select the Dice roll and type of stat that you want to use to decide the turn order of the units.";
@@ -248,7 +274,7 @@ namespace Tempest
 					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
-					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
 					{
 						ImGui::PushFont(FONT_BODY);
 						std::string text = "Drag around the units in the grid to rearrange the their order.";
@@ -267,7 +293,7 @@ namespace Tempest
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f, viewport->Size.y * 0.3f });
 				const ImVec2 ChildSize{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f };
 				tvector<unsigned> remove;
-				if (ImGui::BeginChild("Character added", ChildSize, true))
+				if (ImGui::BeginChild("Character added", ChildSize))
 				{
 					unsigned i = 0;
 					float ypos = ImGui::GetCursorPosY();

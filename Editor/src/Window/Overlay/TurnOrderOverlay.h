@@ -47,6 +47,7 @@ namespace Tempest
             buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.png"];
             buttons[2] = tex_map["Assets/StatsButtonUnlit.png"];
             buttons[3] = tex_map["Assets/CustomButtonUnlit.png"];
+            current_stat = "";
         }
 
         void open_popup(const Event& e);
@@ -56,10 +57,12 @@ namespace Tempest
         bool OverlayOpen = true;
 
         std::string overlay_title{ "" };
+        std::string current_stat{ "" };
         TURN_ORDER_STATE turn_order_state{ TURN_ORDER_STATE::ORDER_ADD_UNITS };
         tsptr<Texture> unit_black;
         tsptr<Texture> character_icon;
         std::array<tsptr<Texture>, 4> buttons;
         tvector<Entity> added_entities; // temp
+
     };
 }
