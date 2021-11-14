@@ -94,7 +94,6 @@ namespace Tempest
 		Texture_Format m_Format = Texture_Format::RGB;
 
 	public:
-		explicit Texture(const std::string& file, [[maybe_unused]] int d);
 		explicit Texture(const std::string & file, bool flip = true);
 		explicit Texture(const std::string & right,
 			const std::string & left,

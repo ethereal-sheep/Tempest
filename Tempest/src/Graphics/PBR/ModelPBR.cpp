@@ -19,10 +19,10 @@ namespace Tempest
 
     void ModelPBR::loadModel(std::string file)
     {
-		std::filesystem::path p{ file };
-		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
-		if (strcmp(p.extension().string().c_str(), ".a"))
+		std::filesystem::path asd{ file };
+		//Assimp::Importer importer;
+		//const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
+		if (strcmp(asd.extension().string().c_str(), ".a"))
 		{
 			Assimp::Importer importer;
 			const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -104,13 +104,13 @@ namespace Tempest
 
 				else if (prefix == "p" && line != "")
 				{
-					TexturePBR tex;
+					TexturePBR tb;
 					std::string temp;
 					file_line >> temp;
 					if (!strcmp(temp.c_str(), "NULL"))
 					{
 						
-						tex.setTexture("0", "0", true);
+						tb.setTexture("0", "0", true);
 					}
 
 					else
@@ -122,7 +122,7 @@ namespace Tempest
 						try
 						{
 							//MaterialPBR m;
-							tex.setTexture(p.c_str(), parent.filename().string(), true);
+							tb.setTexture(p.c_str(), parent.filename().string(), true);
 							//m.addTexture(parent.filename().string(), std::move(tex));
 						}
 
@@ -132,7 +132,7 @@ namespace Tempest
 						}
 					}
 
-					mm.push_back(tex);
+					mm.push_back(tb);
 				}
 
 				else if (prefix == "m" && line != "")
@@ -190,7 +190,7 @@ namespace Tempest
 					vertices.push_back(vert);
 				}
 
-				for (int j = joints; j < joints + sides[i]; ++j)
+				for (int j = joints; j < joints + (int)(sides[i]); ++j)
 				{
 					indices.push_back(faces[j].x);
 					indices.push_back(faces[j].y);
@@ -219,7 +219,7 @@ namespace Tempest
         for (GLuint i = 0; i < node->mNumMeshes; i++)
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            this->meshes.push_back(this->processMesh(mesh, scene));
+            this->meshes.push_back(this->processMesh(mesh));
         }
 
         for (GLuint i = 0; i < node->mNumChildren; i++)
@@ -229,7 +229,7 @@ namespace Tempest
     }
 
 
-    MeshPBR ModelPBR::processMesh(aiMesh* mesh, const aiScene* scene)
+    MeshPBR ModelPBR::processMesh(aiMesh* mesh)
     {
         std::vector<Vertex> vertices;
         std::vector<GLuint> indices;
