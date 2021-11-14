@@ -824,7 +824,7 @@ namespace Tempest
 											   static_cast<float>(tex_map["Assets/WeaponTabUnlit.png"]->GetHeight()) };
 
 		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/WeaponTabLit.png"]->GetID());
+		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabLit.png"]->GetID());
 		Tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/ItemTabUnlit.png"]->GetWidth()),
 											 static_cast<float>(tex_map["Assets/ItemTabUnlit.png"]->GetHeight()) };
 

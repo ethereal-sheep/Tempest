@@ -62,7 +62,7 @@ namespace Tempest
 		// Title
 		if (MainMenuUI < UI_SHOW::LOAD_MAP_UI)
 		{
-			std::string title = "INSERT PROJECT NAME HERE";
+			std::string title = "CoReSys";
 			ImGui::PushFont(FONT_HEAD);
 			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - ImGui::CalcTextSize(title.c_str()).x * 0.5f, viewport.Size.y * 0.2f });
 			ImGui::Text(title.c_str());

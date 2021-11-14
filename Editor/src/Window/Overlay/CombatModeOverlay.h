@@ -66,7 +66,7 @@ namespace Tempest
         void fight(RuntimeInstance& instance);
         void display_selected(RuntimeInstance& instance, Entity character);
         void display_selected_right(RuntimeInstance& instance, Entity character);
-
+        Entity increase_turn();
 
         void try_build_all(Instance& instance)
         {
@@ -142,6 +142,7 @@ namespace Tempest
 
         State state = State::NO_SELECTED;
 
+        unsigned curr_turn;
 
         Entity curr_entity = UNDEFINED;
         Entity selected_action = UNDEFINED;

@@ -129,9 +129,9 @@ namespace Tempest
 		auto& io = ImGui::GetIO();
 		// draw stuff on selected heads
 		{
-			if (instance.selected && instance.ecs.has<tc::Unit>(instance.selected) && instance.ecs.has<tc::Transform>(instance.selected))
+			if (instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
 			{
-				auto position = instance.ecs.get<tc::Transform>(instance.selected).position;
+				auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
 				position.y += 2;
 				auto ss = cam.WorldspaceToScreenspace(position);
 				auto vp = cam.GetViewport();
@@ -142,8 +142,8 @@ namespace Tempest
 				int p_x = (int)std::floor(position.x);
 				int p_y = (int)std::floor(position.z);
 
-				LOG_ASSERT(instance.character_map[p_x][p_y] == instance.selected);
-				LOG_ASSERT(instance.collision_map[p_x][p_y] == instance.selected);
+				LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
+				LOG_ASSERT(instance.collision_map[p_x][p_y] == curr_entity);
 
 				// Draw whatever thing on their head
 				{
@@ -170,6 +170,11 @@ namespace Tempest
 
 				if (battle_state == BATTLE_STATE::CURR_TURN || battle_state == BATTLE_STATE::SELECT_ACTION || battle_state == BATTLE_STATE::SELECT_WEAPON)
 				{
+					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA))
+					{
+						curr_entity = increase_turn();
+					}
+
 					UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f , viewport->Size.y - action_background_size.y * 0.7f });
 					if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, true, ImGuiWindowFlags_NoScrollbar))
@@ -200,7 +205,7 @@ namespace Tempest
 						break;
 						case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_ACTION: // TODO: account for no actions
 						{
-							auto& charac = instance.ecs.get<tc::Character>(instance.selected);
+							auto& charac = instance.ecs.get<tc::Character>(curr_entity);
 							unsigned i = 0;
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 							for (auto id : charac.actions)
@@ -218,7 +223,7 @@ namespace Tempest
 						break;
 						case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_WEAPON: // TODO: account for no weapons
 						{
-							auto& charac = instance.ecs.get<tc::Character>(instance.selected);
+							auto& charac = instance.ecs.get<tc::Character>(curr_entity);
 							unsigned i = 0;
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 
@@ -269,28 +274,28 @@ namespace Tempest
 		}
 		// draw stuff on unit heads
 
-		int w_x = world_mouse.x;
-		int w_y = world_mouse.y;
-		// unselect or select something else
-		if (io.MouseClicked[0] && !ImGui::IsAnyItemHovered())
-		{
-			if (instance.collision_map.count(w_x) && instance.collision_map[w_x].count(w_y))
-				instance.selected = instance.collision_map[w_x][w_y];
-			else
-			{
-				instance.selected = INVALID;
-				state = State::NO_SELECTED;
-			}
-		}
+		//int w_x = world_mouse.x;
+		//int w_y = world_mouse.y;
+		//// unselect or select something else
+		//if (io.MouseClicked[0] && !ImGui::IsAnyItemHovered())
+		//{
+		//	if (instance.collision_map.count(w_x) && instance.collision_map[w_x].count(w_y))
+		//		instance.selected = instance.collision_map[w_x][w_y];
+		//	else
+		//	{
+		//		instance.selected = INVALID;
+		//		state = State::NO_SELECTED;
+		//	}
+		//}
 	}
 	
 	void CombatModeOverlay::attacking(RuntimeInstance& instance, const glm::ivec2& world_mouse)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		if (instance.selected && instance.ecs.has<tc::Unit>(instance.selected) && instance.ecs.has<tc::Transform>(instance.selected))
+		if (curr_entity && instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
 		{
-			auto position = instance.ecs.get<tc::Transform>(instance.selected).position;
+			auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
 			position.y += 2;
 			auto ss = cam.WorldspaceToScreenspace(position);
 			auto vp = cam.GetViewport();
@@ -369,7 +374,7 @@ namespace Tempest
 								battle_state = BATTLE_STATE::BATTLE_GLIMPSE;
 								state = State::GLIMPSE;
 
-								auto& atker = instance.ecs.get<tc::Character>(instance.selected);
+								auto& atker = instance.ecs.get<tc::Character>(curr_entity);
 								auto& defer = instance.ecs.get<tc::Character>(other_entity);
 
 								atker.chosen_weapon = selected_weapon;
@@ -385,7 +390,7 @@ namespace Tempest
 									sequence, freq, win, lose, attack, defend, finish };*/
 
 								Service<EventManager>::Get().instant_dispatch<SimulateConflict>(
-									instance.selected,
+									curr_entity,
 									other_entity,
 									selected_action,
 									other_selected_action,
@@ -404,7 +409,7 @@ namespace Tempest
 										battle_state = BATTLE_STATE::BATTLE_GLIMPSE;
 										state = State::GLIMPSE;
 
-										auto& atker = instance.ecs.get<tc::Character>(instance.selected);
+										auto& atker = instance.ecs.get<tc::Character>(curr_entity);
 										auto& defer = instance.ecs.get<tc::Character>(other_entity);
 
 										atker.chosen_weapon = selected_weapon;
@@ -420,7 +425,7 @@ namespace Tempest
 											sequence, freq, win, lose, attack, defend, finish };*/
 
 										Service<EventManager>::Get().instant_dispatch<SimulateConflict>(
-											instance.selected,
+											curr_entity,
 											other_entity,
 											selected_action,
 											other_selected_action,
@@ -535,7 +540,7 @@ namespace Tempest
 
 
 
-						auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+						auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
 
 						// rotate the fella if the 
 						auto front = transform.rotation * vec3{ 0,0,-1 };
@@ -554,7 +559,7 @@ namespace Tempest
 						if (io.MouseClicked[0])
 						{
 							// Attack
-							auto attacker = instance.selected;
+							auto attacker = curr_entity;
 							other_entity = instance.character_map[w_x][w_y];
 							battle_state = BATTLE_STATE::CURR_TURN;
 
@@ -578,9 +583,9 @@ namespace Tempest
 	void CombatModeOverlay::moving(RuntimeInstance& instance, const glm::ivec2& world_mouse)
 	{
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		if (instance.selected && instance.ecs.has<tc::Unit>(instance.selected) && instance.ecs.has<tc::Transform>(instance.selected))
+		if (curr_entity && instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
 		{
-			auto position = instance.ecs.get<tc::Transform>(instance.selected).position;
+			auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
 			position.y += 2;
 			auto ss = cam.WorldspaceToScreenspace(position);
 			auto vp = cam.GetViewport();
@@ -591,8 +596,8 @@ namespace Tempest
 			int p_x = (int)std::floor(position.x);
 			int p_y = (int)std::floor(position.z);
 
-			LOG_ASSERT(instance.character_map[p_x][p_y] == instance.selected);
-			LOG_ASSERT(instance.collision_map[p_x][p_y] == instance.selected);
+			LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
+			LOG_ASSERT(instance.collision_map[p_x][p_y] == curr_entity);
 
 			// draw bfs if unit
 			tmap<int, tmap<int, bool>> visited;
@@ -689,7 +694,7 @@ namespace Tempest
 					Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
 					Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 
-					auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+					auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
 
 					// rotate the fella if the 
 					auto front = transform.rotation * vec3{ 0,0,-1 };
@@ -712,7 +717,7 @@ namespace Tempest
 						transform.position.x = w_x + .5f;
 						transform.position.z = w_y + .5f;
 						instance.selected = INVALID;
-						state = State::NO_SELECTED;
+						state = State::MENU;
 					}
 				}
 
@@ -747,7 +752,7 @@ namespace Tempest
 
 			try_build_all(instance);
 
-			instance.srm.instant_dispatch_to_id<Simulate>(sequence, instance.selected, other_entity, selected_action, other_selected_action);
+			instance.srm.instant_dispatch_to_id<Simulate>(sequence, curr_entity, other_entity, selected_action, other_selected_action);
 			if (auto var = instance.srm.get_variable_to_id(sequence, "Win"))
 			{
 				LOG_ASSERT(var->get_type() == pin_type::Int);
@@ -783,7 +788,7 @@ namespace Tempest
 	void CombatModeOverlay::fight(RuntimeInstance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		if (UI::CharacterTurnData(instance, instance.selected, { 0.f, viewport->Size.y - placeholder_height }, false, true))
+		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, true))
 		{
 			// attacker roll
 			atk_rolled = true;
@@ -805,22 +810,22 @@ namespace Tempest
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
 		}
 
-		auto& attacker = instance.ecs.get<tc::Character>(instance.selected);
+		auto& attacker = instance.ecs.get<tc::Character>(curr_entity);
 		auto& defender = instance.ecs.get<tc::Character>(other_entity);
 
 		// display the character name and rolls
 		ImGui::PushFont(FONT_HEAD);
 
 		std::string roll = atk_rolled ? std::to_string(atk_output) : "";
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.45f - ImGui::CalcTextSize(attacker.name.c_str()).x, viewport->Size.y * 0.27f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(attacker.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(attacker.name.c_str());
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.4f - ImGui::CalcTextSize(roll.c_str()).x , viewport->Size.y * 0.35f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
 		ImGui::Text(roll.c_str());
 
 		roll = def_rolled ? std::to_string(def_output) : "";
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f + ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(defender.name.c_str());
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.6f + ImGui::CalcTextSize(roll.c_str()).x , viewport->Size.y * 0.35f });
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
 		ImGui::Text(roll.c_str());
 		ImGui::PopFont();
 
@@ -830,7 +835,9 @@ namespace Tempest
 			// TODO: affect the entities
 
 			instance.selected = INVALID;
+			other_entity = INVALID;
 			battle_state = BATTLE_STATE::CURR_TURN; // temp testing
+			state = State::MENU;
 
 			//  TODO: change to the next entity turn
 			selected_action = UNDEFINED;
@@ -1036,6 +1043,7 @@ namespace Tempest
 
 		action_button_diff = (float)tex_map["Assets/SkillSelected.png"]->GetWidth() - (float)tex_map["Assets/SkillUnselected.png"]->GetWidth();
 		battle_state = BATTLE_STATE::CURR_TURN; 
+		state = State::MENU;
 
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		cam_ctrl.set_fixed_camera(cam, 0 , 70);
@@ -1044,7 +1052,9 @@ namespace Tempest
 		other_selected_action = UNDEFINED;
 		other_selected_weapon = UNDEFINED;
 		selected_weapon = UNDEFINED;
-	}
+		curr_turn = 0;
+		curr_entity = units[curr_turn];
+	};
 
 	void CombatModeOverlay::visibility(const Event& e)
 	{
@@ -1090,16 +1100,16 @@ namespace Tempest
 				for (auto id : units)
 				{
 					// check if turn is over
-					UI::CharacterTurn(instance, id, { 0.f, ImGui::GetCursorPosY() + padding }, instance.selected == id);
+					UI::CharacterTurn(instance, id, { 0.f, ImGui::GetCursorPosY() + padding }, curr_entity == id);
 					padding += 85.0f;
 					first = false;
 				}
 				
-				if (!instance.selected || !instance.ecs.valid(instance.selected))
+			/*	if (!instance.selected || !instance.ecs.valid(instance.selected))
 				{
 					state = State::NO_SELECTED;
 					other_entity = INVALID;
-				}
+				}*/
 
 				switch (state)
 				{
@@ -1107,7 +1117,7 @@ namespace Tempest
 					no_selected(runtime, world_mouse);
 					break;
 				case State::MENU:
-					display_selected(runtime, instance.selected);
+					display_selected(runtime, curr_entity);
 					menu(runtime, world_mouse);
 					break;
 				case State::ATTACKING:
@@ -1115,11 +1125,11 @@ namespace Tempest
 					attacking(runtime, world_mouse);
 					break;
 				case State::MOVING:
-					display_selected(runtime, instance.selected);
+					display_selected(runtime, curr_entity);
 					moving(runtime, world_mouse);
 					break;
 				case State::GLIMPSE:
-					display_selected(runtime, instance.selected);
+					display_selected(runtime, curr_entity);
 					display_selected_right(runtime, other_entity);
 					glimpse(runtime);
 					break;
@@ -1587,9 +1597,17 @@ namespace Tempest
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.06f,0.06f, 0.06f, 0.85f });
 	}
 
-	void  CombatModeOverlay::pop_style_color() const
+	void CombatModeOverlay::pop_style_color() const
 	{
 		ImGui::PopStyleColor(2);
 		ImGui::PopStyleVar(3);
+	}
+
+	Entity CombatModeOverlay::increase_turn()
+	{
+		if (++curr_turn >= units.size())
+			curr_turn = 0;
+
+		return units[curr_turn];
 	}
 }

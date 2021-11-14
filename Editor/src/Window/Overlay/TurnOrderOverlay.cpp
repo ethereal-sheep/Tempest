@@ -17,6 +17,7 @@ namespace Tempest
 {
 	void TurnOrderOverlay::open_popup(const Event&)
 	{
+		
 	}
 
 	void TurnOrderOverlay::show(Instance& instance)
@@ -36,7 +37,7 @@ namespace Tempest
 				// title
 				ImGui::SetCursorPos(ImVec2{ 0,0 });
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
-				UI::SubHeader("Add Units");
+				UI::SubHeader(turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS ? "Add Units" : "Turn Order");
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 				// draw the divider
@@ -46,35 +47,203 @@ namespace Tempest
 
 				ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
 
-				// text displays
-				std::string text = "Select and add the units from the list that you want you in the game.";
-				ImGui::PushFont(FONT_BODY);
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.05f, viewport->Size.y * 0.25f });
-				ImGui::Text(text.c_str());
-
-				text = "Currently selected units";
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.695f - ImGui::CalcTextSize(text.c_str()).x * 0.5f, viewport->Size.y * 0.25f });
-				ImGui::Text(text.c_str());
-				ImGui::PopFont();
-
-				// character selection section
-				ImGui::SetCursorPos(ImVec2{0, viewport->Size.y * 0.3f});
-				if (ImGui::BeginChild("Character adding", ImVec2{viewport->Size.x * 0.35f, viewport->Size.y * 0.5f }, true))
+				switch (turn_order_state)
 				{
-					unsigned i = 0;
-					for (auto id : instance.ecs.view<Components::Character>())
-					{
-						auto& charac = instance.ecs.get<tc::Character>(id);
-						if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f},
-							charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, true))
-						{
-							added_entities.emplace_back(id);
-						}
+				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
+				{
+					// text displays
+					std::string text = "Select and add the units from the list that you want you in the game.";
+					ImGui::PushFont(FONT_BODY);
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.05f, viewport->Size.y * 0.25f });
+					ImGui::Text(text.c_str());
 
-						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
+					text = "Currently selected units";
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.695f - ImGui::CalcTextSize(text.c_str()).x * 0.5f, viewport->Size.y * 0.25f });
+					ImGui::Text(text.c_str());
+					ImGui::PopFont();
+
+					// character selection section
+					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.3f });
+					if (ImGui::BeginChild("Character adding", ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.5f }, true))
+					{
+						unsigned i = 0;
+						for (auto id : instance.ecs.view<Components::Character>())
+						{
+							auto& charac = instance.ecs.get<tc::Character>(id);
+							if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f },
+								charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, true))
+							{
+								added_entities.emplace_back(id);
+							}
+
+							ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
+						}
 					}
+					ImGui::EndChild();
 				}
-				ImGui::EndChild();
+					break;
+				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
+				{
+					auto tex = tex_map["Assets/TurnOrderLogo.png"];
+					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
+
+					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::Dummy(ImVec2{ 20.f, 0.f });
+					ImGui::SameLine();
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					{
+						std::string text = "Turn order decides the order in which each entity is able to act in the game. This order can be decided in several ways depending on the mechanics of the tabletop RPG.\n\nEntities with the fastest turn order may have a significant advantage over others.";
+						ImGui::TextWrapped(text.c_str());
+
+						ImGui::Dummy(ImVec2{ 0.f, 100.0f });
+						if (ImGui::ImageButton((void*)static_cast<size_t>(buttons[0]->GetID()), ImVec2{ buttons[0]->GetWidth() * 1.0f,buttons[0]->GetHeight() * 1.0f }))
+						{
+							turn_order_state = TURN_ORDER_STATE::ORDER_DICE;
+						}
+						if (ImGui::IsItemHovered())
+							buttons[0] = tex_map["Assets/DiceRollButtonLit.png"];
+						else
+							buttons[0] = tex_map["Assets/DiceRollButtonUnlit.png"];
+
+						ImVec2 cursor = ImGui::GetCursorPos();
+
+						ImGui::SameLine();
+						ImGui::Dummy(ImVec2{ 20.f, 0.f });
+						ImGui::SameLine();
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(buttons[2]->GetID()), ImVec2{ buttons[2]->GetWidth() * 1.0f,buttons[2]->GetHeight() * 1.0f }))
+						{
+							turn_order_state = TURN_ORDER_STATE::ORDER_STAT;
+						}
+						if (ImGui::IsItemHovered())
+							buttons[2] = tex_map["Assets/StatsButtonLit.png"];
+						else
+							buttons[2] = tex_map["Assets/StatsButtonUnlit.png"];
+
+						ImGui::SetCursorPos(cursor);
+						ImGui::Dummy(ImVec2{ 0.f, 10.0f });
+						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[1]->GetID()), ImVec2{ buttons[1]->GetWidth() * 1.0f,buttons[1]->GetHeight() * 1.0f }))
+						{
+							turn_order_state = TURN_ORDER_STATE::ORDER_DICE_STAT;
+						}
+						if (ImGui::IsItemHovered())
+							buttons[1] = tex_map["Assets/DiceRollStatsButtonLit.png"];
+						else
+							buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.png"];
+
+						ImGui::SameLine();
+						ImGui::Dummy(ImVec2{ 20.f, 0.f });
+						ImGui::SameLine();
+
+						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[3]->GetID()), ImVec2{ buttons[3]->GetWidth() * 1.0f,buttons[3]->GetHeight() * 1.0f }))
+						{
+							turn_order_state = TURN_ORDER_STATE::ORDER_CUSTOM;
+						}
+						if (ImGui::IsItemHovered())
+							buttons[3] = tex_map["Assets/CustomButtonLit.png"];
+						else
+							buttons[3] = tex_map["Assets/CustomButtonUnlit.png"];
+					}
+					ImGui::EndChild();
+					
+				}
+					break;
+				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
+				{
+					auto tex = tex_map["Assets/DiceRollLogo.png"];
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
+
+					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::Dummy(ImVec2{ 20.f, 0.f });
+					ImGui::SameLine();
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					{
+						ImGui::PushFont(FONT_BODY);
+						std::string text = "Select the dice that you want to use to decide the turn order of the units.";
+						ImGui::TextWrapped(text.c_str());
+						ImGui::PopFont();
+						ImGui::Dummy(ImVec2{ 20.f, 100.0f });
+						for (int i = 1; i < 6; ++i)
+						{
+							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".png"];
+							ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
+							ImGui::SameLine();
+							ImGui::Dummy(ImVec2{ 10.f, 0.f });
+							ImGui::SameLine();
+						}
+						
+
+						if (UI::UIButton_2("Roll", "Roll", ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.4f }, { 0,0 }, FONT_PARA))
+						{
+
+						}
+					}
+					ImGui::EndChild();
+				}
+					break;
+				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
+				{
+					auto tex = tex_map["Assets/StatsLogo.png"];
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
+
+					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::Dummy(ImVec2{ 20.f, 0.f });
+					ImGui::SameLine();
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					{
+						ImGui::PushFont(FONT_BODY);
+						std::string text = "Select the stat that you want to use to decide the turn order of the units.";
+						ImGui::TextWrapped(text.c_str());
+						ImGui::PopFont();
+					}
+					ImGui::EndChild();
+				}
+					break;
+				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
+				{
+					auto tex = tex_map["Assets/CombinedLogo.png"];
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
+
+					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::Dummy(ImVec2{ 20.f, 0.f });
+					ImGui::SameLine();
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					{
+						ImGui::PushFont(FONT_BODY);
+						std::string text = "Select the Dice roll and type of stat that you want to use to decide the turn order of the units.";
+						ImGui::TextWrapped(text.c_str());
+						ImGui::PopFont();
+					}
+					ImGui::EndChild();
+				}
+					break;
+				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
+				{
+					auto tex = tex_map["Assets/CustomLogo.png"];
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
+
+					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::Dummy(ImVec2{ 20.f, 0.f });
+					ImGui::SameLine();
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }, true))
+					{
+						ImGui::PushFont(FONT_BODY);
+						std::string text = "Drag around the units in the grid to rearrange the their order.";
+						ImGui::TextWrapped(text.c_str());
+						ImGui::PopFont();
+					}
+					ImGui::EndChild();
+				}
+					break;
+				default:
+					break;
+				}
+				
 
 				// character added section
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f, viewport->Size.y * 0.3f });
@@ -112,8 +281,8 @@ namespace Tempest
 
 				ImGui::EndChild();
 
-				// back button
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+				// back button (get rid of this first
+			/*	ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -125,14 +294,37 @@ namespace Tempest
 					Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
 				}
 
-				ImGui::PopStyleColor(3);
+				ImGui::PopStyleColor(3);*/
 
 				// save
 				if (UI::UIButton_2("Next", "Next", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.9f }, {0,0}, FONT_PARA))
 				{
-					// change the state
-					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities);
+					switch (turn_order_state)
+					{
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
+						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						break;
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
+						// change the state
+						OverlayOpen = false;
+						Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities);
+						break;
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
+						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						break;
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
+						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						break;
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
+						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						break;
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
+						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						break;
+					default:
+						break;
+					}
+					
 				}
 			}
 
