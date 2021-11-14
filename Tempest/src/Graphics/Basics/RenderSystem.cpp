@@ -325,8 +325,13 @@ namespace Tempest
         InitShaders();
         InitBuffers();
 
-        if(m_Pipeline.m_Cameras.empty())
-            m_Pipeline.m_Cameras.emplace_back(Camera{});
+        if (m_Pipeline.m_Cameras.empty())
+        {
+            Camera cam;
+            cam.SetPosition(glm::vec3(0.f, 10.f, 0.f));
+            m_Pipeline.m_Cameras.emplace_back(cam);
+        }
+            
 
         // Make 1 Directional Light
         dir_lights.emplace_back(Directional_Light{});
