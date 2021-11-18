@@ -268,8 +268,12 @@ namespace Tempest
 							transform.rotation = local.local_rotation;
 							transform.scale = local.local_scale;
 
-
-							Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / model->path).string(), transform);
+							std::filesystem::path p{ model->path };
+							if (strcmp(p.extension().string().c_str(), ".a"))
+							{
+								p.replace_extension(".a");
+							}
+							Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), transform);
 
 
 							UI::PaddedSeparator(1.f);
