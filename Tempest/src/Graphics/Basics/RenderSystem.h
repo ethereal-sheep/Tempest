@@ -99,7 +99,7 @@ namespace Tempest
 
         // To be changed to objects instead of global values
         float shininess = 32.f;
-        float ambientStrength = 0.05f;
+        float ambientStrength = 0.5f;
         float specularStrength = 0.5f;
         const GLfloat near_plane = 1.0f, far_plane = 25.0f;
 
@@ -111,7 +111,7 @@ namespace Tempest
 
         
         GLint gBufferView = 1;     // To see the different buffers
-        GLint tonemappingMode = 1; // Tonemapping types 
+        GLint tonemappingMode = 2; // Tonemapping types 
         GLint attenuationMode = 2; // Attenuation type
 
         // Motion Blur settings

@@ -60,7 +60,7 @@ uniform int dirShadowBool;
 uniform int pointShadowBool;
 uniform vec3 camPos;
 uniform mat4 lightSpaceMatrix;
-
+uniform float ambientAmount;
 
 vec3 colorLinear(vec3 colorVector);
 float saturate(float f);
@@ -119,6 +119,8 @@ void main()
         vec3 kD = vec3(1.0f) - kS;
         kD *= 1.0f - metalness;
 
+		vec3 ambient = albedo * ambientAmount;
+		color += ambient;
         if (pointMode)
         {
             // Point light(s) computation
@@ -165,7 +167,8 @@ void main()
 				if(pointShadowBool == 1)
 					shadow = computeShadow(0);
 				
-                color += ( ((diffuse * kD) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
+                //color += ( ((diffuse * kD) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
+				color += ( ((diffuse * kDisney) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
             }
         }
 
@@ -201,8 +204,10 @@ void main()
 				if(dirShadowBool == 1)
 					shadow = computeShadowDir();
 
-				vec3 ambient = albedo * 0.3f;
-				color += ambient +(( diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);
+				
+				color += ((diffuse * kDisney)+ specular ) * lightColor * NdotL * (1.0f - shadow);
+				
+				//color += ambient +(( diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);
                 //color += ambient + ((( diffuse * kD) * (1.0f - shadow))  + ((specular * lightColor * NdotL )  * (1.0f - shadow)));
             }
         }
