@@ -115,10 +115,10 @@ namespace Tempest
 							}
 							{
 								auto vec = transform->local_scale;
-								auto [x, y] = UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 1.f, 0.01f, 0.01f, 5.f);
-								transform->local_scale.x = std::max(0.01f, vec.x);
-								transform->local_scale.y = std::max(0.01f, vec.y);
-								transform->local_scale.z = std::max(0.01f, vec.z);
+								auto [x, y] = UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 1.f, 0.001f, 0.001f, 5.f);
+								transform->local_scale.x = std::max(0.001f, vec.x);
+								transform->local_scale.y = std::max(0.001f, vec.y);
+								transform->local_scale.z = std::max(0.001f, vec.z);
 							}
 
 

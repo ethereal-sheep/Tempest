@@ -1159,7 +1159,7 @@ namespace Tempest
         }
     }
 
-    void RenderSystem::DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType , int pt_light_num)
+    void RenderSystem::DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType , [[maybe_unused]]int pt_light_num)
     {
         if (sprites.empty()) return;
 
