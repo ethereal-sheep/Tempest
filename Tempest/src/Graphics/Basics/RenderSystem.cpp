@@ -826,10 +826,11 @@ namespace Tempest
 
 
                 glActiveTexture(GL_TEXTURE0);
-                if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
-                {                 
-                    m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
-                }
+                if(m_Pipeline.m_Models[i].m_Model->mm.size())
+                    if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
+                    {                 
+                        m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
+                    }
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
 
                 glActiveTexture(GL_TEXTURE1);
@@ -848,7 +849,10 @@ namespace Tempest
                 objectAO.useTexture();
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i((int)m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].tPath.size(), "texID");
+                if(m_Pipeline.m_Models[i].m_Model->mm.size())
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i((int)m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].tPath.size(), "texID");
+                else
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texID");
 
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(TestPBR, "TestPBR");
 
@@ -1359,8 +1363,11 @@ namespace Tempest
         {
             for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
             {
+                if (!m_Pipeline.m_Models[i].m_Model->mm.size())
+                    continue;
                 if (!m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
                 {
+                    
                     auto type = m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].texFileType;
                     switch (type)
                     {
