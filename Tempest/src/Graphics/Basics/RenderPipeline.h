@@ -57,6 +57,7 @@ namespace Tempest
 	{
 		tsptr<ModelPBR> m_Model;
 		glm::mat4 m_Transform;
+		glm::mat4 m_TransformPrev;
 	};
 
 	struct AAGrid

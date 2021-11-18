@@ -10,7 +10,7 @@ out vec3 normal;
 out vec4 fragPosition;
 out vec4 fragPrevPosition;
 
-uniform mat4 model;
+//uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 projViewModel;
@@ -20,12 +20,12 @@ uniform mat4 prevProjViewModel;
 void main()
 {
     // View Space
-    vec4 viewFragPos = view * model * vec4(position, 1.0f);
+    vec4 viewFragPos = view * projViewModel * vec4(position, 1.0f);
     viewPos = viewFragPos.xyz;
 
     TexCoords = texCoords;
 
-    mat3 normalMatrix = transpose(inverse(mat3(view * model)));
+    mat3 normalMatrix = transpose(inverse(mat3(view * projViewModel)));
     normal = normalMatrix * Normal;
 
     fragPosition = projViewModel * vec4(position, 1.0f);

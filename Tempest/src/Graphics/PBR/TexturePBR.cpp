@@ -559,5 +559,11 @@ namespace Tempest
     {
         glBindTexture(this->texType, this->texID);
     }
-
+    void TexturePBR::setTexturePath(const char* texPath, std::string texName, bool texFlip, TextureFileType TexType)
+    {
+        this->texFileType = TexType;
+        this->tName = texName;
+        this->tPath = texPath;
+        this->texFlip = texFlip;
+    }
 }

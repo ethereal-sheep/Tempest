@@ -126,7 +126,7 @@ namespace Tempest
 	{
 		shader->Bind();
 		shader->SetMat4fv(vpm, "viewProjMatrix");
-		glLineWidth(2.f);
+		glLineWidth(2.5f);
 		if (m_Indirect.GetSize() != 0)
 		{
 			m_VAO.Bind();

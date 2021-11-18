@@ -38,15 +38,7 @@ void main()
     gPosition = vec4(viewPos, LinearizeDepth(gl_FragCoord.z));
     //gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
 //    gAlbedo.rgb = vec3(albedoColor);
-	//if (texID != 0)
-	//{
-	//	gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
-	//}
-	//else
-	//{
-	//	gAlbedo.rgb = vec3(colour);
-	//}
-	if(TestPBR == 1)
+	if (texID != 0)
 	{
 		gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
 	}
@@ -54,6 +46,15 @@ void main()
 	{
 		gAlbedo.rgb = vec3(colour);
 	}
+	//gAlbedo.rgb = vec3(colour);
+	//if(TestPBR == 1)
+	//{
+	//	gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
+	//}
+	//else
+	//{
+	//	gAlbedo.rgb = vec3(colour);
+	//}
     gAlbedo.a =  vec3(texture(texRoughness, TexCoords)).r;
 	gAlbedo.a =  0.0f;
 	

@@ -122,7 +122,7 @@ namespace Tempest
 						try
 						{
 							//MaterialPBR m;
-							tb.setTexture(p.c_str(), parent.filename().string(), true);
+							tb.setTexturePath(p.c_str(), parent.filename().string(), true, TexturePBR::TextureFileType::STBImage);
 							//m.addTexture(parent.filename().string(), std::move(tex));
 						}
 

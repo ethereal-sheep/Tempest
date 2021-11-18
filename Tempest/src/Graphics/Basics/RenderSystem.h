@@ -238,6 +238,9 @@ namespace Tempest
 
         uint32_t getHeight();
         uint32_t getWidth();
+
+        void LoadTextures();
+
         bool PREFABMODE = false;
     private:        
        
