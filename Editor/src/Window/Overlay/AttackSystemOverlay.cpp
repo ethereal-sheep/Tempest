@@ -244,10 +244,13 @@ namespace Tempest
 
 								if (UI::ConfirmDeletePopup(string("DeleteAction##" + std::to_string(i)).c_str(), "Delete this action?"))
 								{
-									instance.ecs.emplace<tc::Destroyed>(id);
-									id = UNDEFINED;
-									temp_graph.clear();
-									temp_graph.name = "";
+									instance.ecs.emplace<tc::Destroyed>(current_graph);
+									if (current_graph == id)
+									{
+										id = UNDEFINED;
+										temp_graph.clear();
+										temp_graph.name = "";
+									}
 								}
 
 								++i;
@@ -272,10 +275,13 @@ namespace Tempest
 
 								if (UI::ConfirmDeletePopup(string("DeleteSequence##" + std::to_string(i)).c_str(), "Delete this sequence?"))
 								{
-									instance.ecs.emplace<tc::Destroyed>(id);
-									id = UNDEFINED;
-									temp_graph.clear();
-									temp_graph.name = "";
+									instance.ecs.emplace<tc::Destroyed>(current_graph);
+									if (current_graph == id)
+									{
+										id = UNDEFINED;
+										temp_graph.clear();
+										temp_graph.name = "";
+									}
 								}
 
 								++i;
