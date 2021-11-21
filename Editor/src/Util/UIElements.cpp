@@ -3024,16 +3024,20 @@ namespace Tempest::UI
 		}
 		
 		ImVec2 namePos = { selectedMin.x + selectedImg->GetWidth() * 0.55f, selectedMin.y + selectedImg->GetHeight() * 0.08f };
-		ImVec2 hpPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.3f };
-		ImVec2 atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
-		ImVec2 defPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.7f };
+		ImVec2 hpPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight()   * 0.3f  };
+		ImVec2 atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight()  * 0.425f  };
+		ImVec2 defPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight()  * 0.55f  };
+		ImVec2 rangePos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight()* 0.675f  };
+		ImVec2 movePos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight() * 0.8f  };
 
 		if (isRightSide)
 		{
 			namePos = { selectedMin.x + selectedImg->GetWidth() * 0.18f, selectedMin.y + selectedImg->GetHeight() * 0.08f };
 			hpPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.3f };
-			atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
-			defPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.7f };
+			atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.4f };
+			defPos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.5f };
+			rangePos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.6f };
+			movePos = { selectedMin.x + selectedImg->GetWidth() * 0.2f, selectedMin.y + selectedImg->GetHeight() * 0.7f };
 		}
 		
 		if (!isRoll)
@@ -3045,12 +3049,17 @@ namespace Tempest::UI
 				ImGui::PopFont();
 
 				ImGui::PushFont(FONT_OPEN_30);
-				string str = "  HP  " + std::to_string(character->get_stat(0));
+				int curHp = character->get_stat(0) + character->get_statDelta(0);
+				string str = "  HP   " + std::to_string(curHp) +"/" +std::to_string(character->get_stat(0));
 				window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
-				str = "ATK  " + std::to_string(character->get_stat(1));
+				str = "ATK   " + std::to_string(character->get_stat(1));
 				window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-				str = "DEF  " + std::to_string(character->get_stat(2));
+				str = "DEF   " + std::to_string(character->get_stat(2));
 				window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				str = "RNG  " + std::to_string(character->get_stat(3));
+				window->AddText(rangePos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				str = "MOV  " + std::to_string(character->get_stat(4));
+				window->AddText(movePos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 				ImGui::PopFont();
 			}
 			else
@@ -3060,12 +3069,16 @@ namespace Tempest::UI
 				ImGui::PopFont();
 
 				ImGui::PushFont(FONT_OPEN_30);
-				string str = " HP  NAN";
+				string str = " HP   NAN";
 				window->AddText(hpPos, ImGui::GetColorU32({ 1,0,0,1 }), str.c_str());
-				str = "ATK  NAN" + std::to_string(character->get_stat(1));
+				str = "ATK   NAN";
 				window->AddText(atkPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-				str = "DEF  NAN" + std::to_string(character->get_stat(2));
+				str = "DEF   NAN";
 				window->AddText(defPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				str = "RNG  NAN";
+				window->AddText(rangePos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				str = "MOV  NAN";
+				window->AddText(movePos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 				ImGui::PopFont();
 			}
 		}
