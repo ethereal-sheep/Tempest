@@ -18,6 +18,7 @@ namespace Tempest
 {
     class AttackSystemOverlay : public Window
     {
+
         const char* window_name() override
         {
             return "";
@@ -70,6 +71,8 @@ namespace Tempest
         ax::NodeEditor::EditorContext* context;
 		ImVec2 mouse = ImVec2(0, 0);
 		bool OverlayOpen = false;
+        bool attack_action = false;
+        bool defend_action = false;
         std::string overlay_title{""};
         std::string sidebar_title{""};
         OPEN_GRAPH_TYPE type{ OPEN_GRAPH_TYPE::GRAPH_ACTION };

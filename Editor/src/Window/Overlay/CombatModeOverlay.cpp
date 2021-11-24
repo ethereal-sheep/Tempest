@@ -211,6 +211,9 @@ namespace Tempest
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 							for (auto id : charac.actions)
 							{
+								if (!(instance.ecs.get<tc::ActionGraph>(id).category & tc::ActionGraph::AC_ATTK))
+									continue;
+
 								auto& action = instance.ecs.get<tc::Graph>(id);
 
 								ImGui::SetCursorPos(ImVec2{ selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
@@ -351,6 +354,9 @@ namespace Tempest
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 							for (auto id : charac.actions)
 							{
+								if (!(instance.ecs.get<tc::ActionGraph>(id).category & tc::ActionGraph::AC_DEF))
+									continue;
+
 								auto& action = instance.ecs.get<tc::Graph>(id);
 
 								ImGui::SetCursorPos(ImVec2{ other_selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
