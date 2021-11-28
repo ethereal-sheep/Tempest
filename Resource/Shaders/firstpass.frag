@@ -7,6 +7,12 @@ float FXAA_SPAN_MAX = 8.0f;
 float FXAA_REDUCE_MUL = 1.0f/8.0f;
 float FXAA_REDUCE_MIN = 1.0f/128.0f;
 float middleGrey = 0.18f;
+float bluramount  = 1.0;
+float center      = 1.1;
+float stepSize    = 0.004;
+float steps       = 3.0;
+float minOffs     = (float(steps-1.0)) / -2.0;
+float maxOffs     = (float(steps-1.0)) / +2.0;
 
 uniform sampler2D screenTexture;
 uniform sampler2D sao;
@@ -18,6 +24,7 @@ uniform int tonemappingMode;
 uniform bool saoMode;
 uniform bool fxaaMode;
 uniform bool motionBlurMode;
+uniform bool tiltShiftMode;
 uniform float cameraAperture;
 uniform float cameraShutterSpeed;
 uniform float cameraISO;
@@ -38,15 +45,37 @@ vec3 computeMotionBlur(vec3 colorVector);
 void main()
 {
     vec3 color;
+	float amount = pow((TexCoords.y * center) * 2.0 - 1.0, 2.0) * bluramount;
+    vec4 blurredColor = vec4(0.0, 0.0, 0.0, 1.0);
 
     if(gBufferView == 1)
     {
-        // FXAA computation
-        if(fxaaMode)
-            color = computeFxaa();  // Don't know if applying FXAA first is a good idea, especially with effects such as motion blur and DoF...
-        else
-            color = texture(screenTexture, TexCoords).rgb;
-
+		if(tiltShiftMode)
+		{
+			for(float offsX = minOffs; offsX <= maxOffs; ++offsX) 
+			{
+				for(float offsY = minOffs; offsY <= maxOffs; ++offsY) 
+				{				
+					vec2 temp_tcoord = TexCoords.xy;
+					
+					temp_tcoord.x += offsX * amount * stepSize;
+					temp_tcoord.y += offsY * amount * stepSize;
+					
+					blurredColor += texture2D(screenTexture, temp_tcoord);			
+				} // for y
+			} // for x
+			blurredColor /= float(steps * steps);
+			color = blurredColor.rgb;
+		}
+		else
+		{
+			// FXAA computation
+			if(fxaaMode)
+				color = computeFxaa();  // Don't know if applying FXAA first is a good idea, especially with effects such as motion blur and DoF...
+			else
+				color = texture(screenTexture, TexCoords).rgb;
+		}
+		
         // Motion Blur computation
         if(motionBlurMode)
             color = computeMotionBlur(color);
