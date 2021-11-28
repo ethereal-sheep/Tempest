@@ -13,6 +13,7 @@
 #include "Util/UIElements.h"
 #include "../Util/LineDrawing.h"
 #include <unordered_map>
+#include "Util/shape_manip.h"
 
 namespace Tempest
 {
@@ -124,20 +125,11 @@ namespace Tempest
 										const int& x = shape->x;
 										const int& y = shape->y;
 
-										int a_x = x, a_y = y, e_x = 0, e_y = 0;
-										if (a_x % 2 != a_y % 2)
-										{
-											a_x = a_y = std::min(x, y);
-											e_x = x - a_x;
-											e_y = y - a_y;
+										auto [a_x, a_y, e_x, e_y, o_x, o_y, p_x, p_y] = shape_data_from_position(x, y, inter.x, inter.z);
 
-										}
-
-										inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+										inter.x = o_x;
 										inter.y = 0;
-										inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
-
-
+										inter.z = o_y;
 									}
 
 									transform->position = inter;
@@ -163,28 +155,17 @@ namespace Tempest
 							{
 								const int& x = shape->x;
 								const int& y = shape->y;
-								const int one = 1;
 
 								AABB box;
 
-								int a_x = x, a_y = y, e_x = 0, e_y = 0;
-								if (a_x % 2 != a_y % 2)
-								{
-									a_x = a_y = std::min(x, y);
-									e_x = x - a_x;
-									e_y = y - a_y;
-								}
+								auto [a_x, a_y, b_x, b_y] = shape_bounding_with_position(x, y, inter.x, inter.z);
 
-								inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
-								inter.y = 0;
-								inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
-
-								box.min.x = inter.x -.5f - (a_x - 1) / 2.f;
-								box.min.z = inter.z -.5f - (a_y - 1) / 2.f;
+								box.min.x = a_x;
+								box.min.z = a_y;
 								box.min.y = 0;
 
-								box.max.x = inter.x + .5f + (a_x - 1) / 2.f + e_x;
-								box.max.z = inter.z + .5f + (a_y - 1) / 2.f + e_y;
+								box.max.x = b_x;
+								box.max.z = b_y;
 								box.max.y = 0;
 
 								Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });

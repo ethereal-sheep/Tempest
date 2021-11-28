@@ -9,7 +9,7 @@
 **********************************************************************************/
 
 #pragma once
-
+#define NOMINMAX
 #include "Tracy.hpp"
 
 #include <vector>
@@ -166,4 +166,5 @@ namespace Tempest
 			return fs::hash_value(path);
 		}
 	};
+
 }
