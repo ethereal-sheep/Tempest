@@ -185,6 +185,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\ModelPBR.cpp" />
@@ -244,6 +245,7 @@
     <ClCompile Include="src\Scripting\Nodes\CompareNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\DiceNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\ConflictNode.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\GroupNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\StatNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\SwitchNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\ActionNode.cpp" />
@@ -357,6 +359,7 @@
     <ClInclude Include="src\Scripting\Util\script.h" />
     <ClInclude Include="src\Scripting\Util\var_data.h" />
     <ClInclude Include="src\Scripting\Util\var_set.h" />
+    <ClInclude Include="src\Util\shape_manip.h" />
     <ClInclude Include="src\Util\thread_pool.h" />
     <ClInclude Include="src\Util\algorithm.h" />
     <ClInclude Include="src\Util\range.h" />

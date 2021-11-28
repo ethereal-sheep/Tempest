@@ -60,7 +60,12 @@ namespace Tempest
 					* glm::scale(local->local_scale)
 					* glm::scale(transform->scale);
 
-				Service<RenderSystem>::Get().SubmitModel(model->path, test);
+				std::filesystem::path p{ model->path };
+				if (strcmp(p.extension().string().c_str(), ".a"))
+				{
+					p.replace_extension(".a");
+				}
+				Service<RenderSystem>::Get().SubmitModel(p.string(), test);
 			}
 		}
 	}

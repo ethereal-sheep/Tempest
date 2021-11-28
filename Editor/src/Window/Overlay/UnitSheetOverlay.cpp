@@ -770,7 +770,11 @@ namespace Tempest
 		character->name = tempcs->name;
 
 		for (auto i = 0; i < tc::STAT_TOTAL; i++)
+		{
 			character->set_stat(i, tempcs->get_stat(i));
+			character->set_statDelta(i, 0);
+		}
+			
 
 		NewCharacter = tc::Character();
 		SelectedID = entity;

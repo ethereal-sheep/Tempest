@@ -44,7 +44,7 @@ namespace Tempest
             {
 				ImGui::OpenPopup("Add Stat");
 				ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-				ImGui::SetNextWindowSize(ImVec2(700, 600));
+				ImGui::SetNextWindowSize(ImVec2(700, 500));
 				ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
 					ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
                 ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
@@ -99,7 +99,7 @@ namespace Tempest
                     ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
                     ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.1f, ImGui::GetWindowHeight() * 0.3f });
                     ImGui::PushFont(FONT_BODY);
-                    for (int i = 3; i < tc::STAT_TOTAL; i++)
+                    for (int i = 5; i < tc::STAT_TOTAL; i++)
                     {
                         if ((tempStat)(i))
                         {
@@ -135,7 +135,7 @@ namespace Tempest
                         }
                         else
                         {
-                            ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.1f, ImGui::GetWindowHeight() * 0.3f + ((i-2) * 30.f )});
+                            ImGui::SetCursorPos({ ImGui::GetWindowWidth() * 0.1f, ImGui::GetWindowHeight() * 0.3f + ((i-4) * 30.f )});
                         }
 
                         ImGui::PopStyleColor(2);
@@ -143,14 +143,14 @@ namespace Tempest
                     ImGui::PopFont();
                     ImGui::PopItemWidth();
                     ImGui::SetCursorPosX(0);
-                    if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+                    if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 80.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
                         *sl = tempStat;
                         ImGui::CloseCurrentPopup();
                         enable_popup = false;
                         PopUpClose = true;
                     }
-                    if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.65f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 90.f, 0.f }, FONT_PARA))
+                    if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.65f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 80.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
                        
                         ImGui::CloseCurrentPopup();

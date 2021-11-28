@@ -342,14 +342,14 @@ namespace Tempest
             pt_lights.emplace_back(Point_Light{});
             pt_lights[makePointLight].Position = glm::vec3( (float)makePointLight * 0.5f, 0.5f, 0.5f);
         }
-        pt_lights[0].hide = false;
+        //pt_lights[0].hide = false;
 
-        objectAlbedo.setTexture("textures/pbr/gold/gold_albedo.png", "goldAlbedo", true);
-        //objectAlbedo.setTextureDDS( "Assets/dds_test.dds" , "goldAlbedo", true);
-        objectNormal.setTexture("textures/pbr/gold/gold_normal.png", "goldNormal", true);
-        objectRoughness.setTexture("textures/pbr/gold/gold_roughness.png", "goldRoughness", true);
-        objectMetalness.setTexture("textures/pbr/gold/gold_metalness.png", "goldMetalness", true);
-        objectAO.setTexture("textures/pbr/gold/gold_ao.png", "goldAO", true);
+        objectAlbedo.setTexture("textures/pbr/default/default_albedo.png", "defaultAlbedo", true);
+        //objectAlbedo.setTextureDDS( "Assets/dds_test.dds" , "defaultAlbedo", true);
+        objectNormal.setTexture("textures/pbr/default/default_normal.png", "defaultNormal", true);
+        objectRoughness.setTexture("textures/pbr/default/default_roughness.png", "defaultRoughness", true);
+        objectMetalness.setTexture("textures/pbr/default/default_metalness.png", "defaultMetalness", true);
+        objectAO.setTexture("textures/pbr/default/default_ao.png", "defaultAO", true);
 
         //objectAlbedo.setTexture("textures/pbr/porcelain/porcelain_albedo.png", "porcelainAlbedo", true);
         //objectNormal.setTexture("textures/pbr/porcelain/porcelain_normal.png", "porcelainNormal", true);
@@ -794,14 +794,15 @@ namespace Tempest
         //SubmitModel("models/shaderball/shaderball.a", glm::mat4{1});
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
+        //m_FrameBuffer.Bind();
+    
+        //m_FrameBuffer.Unbind();
+
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-        
         if(AAgridShow)
             RenderAAGrid();
-     
+
         for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
         {
             projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * m_Pipeline.m_Models[i].m_Transform;
@@ -810,10 +811,11 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "projViewModel");
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_TransformPrev, "prevProjViewModel");
-           // m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "model");
-            m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;
 
+            // to be fixed for blur 
+            m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;
+            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_TransformPrev, "prevProjViewModel");
+            m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;
            
             for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
             {                   
@@ -824,10 +826,11 @@ namespace Tempest
 
 
                 glActiveTexture(GL_TEXTURE0);
-                if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
-                {                 
-                    m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
-                }
+                if(m_Pipeline.m_Models[i].m_Model->mm.size())
+                    if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
+                    {                 
+                        m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
+                    }
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
 
                 glActiveTexture(GL_TEXTURE1);
@@ -846,7 +849,10 @@ namespace Tempest
                 objectAO.useTexture();
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
 
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i((int)m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].tPath.size(), "texID");
+                if(m_Pipeline.m_Models[i].m_Model->mm.size())
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i((int)m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].tPath.size(), "texID");
+                else
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texID");
 
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(TestPBR, "TestPBR");
 
@@ -860,10 +866,9 @@ namespace Tempest
         //---------------
         // sao rendering
         //---------------
-        //glQueryCounter(queryIDSAO[0], GL_TIMESTAMP);
         glBindFramebuffer(GL_FRAMEBUFFER, saoFBO);
         glClear(GL_COLOR_BUFFER_BIT);
-
+  
         if (saoMode)
         {
             // SAO noisy texture
@@ -902,7 +907,6 @@ namespace Tempest
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // Directional light depth map
-
         if (!dir_lights[0].hide)
         {
             dir_lights[0].Bind();
@@ -1050,8 +1054,11 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(clearColor, "clearColor");
 
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(envMapShow, "envMapShow");
-        
+
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientStrength, "ambientAmount");
         quadRender.drawShape();
+
+
         m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);    
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -1089,7 +1096,7 @@ namespace Tempest
 
         quadRender.drawShape();
 
-
+       
         //-----------------------
         // Forward Pass rendering
         //-----------------------
@@ -1153,7 +1160,7 @@ namespace Tempest
         }
     }
 
-    void RenderSystem::DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType , int pt_light_num)
+    void RenderSystem::DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType , [[maybe_unused]]int pt_light_num)
     {
         if (sprites.empty()) return;
 
@@ -1357,8 +1364,11 @@ namespace Tempest
         {
             for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
             {
+                if (!m_Pipeline.m_Models[i].m_Model->mm.size())
+                    continue;
                 if (!m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
                 {
+                    
                     auto type = m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].texFileType;
                     switch (type)
                     {

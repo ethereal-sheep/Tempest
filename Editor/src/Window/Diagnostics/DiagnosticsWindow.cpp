@@ -389,6 +389,10 @@ namespace Tempest
 
 			auto& materialF0 = Service<RenderSystem>::Get().materialF0;
 			UI::DragFloat3ColorBox("MaterialF0", "##MaterialF0", ImVec2{ padding , 0.f }, value_ptr(materialF0), 0.f, 0.1f).first;
+			
+			auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;
+			ImGui::SliderFloat("Global Ambient", &ambientStrength, 0.0f, 3.0f);
+
 			if(ImGui::TreeNode("Gbuffer Mode"))
 			{
 				auto& gBufferView = Service<RenderSystem>::Get().gBufferView;

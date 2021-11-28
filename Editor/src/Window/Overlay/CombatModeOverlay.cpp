@@ -629,6 +629,8 @@ namespace Tempest
 					{
 						if (instance.collision_map[p.x + x][p.y + y])
 							continue;
+						if (instance.wall_map[p.x][p.y][p.x + x][p.y + y])
+							continue;
 						if (visited[p.x + x][p.y + y])
 							continue;
 
@@ -644,12 +646,12 @@ namespace Tempest
 						if (!b) continue;
 						AABB box;
 
-						box.min.x = (float)x;
-						box.min.z = (float)y;
+						box.min.x = (float)x + .1f;
+						box.min.z = (float)y + .1f;
 						box.min.y = 0;
 
-						box.max.x = x + 1.f;
-						box.max.z = y + 1.f;
+						box.max.x = x + .9f;
+						box.max.z = y + .9f;
 						box.max.y = 0;
 
 						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
@@ -723,8 +725,7 @@ namespace Tempest
 				}
 
 
-			}
-
+			} 
 		}
 		else
 			state = State::MENU;
