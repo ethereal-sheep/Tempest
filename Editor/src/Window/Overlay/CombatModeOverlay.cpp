@@ -457,27 +457,6 @@ namespace Tempest
 			}
 			else
 			{
-				// outlines all units in the map
-				for (auto& [x, m] : instance.character_map)
-					for (auto& [y, id] : m)
-					{
-						if (id)
-						{
-							AABB box;
-
-							box.min.x = (float)x;
-							box.min.z = (float)y;
-							box.min.y = 0;
-
-							box.max.x = x + 1.f;
-							box.max.z = y + 1.f;
-							box.max.y = 0;
-							if (x == p_x && y == p_y)
-								Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
-							else
-								Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
-						}
-					}
 
 				// if u want display like the triangle on top
 				// need either imgui::image or drawlist
@@ -571,8 +550,324 @@ namespace Tempest
 							//state = State::MENU;
 						}
 					}
+				}
+
+				// helpers
+				auto drawbox = [](int x, int y, bool b) {
+					if (!b) return;
+					AABB box;
+
+					box.min.x = (float)x + .05f;
+					box.min.z = (float)y + .05f;
+					box.min.y = 0;
+
+					box.max.x = x + .95f;
+					box.max.z = y + .95f;
+					box.max.y = 0;
+
+					AABB box2;
+
+					box2.min.x = (float)x + .15f;
+					box2.min.z = (float)y + .15f;
+					box2.min.y = 0;
+
+					box2.max.x = x + .85f;
+					box2.max.z = y + .85f;
+					box2.max.y = 0;
+
+					Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
+					Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
+				};
+				auto raytrace = [](int x0, int y0, int x1, int y1, auto visit)
+				{
+					int dx = abs(x1 - x0);
+					int dy = abs(y1 - y0);
+					int x = x0;
+					int y = y0;
+					int n = dx + dy;
+					int x_inc = (x1 > x0) ? 1 : -1;
+					int y_inc = (y1 > y0) ? 1 : -1;
+					int error = dx - dy;
+					dx *= 2;
+					dy *= 2;
+
+					for (; n > 0; --n)
+					{
+						if (error == 0)
+						{
+							if (!visit(x, y, x, y + y_inc)) return std::make_tuple(x, y, x, y + y_inc, true);
+
+							if (!visit(x, y, x + x_inc, y)) return std::make_tuple(x, y, x + x_inc, y, true);
+
+							if (!visit(x, y + y_inc, x + x_inc, y + y_inc)) return std::make_tuple(x, y + y_inc, x + x_inc, y + y_inc, true);
+
+							if (!visit(x + x_inc, y, x + x_inc, y + y_inc)) return std::make_tuple(x + x_inc, y, x + x_inc, y + y_inc, true);
+
+							x += x_inc;
+							y += y_inc;
+							error -= dy;
+							error += dx;
+
+							--n;
+						}
+						else if (error > 0)
+						{
+							if (!visit(x, y, x + x_inc, y)) return std::make_tuple(x, y, x + x_inc, y, true);
+							x += x_inc;
+							error -= dy;
+						}
+						else
+						{
+							if (!visit(x, y, x, y + y_inc)) return std::make_tuple(x, y, x, y + y_inc, true);
+							y += y_inc;
+							error += dx;
+						}
+					}
+					return std::make_tuple(0, 0, 0, 0, false);
+				};
+				auto collide_first = [drawbox, raytrace](int x0, int y0, int x1, int y1, auto& collision_map, auto& wall_map, auto& character_map) {
+
+					tmap<int, tmap<int, bool>> intersects;
+					return raytrace(x0, y0, x1, y1,
+						[&collision_map, &wall_map, &character_map, &intersects](int x, int y, int n_x, int n_y) {
+
+							if (wall_map[x][y][n_x][n_y])
+								return false;
+							if (collision_map[n_x][n_y])
+								return false;
+							return true;
+						});
+
+					/*for (auto& [x, m] : intesects)
+						for (auto [y, b] : m)
+							drawbox(x, y, b);*/
+				};
+				
+				// draw bfs if unit
+				tmap<int, tmap<int, bool>> visited;
+				tmap<int, tmap<int, uint32_t>> distance;
+				{
+					//bfs
+					const uint32_t range = 4;
+					const tvector<tpair<int, int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
+					std::queue<glm::ivec2> q;
+					q.push({ p_x, p_y });
+
+					//draw
+					while (!q.empty())
+					{
+						auto p = q.front();
+						q.pop();
+
+						if (visited[p.x][p.y])
+							continue;
+
+						visited[p.x][p.y] = true;
+
+						auto new_dist = distance[p.x][p.y] + 1;
+						if (new_dist > range)
+							continue;
+
+						for (auto [x, y] : dir)
+						{
+							if (instance.character_map[p.x + x][p.y + y])
+							{
+								visited[p.x + x][p.y + y] = true;
+								distance[p.x + x][p.y + y] = new_dist;
+								continue;
+							}
+							if (instance.collision_map[p.x + x][p.y + y])
+								continue;
+							if (instance.wall_map[p.x][p.y][p.x + x][p.y + y])
+								continue;
+							if (visited[p.x + x][p.y + y])
+								continue;
+
+							distance[p.x + x][p.y + y] = new_dist;
+							q.push({ p.x + x, p.y + y });
+						}
+
+					}
+
+					auto drawbox1 = [](int x, int y, bool b, auto grey, bool second) {
+						if (!b) return;
+						AABB box;
+
+						box.min.x = (float)x + .05f;
+						box.min.z = (float)y + .05f;
+						box.min.y = 0;
+
+						box.max.x = x + .95f;
+						box.max.z = y + .95f;
+						box.max.y = 0;
+						Service<RenderSystem>::Get().DrawLine(box, { grey, grey, grey, 1 });
+
+						if (second)
+						{
+							AABB box2;
+							box2.min.x = (float)x + .15f;
+							box2.min.z = (float)y + .15f;
+							box2.min.y = 0;
+
+							box2.max.x = x + .85f;
+							box2.max.z = y + .85f;
+							box2.max.y = 0;
+
+							Service<RenderSystem>::Get().DrawLine(box2, { grey, grey, grey, 1 });
+						}
+					};
+					auto drawbox2 = [](int x, int y, bool b) {
+						if (!b) return;
+						AABB box;
+
+						box.min.x = (float)x + .05f;
+						box.min.z = (float)y + .05f;
+						box.min.y = 0;
+
+						box.max.x = x + .95f;
+						box.max.z = y + .95f;
+						box.max.y = 0;
+
+						AABB box2;
+
+						box2.min.x = (float)x + .0f;
+						box2.min.z = (float)y + .0f;
+						box2.min.y = 0;
+
+						box2.max.x = x + 1.0f;
+						box2.max.z = y + 1.0f;
+						box2.max.y = 0;
+
+						Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
+						Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
+					};
+					for (auto& [x, m] : visited)
+						for (auto [y, b] : m)
+						{
+							auto [x0, y0, x1, y1, c] = collide_first(p_x, p_y, x, y, instance.collision_map, instance.wall_map, instance.character_map);
+							if (!c)
+								drawbox1(x, y, b, .15f, true);
+							else if (x == x1 && y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1])
+								drawbox2(x, y, b);
+							else
+								drawbox1(x, y, b, .05f, false);
+
+						}
+				}
+
+				if (visited[w_x][w_y])
+				{
+					auto& io = ImGui::GetIO();
+					if (p_x == w_x && p_y == w_y)
+					{
+						Line l;
+						l.p0 = glm::vec3(w_x + .5f - .5f, 0, w_y + .5f - .5f);
+						l.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f + .5f);
+
+						Line r;
+						r.p0 = glm::vec3(w_x + .5f - .5f, 0, w_y + .5f + .5f);
+						r.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f - .5f);
+						Service<RenderSystem>::Get().DrawLine(l, { 1,0,0,1 });
+						Service<RenderSystem>::Get().DrawLine(r, { 1,0,0,1 });
+
+						//if (io.MouseClicked[0])
+						//{
+						//	// cancel
+						//	state = State::MENU;
+						//}
+					}
+					else
+					{
+						Line l;
+						l.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f - .1f);
+						l.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f + .1f);
+
+						Line r;
+						r.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f + .1f);
+						r.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f - .1f);
+						Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 
 
+						auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
+
+						// rotate the fella if the 
+						auto front = transform.rotation * vec3{ 0,0,-1 };
+						auto mouse = glm::normalize(vec3{ w_x + .5f, 0, w_y + .5f } - transform.position);
+						auto angle = glm::degrees(glm::orientedAngle(mouse, front, vec3{ 0,1,0 }));
+
+						if (angle < -45.5f)
+						{
+							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(90.f), vec3{ 0,1,0 });
+						}
+						if (angle > 45.5f)
+						{
+							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(-90.f), vec3{ 0,1,0 });
+						}
+
+
+						//if (io.MouseClicked[0])
+						//{
+						//	// move
+						//	transform.position.x = w_x + .5f;
+						//	transform.position.z = w_y + .5f;
+						//	instance.selected = INVALID;
+						//	state = State::MENU;
+						//}
+					}
+
+
+				}
+
+				//  line of sight
+				{
+
+					auto [x0, y0, x1, y1, b] = collide_first(p_x, p_y, w_x, w_y, instance.collision_map, instance.wall_map, instance.character_map);
+
+
+					auto p0 = vec3(x0 + .5f, 0, y0 + .5f);
+					auto p1 = vec3(x1 + .5f, 0, y1 + .5f);
+
+					auto normal = glm::normalize(p1 - p0);
+					auto ex = glm::mix(p0, p1, .5f);
+
+					vec3 start_p = vec3(p_x + .5f, 0, p_y + .5f);
+					vec3 end_p = vec3(w_x + .5f, 0, w_y + .5f);
+					vec3 line_v = vec3(w_x, 0, w_y) - vec3(p_x, 0, p_y);
+
+					// 
+					float dist = 0.f;
+					bool check_character = w_x == x1 && w_y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1];
+					if (b && !check_character &&
+						glm::intersectRayPlane(start_p, glm::normalize(line_v), ex, normal, dist))
+					{
+						vec3 intersection = start_p + glm::normalize(line_v) * dist;
+						Line l;
+						l.p0 = glm::vec3(intersection.x - .1f, 0, intersection.z - .1f);
+						l.p1 = glm::vec3(intersection.x + .1f, 0, intersection.z + .1f);
+
+						Line r;
+						r.p0 = glm::vec3(intersection.x - .1f, 0, intersection.z + .1f);
+						r.p1 = glm::vec3(intersection.x + .1f, 0, intersection.z - .1f);
+
+						Service<RenderSystem>::Get().DrawLine(l, { 1,0,0,1 });
+						Service<RenderSystem>::Get().DrawLine(r, { 1,0,0,1 });
+
+						Line pointer;
+						pointer.p0 = start_p;
+						pointer.p1 = intersection;
+						Service<RenderSystem>::Get().DrawLine(pointer, { 0,1,1,1 });
+						pointer.p0 = intersection;
+						pointer.p1 = end_p;
+						Service<RenderSystem>::Get().DrawLine(pointer, { 0.8,0,0,1 });
+					}
+					else
+					{
+						Line pointer;
+						pointer.p0 = start_p;
+						pointer.p1 = end_p;
+						Service<RenderSystem>::Get().DrawLine(pointer, { 0,1,1,1 });
+					}
 				}
 			}
 
@@ -688,14 +983,15 @@ namespace Tempest
 				else
 				{
 					Line l;
-					l.p0 = glm::vec3(w_x + .5f - .1, 0, w_y + .5f - .1);
-					l.p1 = glm::vec3(w_x + .5f + .1, 0, w_y + .5f + .1);
+					l.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f - .1f);
+					l.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f + .1f);
 
 					Line r;
-					r.p0 = glm::vec3(w_x + .5f - .1, 0, w_y + .5f + .1);
-					r.p1 = glm::vec3(w_x + .5f + .1, 0, w_y + .5f - .1);
+					r.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f + .1f);
+					r.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f - .1f);
 					Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
 					Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+
 
 					auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
 
@@ -726,6 +1022,7 @@ namespace Tempest
 
 
 			} 
+
 		}
 		else
 			state = State::MENU;
