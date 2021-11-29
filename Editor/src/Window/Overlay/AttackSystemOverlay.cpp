@@ -766,17 +766,30 @@ namespace Tempest
 
 		ax::NodeEditor::Suspend();
 
+
 		if (ax::NodeEditor::ShowNodeContextMenu(&contextNodeId))
+		{
+			mouse = ImGui::GetMousePos();
 			ImGui::OpenPopup("Node Context Menu");
+		}
 
 		else if (ax::NodeEditor::ShowPinContextMenu(&contextPinId))
+		{
+			mouse = ImGui::GetMousePos();
 			ImGui::OpenPopup("Pin Context Menu");
+		}
 
 		else if (ax::NodeEditor::ShowLinkContextMenu(&contextLinkId))
+		{
+			mouse = ImGui::GetMousePos();
 			ImGui::OpenPopup("Link Context Menu");
+		}
 
 		else if (ax::NodeEditor::ShowBackgroundContextMenu())
+		{
+			mouse = ImGui::GetMousePos();
 			ImGui::OpenPopup("Create New Node");
+		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
 
