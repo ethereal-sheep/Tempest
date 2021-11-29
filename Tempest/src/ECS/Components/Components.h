@@ -441,7 +441,7 @@ namespace Tempest
 			Entity chosen_weapon = UNDEFINED; // no need to serialize this
 			tvector<Entity> weapons;
 			tvector<Entity> actions;
-
+			vec3 color = { 1.f, 0.f, 0.f };
 		private:
 			tvector<int> stats;
 			tvector<int> StatsDelta;

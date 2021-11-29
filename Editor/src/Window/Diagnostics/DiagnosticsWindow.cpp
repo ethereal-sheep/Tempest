@@ -344,20 +344,41 @@ namespace Tempest
 				ImGui::Text("Not facing plane!");
 			}
 
-			auto [id, check] = instance.po.raycast(cam.GetPosition(), lRayDir_world);
-			if (check)
+			//auto [id, check] = instance.po.raycast(cam.GetPosition(), lRayDir_world);
+			//if (check)
+			//{
+			//	ImGui::Text("HIT! id: %u", id);
+			//	if (ImGui::IsMouseClicked(0))
+			//	{
+			//		instance.selected = id;
+			//	}
+			//}
+			//
+			//else
+			//	ImGui::Text("NO HIT!");
+
+			if (instance.selected != NULL)
 			{
-				ImGui::Text("HIT! id: %u", id);
-				if (ImGui::IsMouseClicked(0))
+				
+				auto& test = Service<RenderSystem>::Get().m_Pipeline;
+				if (test.m_ModelLibrary.size() > 0)
 				{
-					instance.selected = id;
+					int count = 0;
+					for (auto mdl : test.m_ModelLibrary)
+					{						
+						for (uint32_t j = 0; j < mdl.second->colours.size(); ++j)
+						{
+							std::string label = "Model" + std::to_string(count) + "Color" + std::to_string(j);
+							vec3 color = mdl.second->colours[j];
+							std::string id = "##Model" + std::to_string(count) + "Color" + std::to_string(j);
+							UI::DragFloat3ColorBox(label.data(), id.data(), ImVec2{ 80.f , 0.f }, value_ptr(mdl.second->colours[j]), 0.f, 0.01f, 0.f, 1.f);
+						}
+						count++;
+					}
 				}
 			}
-
 			else
-				ImGui::Text("NO HIT!");
-
-
+				ImGui::Text("None Selected!");
 		}
 	}
 
