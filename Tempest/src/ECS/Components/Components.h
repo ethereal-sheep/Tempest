@@ -368,7 +368,7 @@ namespace Tempest
 				ar.Member("Charater_Name", component.name);
 				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
-				ar.Vector("Charater_DeltaStats", component.StatsDelta);
+				//ar.Vector("Charater_DeltaStats", component.StatsDelta);
 				ar.Vector("Actions", component.actions);
 
 				return ar.EndObject();
@@ -537,6 +537,15 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Vector("Statline_Data", component.stat_list);
+
+				// first 5 always true and correct name
+				component.stat_list[0] = tpair<bool, string>(true, "HP");
+				component.stat_list[1] = tpair<bool, string>(true, "ATK");
+				component.stat_list[2] = tpair<bool, string>(true, "DEF");
+				component.stat_list[3] = tpair<bool, string>(true, "Range");
+				component.stat_list[4] = tpair<bool, string>(true, "Move");
+
+
 				return ar.EndObject();
 			}
 

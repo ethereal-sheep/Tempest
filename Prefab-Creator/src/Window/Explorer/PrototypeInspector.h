@@ -201,12 +201,16 @@ namespace Tempest
 
 							auto [a_x, a_y, b_x, b_y] = shape_bounding(x, y);
 
-							box.min.x = a_x;
-							box.min.z = a_y;
+							float extra = -.5f;
+							if (x == 0 || y == 0)
+								extra = 0;
+
+							box.min.x = a_x + extra;
+							box.min.z = a_y + extra;
 							box.min.y = 0;
 
-							box.max.x = b_x;
-							box.max.z = b_y;
+							box.max.x = b_x + extra;
+							box.max.z = b_y + extra;
 							box.max.y = (float)a;
 
 
