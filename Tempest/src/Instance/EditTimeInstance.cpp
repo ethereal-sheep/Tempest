@@ -68,6 +68,11 @@ namespace Tempest
 				Service<RenderSystem>::Get().SubmitModel(p.string(), test);
 			}
 		}
+
+		// destroy all deleted stuff in ecs
+		auto view = ecs.view<Components::Destroyed>();
+		tvector<Entity> entities{ view.begin(), view.end() };
+		std::for_each(entities.begin(), entities.end(), std::bind(&ECS::destroy, &ecs, std::placeholders::_1));
 	}
 	void EditTimeInstance::_render()
 	{

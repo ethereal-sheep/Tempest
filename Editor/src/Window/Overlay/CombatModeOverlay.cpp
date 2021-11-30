@@ -211,13 +211,14 @@ namespace Tempest
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 							for (auto id : charac.actions)
 							{
-								auto& action = instance.ecs.get<tc::Graph>(id);
-
-								ImGui::SetCursorPos(ImVec2{ selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
-								if (UI::UIActionButton(action.g.name.c_str(), "##ACTIONSTUFF" + i++, selected_action == id))
+								if (auto action = instance.ecs.get_if<tc::Graph>(id))
 								{
-									selected_action = id;
-									battle_state = BATTLE_STATE::SELECT_WEAPON;
+									ImGui::SetCursorPos(ImVec2{ selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
+									if (UI::UIActionButton(action->g.name.c_str(), "##ACTIONSTUFF" + i++, selected_action == id))
+									{
+										selected_action = id;
+										battle_state = BATTLE_STATE::SELECT_WEAPON;
+									}
 								}
 							}
 						}
@@ -237,19 +238,24 @@ namespace Tempest
 							}
 							else
 							{
+								bool all_bad = true;
 								for (auto id : charac.weapons)
 								{
-									auto& action = instance.ecs.get<tc::Weapon>(id);
-
-									ImGui::SetCursorPos(ImVec2{ selected_weapon == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
-									if (UI::UIActionButton(action.name.c_str(), "##WEAPONSTUFF" + i++, selected_weapon == id))
+									if (auto action = instance.ecs.get_if<tc::Weapon>(id))
 									{
-										selected_weapon = id;
-										other_entity = INVALID;
-										battle_state = BATTLE_STATE::SELECT_OTHER;
-										state = State::ATTACKING;
+										ImGui::SetCursorPos(ImVec2{ selected_weapon == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
+										if (UI::UIActionButton(action->name.c_str(), "##WEAPONSTUFF" + i++, selected_weapon == id))
+										{
+											selected_weapon = id;
+											other_entity = INVALID;
+											battle_state = BATTLE_STATE::SELECT_OTHER;
+											state = State::ATTACKING;
+										}
+										all_bad = false;
 									}
 								}
+								if(all_bad)
+									charac.weapons.clear();
 							}
 
 						}
@@ -351,13 +357,14 @@ namespace Tempest
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 							for (auto id : charac.actions)
 							{
-								auto& action = instance.ecs.get<tc::Graph>(id);
-
-								ImGui::SetCursorPos(ImVec2{ other_selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
-								if (UI::UIActionButton(action.g.name.c_str(), "##ACTIONSTUFF" + i++, other_selected_action == id))
+								if (auto action = instance.ecs.get_if<tc::Graph>(id))
 								{
-									other_selected_action = id;
-									battle_state = BATTLE_STATE::SELECT_WEAPON;
+									ImGui::SetCursorPos(ImVec2{ other_selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
+									if (UI::UIActionButton(action->g.name.c_str(), "##ACTIONSTUFF" + i++, other_selected_action == id))
+									{
+										other_selected_action = id;
+										battle_state = BATTLE_STATE::SELECT_WEAPON;
+									}
 								}
 							}
 						}
@@ -399,40 +406,45 @@ namespace Tempest
 							}
 							else
 							{
+								bool all_bad = true;
 								for (auto id : charac.weapons)
 								{
-									auto& action = instance.ecs.get<tc::Weapon>(id);
-
-									ImGui::SetCursorPos(ImVec2{ other_selected_weapon == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
-									if (UI::UIActionButton(action.name.c_str(), "##WEAPONSTUFF" + i++, other_selected_weapon == id))
+									if (auto action = instance.ecs.get_if<tc::Weapon>(id))
 									{
-										other_selected_weapon = id;
-										battle_state = BATTLE_STATE::BATTLE_GLIMPSE;
-										state = State::GLIMPSE;
+										ImGui::SetCursorPos(ImVec2{ other_selected_weapon == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
+										if (UI::UIActionButton(action->name.c_str(), "##WEAPONSTUFF" + i++, other_selected_weapon == id))
+										{
+											other_selected_weapon = id;
+											battle_state = BATTLE_STATE::BATTLE_GLIMPSE;
+											state = State::GLIMPSE;
 
-										auto& atker = instance.ecs.get<tc::Character>(curr_entity);
-										auto& defer = instance.ecs.get<tc::Character>(other_entity);
+											auto& atker = instance.ecs.get<tc::Character>(curr_entity);
+											auto& defer = instance.ecs.get<tc::Character>(other_entity);
 
-										atker.chosen_weapon = selected_weapon;
-										defer.chosen_weapon = other_selected_weapon;
+											atker.chosen_weapon = selected_weapon;
+											defer.chosen_weapon = other_selected_weapon;
 
-										auto sequence = instance.ecs.view_first<tc::ConflictGraph>();
+											auto sequence = instance.ecs.view_first<tc::ConflictGraph>();
 
-										/*SimulateConflict s{
-											instance.selected,
-											other_entity,
-											selected_action,
-											other_selected_action,
-											sequence, freq, win, lose, attack, defend, finish };*/
+											/*SimulateConflict s{
+												instance.selected,
+												other_entity,
+												selected_action,
+												other_selected_action,
+												sequence, freq, win, lose, attack, defend, finish };*/
 
-										Service<EventManager>::Get().instant_dispatch<SimulateConflict>(
-											curr_entity,
-											other_entity,
-											selected_action,
-											other_selected_action,
-											sequence, freq, win, lose, attack, defend, finish);
+											Service<EventManager>::Get().instant_dispatch<SimulateConflict>(
+												curr_entity,
+												other_entity,
+												selected_action,
+												other_selected_action,
+												sequence, freq, win, lose, attack, defend, finish);
+										}
+										all_bad = false;
 									}
 								}
+								if (all_bad)
+									charac.weapons.clear();
 							}
 
 
