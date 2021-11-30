@@ -204,14 +204,14 @@ namespace Tempest
 
 	tpair<id_t, bool> PhysicsObject::raycast(vec3 origin, vec3 dir)
 	{
-		PxRaycastBuffer result;
-		auto max_dist = 100.f;
-		if (scene->raycast(math_cast( origin ), math_cast( dir ), max_dist, result))
-		{
-			auto* actor = result.getAnyHit(0).actor;
-			if (actor != static_cast<PxRigidActor*>(ground_plane))
-				return make_tpair(PtrToUint(actor->getName()), true);
-		}
+		//PxRaycastBuffer result;
+		//auto max_dist = 100.f;
+		//if (scene->raycast(math_cast( origin ), math_cast( dir ), max_dist, result))
+		//{
+		//	auto* actor = result.getAnyHit(0).actor;
+		//	if (actor != static_cast<PxRigidActor*>(ground_plane))
+		//		return make_tpair(PtrToUint(actor->getName()), true);
+		//}
 		return make_tpair(0, false);
 	}
 
