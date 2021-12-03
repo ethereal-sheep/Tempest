@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <bitset>
 #include "Util.h"
 #include "TMath.h"
 #include "ECS\Entity.h"
@@ -678,11 +679,21 @@ namespace Tempest
 			static const char* get_type() { return "ActionGraph"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, ActionGraph& )
+			friend Archiver& operator&(Archiver& ar, ActionGraph& component)
 			{
 				ar.StartObject();
+				ar.Member("Action_Category", component.category);
 				return ar.EndObject();
 			}
+
+			enum ACTION_CAT : int
+			{
+				AC_NONE = 0,
+				AC_ATTK = 1,
+				AC_DEF  = 2,
+				AC_ATTK_DEF = AC_ATTK | AC_DEF
+			};
+			ACTION_CAT category{ AC_ATTK_DEF }; // set to attack + defend by default
 		};
 
 		struct ResolutionGraph

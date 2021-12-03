@@ -172,14 +172,14 @@ namespace Tempest
 
 
 				// graph name (got bug, first letter always hidden when entering new name)
-				if (id)
+				if (id && instance.ecs.has<tc::ActionGraph>(id))
 				{
 					ImGui::PushFont(FONT_HEAD);
 					ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
 					ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.f,0.f,0.f, 0.f });
 					const ImVec2 text_size{ ImGui::CalcTextSize(temp_graph.name.c_str()) };
 					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.8f - text_size.x * 0.5f, viewport->Size.y * 0.1f });
-					if (ImGui::BeginChild("Editing name", ImVec2{ text_size.x * 2.0f, text_size.y + 5.0f}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
+					if (ImGui::BeginChild("Editing name", ImVec2{ text_size.x * 2.0f, text_size.y + 5.0f}, false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
 					{
 						ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
 						ImGui::PushItemWidth(text_size.x * 2.0f);
@@ -188,9 +188,43 @@ namespace Tempest
 						ImGui::PopStyleColor();
 					}
 					ImGui::EndChild();
-					ImGui::PopStyleVar();
 					ImGui::PopStyleColor();
+					ImGui::PopStyleVar();
 					ImGui::PopFont();
+
+					// render the category
+					if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+					{
+						ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
+						ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.f,0.f,0.f, 0.f });
+						auto& action_graph = instance.ecs.get<tc::ActionGraph>(id);
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.8f , viewport->Size.y * 0.15f });
+						if (ImGui::BeginChild("Category edit", ImVec2{ 150.0f, 80.0f}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
+						{
+							attack_action = action_graph.category & tc::ActionGraph::AC_ATTK;
+							defend_action = action_graph.category & tc::ActionGraph::AC_DEF;
+
+							ImGui::SameLine();
+							ImGui::PushFont(FONT_BODY);
+							ImGui::Text("Attack");
+							ImGui::SameLine();
+							if(UI::UICheckBox_1("##attack_cat", &attack_action))
+								(int&)action_graph.category ^= tc::ActionGraph::ACTION_CAT::AC_ATTK;
+
+							ImGui::Dummy(ImVec2{ 0.f,5.f });
+
+							ImGui::Text("Defend");
+							ImGui::SameLine();
+							if (UI::UICheckBox_1("##defend_cat", &defend_action))
+								(int&)action_graph.category ^= tc::ActionGraph::ACTION_CAT::AC_DEF;
+						
+							ImGui::PopFont();
+						}
+						ImGui::EndChild();
+						ImGui::PopStyleColor();
+						ImGui::PopStyleVar();
+			
+					}
 				}
 
 				const ImVec2 ChildSize{ viewport->Size.x * 0.15f, viewport->Size.y * 0.75f };
@@ -242,10 +276,13 @@ namespace Tempest
 
 								if (UI::ConfirmDeletePopup(string("DeleteAction##" + std::to_string(i)).c_str(), "Delete this action?"))
 								{
-									instance.ecs.emplace<tc::Destroyed>(id);
-									id = UNDEFINED;
-									temp_graph.clear();
-									temp_graph.name = "";
+									instance.ecs.emplace<tc::Destroyed>(current_graph);
+									if (current_graph == id)
+									{
+										id = UNDEFINED;
+										temp_graph.clear();
+										temp_graph.name = "";
+									}
 								}
 
 								++i;
@@ -270,10 +307,13 @@ namespace Tempest
 
 								if (UI::ConfirmDeletePopup(string("DeleteSequence##" + std::to_string(i)).c_str(), "Delete this sequence?"))
 								{
-									instance.ecs.emplace<tc::Destroyed>(id);
-									id = UNDEFINED;
-									temp_graph.clear();
-									temp_graph.name = "";
+									instance.ecs.emplace<tc::Destroyed>(current_graph);
+									if (current_graph == id)
+									{
+										id = UNDEFINED;
+										temp_graph.clear();
+										temp_graph.name = "";
+									}
 								}
 
 								++i;

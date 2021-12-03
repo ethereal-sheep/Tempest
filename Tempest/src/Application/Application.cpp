@@ -44,7 +44,7 @@ namespace Tempest
 		Logger::Init();
 		Service<RenderSystem>::Register(m_width, m_height);
 		LOG("Initializing Tempest Engine");
-		Service<thread_pool>::Register(std::thread::hardware_concurrency() / 2);
+		Service<thread_pool>::Register(std::thread::hardware_concurrency());
 		Service<EventManager>::Register();
 
 		AudioEngine::Init();

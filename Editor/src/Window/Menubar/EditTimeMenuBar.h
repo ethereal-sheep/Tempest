@@ -160,8 +160,13 @@ namespace Tempest
 					ImGui::MenuItem("imPlot Demo", nullptr, &implot_demo_visible);
 					ImGui::EndMenu();
 				}
-
+				
 				ImGui::EndMainMenuBar();
+
+			}
+			if (demo_visible)
+			{
+				ImGui::ShowDemoWindow();
 			}
 
 			if (demo_visible)
@@ -169,7 +174,7 @@ namespace Tempest
 			if (implot_demo_visible)
 				ImPlot::ShowDemoWindow();
 		}
-
+		
 		bool toggle = true;
 		bool demo_visible = false;
 		bool implot_demo_visible = false;
