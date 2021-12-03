@@ -218,12 +218,8 @@ namespace Tempest
 								ImGui::SetCursorPos(ImVec2{ selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
 								if (UI::UIActionButton(action.g.name.c_str(), "##ACTIONSTUFF" + i++, selected_action == id))
 								{
-									ImGui::SetCursorPos(ImVec2{ selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
-									if (UI::UIActionButton(action->g.name.c_str(), "##ACTIONSTUFF" + i++, selected_action == id))
-									{
 										selected_action = id;
 										battle_state = BATTLE_STATE::SELECT_WEAPON;
-									}
 								}
 							}
 						}
@@ -370,12 +366,8 @@ namespace Tempest
 								ImGui::SetCursorPos(ImVec2{ other_selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
 								if (UI::UIActionButton(action.g.name.c_str(), "##ACTIONSTUFF" + i++, other_selected_action == id))
 								{
-									ImGui::SetCursorPos(ImVec2{ other_selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
-									if (UI::UIActionButton(action->g.name.c_str(), "##ACTIONSTUFF" + i++, other_selected_action == id))
-									{
-										other_selected_action = id;
-										battle_state = BATTLE_STATE::SELECT_WEAPON;
-									}
+									other_selected_action = id;
+									battle_state = BATTLE_STATE::SELECT_WEAPON;
 								}
 							}
 						}

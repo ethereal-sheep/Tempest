@@ -172,7 +172,7 @@ namespace Tempest
 
 
 				// graph name (got bug, first letter always hidden when entering new name)
-				if (id)
+				if (id && instance.ecs.has<tc::ActionGraph>(id))
 				{
 					ImGui::PushFont(FONT_HEAD);
 					ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
