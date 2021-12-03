@@ -100,10 +100,34 @@ namespace Tempest
 			}
 	}
 
+	void collision_helper(id_t id, const tc::Transform& t, const tc::Shape& shape, tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>>& m)
+	{
+		vec3 s, e;
+
+		e.x = .5f;
+		e.z = .5f;
+
+		s.x = shape.y ? -.5f : .5f;
+		s.z = shape.x ? -.5f : .5f;
+
+		auto rot = t.rotation;
+		s = rot * s;
+		e = rot * e;
+
+		int a_x = (int)std::floor(t.position.x + s.x);
+		int a_y = (int)std::floor(t.position.z + s.z);
+		int b_x = (int)std::floor(t.position.x + e.x);
+		int b_y = (int)std::floor(t.position.z + e.z);
+
+		m[a_x][a_y][b_x][b_y] = id;
+		m[b_x][b_y][a_x][a_y] = id;
+	}
+
 	void RuntimeInstance::_update(float )
 	{
 		collision_map.clear();
 		character_map.clear();
+		wall_map.clear();
 
 		for (auto id : ecs.view<tc::Collision, tc::Transform, tc::Shape>())
 		{
@@ -119,6 +143,14 @@ namespace Tempest
 			auto& shape = ecs.get<tc::Shape>(id);
 
 			collision_helper(id, transform, shape, character_map);
+		}
+
+		for (auto id : ecs.view<tc::Wall, tc::Transform, tc::Shape>())
+		{
+			auto& transform = ecs.get<tc::Transform>(id);
+			auto& shape = ecs.get<tc::Shape>(id);
+
+			collision_helper(id, transform, shape, wall_map);
 		}
 
 

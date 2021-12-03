@@ -77,6 +77,8 @@
     <ClCompile Include="src\Graphics\PBR\ModelPBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
+    <ClCompile Include="src\ECS\Scene.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\GroupNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -228,6 +230,7 @@
     <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />
     <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
     <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
+    <ClInclude Include="src\Util\shape_manip.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

@@ -36,20 +36,18 @@ namespace Tempest
 		{
 			if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 			{
-				for (auto thisGraph : a.instance.ecs.view<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
+				if(auto thisGraph = a.instance.ecs.view_first<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
 				{
 					id = thisGraph;
 					temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
-					break;
 				}
 			}
 			else
 			{
-				for (auto thisGraph : a.instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
+				if (auto thisGraph = a.instance.ecs.view_first<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
 				{
 					id = thisGraph;
 					temp_graph = a.instance.ecs.get<tc::Graph>(id).g;
-					break;
 				}
 			}
 		}
@@ -412,25 +410,11 @@ namespace Tempest
 
 			update_create(g);
 			update_delete(g);
+			draw_context(g, instance);
 
 
 			// context
 			// ---------
-			ax::NodeEditor::Suspend();
-
-			if (ax::NodeEditor::ShowBackgroundContextMenu())
-			{
-				mouse = ImGui::GetMousePos();
-				ImGui::OpenPopup("Create New Node");
-			}
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-
-			draw_background_context(g, instance);
-
-			ImGui::PopStyleVar();
-
-			ax::NodeEditor::Resume();
 			// ---------
 
 
@@ -462,110 +446,144 @@ namespace Tempest
 				node_ptr->position.x = v.x;
 				node_ptr->position.y = v.y;
 
+				auto new_size = ax::NodeEditor::GetNodeSize(node_id);
+				node_ptr->size.x = new_size.x;
+				node_ptr->size.y = new_size.y;
+
 			}
+
 		}
 	}
 
 	void AttackSystemOverlay::draw_node(node_ptr n, const graph& g, Instance& instance)
 	{
-		ax::NodeEditor::BeginNode(n->get_id());
-
-		float owidth = 0.f;
-		for (const auto& output : n->get_outputs())
+		// if its a comment node do this instead
+		if (n->get_category() == category_type::Group)
 		{
-			owidth = std::max(
-				owidth,
-				ImGui::CalcTextSize(output.get_name().c_str()).x);
-		}
-		float iwidth = 0.f;
-		for (const auto& input : n->get_inputs())
-		{
-			iwidth = std::max(
-				iwidth,
-				ImGui::CalcTextSize(input.get_name().c_str()).x);
-		}
+			auto ID = n->get_id();
+			const auto& size = n->size;
+			// Start Node
+			ax::NodeEditor::BeginNode(ID);
 
-		float twidth = ImGui::CalcTextSize(n->get_name().c_str()).x;
+			// Title
+			ImGui::Text(n->get_name().c_str());
 
-		// Title
-		//auto size = ax::NodeEditor::GetNodeSize(id);
-		//ImGui::SameLine(100.f);
+			ax::NodeEditor::Group({ size.x, size.y });
+			ax::NodeEditor::EndNode();
 
-		if (n->get_name() != "")
-		{
-			ImGui::PushFont(FONT_BOLD);
-			ImGui::Dummy({ 10.f, 1.f });
-			ImGui::SameLine();
-
-			/*if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
+			// Comment
+			if (ax::NodeEditor::BeginGroupHint(ID))
 			{
-				auto gid = gn->graph_entity;
+				auto min = ax::NodeEditor::GetGroupMin();
+				auto spacing = ImVec2(-8, ImGui::GetTextLineHeightWithSpacing()-4);
 
-				ImGui::Text("%s: %u", instance.ecs.get<tc::Graph>(gid).g.get_name().c_str(), gid);
-			}
-			else */
-			if (auto gsn = dynamic_cast<StatNode*>(n.get()))
-			{
-				tc::Statline* statline = nullptr;
-				for (auto i : instance.ecs.view<tc::Statline>())
-					statline = instance.ecs.get_if<tc::Statline>(i);
-
-				string s = magic_enum::enum_name(gsn->get_type()).data();
-				auto index = std::stoi(gsn->get_name());
-				
-				string name;
-				switch (gsn->get_type())
-				{
-				case Tempest::StatNode::inner_type::GetStat:
-					name = "Get " + (*statline)[index];
-					break;
-				case Tempest::StatNode::inner_type::SetStat:
-					name = "Set " + (*statline)[index];
-					break;
-				case Tempest::StatNode::inner_type::GetMain:
-					name = "Get Main";
-					break;
-				case Tempest::StatNode::inner_type::SetMain:
-					name = "Set Main";
-					break;
-				default:
-					name = "If you see this, the node is corrupted";
-					break;
-				}
-
-				ImGui::Text(name.c_str());
-				twidth = ImGui::CalcTextSize(name.c_str()).x;
-			}
-			else
+				ImGui::SetCursorScreenPos({ min.x - spacing.x, min.y - spacing.y });
+				ImGui::BeginGroup();
 				ImGui::Text(n->get_name().c_str());
-			ImGui::PopFont();
+				ImGui::EndGroup();
+			}
+			ax::NodeEditor::EndGroupHint();
 		}
-
-		// Input group
-		ImGui::BeginGroup();
-		for (const auto& input : n->get_inputs())
+		else
 		{
-			draw_input_pin(input, g);
-		}
+			ax::NodeEditor::BeginNode(n->get_id());
 
-		float extra_offset = 0.f;
-		if (!n->get_num_inputs())
-		{
-			extra_offset = 50.f;
-			ImGui::Dummy({ twidth - owidth, 0.1f });
-		}
-		ImGui::EndGroup();
+			float owidth = 0.f;
+			for (const auto& output : n->get_outputs())
+			{
+				owidth = std::max(
+					owidth,
+					ImGui::CalcTextSize(output.get_name().c_str()).x);
+			}
+			float iwidth = 0.f;
+			for (const auto& input : n->get_inputs())
+			{
+				iwidth = std::max(
+					iwidth,
+					ImGui::CalcTextSize(input.get_name().c_str()).x);
+			}
 
-		// Output group
-		ImGui::SameLine();
-		ImGui::BeginGroup();
-		for (const auto& output : n->get_outputs())
-		{
-			draw_output_pin(output, owidth);
-		}
+			float twidth = ImGui::CalcTextSize(n->get_name().c_str()).x;
 
-		ImGui::EndGroup();
-		ax::NodeEditor::EndNode();
+			// Title
+			//auto size = ax::NodeEditor::GetNodeSize(id);
+			//ImGui::SameLine(100.f);
+
+			if (n->get_name() != "")
+			{
+				ImGui::PushFont(FONT_BOLD);
+				ImGui::Dummy({ 10.f, 1.f });
+				ImGui::SameLine();
+
+				/*if (auto gn = dynamic_cast<ActionGraphNode*>(n.get()))
+				{
+					auto gid = gn->graph_entity;
+
+					ImGui::Text("%s: %u", instance.ecs.get<tc::Graph>(gid).g.get_name().c_str(), gid);
+				}
+				else */
+				if (auto gsn = dynamic_cast<StatNode*>(n.get()))
+				{
+					tc::Statline* statline = nullptr;
+					for (auto i : instance.ecs.view<tc::Statline>())
+						statline = instance.ecs.get_if<tc::Statline>(i);
+
+					string s = magic_enum::enum_name(gsn->get_type()).data();
+					auto index = std::stoi(gsn->get_name());
+
+					string name;
+					switch (gsn->get_type())
+					{
+					case Tempest::StatNode::inner_type::GetStat:
+						name = "Get " + (*statline)[index];
+						break;
+					case Tempest::StatNode::inner_type::SetStat:
+						name = "Set " + (*statline)[index];
+						break;
+					case Tempest::StatNode::inner_type::GetMain:
+						name = "Get Main";
+						break;
+					case Tempest::StatNode::inner_type::SetMain:
+						name = "Set Main";
+						break;
+					default:
+						name = "If you see this, the node is corrupted";
+						break;
+					}
+
+					ImGui::Text(name.c_str());
+					twidth = ImGui::CalcTextSize(name.c_str()).x;
+				}
+				else
+					ImGui::Text(n->get_name().c_str());
+				ImGui::PopFont();
+			}
+
+			// Input group
+			ImGui::BeginGroup();
+			for (const auto& input : n->get_inputs())
+			{
+				draw_input_pin(input, g);
+			}
+
+			float extra_offset = 0.f;
+			if (!n->get_num_inputs())
+			{
+				extra_offset = 50.f;
+				ImGui::Dummy({ twidth - owidth, 0.1f });
+			}
+			ImGui::EndGroup();
+
+			// Output group
+			ImGui::SameLine();
+			ImGui::BeginGroup();
+			for (const auto& output : n->get_outputs())
+			{
+				draw_output_pin(output, owidth);
+			}
+			ImGui::EndGroup();
+			ax::NodeEditor::EndNode();
+		}
 	}
 
 	void AttackSystemOverlay::draw_link(link l, pin_id_t from, pin_id_t to, pin_type pin_t)
@@ -780,9 +798,156 @@ namespace Tempest
 	}
 
 
+	void AttackSystemOverlay::draw_context(graph& g, Instance& instance)
+	{
+		static ax::NodeEditor::NodeId contextNodeId = 0;
+		static ax::NodeEditor::PinId contextPinId = 0;
+		static ax::NodeEditor::LinkId contextLinkId = 0;
+
+		ax::NodeEditor::Suspend();
+
+
+		if (ax::NodeEditor::ShowNodeContextMenu(&contextNodeId))
+		{
+			mouse = ImGui::GetMousePos();
+			ImGui::OpenPopup("Node Context Menu");
+		}
+
+		else if (ax::NodeEditor::ShowPinContextMenu(&contextPinId))
+		{
+			mouse = ImGui::GetMousePos();
+			ImGui::OpenPopup("Pin Context Menu");
+		}
+
+		else if (ax::NodeEditor::ShowLinkContextMenu(&contextLinkId))
+		{
+			mouse = ImGui::GetMousePos();
+			ImGui::OpenPopup("Link Context Menu");
+		}
+
+		else if (ax::NodeEditor::ShowBackgroundContextMenu())
+		{
+			mouse = ImGui::GetMousePos();
+			ImGui::OpenPopup("Create New Node");
+		}
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+
+		draw_node_context(g, instance, contextNodeId);
+		draw_pin_context(g, instance, contextPinId);
+		draw_link_context(g, instance, contextLinkId);
+		draw_background_context(g, instance);
+
+		ImGui::PopStyleVar();
+
+
+		ax::NodeEditor::Resume();
+	}
+
+	void AttackSystemOverlay::draw_node_context(graph& g, Instance& , ax::NodeEditor::NodeId contextNodeId)
+	{
+		if (ImGui::BeginPopup("Node Context Menu", ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			if (auto* node = g.get_node((node_id_t)contextNodeId.Get()))
+			{
+				if (node->get_category() == category_type::Group)
+				{
+					ImGui::PushID((node_id_t)contextNodeId.Get());
+					ImGui::InputText("", &node->name);
+					ImGui::PopID();
+				}
+				else
+					ImGui::TextUnformatted(ICON_FA_PROJECT_DIAGRAM " Node");
+
+
+				ImGui::Separator();
+
+				ImGui::Text("Category: %s", magic_enum::enum_name(node->get_category()).data());
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Delete"))
+					ax::NodeEditor::DeleteNode(contextNodeId);
+
+				if (ImGui::MenuItem("Copy", "", false, ax::NodeEditor::GetSelectedObjectCount()))
+					copy_selected();
+			}
+			else
+			{
+				ImGui::Text("Unknown node: %u", contextNodeId.Get());
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	void AttackSystemOverlay::draw_pin_context(graph& g, Instance&, ax::NodeEditor::PinId contextPinId)
+	{
+		if (ImGui::BeginPopup("Pin Context Menu", ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::TextUnformatted(ICON_FA_MAP_MARKER " Pin");
+			ImGui::Separator();
+			if (auto* i_pin = g.get_input_pin((pin_id_t)contextPinId.Get()))
+			{
+				ImGui::Text("Input");
+				ImGui::Text("Type: %s", magic_enum::enum_name(i_pin->get_type()).data());
+				auto [a,b,c] = pin_to_component(i_pin->get_id());
+				if (auto n = g.get_node(c))
+					ImGui::Text("Node: %s", n->get_name().c_str());
+				else
+					ImGui::Text("Node: %s", "<none>");
+			}
+			else if (auto* o_pin = g.get_output_pin((pin_id_t)contextPinId.Get()))
+			{
+				ImGui::Text("Output");
+				ImGui::Text("Type: %s", magic_enum::enum_name(o_pin->get_type()).data());
+				auto [a, b, c] = pin_to_component(o_pin->get_id());
+				if (auto n = g.get_node(c))
+					ImGui::Text("Node: %s", n->get_name().c_str());
+				else
+					ImGui::Text("Node: %s", "<none>");
+			}
+			else
+			{
+				ImGui::Text("Unknown pin: %u", contextPinId.Get());
+			}
+
+
+			ImGui::EndPopup();
+		}
+	}
+
+	void AttackSystemOverlay::draw_link_context(graph& g, Instance&, ax::NodeEditor::LinkId contextLinkId)
+	{
+		if (ImGui::BeginPopup("Link Context Menu", ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			auto linkid = (pin_id_t)contextLinkId.Get();
+			auto [from, to] = split_uint64_t(linkid);
+
+			ImGui::TextUnformatted(ICON_FA_LINK " Link");
+			ImGui::Separator();
+			if (linkid)
+			{
+				if (auto* pin = g.get_input_pin(to))
+				{
+					ImGui::Text("Type: %s", magic_enum::enum_name(pin->get_type()).data());
+				}
+			}
+			else
+			{
+				ImGui::Text("Unknown link: %u", linkid);
+			}
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Delete"))
+				ax::NodeEditor::DeleteLink(linkid);
+
+			ImGui::EndPopup();
+		}
+	}
+
 	void AttackSystemOverlay::draw_background_context(graph& g, Instance& instance)
 	{
-		if (ImGui::BeginPopup("Create New Node", ImGuiWindowFlags_NoResize))
+		if (ImGui::BeginPopup("Create New Node", ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 		{
 			// filter
 			{
@@ -794,18 +959,16 @@ namespace Tempest
 					"  \"xxx,yyy\"  display lines containing \"xxx\" or \"yyy\"\n"
 					"  \"-xxx\"     hide lines containing \"xxx\"", false);
 
-				
 			}
 
 			ImGui::Separator();
 
-			ImGui::BeginChild("Nodes", ImVec2(350.f, 300.f), false, ImGuiWindowFlags_NoResize);
+			ImGui::BeginChild("Nodes", ImVec2(250.f, 300.f), false, ImGuiWindowFlags_NoResize);
 
 			node_context<ArithmeticNode>(g, "Operators");
 			node_context<DiceNode>(g, "Dice Rolls");
 			node_context<SwitchNode>(g, "Switches");
 			node_context<CompareNode>(g, "Compare");
-
 
 			string filter_string = filter.InputBuf;
 
@@ -908,7 +1071,7 @@ namespace Tempest
 				}
 			}
 
-			// graph specific context
+			// graph specific contexts
 			if (g.get_type() == graph_type::action)
 			{
 				if (filter_string.empty())
@@ -1113,14 +1276,89 @@ namespace Tempest
 				}
 
 			}
+
+			// comment
+			if (filter_string.empty())
+			{
+				std::string text = "Comment";
+				if (ImGui::Selectable(text.c_str()))
+				{
+					auto node = g.add_node(GroupNode::create_node(string("Comment")));
+
+					if (node)
+					{
+						ax::NodeEditor::SetNodePosition(
+							node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+						);
+					}
+					ImGui::CloseCurrentPopup();
+				}
+			}
+			else
+			{
+				std::string text = "Comment";
+				if (filter.PassFilter(text.c_str()))
+				{
+					if (ImGui::Selectable(text.c_str()))
+					{
+						auto node = g.add_node(GroupNode::create_node(string("Comment")));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+				}
+			}
+			
+			
 			ImGui::EndChild();
 
 			ImGui::EndPopup();
 		}
 	}
 
+	void Tempest::AttackSystemOverlay::copy_selected()
+	{
+		//const auto copyable_size = 1000;
+		//nodes_copied.clear();
+		//links_copied.clear();
+
+		//{
+		//	tvector<ax::NodeEditor::NodeId> nodes_copied_temp(copyable_size);
+		//	auto n = ax::NodeEditor::GetSelectedNodes(nodes_copied_temp.data(), copyable_size);
+		//	for (int i = 0; i < n; ++i)
+		//	{
+		//		//nodes_copied.push_back((node_id_t)nodes_copied_temp[i].Get());
+		//	}
+
+		//}
+		//{
+		//	tvector<ax::NodeEditor::LinkId> links_copied_temp(copyable_size);
+		//	auto n = ax::NodeEditor::GetSelectedLinks(links_copied_temp.data(), copyable_size);
+		//	for (int i = 0; i < n; ++i)
+		//	{
+		//		links_copied.push_back((size_t)links_copied_temp[i].Get());
+		//	}
+		//}
+
+		//copy_from = id;
+	}
+
+	void Tempest::AttackSystemOverlay::paste_selected(graph& g, Instance& instance)
+	{
+		if (auto from = instance.ecs.get_if<tc::Graph>(copy_from))
+		{
+		}
+	}
+
 	void AttackSystemOverlay::update_create(graph& g)
 	{
+		
+
 		if (ax::NodeEditor::BeginCreate())
 		{
 			// create links

@@ -60,14 +60,32 @@ namespace Tempest
 			graph& g,
 			const char* title);
 
-		void draw_background_context(graph& g, Instance& instance);
+        void draw_context(graph& g, Instance& instance);
+
+        void draw_node_context(graph& g, Instance& instance, ax::NodeEditor::NodeId contextNodeId);
+        void draw_pin_context(graph& g, Instance& instance, ax::NodeEditor::PinId contextPinId);
+        void draw_link_context(graph& g, Instance& instance, ax::NodeEditor::LinkId contextLinkId);
+        void draw_background_context(graph& g, Instance& instance);
+
+
+        void copy_selected();
+        void paste_selected(graph& g, Instance& instance);
+
 		void update_create(graph& g);
 		void update_delete(graph& g);
 		ImColor get_pin_color(pin_type type);
 		ax::Drawing::IconType get_pin_icon(pin_type type);
 
+
+
 		graph temp_graph;
         Entity id = UNDEFINED;
+        
+        // copyable stuff
+        tvector<node> nodes_copied;
+        tvector<size_t> links_copied;
+        Entity copy_from = UNDEFINED;
+
         ax::NodeEditor::EditorContext* context;
 		ImVec2 mouse = ImVec2(0, 0);
 		bool OverlayOpen = false;

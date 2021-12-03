@@ -1081,7 +1081,8 @@ namespace Tempest
 
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");; //wtf is this like come on dude
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");;
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tiltShiftMode, "tiltShiftMode");
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(fps / 144.f, "motionBlurScale");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMaxSamples, "motionBlurMaxSamples");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");;
