@@ -496,7 +496,7 @@ namespace Tempest
         ModelObj model;
         model.m_Transform = model_matrix;
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
-        model.m_Model->colours[1] = color;
+        model.m_Model->colours[4] = color;
         m_Pipeline.m_Models.push_back(model);
     }
  
