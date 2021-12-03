@@ -53,9 +53,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -3.5661449432373049,
+                    -8.11400032043457,
                     0.0,
-                    -0.8686197996139526
+                    -2.443077325820923
                 ],
                 "LocalRotation": [
                     0.0,
@@ -100,7 +100,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\UnitBlack_CombatStance2.a"
+                "Path": "Models\\testmodel_new.a"
             }
         },
         {

@@ -367,6 +367,7 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("Charater_Name", component.name);
+				ar.Member("Color", component.color);
 				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
 				//ar.Vector("Charater_DeltaStats", component.StatsDelta);
