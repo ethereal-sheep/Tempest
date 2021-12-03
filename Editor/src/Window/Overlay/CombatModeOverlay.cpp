@@ -211,6 +211,9 @@ namespace Tempest
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 							for (auto id : charac.actions)
 							{
+								if (!(instance.ecs.get<tc::ActionGraph>(id).category & tc::ActionGraph::AC_ATTK))
+									continue;
+
 								auto& action = instance.ecs.get<tc::Graph>(id);
 
 								ImGui::SetCursorPos(ImVec2{ selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
@@ -351,6 +354,9 @@ namespace Tempest
 							float xpos = ImGui::GetCursorPosX() + 60.0f;
 							for (auto id : charac.actions)
 							{
+								if (!(instance.ecs.get<tc::ActionGraph>(id).category & tc::ActionGraph::AC_DEF))
+									continue;
+
 								auto& action = instance.ecs.get<tc::Graph>(id);
 
 								ImGui::SetCursorPos(ImVec2{ other_selected_action == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
@@ -457,6 +463,35 @@ namespace Tempest
 			}
 			else
 			{
+				// draw character turn data here
+				auto& charac_icon = tex_map["Assets/CharacterIcon.png"];
+				const ImVec2 child_size{ charac_icon->GetWidth() * units.size() * 1.1f + 20.0f * units.size() - 1, charac_icon->GetHeight() * 2.f };
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - child_size.x * 0.5f, viewport->Size.y * 0.2f - child_size.y * 0.5f});
+				if (ImGui::BeginChild("Select other entity attack", child_size, true))
+				{
+					int i = 0;
+					for (auto id : units)
+					{
+						if (curr_turn != i++)
+						{
+							if (!i)
+							{
+								ImGui::Dummy(ImVec2{ 20.0f, charac_icon->GetHeight() * 0.9f });
+							//	ImGui::SameLine();
+							}
+							
+							UI::UICharButton_NoDelete((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", false);
+						}
+							
+						else
+							UI::UICharButton_Arrow((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", true);
+
+						ImGui::SameLine();
+					}
+				}
+
+				ImGui::EndChild();
+				
 				// outlines all units in the map
 				for (auto& [x, m] : instance.character_map)
 					for (auto& [y, id] : m)

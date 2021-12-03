@@ -109,6 +109,9 @@ namespace Tempest
 							instance.ecs.emplace<tc::Destroyed>(id);
 							SelectedID = UNDEFINED;
 							weap = nullptr;
+
+							Tabs[CurrentTab].current_state = TabImageData::STATE::UNHOVER;
+							Tabs[CurrentTab].is_active = false;
 						}
 					}
 
@@ -137,13 +140,16 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
-					render_tabs(TABS_TYPE::WEAPON, [&]() {
-						WeaponSheetOverlay::display_weapon_stats(*viewport, instance);
-					});
-
-					render_tabs(TABS_TYPE::USE, [&]() {
+					if (weap)
+					{
+						render_tabs(TABS_TYPE::WEAPON, [&]() {
+							WeaponSheetOverlay::display_weapon_stats(*viewport, instance);
+						});
+					}
+				
+			/*		render_tabs(TABS_TYPE::USE, [&]() {
 						WeaponSheetOverlay::display_use_stats(*viewport, instance);
-					});
+					});*/
 
 					ImGui::PopStyleColor(3);
 				}
@@ -201,10 +207,10 @@ namespace Tempest
 
 	void WeaponSheetOverlay::initialise_tabs()
 	{
-		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/WeaponInfoTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/WeaponInfoTabLit.png"]->GetID());
-		Tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/WeaponInfoTabUnlit.png"]->GetWidth()),
-											 static_cast<float>(tex_map["Assets/WeaponInfoTabUnlit.png"]->GetHeight()) };
+		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/NewWeaponInfoTabUnlit.png"]->GetID());
+		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/NewWeaponInfoTabLit.png"]->GetID());
+		Tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/NewWeaponInfoTabLit.png"]->GetWidth()),
+											 static_cast<float>(tex_map["Assets/NewWeaponInfoTabLit.png"]->GetHeight()) };
 
 		Tabs[TABS_TYPE::USE].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/UseInfoTabUnlit.png"]->GetID());
 		Tabs[TABS_TYPE::USE].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/UseInfoTabLit.png"]->GetID());
