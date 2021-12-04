@@ -89,7 +89,7 @@ namespace Tempest
                     ImGui::Text(str.c_str(), wrap_width);
                     ImGui::PopTextWrapPos();
                     ImGui::PopFont();
-                   ImU32 lineCol = ImGui::GetColorU32({ 0.48f, 0.48f, 0.48f, 0.5f });
+                    ImU32 lineCol = ImGui::GetColorU32({ 0.48f, 0.48f, 0.48f, 0.5f });
                     ImVec2 lineMin{ ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvailWidth() * 0.1f, ImGui::GetCursorScreenPos().y };
                     ImVec2 lineMax{ ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvailWidth() * 0.9f, ImGui::GetCursorScreenPos().y };
 
