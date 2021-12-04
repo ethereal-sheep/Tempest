@@ -38,10 +38,8 @@ namespace Tempest
         const unsigned numOfButtons = 10;
         const float padding = 50.0f;
         const float halfPadding = padding * 0.5f;
-        tsptr<Texture> AddUnitTex;
-        tsptr<Texture> AddActionTex;
-        tsptr<Texture> AddSquenceTex;
-        tsptr<Texture> AddWeaponTex;
-        tsptr<Texture> AddItemTex;
+        tsptr<Texture> LeftBg;
+        tsptr<Texture> ConflictBg;
+
     };
 }

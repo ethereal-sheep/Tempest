@@ -48,6 +48,7 @@ namespace Tempest
 	public:
 		tmap<int, tmap<int, id_t>> collision_map;
 		tmap<int, tmap<int, id_t>> character_map;
+		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> wall_map;
 	};
 }
 

@@ -132,16 +132,16 @@ namespace Tempest
 			ImGui::BeginChild("##LoadingMap", ImVec2{ viewport.Size.x * 0.6f, viewport.Size.y * 0.5f }, true);
 			static int selectedItem = 0;
 
-			const ImVec2 itemSize{ viewport.Size.x * 0.6f * 0.8f, viewport.Size.y * 0.5f * 0.3f };
-			auto tex = tex_map["Assets/test_photo.png"];
+			auto tex = tex_map["Assets/01.png"];
+			const ImVec2 itemSize{ viewport.Size.x * 0.6f * 0.8f, (float)tex->GetHeight() * 0.7f };
 			for(int i = 0 ; i < 5; i++)
 			{
-				ImGui::Dummy(ImVec2{0.f,20.f});
+				ImGui::Dummy(ImVec2{0.f,40.f});
 				ImGui::Dummy(ImVec2{20.f,0.f});
 				ImGui::SameLine();
 				std::string itemid = "##" + std::to_string(i);
 				ImGui::PushID(i);
-				if (UI::UIMapSelectable((void*)static_cast<size_t>(tex->GetID()), "NAME","DATE","UNIT", i == selectedItem, 0, itemSize))
+				if (UI::UIMapSelectable((void*)static_cast<size_t>(tex->GetID()), { (float)tex->GetWidth() *0.7f,(float)tex->GetHeight()*0.7f }, "NAME", "DATE", "UNIT", i == selectedItem, 0, itemSize))
 				{
 					selectedItem = i;
 				

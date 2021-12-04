@@ -61,6 +61,12 @@ namespace Tempest
 				* glm::scale(local->local_scale)
 				* glm::scale(transform->scale);
 
+			auto character = ecs.get_if<tc::Character>(id);
+			if (character != nullptr)
+			{
+				Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+			}
+
 			Service<RenderSystem>::Get().SubmitModel(model->path, test);
 
 			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);

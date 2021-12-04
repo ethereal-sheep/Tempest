@@ -60,9 +60,19 @@ namespace Tempest
 					* glm::scale(local->local_scale)
 					* glm::scale(transform->scale);
 
-				Service<RenderSystem>::Get().SubmitModel(model->path, test);
+				std::filesystem::path p{ model->path };
+				if (strcmp(p.extension().string().c_str(), ".a"))
+				{
+					p.replace_extension(".a");
+				}
+				Service<RenderSystem>::Get().SubmitModel(p.string(), test);
 			}
 		}
+
+		// destroy all deleted stuff in ecs
+		auto view = ecs.view<Components::Destroyed>();
+		tvector<Entity> entities{ view.begin(), view.end() };
+		std::for_each(entities.begin(), entities.end(), std::bind(&ECS::destroy, &ecs, std::placeholders::_1));
 	}
 	void EditTimeInstance::_render()
 	{

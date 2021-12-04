@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <bitset>
 #include "Util.h"
 #include "TMath.h"
 #include "ECS\Entity.h"
@@ -354,7 +355,7 @@ namespace Tempest
 			}
 		};
 
-		static const size_t STAT_TOTAL = 13;
+		static const size_t STAT_TOTAL = 10;
 
 		struct Character
 		{
@@ -366,14 +367,16 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("Charater_Name", component.name);
+				ar.Member("Color", component.color);
 				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
+				//ar.Vector("Charater_DeltaStats", component.StatsDelta);
 				ar.Vector("Actions", component.actions);
 
 				return ar.EndObject();
 			}
 
-			Character() : stats(STAT_TOTAL,0)
+			Character() : stats(STAT_TOTAL,0), StatsDelta(STAT_TOTAL,0)
 			{
 
 			}
@@ -395,15 +398,32 @@ namespace Tempest
 
 				stats[index] = val;
 			}
-
-			[[nodiscard]] int& operator[](size_t index)
+			void set_statDelta(size_t index, int val)
 			{
-				return stats[index];
+				if (index >= STAT_TOTAL)
+					return;
+
+				StatsDelta[index] = val;
 			}
+
+			// If pair.second is true return stats
+			// else return statsDelta
+			[[nodiscard]] int& operator[](std::pair<size_t,bool> index)
+			{
+				if (index.second)
+					return stats[index.first];
+				else
+					return StatsDelta[index.first];
+			}
+
 
 			[[nodiscard]] int& get_stat(size_t index)
 			{
 				return stats[index];
+			}
+			[[nodiscard]] int& get_statDelta(size_t index)
+			{
+				return StatsDelta[index];
 			}
 
 			[[deprecated("Iterate statline and get stat via []")]]
@@ -423,9 +443,10 @@ namespace Tempest
 			Entity chosen_weapon = UNDEFINED; // no need to serialize this
 			tvector<Entity> weapons;
 			tvector<Entity> actions;
-
+			vec3 color = { 1.f, 0.f, 0.f };
 		private:
 			tvector<int> stats;
+			tvector<int> StatsDelta;
 
 		};
 
@@ -518,6 +539,15 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Vector("Statline_Data", component.stat_list);
+
+				// first 5 always true and correct name
+				component.stat_list[0] = tpair<bool, string>(true, "HP");
+				component.stat_list[1] = tpair<bool, string>(true, "ATK");
+				component.stat_list[2] = tpair<bool, string>(true, "DEF");
+				component.stat_list[3] = tpair<bool, string>(true, "Range");
+				component.stat_list[4] = tpair<bool, string>(true, "Move");
+
+
 				return ar.EndObject();
 			}
 
@@ -530,17 +560,14 @@ namespace Tempest
 				stat_list[0] = tpair<bool, string>(true, "HP");
 				stat_list[1] = tpair<bool, string>(true, "ATK");
 				stat_list[2] = tpair<bool, string>(true, "DEF");
+				stat_list[3] = tpair<bool, string>(true, "Range");
+				stat_list[4] = tpair<bool, string>(true, "Move");
 
-				stat_list[3] = tpair<bool, string>(false, "Stat1");
-				stat_list[4] = tpair<bool, string>(false, "Stat2");
-				stat_list[5] = tpair<bool, string>(false, "Stat3");
-				stat_list[6] = tpair<bool, string>(false, "Stat4");
-				stat_list[7] = tpair<bool, string>(false, "Stat5");
-				stat_list[8] = tpair<bool, string>(false, "Stat6");
-				stat_list[9] = tpair<bool, string>(false, "Stat7");
-				stat_list[10] = tpair<bool, string>(false, "Stat8");
-				stat_list[11] = tpair<bool, string>(false, "Stat9");
-				stat_list[12] = tpair<bool, string>(false, "Stat10");
+				stat_list[5] = tpair<bool, string>(false, "Stat1");
+				stat_list[6] = tpair<bool, string>(false, "Stat2");
+				stat_list[7] = tpair<bool, string>(false, "Stat3");
+				stat_list[8] = tpair<bool, string>(false, "Stat4");
+				stat_list[9] = tpair<bool, string>(false, "Stat5");
 			}
 
 			[[deprecated("No more removal of stat")]] 
@@ -653,11 +680,21 @@ namespace Tempest
 			static const char* get_type() { return "ActionGraph"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, ActionGraph& )
+			friend Archiver& operator&(Archiver& ar, ActionGraph& component)
 			{
 				ar.StartObject();
+				ar.Member("Action_Category", component.category);
 				return ar.EndObject();
 			}
+
+			enum ACTION_CAT : int
+			{
+				AC_NONE = 0,
+				AC_ATTK = 1,
+				AC_DEF  = 2,
+				AC_ATTK_DEF = AC_ATTK | AC_DEF
+			};
+			ACTION_CAT category{ AC_ATTK_DEF }; // set to attack + defend by default
 		};
 
 		struct ResolutionGraph

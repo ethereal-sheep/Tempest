@@ -264,6 +264,22 @@ namespace Tempest
 									LOG_ASSERT(instance.ecs.has<tc::Transform>(entity));
 									LOG_ASSERT(instance.ecs.has<tc::Model>(entity));
 
+									/*auto& model = instance.ecs.get<tc::Model>(entity);
+									auto& pipeline = Service<RenderSystem>::Get().m_Pipeline;
+									if (!pipeline.m_ModelLibrary.count(model.path))
+									{
+										std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+										temp->loadModel(model.path);
+										pipeline.m_ModelLibrary.insert(std::make_pair(model.path, std::move(temp)));
+									}
+									ModelObj modelObj;
+									modelObj.m_Model = pipeline.m_ModelLibrary[model.path];
+									auto& ModelColors = Service<RenderSystem>::Get().ModelColors;
+									for (auto i = 0; i < modelObj.m_Model->colours.size(); i++)
+									{
+										ModelColors[selected].push_back(modelObj.m_Model->colours[i]);
+									}
+									*/
 									auto& transform = instance.ecs.get<tc::Transform>(entity);
 									//auto& model = instance.ecs.get<tc::Model>(entity);
 

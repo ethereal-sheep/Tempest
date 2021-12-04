@@ -68,7 +68,7 @@ namespace Tempest
 				}
 
 				auto& cam = Service<RenderSystem>::Get().GetCamera();
-				//cam_ctrl.show_debug(cam);
+				cam_ctrl.show_debug(cam);
 				//cam_ctrl.set_orbit_camera(cam, { 0,0,0 });
 				cam_ctrl.update(cam);
 			}
