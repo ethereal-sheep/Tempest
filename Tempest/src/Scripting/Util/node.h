@@ -150,7 +150,6 @@ namespace Tempest
 		void set_name(const string& _name) { name = _name; }
 
 		node_id_t id;
-		string name;
 		category_type category;
 
 		tvector<input_pin> inputs;
@@ -165,6 +164,7 @@ namespace Tempest
 		size_t non_flow_outputs = 0;
 
 	public:
+		string name;
 		vec2 size{ 1.f, 1.f};
 		vec2 position{ 0.f, 0.f };
 
@@ -256,7 +256,7 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(SetStatNode, SetStat, Owner, Enemy);
 	DEFINE_NODE(GetMainStatNode, GetMainStat, Owner, Enemy);
 	DEFINE_NODE(StatNode, Stat, GetStat, SetStat, GetMain, SetMain);
-
+	DEFINE_NODE(GroupNode, Group, Default);
 	DEFINE_NODE(ConflictNode, Conflict, Start, Win, Lose, AttackRoll, DefendRoll, AttackResolve, DefendResolve);
 	DEFINE_NODE(ActionNode, Action, Input, Output, Roll, Resolve);
 	DEFINE_NODE(SwitchNode, Switch, TwoSwitch, ThreeSwitch, FiveSwitch, TenSwitch, TwentySwitch, ThirtySwitch);
@@ -276,6 +276,7 @@ case category_type::NodeCategory:											\
 		NODE_CASE(SetStatNode, SetStat);
 		NODE_CASE(GetMainStatNode, GetMainStat);
 		NODE_CASE(StatNode, Stat);
+		NODE_CASE(GroupNode, Group);
 
 		NODE_CASE(ConflictNode, Conflict);
 		NODE_CASE(ActionNode, Action);

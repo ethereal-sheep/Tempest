@@ -148,6 +148,7 @@ namespace Tempest
         bool pointShadowBool = true;   // Point light shadows toggle
         bool pbrMode = false;
         bool envMapShow = false;        // Envmap toggle
+        bool tiltShiftMode = false;
 
         bool AAgridShow = true;
         bool TestPBR = false;

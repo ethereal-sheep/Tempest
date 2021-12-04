@@ -2579,8 +2579,8 @@ namespace Tempest::UI
 			bb.Max.y += (spacing_y - spacing_U);
 		}
 		//Drawing of Images to the selectable
-		ImVec2 rectMin = { bb.Min.x + (bb.Max.x * 0.01f), bb.Min.y };
-		ImVec2 rectMax = { bb.Min.x + (bb.Max.x * 0.13f), bb.Max.y };
+		ImVec2 rectMin = { bb.Min.x + (size.x * 0.01f), bb.Min.y };
+		ImVec2 rectMax = { bb.Min.x + (size.x * 0.17f), bb.Max.y };
 		ImVec2 texMax = { rectMin.x + texIndex_Selection->GetWidth() * 0.7f ,rectMin.y + texIndex_Selection->GetHeight() * 0.7f };
 
 		ImVec4 col = { 0.133f, 0.133f, 0.133f, 1.f };

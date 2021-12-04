@@ -1,6 +1,7 @@
 #pragma once
 #include "ECS/Prototypes/Prototype_Category.h"
 #include "../Util/UIElements.h"
+#include "Util/shape_manip.h"
 
 namespace Tempest
 {
@@ -161,9 +162,6 @@ namespace Tempest
 					}
 					if (auto mesh = _current->get_if<tc::Mesh>())
 					{
-						auto transform = _current->get_if<tc::Transform>();
-						if (transform)
-							Service<RenderSystem>::Get().Submit(mesh->code, *transform);
 					}
 					if (auto shape = _current->get_if<tc::Shape>())
 					{
@@ -178,12 +176,12 @@ namespace Tempest
 							ImGui::PushItemWidth(padding);
 							if (ImGui::InputScalar("X##xby", ImGuiDataType_S32, &x, &one))
 							{
-								x = std::clamp(x, 1, 3);
+								x = std::clamp(x, 0, 3);
 							}
 							ImGui::Text(ICON_FA_TIMES);
 							if (ImGui::InputScalar("Y##yby", ImGuiDataType_S32, &y, &one))
 							{
-								y = std::clamp(y, 1, 3);
+								y = std::clamp(y, 0, 3);
 							}
 							ImGui::PopItemWidth();
 
@@ -201,21 +199,18 @@ namespace Tempest
 
 							AABB box;
 
-							int a_x = x, a_y = y, e_x = 0, e_y = 0;
+							auto [a_x, a_y, b_x, b_y] = shape_bounding(x, y);
 
-							if (a_x % 2 != a_y % 2)
-							{
-								a_x = a_y = std::min(x, y);
-								e_x = x - a_x;
-								e_y = y - a_y;
-							}
+							float extra = -.5f;
+							if (x == 0 || y == 0)
+								extra = 0;
 
-							box.min.x = -.5f - (a_x - 1) / 2.f;
-							box.min.z = -.5f - (a_y - 1) / 2.f;
+							box.min.x = a_x + extra;
+							box.min.z = a_y + extra;
 							box.min.y = 0;
 
-							box.max.x = .5f + (a_x - 1) / 2.f + e_x;
-							box.max.z = .5f + (a_y - 1) / 2.f + e_y;
+							box.max.x = b_x + extra;
+							box.max.z = b_y + extra;
 							box.max.y = (float)a;
 
 
@@ -332,67 +327,67 @@ namespace Tempest
 					//		}
 					//	}
 					//}
-				}
 
-				ImGui::Dummy({ 0.f, 2.f });
-				ImGui::TextWrapped("The below are not serialized because they are not components yet");
-				ImGui::Separator();
-				ImGui::Dummy({ 0.f, 1.f });
+					ImGui::Dummy({ 0.f, 2.f });
+					ImGui::TextWrapped("The below are not serialized because they are not components yet");
+					ImGui::Separator();
+					ImGui::Dummy({ 0.f, 1.f });
 
-				// health
-				if (true)
-				{
-					//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
-					bool header = ImGui::CollapsingHeader("Stats##StatsHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
-
-					if (header)
+					// health
+					if (true)
 					{
-						static int hp = 1;
-						static int def = 1;
-						const int one = 1;
-						ImGui::PushItemWidth(padding);
-						if (ImGui::InputScalar("HP##healthinput", ImGuiDataType_S32, &hp, &one))
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("Stats##StatsHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+
+						if (header)
 						{
-							hp = std::max(hp, 1);
-						}
-						if (ImGui::InputScalar("DEF##healthinput", ImGuiDataType_S32, &def, &one))
-						{
-							def = std::max(def, 0);
-						}
-						ImGui::PopItemWidth();
-
-
-						UI::PaddedSeparator(1.f);
-					}
-				}
-				
-				// states
-				if (true)
-				{
-					//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
-					bool header = ImGui::CollapsingHeader("State##StateHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
-
-					if (header)
-					{
-						const static std::vector<string> states = { "Open", "Close", "Breakable", "Interactable" };
-						static std::vector<int> current = { 0,0,0,0 };
-						const static std::vector<string> resources = { "This", "Will", "Be", "Filled", "With", "Compiled", "Resources"};
-
-						for (auto i = 0; i < states.size(); ++i)
-						{
-							if (ImGui::ComboWithFilter(states[i].c_str(), &current[i], resources))
+							static int hp = 1;
+							static int def = 1;
+							const int one = 1;
+							ImGui::PushItemWidth(padding);
+							if (ImGui::InputScalar("HP##healthinput", ImGuiDataType_S32, &hp, &one))
 							{
-
+								hp = std::max(hp, 1);
 							}
-							ImGui::SameLine();
-							ImGui::Text(states[i].c_str());
+							if (ImGui::InputScalar("DEF##healthinput", ImGuiDataType_S32, &def, &one))
+							{
+								def = std::max(def, 0);
+							}
+							ImGui::PopItemWidth();
+
+
+							UI::PaddedSeparator(1.f);
 						}
-
-
-
 					}
-				}
+				
+					// states
+					if (true)
+					{
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("State##StateHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
 
+						if (header)
+						{
+							const static std::vector<string> states = { "Open", "Close", "Breakable", "Interactable" };
+							static std::vector<int> current = { 0,0,0,0 };
+							const static std::vector<string> resources = { "This", "Will", "Be", "Filled", "With", "Compiled", "Resources"};
+
+							for (auto i = 0; i < states.size(); ++i)
+							{
+								if (ImGui::ComboWithFilter(states[i].c_str(), &current[i], resources))
+								{
+
+								}
+								ImGui::SameLine();
+								ImGui::Text(states[i].c_str());
+							}
+
+
+
+						}
+					}
+
+				}
 				ImGui::End();
 
 				if (!p_open)

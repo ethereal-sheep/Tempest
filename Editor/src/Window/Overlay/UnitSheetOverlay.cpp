@@ -955,32 +955,40 @@ namespace Tempest
 		unsigned j = 0;
 		const ImVec2 cursor{ ImGui::GetCursorPosX() + 130, ImGui::GetCursorPosY() + 60 };
 
+		tset<Entity> destroyed;
 		for (auto weap_id : cs->weapons)
 		{
-			auto& weap = instance.ecs.get<tc::Weapon>(weap_id);
-			auto PairResult = UI::UIButtonWithDelete(weap.name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
-			if (PairResult.first)
+			if (auto weap = instance.ecs.get_if<tc::Weapon>(weap_id))
 			{
-				Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
-				Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance, weap_id);
-			}
-			if (PairResult.second)
-			{
-				ImGui::OpenPopup(string("RemoveWeap##" + std::to_string(i)).c_str());
-			}
+				auto PairResult = UI::UIButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
+				if (PairResult.first)
+				{
+					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+					Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance, weap_id);
+				}
+				if (PairResult.second)
+				{
+					ImGui::OpenPopup(string("RemoveWeap##" + std::to_string(i)).c_str());
+				}
 
-			if (UI::ConfirmDeletePopup(string("RemoveWeap##" + std::to_string(i)).c_str(), "Remove this weapon?"))
-			{
-				cs->weapons.erase(std::remove(cs->weapons.begin(), cs->weapons.end(), weap_id), cs->weapons.end());
-			}
+				if (UI::ConfirmDeletePopup(string("RemoveWeap##" + std::to_string(i)).c_str(), "Remove this weapon?"))
+				{
+					cs->weapons.erase(std::remove(cs->weapons.begin(), cs->weapons.end(), weap_id), cs->weapons.end());
+				}
 
-			// display in rows of 2
-			if (i / 3)
+				// display in rows of 2
+				if (i / 3)
+				{
+					i = 0;
+					j++;
+				}
+			}
+			else
 			{
-				i = 0;
-				j++;
+				destroyed.insert(weap_id);
 			}
 		}
+		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
 		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
 		{
@@ -1011,32 +1019,41 @@ namespace Tempest
 		unsigned j = 0;
 		const ImVec2 cursor{ ImGui::GetCursorPosX() + 130, ImGui::GetCursorPosY() + 60 };
 
+		tset<Entity> destroyed;
 		for (auto id : cs->actions)
 		{
-			auto& action = instance.ecs.get<tc::Graph>(id);
-			auto PairResult = UI::UIButtonWithDelete(action.g.name.c_str(), string("##actionn" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
-			if (PairResult.first)
+			if (auto action = instance.ecs.get_if<tc::Graph>(id))
 			{
-				Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
-				Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(id, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
-			}
-			if (PairResult.second)
-			{
-				ImGui::OpenPopup(string("RemoveAction##" + std::to_string(i)).c_str());
-			}
+				auto PairResult = UI::UIButtonWithDelete(action->g.name.c_str(), string("##actionn" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
+				if (PairResult.first)
+				{
+					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+					Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(id, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
+				}
+				if (PairResult.second)
+				{
+					ImGui::OpenPopup(string("RemoveAction##" + std::to_string(i)).c_str());
+				}
 
-			if (UI::ConfirmDeletePopup(string("RemoveAction##" + std::to_string(i)).c_str(), "Remove this action?"))
-			{
-				cs->actions.erase(std::remove(cs->actions.begin(), cs->actions.end(), id), cs->actions.end());
-			}
+				if (UI::ConfirmDeletePopup(string("RemoveAction##" + std::to_string(i)).c_str(), "Remove this action?"))
+				{
+					cs->actions.erase(std::remove(cs->actions.begin(), cs->actions.end(), id), cs->actions.end());
+				}
 
-			// display in rows of 2
-			if (i / 3)
+				// display in rows of 2
+				if (i / 3)
+				{
+					i = 0;
+					j++;
+				}
+			}
+			else
 			{
-				i = 0;
-				j++;
+				destroyed.insert(id);
 			}
 		}
+
+		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
 		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
 		{

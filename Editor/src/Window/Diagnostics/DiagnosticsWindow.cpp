@@ -626,6 +626,14 @@ namespace Tempest
 
 					ImGui::TreePop();
 				}
+				
+				if (ImGui::TreeNode("Tilt Shift"))
+				{
+					auto& tiltShiftMode = Service<RenderSystem>::Get().tiltShiftMode;
+					ImGui::Checkbox("Enable", &tiltShiftMode);
+
+					ImGui::TreePop();
+				}
 
 				ImGui::TreePop();
 			}

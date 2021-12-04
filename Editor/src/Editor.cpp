@@ -50,7 +50,7 @@ namespace Tempest
 		
 	public:
 		Editor()
-			: Application(1600, 900, L"Editor") {}
+			: Application(1600, 900, L"CoReSys") {}
 		
 		void OnInit() override
 		{

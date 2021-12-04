@@ -14,7 +14,7 @@
 #include "Util/GuizmoController.h"
 #include "CameraControls.h"
 #include "Actions/EditorAction.h"
-
+#include "Util/shape_manip.h"
 
 namespace Tempest
 {
@@ -269,24 +269,16 @@ namespace Tempest
 				{
 					const int& x = shape->x;
 					const int& y = shape->y;
-					const int one = 1;
 
 					AABB box;
 
-					int a_x = x, a_y = y, e_x = 0, e_y = 0;
-					if (a_x % 2 != a_y % 2)
-					{
-						a_x = a_y = std::min(x, y);
-						e_x = x - a_x;
-						e_y = y - a_y;
+					auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
 
-					}
+					box.min.x = a_x;
+					box.min.z = a_y;
 
-					box.min.x = - .5f - (a_x - 1) / 2.f;
-					box.min.z = - .5f - (a_y - 1) / 2.f;
-
-					box.max.x = + .5f + (a_x - 1) / 2.f + e_x;
-					box.max.z = + .5f + (a_y - 1) / 2.f + e_y;
+					box.max.x = b_x;
+					box.max.z = b_y;
 
 					auto rot = transform.rotation;
 					box.min = rot * box.min;
@@ -313,12 +305,54 @@ namespace Tempest
 					//Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
 					//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 				}
+				if (auto wall = pf.get_if<tc::Wall>())
+				{
+					auto shape = pf.get_if<tc::Shape>();
+					const int& x = shape->x;
+					const int& y = shape->y;
+
+					vec3 s, e;
+
+					e.x = .5f;
+					e.z = .5f;
+
+					s.x = y ? -.5f : .5f;
+					s.z = x ? -.5f : .5f;
+
+
+					auto rot = transform.rotation;
+					//s = glm::rotateY(s, glm::pi<float>()/2.f);
+					//e = glm::rotateY(e, glm::pi<float>()/2.f);
+
+					s = rot * s;
+					e = rot * e;
+
+					s.x += transform.position.x;
+					s.z += transform.position.z;
+					s.y = 0;
+
+					e.x += transform.position.x;
+					e.z += transform.position.z;
+					e.y = 0;
+
+
+					Line l;
+					l.p0 = s;
+					l.p1 = e;
+
+					/*Line r;
+					r.p0 = glm::vec3(-.1, 0, .1);
+					r.p1 = glm::vec3(.1, 0, -.1);*/
+
+					//Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+					Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+					//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+				}
 			}
 			
 			// highlights
 			if(!io.MouseDown[0])
 			{
-
 				if (io.WantCaptureMouse)
 					return;
 
@@ -328,8 +362,31 @@ namespace Tempest
 				if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 				{
 					auto inter = cam.GetPosition() + ray * dist;
-					id_t id = instance.scene.get_map().find((int)std::round(inter.x-.5f), (int)std::round(inter.z - .5f));
-					
+					id_t id = instance.scene.get_map().find((int)std::round(inter.x - .5f), (int)std::round(inter.z - .5f));
+
+					float r_x = std::round(inter.x) - inter.x;
+					float r_y = std::round(inter.z) - inter.z;
+
+					if (abs(r_x) < 0.1f)
+					{
+						auto c_y = (int)std::round(inter.z - .5f);
+						auto a_x = (int)std::round(inter.x);
+						auto b_x = (int)std::round(inter.x) - 1;
+						if(auto check = instance.scene.get_map().find_edge(a_x, c_y, b_x, c_y))
+							id = check;
+						
+					}
+					else if (abs(r_y) < 0.1f)
+					{
+						auto c_x = (int)std::round(inter.x - .5f);
+						auto a_y = (int)std::round(inter.z);
+						auto b_y = (int)std::round(inter.z) - 1;
+						if(auto check = instance.scene.get_map().find_edge(c_x, a_y, c_x, b_y))
+							id = check;
+					}
+
+					//instance.scene.get_map().find_edge();
+
 					if (id && instance.scene.get_map().exist(id))
 					{
 						auto& pf = instance.scene.get_map().get(id);
@@ -341,24 +398,16 @@ namespace Tempest
 
 							const int& x = shape->x;
 							const int& y = shape->y;
-							const int one = 1;
 
 							AABB box;
 
-							int a_x = x, a_y = y, e_x = 0, e_y = 0;
-							if (a_x % 2 != a_y % 2)
-							{
-								a_x = a_y = std::min(x, y);
-								e_x = x - a_x;
-								e_y = y - a_y;
+							auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
 
-							}
+							box.min.x = a_x;
+							box.min.z = a_y;
 
-							box.min.x = -.5f - (a_x - 1) / 2.f;
-							box.min.z = -.5f - (a_y - 1) / 2.f;
-
-							box.max.x = +.5f + (a_x - 1) / 2.f + e_x;
-							box.max.z = +.5f + (a_y - 1) / 2.f + e_y;
+							box.max.x = b_x;
+							box.max.z = b_y;
 
 							auto rot = transform.rotation;
 							box.min = rot * box.min;
@@ -379,25 +428,14 @@ namespace Tempest
 					{
 						AABB box;
 
-						int a_x = 1, a_y = 1, e_x = 0, e_y = 0;
-						if (a_x % 2 != a_y % 2)
-						{
-							a_x = a_y = std::min(1, 1);
-							e_x = 1 - a_x;
-							e_y = 1 - a_y;
+						auto [a_x, a_y, b_x, b_y] = shape_bounding_with_position(1, 1, inter.x, inter.z);
 
-						}
-
-						inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
-						inter.y = 0;
-						inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
-
-						box.min.x = inter.x - .5f - (a_x - 1) / 2.f;
-						box.min.z = inter.z - .5f - (a_y - 1) / 2.f;
+						box.min.x = a_x;
+						box.min.z = a_y;
 						box.min.y = 0;
 
-						box.max.x = inter.x + .5f + (a_x - 1) / 2.f + e_x;
-						box.max.z = inter.z + .5f + (a_y - 1) / 2.f + e_y;
+						box.max.x = b_x;
+						box.max.z = b_y;
 						box.max.y = 0;
 
 						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
@@ -410,38 +448,39 @@ namespace Tempest
 			// click
 			if (io.MouseClicked[0])
 			{
-				auto vp = cam.GetViewport();
-				auto width = vp.z;
-				auto height = vp.w;
-
 				if (io.WantCaptureMouse)
 					return;
 
-				glm::vec4 lRayStart_NDC(
-					((float)io.MousePos.x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
-					((float)io.MousePos.y / (float)height - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
-					-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
-					1.0f
-				);
-				glm::vec4 lRayEnd_NDC(
-					((float)io.MousePos.x / (float)width - 0.5f) * 2.0f,
-					((float)io.MousePos.y / (float)height - 0.5f) * -2.0f,
-					0.0,
-					1.0f
-				);
-
-				glm::mat4 M = glm::inverse(cam.GetViewProjectionMatrix());
-				glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
-				glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
-				glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
-				lRayDir_world = glm::normalize(lRayDir_world);
-
+				auto ray = cam.GetMouseRay();
 				auto start = cam.GetPosition();
 				float dist = 0;
-				if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+				if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 				{
-					auto inter = cam.GetPosition() + lRayDir_world * dist;
-					instance.selected = instance.scene.get_map().find((int)std::round(inter.x - .5f), (int)std::round(inter.z - .5f));
+					auto inter = cam.GetPosition() + ray * dist;
+					id_t id = instance.scene.get_map().find((int)std::round(inter.x - .5f), (int)std::round(inter.z - .5f));
+
+					float r_x = std::round(inter.x) - inter.x;
+					float r_y = std::round(inter.z) - inter.z;
+
+					if (abs(r_x) < 0.1f)
+					{
+						auto c_y = (int)std::round(inter.z - .5f);
+						auto a_x = (int)std::round(inter.x);
+						auto b_x = (int)std::round(inter.x) - 1;
+						if (auto check = instance.scene.get_map().find_edge(a_x, c_y, b_x, c_y))
+							id = check;
+
+					}
+					else if (abs(r_y) < 0.1f)
+					{
+						auto c_x = (int)std::round(inter.x - .5f);
+						auto a_y = (int)std::round(inter.z);
+						auto b_y = (int)std::round(inter.z) - 1;
+						if (auto check = instance.scene.get_map().find_edge(c_x, a_y, c_x, b_y))
+							id = check;
+					}
+
+					instance.selected = id;
 				}
 			}
 
