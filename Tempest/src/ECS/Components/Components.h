@@ -355,7 +355,7 @@ namespace Tempest
 			}
 		};
 
-		static const size_t STAT_TOTAL = 13;
+		static const size_t STAT_TOTAL = 10;
 
 		struct Character
 		{
@@ -369,12 +369,13 @@ namespace Tempest
 				ar.Member("Charater_Name", component.name);
 				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
+				ar.Vector("Charater_DeltaStats", component.StatsDelta);
 				ar.Vector("Actions", component.actions);
 
 				return ar.EndObject();
 			}
 
-			Character() : stats(STAT_TOTAL,0)
+			Character() : stats(STAT_TOTAL,0), StatsDelta(STAT_TOTAL,0)
 			{
 
 			}
@@ -396,15 +397,32 @@ namespace Tempest
 
 				stats[index] = val;
 			}
-
-			[[nodiscard]] int& operator[](size_t index)
+			void set_statDelta(size_t index, int val)
 			{
-				return stats[index];
+				if (index >= STAT_TOTAL)
+					return;
+
+				StatsDelta[index] = val;
 			}
+
+			// If pair.second is true return stats
+			// else return statsDelta
+			[[nodiscard]] int& operator[](std::pair<size_t,bool> index)
+			{
+				if (index.second)
+					return stats[index.first];
+				else
+					return StatsDelta[index.first];
+			}
+
 
 			[[nodiscard]] int& get_stat(size_t index)
 			{
 				return stats[index];
+			}
+			[[nodiscard]] int& get_statDelta(size_t index)
+			{
+				return StatsDelta[index];
 			}
 
 			[[deprecated("Iterate statline and get stat via []")]]
@@ -427,6 +445,7 @@ namespace Tempest
 
 		private:
 			tvector<int> stats;
+			tvector<int> StatsDelta;
 
 		};
 
@@ -531,17 +550,14 @@ namespace Tempest
 				stat_list[0] = tpair<bool, string>(true, "HP");
 				stat_list[1] = tpair<bool, string>(true, "ATK");
 				stat_list[2] = tpair<bool, string>(true, "DEF");
+				stat_list[3] = tpair<bool, string>(true, "Range");
+				stat_list[4] = tpair<bool, string>(true, "Move");
 
-				stat_list[3] = tpair<bool, string>(false, "Stat1");
-				stat_list[4] = tpair<bool, string>(false, "Stat2");
-				stat_list[5] = tpair<bool, string>(false, "Stat3");
-				stat_list[6] = tpair<bool, string>(false, "Stat4");
-				stat_list[7] = tpair<bool, string>(false, "Stat5");
-				stat_list[8] = tpair<bool, string>(false, "Stat6");
-				stat_list[9] = tpair<bool, string>(false, "Stat7");
-				stat_list[10] = tpair<bool, string>(false, "Stat8");
-				stat_list[11] = tpair<bool, string>(false, "Stat9");
-				stat_list[12] = tpair<bool, string>(false, "Stat10");
+				stat_list[5] = tpair<bool, string>(false, "Stat1");
+				stat_list[6] = tpair<bool, string>(false, "Stat2");
+				stat_list[7] = tpair<bool, string>(false, "Stat3");
+				stat_list[8] = tpair<bool, string>(false, "Stat4");
+				stat_list[9] = tpair<bool, string>(false, "Stat5");
 			}
 
 			[[deprecated("No more removal of stat")]] 
