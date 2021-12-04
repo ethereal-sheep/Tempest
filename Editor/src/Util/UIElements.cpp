@@ -2749,7 +2749,7 @@ namespace Tempest::UI
 		}
 		return { false,false };
 	}
-	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col, const ImVec4& tint_pressed)
+	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = g.CurrentWindow;
@@ -2762,7 +2762,7 @@ namespace Tempest::UI
 		ImGui::PopID();
 
 		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
-		return UIImageButtonEx(id, user_texture_id, size, uv0, uv1, padding, bg_col, tint_col, tint_pressed);
+		return UIImageButtonEx(id, user_texture_id, size, uv0, uv1, padding, bg_col, tint_hover, tint_pressed);
 	}
 	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
 	{
@@ -2787,9 +2787,15 @@ namespace Tempest::UI
 			window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, ImGui::GetColorU32(bg_col));
 
 		if (pressed || held)
+		{
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_pressed));
+			ImGui::SetMouseCursor(7);
+		}
 		else if (hovered)
+		{
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_hover));
+			ImGui::SetMouseCursor(7);
+		}
 		else
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
 
@@ -3448,9 +3454,7 @@ namespace Tempest::UI
 		ImVec2 valTextPos = { arrowMin.x + arrowImg->GetWidth() * 0.7f, arrowMin.y - valTextSize.y * 0.2f };
 		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
 		ImGui::PopFont();
-		
 	}
-
 
 }
 

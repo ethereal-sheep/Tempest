@@ -50,6 +50,7 @@
 #include "Window/Popup/AddUnitsPopup.h"
 #include "Window/Popup/AddActionPopup.h"
 #include "Window/Popup/SelectSequencePopup.h"
+#include "Window/Popup/TutorialPopup.h"
 
 
 #include "Window/Util/SimulationBuilder.h"
@@ -134,6 +135,7 @@ namespace Tempest
 		instance->register_always<AddUnitsPopup>();
 		instance->register_always<AddActionPopup>();
 		instance->register_always<SelectSequencePopup>();
+		instance->register_always<TutorialPopup>();
 
 
 		instance->register_always<SaveBrowser>();

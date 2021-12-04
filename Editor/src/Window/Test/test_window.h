@@ -69,7 +69,10 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
 				}
-				
+				if (ImGui::Button("TUTORIAL"))
+				{
+					Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>();
+				}
 				if (ImGui::Button("DEFINE STATS"))
 				{
 					Service<EventManager>::Get().instant_dispatch<DefineStatsTrigger>();
