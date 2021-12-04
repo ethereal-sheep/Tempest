@@ -40,6 +40,7 @@ namespace Tempest
         const float halfPadding = padding * 0.5f;
         ImVec2 initViewPortSize = ImGui::GetMainViewport()->Size;
         tsptr<Texture> ConflictBg;
-
+        ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
+        ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
     };
 }
