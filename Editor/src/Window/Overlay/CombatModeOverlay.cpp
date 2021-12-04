@@ -17,6 +17,200 @@
 namespace Tempest
 {
 
+	auto collide_first(
+		int x0, int y0, int x1, int y1,
+		tmap<int, tmap<int, id_t>>& collision_map,
+		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>>& wall_map,
+		tmap<int, tmap<int, id_t>>& character_map) {
+
+		auto raytrace = [](int x0, int y0, int x1, int y1, auto visit)
+		{
+			int dx = abs(x1 - x0);
+			int dy = abs(y1 - y0);
+			int x = x0;
+			int y = y0;
+			int n = dx + dy;
+			int x_inc = (x1 > x0) ? 1 : -1;
+			int y_inc = (y1 > y0) ? 1 : -1;
+			int error = dx - dy;
+			dx *= 2;
+			dy *= 2;
+
+			for (; n > 0; --n)
+			{
+				if (error == 0)
+				{
+					if (!visit(x, y, x, y + y_inc)) return std::make_tuple(x, y, x, y + y_inc, true);
+
+					if (!visit(x, y, x + x_inc, y)) return std::make_tuple(x, y, x + x_inc, y, true);
+
+					if (!visit(x, y + y_inc, x + x_inc, y + y_inc)) return std::make_tuple(x, y + y_inc, x + x_inc, y + y_inc, true);
+
+					if (!visit(x + x_inc, y, x + x_inc, y + y_inc)) return std::make_tuple(x + x_inc, y, x + x_inc, y + y_inc, true);
+
+					x += x_inc;
+					y += y_inc;
+					error -= dy;
+					error += dx;
+
+					--n;
+				}
+				else if (error > 0)
+				{
+					if (!visit(x, y, x + x_inc, y)) return std::make_tuple(x, y, x + x_inc, y, true);
+					x += x_inc;
+					error -= dy;
+				}
+				else
+				{
+					if (!visit(x, y, x, y + y_inc)) return std::make_tuple(x, y, x, y + y_inc, true);
+					y += y_inc;
+					error += dx;
+				}
+			}
+			return std::make_tuple(0, 0, 0, 0, false);
+		};
+		tmap<int, tmap<int, bool>> intersects;
+		return raytrace(x0, y0, x1, y1,
+			[&collision_map, &wall_map, &character_map, &intersects](int x, int y, int n_x, int n_y) {
+
+				if (wall_map[x][y][n_x][n_y])
+					return false;
+				if (collision_map[n_x][n_y])
+					return false;
+				return true;
+			});
+	};
+
+	void calculate_range(RuntimeInstance& instance, int p_x, int p_y, int range, tmap<int, tmap<int, uint32_t>>& range_map, tmap<int, tmap<int, bool>>& visited)
+	{
+		range_map.clear();
+		visited.clear();
+		tmap<int, tmap<int, uint32_t>> distance;
+		{
+			//bfs
+			const tvector<tpair<int, int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
+			std::queue<glm::ivec2> q;
+			q.push({ p_x, p_y });
+
+			//draw
+			while (!q.empty())
+			{
+				auto p = q.front();
+				q.pop();
+
+				if (visited[p.x][p.y])
+					continue;
+
+				visited[p.x][p.y] = true;
+
+				auto new_dist = distance[p.x][p.y] + 1;
+				if (new_dist > range)
+					continue;
+
+				for (auto [x, y] : dir)
+				{
+					if (instance.character_map[p.x + x][p.y + y])
+					{
+						visited[p.x + x][p.y + y] = true;
+						distance[p.x + x][p.y + y] = new_dist;
+						continue;
+					}
+					if (instance.collision_map[p.x + x][p.y + y])
+						continue;
+					if (instance.wall_map[p.x][p.y][p.x + x][p.y + y])
+						continue;
+					if (visited[p.x + x][p.y + y])
+						continue;
+
+					distance[p.x + x][p.y + y] = new_dist;
+					q.push({ p.x + x, p.y + y });
+				}
+
+			}
+
+			for (auto& [x, m] : visited)
+				for (auto [y, b] : m)
+				{
+					auto [x0, y0, x1, y1, c] = collide_first(p_x, p_y, x, y, instance.collision_map, instance.wall_map, instance.character_map);
+					if (!c)
+						range_map[x][y] = 0;
+					else if (x == x1 && y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1])
+						range_map[x][y] = 1;
+					else
+						range_map[x][y] = 2;
+
+				}
+		}
+	}
+
+	void draw_range(const tmap<int, tmap<int, uint32_t>>& range_map)
+	{
+		auto drawbox1 = [](int x, int y, bool b, auto grey, bool second) {
+			if (!b) return;
+			AABB box;
+
+			box.min.x = (float)x + .05f;
+			box.min.z = (float)y + .05f;
+			box.min.y = 0;
+
+			box.max.x = x + .95f;
+			box.max.z = y + .95f;
+			box.max.y = 0;
+			Service<RenderSystem>::Get().DrawLine(box, { grey, grey, grey, 1 });
+
+			if (second)
+			{
+				AABB box2;
+				box2.min.x = (float)x + .15f;
+				box2.min.z = (float)y + .15f;
+				box2.min.y = 0;
+
+				box2.max.x = x + .85f;
+				box2.max.z = y + .85f;
+				box2.max.y = 0;
+
+				Service<RenderSystem>::Get().DrawLine(box2, { grey, grey, grey, 1 });
+			}
+		};
+		auto drawbox2 = [](int x, int y, bool b) {
+			if (!b) return;
+			AABB box;
+
+			box.min.x = (float)x + .05f;
+			box.min.z = (float)y + .05f;
+			box.min.y = 0;
+
+			box.max.x = x + .95f;
+			box.max.z = y + .95f;
+			box.max.y = 0;
+
+			AABB box2;
+
+			box2.min.x = (float)x + .0f;
+			box2.min.z = (float)y + .0f;
+			box2.min.y = 0;
+
+			box2.max.x = x + 1.0f;
+			box2.max.z = y + 1.0f;
+			box2.max.y = 0;
+
+			Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
+			Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
+		};
+		for (auto& [x, m] : range_map)
+			for (auto [y, i] : m)
+			{
+				if (i == 0)
+					drawbox1(x, y, true, .15f, true);
+				else if (i == 1)
+					drawbox2(x, y, true);
+				else
+					drawbox1(x, y, true, .05f, false);
+
+			}
+	}
+
 	glm::ivec2 CombatModeOverlay::calculate_world_mouse(const Camera& cam)
 	{
 		auto ray = cam.GetMouseRay();
@@ -130,8 +324,9 @@ namespace Tempest
 		//auto& io = ImGui::GetIO();
 		// draw stuff on selected heads
 		{
-			if (instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
+			if (instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Character>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
 			{
+				auto cs = instance.ecs.get<tc::Character>(curr_entity);
 				auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
 				position.y += 2;
 				auto ss = cam.WorldspaceToScreenspace(position);
@@ -236,21 +431,24 @@ namespace Tempest
 								other_entity = INVALID;
 								battle_state = BATTLE_STATE::SELECT_OTHER;
 								state = State::ATTACKING;
+								calculate_range(instance, p_x, p_y, cs.get_stat(3) + cs.get_statDelta(3), range_map, visited);
 							}
 							else
 							{
 								bool all_bad = true;
 								for (auto id : charac.weapons)
 								{
-									if (auto action = instance.ecs.get_if<tc::Weapon>(id))
+									if (auto weapon = instance.ecs.get_if<tc::Weapon>(id))
 									{
 										ImGui::SetCursorPos(ImVec2{ selected_weapon == id ? xpos - action_button_diff : xpos, ImGui::GetCursorPosY() });
-										if (UI::UIActionButton(action->name.c_str(), "##WEAPONSTUFF" + i++, selected_weapon == id))
+										if (UI::UIActionButton(weapon->name.c_str(), "##WEAPONSTUFF" + i++, selected_weapon == id))
 										{
 											selected_weapon = id;
 											other_entity = INVALID;
 											battle_state = BATTLE_STATE::SELECT_OTHER;
 											state = State::ATTACKING;
+
+											calculate_range(instance, p_x, p_y, cs.get_stat(3) + cs.get_statDelta(3) + weapon->get_stat(3), range_map, visited);
 										}
 										all_bad = false;
 									}
@@ -296,7 +494,8 @@ namespace Tempest
 		//	}
 		//}
 	}
-	
+
+
 	void CombatModeOverlay::attacking(RuntimeInstance& instance, const glm::ivec2& world_mouse)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -502,7 +701,7 @@ namespace Tempest
 				ImGui::EndChild();
 				
 				// outlines all units in the map
-				for (auto& [x, m] : instance.character_map)
+				/*for (auto& [x, m] : instance.character_map)
 					for (auto& [y, id] : m)
 					{
 						if (id)
@@ -521,45 +720,40 @@ namespace Tempest
 							else
 								Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
 						}
-					}
+					}*/
 
 				// if u want display like the triangle on top
 				// need either imgui::image or drawlist
 
-				if (instance.character_map[w_x][w_y])
+
+				// helpers
+				draw_range(range_map);
+
+				if (visited[w_x][w_y])
 				{
-					auto& io = ImGui::GetIO();
 					if (p_x == w_x && p_y == w_y)
 					{
 						Line l;
-						l.p0 = glm::vec3(w_x + .5f - .5, 0, w_y + .5f - .5);
-						l.p1 = glm::vec3(w_x + .5f + .5, 0, w_y + .5f + .5);
+						l.p0 = glm::vec3(w_x + .5f - .5f, 0, w_y + .5f - .5f);
+						l.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f + .5f);
 
 						Line r;
-						r.p0 = glm::vec3(w_x + .5f - .5, 0, w_y + .5f + .5);
-						r.p1 = glm::vec3(w_x + .5f + .5, 0, w_y + .5f - .5);
+						r.p0 = glm::vec3(w_x + .5f - .5f, 0, w_y + .5f + .5f);
+						r.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f - .5f);
 						Service<RenderSystem>::Get().DrawLine(l, { 1,0,0,1 });
 						Service<RenderSystem>::Get().DrawLine(r, { 1,0,0,1 });
 
-						if (io.MouseClicked[0])
+
+
+						if (ImGui::GetIO().MouseClicked[0])
 						{
 							// cancel
 							state = State::MENU;
-							battle_state = BATTLE_STATE::SELECT_WEAPON;
+							battle_state = BATTLE_STATE::CURR_TURN;
 						}
 					}
-					else
+					else if(instance.character_map[w_x][w_y])
 					{
-						/*Line l;
-						l.p0 = glm::vec3(w_x + .5f - .1, 0, w_y + .5f - .1);
-						l.p1 = glm::vec3(w_x + .5f + .1, 0, w_y + .5f + .1);
-
-						Line r;
-						r.p0 = glm::vec3(w_x + .5f - .1, 0, w_y + .5f + .1);
-						r.p1 = glm::vec3(w_x + .5f + .1, 0, w_y + .5f - .1);
-						Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });*/
-
 						auto id = instance.character_map[w_x][w_y];
 
 						auto t_position = instance.ecs.get<tc::Transform>(id).position;
@@ -567,7 +761,7 @@ namespace Tempest
 						auto t_ss = cam.WorldspaceToScreenspace(t_position);
 						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
 						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
-						
+
 						auto temp_cursor = ImGui::GetCursorPos();
 						// Draw whatever thing on their head
 						{
@@ -583,8 +777,6 @@ namespace Tempest
 						}
 						ImGui::SetCursorPos(temp_cursor);
 
-
-
 						auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
 
 						// rotate the fella if the 
@@ -601,7 +793,7 @@ namespace Tempest
 							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(-90.f), vec3{ 0,1,0 });
 						}
 
-						if (io.MouseClicked[0])
+						if (ImGui::GetIO().MouseClicked[0])
 						{
 							// Attack
 							auto attacker = curr_entity;
@@ -614,232 +806,6 @@ namespace Tempest
 							// for now we just cancel
 							//state = State::MENU;
 						}
-					}
-				}
-
-				// helpers
-				auto drawbox = [](int x, int y, bool b) {
-					if (!b) return;
-					AABB box;
-
-					box.min.x = (float)x + .05f;
-					box.min.z = (float)y + .05f;
-					box.min.y = 0;
-
-					box.max.x = x + .95f;
-					box.max.z = y + .95f;
-					box.max.y = 0;
-
-					AABB box2;
-
-					box2.min.x = (float)x + .15f;
-					box2.min.z = (float)y + .15f;
-					box2.min.y = 0;
-
-					box2.max.x = x + .85f;
-					box2.max.z = y + .85f;
-					box2.max.y = 0;
-
-					Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
-					Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
-				};
-				auto raytrace = [](int x0, int y0, int x1, int y1, auto visit)
-				{
-					int dx = abs(x1 - x0);
-					int dy = abs(y1 - y0);
-					int x = x0;
-					int y = y0;
-					int n = dx + dy;
-					int x_inc = (x1 > x0) ? 1 : -1;
-					int y_inc = (y1 > y0) ? 1 : -1;
-					int error = dx - dy;
-					dx *= 2;
-					dy *= 2;
-
-					for (; n > 0; --n)
-					{
-						if (error == 0)
-						{
-							if (!visit(x, y, x, y + y_inc)) return std::make_tuple(x, y, x, y + y_inc, true);
-
-							if (!visit(x, y, x + x_inc, y)) return std::make_tuple(x, y, x + x_inc, y, true);
-
-							if (!visit(x, y + y_inc, x + x_inc, y + y_inc)) return std::make_tuple(x, y + y_inc, x + x_inc, y + y_inc, true);
-
-							if (!visit(x + x_inc, y, x + x_inc, y + y_inc)) return std::make_tuple(x + x_inc, y, x + x_inc, y + y_inc, true);
-
-							x += x_inc;
-							y += y_inc;
-							error -= dy;
-							error += dx;
-
-							--n;
-						}
-						else if (error > 0)
-						{
-							if (!visit(x, y, x + x_inc, y)) return std::make_tuple(x, y, x + x_inc, y, true);
-							x += x_inc;
-							error -= dy;
-						}
-						else
-						{
-							if (!visit(x, y, x, y + y_inc)) return std::make_tuple(x, y, x, y + y_inc, true);
-							y += y_inc;
-							error += dx;
-						}
-					}
-					return std::make_tuple(0, 0, 0, 0, false);
-				};
-				auto collide_first = [drawbox, raytrace](int x0, int y0, int x1, int y1, auto& collision_map, auto& wall_map, auto& character_map) {
-
-					tmap<int, tmap<int, bool>> intersects;
-					return raytrace(x0, y0, x1, y1,
-						[&collision_map, &wall_map, &character_map, &intersects](int x, int y, int n_x, int n_y) {
-
-							if (wall_map[x][y][n_x][n_y])
-								return false;
-							if (collision_map[n_x][n_y])
-								return false;
-							return true;
-						});
-
-					/*for (auto& [x, m] : intesects)
-						for (auto [y, b] : m)
-							drawbox(x, y, b);*/
-				};
-				
-				// draw bfs if unit
-				tmap<int, tmap<int, bool>> visited;
-				tmap<int, tmap<int, uint32_t>> distance;
-				{
-					//bfs
-					const uint32_t range = 4;
-					const tvector<tpair<int, int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
-					std::queue<glm::ivec2> q;
-					q.push({ p_x, p_y });
-
-					//draw
-					while (!q.empty())
-					{
-						auto p = q.front();
-						q.pop();
-
-						if (visited[p.x][p.y])
-							continue;
-
-						visited[p.x][p.y] = true;
-
-						auto new_dist = distance[p.x][p.y] + 1;
-						if (new_dist > range)
-							continue;
-
-						for (auto [x, y] : dir)
-						{
-							if (instance.character_map[p.x + x][p.y + y])
-							{
-								visited[p.x + x][p.y + y] = true;
-								distance[p.x + x][p.y + y] = new_dist;
-								continue;
-							}
-							if (instance.collision_map[p.x + x][p.y + y])
-								continue;
-							if (instance.wall_map[p.x][p.y][p.x + x][p.y + y])
-								continue;
-							if (visited[p.x + x][p.y + y])
-								continue;
-
-							distance[p.x + x][p.y + y] = new_dist;
-							q.push({ p.x + x, p.y + y });
-						}
-
-					}
-
-					auto drawbox1 = [](int x, int y, bool b, auto grey, bool second) {
-						if (!b) return;
-						AABB box;
-
-						box.min.x = (float)x + .05f;
-						box.min.z = (float)y + .05f;
-						box.min.y = 0;
-
-						box.max.x = x + .95f;
-						box.max.z = y + .95f;
-						box.max.y = 0;
-						Service<RenderSystem>::Get().DrawLine(box, { grey, grey, grey, 1 });
-
-						if (second)
-						{
-							AABB box2;
-							box2.min.x = (float)x + .15f;
-							box2.min.z = (float)y + .15f;
-							box2.min.y = 0;
-
-							box2.max.x = x + .85f;
-							box2.max.z = y + .85f;
-							box2.max.y = 0;
-
-							Service<RenderSystem>::Get().DrawLine(box2, { grey, grey, grey, 1 });
-						}
-					};
-					auto drawbox2 = [](int x, int y, bool b) {
-						if (!b) return;
-						AABB box;
-
-						box.min.x = (float)x + .05f;
-						box.min.z = (float)y + .05f;
-						box.min.y = 0;
-
-						box.max.x = x + .95f;
-						box.max.z = y + .95f;
-						box.max.y = 0;
-
-						AABB box2;
-
-						box2.min.x = (float)x + .0f;
-						box2.min.z = (float)y + .0f;
-						box2.min.y = 0;
-
-						box2.max.x = x + 1.0f;
-						box2.max.z = y + 1.0f;
-						box2.max.y = 0;
-
-						Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
-						Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
-					};
-					for (auto& [x, m] : visited)
-						for (auto [y, b] : m)
-						{
-							auto [x0, y0, x1, y1, c] = collide_first(p_x, p_y, x, y, instance.collision_map, instance.wall_map, instance.character_map);
-							if (!c)
-								drawbox1(x, y, b, .15f, true);
-							else if (x == x1 && y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1])
-								drawbox2(x, y, b);
-							else
-								drawbox1(x, y, b, .05f, false);
-
-						}
-				}
-
-				if (visited[w_x][w_y])
-				{
-					auto& io = ImGui::GetIO();
-					if (p_x == w_x && p_y == w_y)
-					{
-						Line l;
-						l.p0 = glm::vec3(w_x + .5f - .5f, 0, w_y + .5f - .5f);
-						l.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f + .5f);
-
-						Line r;
-						r.p0 = glm::vec3(w_x + .5f - .5f, 0, w_y + .5f + .5f);
-						r.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f - .5f);
-						Service<RenderSystem>::Get().DrawLine(l, { 1,0,0,1 });
-						Service<RenderSystem>::Get().DrawLine(r, { 1,0,0,1 });
-
-						//if (io.MouseClicked[0])
-						//{
-						//	// cancel
-						//	state = State::MENU;
-						//}
 					}
 					else
 					{
@@ -854,37 +820,13 @@ namespace Tempest
 						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 
 
-						auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
-
-						// rotate the fella if the 
-						auto front = transform.rotation * vec3{ 0,0,-1 };
-						auto mouse = glm::normalize(vec3{ w_x + .5f, 0, w_y + .5f } - transform.position);
-						auto angle = glm::degrees(glm::orientedAngle(mouse, front, vec3{ 0,1,0 }));
-
-						if (angle < -45.5f)
-						{
-							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(90.f), vec3{ 0,1,0 });
-						}
-						if (angle > 45.5f)
-						{
-							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(-90.f), vec3{ 0,1,0 });
-						}
-
-
-						//if (io.MouseClicked[0])
-						//{
-						//	// move
-						//	transform.position.x = w_x + .5f;
-						//	transform.position.z = w_y + .5f;
-						//	instance.selected = INVALID;
-						//	state = State::MENU;
-						//}
 					}
 
 
 				}
 
 				//  line of sight
+				if (visited[w_x][w_y])
 				{
 
 					auto [x0, y0, x1, y1, b] = collide_first(p_x, p_y, w_x, w_y, instance.collision_map, instance.wall_map, instance.character_map);
@@ -1106,7 +1048,7 @@ namespace Tempest
 
 		UI::AttackSuccessUI(instance.ecs.get<tc::Graph>(selected_action).g.name.c_str(), ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.72f }, value);
 
-		if (UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
+		if (finish && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 		{
 			state = State::FIGHT;
 			display_other_stat = false;

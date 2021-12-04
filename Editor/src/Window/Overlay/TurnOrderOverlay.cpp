@@ -178,7 +178,7 @@ namespace Tempest
 
 						if (UI::UIButton_2("Roll", "Roll", ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.4f }, { 0,0 }, FONT_PARA))
 						{
-
+							std::shuffle(added_entities.begin(), added_entities.end(), els::random::prng);
 						}
 					}
 					ImGui::EndChild();
@@ -215,7 +215,27 @@ namespace Tempest
 								{
 									bool is_selected = (current_stat == sl->operator[](i));
 									if (ImGui::Selectable(sl->operator[](i).c_str(), is_selected))
+									{
 										current_stat = sl->operator[](i);
+										
+										// sort based on stat
+										std::sort(added_entities.begin(), added_entities.end(), [i, &instance](const auto id1, const auto id2)
+											{
+												int first = 0, second = 0;
+												if (tc::Character* cs = instance.ecs.get_if<tc::Character>(id1))
+												{
+													first = cs->get_stat(i);
+												}
+												if (tc::Character* cs = instance.ecs.get_if<tc::Character>(id2))
+												{
+													second = cs->get_stat(i);
+												}
+
+												return first > second;
+
+											});
+
+									}
 
 									if (is_selected)
 										ImGui::SetItemDefaultFocus();
@@ -303,10 +323,17 @@ namespace Tempest
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + i++ * (ChildSize.x - (character_icon->GetWidth() + 2.0f) * 5) * 0.5f);
 						ImGui::SetCursorPosY(ypos);
 						ImGui::PushID(i);
+						ImGui::BeginGroup();
+
 						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f }))
 						{
 							remove.push_back(i-1);
 						}
+						if (auto cs = instance.ecs.get_if<tc::Character>(id))
+						{
+							ImGui::Text(cs->name.c_str());
+						}
+						ImGui::EndGroup();
 						ImGui::PopID();
 						
 						if (i / 5)
