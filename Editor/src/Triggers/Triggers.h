@@ -86,6 +86,13 @@ namespace Tempest
 	};
 	struct TutorialPopupTrigger : public Event {};
 
+	struct MainMenuSequencePopupTrigger : public Event
+	{
+		MainMenuSequencePopupTrigger(std::vector<int>& selections) : selected_seqs{ selections } {}
+
+		std::vector<int>& selected_seqs;
+	};
+
 	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};
 	struct OpenSimulateResultTrigger : public Event

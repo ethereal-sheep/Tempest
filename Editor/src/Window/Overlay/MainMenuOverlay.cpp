@@ -448,16 +448,14 @@ namespace Tempest
 
 				// TODO: render all the sequences from selected conflict
 				// TODO: make a popup menu
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 8; i++)
 				{
-					ImGui::PushID(std::string{ "Sequence" + std::to_string(i) }.c_str());
+					std::string seq_name = "Sample_Seq" + std::to_string(i);
+					ImGui::PushID(seq_name.c_str());
 					bool selected = std::find(SelectedSequences.begin(), SelectedSequences.end(), i) != SelectedSequences.end();
-					if (UI::UIButton_2("Sample_Sequence", "Sample_Sequence", ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 }, FONT_BTN, selected))
+					if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 }, FONT_BTN, selected))
 					{
-						if (selected)
-							SelectedSequences.erase(std::remove(SelectedSequences.begin(), SelectedSequences.end(), i), SelectedSequences.end());
-						else
-							SelectedSequences.emplace_back(i);
+						Service<EventManager>::Get().instant_dispatch< MainMenuSequencePopupTrigger>(SelectedSequences);
 					}
 					ImGui::PopID();
 				}
