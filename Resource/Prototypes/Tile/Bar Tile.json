@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Obstacle"
+        "Category": "Tile"
     },
     "Components": [
         {
@@ -37,11 +37,9 @@
         },
         {
             "Metadata": {
-                "Type": "Collision"
+                "Type": "Tile"
             },
-            "Component": {
-                "Cover": 0
-            }
+            "Component": {}
         },
         {
             "Metadata": {
@@ -49,9 +47,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.18895521759986878,
                     0.0,
-                    0.21712784469127656
+                    -0.009999999776482582,
+                    0.0
                 ],
                 "LocalRotation": [
                     0.0,
@@ -60,24 +58,18 @@
                     1.0
                 ],
                 "LocalScale": [
-                    0.7039170265197754,
-                    0.7039170265197754,
-                    0.7039170265197754
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             }
-        },
-        {
-            "Metadata": {
-                "Type": "Obstacle"
-            },
-            "Component": {}
         },
         {
             "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bookshelf.a"
+                "Path": "Models\\Bar_Floor.a"
             }
         },
         {

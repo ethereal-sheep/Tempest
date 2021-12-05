@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Obstacle"
+        "Category": "Door"
     },
     "Components": [
         {
@@ -49,9 +49,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -0.18895521759986878,
+                    8.645000457763672,
                     0.0,
-                    0.21712784469127656
+                    -11.484999656677246
                 ],
                 "LocalRotation": [
                     0.0,
@@ -60,24 +60,18 @@
                     1.0
                 ],
                 "LocalScale": [
-                    0.7039170265197754,
-                    0.7039170265197754,
-                    0.7039170265197754
+                    0.009999999776482582,
+                    0.009999999776482582,
+                    0.009999999776482582
                 ]
             }
-        },
-        {
-            "Metadata": {
-                "Type": "Obstacle"
-            },
-            "Component": {}
         },
         {
             "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bookshelf.a"
+                "Path": "Models\\MetalDoor.a"
             }
         },
         {
@@ -86,8 +80,14 @@
             },
             "Component": {
                 "X": 1,
-                "Y": 1
+                "Y": 0
             }
+        },
+        {
+            "Metadata": {
+                "Type": "Door"
+            },
+            "Component": {}
         }
     ]
 }

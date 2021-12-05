@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Obstacle"
+        "Category": "Wall"
     },
     "Components": [
         {
@@ -37,21 +37,13 @@
         },
         {
             "Metadata": {
-                "Type": "Collision"
-            },
-            "Component": {
-                "Cover": 0
-            }
-        },
-        {
-            "Metadata": {
                 "Type": "Local"
             },
             "Component": {
                 "LocalPosition": [
-                    -0.18895521759986878,
+                    6.394999980926514,
                     0.0,
-                    0.21712784469127656
+                    -3.7750000953674318
                 ],
                 "LocalRotation": [
                     0.0,
@@ -60,24 +52,18 @@
                     1.0
                 ],
                 "LocalScale": [
-                    0.7039170265197754,
-                    0.7039170265197754,
-                    0.7039170265197754
+                    0.009999999776482582,
+                    0.009999999776482582,
+                    0.009999999776482582
                 ]
             }
-        },
-        {
-            "Metadata": {
-                "Type": "Obstacle"
-            },
-            "Component": {}
         },
         {
             "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bookshelf.a"
+                "Path": "Models\\Bar_Wall.a"
             }
         },
         {
@@ -86,7 +72,15 @@
             },
             "Component": {
                 "X": 1,
-                "Y": 1
+                "Y": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Wall"
+            },
+            "Component": {
+                "Cover": 0
             }
         }
     ]
