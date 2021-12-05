@@ -54,6 +54,12 @@ namespace Tempest
 
 			ImGui::PopStyleVar();
 			ImGui::PopStyleColor();
+
+			// this is a test run
+			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+			{
+				Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+			}
 		}
 	}
 
