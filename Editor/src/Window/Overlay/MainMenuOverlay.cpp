@@ -62,7 +62,7 @@ namespace Tempest
 		ImVec2 button_pos{ 0, viewport.Size.y * 0.55f };
 
 		// render the title image
-		if (MainMenuUI <= UI_SHOW::CONFLICT_RES)
+		if (MainMenuUI < UI_SHOW::CONFLICT_RES)
 		{
 			auto title_img = tex_map["Assets/MainMenuTitle.png"];
 			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
@@ -263,6 +263,41 @@ namespace Tempest
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
 		{
+			auto image = tex_map["Assets/ConflictBG.png"];
+			ImVec2 point = ImGui::GetCursorScreenPos();
+			ImVec2 Min{ point.x, point.y };
+			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
+
+			// render title
+			ImGui::SetCursorPos(ImVec2{ 0,0 });
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			UI::SubHeader("Conflict Resolution");
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+
+			auto cur_pos = ImGui::GetCursorPos();
+			for (int i = 0; i < 3; i++)
+			{
+				ImGui::SetCursorPos(cur_pos);
+				ImGui::Dummy({ viewport.Size.x * 0.3f, 0.f });
+				ImGui::SameLine();
+				string str = "CONFLICT RES##" + std::to_string(i);
+				UI::UIConflictSelectable(str.c_str(), false, 1);
+				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
+				cur_pos = ImGui::GetCursorPos();
+			}
+
+			// render back button
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.02f,viewport.Size.y * 0.03f });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+			image = tex_map["Assets/BackMenuBtn.png"];
+
+			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+				MainMenuUI = UI_SHOW::NEW_PROJECT;
+
+			ImGui::PopStyleColor(3);
 
 		}
 			break;
