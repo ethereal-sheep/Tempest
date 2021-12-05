@@ -59,14 +59,15 @@ namespace Tempest
 
 	void MainMenuOverlay::OpenLocalUI(Instance& instance, const ImGuiViewport& viewport)
 	{
-		ImVec2 button_pos{ 0.0f, viewport.Size.y * 0.55f };
+		ImVec2 button_pos{ 0, viewport.Size.y * 0.55f };
 
 		// render the title image
 		if (MainMenuUI <= UI_SHOW::CONFLICT_RES)
 		{
 			auto title_img = tex_map["Assets/MainMenuTitle.png"];
 			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
-			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.2f - title_size.x * 0.5f, viewport.Size.y * 0.45f - title_size.y * 0.5f });
+			button_pos.x = viewport.Size.x * 0.2f - title_size.x * 0.5f;
+			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.45f - title_size.y * 0.5f });
 			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
 		}
 
@@ -74,111 +75,190 @@ namespace Tempest
 		{
 		case Tempest::MainMenuOverlay::UI_SHOW::INITIAL:
 		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
 			selectable = "Projects";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			button_pos.y += 40.0f;
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			
+			if (ImGui::Selectable(selectable.c_str(), false))
 				MainMenuUI = UI_SHOW::PROJECTS;
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
 
 			selectable = "Settings";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			
+			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
 			button_pos.y += 40.0f;
-			UI::UISelectable(selectable.c_str(), false);
 
 			selectable = "Credits";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
 			button_pos.y += 40.0f;
-			UI::UISelectable(selectable.c_str(), false);
 
 			selectable = "Quit";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				OverlayOpen = false;
 				instance.window_manager.show_all();
 			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
 
 			ImGui::PopFont();
+			ImGui::PopStyleColor(2);
 		}
 			
 			break;
 
 		case Tempest::MainMenuOverlay::UI_SHOW::PROJECTS:
 		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
 			selectable = "New Project";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			button_pos.y += 40.0f;
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+
+			if (ImGui::Selectable(selectable.c_str(), false))
 				MainMenuUI = UI_SHOW::NEW_PROJECT;
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
 
 			selectable = "Load Project";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
 			button_pos.y += 40.0f;
-			UI::UISelectable(selectable.c_str(), false);
 
 			selectable = "Back";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
 				MainMenuUI = UI_SHOW::INITIAL;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
 
 			ImGui::PopFont();
+			ImGui::PopStyleColor(2);
 		}
 			break;
 
 		case Tempest::MainMenuOverlay::UI_SHOW::NEW_PROJECT:
 		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
 			selectable = "Conflict Resolutions";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			button_pos.y += 40.0f;
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
 				MainMenuUI = UI_SHOW::CONFLICT_RES;
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
 
 			selectable = "New Game";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			button_pos.y += 40.0f;
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				MapTitle = selectable;
 				MainMenuUI = UI_SHOW::SELECT_MAP;
 			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
 				
 
 			selectable = "Map Builder";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			button_pos.y += 40.0f;
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				MapTitle = selectable;
 				MainMenuUI = UI_SHOW::SELECT_MAP;
 			}
-				
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
 
 			selectable = "Back";
 			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(selectable.c_str()).x);
-			if (UI::UISelectable(selectable.c_str(), false))
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
 				MainMenuUI = UI_SHOW::PROJECTS;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
 
 			ImGui::PopFont();
+			ImGui::PopStyleColor(2);
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
