@@ -373,7 +373,10 @@ namespace Tempest
 					switch (turn_order_state)
 					{
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
-						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						if(added_entities.size() > 1)
+							turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						else
+							Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("At least two units required!");
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 						// change the state
