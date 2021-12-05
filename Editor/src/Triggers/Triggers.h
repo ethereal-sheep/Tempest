@@ -84,7 +84,7 @@ namespace Tempest
 		bool for_unitpage;
 		Entity data;
 	};
-
+	struct TutorialPopupTrigger : public Event {};
 
 	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};

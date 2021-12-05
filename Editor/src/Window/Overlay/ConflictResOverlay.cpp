@@ -18,7 +18,6 @@ namespace Tempest
 	void ConflictResOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
-		LeftBg = tex_map["Assets/ConflictBG_Left.png"];
 		ConflictBg = tex_map["Assets/ConflictBG.png"];
 	}
 	void ConflictResOverlay::show([[maybe_unused]]Instance& instance)
@@ -37,23 +36,40 @@ namespace Tempest
 			{
 				auto drawlist = ImGui::GetWindowDrawList();
 				auto pos = ImGui::GetCursorPos();
-				ImVec2 leftBgMax = { pos.x + LeftBg->GetWidth(), pos.y + LeftBg->GetHeight() };
-				ImVec2 bgMax = { pos.x + ConflictBg->GetWidth(), pos.y + ConflictBg->GetHeight() };
-				drawlist->AddImage((void*)static_cast<size_t>(ConflictBg->GetID()), pos, bgMax);
-				drawlist->AddImage((void*)static_cast<size_t>(LeftBg->GetID()), pos, leftBgMax);
+				ImVec2 max = { pos.x + viewport->Size.x,pos.y + viewport->Size.y };
+				
+				drawlist->AddImage((void*)static_cast<size_t>(ConflictBg->GetID()), pos, max);
+				auto scale = viewport->Size / initViewPortSize ;
+				auto scale2 = initViewPortSize / viewport->Size ;
+				auto scale3 = scale * scale2 ;
 
-				static float x = 10.f;
-				static float y = 10.f;
-				ImGui::DragFloat("##12", &x);
-				ImGui::DragFloat("##132", &y);
-				ImGui::SetCursorPos({ pos.x + x,pos.y + y });
-				UI::UIConflictSelectable("CONFLICT RES", false, 1);
-				UI::UIConflictSelectable("CONFLICT RES", false, 0);
-
-				if (ImGui::Button("Close"))
+				ImGui::Dummy({ 0, 70.f });
+				UI::SubHeader("Conflict Resolution");
+				ImGui::SetCursorPos({0.f, pos.y + viewport->Size.y * 0.2f});
+				auto curPos = ImGui::GetCursorPos();
+				for (int i = 0; i < 3; i++)
+				{
+					ImGui::SetCursorPos(curPos);
+					ImGui::Dummy({ pos.x + viewport->Size.x * 0.3f, 0.f });
+					ImGui::SameLine();
+					string str = "CONFLICT RES##" + std::to_string(i);
+					UI::UIConflictSelectable(str.c_str(), false, 1);
+					//ImGui::Dummy({ 0.f, 60.f });
+					ImGui::Dummy({ 0.f, viewport->Size.y * 0.07f });
+					curPos = ImGui::GetCursorPos();
+					
+				}
+				
+				auto tex = tex_map["Assets/BackMenuBtn.png"];
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+				if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 				{
 					OverlayOpen = false;
 				}
+				ImGui::PopStyleColor(3);
 			}
 			ImGui::PopStyleVar();
 			ImGui::End();
