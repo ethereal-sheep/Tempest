@@ -206,12 +206,12 @@ namespace Tempest
 							ImGui::PushItemWidth(padding);
 							if (ImGui::InputScalar("X##xby", ImGuiDataType_S32, &x, &one))
 							{
-								x = std::clamp(x, 0, 3);
+								x = std::clamp(x, 0, 4);
 							}
 							ImGui::Text(ICON_FA_TIMES);
 							if (ImGui::InputScalar("Y##yby", ImGuiDataType_S32, &y, &one))
 							{
-								y = std::clamp(y, 0, 3);
+								y = std::clamp(y, 0, 4);
 							}
 							ImGui::PopItemWidth();
 
