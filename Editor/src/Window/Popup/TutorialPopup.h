@@ -90,7 +90,7 @@ namespace Tempest
                     
                     auto tex = tex_map["Assets/closeBtn.png"];
                     ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.85f,viewport->Size.y * 0.1f });
-                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
                     {
                         enable_popup = false;
                     }
@@ -105,5 +105,7 @@ namespace Tempest
         tsptr<Texture> tutorial_Arr[5];
         ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
         ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
+        ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+        ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
     };
 }
