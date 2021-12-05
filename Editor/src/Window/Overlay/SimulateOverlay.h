@@ -73,5 +73,7 @@ namespace Tempest
         tsptr<Texture> enter_button;
 
         float padding{ 0.0f };
+        ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+        ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
     };
 }

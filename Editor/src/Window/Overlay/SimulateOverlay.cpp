@@ -198,7 +198,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 					tex = tex_map["Assets/BackMenuBtn.png"];
 
-					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						OverlayOpen = false;
 						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
@@ -210,11 +210,20 @@ namespace Tempest
 
 					tex = tex_map["Assets/QuickMenuBtn.png"];
 
-					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 					}
+					ImGui::SameLine();
+					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
+					ImGui::SameLine();
 
+					tex = tex_map["Assets/TutorialBtn.png"];
+
+					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+					{
+						Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>();
+					}
 					ImGui::PopStyleColor(3);
 				}
 				

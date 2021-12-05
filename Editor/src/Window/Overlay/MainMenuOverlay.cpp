@@ -141,12 +141,7 @@ namespace Tempest
 				ImGui::SameLine();
 				std::string itemid = "##" + std::to_string(i);
 				ImGui::PushID(i);
-				if (UI::UIMapSelectable((void*)static_cast<size_t>(tex->GetID()), { (float)tex->GetWidth() *0.7f,(float)tex->GetHeight()*0.7f }, "NAME", "DATE", "UNIT", i == selectedItem, 0, itemSize))
-				{
-					selectedItem = i;
 				
-					LOG("SELECTED TRUE");
-				}
 				 ImGui::PopID();
 			}
 			ImGui::EndChild();

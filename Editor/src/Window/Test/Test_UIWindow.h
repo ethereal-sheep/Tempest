@@ -119,7 +119,7 @@ namespace Tempest
 		{
 			if (ImGui::Begin(window_name(), &visible, window_flags))
 			{
-				UI::UIButton_2("TEST", "TEST", { 100.f,50.f }, { 0,0 }, FONT_PARA, false);
+				/*UI::UIButton_2("TEST", "TEST", { 100.f,50.f }, { 0,0 }, FONT_PARA, false);
 				UI::UIButton_2("TEST", "TEST", { 300.f,50.f }, { 0,0 }, FONT_PARA, true);
 
 				UI::UIButton_Weapon(instance, UNDEFINED, "TEST", "TEST", { 100.f,100.f }, { 0,0 }, FONT_PARA, false);
@@ -133,13 +133,12 @@ namespace Tempest
 
 				UI::UIButton_Simulate("TEST", "TEST", { 100.f,250.f }, { 0,0 }, FONT_PARA, false);
 				UI::UIButton_Simulate("TEST", "TEST", { 300.f,250.f }, { 0,0 }, FONT_PARA, true);
-				UI::UIButton_EndTurn({ 300.f,300.f }, { 0,0 }, FONT_PARA, true);
+				UI::UIButton_EndTurn({ 300.f,300.f }, { 0,0 }, FONT_PARA, true);*/
 
-
-				UI::UIConflictSelectable("CONFLICT RES 1##1", false, 1);
-				UI::UIConflictSelectable("CONFLICT RES 1##2", false, 1);
-				UI::UIConflictSelectable("CONFLICT RES 1##3", false, 1);
-
+				
+				UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
+					
+				
 				if (instance.selected == INVALID)
 				{
 					//ImGui::Text("NO ENTITY SELECTED");

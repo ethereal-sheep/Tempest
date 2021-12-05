@@ -171,10 +171,10 @@ namespace Tempest::UI
 	void AddUnderline(ImU32 col, ImVec2 min = { 0, 0 }, ImVec2 max = { 0, 0 });
 	bool UISelectable(const char* label, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	bool UISelectable(const char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
-	bool UIMapSelectable(ImTextureID tex, ImVec2 texSize, const char* name, const char* date, const char* UnitData, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
-	bool UIMapSelectable(ImTextureID tex, ImVec2 texSize, const char* name, const char* date, const char* unitData, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	std::pair<bool, bool> UIConflictSelectable(const char* label, bool selected = false, int type = 0,ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	std::pair<bool,bool> UIConflictSelectable(const char* label, bool* p_selected, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
+	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool selected = false, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
+	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool* p_selected, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_hover = ImVec4(1, 1, 1, 1), const ImVec4& tint_pressed = ImVec4(1,1,1,1));
 	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col, const ImVec4& tint_pressed);
 	bool UICheckBox_1(const char* label, bool* v);
