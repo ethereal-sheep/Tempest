@@ -371,11 +371,12 @@ namespace Tempest
 			ImGui::PopStyleColor(3);
 
 			// draw the child
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 10.0f, 10.f });
 			const ImVec2 child_size{viewport.Size.x * 0.5f, viewport.Size.y * 0.55f};
 			ImGui::SetCursorPos(ImVec2{viewport.Size.x * 0.65f - child_size.x * 0.5f, viewport.Size.y * 0.5f - child_size.y * 0.5f });
 			if (ImGui::BeginChild("##LoadMapMainMenu", child_size, true))
 			{
-				const std::pair<bool, bool> map_pair = UI::UIConflictSelectable("MAP_01", false, 1);
+				const std::pair<bool, bool> map_pair = UI::UIMapSelectable("MAP_01", "Date created: 12/31/2021", false, 1);
 
 				// render all the maps here
 				if (map_pair.first)
@@ -390,6 +391,7 @@ namespace Tempest
 			}
 
 			ImGui::EndChild();
+			ImGui::PopStyleVar();
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
