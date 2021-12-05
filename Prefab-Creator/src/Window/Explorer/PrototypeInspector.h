@@ -274,6 +274,40 @@ namespace Tempest
 							UI::PaddedSeparator(1.f);
 						}
 					}
+					if (auto collider = _current->get_if<tc::Collision>())
+					{
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("Collider##ColliderHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+						if (header)
+						{
+							int index = 0;
+							std::vector<string> cover_types = { };
+							for (auto i = 0; i < static_cast<int>(tc::Collision::Cover::End); ++i)
+								cover_types.push_back(magic_enum::enum_name(static_cast<tc::Collision::Cover>(i)).data());
+
+							if (ImGui::ComboWithFilter("Cover", &index, cover_types))
+							{
+								collider->cover = static_cast<tc::Collision::Cover>(index);
+							}
+						}
+					}
+					if (auto wall = _current->get_if<tc::Wall>())
+					{
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("Wall##WallHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+						if (header)
+						{
+							int index = 0;
+							std::vector<string> cover_types = { };
+							for (auto i = 0; i < static_cast<int>(tc::Wall::Cover::End); ++i)
+								cover_types.push_back(magic_enum::enum_name(static_cast<tc::Wall::Cover>(i)).data());
+
+							if (ImGui::ComboWithFilter("Cover", &index, cover_types))
+							{
+								wall->cover = static_cast<tc::Wall::Cover>(index);
+							}
+						}
+					}
 
 
 					//if (auto rb = _current->get_if<tc::Rigidbody>())

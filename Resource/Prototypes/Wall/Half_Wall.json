@@ -37,29 +37,23 @@
         },
         {
             "Metadata": {
-                "Type": "Collision"
-            },
-            "Component": {}
-        },
-        {
-            "Metadata": {
                 "Type": "Local"
             },
             "Component": {
                 "LocalPosition": [
+                    0.5,
                     0.0,
-                    0.0,
-                    -0.38920173048973086
+                    0.0
                 ],
                 "LocalRotation": [
-                    9.099629210140847e-7,
-                    1.0,
-                    9.099629210140847e-7,
-                    8.280325210219264e-13
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
                 ],
                 "LocalScale": [
-                    0.999981701374054,
-                    0.9999957084655762,
+                    1.0,
+                    0.30000001192092898,
                     1.0
                 ]
             }
@@ -69,7 +63,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\BrickWall.a"
+                "Path": "Models\\Wall.a"
             }
         },
         {
@@ -78,14 +72,16 @@
             },
             "Component": {
                 "X": 1,
-                "Y": 1
+                "Y": 0
             }
         },
         {
             "Metadata": {
                 "Type": "Wall"
             },
-            "Component": {}
+            "Component": {
+                "Cover": 1
+            }
         }
     ]
 }

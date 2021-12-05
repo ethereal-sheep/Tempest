@@ -17,11 +17,109 @@
 namespace Tempest
 {
 
-	auto collide_first(
+	auto collide_first_edited(
 		int x0, int y0, int x1, int y1,
 		tmap<int, tmap<int, id_t>>& collision_map,
 		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>>& wall_map,
 		tmap<int, tmap<int, id_t>>& character_map) {
+
+		auto raytrace = [](int x0, int y0, int x1, int y1, auto visit)
+		{
+			int dx = abs(x1 - x0);
+			int dy = abs(y1 - y0);
+			int x = x0;
+			int y = y0;
+			int n = dx + dy;
+			int x_inc = (x1 > x0) ? 1 : -1;
+			int y_inc = (y1 > y0) ? 1 : -1;
+			int error = dx - dy;
+			dx *= 2;
+			dy *= 2;
+
+			tvector<std::tuple<int, int, int, int>> covered;
+
+			for (; n > 0; --n)
+			{
+				if (error == 0)
+				{
+
+					// first move
+					auto x_level = visit(x, y, x, y + y_inc);
+					auto y_level = visit(x, y, x + x_inc, y);
+					
+					if (x_level || y_level)
+					{
+						covered.push_back(std::make_tuple(x, y, x, y + y_inc));
+						if(x_level == 1 || y_level == 1)
+							return std::make_tuple(covered, true);
+					}
+
+					x_level = visit(x, y + y_inc, x + x_inc, y + y_inc);
+					y_level = visit(x + x_inc, y, x + x_inc, y + y_inc);
+
+					if (x_level || y_level)
+					{
+						covered.push_back(std::make_tuple(x, y + y_inc, x + x_inc, y + y_inc));
+						if (x_level == 1 || y_level == 1)
+							return std::make_tuple(covered, true);
+					}
+
+					x += x_inc;
+					y += y_inc;
+					error -= dy;
+					error += dx;
+
+					--n;
+				}
+				else if (error > 0)
+				{
+					auto level = visit(x, y, x + x_inc, y);
+					if (level)
+					{
+						covered.push_back(std::make_tuple(x, y, x + x_inc, y));
+						if(level == 1)
+							return std::make_tuple(covered, true);
+					}
+					x += x_inc;
+					error -= dy;
+				}
+				else
+				{
+					auto level = visit(x, y, x, y + y_inc);
+					if (level)
+					{
+						covered.push_back(std::make_tuple(x, y, x, y + y_inc));
+						if (level == 1)
+							return std::make_tuple(covered, true);
+					}
+
+					y += y_inc;
+					error += dx;
+				}
+			}
+			return std::make_tuple(covered, false);
+		};
+		tmap<int, tmap<int, bool>> intersects;
+		return raytrace(x0, y0, x1, y1,
+			[&collision_map, &wall_map, &character_map, &intersects](int x, int y, int n_x, int n_y) {
+
+				uint32_t level = INT_MAX;
+
+				if (wall_map[x][y][n_x][n_y])
+					level = std::min(wall_map[x][y][n_x][n_y], level);
+				if (collision_map[n_x][n_y])
+					level = std::min(collision_map[n_x][n_y], level);
+
+				return level == INT_MAX ? 0 : level;
+			});
+	};
+
+	auto collide_first(
+		int x0, int y0, int x1, int y1,
+		tmap<int, tmap<int, id_t>>& collision_map,
+		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>>& wall_map,
+		tmap<int, tmap<int, id_t>>& character_map)
+	{
 
 		auto raytrace = [](int x0, int y0, int x1, int y1, auto visit)
 		{
@@ -80,15 +178,16 @@ namespace Tempest
 					return false;
 				return true;
 			});
-	};
+	}
 
-	void calculate_range(RuntimeInstance& instance, int p_x, int p_y, int range, tmap<int, tmap<int, uint32_t>>& range_map, tmap<int, tmap<int, bool>>& visited)
+	void calculate_range(RuntimeInstance& instance, int p_x, int p_y, int range_u, tmap<int, tmap<int, uint32_t>>& range_map, tmap<int, tmap<int, bool>>& visited)
 	{
 		range_map.clear();
 		visited.clear();
 		tmap<int, tmap<int, uint32_t>> distance;
 		{
 			//bfs
+			const uint32_t range = range_u < 0 ? 0 : static_cast<uint32_t>(range_u);
 			const tvector<tpair<int, int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
 			std::queue<glm::ivec2> q;
 			q.push({ p_x, p_y });
@@ -130,17 +229,81 @@ namespace Tempest
 			}
 
 			for (auto& [x, m] : visited)
-				for (auto [y, b] : m)
+				for (auto [y, ignore] : m)
 				{
-					auto [x0, y0, x1, y1, c] = collide_first(p_x, p_y, x, y, instance.collision_map, instance.wall_map, instance.character_map);
-					if (!c)
+					auto [v, b] = collide_first_edited(p_x, p_y, x, y, instance.collision_map, instance.wall_map, instance.character_map);
+
+					if (v.empty())
+					{
+						range_map[x][y] = 0; // hit nothing
+					}
+					else if (b)
+					{
+						auto& [x0, y0, x1, y1] = v.back();
+						if (x == x1 && y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1])
+						{
+							range_map[x][y] = (unsigned)v.size() + 2; // hit character
+						}
+						else
+							range_map[x][y] = 1; // hit collider
+					}
+					else
+					{
+						range_map[x][y] = 2; // hit cover
+					}
+
+					/*if (!c)
 						range_map[x][y] = 0;
 					else if (x == x1 && y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1])
 						range_map[x][y] = 1;
 					else
-						range_map[x][y] = 2;
+						range_map[x][y] = 2;*/
 
 				}
+		}
+	}
+
+	void calculate_move(RuntimeInstance& instance, int p_x, int p_y, int move_u, tmap<int, tmap<int, uint32_t>> distance, tmap<int, tmap<int, bool>>& visited)
+	{
+		distance.clear();
+		visited.clear();
+
+		{
+			//bfs
+			const uint32_t range = move_u < 0 ? 0 : static_cast<uint32_t>(move_u);
+			const tvector<tpair<int, int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
+			std::queue<glm::ivec2> q;
+			q.push({ p_x, p_y });
+
+			//draw
+			while (!q.empty())
+			{
+				auto p = q.front();
+				q.pop();
+
+				if (visited[p.x][p.y])
+					continue;
+
+				visited[p.x][p.y] = true;
+
+				auto new_dist = distance[p.x][p.y] + 1;
+				if (new_dist > range)
+					continue;
+
+				for (auto [x, y] : dir)
+				{
+					if (instance.collision_map[p.x + x][p.y + y])
+						continue;
+					if (instance.wall_map[p.x][p.y][p.x + x][p.y + y])
+						continue;
+					if (visited[p.x + x][p.y + y])
+						continue;
+
+					distance[p.x + x][p.y + y] = new_dist;
+					q.push({ p.x + x, p.y + y });
+				}
+
+			}
 		}
 	}
 
@@ -198,15 +361,47 @@ namespace Tempest
 			Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
 			Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
 		};
+		
+		auto drawbox = [](int x, int y, const vec4& color = vec4{ 1,1,1,1 }, unsigned number_of_squares = 1, float interval = .15f)
+		{
+			AABB box;
+
+			number_of_squares = std::min(number_of_squares, 5u);
+
+			float curr = 0.05f;
+
+			while (number_of_squares--)
+			{
+				box.min.x = (float)x + curr;
+				box.min.z = (float)y + curr;
+				box.min.y = 0;
+
+				box.max.x = x + 1 - curr;
+				box.max.z = y + 1 - curr;
+				box.max.y = 0;
+				Service<RenderSystem>::Get().DrawLine(box, color);
+				curr += interval;
+			}
+
+		};
+
 		for (auto& [x, m] : range_map)
 			for (auto [y, i] : m)
 			{
-				if (i == 0)
-					drawbox1(x, y, true, .15f, true);
-				else if (i == 1)
-					drawbox2(x, y, true);
-				else
-					drawbox1(x, y, true, .05f, false);
+				if (i == 0) // hit nothing dark green
+					drawbox(x, y, { 0.01f, 0.05f, 0.01f, 0.5f }, 2, .1f);
+				else if (i == 1) // hit collider dark red
+					drawbox(x, y, { 0.04f, 0.02f, 0.02f, 0.4f }, 1, .1f);
+				else if (i == 2) // hit cover only dark red
+					drawbox(x, y, { 0.04f, 0.02f, 0.02f, 0.4f }, 1, .1f);
+				else if (i == 3) // hit player
+					drawbox(x, y, { 0,1,0,1 }, 1);
+				else // hit player behind cover
+				{
+					float p = (float)std::pow<float>(0.5f, i - 3);
+					vec4 color = { 1.f, 0.3725f * p, 0.121f * p, 1 };
+					drawbox(x, y, color, i - 3, .1f);
+				}
 
 			}
 	}
@@ -339,7 +534,6 @@ namespace Tempest
 				int p_y = (int)std::floor(position.z);
 
 				LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
-				LOG_ASSERT(instance.collision_map[p_x][p_y] == curr_entity);
 
 				// Draw whatever thing on their head
 				{
@@ -677,7 +871,7 @@ namespace Tempest
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - child_size.x * 0.5f, viewport->Size.y * 0.2f - child_size.y * 0.5f});
 				if (ImGui::BeginChild("Select other entity attack", child_size, true))
 				{
-					int i = 0;
+					unsigned i = 0;
 					for (auto id : units)
 					{
 						if (curr_turn != i++)
@@ -793,7 +987,8 @@ namespace Tempest
 							transform.rotation = transform.rotation * glm::angleAxis(glm::radians(-90.f), vec3{ 0,1,0 });
 						}
 
-						if (ImGui::GetIO().MouseClicked[0])
+						auto can_hit = range_map[w_x][w_y] >= 3;
+						if (ImGui::GetIO().MouseClicked[0] && can_hit)
 						{
 							// Attack
 							auto attacker = curr_entity;
@@ -825,56 +1020,113 @@ namespace Tempest
 
 				}
 
-				//  line of sight
+				//  segmented line of sight
+				{
+				/*
 				if (visited[w_x][w_y])
 				{
 
-					auto [x0, y0, x1, y1, b] = collide_first(p_x, p_y, w_x, w_y, instance.collision_map, instance.wall_map, instance.character_map);
+					auto [v, b] = collide_first_edited(p_x, p_y, w_x, w_y, instance.collision_map, instance.wall_map, instance.character_map);
 
-
-					auto p0 = vec3(x0 + .5f, 0, y0 + .5f);
-					auto p1 = vec3(x1 + .5f, 0, y1 + .5f);
-
-					auto normal = glm::normalize(p1 - p0);
-					auto ex = glm::mix(p0, p1, .5f);
 
 					vec3 start_p = vec3(p_x + .5f, 0, p_y + .5f);
 					vec3 end_p = vec3(w_x + .5f, 0, w_y + .5f);
 					vec3 line_v = vec3(w_x, 0, w_y) - vec3(p_x, 0, p_y);
-
-					// 
-					float dist = 0.f;
-					bool check_character = w_x == x1 && w_y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1];
-					if (b && !check_character &&
-						glm::intersectRayPlane(start_p, glm::normalize(line_v), ex, normal, dist))
+					vec4 color = { 0,1,0,1 };
+					vec4 orange = { 1,0.3725,0.121,1 };
+					vec3 curr = start_p;
+					bool check_character = false;
+					for (auto i = 0; i < (int)v.size(); ++i)
 					{
-						vec3 intersection = start_p + glm::normalize(line_v) * dist;
+						const auto& [x0, y0, x1, y1] = v[i];
+
+						// collision points
+						auto p0 = vec3(x0 + .5f, 0, y0 + .5f);
+						auto p1 = vec3(x1 + .5f, 0, y1 + .5f);
+
+						// normal of plane
+						auto normal = glm::normalize(p1 - p0);
+
+						// intersection point
+						auto ex = glm::mix(p0, p1, .5f);
+
+
+						// 
+						float dist = 0.f;
+						//bool check_character = w_x == x1 && w_y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1];
+						
+						if (glm::intersectRayPlane(start_p, glm::normalize(line_v), ex, normal, dist))
+						{
+							vec3 intersection = start_p + glm::normalize(line_v) * dist;
+
+							// uncomment for multiple line segments
+							Line pointer;
+							pointer.p0 = curr;
+							pointer.p1 = intersection;
+							Service<RenderSystem>::Get().DrawLine(pointer, color);
+
+							curr = intersection;
+
+							color = orange;
+							check_character = w_x == x1 && w_y == y1 && instance.character_map[x1][y1] && !instance.wall_map[x0][y0][x1][y1];
+						}
+
+					}
+					
+					// draw from current to end
+					// if hit something last colour is red
+
+					if (b && !check_character)
+					{
+						color = { 1,0,0,1 };
+
 						Line l;
-						l.p0 = glm::vec3(intersection.x - .1f, 0, intersection.z - .1f);
-						l.p1 = glm::vec3(intersection.x + .1f, 0, intersection.z + .1f);
+						l.p0 = glm::vec3(curr.x - .1f, 0, curr.z - .1f);
+						l.p1 = glm::vec3(curr.x + .1f, 0, curr.z + .1f);
 
 						Line r;
-						r.p0 = glm::vec3(intersection.x - .1f, 0, intersection.z + .1f);
-						r.p1 = glm::vec3(intersection.x + .1f, 0, intersection.z - .1f);
+						r.p0 = glm::vec3(curr.x - .1f, 0, curr.z + .1f);
+						r.p1 = glm::vec3(curr.x + .1f, 0, curr.z - .1f);
 
-						Service<RenderSystem>::Get().DrawLine(l, { 1,0,0,1 });
-						Service<RenderSystem>::Get().DrawLine(r, { 1,0,0,1 });
+						Service<RenderSystem>::Get().DrawLine(l, color);
+						Service<RenderSystem>::Get().DrawLine(r, color);
+					}
 
-						Line pointer;
-						pointer.p0 = start_p;
-						pointer.p1 = intersection;
-						Service<RenderSystem>::Get().DrawLine(pointer, { 0,1,1,1 });
-						pointer.p0 = intersection;
-						pointer.p1 = end_p;
-						Service<RenderSystem>::Get().DrawLine(pointer, { 0.8,0,0,1 });
-					}
-					else
-					{
-						Line pointer;
-						pointer.p0 = start_p;
-						pointer.p1 = end_p;
-						Service<RenderSystem>::Get().DrawLine(pointer, { 0,1,1,1 });
-					}
+					Line pointer;
+					pointer.p0 = curr;
+					pointer.p1 = end_p;
+					Service<RenderSystem>::Get().DrawLine(pointer, color);
+				}
+				*/
+				}
+
+				// lousy line of sight
+				if (range_map.count(w_x) && range_map[w_x].count(w_y))
+				{
+					auto i = range_map[w_x][w_y];
+					vec3 start_p = vec3(p_x + .5f, 0, p_y + .5f);
+					vec3 end_p = vec3(w_x + .5f, 0, w_y + .5f);
+					vec3 line_v = vec3(w_x, 0, w_y) - vec3(p_x, 0, p_y);
+					vec4 color = { 0,1,0,1 };
+
+					if (i == 0) // hit nothing not blocked
+						color = { 0,1,0,1 };
+					else if (i == 1) // hit collider
+						color = { 1,0,0,1 };
+					else if (i == 2) // hit cover
+						color = { 1,0.3725,0.121,1 };
+					else if (i == 3) // hit collider and collider is player
+						color = { 0,1,0,1 };
+					else // hit player and its behind cover
+						color = { 1,0.3725,0.121,1 };
+
+
+					Line pointer;
+					pointer.p0 = start_p;
+					pointer.p1 = end_p;
+					Service<RenderSystem>::Get().DrawLine(pointer, color);
+
+
 				}
 			}
 
@@ -886,8 +1138,9 @@ namespace Tempest
 	void CombatModeOverlay::moving(RuntimeInstance& instance, const glm::ivec2& world_mouse)
 	{
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		if (curr_entity && instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
+		if (curr_entity && instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Character>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
 		{
+			auto& cs = instance.ecs.get<tc::Character>(curr_entity);
 			auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
 			position.y += 2;
 			auto ss = cam.WorldspaceToScreenspace(position);
@@ -900,71 +1153,30 @@ namespace Tempest
 			int p_y = (int)std::floor(position.z);
 
 			LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
-			LOG_ASSERT(instance.collision_map[p_x][p_y] == curr_entity);
 
-			// draw bfs if unit
-			tmap<int, tmap<int, bool>> visited;
+
 			tmap<int, tmap<int, uint32_t>> distance;
-			{
-				//bfs
-				const uint32_t range = 4;
-				const tvector<tpair<int, int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} };
-				std::queue<glm::ivec2> q;
-				q.push({ p_x, p_y });
-
-				//draw
-				while (!q.empty())
-				{
-					auto p = q.front();
-					q.pop();
-
-					if (visited[p.x][p.y])
-						continue;
-
-					visited[p.x][p.y] = true;
-
-					auto new_dist = distance[p.x][p.y] + 1;
-					if (new_dist > range)
-						continue;
-
-					for (auto [x, y] : dir)
-					{
-						if (instance.collision_map[p.x + x][p.y + y])
-							continue;
-						if (instance.wall_map[p.x][p.y][p.x + x][p.y + y])
-							continue;
-						if (visited[p.x + x][p.y + y])
-							continue;
-
-						distance[p.x + x][p.y + y] = new_dist;
-						q.push({ p.x + x, p.y + y });
-					}
-
-				}
-
-				for (auto& [x, m] : visited)
-					for (auto [y, b] : m)
-					{
-						if (!b) continue;
-						AABB box;
-
-						box.min.x = (float)x + .1f;
-						box.min.z = (float)y + .1f;
-						box.min.y = 0;
-
-						box.max.x = x + .9f;
-						box.max.z = y + .9f;
-						box.max.y = 0;
-
-						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
-					}
-
-
-
-			}
+			calculate_move(instance, p_x, p_y, cs.get_stat(4) + cs.get_statDelta(4), distance, visited);
 
 			int w_x = world_mouse.x;
 			int w_y = world_mouse.y;
+
+			for (auto& [x, m] : visited)
+				for (auto [y, b] : m)
+				{
+					if (!b) continue;
+					AABB box;
+
+					box.min.x = (float)x + .1f;
+					box.min.z = (float)y + .1f;
+					box.min.y = 0;
+
+					box.max.x = x + .9f;
+					box.max.z = y + .9f;
+					box.max.y = 0;
+
+					Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+				}
 
 			if (visited[w_x][w_y])
 			{
