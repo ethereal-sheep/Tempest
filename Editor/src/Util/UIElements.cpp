@@ -3377,12 +3377,12 @@ namespace Tempest::UI
 			charImgMax = { charImgMin.x + characterImg->GetWidth(), charImgMin.y + characterImg->GetHeight() };
 			//window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax, { 1,0 }, { 0,1 });
 			window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax);
-			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), charImgMin, charImgMax, { 1,0 }, { 0,1 });
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), charImgMin, charImgMax, { 1,0 }, { 0,1 }, ImGui::GetColorU32(ImVec4{ character->color.x, character->color.y,character->color.z, 1.0f }));
 		}
 		else
 		{
 			window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), selectedMin, selectedMax);
-			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, charImgMax);
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, charImgMax, ImVec2{ 0,0 }, ImVec2{ 1,1 }, ImGui::GetColorU32(ImVec4{ character->color.x, character->color.y,character->color.z, 1.0f }));
 		}
 		
 		ImVec2 namePos = { selectedMin.x + selectedImg->GetWidth() * 0.55f, selectedMin.y + selectedImg->GetHeight() * 0.08f };

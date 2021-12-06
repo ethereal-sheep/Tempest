@@ -847,7 +847,7 @@ namespace Tempest
 											   static_cast<float>(tex_map["Assets/ActionTabUnlit.png"]->GetHeight()) };
 	}
 
-	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return; 
@@ -955,7 +955,7 @@ namespace Tempest
 		ImGui::PopStyleColor();
 	}
 
-	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return;
@@ -976,6 +976,7 @@ namespace Tempest
 				auto PairResult = UI::UIButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
 				if (PairResult.first)
 				{
+					OverlayOpen = false;
 					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 					Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance, weap_id);
 				}
@@ -1013,7 +1014,7 @@ namespace Tempest
 		ImGui::PopStyleColor();
 	}
 
-	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return;
@@ -1022,7 +1023,7 @@ namespace Tempest
 		(void)instance;
 	}
 
-	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return;
@@ -1042,6 +1043,7 @@ namespace Tempest
 				auto PairResult = UI::UIButtonWithDelete(action->g.name.c_str(), string("##actionn" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
 				if (PairResult.first)
 				{
+					OverlayOpen = false;
 					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 					Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(id, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
 				}

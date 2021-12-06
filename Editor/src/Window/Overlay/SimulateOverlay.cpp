@@ -522,6 +522,7 @@ namespace Tempest
 		ImGui::PushID("chara" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
+			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_UNIT, is_attacker, *temp);
 		}
@@ -542,6 +543,7 @@ namespace Tempest
 		ImGui::PushID("weapon" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 		{
+			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_WEAPON, is_attacker, *temp);
 		}
@@ -564,6 +566,7 @@ namespace Tempest
 		push_button_style();
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
+			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 			Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(*temp, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
 		}
