@@ -5,15 +5,21 @@
     "Components": [
         {
             "Entity": 2,
-            "Component": {}
+            "Component": {
+                "Action_Category": 3
+            }
         },
         {
             "Entity": 5,
-            "Component": {}
+            "Component": {
+                "Action_Category": 3
+            }
         },
         {
             "Entity": 54,
-            "Component": {}
+            "Component": {
+                "Action_Category": 3
+            }
         }
     ]
 }
