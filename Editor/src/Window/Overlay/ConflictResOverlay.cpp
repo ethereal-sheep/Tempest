@@ -38,7 +38,7 @@ namespace Tempest
 			if (ImGui::Begin("ConflictResolution", nullptr, window_flags))
 			{
 				// render the select map image
-				auto image = tex_map["Assets/MM_SelectCR.png"];
+				auto image = tex_map["Assets/SelectCR_BG.png"];
 				ImVec2 point = ImGui::GetCursorScreenPos();
 				ImVec2 Min{ point.x, point.y };
 				ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
