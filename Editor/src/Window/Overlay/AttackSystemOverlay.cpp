@@ -365,7 +365,8 @@ namespace Tempest
 						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 						{
 							OverlayOpen = false;
-							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+							//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 						}
 
 						ImGui::SameLine();

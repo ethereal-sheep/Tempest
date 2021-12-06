@@ -176,7 +176,8 @@ namespace Tempest
 					{
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
-						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+						//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 					}
 
 					ImGui::SameLine();

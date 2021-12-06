@@ -94,7 +94,7 @@ namespace Tempest
                         enable_popup = false;
                         ImGui::CloseCurrentPopup();
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
-                        Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+                        Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
                     }
 
 

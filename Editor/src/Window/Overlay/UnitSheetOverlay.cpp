@@ -118,7 +118,6 @@ namespace Tempest
 					unsigned i = 0;
 					auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
 
-
 					// TODO: store selected item
 					const ImVec2 cursor{ ImGui::GetCursorPosX() + 30, ImGui::GetCursorPosY() + 20 };
 					for (auto id : view)
@@ -208,7 +207,8 @@ namespace Tempest
 					{
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
-						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+						//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 					}
 
 					ImGui::SameLine();

@@ -96,7 +96,12 @@ namespace Tempest
 	};
 
 	//Overlay Trigger
-	struct OpenSimulateTrigger : public Event {};
+	struct OpenSimulateTrigger : public Event 
+	{
+		OpenSimulateTrigger(Instance& in): instance{ in }  {}
+		Instance& instance;
+	};
+
 	struct OpenSimulateResultTrigger : public Event
 	{
 		OpenSimulateResultTrigger(Entity a, Entity d, Entity c):
@@ -117,7 +122,12 @@ namespace Tempest
 	};
 
 	struct OpenConflictResTrigger : public Event {};
-	struct OpenMainMenuTrigger : public Event {};
+	struct OpenMainMenuTrigger : public Event
+	{
+		OpenMainMenuTrigger(int type = 0) : menuType{ type } {}
+		int menuType;
+	};
+
 	struct OpenActionGraphTrigger : public Event // not using for new change
 	{
 		OpenActionGraphTrigger(Entity entityid, Instance& in) : id{ entityid }, instance{in} {}

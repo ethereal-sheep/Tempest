@@ -15,13 +15,14 @@
 
 namespace Tempest
 {
-	void MainMenuOverlay::open_popup(const Event&)
+	void MainMenuOverlay::open_popup(const Event& e)
 	{
+		auto a = event_cast<OpenMainMenuTrigger>(e);
 		OverlayOpen = true;
 		MapTitle = "";
 		SelectedConflictRes = 0;
 		SelectedSequences.clear();
-		MainMenuUI = UI_SHOW::INITIAL;
+		MainMenuUI = static_cast<UI_SHOW>(a.menuType);
 		window_flags =  ImGuiWindowFlags_NoTitleBar;
 	}
 
@@ -291,7 +292,7 @@ namespace Tempest
 				if (UI::UIConflictSelectable(str.c_str(), false, 1).first)
 				{
 					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 				}
 				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
 				cur_pos = ImGui::GetCursorPos();

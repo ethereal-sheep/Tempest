@@ -18,12 +18,15 @@
 
 namespace Tempest
 {
-	void SimulateOverlay::open_popup(const Event&)
+	void SimulateOverlay::open_popup(const Event& e)
 	{
+		auto a = event_cast<OpenSimulateTrigger>(e);
 		OverlayOpen = true;
 		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar;
-		attacker.Reset();
-		defender.Reset();
+		attacker.Reset(a.instance);
+		defender.Reset(a.instance);
+
+		if (!a.instance.ecs.view<Components::Graph>(exclude_t<tc::Destroyed>()).contains(sequence))
 		sequence = UNDEFINED;
 
 		padding = ImGui::GetMainViewport()->Size.y * 0.02f;
@@ -201,7 +204,7 @@ namespace Tempest
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						OverlayOpen = false;
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
 					}
 
 					ImGui::SameLine();
@@ -568,5 +571,17 @@ namespace Tempest
 	void SimulateOverlay::pop_button_style() const
 	{
 		ImGui::PopStyleColor(3);
+	}
+
+	void SimulateOverlay::UnitData::Reset(Instance& instance)
+	{
+		if (!instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>()).contains(unit_id))
+			unit_id = UNDEFINED;
+
+		if (!instance.ecs.view<Components::Weapon>(exclude_t<tc::Destroyed>()).contains(weapon))
+			weapon = UNDEFINED;
+
+		if (!instance.ecs.view<Components::Graph>(exclude_t<tc::Destroyed>()).contains(action))
+			action = UNDEFINED;
 	}
 }

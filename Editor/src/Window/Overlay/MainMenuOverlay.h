@@ -18,6 +18,7 @@ namespace Tempest
 {
     class MainMenuOverlay : public Window
     {
+    public:
         enum class UI_SHOW
         {
             INITIAL,
@@ -28,6 +29,8 @@ namespace Tempest
             LOAD_MAP,
             SELECT_CONFLICT_RES,
         };
+
+    private:
         const char* window_name() override
         {
             return "";
