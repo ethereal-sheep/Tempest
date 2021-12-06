@@ -523,7 +523,6 @@ namespace Tempest
 					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 					MemoryStrategy{},
 					InstanceType::RUN_TIME);
-				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
 			}
 		}
 			break;
