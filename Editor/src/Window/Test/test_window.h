@@ -169,7 +169,7 @@ namespace Tempest
 				if (clicked)
 				{
 					LOG("TRUE");
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 				}
 
 

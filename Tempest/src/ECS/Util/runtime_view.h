@@ -59,12 +59,15 @@ namespace Tempest
 		{
 			// preprocessing
 			auto lambda = [&](auto i) {
-				return !pools.count(i);
+				return !pools.count(i) || pools.at(i) == nullptr;
 			};
 
 			for (auto i : include)
 				if (lambda(i))
+				{
+					include.clear();
 					return;
+				}
 
 			//include.erase(std::remove_if(include.begin(), include.end(), lambda), include.end());
 			exclude.erase(std::remove_if(exclude.begin(), exclude.end(), lambda), exclude.end());

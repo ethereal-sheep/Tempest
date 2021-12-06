@@ -19,16 +19,15 @@ uniform sampler2D sao;
 uniform sampler2D gEffects;
 
 uniform int gBufferView;
-uniform int motionBlurMaxSamples;
+//uniform int motionBlurMaxSamples;
 uniform int tonemappingMode;
 uniform bool saoMode;
 uniform bool fxaaMode;
-uniform bool motionBlurMode;
 uniform bool tiltShiftMode;
 uniform float cameraAperture;
 uniform float cameraShutterSpeed;
 uniform float cameraISO;
-uniform float motionBlurScale;
+//uniform float motionBlurScale;
 uniform vec2 screenTextureSize;
 
 
@@ -39,7 +38,6 @@ vec3 FilmicTM(vec3 color);
 vec3 UnchartedTM(vec3 color);
 float computeSOBExposure(float aperture, float shutterSpeed, float iso);
 vec3 computeFxaa();
-vec3 computeMotionBlur(vec3 colorVector);
 
 
 void main()
@@ -76,10 +74,6 @@ void main()
 				color = texture(screenTexture, TexCoords).rgb;
 		}
 		
-        // Motion Blur computation
-        if(motionBlurMode)
-            color = computeMotionBlur(color);
-
         // SAO computation
         if(saoMode)
         {
@@ -162,24 +156,6 @@ vec3 computeFxaa()
         return vec3(resultB);
 }
 
-vec3 computeMotionBlur(vec3 colorVector)
-{
-    vec2 texelSize = 1.0f / vec2(textureSize(screenTexture, 0));
-
-    vec2 velocity = texture(gEffects, TexCoords).gb;
-    velocity *= motionBlurScale;
-
-    float fragSpeed = length(velocity / texelSize);
-    int numSamples = clamp(int(fragSpeed), 1, motionBlurMaxSamples);
-
-    for (int i = 1; i < numSamples; ++i)
-    {
-        vec2 blurOffset = velocity * (float(i) / float(numSamples - 1) - 0.5f);
-        colorVector += texture(screenTexture, TexCoords + blurOffset).rgb;
-    }
-
-    return colorVector /= float(numSamples);
-}
 
 
 vec3 colorLinear(vec3 colorVector)

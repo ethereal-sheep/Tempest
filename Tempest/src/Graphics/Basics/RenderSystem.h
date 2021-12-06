@@ -96,7 +96,7 @@ namespace Tempest
         glm::mat4 lightProjection, lightView;
         glm::mat4 lightSpaceMatrix;
 
-        uint32_t MAX_POINT_LIGHT = 10;
+        uint32_t MAX_POINT_LIGHT = 5;
 
         // To be changed to objects instead of global values
         float shininess = 32.f;

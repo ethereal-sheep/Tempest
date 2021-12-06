@@ -96,7 +96,6 @@ namespace Tempest
 			REQUIRE(Shape)
 			REQUIRE(Model)
 			REQUIRE(Door)
-			REQUIRE(Collision)
 		});
 
 		PROTO_CATEGORY(Wall)

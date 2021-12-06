@@ -133,12 +133,93 @@ namespace Tempest
 			friend Archiver& operator&(Archiver& ar, Tile&) { ar.StartObject(); return ar.EndObject(); }
 		};
 
+
+		struct Transform
+		{
+			static const char* get_type() { return "Transform"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Transform& component)
+			{
+				ar.StartObject();
+				ar.Member("Position", component.position);
+				ar.Member("Rotation", component.rotation);
+				ar.Member("Scale", component.scale);
+				return ar.EndObject();
+			}
+
+			vec3 position;
+			quat rotation = { 1.f, 0.f, 0.f, 0.f };
+			vec3 scale = { 1.f, 1.f, 1.f };
+
+			friend bool operator==(const Transform& lhs, const Transform& rhs) {
+				return
+					glm::all(glm::epsilonEqual(lhs.position, rhs.position, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.rotation, rhs.rotation, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.scale, rhs.scale, glm::epsilon<float>()));
+			}
+			friend bool operator!=(const Transform& lhs, const Transform& rhs) {
+				return !(lhs == rhs);
+			}
+
+		};
+
+		struct Local
+		{
+			static const char* get_type() { return "Local"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Local& component)
+			{
+				ar.StartObject();
+				ar.Member("LocalPosition", component.local_position);
+				ar.Member("LocalRotation", component.local_rotation);
+				ar.Member("LocalScale", component.local_scale);
+				return ar.EndObject();
+			}
+
+			vec3 local_position;
+			quat local_rotation = { 1.f, 0.f, 0.f, 0.f };
+			vec3 local_scale = { 1.f, 1.f, 1.f };
+		};
+
+
 		struct Door
 		{
 			static const char* get_type() { return "Door"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Door&) { ar.StartObject(); return ar.EndObject(); }
+			friend Archiver& operator&(Archiver& ar, Door& component) 
+			{
+				ar.StartObject();
+				ar.Vector("States", component.states);
+				component.states.resize((int)State::End);
+				return ar.EndObject(); 
+			}
+
+			enum struct State {
+				CLOSE,
+				OPEN,
+				End
+			};
+
+			void update(float dt);
+
+			auto get_current_state() const { return next; }
+			auto get_current_local() const { return current_local; }
+
+			bool change_state(State new_state);
+
+
+			tvector<Local> states = tvector<Local>((int)State::End);
+
+		private:
+			float interpolation_time = 1.f;
+			float current_time = 0.f;
+			Local current_local;
+
+			State next = State::CLOSE;
+			State prev = State::CLOSE;
 		};
 
 		struct Obstacle
@@ -158,7 +239,27 @@ namespace Tempest
 
 			template <typename Archiver>
 			friend Archiver& operator&(Archiver& ar, Unit&) { ar.StartObject(); return ar.EndObject(); }
+
+			void update(float dt);
+			bool set_path(const tvector<glm::ivec2>& path, const Transform& curr);
+			bool is_moving() { return moving; }
+			bool is_end_frame() { return end_frame; }
+			Transform get_current_transform() const { return curr_xform; };
+
+		private:
+			Transform prev_xform;
+			Transform curr_xform;
+			Transform next_xform;
+			tvector<glm::ivec2> path;
+
+			float interpolation_time = 1.f;
+			float current_time = 0.f;
+
+			bool end_frame = false;
+			bool moving = false;
+
 		};
+
 		struct Wall
 		{
 			static const char* get_type() { return "Wall"; }
@@ -221,55 +322,7 @@ namespace Tempest
 			int member4;
 		};
 
-		struct Transform
-		{
-			static const char* get_type() { return "Transform"; }
 
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Transform& component)
-			{
-				ar.StartObject();
-				ar.Member("Position", component.position);
-				ar.Member("Rotation", component.rotation);
-				ar.Member("Scale", component.scale);
-				return ar.EndObject();
-			}
-
-			vec3 position;
-			quat rotation = { 1.f, 0.f, 0.f, 0.f };
-			vec3 scale = { 1.f, 1.f, 1.f };
-
-			friend bool operator==(const Transform& lhs, const Transform& rhs) {
-				return
-					glm::all(glm::epsilonEqual(lhs.position, rhs.position, glm::epsilon<float>())) &&
-					glm::all(glm::epsilonEqual(lhs.rotation, rhs.rotation, glm::epsilon<float>())) &&
-					glm::all(glm::epsilonEqual(lhs.scale, rhs.scale, glm::epsilon<float>()));
-			}
-			friend bool operator!=(const Transform& lhs, const Transform& rhs) {
-				return !(lhs == rhs);
-			}
-
-		};
-
-
-		struct Local
-		{
-			static const char* get_type() { return "Local"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Local& component)
-			{
-				ar.StartObject();
-				ar.Member("LocalPosition", component.local_position);
-				ar.Member("LocalRotation", component.local_rotation);
-				ar.Member("LocalScale", component.local_scale);
-				return ar.EndObject();
-			}
-
-			vec3 local_position;
-			quat local_rotation = { 1.f, 0.f, 0.f, 0.f };
-			vec3 local_scale = { 1.f, 1.f, 1.f };
-		};
 
 		struct Shape
 		{

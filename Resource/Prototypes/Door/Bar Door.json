@@ -49,7 +49,7 @@
             },
             "Component": {
                 "LocalPosition": [
-                    6.065000057220459,
+                    6.0637288093566898,
                     0.0,
                     -3.6109023094177248
                 ],
@@ -87,7 +87,46 @@
             "Metadata": {
                 "Type": "Door"
             },
-            "Component": {}
+            "Component": {
+                "States": [
+                    {
+                        "LocalPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "LocalPosition": [
+                            -0.800000011920929,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

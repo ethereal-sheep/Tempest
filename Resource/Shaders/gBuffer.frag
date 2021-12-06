@@ -58,8 +58,8 @@ void main()
     gAlbedo.a =  vec3(texture(texRoughness, TexCoords)).r;
 	gAlbedo.a =  0.0f;
 	
-    //gNormal.rgb = computeTexNormal(normal, texNormal);
-    gNormal.rgb = normalize(normal);
+    gNormal.rgb = computeTexNormal(normal, texNormal);
+    //gNormal.rgb = normalize(normal);
 	
     gNormal.a = vec3(texture(texMetalness, TexCoords)).r;
     gEffects.r = vec3(texture(texAO, TexCoords)).r;

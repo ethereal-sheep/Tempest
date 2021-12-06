@@ -13,6 +13,9 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "Triggers/SimulationTriggers.h"
 #include "Events/Events/ScriptEvents.h"
+#include "Util/shape_manip.h"
+#include "Audio/AudioEngine.h"
+#include "Util/pathfinding.h"
 
 namespace Tempest
 {
@@ -672,21 +675,83 @@ namespace Tempest
 			}
 
 		}
-		// draw stuff on unit heads
+		
+		// object picking for door
+		auto ray = cam.GetMouseRay();
+		auto start = cam.GetPosition();
+		float dist = 0;
+		glm::ivec2 mouse = { -INT_MAX, -INT_MAX };
+		Entity door = INVALID;
+		if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+		{
+			auto inter = cam.GetPosition() + ray * dist;
 
-		//int w_x = world_mouse.x;
-		//int w_y = world_mouse.y;
-		//// unselect or select something else
-		//if (io.MouseClicked[0] && !ImGui::IsAnyItemHovered())
-		//{
-		//	if (instance.collision_map.count(w_x) && instance.collision_map[w_x].count(w_y))
-		//		instance.selected = instance.collision_map[w_x][w_y];
-		//	else
-		//	{
-		//		instance.selected = INVALID;
-		//		state = State::NO_SELECTED;
-		//	}
-		//}
+			float r_x = std::round(inter.x) - inter.x;
+			float r_y = std::round(inter.z) - inter.z;
+
+			if (abs(r_x) < 0.1f)
+			{
+				auto c_y = (int)std::round(inter.z - .5f);
+				auto a_x = (int)std::round(inter.x);
+				auto b_x = (int)std::round(inter.x) - 1;
+				if (auto check = instance.door_map[a_x][c_y][b_x][c_y])
+					door = check;
+
+			}
+			else if (abs(r_y) < 0.1f)
+			{
+				auto c_x = (int)std::round(inter.x - .5f);
+				auto a_y = (int)std::round(inter.z);
+				auto b_y = (int)std::round(inter.z) - 1;
+				if (auto check = instance.door_map[c_x][a_y][c_x][b_y])
+					door = check;
+			}
+		}
+
+		if (door && instance.ecs.has<tc::Door>(door) && instance.ecs.has<tc::Shape>(door) && instance.ecs.has<tc::Transform>(door))
+		{
+			auto shape = instance.ecs.get_if<tc::Shape>(door);
+			auto& transform = instance.ecs.get<tc::Transform>(door);
+
+			const int& x = shape->x;
+			const int& y = shape->y;
+
+			AABB box;
+
+			auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
+
+			box.min.x = a_x;
+			box.min.z = a_y;
+
+			box.max.x = b_x;
+			box.max.z = b_y;
+
+			auto rot = transform.rotation;
+			box.min = rot * box.min;
+			box.max = rot * box.max;
+
+			box.min.x += transform.position.x;
+			box.min.z += transform.position.z;
+			box.min.y = 0;
+
+			box.max.x += transform.position.x;
+			box.max.z += transform.position.z;
+			box.max.y = 0;
+
+			Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+
+
+			if (ImGui::GetIO().MouseClicked[0])
+			{
+				auto door_p = instance.ecs.get_if<tc::Door>(door);
+				auto next = door_p->get_current_state() == tc::Door::State::CLOSE ? tc::Door::State::OPEN : tc::Door::State::CLOSE;
+				if (door_p->change_state(next))
+				{
+					AudioEngine ae;
+					ae.Play("Sounds2D/Door_Open.wav", "SFX");
+				}
+			}
+		}
 	}
 
 
@@ -1141,6 +1206,7 @@ namespace Tempest
 		if (curr_entity && instance.ecs.has<tc::Unit>(curr_entity) && instance.ecs.has<tc::Character>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity))
 		{
 			auto& cs = instance.ecs.get<tc::Character>(curr_entity);
+			auto& unit = instance.ecs.get<tc::Unit>(curr_entity);
 			auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
 			position.y += 2;
 			auto ss = cam.WorldspaceToScreenspace(position);
@@ -1154,9 +1220,9 @@ namespace Tempest
 
 			LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
 
-
+			int steps = cs.get_stat(4) + cs.get_statDelta(4);
 			tmap<int, tmap<int, uint32_t>> distance;
-			calculate_move(instance, p_x, p_y, cs.get_stat(4) + cs.get_statDelta(4), distance, visited);
+			calculate_move(instance, p_x, p_y, steps, distance, visited);
 
 			int w_x = world_mouse.x;
 			int w_y = world_mouse.y;
@@ -1231,9 +1297,22 @@ namespace Tempest
 
 					if (io.MouseClicked[0])
 					{
+						auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
+							[&collision_map = instance.collision_map, &wall_map = instance.wall_map](int x, int y, int n_x, int n_y) {
+
+								if (wall_map[x][y][n_x][n_y])
+									return true;
+								if (collision_map[n_x][n_y])
+									return true;
+								return false;
+							});
+
 						// move
-						transform.position.x = w_x + .5f;
-						transform.position.z = w_y + .5f;
+						v.pop_back();
+						unit.set_path(v, transform);
+
+						/*transform.position.x = w_x + .5f;
+						transform.position.z = w_y + .5f;*/
 						instance.selected = INVALID;
 						state = State::MENU;
 					}

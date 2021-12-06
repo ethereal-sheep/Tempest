@@ -371,7 +371,6 @@ namespace Tempest
 		return Play(path, bus, sd);
 	}
 
-
 	bool AudioEngine::RegisterSound(tpath file_path, bool is3D)
 	{
 		if (audioImpl->m_Sounds.count(file_path))

@@ -74,8 +74,8 @@ namespace Tempest
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 				// Display the created units
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.03f, viewport->Size.y * 0.15f });
-				ImGui::BeginChild("##WeaponsDisplay", { viewport->Size.x * 0.15f, viewport->Size.y * 0.7f }, true);
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * 0.15f });
+				ImGui::BeginChild("##WeaponsDisplay", { viewport->Size.x * 0.12f, viewport->Size.y * 0.7f }, true);
 
 				{
 					unsigned i = 0;
@@ -130,6 +130,16 @@ namespace Tempest
 				ImGui::EndChild();
 
 				// display weapon picture here
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.15f, viewport->Size.y * 0.3f });
+				auto UnitImg = tex_map["Assets/WeaponImage.png"];
+				if (UI::UIImageButton((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }))
+				{
+
+				}
+				ImGui::PopStyleColor(3);
 
 				// display information
 				// tabs 
@@ -166,7 +176,8 @@ namespace Tempest
 					{
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
-						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+						//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 					}
 
 					ImGui::SameLine();

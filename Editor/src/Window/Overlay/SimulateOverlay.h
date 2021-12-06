@@ -52,11 +52,7 @@ namespace Tempest
             Entity unit_id{ UNDEFINED };
             Entity weapon{ UNDEFINED };
             Entity action{ UNDEFINED };
-            void Reset() {
-                unit_id = UNDEFINED;
-                weapon = UNDEFINED;
-                action = UNDEFINED;
-            }
+            void Reset(Instance& instance);
         };
 
         UnitData attacker{};
