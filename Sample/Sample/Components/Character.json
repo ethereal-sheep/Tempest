@@ -7,6 +7,11 @@
             "Entity": 4,
             "Component": {
                 "Charater_Name": "Test Character",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
                 "Weapon_Ids": [
                     7
                 ],
@@ -35,6 +40,11 @@
             "Entity": 3,
             "Component": {
                 "Charater_Name": "Lousy",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
                 "Weapon_Ids": [],
                 "Charater_Stats": [
                     1,
@@ -61,6 +71,11 @@
             "Entity": 57,
             "Component": {
                 "Charater_Name": "Soldier B",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
                 "Weapon_Ids": [
                     7,
                     51

@@ -25,7 +25,7 @@ void main()
 
     TexCoords = texCoords;
 
-    mat3 normalMatrix = transpose(inverse(mat3(view * projViewModel)));
+    mat3 normalMatrix = transpose(inverse(mat3(projViewModel)));
     normal = normalMatrix * Normal;
 
     fragPosition = projViewModel * vec4(position, 1.0f);
