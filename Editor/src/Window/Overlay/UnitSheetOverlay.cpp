@@ -940,7 +940,7 @@ namespace Tempest
 
 		}
 		ImGui::PopFont();
-
+		ImGui::ColorEdit3("##color", glm::value_ptr(cs->color), ImGuiColorEditFlags_AlphaBar | 0);
 		ImGui::EndChild();
 	}
 

@@ -55,7 +55,7 @@ namespace Tempest
 
 	}
 
-	void collision_helper(id_t id, const tc::Transform& t, const tc::Shape& s, tmap<int, tmap<int, id_t>>& m)
+	void collision_helper(uint32_t level, const tc::Transform& t, const tc::Shape& s, tmap<int, tmap<int, id_t>>& m)
 	{
 		const auto transform = &t;
 		const auto shape = &s;
@@ -96,11 +96,11 @@ namespace Tempest
 
 		for (int i = (int)std::round(min.x); i < (int)std::round(max.x); ++i)
 			for (int j = (int)std::round(min.z); j < (int)std::round(max.z); ++j) {
-				m[i][j] = id;
+				m[i][j] = level;
 			}
 	}
 
-	void collision_helper(id_t id, const tc::Transform& t, const tc::Shape& shape, tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>>& m)
+	void collision_helper(uint32_t level, const tc::Transform& t, const tc::Shape& shape, tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>>& m)
 	{
 		vec3 s, e;
 
@@ -119,8 +119,8 @@ namespace Tempest
 		int b_x = (int)std::floor(t.position.x + e.x);
 		int b_y = (int)std::floor(t.position.z + e.z);
 
-		m[a_x][a_y][b_x][b_y] = id;
-		m[b_x][b_y][a_x][a_y] = id;
+		m[a_x][a_y][b_x][b_y] = level;
+		m[b_x][b_y][a_x][a_y] = level;
 	}
 
 	void RuntimeInstance::_update(float )
@@ -129,12 +129,18 @@ namespace Tempest
 		character_map.clear();
 		wall_map.clear();
 
+		// 1 is full
+		// 2 is half
+
 		for (auto id : ecs.view<tc::Collision, tc::Transform, tc::Shape>())
 		{
 			auto& transform = ecs.get<tc::Transform>(id);
 			auto& shape = ecs.get<tc::Shape>(id);
+			auto& collider = ecs.get<tc::Collision>(id);
 
-			collision_helper(id, transform, shape, collision_map);
+			auto level = collider.cover == tc::Collision::Cover::FULL ? 1u : 2u;
+
+			collision_helper(level, transform, shape, collision_map);
 		}
 
 		for (auto id : ecs.view<tc::Unit, tc::Transform, tc::Shape>())
@@ -149,8 +155,11 @@ namespace Tempest
 		{
 			auto& transform = ecs.get<tc::Transform>(id);
 			auto& shape = ecs.get<tc::Shape>(id);
+			auto& wall = ecs.get<tc::Wall>(id);
 
-			collision_helper(id, transform, shape, wall_map);
+			auto level = wall.cover == tc::Wall::Cover::FULL ? 1u : 2u;
+
+			collision_helper(level, transform, shape, wall_map);
 		}
 
 

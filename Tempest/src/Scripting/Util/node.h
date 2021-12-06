@@ -252,13 +252,10 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
 	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus, Multiply, Divide);
 
-	DEFINE_NODE(GetStatNode, GetStat, Owner, Enemy);
-	DEFINE_NODE(SetStatNode, SetStat, Owner, Enemy);
-	DEFINE_NODE(GetMainStatNode, GetMainStat, Owner, Enemy);
-	DEFINE_NODE(StatNode, Stat, GetStat, SetStat, GetMain, SetMain);
+	DEFINE_NODE(StatNode, Stat, GetStat, SetStat, GetMain, SetMain, ReduceStat, RestoreStat, ResetStat);
 	DEFINE_NODE(GroupNode, Group, Default);
 	DEFINE_NODE(ConflictNode, Conflict, Start, Win, Lose, AttackRoll, DefendRoll, AttackResolve, DefendResolve);
-	DEFINE_NODE(ActionNode, Action, Input, Output, Roll, Resolve);
+	DEFINE_NODE(ActionNode, Action, Input, Output, Roll, Resolve, Deal);
 	DEFINE_NODE(SwitchNode, Switch, TwoSwitch, ThreeSwitch, FiveSwitch, TenSwitch, TwentySwitch, ThirtySwitch);
 	DEFINE_NODE(CompareNode, Compare, CompareFlow);
 	DEFINE_NODE(UtilNode, util, Print, In);
@@ -272,9 +269,6 @@ case category_type::NodeCategory:											\
 		NODE_CASE(DiceNode, Dice);
 		NODE_CASE(ArithmeticNode, Arithmetic);
 
-		NODE_CASE(GetStatNode, GetStat);
-		NODE_CASE(SetStatNode, SetStat);
-		NODE_CASE(GetMainStatNode, GetMainStat);
 		NODE_CASE(StatNode, Stat);
 		NODE_CASE(GroupNode, Group);
 

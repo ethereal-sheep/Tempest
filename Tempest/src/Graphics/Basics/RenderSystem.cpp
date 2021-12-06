@@ -484,7 +484,23 @@ namespace Tempest
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
         m_Pipeline.m_Models.push_back(model);
     }
-
+    
+    void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        ModelObj model;
+        model.m_Transform = model_matrix;
+        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        model.hasColor = true;
+        model.color = color;
+        m_Pipeline.m_Models.push_back(model);
+    }
+ 
     void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)
     {
         m_LineRenderer.Submit(line, color);
@@ -819,8 +835,16 @@ namespace Tempest
            
             for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
             {                   
-                if(m_Pipeline.m_Models[i].m_Model->colours.size())
-                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                if (m_Pipeline.m_Models[i].m_Model->colours.size())
+                {
+                    if (j == 4)
+                    {
+                        if (m_Pipeline.m_Models[i].hasColor)
+                            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].color, "colour");
+                    }
+                    else
+                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                }
                 else
                     m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
 
