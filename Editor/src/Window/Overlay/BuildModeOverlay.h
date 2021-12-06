@@ -28,7 +28,7 @@ namespace Tempest
         void init(Instance&) override
         {
             window_flags =
-                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar;
+                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs;
 
             Service<EventManager>::Get().register_listener<OpenBuildModeOverlay>(&BuildModeOverlay::open_popup, this);
             //cam_ctrl.reset(Service<RenderSystem>::Get().GetCamera());
