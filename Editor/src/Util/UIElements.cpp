@@ -10,7 +10,7 @@
 
 
 #include "UIElements.h"
-
+#include "Audio/AudioEngine.h"
 
 
 namespace Tempest::UI
@@ -1200,6 +1200,8 @@ namespace Tempest::UI
 			auto io = ImGui::GetIO();
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				return true;
 			}
 		}
@@ -1242,6 +1244,8 @@ namespace Tempest::UI
 			auto io = ImGui::GetIO();
 			if (ImGui::IsMouseClicked(0))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				return true;
 			}
 		}
@@ -2009,6 +2013,8 @@ namespace Tempest::UI
 			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f + 10.f });
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -2041,6 +2047,8 @@ namespace Tempest::UI
 			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f + 10.f });
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -2068,6 +2076,8 @@ namespace Tempest::UI
 			ImGui::SetCursorPos({ new_pos.x + button_size.x - 15.f, new_pos.y - button_size.y * 0.5f + 10.f });
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -2874,6 +2884,8 @@ namespace Tempest::UI
 		ImGui::SameLine();
 		if (ImGui::Button((string(ICON_FA_TRASH) + label).c_str()))
 		{
+			AudioEngine ae;
+			ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
 			//ImGui::PopStyleVar();
 			remove = true;
 		}

@@ -74,6 +74,8 @@ namespace Tempest
 		QUICKMENU_POPUP_TYPE current;
 	};
 
+	struct PauseOverlayTrigger : public Event {};
+
 	//Confirm Trigger
 	struct SimulateSelectionConfirm : public Event
 	{
@@ -85,6 +87,13 @@ namespace Tempest
 		Entity data;
 	};
 	struct TutorialPopupTrigger : public Event {};
+
+	struct MainMenuSequencePopupTrigger : public Event
+	{
+		MainMenuSequencePopupTrigger(std::vector<int>& selections) : selected_seqs{ selections } {}
+
+		std::vector<int>& selected_seqs;
+	};
 
 	//Overlay Trigger
 	struct OpenSimulateTrigger : public Event {};

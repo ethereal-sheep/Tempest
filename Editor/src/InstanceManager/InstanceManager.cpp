@@ -51,7 +51,7 @@
 #include "Window/Popup/AddActionPopup.h"
 #include "Window/Popup/SelectSequencePopup.h"
 #include "Window/Popup/TutorialPopup.h"
-
+#include "Window/Popup/MainMenuSequencePopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
 #include "Window/Util/SimulationStart.h"
@@ -68,6 +68,7 @@
 #include "Window/Overlay/TurnOrderOverlay.h"
 #include "Window/Overlay/PlaceUnitsOverlay.h"
 #include "Window/Overlay/BuildModeOverlay.h"
+#include "Window/Overlay/PauseOverlay.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -137,6 +138,7 @@ namespace Tempest
 		instance->register_always<AddActionPopup>();
 		instance->register_always<SelectSequencePopup>();
 		instance->register_always<TutorialPopup>();
+		instance->register_always<MainMenuSequencePopup>();
 
 
 		instance->register_always<SaveBrowser>();
@@ -146,15 +148,11 @@ namespace Tempest
 		instance->register_always<WeaponSheetOverlay>();
 		instance->register_always<SimulateOverlay>();
 		instance->register_always<SimulateResultOverlay>();
-		//======================================
-		//instance->register_always<CombatModeOverlay>();
-		//instance->register_always<TurnOrderOverlay>();
-		//instance->register_always<PlaceUnitsOverlay>();
-		//=======================================
 		instance->register_always<ConflictResOverlay>();
 		instance->register_always<AttackSystemOverlay>();
 		instance->register_always<MainMenuOverlay>();
 		instance->register_always<BuildModeOverlay>();
+		instance->register_always<PauseOverlay>();
 
 		instance->register_always<SimulationStart>();
 		
@@ -173,6 +171,7 @@ namespace Tempest
 		instance->register_always<CombatModeOverlay>();
 		instance->register_always<TurnOrderOverlay>();
 		instance->register_always<PlaceUnitsOverlay>();
+		instance->register_always<PauseOverlay>();
 		//instance->register_always<TurnOrderOverlay>();
 		instance->register_always<SimulationStart>();
 		//instance->register_window<test_window4>();
