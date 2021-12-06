@@ -680,7 +680,6 @@ namespace Tempest
 		auto ray = cam.GetMouseRay();
 		auto start = cam.GetPosition();
 		float dist = 0;
-		glm::ivec2 mouse = { -INT_MAX, -INT_MAX };
 		Entity door = INVALID;
 		if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 		{
@@ -694,8 +693,11 @@ namespace Tempest
 				auto c_y = (int)std::round(inter.z - .5f);
 				auto a_x = (int)std::round(inter.x);
 				auto b_x = (int)std::round(inter.x) - 1;
+
 				if (auto check = instance.door_map[a_x][c_y][b_x][c_y])
-					door = check;
+				{
+					door = instance.door_map[a_x][c_y][b_x][c_y];
+				}
 
 			}
 			else if (abs(r_y) < 0.1f)
@@ -703,8 +705,11 @@ namespace Tempest
 				auto c_x = (int)std::round(inter.x - .5f);
 				auto a_y = (int)std::round(inter.z);
 				auto b_y = (int)std::round(inter.z) - 1;
+
 				if (auto check = instance.door_map[c_x][a_y][c_x][b_y])
-					door = check;
+				{
+					door = instance.door_map[c_x][a_y][c_x][b_y];
+				}
 			}
 		}
 
@@ -937,7 +942,7 @@ namespace Tempest
 				if (ImGui::BeginChild("Select other entity attack", child_size, true))
 				{
 					unsigned i = 0;
-					for (auto id : units)
+					for ([[maybe_unused]]auto id : units)
 					{
 						if (curr_turn != i++)
 						{

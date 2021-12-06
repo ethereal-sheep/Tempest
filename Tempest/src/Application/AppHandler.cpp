@@ -34,7 +34,7 @@ namespace Tempest
 		MSG msg = {};
 		bool running = true;
 
-		try
+		
 		{
 			while (running)
 			{
@@ -55,14 +55,7 @@ namespace Tempest
 				}
 			}
 		}
-		catch (const std::exception& a)
-		{
-			LOG(a.what());
-		}
-		catch (...)
-		{
-			__debugbreak();
-		}
+		
 		
 
 		s_pApp->OnEngineExit();

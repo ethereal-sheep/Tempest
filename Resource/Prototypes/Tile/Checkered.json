@@ -69,7 +69,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\WoodenFloor.a"
+                "Path": "Models\\CheckeredFloor.a"
             }
         },
         {

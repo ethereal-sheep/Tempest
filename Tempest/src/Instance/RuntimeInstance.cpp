@@ -107,9 +107,11 @@ namespace Tempest
 
 		e.x = .5f;
 		e.z = .5f;
+		e.y = .0f;
 
 		s.x = shape.y ? -.5f : .5f;
 		s.z = shape.x ? -.5f : .5f;
+		s.y = .0f;
 
 		auto rot = t.rotation;
 		s = rot * s;
@@ -129,6 +131,7 @@ namespace Tempest
 		collision_map.clear();
 		character_map.clear();
 		wall_map.clear();
+		door_map.clear();
 
 
 		auto view1 = ecs.view<tc::Unit, tc::Transform>(exclude_t<tc::Destroyed>());

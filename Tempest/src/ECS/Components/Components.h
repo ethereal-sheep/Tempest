@@ -212,7 +212,7 @@ namespace Tempest
 
 
 			tvector<Local> states = tvector<Local>((int)State::End);
-
+			State curr = State::CLOSE;
 		private:
 			float interpolation_time = 1.f;
 			float current_time = 0.f;

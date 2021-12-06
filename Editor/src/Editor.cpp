@@ -71,8 +71,6 @@ namespace Tempest
 			init_file_dialog();
 			init_sounds();
 			init_ui_textures();
-
-			//testing_scene();
 		}
 
 		void OnUpdate() override
