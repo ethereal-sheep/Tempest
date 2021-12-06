@@ -165,11 +165,6 @@ namespace Tempest
 
 			}
 			if (demo_visible)
-			{
-				ImGui::ShowDemoWindow();
-			}
-
-			if (demo_visible)
 				ImGui::ShowDemoWindow();
 			if (implot_demo_visible)
 				ImPlot::ShowDemoWindow();
