@@ -69,8 +69,8 @@ namespace Tempest
 		void world_controls(Camera& cam)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
-			{
+			/*if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+			{*/
 				auto direction = els::to_vec2(io.MouseDelta);
 				auto yaw_speed = 1.f / 4;
 				auto pitch_speed = 1.f / 4;
@@ -196,13 +196,13 @@ namespace Tempest
 					easing = EasingMode::LINEAR;
 				}
 				//cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
-			}
+			//}
 		}
 
 		void orbit_controls(Camera& cam)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
+			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
 			{
 				auto direction = els::to_vec2(io.MouseDelta);
 				auto yaw_speed = 1.f / 4;
@@ -433,7 +433,7 @@ namespace Tempest
 		void fixed_orbit_controls(Camera& cam)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
+			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
 			{
 				auto direction = els::to_vec2(io.MouseDelta);
 				//auto yaw_speed = 1.f / 4;

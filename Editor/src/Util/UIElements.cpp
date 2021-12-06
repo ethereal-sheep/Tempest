@@ -105,7 +105,6 @@ namespace Tempest::UI
 			ImGui::PopFont();
 
 
-
 			ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
 			ImGui::PushFont(FONT_SHEAD);
 			auto windowWidth = ImGui::GetWindowSize().x;

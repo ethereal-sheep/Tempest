@@ -128,7 +128,7 @@ namespace Tempest
 
 				draw_splitter();
 				draw_sidebar(instance);
-				ImGui::SameLine();
+				//ImGui::SameLine();
 
 				draw_context(instance);
 
@@ -144,18 +144,18 @@ namespace Tempest
 			ImVec2 backup_pos = ImGui::GetCursorPos();
 			ImGui::SetCursorPosX(backup_pos.x + swidth);
 
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 1, 0));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 1, 0, 0));
 			// We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.6f, 0.6f, 0.10f));
-			ImGui::Button("##Splitter", ImVec2(border, -1.f));
+			ImGui::Button("##Splitter", ImVec2(-1.f, border));
 			ImGui::PopStyleColor(3);
 
 			ImGui::SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter. 
 
 			if (ImGui::IsItemActive())
 			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
 				float mouse_delta = ImGui::GetIO().MouseDelta.x;
 
 				// Minimum pane size
@@ -170,7 +170,7 @@ namespace Tempest
 			else
 			{
 				if (ImGui::IsItemHovered())
-					ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+					ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
 				else
 					ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 			}
@@ -180,7 +180,7 @@ namespace Tempest
 
 		void draw_sidebar(Instance& instance)
 		{
-			if (ImGui::BeginChild("##NodeEditorSideBar", ImVec2(swidth, -10.f), false,
+			if (ImGui::BeginChild("##NodeEditorSideBar", ImVec2(-10.f, swidth), false,
 				ImGuiWindowFlags_MenuBar))
 			{
 
