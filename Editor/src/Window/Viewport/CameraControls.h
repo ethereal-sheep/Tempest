@@ -202,7 +202,7 @@ namespace Tempest
 		void orbit_controls(Camera& cam)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
 			{
 				auto direction = els::to_vec2(io.MouseDelta);
 				auto yaw_speed = 1.f / 4;
