@@ -11,6 +11,7 @@
 #include "AppHandler.h"
 #include "Application.h"
 #include "Logger/Log.h"
+#include "Util/quitter.h"
 
 namespace Tempest
 {
@@ -53,6 +54,9 @@ namespace Tempest
 					s_pApp->OnEngineRender();
 					s_pContext->SwapBuffer();
 				}
+
+				if (get_quitter().quit == true)
+					running = false;
 			}
 		}
 		

@@ -14,6 +14,7 @@
 #include "MainMenuOverlay.h"
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
+#include "Util/quitter.h"
 
 namespace Tempest
 {
@@ -134,8 +135,7 @@ namespace Tempest
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
-				OverlayOpen = false;
-				instance.window_manager.show_all();
+				get_quitter().quit = true;
 			}
 			if (ImGui::IsItemHovered())
 			{
