@@ -333,13 +333,11 @@ namespace Tempest
 					jank = 0;
 				if (UI::UIConflictSelectable(str.c_str(), false, jank).first)
 				{
-					
 					if (jank)
 					{
 						OverlayOpen = false;
 						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 					}
-						
 				}
 				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
 				cur_pos = ImGui::GetCursorPos();
@@ -489,12 +487,12 @@ namespace Tempest
 				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
 				// TODO: load the conflict stuff here
 
-				for (int i = 0; i < 4; i++)
+				//for (int i = 0; i < SelectedConflictRes; i++)
 				{
-					ImGui::PushID(std::string{ "ConflictRes" + std::to_string(i) }.c_str());
-					if (UI::UIButton_2("Sample_Conflict", "Sample_Conflict", ImVec2{ cusor.x, cusor.y + i * 90.0f}, { 50,20 }, FONT_BTN, SelectedConflictRes == i))
+					ImGui::PushID(std::string{ "Conflict Res " + std::to_string(0) }.c_str());
+					if (UI::UIButton_2("Sample_Conflict", "Sample_Conflict", ImVec2{ cusor.x, cusor.y + 0 * 90.0f }, { 50,20 }, FONT_BTN, SelectedConflictRes == 0))
 					{
-						SelectedConflictRes = i;
+						SelectedConflictRes = 0;
 					}
 					ImGui::PopID();
 				}
@@ -509,17 +507,18 @@ namespace Tempest
 
 				// TODO: render all the sequences from selected conflict
 				// TODO: make a popup menu
-				for (int i = 0; i < 8; i++)
+
+				int i = 0;
+				std::string seq_name = "Unit vs Unit";
+				ImGui::PushID(seq_name.c_str());
+				bool selected = SelectedSequences.size();
+				if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, false))
 				{
-					std::string seq_name = "Sample_Seq" + std::to_string(i);
-					ImGui::PushID(seq_name.c_str());
-					bool selected = std::find(SelectedSequences.begin(), SelectedSequences.end(), i) != SelectedSequences.end();
-					if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 }, FONT_BTN, selected))
-					{
-						Service<EventManager>::Get().instant_dispatch< MainMenuSequencePopupTrigger>(SelectedSequences);
-					}
-					ImGui::PopID();
+					Service<EventManager>::Get().instant_dispatch<MainMenuSequencePopupTrigger>(SelectedSequences);
 				}
+				ImGui::PopID();
+
+				++i;
 			}
 
 			ImGui::EndChild();
@@ -531,6 +530,7 @@ namespace Tempest
 					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 					MemoryStrategy{},
 					InstanceType::RUN_TIME);
+
 			}
 		}
 			break;
