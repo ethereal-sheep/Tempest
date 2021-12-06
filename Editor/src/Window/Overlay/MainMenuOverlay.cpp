@@ -288,7 +288,11 @@ namespace Tempest
 				ImGui::Dummy({ viewport.Size.x * 0.3f, 0.f });
 				ImGui::SameLine();
 				string str = "CONFLICT RES##" + std::to_string(i);
-				UI::UIConflictSelectable(str.c_str(), false, 1);
+				if (UI::UIConflictSelectable(str.c_str(), false, 1).first)
+				{
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+				}
 				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
 				cur_pos = ImGui::GetCursorPos();
 			}
