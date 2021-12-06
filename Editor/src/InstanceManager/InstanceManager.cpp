@@ -110,7 +110,7 @@ namespace Tempest
 	void InstanceManager::register_edittime_windows()
 	{
 		// assume instance is valid here
-		instance->register_window<ViewportWindow>();
+		instance->register_always<ViewportWindow>();
 		
 		instance->register_window<PrefabList>();
 		
