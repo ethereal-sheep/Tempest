@@ -1144,7 +1144,7 @@ namespace Tempest
                             m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].texFlip
                         );
                         break;
-                    case TexturePBR::TextureFileType::HDR :z`
+                    case TexturePBR::TextureFileType::HDR :
                         m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].setTextureHDR
                         (
                             m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].tPath.c_str(),
