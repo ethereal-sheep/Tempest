@@ -53,7 +53,6 @@ namespace Tempest
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0,0.0f));
-		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 		ImGui::SetNextWindowPos({ viewport->WorkPos.x,viewport->WorkPos.y });
@@ -72,16 +71,23 @@ namespace Tempest
 			//camEnable(instance);
 
 			ImGui::SetCursorPos({cPos.x + ImGui::GetWindowWidth() * 0.85f, cPos.y + ImGui::GetWindowHeight() * 0.05f });
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.f));
+			ImGui::BeginChild("Child", ImVec2{}, false);
 			if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 			{
 				OverlayOpen = false;
 			}
+			ImGui::EndChild();
+			ImGui::PopStyleColor(1);
+
 			
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), viewport->WorkPos, { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + bannerTex->GetHeight() });
 			float posY = (viewport->WorkPos.y + viewport->Size.y - swidth);
 			float endY = (viewport->WorkPos.y + viewport->Size.y);
 			ImGui::SetCursorPos({ viewport->WorkPos.x,posY });
 
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
 			ImGui::BeginChild("ChildTest");
 			draw_splitter(posY);
 
@@ -98,11 +104,12 @@ namespace Tempest
 			}
 			ImGui::EndChild();
 			ImGui::EndChild();
+			ImGui::PopStyleColor(1);
 		}
 		ImGui::End();
 
 		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor(2);
+		ImGui::PopStyleColor(1);
 	}
 
 	void BuildModeOverlay::draw_splitter(float posY)
