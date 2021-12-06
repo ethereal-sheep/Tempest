@@ -29,6 +29,7 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar;
 
             Service<EventManager>::Get().register_listener<OpenGraphTrigger>(&AttackSystemOverlay::open_popup, this);
+            Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&AttackSystemOverlay::close_popup, this);
 
             context = ax::NodeEditor::CreateEditor();
             ax::NodeEditor::SetCurrentEditor(context);
@@ -46,6 +47,7 @@ namespace Tempest
         }
 
         void open_popup(const Event& e);
+        void close_popup(const Event& e);
 
         void show(Instance&) override;
 

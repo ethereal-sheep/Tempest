@@ -187,10 +187,12 @@ namespace Tempest
 					// open testing combat in map
 					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
 					edit.save();
-					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
+					OverlayOpen = false;
+					/*Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 						edit.get_full_path(),
 						MemoryStrategy{},
-						InstanceType::RUN_TIME);
+						InstanceType::RUN_TIME);*/
 				}
 
 				// display top buttons

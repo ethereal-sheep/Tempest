@@ -68,6 +68,15 @@ namespace Tempest
 
 		ax::NodeEditor::NavigateToContent();
 	}
+
+	void AttackSystemOverlay::close_popup(const Event& e)
+	{
+		auto a = event_cast<CloseOverlayTrigger>(e);
+		if (a.current == QUICKMENU_POPUP_TYPE::ACTIONS ||
+			a.current == QUICKMENU_POPUP_TYPE::SEQUENCES)
+			OverlayOpen = false;
+	}
+
 	void AttackSystemOverlay::show(Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
