@@ -68,7 +68,10 @@ namespace Tempest
 			auto io = ImGui::GetIO();
 			auto bbY = viewport->Size.y - swidth;
 			ImVec2 MousePos = { 0,0 };
-
+			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+			{
+				Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+			}
 			//camEnable(instance);
 
 			ImGui::SetCursorPos({cPos.x + ImGui::GetWindowWidth() * 0.85f, cPos.y + ImGui::GetWindowHeight() * 0.05f });
