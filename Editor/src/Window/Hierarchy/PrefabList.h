@@ -57,7 +57,7 @@ namespace Tempest
 							auto check = instance.scene.get_map().find((int)pos.x, (int)pos.z);
 
 							auto c = UI::CreateLabelWithId("", id);
-							if (ImGui::Selectable(c.c_str(), id == check,
+							if (ImGui::Selectable(c.c_str(), id == instance.selected,
 								ImGuiSelectableFlags_SpanAllColumns |
 								ImGuiSelectableFlags_AllowItemOverlap))
 							{

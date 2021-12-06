@@ -19,6 +19,7 @@
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
 #include "Graphics/Basics/Model.h"
+#include "Graphics/Basics/Lights.h"
 
 /**
 * @brief 
@@ -112,7 +113,7 @@ namespace Tempest
 	{
 		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
 		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, 
-		Tile, Wall, Shape, Door, Obstacle, Unit, Collision
+		Tile, Wall, Shape, Door, Obstacle, Unit, Collision, PointLight
 		,END
 	};
 
@@ -809,7 +810,24 @@ namespace Tempest
 			graph g;
 		};
 
+		struct PointLight
+		{
+			static const char* get_type() { return "PointLight"; }
 
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, PointLight& component)
+			{
+				ar.StartObject();
+				ar.Member("Position", component.pos);
+				ar.Member("Colour", component.color);
+				return ar.EndObject();
+			}
+
+			PointLight(glm::vec3 _pos = glm::vec3(0.f, 1.f, 0.f), glm::vec4 _color = glm::vec4(1.f, 1.f, 1.f, 0.f)) : pos{ _pos }, color{ _color } {}
+
+			glm::vec3 pos;
+			glm::vec4 color;
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -828,7 +846,7 @@ namespace Tempest
 		else {														\
 			auto c = ecs.try_emplace<tc::ComponentName>();			\
 			if(c) reader.Member("Component", *c);					\
-		}												\
+		}															\
 	}																\
 		break														\
 
@@ -866,6 +884,7 @@ namespace Tempest
 			COMPONENT_CASE(ActionGraph);
 			COMPONENT_CASE(ResolutionGraph);
 			COMPONENT_CASE(Graph);
+			COMPONENT_CASE(PointLight);
 
 		/* ABOVE THIS PLEASE */
 

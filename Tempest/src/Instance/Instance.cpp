@@ -105,6 +105,17 @@ namespace Tempest
 
 			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
 		}
+
+		auto view5 = ecs.view<tc::PointLight>(exclude_t<tc::Destroyed, tc::Local>());
+		for (auto id : view5)
+		{
+			auto& light = ecs.get<tc::PointLight>(id);
+			auto& ptlight = Service<RenderSystem>::Get().pt_lights[Service<RenderSystem>::Get().NumPLight];
+			ptlight.hide = false;
+			ptlight.Position = light.pos;
+			ptlight.Color = light.color;
+			Service<RenderSystem>::Get().NumPLight++;
+		}
 	}
 	void Instance::internal_exit()
 	{

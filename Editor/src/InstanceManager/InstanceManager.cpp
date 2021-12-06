@@ -115,8 +115,8 @@ namespace Tempest
 		
 		//instance->register_window<AssetManagerWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
-		//instance->register_window<HierarchyWindow>()->visible = false;
-		//instance->register_window<InspectorWindow>()->visible = false;
+		instance->register_window<HierarchyWindow>()->visible = false;
+		instance->register_window<InspectorWindow>()->visible = false;
 
 		instance->register_window<test_window>()->visible = false;
 		//instance->register_window<test_window2>()->visible = false;
