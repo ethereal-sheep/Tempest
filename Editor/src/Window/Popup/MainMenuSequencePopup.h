@@ -84,18 +84,22 @@ namespace Tempest
 
                     unsigned i = 0;
                     unsigned j = 0;
-                    for (int counter = 0; counter < 8; ++counter)
+                    int counter = 0;
+                    for (auto id : instance.ecs.view<tc::ConflictGraph>())
                     {
-                        bool selected = std::find(selected_seqs->begin(), selected_seqs->end(), counter) != selected_seqs->end();
-                        std::string seq_name = "Sample_Seq" + std::to_string(counter);
+                        auto g = instance.ecs.get_if<tc::Graph>(id);
+
+                        bool selected = std::find(selected_seqs->begin(), selected_seqs->end(), id) != selected_seqs->end();
+                        std::string seq_name = g->g.get_name();
                         if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 5, 20 }, FONT_PARA, selected))
                         {
                             if (selected)
                                 selected_seqs->erase(std::remove(selected_seqs->begin(), selected_seqs->end(), counter), selected_seqs->end());
     		                else
-                                selected_seqs->emplace_back(counter);
+                                selected_seqs->emplace_back(id);
 
                             enable_popup = false;
+                            ++counter;
                         }
 
                         // display in rows of 2
