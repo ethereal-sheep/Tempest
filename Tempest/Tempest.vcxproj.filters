@@ -232,6 +232,7 @@
     <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
     <ClInclude Include="src\Util\shape_manip.h" />
     <ClInclude Include="src\Util\pathfinding.h" />
+    <ClInclude Include="src\Util\quitter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
