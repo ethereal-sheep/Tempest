@@ -112,7 +112,7 @@ namespace Tempest
 		// assume instance is valid here
 		instance->register_always<ViewportWindow>();
 		
-		instance->register_window<PrefabList>();
+		instance->register_window<PrefabList>()->visible = false;
 		
 		//instance->register_window<AssetManagerWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
