@@ -11,6 +11,7 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "PauseOverlay.h"
+#include <Editor/src/InstanceManager/InstanceConfig.h>
 
 namespace Tempest
 {
@@ -39,18 +40,15 @@ namespace Tempest
 				UI::SubHeader("Paused");
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
-				if (UI::UIButton_2("Save", "Save", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.3f }, { 50,20}, FONT_BTN))
+				if (UI::UIButton_2("Save", "Save", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.4f }, { 50,20}, FONT_BTN))
+				{
+					Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+				}
+				if (UI::UIButton_2("Load", "Load", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
 				{
 
 				}
-				if (UI::UIButton_2("Load", "Load", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.4f }, { 50,20 }, FONT_BTN))
-				{
 
-				}
-				if (UI::UIButton_2("Edit Conflict Resolution", "Edit Conflict Resolution", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
-				{
-
-				}
 				if (UI::UIButton_2("Return", "Return", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.6f }, { 50,20 }, FONT_BTN))
 				{
 					OverlayOpen = false;
@@ -59,7 +57,12 @@ namespace Tempest
 				// where does this go to?
 				if (UI::UIButton_2("Quit", "Quit", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.7f }, { 50,20 }, FONT_BTN))
 				{
-
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						instance.get_full_path(),
+						MemoryStrategy{},
+						InstanceType::EDIT_TIME);
+					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
 				}
 			}
 			ImGui::End();
