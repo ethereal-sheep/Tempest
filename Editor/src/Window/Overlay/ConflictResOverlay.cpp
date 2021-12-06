@@ -12,6 +12,8 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "ConflictResOverlay.h"
+#include <Editor/src/InstanceManager/InstanceConfig.h>
+#include <Tempest/src/Instance/EditTimeInstance.h>
 
 namespace Tempest
 {
@@ -33,7 +35,7 @@ namespace Tempest
 
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.8f));
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
-			if (ImGui::Begin("Conflict Resolution", &visible, window_flags))
+			if (ImGui::Begin("ConflictResolution", nullptr, window_flags))
 			{
 				// render the select map image
 				auto image = tex_map["Assets/MM_SelectCR.png"];
@@ -104,11 +106,16 @@ namespace Tempest
 
 				ImGui::EndChild();
 
+				ImGui::PushID("conflictresnext");
 				if (UI::UIButton_2("Next", "Next", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 				{
 					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
+						MemoryStrategy{},
+						InstanceType::RUN_TIME);
 				}
+				ImGui::PopID();
 			}
 			ImGui::End();
 			ImGui::PopStyleVar();
