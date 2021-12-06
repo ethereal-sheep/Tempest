@@ -944,6 +944,7 @@ namespace Tempest
 					unsigned i = 0;
 					for ([[maybe_unused]]auto id : units)
 					{
+						auto &charac = instance.ecs.get<tc::Character>(id);
 						if (curr_turn != i++)
 						{
 							if (!i)
@@ -952,11 +953,13 @@ namespace Tempest
 							//	ImGui::SameLine();
 							}
 							
-							UI::UICharButton_NoDelete((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", false);
+							UI::UICharButton_NoDelete((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", false,
+								ImVec2{ 0,0 }, ImVec2{ 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x,charac.color.y, charac.color.z, 1});
 						}
 							
 						else
-							UI::UICharButton_Arrow((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", true);
+							UI::UICharButton_Arrow((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", true,
+								ImVec2{ 0,0 }, ImVec2{ 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x,charac.color.y, charac.color.z, 1 });
 
 						ImGui::SameLine();
 					}

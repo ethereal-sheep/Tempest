@@ -71,7 +71,7 @@ namespace Tempest
 						{
 							auto& charac = instance.ecs.get<tc::Character>(id);
 							if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f },
-								charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, true))
+								charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, true, ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 }))
 							{
 								added_entities.emplace_back(id);
 							}
@@ -325,11 +325,14 @@ namespace Tempest
 						ImGui::PushID(i);
 						ImGui::BeginGroup();
 
-						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f }))
+						auto cs = instance.ecs.get_if<tc::Character>(id);
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
+							ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 }))
 						{
 							remove.push_back(i-1);
 						}
-						if (auto cs = instance.ecs.get_if<tc::Character>(id))
+						if (cs)
 						{
 							ImGui::Text(cs->name.c_str());
 						}

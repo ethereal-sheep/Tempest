@@ -3262,7 +3262,7 @@ namespace Tempest::UI
 		if (bg_col.w > 0.0f)
 			window->DrawList->AddRectFilled({ bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, ImGui::GetColorU32(bg_col));
 
-		window->DrawList->AddImage(selectedID, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
+		window->DrawList->AddImage(selectedID, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(ImVec4{ 1,1,1,1 }));
 		
 		window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { CharacterImgMax.x - padding.x, CharacterImgMax.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
 
@@ -3311,7 +3311,7 @@ namespace Tempest::UI
 			ImVec2 characterImgMin = { Min.x + selectedImg->GetWidth() * 0.1f, Min.y };
 			ImVec2 characterImgMax = { characterImgMin.x + characterImg->GetWidth(), characterImgMin.y + characterImg->GetHeight() };
 			window->AddImage((void*)static_cast<size_t>(selectedImg->GetID()), Min, selectedMax);
-			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), characterImgMin, characterImgMax);
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), characterImgMin, characterImgMax, ImVec2{ 0,0 }, ImVec2{ 1,1 }, ImGui::GetColorU32(ImVec4{ character->color.x,character->color.y, character->color.z, 1.0f }));
 			ImVec2 TextStartPos = { Min.x + selectedImg->GetWidth() * 0.53f, Min.y + selectedImg->GetHeight() * 0.17f };
 			ImGui::PushFont(FONT_OPEN);
 
@@ -3328,7 +3328,7 @@ namespace Tempest::UI
 			ImVec2 unselectedMax = { Min.x + unselectedImg->GetWidth(), Min.y + unselectedImg->GetHeight() };
 			ImVec2 characterImgMax = { Min.x + characterImg->GetWidth(), Min.y + characterImg->GetHeight() };
 			window->AddImage((void*)static_cast<size_t>(unselectedImg->GetID()), Min, unselectedMax);
-			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, characterImgMax);
+			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, characterImgMax, ImVec2{ 0,0 }, ImVec2{ 1,1 }, ImGui::GetColorU32(ImVec4{ character->color.x,character->color.y, character->color.z, 1.0f }));
 			ImVec2 TextStartPos = { Min.x + unselectedImg->GetWidth() * 0.45f, Min.y + unselectedImg->GetHeight() * 0.17f };
 			ImGui::PushFont(FONT_OPEN);
 

@@ -71,6 +71,11 @@ namespace Tempest
 			init_file_dialog();
 			init_sounds();
 			init_ui_textures();
+
+			AudioEngine ae;
+			ae.Play("Sounds2D/BGM_1.wav", "bgm_bus", 0.2f, true);
+
+			//testing_scene();
 		}
 
 		void OnUpdate() override

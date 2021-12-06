@@ -493,15 +493,22 @@ namespace Tempest
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{
 		Entity* temp = is_attacker ? &attacker.unit_id : &defender.unit_id;
+		ImVec4 tint{ 1,1,1,1 };
 
 		// character display
 		ImGui::SetCursorPos(ImVec2{start_pos.x - 35.0f, start_pos.y - 60.0f });
 		auto tex = tex_map["Assets/CharacterIcon.png"];
 		std::string chara_name{ "CHARACTER" };
 		if (*temp != UNDEFINED)
-			chara_name = instance.ecs.get<tc::Character>(*temp).name;
+		{
+			auto charac = instance.ecs.get<tc::Character>(*temp);
+			chara_name = charac.name;
+			tint = ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 };
+		}
+			
+		
 		if (UI::UICharButton_Toggle((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f },
-			chara_name, "##charaname" + is_attacker, *temp != UNDEFINED, { 0, 0 }, { 1,1 }))
+			chara_name, "##charaname" + is_attacker, * temp != UNDEFINED, { 0, 0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, tint))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::UNIT, is_attacker, *temp);
