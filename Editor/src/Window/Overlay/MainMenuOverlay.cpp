@@ -155,12 +155,40 @@ namespace Tempest
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
+			if (dynamic_cast<EditTimeInstance*>(&instance))
+			{
+				selectable = "Current Project";
+				ImGui::SetCursorPos(button_pos);
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+
+				if (ImGui::Selectable(selectable.c_str(), false))
+				{
+					MainMenuUI = UI_SHOW::NEW_PROJECT;
+				
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+					ImGui::Text(">");
+				}
+
+				button_pos.y += 40.0f;
+			}
 			selectable = "New Project";
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 
 			if (ImGui::Selectable(selectable.c_str(), false))
-				MainMenuUI = UI_SHOW::NEW_PROJECT;
+			{
+				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Creating new project...");
+				Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
+				//MainMenuUI = UI_SHOW::NEW_PROJECT;
+				/*if (dynamic_cast<EditTimeInstance*>(&instance))
+				{
+					MainMenuUI = UI_SHOW::NEW_PROJECT;
+				}*/
+			}
+				
 
 			if (ImGui::IsItemHovered())
 			{
@@ -173,7 +201,11 @@ namespace Tempest
 			selectable = "Load Project";
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
+				Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
+			}
 			if (ImGui::IsItemHovered())
 			{
 				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
@@ -181,6 +213,8 @@ namespace Tempest
 			}
 
 			button_pos.y += 40.0f;
+
+
 
 			selectable = "Back";
 			ImGui::SetCursorPos(button_pos);
@@ -210,7 +244,10 @@ namespace Tempest
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
+			{		
 				MainMenuUI = UI_SHOW::CONFLICT_RES;
+			}
+				
 
 			if (ImGui::IsItemHovered())
 			{
@@ -344,7 +381,8 @@ namespace Tempest
 			// render bottom two buttons
 			if (UI::UIButton_2("New Map", "New Map", ImVec2{ viewport.Size.x * 0.34f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
 			{
-
+				Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+				OverlayOpen = false;
 			}
 
 			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))

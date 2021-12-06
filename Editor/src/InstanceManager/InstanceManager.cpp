@@ -79,8 +79,9 @@ namespace Tempest
 	{
 		// assume instance is valid here
 		instance->register_window<DiagnosticsWindow>()->visible = false;
-
-		instance->register_always<MainMenuWindow>();
+		instance->register_always<MainMenuOverlay>();
+		//instance->register_always<MainMenuWindow>();
+		
 
 		instance->register_always<NewProjectPopup>();
 		instance->register_always<OpenProjectPopup>();
