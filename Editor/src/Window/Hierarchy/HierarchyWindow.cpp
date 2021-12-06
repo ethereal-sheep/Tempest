@@ -160,6 +160,31 @@ namespace Tempest
 						instance.selected = entity;
 					}
 
+					if (ImGui::MenuItem("Add PointLight"))
+					{
+						// we can do factories for entities here
+						auto entity = instance.ecs.create();
+						auto meta = instance.ecs.emplace<tc::Meta>(entity);
+						meta->name = "Light";
+						auto light = instance.ecs.emplace<tc::PointLight>(entity);
+						//auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
+						//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
+						//instance.ecs.emplace<tc::Model>(entity, "Models/Table.fbx");
+
+
+						//auto& transform = instance.ecs.get<Components::Transform>(entity);
+						//rb->shape_data = SHAPE_TYPE::SPHERE;
+						//rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
+						//rigidbody_config staticBody;
+						//staticBody.is_static = true;
+						//rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform.position, transform.rotation, entity);
+						//instance.po.AddActorToScene(rb->internal_rb.get());
+						instance.action_history.Commit<AddEntity>(entity);
+
+
+						instance.selected = entity;
+					}
+
 					if (ImGui::MenuItem("Add Spear"))
 					{
 						// we can do factories for entities here

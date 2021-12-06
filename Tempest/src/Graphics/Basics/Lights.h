@@ -64,6 +64,7 @@ namespace Tempest
 
 		bool hide = true;
 		Point_Light(); // Make Point Light FBO
+		Point_Light(glm::vec3 pos, glm::vec4 color);
 		void Bind();
 	};
 

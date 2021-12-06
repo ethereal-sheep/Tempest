@@ -774,9 +774,13 @@ namespace Tempest
         glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
 
-        glActiveTexture(GL_TEXTURE10);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
+        if (!pt_lights.empty())
+        {
+            glActiveTexture(GL_TEXTURE10);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
+        }
+        
 
         for (int pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
         {
@@ -1034,6 +1038,8 @@ namespace Tempest
         m_Pipeline.m_Spheres.clear();
         m_Pipeline.m_Icosahedrons.clear();
         m_Pipeline.m_Models.clear();
+        NumPLight = 0;
+        //pt_lights.clear();
     }
 
     void RenderSystem::Resize(uint32_t width, uint32_t height)
@@ -1169,5 +1175,10 @@ namespace Tempest
                 }
             }
         }
+    }
+
+    void RenderSystem::SubmitLights(const Point_Light& plight)
+    {
+       // pt_lights.emplace_back(plight);
     }
 }
