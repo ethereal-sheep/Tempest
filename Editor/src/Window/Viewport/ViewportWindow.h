@@ -79,8 +79,8 @@ namespace Tempest
 
 
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
-			/*cam_ctrl.controls(cam);
-			cam_ctrl.update(cam);*/
+			cam_ctrl.controls(cam);
+			cam_ctrl.update(cam);
 
 
 			if (io.KeyCtrl)

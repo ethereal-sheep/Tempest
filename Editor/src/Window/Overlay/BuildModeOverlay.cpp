@@ -68,12 +68,9 @@ namespace Tempest
 			auto io = ImGui::GetIO();
 			auto bbY = viewport->Size.y - swidth;
 			ImVec2 MousePos = { 0,0 };
-			if (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1) || ImGui::IsMouseClicked(2))
-			{
-				MousePos = io.MousePos;
-			}
-			if (MousePos.y <= bbY)
-				camEnable(instance);
+
+			//camEnable(instance);
+
 			ImGui::SetCursorPos({cPos.x + ImGui::GetWindowWidth() * 0.85f, cPos.y + ImGui::GetWindowHeight() * 0.05f });
 			if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 			{
@@ -84,7 +81,10 @@ namespace Tempest
 			float posY = (viewport->WorkPos.y + viewport->Size.y - swidth);
 			float endY = (viewport->WorkPos.y + viewport->Size.y);
 			ImGui::SetCursorPos({ viewport->WorkPos.x,posY });
+
+			ImGui::BeginChild("ChildTest");
 			draw_splitter(posY);
+
 			ImGui::SetNextWindowSize({ ImGui::GetWindowWidth(), endY - posY },ImGuiCond_Appearing);
 			ImGui::BeginChild("PrototypeDisplay");
 			for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
@@ -96,6 +96,7 @@ namespace Tempest
 					ImGui::EndTabBar();
 				}
 			}
+			ImGui::EndChild();
 			ImGui::EndChild();
 		}
 		ImGui::End();
