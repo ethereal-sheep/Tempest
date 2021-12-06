@@ -114,6 +114,8 @@ namespace Tempest
 				if (UI::UIButton_2("Next", "Next", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 				{
 					OverlayOpen = false;
+					//Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+					Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
 					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 						dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 						MemoryStrategy{},

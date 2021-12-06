@@ -440,7 +440,13 @@ namespace Tempest
 				// render all the maps here
 				if (map_pair.first)
 				{
-					MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
+					if (MapTitle == "Map Builder")
+					{
+						Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+						OverlayOpen = false;
+					}
+					else
+						MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
 				}
 
 				else if (map_pair.second)
@@ -527,6 +533,7 @@ namespace Tempest
 			if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 			{
 				OverlayOpen = false;
+				Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
 				Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 					MemoryStrategy{},
