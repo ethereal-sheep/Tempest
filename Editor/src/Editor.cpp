@@ -82,7 +82,7 @@ namespace Tempest
 			auto& io = ImGui::GetIO();
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
 			cam.SetMousePosition((int)io.MousePos.x, (int)io.MousePos.y);
-			instance_manager.update(1.f);
+			instance_manager.update(io.DeltaTime);
 		}
 
 		void OnRender() override
