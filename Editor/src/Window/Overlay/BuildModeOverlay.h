@@ -35,6 +35,8 @@ namespace Tempest
         void open_popup(const Event& e);
 
         void show(Instance&) override;
+        void renderTop();
+        void renderBtm(Instance& instance);
         void draw_category(Instance& instance, const string& cat_name, prototype_container& proto_cat);
         bool OverlayOpen = false;
         LineDrawing line;

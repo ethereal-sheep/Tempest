@@ -17,41 +17,65 @@ namespace Tempest
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		//ImGui::SetNextWindowPos(viewport->Pos);
 		//ImGui::SetNextWindowSize(viewport->Size);
+		if (OverlayOpen)
+		{
+			renderTop();
+			renderBtm(instance);
+		}
+	}
+
+	void BuildModeOverlay::renderTop()
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
+		ImGui::SetNextWindowPos({ viewport->WorkPos.x,viewport->WorkPos.y });
+		ImGui::SetNextWindowSize({ viewport->WorkSize.x ,viewport->Size.y * 0.1f });
+
+		if (ImGui::Begin("Top Build Mode Screen", nullptr, window_flags))
+		{
+			ImGui::Button("TEST");
+		}
+
+		ImGui::End();
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(2);
+	}
+
+	void BuildModeOverlay::renderBtm(Instance& instance)
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 		ImGui::SetNextWindowPos({ viewport->WorkPos.x,viewport->WorkPos.y + viewport->Size.y * 0.7f });
 		ImGui::SetNextWindowSize({ viewport->WorkSize.x ,viewport->Size.y * 0.3f });
 
-		if (OverlayOpen)
+		if (ImGui::Begin("Btm Build Mode Screen", nullptr, window_flags))
 		{
-			
-			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.7f));
-			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-
-			if (ImGui::Begin("Build Mode Screen", nullptr, window_flags))
+			//ImGui::SetCursorPosY(ImGui::GetWindowPos().y + ImGui::GetWindowHeight() * 0.3f);
+			ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
+			ImGui::Dummy({ 10.f, 0.f });
+			ImGui::SameLine();
+			ImGui::BeginChild("PrototypeDisplay", { ImGui::GetWindowWidth() - 40.f, ImGui::GetWindowHeight() * 0.7f }, true);
+			for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
 			{
-				auto pos = ImGui::GetWindowPos();
-				//ImGui::SetCursorPosY(ImGui::GetWindowPos().y + ImGui::GetWindowHeight() * 0.3f);
-				ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
-				ImGui::Dummy({ 10.f, 0.f });
-				ImGui::SameLine();
-				ImGui::BeginChild("PrototypeDisplay", { ImGui::GetWindowWidth() - 40.f, ImGui::GetWindowHeight() * 0.7f }, true);
-				for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
+				if (ImGui::BeginTabBar("##categorytab"))
 				{
-					if (ImGui::BeginTabBar("##categorytab"))
-					{
-						// each folder is a category
-						draw_category(instance, cat_name, proto_cat);
-						ImGui::EndTabBar();
-					}
+					// each folder is a category
+					draw_category(instance, cat_name, proto_cat);
+					ImGui::EndTabBar();
 				}
-				ImGui::EndChild();
 			}
-			ImGui::End();
-
-			ImGui::PopStyleVar(2);
-			ImGui::PopStyleColor(2);
+			ImGui::EndChild();
 		}
+		ImGui::End();
+
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(2);
 	}
 
 
