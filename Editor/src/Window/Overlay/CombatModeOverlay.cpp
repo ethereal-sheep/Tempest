@@ -1690,6 +1690,11 @@ namespace Tempest
 			if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 			{
 
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+				{
+					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+				}
+
 				//static int selected = -1;
 				//static tvector<Entity> chars(4, INVALID);
 				//bool selectable_hovered = false;
