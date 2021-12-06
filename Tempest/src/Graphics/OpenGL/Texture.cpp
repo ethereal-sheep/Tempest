@@ -297,7 +297,7 @@ namespace Tempest
 		default:
 			glBindTexture(target, 0);
 		}
-		dds.Flip();
+		//dds.Flip();
 
 		uint32_t numFaces = dds.IsCubemap() ? 6 : 1;
 		for (uint32_t layer = 0; layer < dds.GetArraySize(); layer++) {
@@ -346,6 +346,8 @@ namespace Tempest
 		}
 
 		glBindTexture(target, 0);
+		tex.m_Width = dds.GetWidth();
+		tex.m_Height = dds.GetHeight();
 	}
 
 	Texture::Texture(const std::string& file, bool flip)
