@@ -2644,6 +2644,8 @@ namespace Tempest::UI
 		ImVec2 rectMax = { bb.Min.x + (size.x * 0.17f), bb.Max.y };
 		
 		ImVec4 col = { 0.133f, 0.133f, 0.133f, 1.f };
+		ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
+		ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
 		ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(texMapBg->GetID()), bb.Min, bb.Max);
 
 
@@ -2654,8 +2656,7 @@ namespace Tempest::UI
 
 		ImVec2 delSize = { (float)texConflictDel->GetWidth() * 0.7f,(float)texConflictDel->GetHeight() * 0.7f };
 		//ImVec4 tinCol = { 0.7f, 0.7f, 0.7f,1 };
-		ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
-		ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
+		
 		ImGui::PushID(label);
 		if (UIImageButton((void*)static_cast<size_t>(texConflictDel->GetID()), delSize, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 		{
@@ -2721,7 +2722,7 @@ namespace Tempest::UI
 		const bool was_selected = selected;
 		bool hovered, held;
 		bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held, button_flags);
-
+		
 
 		// Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
 		if (pressed || (hovered && (flags & ImGuiSelectableFlags_SetNavIdOnHover)))
@@ -2731,7 +2732,9 @@ namespace Tempest::UI
 				ImGui::SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect(bb.Min - window->Pos, bb.Max - window->Pos));
 				g.NavDisableHighlight = true;
 			}
+			ImGui::SetMouseCursor(3);
 		}
+
 		if (pressed)
 			ImGui::MarkItemEdited(id);
 
@@ -2750,6 +2753,7 @@ namespace Tempest::UI
 			const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
 			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
 			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+			ImGui::SetMouseCursor(3);
 		}
 
 		if (span_all_columns && window->DC.CurrentColumns)
