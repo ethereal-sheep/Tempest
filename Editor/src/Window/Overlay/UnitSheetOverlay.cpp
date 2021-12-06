@@ -111,8 +111,8 @@ namespace Tempest
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 				// Display the created units
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.03f, viewport->Size.y * 0.15f });
-				ImGui::BeginChild("##UnitsDisplay", { viewport->Size.x * 0.15f, viewport->Size.y * 0.7f }, true);
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * 0.15f });
+				ImGui::BeginChild("##UnitsDisplay", { viewport->Size.x * 0.1f, viewport->Size.y * 0.7f }, true);
 
 				{
 					unsigned i = 0;
@@ -120,7 +120,7 @@ namespace Tempest
 
 
 					// TODO: store selected item
-					const ImVec2 cursor{ ImGui::GetCursorPosX() + 60, ImGui::GetCursorPosY() + 20 };
+					const ImVec2 cursor{ ImGui::GetCursorPosX() + 30, ImGui::GetCursorPosY() + 20 };
 					for (auto id : view)
 					{
 						auto& charac = instance.ecs.get<tc::Character>(id);
@@ -146,7 +146,7 @@ namespace Tempest
 					}
 
 					// just try with get cursor pos
-					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 110, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
+					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 80, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
 					{
 						create_new_unit(instance);
 						cs = instance.ecs.get_if<tc::Character>(SelectedID);
@@ -161,9 +161,15 @@ namespace Tempest
 				ImGui::EndChild();
 
 				// display unit picture here
+				//push_button_style();
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.12f, viewport->Size.y * 0.15f });
+				auto UnitImg = tex_map["Assets/UnitIdle.png"];
+				if (UI::UIImageButton((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth()*1.0f,UnitImg->GetHeight() * 1.0f }))
+				{
 
-				//ImGui::SetNextWindowSizeConstraints(); for buttons resize?
-				// 
+				}
+				//pop_button_style();
+			
 				// tabs 
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.15f });
