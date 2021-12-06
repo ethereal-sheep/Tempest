@@ -46,7 +46,7 @@ namespace Tempest
 
         //FontRenderer m_FontR;
         LineRenderer m_LineRenderer;
-        RenderPipeline m_Pipeline;
+        //RenderPipeline m_Pipeline;
         ShadowBuffer m_ShadowBuffer;
         //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
@@ -60,13 +60,14 @@ namespace Tempest
         void InitBuffers();
 
     public:
-
+        RenderPipeline m_Pipeline;
         RenderSystem(uint32_t width, uint32_t height);
         ~RenderSystem() = default;
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
         void SubmitModel(const string& path, const glm::mat4& model_matrix);
+        void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight, const Transform& transform);           // Submitting Point Light {Transform to be used for pos}
@@ -243,6 +244,7 @@ namespace Tempest
         void LoadTextures();
 
         bool PREFABMODE = false;
+
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);

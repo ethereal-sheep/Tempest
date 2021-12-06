@@ -58,6 +58,8 @@ namespace Tempest
 		tsptr<ModelPBR> m_Model;
 		glm::mat4 m_Transform;
 		glm::mat4 m_TransformPrev;
+		bool hasColor = false;
+		vec3 color = { 0.f, 0.f, 0.f };
 	};
 
 	struct AAGrid

@@ -146,7 +146,10 @@ namespace Tempest
 			static const char* get_type() { return "Obstacle"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Obstacle&) { ar.StartObject(); return ar.EndObject(); }
+			friend Archiver& operator&(Archiver& ar, Obstacle&) { 
+				ar.StartObject(); 
+				return ar.EndObject(); 
+			}
 		};
 
 		struct Unit
@@ -161,14 +164,39 @@ namespace Tempest
 			static const char* get_type() { return "Wall"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Wall&) { ar.StartObject(); return ar.EndObject(); }
+			friend Archiver& operator&(Archiver& ar, Wall& component) {
+				ar.StartObject();
+				ar.Member("Cover", component.cover);
+				return ar.EndObject();
+			}
+
+			enum struct Cover
+			{
+				FULL,
+				HALF,
+				End
+			};
+			Cover cover = Cover::FULL;
 		};
+
 		struct Collision
 		{
 			static const char* get_type() { return "Collision"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Collision&) { ar.StartObject(); return ar.EndObject(); }
+			friend Archiver& operator&(Archiver& ar, Collision& component) {
+				ar.StartObject();
+				ar.Member("Cover", component.cover);
+				return ar.EndObject();
+			}
+
+			enum struct Cover
+			{
+				FULL,
+				HALF,
+				End
+			};
+			Cover cover = Cover::FULL;
 		};
 
 
@@ -367,6 +395,7 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("Charater_Name", component.name);
+				ar.Member("Color", component.color);
 				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
 				//ar.Vector("Charater_DeltaStats", component.StatsDelta);
@@ -442,7 +471,7 @@ namespace Tempest
 			Entity chosen_weapon = UNDEFINED; // no need to serialize this
 			tvector<Entity> weapons;
 			tvector<Entity> actions;
-
+			vec3 color = { 1.f, 0.f, 0.f };
 		private:
 			tvector<int> stats;
 			tvector<int> StatsDelta;
