@@ -12,6 +12,8 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "MainMenuOverlay.h"
+#include <Tempest/src/Instance/EditTimeInstance.h>
+#include <Editor/src/InstanceManager/InstanceConfig.h>
 
 namespace Tempest
 {
@@ -478,7 +480,12 @@ namespace Tempest
 
 			if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 			{
-				// TODO: bring to add units page
+				OverlayOpen = false;
+				Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
+					MemoryStrategy{},
+					InstanceType::RUN_TIME);
+				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
 			}
 		}
 			break;
