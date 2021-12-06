@@ -75,6 +75,8 @@ namespace Tempest
 
 				// Display the created units
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * 0.15f });
+
+				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				ImGui::BeginChild("##WeaponsDisplay", { viewport->Size.x * 0.12f, viewport->Size.y * 0.7f }, true);
 
 				{
@@ -128,6 +130,7 @@ namespace Tempest
 				}
 
 				ImGui::EndChild();
+				ImGui::PopStyleColor();
 
 				// display weapon picture here
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
@@ -273,6 +276,8 @@ namespace Tempest
 		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+
+		ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 		ImGui::BeginChild("##WeaponsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 
 		// display the weapon info
@@ -344,6 +349,7 @@ namespace Tempest
 		ImGui::PopFont();
 
 		ImGui::EndChild();
+		ImGui::PopStyleColor();
 	}
 
 	void WeaponSheetOverlay::display_use_stats(const ImGuiViewport& viewport, Instance& instance)

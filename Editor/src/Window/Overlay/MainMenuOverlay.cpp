@@ -431,6 +431,8 @@ namespace Tempest
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 10.0f, 10.f });
 			const ImVec2 child_size{viewport.Size.x * 0.5f, viewport.Size.y * 0.55f};
 			ImGui::SetCursorPos(ImVec2{viewport.Size.x * 0.65f - child_size.x * 0.5f, viewport.Size.y * 0.5f - child_size.y * 0.5f });
+
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 			if (ImGui::BeginChild("##LoadMapMainMenu", child_size, true))
 			{
 				const std::pair<bool, bool> map_pair = UI::UIMapSelectable("MAP_01", "Date created: 12/31/2021", false, 1);
@@ -455,6 +457,7 @@ namespace Tempest
 
 			ImGui::EndChild();
 			ImGui::PopStyleVar();
+			ImGui::PopStyleColor();
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
@@ -488,6 +491,8 @@ namespace Tempest
 			// draw the child
 			const ImVec2 child_size{ viewport.Size.x * 0.25f, viewport.Size.y * 0.55f };
 			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - child_size.x * 0.5f, viewport.Size.y * 0.55f - child_size.y * 0.5f });
+
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 			if (ImGui::BeginChild("##LoadConflictResMainMenu", child_size, true))
 			{
 				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
@@ -529,16 +534,19 @@ namespace Tempest
 
 			ImGui::EndChild();
 
+			ImGui::PopStyleColor();
+
 			if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 			{
 				OverlayOpen = false;
-				Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+				dynamic_cast<EditTimeInstance&>(instance).save();
 				Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 					MemoryStrategy{},
 					InstanceType::RUN_TIME);
 
 			}
+
 		}
 			break;
 		default:

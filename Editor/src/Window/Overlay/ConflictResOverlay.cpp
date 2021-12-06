@@ -116,7 +116,7 @@ namespace Tempest
 				{
 					OverlayOpen = false;
 					//Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
-					Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+					dynamic_cast<EditTimeInstance&>(instance).save();
 					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 						dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 						MemoryStrategy{},

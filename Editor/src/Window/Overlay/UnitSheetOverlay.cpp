@@ -112,6 +112,7 @@ namespace Tempest
 
 				// Display the created units
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * 0.15f });
+				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				ImGui::BeginChild("##UnitsDisplay", { viewport->Size.x * 0.1f, viewport->Size.y * 0.7f }, true);
 				{
 					unsigned i = 0;
@@ -156,8 +157,8 @@ namespace Tempest
 						CurrentTab = TABS_TYPE::UNIT;
 					}
 				}
-
 				ImGui::EndChild();
+				ImGui::PopStyleColor();
 
 				// display unit picture here
 				if (cs)
@@ -858,6 +859,8 @@ namespace Tempest
 		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+
+		ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 		ImGui::BeginChild("##UnitsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 
 		// display the character info
@@ -949,6 +952,7 @@ namespace Tempest
 		}
 		ImGui::PopFont();
 		ImGui::EndChild();
+		ImGui::PopStyleColor();
 	}
 
 	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance) const
@@ -957,6 +961,8 @@ namespace Tempest
 			return;
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+
+		ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 		ImGui::BeginChild("##WeaponsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 		unsigned i = 0;
 		unsigned j = 0;
@@ -1004,6 +1010,7 @@ namespace Tempest
 		}
 
 		ImGui::EndChild();
+		ImGui::PopStyleColor();
 	}
 
 	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance) const
@@ -1021,6 +1028,7 @@ namespace Tempest
 			return;
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+		ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 		ImGui::BeginChild("##ActionsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 		unsigned i = 0;
 		unsigned j = 0;
@@ -1069,5 +1077,6 @@ namespace Tempest
 		}
 
 		ImGui::EndChild();
+		ImGui::PopStyleColor();
 	}
 }
