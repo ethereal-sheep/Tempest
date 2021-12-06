@@ -1177,7 +1177,7 @@ namespace Tempest
         }
     }
 
-    void RenderSystem::SubmitLights(const Point_Light& plight)
+    void RenderSystem::SubmitLights([[maybe_unused]]const Point_Light& plight)
     {
        // pt_lights.emplace_back(plight);
     }

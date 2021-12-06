@@ -170,7 +170,7 @@ namespace Tempest
 				ImPlot::ShowDemoWindow();
 		}
 		
-		bool toggle = false;
+		bool toggle = true;
 		bool demo_visible = false;
 		bool implot_demo_visible = false;
 	};
