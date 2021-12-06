@@ -15,10 +15,14 @@
 
 namespace Tempest
 {
-	void MainMenuOverlay::open_popup(const Event&)
+	void MainMenuOverlay::open_popup(const Event& e)
 	{
+		auto a = event_cast<OpenMainMenuTrigger>(e);
 		OverlayOpen = true;
-		MainMenuUI = UI_SHOW::INITIAL;
+		MapTitle = "";
+		SelectedConflictRes = 0;
+		SelectedSequences.clear();
+		MainMenuUI = static_cast<UI_SHOW>(a.menuType);
 		window_flags =  ImGuiWindowFlags_NoTitleBar;
 	}
 
@@ -51,135 +55,432 @@ namespace Tempest
 
 			ImGui::PopStyleVar();
 			ImGui::PopStyleColor();
+
+			// this is a test run
+			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+			{
+				Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+			}
 		}
 	}
 
 	void MainMenuOverlay::OpenLocalUI(Instance& instance, const ImGuiViewport& viewport)
 	{
-		if (MainMenuUI == UI_SHOW::NONE)
-			return;
+		ImVec2 button_pos{ 0, viewport.Size.y * 0.55f };
 
-		// Title
-		if (MainMenuUI < UI_SHOW::LOAD_MAP_UI)
+		// render the title image
+		if (MainMenuUI < UI_SHOW::CONFLICT_RES)
 		{
-			std::string title = "CoReSys";
-			ImGui::PushFont(FONT_HEAD);
-			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - ImGui::CalcTextSize(title.c_str()).x * 0.5f, viewport.Size.y * 0.2f });
-			ImGui::Text(title.c_str());
-			ImGui::PopFont();
+			auto title_img = tex_map["Assets/MainMenuTitle.png"];
+			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
+			button_pos.x = viewport.Size.x * 0.2f - title_size.x * 0.5f;
+			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.45f - title_size.y * 0.5f });
+			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
 		}
 
-
-		ImVec2 buttonPos{ 0.f, viewport.Size.y * 0.7f };
 		switch (MainMenuUI)
 		{
-			// TODO: more local functions
 		case Tempest::MainMenuOverlay::UI_SHOW::INITIAL:
+		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+			// render the selectables
+			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
-			ImGui::SetCursorPos(buttonPos);
-			buttonPos.y += 40.0f;
-			if (UI::UISelectable("Conflict Resolutions", false, 0))
-				MainMenuUI = UI_SHOW::CONFLICT_UI;
+			selectable = "Projects";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			
+			if (ImGui::Selectable(selectable.c_str(), false))
+				MainMenuUI = UI_SHOW::PROJECTS;
 
-			ImGui::SetCursorPos(buttonPos);
-			buttonPos.y += 40.0f;
-			if (UI::UISelectable("Maps", false, 0))
-				MainMenuUI = UI_SHOW::MAP_UI;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
 
-			ImGui::SetCursorPos(buttonPos);
-			buttonPos.y += 40.0f;
-			UI::UISelectable("Settings", false);
+			button_pos.y += 40.0f;
 
-			ImGui::SetCursorPos(buttonPos);
-			if (UI::UISelectable("Quit", false))
+			selectable = "Settings";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			
+			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
+
+			selectable = "Credits";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
+
+			selectable = "Quit";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				OverlayOpen = false;
 				instance.window_manager.show_all();
 			}
-
-			ImGui::PopFont();
-			break;
-
-		case Tempest::MainMenuOverlay::UI_SHOW::MAP_UI:
-			ImGui::PushFont(FONT_BTN);
-			ImGui::SetCursorPos(buttonPos);
-			buttonPos.y += 40.0f;
-			if (UI::UISelectable("New", false, 0)) {}
-
-			ImGui::SetCursorPos(buttonPos);
-			buttonPos.y += 40.0f;
-			if (UI::UISelectable("Load", false, 0))
+			if (ImGui::IsItemHovered())
 			{
-				MainMenuUI = UI_SHOW::LOAD_MAP_UI;
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
 			}
 
-			ImGui::SetCursorPos(buttonPos);
-			if (UI::UISelectable("Back", false))
-				MainMenuUI = UI_SHOW::INITIAL;
-
 			ImGui::PopFont();
+			ImGui::PopStyleColor(2);
+		}
+			
 			break;
 
-		case Tempest::MainMenuOverlay::UI_SHOW::LOAD_MAP_UI:
+		case Tempest::MainMenuOverlay::UI_SHOW::PROJECTS:
 		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+
+			// render the selectables
+			std::string selectable = "";
+			ImGui::PushFont(FONT_BTN);
+			selectable = "New Project";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+
+			if (ImGui::Selectable(selectable.c_str(), false))
+				MainMenuUI = UI_SHOW::NEW_PROJECT;
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
+
+			selectable = "Load Project";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
+
+			selectable = "Back";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
+				MainMenuUI = UI_SHOW::INITIAL;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			ImGui::PopFont();
+			ImGui::PopStyleColor(2);
+		}
+			break;
+
+		case Tempest::MainMenuOverlay::UI_SHOW::NEW_PROJECT:
+		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+
+			// render the selectables
+			std::string selectable = "";
+			ImGui::PushFont(FONT_BTN);
+			selectable = "Conflict Resolutions";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
+				MainMenuUI = UI_SHOW::CONFLICT_RES;
+
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
+
+			selectable = "New Game";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				MapTitle = selectable;
+				MainMenuUI = UI_SHOW::SELECT_MAP;
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
+				
+
+			selectable = "Map Builder";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				MapTitle = selectable;
+				MainMenuUI = UI_SHOW::SELECT_MAP;
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			button_pos.y += 40.0f;
+
+			selectable = "Back";
+			ImGui::SetCursorPos(button_pos);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			if (ImGui::Selectable(selectable.c_str(), false))
+				MainMenuUI = UI_SHOW::PROJECTS;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+				ImGui::Text(">");
+			}
+
+			ImGui::PopFont();
+			ImGui::PopStyleColor(2);
+		}
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
+		{
+			auto image = tex_map["Assets/ConflictBG.png"];
+			ImVec2 point = ImGui::GetCursorScreenPos();
+			ImVec2 Min{ point.x, point.y };
+			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
+
+			// render title
+			ImGui::SetCursorPos(ImVec2{ 0,0 });
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			UI::SubHeader("Conflict Resolution");
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+
+			auto cur_pos = ImGui::GetCursorPos();
+			for (int i = 0; i < 3; i++)
+			{
+				ImGui::SetCursorPos(cur_pos);
+				ImGui::Dummy({ viewport.Size.x * 0.3f, 0.f });
+				ImGui::SameLine();
+				string str = "CONFLICT RES##" + std::to_string(i);
+				if (UI::UIConflictSelectable(str.c_str(), false, 1).first)
+				{
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+				}
+				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
+				cur_pos = ImGui::GetCursorPos();
+			}
+
+			// render back button
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.02f,viewport.Size.y * 0.03f });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+			image = tex_map["Assets/BackMenuBtn.png"];
+
+			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+				MainMenuUI = UI_SHOW::NEW_PROJECT;
+
+			ImGui::PopStyleColor(3);
+
+		}
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_MAP:
+		{
+			// render the select map image
+			auto image = tex_map["Assets/MM_SelectMap.png"];
+			ImVec2 point = ImGui::GetCursorScreenPos();
+			ImVec2 Min{ point.x, point.y };
+			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
+
+			// render title
+			ImGui::SetCursorPos(ImVec2{ 0,0 });
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			UI::SubHeader(MapTitle.c_str());
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+
+
+			// render back button
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.02f,viewport.Size.y * 0.03f });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+			image = tex_map["Assets/BackMenuBtn.png"];
+
+			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+				MainMenuUI = UI_SHOW::NEW_PROJECT;
+
+			ImGui::PopStyleColor(3);
+
+			ImGui::PushFont(FONT_BTN);
+			// render bottom two buttons
+			if (UI::UIButton_2("New Map", "New Map", ImVec2{ viewport.Size.x * 0.34f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
+			{
+
+			}
+
+			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
+				MainMenuUI = UI_SHOW::LOAD_MAP;
+			
+			ImGui::PopFont();
+		}
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::LOAD_MAP:
+		{
+			// render the select map image
+			auto image = tex_map["Assets/MM_LoadMap.png"];
+			ImVec2 point = ImGui::GetCursorScreenPos();
+			ImVec2 Min{ point.x, point.y };
+			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
+
+			// render title
+			ImGui::SetCursorPos(ImVec2{ 0,0 });
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 			UI::SubHeader("Load Map");
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
-			// Content region
-			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - (viewport.Size.x * 0.6f * 0.5f), viewport.Size.y * 0.25f});
-			
-			ImGui::BeginChild("##LoadingMap", ImVec2{ viewport.Size.x * 0.6f, viewport.Size.y * 0.5f }, true);
-			static int selectedItem = 0;
 
-			auto tex = tex_map["Assets/01.png"];
-			const ImVec2 itemSize{ viewport.Size.x * 0.6f * 0.8f, (float)tex->GetHeight() * 0.7f };
-			for(int i = 0 ; i < 5; i++)
+			// render back button
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.02f,viewport.Size.y * 0.03f });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+			image = tex_map["Assets/BackMenuBtn.png"];
+
+			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+				MainMenuUI = UI_SHOW::SELECT_MAP;
+
+			ImGui::PopStyleColor(3);
+
+			// draw the child
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 10.0f, 10.f });
+			const ImVec2 child_size{viewport.Size.x * 0.5f, viewport.Size.y * 0.55f};
+			ImGui::SetCursorPos(ImVec2{viewport.Size.x * 0.65f - child_size.x * 0.5f, viewport.Size.y * 0.5f - child_size.y * 0.5f });
+			if (ImGui::BeginChild("##LoadMapMainMenu", child_size, true))
 			{
-				ImGui::Dummy(ImVec2{0.f,40.f});
-				ImGui::Dummy(ImVec2{20.f,0.f});
-				ImGui::SameLine();
-				std::string itemid = "##" + std::to_string(i);
-				ImGui::PushID(i);
-				if (UI::UIMapSelectable((void*)static_cast<size_t>(tex->GetID()), { (float)tex->GetWidth() *0.7f,(float)tex->GetHeight()*0.7f }, "NAME", "DATE", "UNIT", i == selectedItem, 0, itemSize))
+				const std::pair<bool, bool> map_pair = UI::UIMapSelectable("MAP_01", "Date created: 12/31/2021", false, 1);
+
+				// render all the maps here
+				if (map_pair.first)
 				{
-					selectedItem = i;
-				
-					LOG("SELECTED TRUE");
+					MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
 				}
-				 ImGui::PopID();
+
+				else if (map_pair.second)
+				{
+					// TODO: delete map
+				}
 			}
+
 			ImGui::EndChild();
-
-			// Buttons
-			if (UI::UIButton_2("Back", "Back", ImVec2{ viewport.Size.x * 0.5f - 240.0f, viewport.Size.y * 0.9f }, ImVec2{ 0.f, 8.0f }, FONT_BODY))
-				MainMenuUI = UI_SHOW::MAP_UI;
-
-			UI::UIButton_2("Play", "Play", ImVec2{ viewport.Size.x * 0.5f + 240.0f, viewport.Size.y * 0.9f }, ImVec2{ 0.f, 8.0f }, FONT_BODY);
+			ImGui::PopStyleVar();
 		}
 			break;
-		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_UI:
-			ImGui::PushFont(FONT_BTN);
-			ImGui::SetCursorPos(buttonPos);
-			buttonPos.y += 40.0f;
-			if (UI::UISelectable("Edit Existing", false, 0)) {}
+		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
+		{
+			// render the select map image
+			auto image = tex_map["Assets/MM_SelectCR.png"];
+			ImVec2 point = ImGui::GetCursorScreenPos();
+			ImVec2 Min{ point.x, point.y };
+			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
 
-			ImGui::SetCursorPos(buttonPos);
-			buttonPos.y += 40.0f;
-			if (UI::UISelectable("Create New", false, 0))
+			// render title
+			ImGui::SetCursorPos(ImVec2{ 0,0 });
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			UI::SubHeader("Select Conflict Resolution");
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+
+
+			// render back button
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.02f,viewport.Size.y * 0.03f });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+			image = tex_map["Assets/BackMenuBtn.png"];
+
+			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+				MainMenuUI = UI_SHOW::LOAD_MAP;
+
+			ImGui::PopStyleColor(3);
+
+			// draw the child
+			const ImVec2 child_size{ viewport.Size.x * 0.25f, viewport.Size.y * 0.55f };
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - child_size.x * 0.5f, viewport.Size.y * 0.55f - child_size.y * 0.5f });
+			if (ImGui::BeginChild("##LoadConflictResMainMenu", child_size, true))
 			{
-				MainMenuUI = UI_SHOW::NONE;
-				Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+				// TODO: load the conflict stuff here
+
+				for (int i = 0; i < 4; i++)
+				{
+					ImGui::PushID(std::string{ "ConflictRes" + std::to_string(i) }.c_str());
+					if (UI::UIButton_2("Sample_Conflict", "Sample_Conflict", ImVec2{ cusor.x, cusor.y + i * 90.0f}, { 50,20 }, FONT_BTN, SelectedConflictRes == i))
+					{
+						SelectedConflictRes = i;
+					}
+					ImGui::PopID();
+				}
 			}
-		
 
-			ImGui::SetCursorPos(buttonPos);
-			if (UI::UISelectable("Back", false))
-				MainMenuUI = UI_SHOW::INITIAL;
+			ImGui::EndChild();
 
-			ImGui::PopFont();
-			break;
-		case Tempest::MainMenuOverlay::UI_SHOW::SETTINGS:
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.8f - child_size.x * 0.5f, viewport.Size.y * 0.55f - child_size.y * 0.5f });
+			if (ImGui::BeginChild("##LoadSequenceMainMenu", child_size, true))
+			{
+				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+
+				// TODO: render all the sequences from selected conflict
+				// TODO: make a popup menu
+				for (int i = 0; i < 8; i++)
+				{
+					std::string seq_name = "Sample_Seq" + std::to_string(i);
+					ImGui::PushID(seq_name.c_str());
+					bool selected = std::find(SelectedSequences.begin(), SelectedSequences.end(), i) != SelectedSequences.end();
+					if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 }, FONT_BTN, selected))
+					{
+						Service<EventManager>::Get().instant_dispatch< MainMenuSequencePopupTrigger>(SelectedSequences);
+					}
+					ImGui::PopID();
+				}
+			}
+
+			ImGui::EndChild();
+
+			if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
+			{
+				// TODO: bring to add units page
+			}
+		}
 			break;
 		default:
 			break;

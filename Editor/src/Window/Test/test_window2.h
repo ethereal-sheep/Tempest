@@ -415,7 +415,7 @@ namespace Tempest
 			}
 		}
 
-		void draw_node(node_ptr n, Instance& instance)
+		void draw_node(node_ptr n, Instance& )
 		{
 			auto id = n->get_id();
 			ax::NodeEditor::BeginNode(id);
@@ -454,22 +454,6 @@ namespace Tempest
 					ImGui::Text("%s: %u", instance.ecs.get<tc::Graph>(gid).g.get_name().c_str(), gid);
 				}
 				else */
-				if (auto gsn = dynamic_cast<GetStatNode*>(n.get()))
-				{
-					tc::Statline* statline = nullptr;
-					for (auto i : instance.ecs.view<tc::Statline>())
-						statline = instance.ecs.get_if<tc::Statline>(i);
-
-					string s = magic_enum::enum_name(gsn->get_type()).data();
-					auto index = std::stoi(gsn->get_name());
-
-					string name = "Get " + s + " " + (*statline)[index];
-					ImGui::Text(name.c_str());
-					twidth = ImGui::CalcTextSize(name.c_str()).x;
-				}
-				else
-					ImGui::Text(n->get_name().c_str());
-				ImGui::PopFont();
 			}
 
 			// Input group
@@ -611,7 +595,7 @@ namespace Tempest
 		}
 
 
-		void draw_background_context(graph& g, Instance& instance)
+		void draw_background_context(graph& g, Instance& )
 		{
 			if (ImGui::BeginPopup("Create New Node", ImGuiWindowFlags_NoResize))
 			{
@@ -634,66 +618,6 @@ namespace Tempest
 				node_context<DiceNode>(g, "Dice");
 				node_context<SwitchNode>(g, "Switch");
 				node_context<CompareNode>(g, "Compare");
-
-
-				if (ImGui::TreeNodeEx("Get Attacker Stats"))
-				{
-
-					tc::Statline* statline = nullptr;
-					for (auto i : instance.ecs.view<tc::Statline>())
-						statline = instance.ecs.get_if<tc::Statline>(i);
-
-					for (auto i = 0; i < statline->size(); ++i)
-					{
-						if (!(*statline)(i)) continue;
-
-						std::string text = "Get Attacker " + (*statline)[i];
-						ImGui::Indent(10.f);
-						if (ImGui::Selectable(text.c_str()))
-						{
-							auto node = g.add_node(GetStatNode::create_node(string("Attacker:") + std::to_string(i)));
-
-							if (node)
-							{
-								ax::NodeEditor::SetNodePosition(
-									node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
-								);
-							}
-							ImGui::CloseCurrentPopup();
-						}
-						ImGui::Unindent(10.f);
-					}
-					ImGui::TreePop();
-				}
-
-				if (ImGui::TreeNodeEx("Get Defender Stats"))
-				{
-					tc::Statline* statline = nullptr;
-					for (auto i : instance.ecs.view<tc::Statline>())
-						statline = instance.ecs.get_if<tc::Statline>(i);
-
-					for (auto i = 0; i < statline->size(); ++i)
-					{
-						if (!(*statline)(i)) continue;
-
-						std::string text = "Get Attacker " + (*statline)[i];
-						ImGui::Indent(10.f);
-						if (ImGui::Selectable(text.c_str()))
-						{
-							auto node = g.add_node(GetStatNode::create_node(string("Defender:") + std::to_string(i)));
-
-							if (node)
-							{
-								ax::NodeEditor::SetNodePosition(
-									node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
-								);
-							}
-							ImGui::CloseCurrentPopup();
-						}
-						ImGui::Unindent(10.f);
-					}
-					ImGui::TreePop();
-				}
 
 
 				if (g.get_type() == graph_type::action)

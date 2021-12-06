@@ -18,15 +18,19 @@ namespace Tempest
 {
     class MainMenuOverlay : public Window
     {
+    public:
         enum class UI_SHOW
         {
-            NONE,
             INITIAL,
-            MAP_UI,
-            CONFLICT_UI,
-            LOAD_MAP_UI,
-            SETTINGS
+            PROJECTS,
+            NEW_PROJECT,
+            CONFLICT_RES,
+            SELECT_MAP,
+            LOAD_MAP,
+            SELECT_CONFLICT_RES,
         };
+
+    private:
         const char* window_name() override
         {
             return "";
@@ -45,7 +49,9 @@ namespace Tempest
         void OpenLocalUI(Instance& instance, const ImGuiViewport& viewport);
 
         bool OverlayOpen = true;
+        std::string MapTitle{ "" };
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
-        
+        int SelectedConflictRes{ 0 };
+        std::vector<int> SelectedSequences; // will this be an entity id?
     };
 }

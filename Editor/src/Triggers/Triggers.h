@@ -74,6 +74,8 @@ namespace Tempest
 		QUICKMENU_POPUP_TYPE current;
 	};
 
+	struct PauseOverlayTrigger : public Event {};
+
 	//Confirm Trigger
 	struct SimulateSelectionConfirm : public Event
 	{
@@ -84,10 +86,22 @@ namespace Tempest
 		bool for_unitpage;
 		Entity data;
 	};
+	struct TutorialPopupTrigger : public Event {};
 
+	struct MainMenuSequencePopupTrigger : public Event
+	{
+		MainMenuSequencePopupTrigger(std::vector<int>& selections) : selected_seqs{ selections } {}
+
+		std::vector<int>& selected_seqs;
+	};
 
 	//Overlay Trigger
-	struct OpenSimulateTrigger : public Event {};
+	struct OpenSimulateTrigger : public Event 
+	{
+		OpenSimulateTrigger(Instance& in): instance{ in }  {}
+		Instance& instance;
+	};
+
 	struct OpenSimulateResultTrigger : public Event
 	{
 		OpenSimulateResultTrigger(Entity a, Entity d, Entity c):
@@ -108,7 +122,12 @@ namespace Tempest
 	};
 
 	struct OpenConflictResTrigger : public Event {};
-	struct OpenMainMenuTrigger : public Event {};
+	struct OpenMainMenuTrigger : public Event
+	{
+		OpenMainMenuTrigger(int type = 0) : menuType{ type } {}
+		int menuType;
+	};
+
 	struct OpenActionGraphTrigger : public Event // not using for new change
 	{
 		OpenActionGraphTrigger(Entity entityid, Instance& in) : id{ entityid }, instance{in} {}
@@ -125,7 +144,6 @@ namespace Tempest
 		Instance& instance;
 		OPEN_GRAPH_TYPE type;
 	};
-
 	struct OpenUnitSheetTrigger : public Event 
 	{
 		OpenUnitSheetTrigger(bool isAddUnit, Instance& in, Entity id = UNDEFINED) : addUnit{ isAddUnit }, instance{ in }, entityID{ id } {}
@@ -133,7 +151,6 @@ namespace Tempest
 		Entity entityID = UNDEFINED;
 		Instance& instance;
 	};
-
 	struct OpenWeaponSheetTrigger : public Event
 	{
 		OpenWeaponSheetTrigger(bool isAddUnit, Instance& in, Entity selected = UNDEFINED) :
@@ -142,14 +159,13 @@ namespace Tempest
 		Instance& instance;
 		Entity entity;
 	};
-
 	struct OpenTurnOrderOverlay : public Event {};
 	struct OpenPlaceUnitsOverlay : public Event 
 	{
 		OpenPlaceUnitsOverlay(const tvector<Entity> entity) : entities{ entity } {}
 		tvector<Entity> entities;
 	};
-
+	struct OpenBuildModeOverlay : public Event {};
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}

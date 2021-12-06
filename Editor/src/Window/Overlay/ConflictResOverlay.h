@@ -38,8 +38,9 @@ namespace Tempest
         const unsigned numOfButtons = 10;
         const float padding = 50.0f;
         const float halfPadding = padding * 0.5f;
-        tsptr<Texture> LeftBg;
+        ImVec2 initViewPortSize = ImGui::GetMainViewport()->Size;
         tsptr<Texture> ConflictBg;
-
+        ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+        ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
     };
 }

@@ -125,7 +125,6 @@ namespace Tempest
 
         bool OverlayOpen = false;
 
-
         tvector<Entity> units;
 
         CameraControls cam_ctrl;
@@ -172,5 +171,9 @@ namespace Tempest
         bool display_other_stat{ false };
         INFO_TYPE info_type{ INFO_TYPE::CHAR};
         BATTLE_STATE battle_state{ BATTLE_STATE::CURR_TURN };
+
+
+        tmap<int, tmap<int, uint32_t>> range_map;
+        tmap<int, tmap<int, bool>> visited;
     };
 }

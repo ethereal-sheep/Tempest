@@ -79,7 +79,9 @@
             "Metadata": {
                 "Type": "Wall"
             },
-            "Component": {}
+            "Component": {
+                "Cover": 0
+            }
         }
     ]
 }

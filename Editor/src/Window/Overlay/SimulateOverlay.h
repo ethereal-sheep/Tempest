@@ -52,11 +52,7 @@ namespace Tempest
             Entity unit_id{ UNDEFINED };
             Entity weapon{ UNDEFINED };
             Entity action{ UNDEFINED };
-            void Reset() {
-                unit_id = UNDEFINED;
-                weapon = UNDEFINED;
-                action = UNDEFINED;
-            }
+            void Reset(Instance& instance);
         };
 
         UnitData attacker{};
@@ -73,5 +69,7 @@ namespace Tempest
         tsptr<Texture> enter_button;
 
         float padding{ 0.0f };
+        ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+        ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
     };
 }

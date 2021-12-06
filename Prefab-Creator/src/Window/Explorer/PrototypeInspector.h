@@ -116,10 +116,40 @@ namespace Tempest
 							}
 							{
 								auto vec = transform->local_scale;
-								auto [x, y] = UI::DragFloat3ColorBox("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, glm::value_ptr(vec), 1.f, 0.001f, 0.001f, 5.f);
+								static bool uniform = false;
+								auto [x, y] = UI::UniformScaleFloat3("Scale", "##ScaleDrag", ImVec2{ padding , 0.f }, &uniform, glm::value_ptr(vec), 1.f, 0.001f, 0.001f, 5.f);
 								transform->local_scale.x = std::max(0.001f, vec.x);
 								transform->local_scale.y = std::max(0.001f, vec.y);
 								transform->local_scale.z = std::max(0.001f, vec.z);
+							}
+							{
+								if (ImGui::Button(".1x"))
+								{
+									transform->local_scale.x = 
+									transform->local_scale.y = 
+									transform->local_scale.z = .1f;
+								}
+								ImGui::SameLine();
+								if (ImGui::Button(".01x"))
+								{
+									transform->local_scale.x =
+										transform->local_scale.y =
+										transform->local_scale.z = .01f;
+								}
+								ImGui::SameLine();
+								if (ImGui::Button(".02x"))
+								{
+									transform->local_scale.x =
+										transform->local_scale.y =
+										transform->local_scale.z = .02f;
+								}
+								ImGui::SameLine();
+								if (ImGui::Button(".001x"))
+								{
+									transform->local_scale.x =
+										transform->local_scale.y =
+										transform->local_scale.z = .001f;
+								}
 							}
 
 
@@ -160,6 +190,42 @@ namespace Tempest
 							UI::PaddedSeparator(1.f);
 						}
 					}
+					if (auto door = _current->get_if<tc::Door>())
+					{
+						int index = static_cast<int>(door->curr);
+						std::vector<string> cover_types = { };
+						for (auto i = 0; i < static_cast<int>(tc::Door::State::End); ++i)
+
+							cover_types.push_back(magic_enum::enum_name(static_cast<tc::Door::State>(i)).data());
+
+						if (ImGui::ComboWithFilter("Door States", &index, cover_types))
+						{
+							door->curr = static_cast<tc::Door::State>(index);
+						}
+
+						auto transform = &door->states[(int)door->curr];
+
+						{
+							UI::DragFloat3ColorBox("Position", "##DoorPositionDrag", ImVec2{ padding , 0.f }, glm::value_ptr(transform->local_position), 0.f, 0.1f);
+						}
+						{
+							auto vec = glm::degrees(glm::eulerAngles(transform->local_rotation));
+							auto [x, y] = UI::DragFloat3ColorBox("Rotation", "##DoorRotationDrag", ImVec2{ padding , 0.f }, &vec.x, 0.f, 0.1f);
+							if (x)
+							{
+								transform->local_rotation = glm::quat(glm::radians(vec));
+							}
+						}
+						{
+							auto vec = transform->local_scale;
+							static bool uniform = false;
+							auto [x, y] = UI::UniformScaleFloat3("Scale", "##DoorScaleDrag", ImVec2{ padding , 0.f }, &uniform, glm::value_ptr(vec), 1.f, 0.001f, 0.001f, 5.f);
+							transform->local_scale.x = std::max(0.001f, vec.x);
+							transform->local_scale.y = std::max(0.001f, vec.y);
+							transform->local_scale.z = std::max(0.001f, vec.z);
+						}
+
+					}
 					if (auto mesh = _current->get_if<tc::Mesh>())
 					{
 					}
@@ -176,12 +242,12 @@ namespace Tempest
 							ImGui::PushItemWidth(padding);
 							if (ImGui::InputScalar("X##xby", ImGuiDataType_S32, &x, &one))
 							{
-								x = std::clamp(x, 0, 3);
+								x = std::clamp(x, 0, 4);
 							}
 							ImGui::Text(ICON_FA_TIMES);
 							if (ImGui::InputScalar("Y##yby", ImGuiDataType_S32, &y, &one))
 							{
-								y = std::clamp(y, 0, 3);
+								y = std::clamp(y, 0, 4);
 							}
 							ImGui::PopItemWidth();
 
@@ -257,21 +323,92 @@ namespace Tempest
 							ImGui::SameLine();
 							ImGui::Text("Decoration");
 
-							auto local = _current->get<tc::Local>();
-							tc::Transform transform;
-							transform.position = local.local_position;
-							transform.rotation = local.local_rotation;
-							transform.scale = local.local_scale;
 
-							std::filesystem::path p{ model->path };
-							if (strcmp(p.extension().string().c_str(), ".a"))
+
+							if (auto door = _current->get_if<tc::Door>())
 							{
-								p.replace_extension(".a");
+
+								const auto& l = door->states[(int)door->curr];
+								tc::Transform t;
+
+								t.position = l.local_position;
+								t.rotation = l.local_rotation;
+								t.scale = l.local_scale;
+
+								auto transform = &t;
+
+								auto local = &_current->get<tc::Local>();
+
+
+								auto mat = glm::translate(transform->position)
+									* glm::mat4(transform->rotation)
+									* glm::translate(local->local_position)
+									* glm::mat4(local->local_rotation)
+									* glm::scale(local->local_scale)
+									* glm::scale(transform->scale);
+
+								std::filesystem::path p{ model->path };
+								if (strcmp(p.extension().string().c_str(), ".a"))
+								{
+									p.replace_extension(".a");
+								}
+								Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), mat);
 							}
-							Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), transform);
+							else
+							{
+								const auto& local = _current->get<tc::Local>();
+								tc::Transform transform;
+
+								transform.position = local.local_position;
+								transform.rotation = local.local_rotation;
+								transform.scale = local.local_scale;
+
+								std::filesystem::path p{ model->path };
+								if (strcmp(p.extension().string().c_str(), ".a"))
+								{
+									p.replace_extension(".a");
+								}
+								Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), transform);
+							}
+
+
 
 
 							UI::PaddedSeparator(1.f);
+						}
+					}
+					if (auto collider = _current->get_if<tc::Collision>())
+					{
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("Collider##ColliderHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+						if (header)
+						{
+							int index = static_cast<int>(collider->cover);
+							std::vector<string> cover_types = { };
+							for (auto i = 0; i < static_cast<int>(tc::Collision::Cover::End); ++i)
+								cover_types.push_back(magic_enum::enum_name(static_cast<tc::Collision::Cover>(i)).data());
+
+							if (ImGui::ComboWithFilter("Collider Cover", &index, cover_types))
+							{
+								collider->cover = static_cast<tc::Collision::Cover>(index);
+							}
+						}
+					}
+					if (auto wall = _current->get_if<tc::Wall>())
+					{
+						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
+						bool header = ImGui::CollapsingHeader("Wall##WallHeader", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+						if (header)
+						{
+							int index = static_cast<int>(wall->cover);
+							std::vector<string> cover_types = { };
+							for (auto i = 0; i < static_cast<int>(tc::Wall::Cover::End); ++i)
+								cover_types.push_back(magic_enum::enum_name(static_cast<tc::Wall::Cover>(i)).data());
+
+							if (ImGui::ComboWithFilter("Wall Cover", &index, cover_types))
+							{
+								wall->cover = static_cast<tc::Wall::Cover>(index);
+							}
 						}
 					}
 

@@ -133,65 +133,6 @@ namespace Tempest
 			friend Archiver& operator&(Archiver& ar, Tile&) { ar.StartObject(); return ar.EndObject(); }
 		};
 
-		struct Door
-		{
-			static const char* get_type() { return "Door"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Door&) { ar.StartObject(); return ar.EndObject(); }
-		};
-
-		struct Obstacle
-		{
-			static const char* get_type() { return "Obstacle"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Obstacle&) { ar.StartObject(); return ar.EndObject(); }
-		};
-
-		struct Unit
-		{
-			static const char* get_type() { return "Unit"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Unit&) { ar.StartObject(); return ar.EndObject(); }
-		};
-		struct Wall
-		{
-			static const char* get_type() { return "Wall"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Wall&) { ar.StartObject(); return ar.EndObject(); }
-		};
-		struct Collision
-		{
-			static const char* get_type() { return "Collision"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Collision&) { ar.StartObject(); return ar.EndObject(); }
-		};
-
-
-		struct Example
-		{
-			static const char* get_type() { return "Example"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Example& component)
-			{
-				ar.StartObject();
-				ar.Member("Member1", component.member1);
-				ar.Member("Member2", component.member2);
-				ar.Member("Member3", component.member3);
-				ar.Member("Member4", component.member4);
-				return ar.EndObject();
-			}
-
-			int member1;
-			int member2;
-			int member3;
-			int member4;
-		};
 
 		struct Transform
 		{
@@ -223,7 +164,6 @@ namespace Tempest
 
 		};
 
-
 		struct Local
 		{
 			static const char* get_type() { return "Local"; }
@@ -242,6 +182,147 @@ namespace Tempest
 			quat local_rotation = { 1.f, 0.f, 0.f, 0.f };
 			vec3 local_scale = { 1.f, 1.f, 1.f };
 		};
+
+
+		struct Door
+		{
+			static const char* get_type() { return "Door"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Door& component) 
+			{
+				ar.StartObject();
+				ar.Vector("States", component.states);
+				component.states.resize((int)State::End);
+				return ar.EndObject(); 
+			}
+
+			enum struct State {
+				CLOSE,
+				OPEN,
+				End
+			};
+
+			void update(float dt);
+
+			auto get_current_state() const { return next; }
+			auto get_current_local() const { return current_local; }
+
+			bool change_state(State new_state);
+
+
+			tvector<Local> states = tvector<Local>((int)State::End);
+
+		private:
+			float interpolation_time = 1.f;
+			float current_time = 0.f;
+			Local current_local;
+
+			State next = State::CLOSE;
+			State prev = State::CLOSE;
+		};
+
+		struct Obstacle
+		{
+			static const char* get_type() { return "Obstacle"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Obstacle&) { 
+				ar.StartObject(); 
+				return ar.EndObject(); 
+			}
+		};
+
+		struct Unit
+		{
+			static const char* get_type() { return "Unit"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Unit&) { ar.StartObject(); return ar.EndObject(); }
+
+			void update(float dt);
+			bool set_path(const tvector<glm::ivec2>& path, const Transform& curr);
+			bool is_moving() { return moving; }
+			bool is_end_frame() { return end_frame; }
+			Transform get_current_transform() const { return curr_xform; };
+
+		private:
+			Transform prev_xform;
+			Transform curr_xform;
+			Transform next_xform;
+			tvector<glm::ivec2> path;
+
+			float interpolation_time = 1.f;
+			float current_time = 0.f;
+
+			bool end_frame = false;
+			bool moving = false;
+
+		};
+
+		struct Wall
+		{
+			static const char* get_type() { return "Wall"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Wall& component) {
+				ar.StartObject();
+				ar.Member("Cover", component.cover);
+				return ar.EndObject();
+			}
+
+			enum struct Cover
+			{
+				FULL,
+				HALF,
+				End
+			};
+			Cover cover = Cover::FULL;
+		};
+
+		struct Collision
+		{
+			static const char* get_type() { return "Collision"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Collision& component) {
+				ar.StartObject();
+				ar.Member("Cover", component.cover);
+				return ar.EndObject();
+			}
+
+			enum struct Cover
+			{
+				FULL,
+				HALF,
+				End
+			};
+			Cover cover = Cover::FULL;
+		};
+
+
+		struct Example
+		{
+			static const char* get_type() { return "Example"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Example& component)
+			{
+				ar.StartObject();
+				ar.Member("Member1", component.member1);
+				ar.Member("Member2", component.member2);
+				ar.Member("Member3", component.member3);
+				ar.Member("Member4", component.member4);
+				return ar.EndObject();
+			}
+
+			int member1;
+			int member2;
+			int member3;
+			int member4;
+		};
+
+
 
 		struct Shape
 		{

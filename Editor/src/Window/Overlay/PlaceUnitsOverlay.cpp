@@ -162,47 +162,33 @@ namespace Tempest
 						int w_y = (int)std::round(inter.z - .5f);
 
 						id_t id = INVALID;
-						if (runtime.collision_map.count(w_x) && runtime.collision_map[w_x].count(w_y))
-							id = runtime.collision_map[w_x][w_y];
-
-						if (id && instance.ecs.valid(id) && instance.ecs.has<tc::Shape>(id) && instance.ecs.has<tc::Transform>(id))
+						if (runtime.character_map.count(w_x) && runtime.character_map[w_x].count(w_y))
+							id = runtime.character_map[w_x][w_y];
+						
+						if (runtime.collision_map[w_x][w_y])
 						{
 							// draw existing collider
 							{
-								auto shape = instance.ecs.get_if<tc::Shape>(id);
-								auto& transform = instance.ecs.get<tc::Transform>(id);
-
-								const int& x = shape->x;
-								const int& y = shape->y;
-								const int one = 1;
-
 								AABB box;
 
-								int a_x = x, a_y = y, e_x = 0, e_y = 0;
+								int a_x = 1, a_y = 1, e_x = 0, e_y = 0;
 								if (a_x % 2 != a_y % 2)
 								{
-									a_x = a_y = std::min(x, y);
-									e_x = x - a_x;
-									e_y = y - a_y;
-
+									a_x = a_y = std::min(1, 1);
+									e_x = 1 - a_x;
+									e_y = 1 - a_y;
 								}
 
-								box.min.x = -.5f - (a_x - 1) / 2.f;
-								box.min.z = -.5f - (a_y - 1) / 2.f;
+								inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+								inter.y = 0;
+								inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
 
-								box.max.x = +.5f + (a_x - 1) / 2.f + e_x;
-								box.max.z = +.5f + (a_y - 1) / 2.f + e_y;
-
-								auto rot = transform.rotation;
-								box.min = rot * box.min;
-								box.max = rot * box.max;
-
-								box.min.x += transform.position.x;
-								box.min.z += transform.position.z;
+								box.min.x = inter.x - .5f - (a_x - 1) / 2.f;
+								box.min.z = inter.z - .5f - (a_y - 1) / 2.f;
 								box.min.y = 0;
 
-								box.max.x += transform.position.x;
-								box.max.z += transform.position.z;
+								box.max.x = inter.x + .5f + (a_x - 1) / 2.f + e_x;
+								box.max.z = inter.z + .5f + (a_y - 1) / 2.f + e_y;
 								box.max.y = 0;
 
 								Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });

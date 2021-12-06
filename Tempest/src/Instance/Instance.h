@@ -135,7 +135,7 @@ namespace Tempest
 		 */
 		virtual void OnUpdate(float dt)
 		{
-			internal_update();
+			internal_update(dt);
 			_update(dt);
 		}
 
@@ -168,7 +168,7 @@ namespace Tempest
 	private:
 
 		void internal_init();
-		void internal_update();
+		void internal_update(float dt);
 		void internal_render();
 		void internal_exit();
 

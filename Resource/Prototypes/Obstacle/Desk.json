@@ -39,7 +39,9 @@
             "Metadata": {
                 "Type": "Collision"
             },
-            "Component": {}
+            "Component": {
+                "Cover": 1
+            }
         },
         {
             "Metadata": {

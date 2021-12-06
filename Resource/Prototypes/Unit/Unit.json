@@ -53,9 +53,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -8.11400032043457,
+                    -8.008000373840332,
                     0.0,
-                    -2.443077325820923
+                    -1.059999942779541
                 ],
                 "LocalRotation": [
                     0.0,
@@ -76,6 +76,11 @@
             },
             "Component": {
                 "Charater_Name": "Char",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
                 "Weapon_Ids": [],
                 "Charater_Stats": [
                     0,
@@ -100,7 +105,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\testmodel_new.a"
+                "Path": "Models\\UnitBlack_CombatStance.a"
             }
         },
         {

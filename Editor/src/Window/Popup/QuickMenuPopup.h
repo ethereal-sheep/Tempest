@@ -21,7 +21,7 @@ namespace Tempest
             Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.png"];
             Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.png"];
             Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.png"];
-            button_size = ImVec2{ Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() * 0.75f, Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() * 0.75f};
+            button_size = ImVec2{ 1.f, 1.f * Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() / Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() };
         }
 
         void open_popup(const Event& e)
@@ -41,6 +41,12 @@ namespace Tempest
                 ImGui::OpenPopup("Quick Menu");
                 ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, 0.f}, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
                 ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, viewport->Size.y * 0.45f));
+
+
+                button_size = ImVec2{ 1.f, 1.f * Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() / Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() };
+
+                button_size.x *= viewport->Size.x / 6 * 0.95f;
+                button_size.y *= viewport->Size.x / 6 * 0.95f;
 
                 if (ImGui::BeginPopupModal("Quick Menu", NULL, flags))
                 {
@@ -78,6 +84,8 @@ namespace Tempest
                         ImGui::CloseCurrentPopup();
                     }
 
+                    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+
                     // render the buttons yo
                     ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.33f});
 
@@ -86,8 +94,9 @@ namespace Tempest
                         enable_popup = false;
                         ImGui::CloseCurrentPopup();
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
-                        Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+                        Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
                     }
+
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SIMULATE)
                         Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainLit.png"];
@@ -165,6 +174,7 @@ namespace Tempest
                     else
                         Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.png"];
 
+                    ImGui::PopStyleVar();
                     ImGui::PopStyleColor(3);
 
                 }

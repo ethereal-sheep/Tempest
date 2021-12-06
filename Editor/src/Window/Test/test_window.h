@@ -69,7 +69,10 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
 				}
-				
+				if (ImGui::Button("TUTORIAL"))
+				{
+					Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>();
+				}
 				if (ImGui::Button("DEFINE STATS"))
 				{
 					Service<EventManager>::Get().instant_dispatch<DefineStatsTrigger>();
@@ -78,7 +81,10 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
 				}
-
+				if (ImGui::Button("BUILD MODE"))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+				}
 				UI::UISelectable("TEST", false);
 				
 				
@@ -163,7 +169,7 @@ namespace Tempest
 				if (clicked)
 				{
 					LOG("TRUE");
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 				}
 
 

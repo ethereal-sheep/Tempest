@@ -16,6 +16,8 @@
 
 namespace Tempest
 {
+	const float indent = 30.f;
+
 	void AttackSystemOverlay::open_popup(const Event& e)
 	{
 		auto a = event_cast<OpenGraphTrigger>(e);
@@ -363,7 +365,8 @@ namespace Tempest
 						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 						{
 							OverlayOpen = false;
-							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+							//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 						}
 
 						ImGui::SameLine();
@@ -374,7 +377,8 @@ namespace Tempest
 
 						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 						{
-							Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
+							QUICKMENU_POPUP_TYPE t = type == OPEN_GRAPH_TYPE::GRAPH_ACTION ? QUICKMENU_POPUP_TYPE::ACTIONS : QUICKMENU_POPUP_TYPE::SEQUENCES;
+							Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(t);
 						}
 
 						ImGui::PopStyleColor(3);
@@ -524,9 +528,7 @@ namespace Tempest
 				else */
 				if (auto gsn = dynamic_cast<StatNode*>(n.get()))
 				{
-					tc::Statline* statline = nullptr;
-					for (auto i : instance.ecs.view<tc::Statline>())
-						statline = instance.ecs.get_if<tc::Statline>(i);
+					tc::Statline* statline = instance.ecs.get_if<tc::Statline>(instance.ecs.view_first<tc::Statline>());
 
 					string s = magic_enum::enum_name(gsn->get_type()).data();
 					auto index = std::stoi(gsn->get_name());
@@ -545,6 +547,15 @@ namespace Tempest
 						break;
 					case Tempest::StatNode::inner_type::SetMain:
 						name = "Set Main";
+						break;
+					case Tempest::StatNode::inner_type::ReduceStat:
+						name = "Reduce " + (*statline)[index] + " by";
+						break;
+					case Tempest::StatNode::inner_type::RestoreStat:
+						name = "Restore " + (*statline)[index] + " by";
+						break;
+					case Tempest::StatNode::inner_type::ResetStat:
+						name = "Reset " + (*statline)[index];
 						break;
 					default:
 						name = "If you see this, the node is corrupted";
@@ -753,7 +764,7 @@ namespace Tempest
 				for (unsigned i = 0; i < static_cast<unsigned>(TNode::inner_type::END); ++i)
 				{
 					std::string text = magic_enum::enum_name(static_cast<typename TNode::inner_type>(i)).data();
-					ImGui::Indent(10.f);
+					ImGui::Indent(indent);
 					if (ImGui::Selectable(text.c_str()))
 					{
 						auto node = g.add_node(TNode::create_node(text));
@@ -766,7 +777,7 @@ namespace Tempest
 						}
 						ImGui::CloseCurrentPopup();
 					}
-					ImGui::Unindent(10.f);
+					ImGui::Unindent(indent);
 				}
 				ImGui::TreePop();
 			}
@@ -972,42 +983,20 @@ namespace Tempest
 
 			string filter_string = filter.InputBuf;
 
-			// attacker stats
+			// stats
 			if (filter_string.empty())
 			{
-				if (ImGui::TreeNodeEx("Get Stats"))
+				if (ImGui::TreeNodeEx("Stats"))
 				{
-					tc::Statline* statline = nullptr;
-					for (auto i : instance.ecs.view<tc::Statline>())
-						statline = instance.ecs.get_if<tc::Statline>(i);
-
+					tc::Statline* statline = instance.ecs.get_if<tc::Statline>(instance.ecs.view_first<tc::Statline>());
 					LOG_ASSERT(statline);
-
-					std::string text = "Get Main";
-					ImGui::Indent(10.f);
-					if (ImGui::Selectable(text.c_str()))
+					if (ImGui::TreeNodeEx("Getters"))
 					{
-						auto node = g.add_node(StatNode::create_node(string("GetMain:0")));
-
-						if (node)
-						{
-							ax::NodeEditor::SetNodePosition(
-								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
-							);
-						}
-						ImGui::CloseCurrentPopup();
-					}
-					ImGui::Unindent(10.f);
-
-					for (auto i = 0; i < statline->size(); ++i)
-					{
-						if (!(*statline)(i)) continue;
-
-						text = "Get " + (*statline)[i];
-						ImGui::Indent(10.f);
+						std::string text = "Get Main";
+						ImGui::Indent(indent);
 						if (ImGui::Selectable(text.c_str()))
 						{
-							auto node = g.add_node(StatNode::create_node(string("GetStat:") + std::to_string(i)));
+							auto node = g.add_node(StatNode::create_node(string("GetMain:0")));
 
 							if (node)
 							{
@@ -1017,21 +1006,143 @@ namespace Tempest
 							}
 							ImGui::CloseCurrentPopup();
 						}
-						ImGui::Unindent(10.f);
+						ImGui::Unindent(indent);
+
+						for (auto i = 0; i < statline->size(); ++i)
+						{
+							if (!(*statline)(i)) continue;
+
+							text = "Get " + (*statline)[i];
+							ImGui::Indent(indent);
+							if (ImGui::Selectable(text.c_str()))
+							{
+								auto node = g.add_node(StatNode::create_node(string("GetStat:") + std::to_string(i)));
+
+								if (node)
+								{
+									ax::NodeEditor::SetNodePosition(
+										node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+									);
+								}
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::Unindent(indent);
+						}
+						ImGui::TreePop();
+					}
+					if (ImGui::TreeNodeEx("Setters"))
+					{
+						string text;
+						for (auto i = 0; i < statline->size(); ++i)
+						{
+							if (!(*statline)(i)) continue;
+
+							text = "Set " + (*statline)[i];
+							ImGui::Indent(indent);
+							if (ImGui::Selectable(text.c_str()))
+							{
+								auto node = g.add_node(StatNode::create_node(string("SetStat:") + std::to_string(i)));
+
+								if (node)
+								{
+									ax::NodeEditor::SetNodePosition(
+										node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+									);
+								}
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::Unindent(indent);
+						}
+						ImGui::TreePop();
+					}
+					if (ImGui::TreeNodeEx("Reducers"))
+					{
+						string text;
+						for (auto i = 0; i < statline->size(); ++i)
+						{
+							if (!(*statline)(i)) continue;
+
+							text = "Reduce " + (*statline)[i];
+							ImGui::Indent(indent);
+							if (ImGui::Selectable(text.c_str()))
+							{
+								auto node = g.add_node(StatNode::create_node(string("ReduceStat:") + std::to_string(i)));
+
+								if (node)
+								{
+									ax::NodeEditor::SetNodePosition(
+										node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+									);
+								}
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::Unindent(indent);
+						}
+						ImGui::TreePop();
+					}
+					if (ImGui::TreeNodeEx("Restorers"))
+					{
+						string text;
+						for (auto i = 0; i < statline->size(); ++i)
+						{
+							if (!(*statline)(i)) continue;
+
+							text = "Restore " + (*statline)[i];
+							ImGui::Indent(indent);
+							if (ImGui::Selectable(text.c_str()))
+							{
+								auto node = g.add_node(StatNode::create_node(string("RestoreStat:") + std::to_string(i)));
+
+								if (node)
+								{
+									ax::NodeEditor::SetNodePosition(
+										node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+									);
+								}
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::Unindent(indent);
+						}
+						ImGui::TreePop();
+					}
+					if (ImGui::TreeNodeEx("Resetters"))
+					{
+						string text;
+						for (auto i = 0; i < statline->size(); ++i)
+						{
+							if (!(*statline)(i)) continue;
+
+							text = "Restore " + (*statline)[i];
+							ImGui::Indent(indent);
+							if (ImGui::Selectable(text.c_str()))
+							{
+								auto node = g.add_node(StatNode::create_node(string("ResetStat:") + std::to_string(i)));
+
+								if (node)
+								{
+									ax::NodeEditor::SetNodePosition(
+										node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+									);
+								}
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::Unindent(indent);
+						}
+						ImGui::TreePop();
 					}
 					ImGui::TreePop();
 				}
+
 			}
 			else
 			{
-				tc::Statline* statline = nullptr;
-				for (auto i : instance.ecs.view<tc::Statline>())
-					statline = instance.ecs.get_if<tc::Statline>(i);
+				const char* alt = "Stats";
+				tc::Statline* statline = instance.ecs.get_if<tc::Statline>(instance.ecs.view_first<tc::Statline>());
 
 				LOG_ASSERT(statline);
 
 				std::string text = "Get Main";
-				if (filter.PassFilter(text.c_str()))
+				if (filter.PassFilter(text.c_str()) || filter.PassFilter(alt))
 				{
 					if (ImGui::Selectable(text.c_str()))
 					{
@@ -1047,18 +1158,106 @@ namespace Tempest
 					}
 				}
 
-
+				// getter
 				for (auto i = 0; i < statline->size(); ++i)
 				{
 					if (!(*statline)(i)) continue;
 
 					text = "Get " + (*statline)[i];
-					if (!filter.PassFilter(text.c_str())) continue;
+					if (!filter.PassFilter(text.c_str()) && !filter.PassFilter(alt)) continue;
 
 
 					if (ImGui::Selectable(text.c_str()))
 					{
 						auto node = g.add_node(StatNode::create_node(string("GetStat:") + std::to_string(i)));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				// setter
+				for (auto i = 0; i < statline->size(); ++i)
+				{
+					if (!(*statline)(i)) continue;
+
+					text = "Set " + (*statline)[i];
+					if (!filter.PassFilter(text.c_str()) && !filter.PassFilter(alt)) continue;
+
+
+					if (ImGui::Selectable(text.c_str()))
+					{
+						auto node = g.add_node(StatNode::create_node(string("SetStat:") + std::to_string(i)));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				// reducer
+				for (auto i = 0; i < statline->size(); ++i)
+				{
+					if (!(*statline)(i)) continue;
+
+					text = "Reduce " + (*statline)[i];
+					if (!filter.PassFilter(text.c_str()) && !filter.PassFilter(alt)) continue;
+
+
+					if (ImGui::Selectable(text.c_str()))
+					{
+						auto node = g.add_node(StatNode::create_node(string("ReduceStat:") + std::to_string(i)));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				// restore
+				for (auto i = 0; i < statline->size(); ++i)
+				{
+					if (!(*statline)(i)) continue;
+
+					text = "Restore " + (*statline)[i];
+					if (!filter.PassFilter(text.c_str()) && !filter.PassFilter(alt)) continue;
+
+
+					if (ImGui::Selectable(text.c_str()))
+					{
+						auto node = g.add_node(StatNode::create_node(string("RestoreStat:") + std::to_string(i)));
+
+						if (node)
+						{
+							ax::NodeEditor::SetNodePosition(
+								node->get_id(), ax::NodeEditor::ScreenToCanvas(mouse)
+							);
+						}
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				// reset
+				for (auto i = 0; i < statline->size(); ++i)
+				{
+					if (!(*statline)(i)) continue;
+
+					text = "Reset " + (*statline)[i];
+					if (!filter.PassFilter(text.c_str()) && !filter.PassFilter(alt)) continue;
+
+
+					if (ImGui::Selectable(text.c_str()))
+					{
+						auto node = g.add_node(StatNode::create_node(string("ResetStat:") + std::to_string(i)));
 
 						if (node)
 						{
@@ -1078,7 +1277,7 @@ namespace Tempest
 				{
 					if (ImGui::TreeNodeEx("Output"))
 					{
-						ImGui::Indent(10.f);
+						ImGui::Indent(indent);
 						if (ImGui::Selectable("Output"))
 						{
 							auto node = g.add_node(ActionNode::create_node("Output"));
@@ -1091,7 +1290,7 @@ namespace Tempest
 							}
 							ImGui::CloseCurrentPopup();
 						}
-						ImGui::Unindent(10.f);
+						ImGui::Unindent(indent);
 						ImGui::TreePop();
 					}
 
@@ -1122,7 +1321,7 @@ namespace Tempest
 				{
 					if (ImGui::TreeNodeEx("Resolution"))
 					{
-						ImGui::Indent(10.f);
+						ImGui::Indent(indent);
 						if (ImGui::Selectable("Win"))
 						{
 							auto node = g.add_node(ConflictNode::create_node("Win"));
@@ -1195,7 +1394,7 @@ namespace Tempest
 							}
 							ImGui::CloseCurrentPopup();
 						}
-						ImGui::Unindent(10.f);
+						ImGui::Unindent(indent);
 						ImGui::TreePop();
 					}
 				}
@@ -1348,7 +1547,7 @@ namespace Tempest
 		//copy_from = id;
 	}
 
-	void Tempest::AttackSystemOverlay::paste_selected(graph& g, Instance& instance)
+	void Tempest::AttackSystemOverlay::paste_selected(graph& , Instance& instance)
 	{
 		if (auto from = instance.ecs.get_if<tc::Graph>(copy_from))
 		{

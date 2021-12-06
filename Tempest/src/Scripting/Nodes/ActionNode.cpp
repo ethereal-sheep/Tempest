@@ -136,7 +136,7 @@ namespace Tempest
 
                     if (auto var = instance.srm.get_variable_to_id(entity, "Output"))
                     {
-                        var->get<int>() = static_cast<int64_t>(a.input);
+                        var->get<int>() = a.input;
                     }
 
                     return std::make_tuple(a.input);
@@ -167,11 +167,6 @@ namespace Tempest
                     if (auto var = instance.srm.get_variable_to_id(entity, "Enemy"))
                     {
                         var->get<int64_t>() = static_cast<int64_t>(a.enemy);
-                    }
-
-                    if (auto var = instance.srm.get_variable_to_id(entity, "Output"))
-                    {
-                        var->get<int>() = static_cast<int64_t>(a.input);
                     }
 
                     return std::make_tuple(a.input);
