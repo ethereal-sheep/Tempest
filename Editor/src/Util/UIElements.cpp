@@ -2527,7 +2527,11 @@ namespace Tempest::UI
 			}
 		}
 		if (pressed)
+		{
 			ImGui::MarkItemEdited(id);
+			ImGui::SetMouseCursor(7);
+		}
+			
 
 		if (flags & ImGuiSelectableFlags_AllowItemOverlap)
 			ImGui::SetItemAllowOverlap();
@@ -2544,6 +2548,7 @@ namespace Tempest::UI
 			const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
 			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
 			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+			ImGui::SetMouseCursor(7);
 		}
 
 		if (span_all_columns && window->DC.CurrentColumns)
@@ -2732,7 +2737,7 @@ namespace Tempest::UI
 				ImGui::SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect(bb.Min - window->Pos, bb.Max - window->Pos));
 				g.NavDisableHighlight = true;
 			}
-			ImGui::SetMouseCursor(3);
+			ImGui::SetMouseCursor(7);
 		}
 
 		if (pressed)
@@ -2753,7 +2758,7 @@ namespace Tempest::UI
 			const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
 			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
 			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
-			ImGui::SetMouseCursor(3);
+			ImGui::SetMouseCursor(7);
 		}
 
 		if (span_all_columns && window->DC.CurrentColumns)

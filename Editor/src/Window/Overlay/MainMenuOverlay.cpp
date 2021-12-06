@@ -322,16 +322,24 @@ namespace Tempest
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 			auto cur_pos = ImGui::GetCursorPos();
-			for (int i = 0; i < 3; i++)
+			for (int i = 1; i < 4; i++)
 			{
 				ImGui::SetCursorPos(cur_pos);
 				ImGui::Dummy({ viewport.Size.x * 0.3f, 0.f });
 				ImGui::SameLine();
 				string str = "CONFLICT RES##" + std::to_string(i);
-				if (UI::UIConflictSelectable(str.c_str(), false, 1).first)
+				int jank = 1;
+				if (i > jank)
+					jank = 0;
+				if (UI::UIConflictSelectable(str.c_str(), false, jank).first)
 				{
-					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+					
+					if (jank)
+					{
+						OverlayOpen = false;
+						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+					}
+						
 				}
 				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
 				cur_pos = ImGui::GetCursorPos();

@@ -78,10 +78,6 @@ namespace Tempest
 			if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 			{
 				OverlayOpen = false;
-				Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
-					MemoryStrategy{},
-					InstanceType::RUN_TIME);
 				Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
 			}
 			ImGui::EndChild();
