@@ -417,10 +417,12 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("Path", component.path);
+				ar.Member("TexturePath", component.texPath);
 				return ar.EndObject();
 			}
 			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
 			string path;
+			string texPath;
 		};
 
 

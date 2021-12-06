@@ -63,7 +63,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\MetalDoorFrame.a"
+                "Path": "Models\\MetalDoorFrame.a",
+                "TexturePath": "Assets\\Doorframe.dds"
             }
         },
         {

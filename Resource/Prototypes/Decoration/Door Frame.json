@@ -63,7 +63,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Entrance.a"
+                "Path": "Models\\Entrance.a",
+                "TexturePath": "Assets\\Doorframe.dds"
             }
         },
         {

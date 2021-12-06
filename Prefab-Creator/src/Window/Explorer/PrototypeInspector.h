@@ -322,7 +322,27 @@ namespace Tempest
 							}
 							ImGui::SameLine();
 							ImGui::Text("Decoration");
+							//============================================
+							int texIndex = 0;
+							std::vector<string> texResources = { "None" };
+							for (auto entry : fs::directory_iterator(instance.get_full_path() / "Assets"))
+							{
+								// only get .a file
+								/*if (entry.path().extension() != ")
+									continue;*/
+								auto rel = fs::relative(entry.path(), instance.get_full_path()).string();
+								if (model->texPath == rel) {
+									texIndex = (int)texResources.size();
+								}
+								texResources.emplace_back(rel);
+							}
 
+							if (ImGui::ComboWithFilter("ThumbNail", &texIndex, texResources))
+							{
+								model->texPath = texResources[texIndex];
+							}
+							ImGui::SameLine();
+							ImGui::Text("ThumbNail");
 
 
 							if (auto door = _current->get_if<tc::Door>())

@@ -178,10 +178,19 @@ namespace Tempest
 				// display
 				ImGui::PushID(proto_name.c_str());
 				ImGui::BeginGroup();
+				auto model = proto.get_if<tc::Model>();
+				tsptr<Texture> modelTex;
+				ImTextureID texID = reinterpret_cast<ImTextureID>(static_cast<uint64_t>(0));
+				if (model->texPath != "")
+				{
+					modelTex = tex_map[model->texPath];
+					texID = (void*)static_cast<size_t>(modelTex->GetID());
+				}
+					
 				if (ImGui::ImageButton(
-					reinterpret_cast<ImTextureID>(static_cast<uint64_t>(0)),
+					texID,
 					{ icon_size, icon_size },
-					ImVec2(0, 1), ImVec2(1, 0), 2
+					ImVec2(0, 0), ImVec2(1, 1), 2
 				))
 					/*if(ImGui::Button(name.c_str()))*/
 				{

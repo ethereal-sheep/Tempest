@@ -63,7 +63,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bar_Doorframe.a"
+                "Path": "Models\\Bar_Doorframe.a",
+                "TexturePath": "Assets\\Bar_Doorframe.dds"
             }
         },
         {
