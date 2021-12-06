@@ -226,6 +226,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Hierarchy\HierarchyWindow.cpp" />
     <ClCompile Include="src\Window\Inspector\InspectorWindow.cpp" />
     <ClCompile Include="src\Window\Overlay\AttackSystemOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\BuildModeOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\CombatModeOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
@@ -287,6 +288,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Inspector\InspectorWindow.h" />
     <ClInclude Include="src\Window\Menubar\RunTimeMenuBar.h" />
     <ClInclude Include="src\Window\Overlay\AttackSystemOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\BuildModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\CombatModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\ConflictResOverlay.h" />
     <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />

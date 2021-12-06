@@ -81,7 +81,10 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
 				}
-
+				if (ImGui::Button("BUILD MODE"))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+				}
 				UI::UISelectable("TEST", false);
 				
 				

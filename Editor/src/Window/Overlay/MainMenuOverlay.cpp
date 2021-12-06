@@ -124,33 +124,13 @@ namespace Tempest
 		{
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 			UI::SubHeader("Load Map");
-			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
-
-			// Content region
-			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - (viewport.Size.x * 0.6f * 0.5f), viewport.Size.y * 0.25f});
 			
-			ImGui::BeginChild("##LoadingMap", ImVec2{ viewport.Size.x * 0.6f, viewport.Size.y * 0.5f }, true);
-			static int selectedItem = 0;
 
-			auto tex = tex_map["Assets/01.png"];
-			const ImVec2 itemSize{ viewport.Size.x * 0.6f * 0.8f, (float)tex->GetHeight() * 0.7f };
-			for(int i = 0 ; i < 5; i++)
-			{
-				ImGui::Dummy(ImVec2{0.f,40.f});
-				ImGui::Dummy(ImVec2{20.f,0.f});
-				ImGui::SameLine();
-				std::string itemid = "##" + std::to_string(i);
-				ImGui::PushID(i);
-				
-				 ImGui::PopID();
-			}
-			ImGui::EndChild();
+			
 
-			// Buttons
-			if (UI::UIButton_2("Back", "Back", ImVec2{ viewport.Size.x * 0.5f - 240.0f, viewport.Size.y * 0.9f }, ImVec2{ 0.f, 8.0f }, FONT_BODY))
-				MainMenuUI = UI_SHOW::MAP_UI;
+			
 
-			UI::UIButton_2("Play", "Play", ImVec2{ viewport.Size.x * 0.5f + 240.0f, viewport.Size.y * 0.9f }, ImVec2{ 0.f, 8.0f }, FONT_BODY);
+			
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_UI:
