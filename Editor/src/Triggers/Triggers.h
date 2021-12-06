@@ -134,7 +134,6 @@ namespace Tempest
 		Instance& instance;
 		OPEN_GRAPH_TYPE type;
 	};
-
 	struct OpenUnitSheetTrigger : public Event 
 	{
 		OpenUnitSheetTrigger(bool isAddUnit, Instance& in, Entity id = UNDEFINED) : addUnit{ isAddUnit }, instance{ in }, entityID{ id } {}
@@ -142,7 +141,6 @@ namespace Tempest
 		Entity entityID = UNDEFINED;
 		Instance& instance;
 	};
-
 	struct OpenWeaponSheetTrigger : public Event
 	{
 		OpenWeaponSheetTrigger(bool isAddUnit, Instance& in, Entity selected = UNDEFINED) :
@@ -151,14 +149,13 @@ namespace Tempest
 		Instance& instance;
 		Entity entity;
 	};
-
 	struct OpenTurnOrderOverlay : public Event {};
 	struct OpenPlaceUnitsOverlay : public Event 
 	{
 		OpenPlaceUnitsOverlay(const tvector<Entity> entity) : entities{ entity } {}
 		tvector<Entity> entities;
 	};
-
+	struct OpenBuildModeOverlay : public Event {};
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}

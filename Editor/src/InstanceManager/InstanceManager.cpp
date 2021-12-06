@@ -67,6 +67,7 @@
 #include "Window/Overlay/SimulateResultOverlay.h"
 #include "Window/Overlay/TurnOrderOverlay.h"
 #include "Window/Overlay/PlaceUnitsOverlay.h"
+#include "Window/Overlay/BuildModeOverlay.h"
 #include "Window/Overlay/PauseOverlay.h"
 
 // show recent projects
@@ -112,7 +113,7 @@ namespace Tempest
 		
 		instance->register_window<PrefabList>();
 		
-		instance->register_window<AssetManagerWindow>();
+		//instance->register_window<AssetManagerWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 		//instance->register_window<HierarchyWindow>()->visible = false;
 		//instance->register_window<InspectorWindow>()->visible = false;
@@ -150,6 +151,7 @@ namespace Tempest
 		instance->register_always<ConflictResOverlay>();
 		instance->register_always<AttackSystemOverlay>();
 		instance->register_always<MainMenuOverlay>();
+		instance->register_always<BuildModeOverlay>();
 		instance->register_always<PauseOverlay>();
 
 		instance->register_always<SimulationStart>();

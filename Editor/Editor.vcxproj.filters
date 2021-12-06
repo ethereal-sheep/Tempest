@@ -123,6 +123,9 @@
     <ClCompile Include="src\Window\Overlay\PlaceUnitsOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\Overlay\BuildModeOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Window\Overlay\PauseOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -382,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="src\Window\Popup\TutorialPopup.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\BuildModeOverlay.h">
+    <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Popup\MainMenuSequencePopup.h">
       <Filter>Header Files</Filter>
