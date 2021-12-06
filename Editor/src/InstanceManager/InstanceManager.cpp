@@ -149,7 +149,6 @@ namespace Tempest
 		instance->register_always<WeaponSheetOverlay>();
 		instance->register_always<SimulateOverlay>();
 		instance->register_always<SimulateResultOverlay>();
-		instance->register_always<ConflictResOverlay>();
 		instance->register_always<AttackSystemOverlay>();
 		instance->register_always<MainMenuOverlay>();
 		instance->register_always<BuildModeOverlay>();
@@ -169,6 +168,7 @@ namespace Tempest
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 		//instance->register_window<test_window>()->visible = false;
 		//instance->register_window<test_window3>();
+		instance->register_always<ConflictResOverlay>();
 		instance->register_always<CombatModeOverlay>();
 		instance->register_always<TurnOrderOverlay>();
 		instance->register_always<PlaceUnitsOverlay>();
