@@ -21,11 +21,11 @@
                     },
                     {
                         "first": true,
-                        "second": "POW"
+                        "second": "Range"
                     },
                     {
                         "first": true,
-                        "second": "RANGE"
+                        "second": "Move"
                     },
                     {
                         "first": false,
