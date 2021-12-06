@@ -59,7 +59,11 @@ namespace Tempest
 				image = tex_map["Assets/BackMenuBtn.png"];
 
 				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+				{
 					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+				}
+					
 
 				ImGui::PopStyleColor(3);
 
