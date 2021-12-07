@@ -92,6 +92,8 @@ namespace Tempest
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetID()), button_size))
                     {
                         enable_popup = false;
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
                         ImGui::CloseCurrentPopup();
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
@@ -108,6 +110,8 @@ namespace Tempest
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::UNITS]->GetID()), button_size))
                     {
                         enable_popup = false;
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
                         ImGui::CloseCurrentPopup();
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
@@ -123,6 +127,8 @@ namespace Tempest
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ACTIONS]->GetID()), button_size))
                     {
                         enable_popup = false;
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
                         ImGui::CloseCurrentPopup();
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
@@ -138,6 +144,8 @@ namespace Tempest
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size))
                     {
                         enable_popup = false;
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
                         ImGui::CloseCurrentPopup();
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
@@ -153,6 +161,8 @@ namespace Tempest
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::WEAPONS]->GetID()), button_size))
                     {
                         enable_popup = false;
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
                         ImGui::CloseCurrentPopup();
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
@@ -167,6 +177,8 @@ namespace Tempest
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ITEMS]->GetID()), button_size))
                     {
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ITEMS)

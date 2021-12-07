@@ -14,6 +14,7 @@
 #include "Triggers/Triggers.h"
 #include "Instance/RuntimeInstance.h"
 #include "ECS/Prototypes/Prototype_Category.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -244,6 +245,9 @@ namespace Tempest
 									auto proto_p = instance.scene.get_prototype_if("Unit", "Unit");
 									auto prefab = proto_p ? proto_p->instance() : create_new_prototype("Unit").instance();
 									auto entity = instance.ecs.create(prefab);
+
+									AudioEngine ae;
+									ae.Play("Sounds2D/ObjectPlacement.wav", "sfx_bus");
 
 									chars[selected] = entity;
 									LOG_ASSERT(instance.ecs.has<tc::Character>(entity));

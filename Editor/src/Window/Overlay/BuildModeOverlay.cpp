@@ -7,6 +7,7 @@
 #include "Util/shape_manip.h"
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -235,6 +236,8 @@ namespace Tempest
 						if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 						{
 							auto [it, b] = instance.scene.get_map().create(proto);
+							AudioEngine ae;
+							ae.Play("Sounds2D/ObjectPlacement.wav", "sfx_bus");
 							instance.selected = it->first;
 							if (auto transform = it->second.force_if<tc::Transform>())
 							{
@@ -430,6 +433,8 @@ namespace Tempest
 					instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
 				}
 				instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
+				AudioEngine ae;
+				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
 				instance.selected = INVALID;
 				return;
 			}

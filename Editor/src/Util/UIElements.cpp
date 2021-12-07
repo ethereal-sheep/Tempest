@@ -1086,6 +1086,8 @@ namespace Tempest::UI
 			auto io = ImGui::GetIO();
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				return true;
 			}
 		}
@@ -1132,6 +1134,8 @@ namespace Tempest::UI
 			auto io = ImGui::GetIO();
 			if (ImGui::IsMouseClicked(0))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				return true;
 			}
 		}
@@ -1334,6 +1338,8 @@ namespace Tempest::UI
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				res = true;
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1381,6 +1387,8 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				res = true;
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 			}
 		}
 
@@ -1480,6 +1488,8 @@ namespace Tempest::UI
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				res = true;
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1527,6 +1537,8 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				res = true;
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 			}
 		}
 
@@ -1630,6 +1642,8 @@ namespace Tempest::UI
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				res = true;
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1677,6 +1691,8 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				res = true;
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 			}
 		}
 
@@ -1933,6 +1949,9 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				res = true;
+
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 			}
 		}
 		if (selected)
@@ -3089,6 +3108,12 @@ namespace Tempest::UI
 		if(selected)
 			window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
 
+		if (pressed)
+		{
+			AudioEngine ae;
+			ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+		}
+
 		return pressed;
 	}
 
@@ -3176,6 +3201,13 @@ namespace Tempest::UI
 		ImGui::PushFont(FONT_TURN);
 		window->DrawList->AddText(textPos, ImGui::GetColorU32({ 1,1,1,1 }), actionName.c_str());
 		ImGui::PopFont();
+
+		if (pressed)
+		{
+			AudioEngine ae;
+			ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+		}
+
 		return pressed;
 	}
 
