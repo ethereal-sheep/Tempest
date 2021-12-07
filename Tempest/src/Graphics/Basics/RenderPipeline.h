@@ -56,8 +56,8 @@ namespace Tempest
 	struct ModelObj
 	{
 		tsptr<ModelPBR> m_Model;
-		glm::mat4 m_Transform;
-		glm::mat4 m_TransformPrev;
+		glm::mat4 m_Transform{ 1.0f };
+		glm::mat4 m_TransformPrev{ 1.0f };
 		bool hasColor = false;
 		vec3 color = { 0.f, 0.f, 0.f };
 	};
