@@ -471,11 +471,11 @@ namespace Tempest
 							{
 								pt_lights[pt_light_num].hide = !pt_lights[pt_light_num].hide;
 							}
-							std::string PointLightPosition = "Point Light" + std::to_string(pt_light_num);
+							std::string PointLightPosition = "Point Light Pos" + std::to_string(pt_light_num);
 							std::string PointLightPositionID = "##Pos" + std::to_string(pt_light_num);
 							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Position), 0.f, 0.1f, -10.f, 10.f);
 							
-							PointLightPosition = "Point Light" + std::to_string(pt_light_num);
+							PointLightPosition = "Point Light Color" + std::to_string(pt_light_num);
 							PointLightPositionID = "##Color" + std::to_string(pt_light_num);
 							UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(pt_lights[pt_light_num].Color), 0.f, 0.1f, -10.f, 10.f);
 
@@ -769,147 +769,7 @@ namespace Tempest
 				}
 				ImGui::TreePop();
 			}
-		
-
-
-
-		}
-		if (ImGui::CollapsingHeader("Old Lighting"))
-		{
-			auto& shininess = Service<RenderSystem>::Get().shininess;
-			auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;
-			auto& specularStrength = Service<RenderSystem>::Get().specularStrength;
-			std::string shininessID = "Shininess";
-			std::string ambientStrengthID = "Ambient Strength";
-			std::string specularStrengthID = "Specular Stregth";
-			ImGui::Selectable(shininessID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-			ImGui::SameLine();
-			ImGui::PushID(shininessID.data());
-			if (ImGui::DragFloat(" ", &shininess, 1.f, 1.f, 50.f)) {}
-			ImGui::PopID();
-			ImGui::Selectable(ambientStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-			ImGui::SameLine();
-			ImGui::PushID(ambientStrengthID.data());
-			if (ImGui::DragFloat(" ", &ambientStrength, 0.01f, 0.f, 1.f)) {}
-			ImGui::PopID();
-			ImGui::Selectable(specularStrengthID.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-			ImGui::SameLine();
-			ImGui::PushID(specularStrengthID.data());
-			if (ImGui::DragFloat(" ", &specularStrength, 0.01f, 0.f, 1.f)) {}
-			ImGui::PopID();
-			if (ImGui::Button("Toggle Gamma Correction"))
-			{
-				int gamma = Service<RenderSystem>::Get().GetGammaCorrection();
-				gamma = (gamma) ? 0 : 1;
-				Service<RenderSystem>::Get().SetGammaCorrection(gamma);
-			}
-			ImGui::Dummy(ImVec2{ 0, 0.25f });
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2{ 0, 0.25f });
-			if (Service<RenderSystem>::Get().dir_lights.size())
-			{
-				auto& light = Service<RenderSystem>::Get().dir_lights[0];
-				if(light.hide)
-				{
-					if (ImGui::Button("Turn on Directional Light"))
-					{
-						light.hide = !light.hide;
-					}
-				}
-				else
-				{
-					if (ImGui::Button("Turn off Directional Light"))
-					{
-						light.hide = !light.hide;
-					}
-					const auto padding = 80.f;
-					UI::DragFloat3ColorBox("Direction", "##LightDirection", ImVec2{ padding , 0.f }, value_ptr(light.Direction), 0.f, 0.1f, -10.f, 10.f);
-					UI::DragFloat3ColorBox("Color", "##LightColor", ImVec2{ padding , 0.f }, value_ptr(light.Color), 0.f, 0.01f, 0.f, 1.f);
-
-					ImGui::Selectable("Intensity", false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-					ImGui::SameLine();
-					ImGui::PushID("Intensity");
-					if (ImGui::DragFloat(" ", &light.Intensity, 0.01f, 0.f, 1.f)) {}
-					ImGui::PopID();
-				}
-
-			}
-			/*ImGui::Dummy(ImVec2{ 0, 0.25f });
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2{ 0, 0.25f });
-			if (Service<RenderSystem>::Get().pt_lights.size() < 10)
-			{			
-				if (ImGui::Button("Add Point Light"))
-				{
-					int index = Service<RenderSystem>::Get().pt_lights.size();
-					Service<RenderSystem>::Get().pt_lights.emplace_back(Point_Light{});
-					Service<RenderSystem>::Get().pt_lights[index].Position = glm::vec3(0.5f, 0.5f, 0.5f);
-				}
-			}*/
-			if (Service<RenderSystem>::Get().pt_lights.size())
-			{
-				/*if (Service<RenderSystem>::Get().pt_lights.size() > 1)
-				{
-					if (ImGui::Button("Remove Point Light"))
-					{
-						Service<RenderSystem>::Get().pt_lights.pop_back();
-					}
-				}*/
-				const auto padding = 80.f;
-				for (unsigned int i = 0; i < Service<RenderSystem>::Get().pt_lights.size(); ++i)
-				{
-					ImGui::Dummy(ImVec2{ 0, 0.25f });
-					ImGui::Separator();
-					ImGui::Dummy(ImVec2{ 0, 0.25f });
-					auto& ptlight = Service<RenderSystem>::Get().pt_lights[i];
-					if (ptlight.hide)
-					{
-						if (ImGui::Button(("Turn on Point Light" + std::to_string(i)).c_str()))
-						{
-							ptlight.hide = !ptlight.hide;
-						}
-					}
-					else
-					{
-						if (ImGui::Button(("Turn off Point Light" + std::to_string(i)).c_str()))
-						{
-							ptlight.hide = !ptlight.hide;
-						}
-						std::string PointLightPosition = "PLightPos" + std::to_string(i);
-						std::string PointLightPositionID = "##Pos" + std::to_string(i);
-						std::string PointLightColor = "Color" + std::to_string(i);
-						std::string PointLightColorID = "##Color" + std::to_string(i);
-						std::string PointLightIntensity = "Intensity" + std::to_string(i);
-						std::string PointLightConstant = "Constant" + std::to_string(i);
-						std::string PointLightLinear = "Linear" + std::to_string(i);
-						std::string PointLightQuadratic = "Quadratic" + std::to_string(i);
-						UI::DragFloat3ColorBox(PointLightPosition.data(), PointLightPositionID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Position), 0.f, 0.1f, -10.f, 10.f);
-						UI::DragFloat3ColorBox(PointLightColor.data(), PointLightColorID.data(), ImVec2{ padding , 0.f }, value_ptr(ptlight.Color), 0.f, 0.01f, 0.f, 1.f);
-						ImGui::Selectable(PointLightIntensity.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-						ImGui::SameLine();
-						ImGui::PushID(PointLightIntensity.data());
-						if (ImGui::DragFloat(" ", &ptlight.Intensity, 0.01f, 0.f, 1.f)) {}
-						ImGui::PopID();
-						ImGui::Selectable(PointLightConstant.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-						ImGui::SameLine();
-						ImGui::PushID(PointLightConstant.data());
-						if (ImGui::DragFloat(" ", &ptlight.pointLightConsts, 0.01f, 0.f, 1.f)) {}
-						ImGui::PopID();
-						ImGui::Selectable(PointLightLinear.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-						ImGui::SameLine();
-						ImGui::PushID(PointLightLinear.data());
-						if (ImGui::DragFloat(" ", &ptlight.pointLightLinears, 0.01f, 0.f, 1.f)) {}
-						ImGui::PopID();
-						ImGui::Selectable(PointLightQuadratic.data(), false, ImGuiSelectableFlags_Disabled, ImVec2{ 90.f, 0 });
-						ImGui::SameLine();
-						ImGui::PushID(PointLightQuadratic.data());
-						if (ImGui::DragFloat(" ", &ptlight.pointLightQuads, 0.01f, 0.f, 1.f)) {}
-						ImGui::PopID();
-					}
-			
-				}
-			}
-		}
+		}		
 	}
 
 	void DiagnosticsWindow::Textures(Instance&)

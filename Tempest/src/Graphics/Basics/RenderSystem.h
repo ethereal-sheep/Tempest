@@ -145,7 +145,7 @@ namespace Tempest
         bool saoMode = true;          // SAO 
         bool fxaaMode = true;         // FXAA
         bool motionBlurMode = false;   // Motion Blur
-        bool dirShadowBool = false;    // Direcitonal shadows toggle
+        bool dirShadowBool = true;    // Direcitonal shadows toggle
         bool pointShadowBool = true;   // Point light shadows toggle
         bool pbrMode = false;
         bool envMapShow = false;        // Envmap toggle
