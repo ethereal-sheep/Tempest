@@ -165,7 +165,7 @@ void main()
 				// Shadow Calulation
 				float shadow = 0.0f;
 				if(pointShadowBool == 1)
-					shadow = computeShadow(0);
+					shadow = computeShadow(i);
 				
                 //color += ( ((diffuse * kD) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
 				color += ( ((diffuse * kDisney) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;

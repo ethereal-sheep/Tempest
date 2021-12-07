@@ -422,7 +422,7 @@ f 8 9 10
 f 10 11 8
 f 12 13 14
 f 14 15 12
-p Models\BrickWall.fbm\BrickWall.png
+p Models\BrickWall.fbm\BrickWall.dds
 p NULL
 p NULL
 p NULL

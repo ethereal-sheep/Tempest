@@ -95,7 +95,7 @@ namespace Tempest
         this->texType = GL_TEXTURE_2D;
 
         std::string tempPath = std::string(texPath);
-
+        
         if (texFlip)
             stbi_set_flip_vertically_on_load(true);
         else
