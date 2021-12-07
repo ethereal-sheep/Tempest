@@ -52,10 +52,13 @@ namespace Tempest
 		
 	public:
 		Editor()
-			: Application(1920, 1080, L"CoReSys") {}
+			: Application(1600, 900, L"CoReSys") {}
 		
 		void OnInit() override
 		{
+			ShowWindow(AppHandler::GetContext()->GetHWND(), SW_SHOWMAXIMIZED);
+
+
 			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
 			ImGui::StyleColorsDark();
