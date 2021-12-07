@@ -129,17 +129,38 @@ namespace Tempest
 						std::string p = parent.parent_path().string();
 						p.erase(p.end() - 6, p.end());
 						p += temp;
-						try
+						std::filesystem::path ext{ temp };
+						std::string xt = ext.extension().string();
+						if (!strcmp(xt.c_str(), ".dds"))
 						{
-							//MaterialPBR m;
-							tb.setTexturePath(p.c_str(), parent.filename().string(), true, TexturePBR::TextureFileType::STBImage);
-							//m.addTexture(parent.filename().string(), std::move(tex));
+							try
+							{
+								//MaterialPBR m;
+								tb.setTexturePath(p.c_str(), parent.filename().string(), true, TexturePBR::TextureFileType::DDS);
+								//m.addTexture(parent.filename().string(), std::move(tex));
+							}
+
+							catch (...)
+							{
+								LOG_WARN("Texture File Not Found!");
+							}
 						}
 
-						catch (...)
+						else if (!strcmp(xt.c_str(), ".png"))
 						{
-							LOG_WARN("Texture File Not Found!");
+							try
+							{
+								//MaterialPBR m;
+								tb.setTexturePath(p.c_str(), parent.filename().string(), true, TexturePBR::TextureFileType::STBImage);
+								//m.addTexture(parent.filename().string(), std::move(tex));
+							}
+
+							catch (...)
+							{
+								LOG_WARN("Texture File Not Found!");
+							}
 						}
+						
 					}
 
 					mm.push_back(tb);

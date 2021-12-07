@@ -56,6 +56,9 @@ namespace Tempest
 		
 		void OnInit() override
 		{
+			ShowWindow(AppHandler::GetContext()->GetHWND(), SW_SHOWMAXIMIZED);
+
+
 			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
 			ImGui::StyleColorsDark();

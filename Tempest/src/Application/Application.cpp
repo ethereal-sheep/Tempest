@@ -59,7 +59,9 @@ namespace Tempest
 		OnUpdate();
 		
 		//testing_physics_7_2();
+#ifdef _DEBUG
 		FrameMark
+#endif
 	}
 
 	void Application::OnEngineRender()

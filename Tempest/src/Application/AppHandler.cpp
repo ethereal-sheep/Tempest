@@ -83,7 +83,6 @@ namespace Tempest
 		if (val)
 		{
 			s_IsFullscreen = true;
-
 			GetWindowPlacement(s_pContext->GetHWND(), &s_WPC);
 			if (s_HWNDStyle == 0)
 				s_HWNDStyle = GetWindowLong(s_pContext->GetHWND(), GWL_STYLE);
