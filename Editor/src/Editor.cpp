@@ -52,7 +52,7 @@ namespace Tempest
 		
 	public:
 		Editor()
-			: Application(1600, 900, L"CoReSys") {}
+			: Application(1920, 1080, L"CoReSys") {}
 		
 		void OnInit() override
 		{
