@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -22,12 +22,62 @@ namespace Tempest
 			return "";
 		}
 
-		void init(Instance&) override
+		void save_current_to_recent()
+		{
+			// if current directory is nothing, we can just return
+			if (current.empty() || current == ".json") return;
+
+			// check APPDATA if there exist a file with project info
+			char* pValue;
+			size_t len;
+			[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
+			if (!pValue)
+			{
+				LOG_WARN("APPDATA environment variable could not be found!");
+				return;
+			}
+			tpath envpath{ pValue };
+			free(pValue); // It's OK to call free with NULL
+			envpath /= "Documents";
+			envpath /= "CoReSys";
+
+			if (!fs::exists(envpath))
+				fs::create_directory(envpath);
+
+
+			Writer writer;
+			writer.StartObject();
+
+			writer.StartArray("Recent");
+			for (auto& path : recent)
+			{
+				if (path == current) continue;
+
+				writer.StartObject();
+				string p_str = path.string();
+				writer.Member("rec", p_str);
+				writer.EndObject();
+			}
+
+			writer.StartObject();
+			string p_str = current.string();
+			writer.Member("rec", p_str);
+			writer.EndObject();
+
+			writer.EndArray();
+
+			writer.EndObject();
+
+
+			Serializer::SaveJson(envpath / "_recent.json", writer.GetString());
+		}
+
+		void load_recent()
 		{
 			// check APPDATA if there exist a file with project info
 			char* pValue;
 			size_t len;
-			[[maybe_unused]]errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
+			[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
 			if (!pValue)
 			{
 				LOG_WARN("APPDATA environment variable could not be found!");
@@ -36,7 +86,7 @@ namespace Tempest
 			tpath path{ pValue };
 			free(pValue); // It's OK to call free with NULL
 			path /= "Documents";
-			path /= "EditorTempData";
+			path /= "CoReSys";
 			path /= "_recent.json";
 
 			Serializer serializer;
@@ -66,8 +116,28 @@ namespace Tempest
 			}
 			else
 				LOG("No recent projects found.");
-			
+		}
+
+		void init(Instance& instance) override
+		{
+			if (current.empty()) {
+				current = instance.get_path() / (instance.get_name() + ".json");
+			}
+
 			Service<EventManager>::Get().register_listener<ShowRecentUtil>(&ShowRecent::show_recent, this);
+			Service<EventManager>::Get().register_listener<GetRecentUtil>(&ShowRecent::get_recent, this);
+
+			save_current_to_recent();
+			load_recent();
+		}
+
+
+		void get_recent(const Event& e)
+		{
+			if (auto a = s_event_cast<GetRecentUtil>(e))
+			{
+				const_cast<GetRecentUtil*>(a)->paths = recent;
+			}
 		}
 
 		void show_recent(const Event&)
@@ -93,52 +163,7 @@ namespace Tempest
 
 		void exit(Instance&) override
 		{
-			// if current directory is nothing, we can just return
-			if (current.empty() || current == ".json") return;
-
-			// check APPDATA if there exist a file with project info
-			char* pValue;
-			size_t len;
-			[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
-			if (!pValue)
-			{
-				LOG_WARN("APPDATA environment variable could not be found!");
-				return;
-			}
-			tpath envpath{ pValue };
-			free(pValue); // It's OK to call free with NULL
-			envpath /= "Documents";
-			envpath /= "EditorTempData";
-
-			if (!fs::exists(envpath))
-				fs::create_directory(envpath);
-
-
-			Writer writer;
-			writer.StartObject();
-
-			writer.StartArray("Recent");
-			for (auto& path : recent)
-			{
-				if (path == current) continue;
-
-				writer.StartObject();
-				string p_str = path.string();
-				writer.Member("rec", p_str);
-				writer.EndObject();
-			}
-
-			writer.StartObject();
-			string p_str = current.string();
-			writer.Member("rec", p_str);
-			writer.EndObject();
-
-			writer.EndArray();
-
-			writer.EndObject();
 			
-
-			Serializer::SaveJson(envpath / "_recent.json", writer.GetString());
 		}
 
 
@@ -149,6 +174,6 @@ namespace Tempest
 		}
 
 		tpath current;
-		tvector<tpath> recent;
+		std::vector<tpath> recent;
 	};
 }

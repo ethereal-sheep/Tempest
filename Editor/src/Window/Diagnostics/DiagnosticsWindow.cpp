@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -332,6 +332,7 @@ namespace Tempest
 
 			ImGui::Text("Start:       %.3f , %.3f,  %.3f", start.x, start.y, start.z);
 			ImGui::Text("End:         %.3f , %.3f,  %.3f", end.x, end.y, end.z);
+			ImGui::Text("MousePos:         %.3f , %.3f", io.MousePos.x, io.MousePos.y);
 
 			float dist = 0;
 			if (glm::intersectRayPlane(start, lRayDir_world, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))

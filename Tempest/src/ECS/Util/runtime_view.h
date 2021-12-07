@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -374,8 +374,8 @@ namespace Tempest
 		 */
 		[[nodiscard]] bool contains(Entity entity)
 		{
-			for (auto i : exclude) if (pools.at(i)->contains(entity)) return false;
-			for (auto i : include) if (!pools.at(i)->contains(entity)) return false;
+			for (auto i : exclude) if (!pools.count(i) || pools.at(i)->contains(entity)) return false;
+			for (auto i : include) if (!pools.count(i) || !pools.at(i)->contains(entity)) return false;
 			return true;
 		}
 

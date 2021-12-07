@@ -1,3 +1,12 @@
+/**********************************************************************************
+* \author		Cantius Chew (c.chew@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 #pragma once
 #include "Util/UIElements.h"
 
@@ -433,7 +442,7 @@ namespace Tempest
 		void fixed_orbit_controls(Camera& cam)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
+			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
 			{
 				auto direction = els::to_vec2(io.MouseDelta);
 				//auto yaw_speed = 1.f / 4;

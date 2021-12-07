@@ -74,10 +74,10 @@ namespace Tempest
         void push_button_style() const;
         void pop_button_style() const;
         void initialise_tabs();
-        void display_unit_stats(const ImGuiViewport& viewport, Instance& instance) const;
-        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance) const;
-        void display_items(const ImGuiViewport& viewport, Instance& instance) const;
-        void display_actions(const ImGuiViewport& viewport, Instance& instance) const;
+        void display_unit_stats(const ImGuiViewport& viewport, Instance& instance);
+        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance);
+        void display_items(const ImGuiViewport& viewport, Instance& instance);
+        void display_actions(const ImGuiViewport& viewport, Instance& instance);
        
 
         template<typename F>

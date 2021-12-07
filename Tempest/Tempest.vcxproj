@@ -360,6 +360,7 @@
     <ClInclude Include="src\Scripting\Util\var_data.h" />
     <ClInclude Include="src\Scripting\Util\var_set.h" />
     <ClInclude Include="src\Util\pathfinding.h" />
+    <ClInclude Include="src\Util\quitter.h" />
     <ClInclude Include="src\Util\shape_manip.h" />
     <ClInclude Include="src\Util\thread_pool.h" />
     <ClInclude Include="src\Util\algorithm.h" />

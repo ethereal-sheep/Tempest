@@ -187,10 +187,12 @@ namespace Tempest
 					// open testing combat in map
 					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
 					edit.save();
-					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
+					OverlayOpen = false;
+					/*Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 						edit.get_full_path(),
 						MemoryStrategy{},
-						InstanceType::RUN_TIME);
+						InstanceType::RUN_TIME);*/
 				}
 
 				// display top buttons
@@ -493,15 +495,22 @@ namespace Tempest
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{
 		Entity* temp = is_attacker ? &attacker.unit_id : &defender.unit_id;
+		ImVec4 tint{ 1,1,1,1 };
 
 		// character display
 		ImGui::SetCursorPos(ImVec2{start_pos.x - 35.0f, start_pos.y - 60.0f });
 		auto tex = tex_map["Assets/CharacterIcon.png"];
 		std::string chara_name{ "CHARACTER" };
 		if (*temp != UNDEFINED)
-			chara_name = instance.ecs.get<tc::Character>(*temp).name;
+		{
+			auto charac = instance.ecs.get<tc::Character>(*temp);
+			chara_name = charac.name;
+			tint = ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 };
+		}
+			
+		
 		if (UI::UICharButton_Toggle((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f },
-			chara_name, "##charaname" + is_attacker, *temp != UNDEFINED, { 0, 0 }, { 1,1 }))
+			chara_name, "##charaname" + is_attacker, * temp != UNDEFINED, { 0, 0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, tint))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::UNIT, is_attacker, *temp);
@@ -513,6 +522,7 @@ namespace Tempest
 		ImGui::PushID("chara" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
+			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_UNIT, is_attacker, *temp);
 		}
@@ -533,6 +543,7 @@ namespace Tempest
 		ImGui::PushID("weapon" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 		{
+			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_WEAPON, is_attacker, *temp);
 		}
@@ -555,6 +566,7 @@ namespace Tempest
 		push_button_style();
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
+			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 			Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(*temp, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
 		}

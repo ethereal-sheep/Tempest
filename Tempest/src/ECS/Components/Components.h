@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -19,6 +19,7 @@
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
 #include "Graphics/Basics/Model.h"
+#include "Graphics/Basics/Lights.h"
 
 /**
 * @brief 
@@ -112,7 +113,7 @@ namespace Tempest
 	{
 		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
 		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, 
-		Tile, Wall, Shape, Door, Obstacle, Unit, Collision
+		Tile, Wall, Shape, Door, Obstacle, Unit, Collision, PointLight
 		,END
 	};
 
@@ -212,7 +213,7 @@ namespace Tempest
 
 
 			tvector<Local> states = tvector<Local>((int)State::End);
-
+			State curr = State::CLOSE;
 		private:
 			float interpolation_time = 1.f;
 			float current_time = 0.f;
@@ -417,10 +418,12 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("Path", component.path);
+				ar.Member("TexturePath", component.texPath);
 				return ar.EndObject();
 			}
 			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
 			string path;
+			string texPath;
 		};
 
 
@@ -809,7 +812,24 @@ namespace Tempest
 			graph g;
 		};
 
+		struct PointLight
+		{
+			static const char* get_type() { return "PointLight"; }
 
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, PointLight& component)
+			{
+				ar.StartObject();
+				ar.Member("Position", component.pos);
+				ar.Member("Colour", component.color);
+				return ar.EndObject();
+			}
+
+			PointLight(glm::vec3 _pos = glm::vec3(0.f, 1.f, 0.f), glm::vec4 _color = glm::vec4(1.f, 1.f, 1.f, 0.f)) : pos{ _pos }, color{ _color } {}
+
+			glm::vec3 pos;
+			glm::vec4 color;
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -828,7 +848,7 @@ namespace Tempest
 		else {														\
 			auto c = ecs.try_emplace<tc::ComponentName>();			\
 			if(c) reader.Member("Component", *c);					\
-		}												\
+		}															\
 	}																\
 		break														\
 
@@ -866,6 +886,7 @@ namespace Tempest
 			COMPONENT_CASE(ActionGraph);
 			COMPONENT_CASE(ResolutionGraph);
 			COMPONENT_CASE(Graph);
+			COMPONENT_CASE(PointLight);
 
 		/* ABOVE THIS PLEASE */
 

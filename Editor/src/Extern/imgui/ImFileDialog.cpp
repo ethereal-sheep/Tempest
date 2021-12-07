@@ -401,6 +401,7 @@ namespace ifd {
 			if (d & (1 << i))
 				thisPC->Children.push_back(new FileTreeNode(std::string(1, 'A' + i) + R"(:\)"));
 		m_treeCache.push_back(thisPC);
+
 #else
 		std::error_code ec;
 
@@ -503,6 +504,26 @@ namespace ifd {
 
 			if (ImGui::BeginPopupModal(m_currentTitle.c_str(), &m_isOpen, ImGuiWindowFlags_NoScrollbar)) {
 				m_renderFileDialog();
+				ImGui::EndPopup();
+			}
+			else m_isOpen = false;
+		}
+
+		return isMe && !m_isOpen;
+	}
+	bool FileDialog::IsDone(const std::string& key, std::vector<std::filesystem::path>* recent)
+	{
+		bool isMe = m_currentKey == key;
+
+		if (isMe && m_isOpen) {
+			if (!m_calledOpenPopup) {
+				ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+				ImGui::OpenPopup(m_currentTitle.c_str());
+				m_calledOpenPopup = true;
+			}
+
+			if (ImGui::BeginPopupModal(m_currentTitle.c_str(), &m_isOpen, ImGuiWindowFlags_NoScrollbar)) {
+				m_renderFileDialog(recent);
 				ImGui::EndPopup();
 			}
 			else m_isOpen = false;
@@ -1086,6 +1107,37 @@ namespace ifd {
 			m_setDirectory(node->Path);
 		ImGui::PopID();
 	}
+
+
+	void FileDialog::m_renderRecent(std::vector<std::filesystem::path>* render)
+	{
+		// directory
+		if (!render)
+			return;
+
+		std::error_code ec;
+		ImGui::PushID("Recent");
+		bool isClicked = false;
+		std::string displayName = "Recent";
+		if (FolderNode(displayName.c_str(), (ImTextureID)m_getIcon("C:\\Users"), isClicked)) {
+
+			// display children
+			for (auto c : *render)
+			{
+				ImGui::Image((ImTextureID)m_getIcon(c), ImVec2(ICON_SIZE, ICON_SIZE));
+				ImGui::SameLine();
+				if (ImGui::Selectable(c.stem().string().c_str(), false, ImGuiSelectableFlags_SpanAllColumns)) {
+					m_finalize(c.string());
+				}
+			}
+
+			ImGui::TreePop();
+		}
+		ImGui::PopID();
+	}
+
+
+
 	void FileDialog::m_renderContent()
 	{
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
@@ -1280,7 +1332,7 @@ namespace ifd {
 	{
 		/***** TOP BAR *****/
 		bool noBackHistory = m_backHistory.empty(), noForwardHistory = m_forwardHistory.empty();
-		
+
 		ImGui::PushStyleColor(ImGuiCol_Button, 0);
 		if (noBackHistory) ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		if (ImGui::ArrowButtonEx("##back", ImGuiDir_Left, ImVec2(GUI_ELEMENT_SIZE, GUI_ELEMENT_SIZE), m_backHistory.empty() * ImGuiButtonFlags_Disabled)) {
@@ -1292,7 +1344,7 @@ namespace ifd {
 		}
 		if (noBackHistory) ImGui::PopStyleVar();
 		ImGui::SameLine();
-		
+
 		if (noForwardHistory) ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		if (ImGui::ArrowButtonEx("##forward", ImGuiDir_Right, ImVec2(GUI_ELEMENT_SIZE, GUI_ELEMENT_SIZE), m_forwardHistory.empty() * ImGuiButtonFlags_Disabled)) {
 			std::filesystem::path newPath = m_forwardHistory.top();
@@ -1303,21 +1355,21 @@ namespace ifd {
 		}
 		if (noForwardHistory) ImGui::PopStyleVar();
 		ImGui::SameLine();
-		
+
 		if (ImGui::ArrowButtonEx("##up", ImGuiDir_Up, ImVec2(GUI_ELEMENT_SIZE, GUI_ELEMENT_SIZE))) {
 			if (m_currentDirectory.has_parent_path())
 				m_setDirectory(m_currentDirectory.parent_path());
 		}
-		
+
 		std::filesystem::path curDirCopy = m_currentDirectory;
 		if (PathBox("##pathbox", curDirCopy, m_pathBuffer, ImVec2(-250, GUI_ELEMENT_SIZE)))
 			m_setDirectory(curDirCopy);
 		ImGui::SameLine();
-		
+
 		if (FavoriteButton("##dirfav", std::count(m_favorites.begin(), m_favorites.end(), m_currentDirectory.u8string()))) {
 			if (std::count(m_favorites.begin(), m_favorites.end(), m_currentDirectory.u8string()))
 				RemoveFavorite(m_currentDirectory.u8string());
-			else 
+			else
 				AddFavorite(m_currentDirectory.u8string());
 		}
 		ImGui::SameLine();
@@ -1341,11 +1393,11 @@ namespace ifd {
 			for (auto node : m_treeCache)
 				m_renderTree(node);
 			ImGui::EndChild();
-			
+
 			// content on the right side
 			ImGui::TableSetColumnIndex(1);
 			ImGui::BeginChild("##contentContainer", ImVec2(0, -bottomBarHeight));
-				m_renderContent();
+			m_renderContent();
 			ImGui::EndChild();
 			if (ImGui::IsItemHovered() && ImGui::GetIO().KeyCtrl && ImGui::GetIO().MouseWheel != 0.0f) {
 				m_zoom = std::min<float>(25.0f, std::max<float>(1.0f, m_zoom + ImGui::GetIO().MouseWheel));
@@ -1359,7 +1411,128 @@ namespace ifd {
 		}
 
 
-		
+
+		/***** BOTTOM BAR *****/
+		ImGui::Text("File name:");
+		ImGui::SameLine();
+		if (ImGui::InputTextEx("##file_input", "Filename", m_inputTextbox, 1024, ImVec2((m_type != IFD_DIALOG_DIRECTORY) ? -250.0f : -FLT_MIN, 0), ImGuiInputTextFlags_EnterReturnsTrue)) {
+			bool success = m_finalize(std::string(m_inputTextbox));
+#ifdef _WIN32
+			if (!success)
+				MessageBeep(MB_ICONERROR);
+#endif
+		}
+		if (m_type != IFD_DIALOG_DIRECTORY) {
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(-FLT_MIN);
+			if (ImGui::Combo("##ext_combo", &m_filterSelection, m_filter.c_str()))
+				m_setDirectory(m_currentDirectory, false); // refresh
+		}
+
+		// buttons
+		ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 250);
+		if (ImGui::Button(m_type == IFD_DIALOG_SAVE ? "Save" : "Open", ImVec2(250 / 2 - ImGui::GetStyle().ItemSpacing.x, 0.0f))) {
+			std::string filename(m_inputTextbox);
+			bool success = false;
+			if (!filename.empty() || m_type == IFD_DIALOG_DIRECTORY)
+				success = m_finalize(filename);
+#ifdef _WIN32
+			if (!success)
+				MessageBeep(MB_ICONERROR);
+#endif
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(-FLT_MIN, 0.0f)))
+		{
+			m_finalize();
+			m_result.clear();
+		}
+	}
+	void FileDialog::m_renderFileDialog(std::vector<std::filesystem::path>* render)
+	{
+		/***** TOP BAR *****/
+		bool noBackHistory = m_backHistory.empty(), noForwardHistory = m_forwardHistory.empty();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, 0);
+		if (noBackHistory) ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		if (ImGui::ArrowButtonEx("##back", ImGuiDir_Left, ImVec2(GUI_ELEMENT_SIZE, GUI_ELEMENT_SIZE), m_backHistory.empty() * ImGuiButtonFlags_Disabled)) {
+			std::filesystem::path newPath = m_backHistory.top();
+			m_backHistory.pop();
+			m_forwardHistory.push(m_currentDirectory);
+
+			m_setDirectory(newPath, false);
+		}
+		if (noBackHistory) ImGui::PopStyleVar();
+		ImGui::SameLine();
+
+		if (noForwardHistory) ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		if (ImGui::ArrowButtonEx("##forward", ImGuiDir_Right, ImVec2(GUI_ELEMENT_SIZE, GUI_ELEMENT_SIZE), m_forwardHistory.empty() * ImGuiButtonFlags_Disabled)) {
+			std::filesystem::path newPath = m_forwardHistory.top();
+			m_forwardHistory.pop();
+			m_backHistory.push(m_currentDirectory);
+
+			m_setDirectory(newPath, false);
+		}
+		if (noForwardHistory) ImGui::PopStyleVar();
+		ImGui::SameLine();
+
+		if (ImGui::ArrowButtonEx("##up", ImGuiDir_Up, ImVec2(GUI_ELEMENT_SIZE, GUI_ELEMENT_SIZE))) {
+			if (m_currentDirectory.has_parent_path())
+				m_setDirectory(m_currentDirectory.parent_path());
+		}
+
+		std::filesystem::path curDirCopy = m_currentDirectory;
+		if (PathBox("##pathbox", curDirCopy, m_pathBuffer, ImVec2(-250, GUI_ELEMENT_SIZE)))
+			m_setDirectory(curDirCopy);
+		ImGui::SameLine();
+
+		if (FavoriteButton("##dirfav", std::count(m_favorites.begin(), m_favorites.end(), m_currentDirectory.u8string()))) {
+			if (std::count(m_favorites.begin(), m_favorites.end(), m_currentDirectory.u8string()))
+				RemoveFavorite(m_currentDirectory.u8string());
+			else
+				AddFavorite(m_currentDirectory.u8string());
+		}
+		ImGui::SameLine();
+		ImGui::PopStyleColor();
+
+		if (ImGui::InputTextEx("##searchTB", "Search", m_searchBuffer, 128, ImVec2(-FLT_MIN, GUI_ELEMENT_SIZE), 0)) // TODO: no hardcoded literals
+			m_setDirectory(m_currentDirectory, false); // refresh
+
+
+
+		/***** CONTENT *****/
+		float bottomBarHeight = (GImGui->FontSize + ImGui::GetStyle().FramePadding.y * 2.0f + ImGui::GetStyle().ItemSpacing.y * 2.0f) * 2;
+		if (ImGui::BeginTable("##table", 2, ImGuiTableFlags_Resizable, ImVec2(0, -bottomBarHeight))) {
+			ImGui::TableSetupColumn("##tree", ImGuiTableColumnFlags_WidthFixed, 125.0f);
+			ImGui::TableSetupColumn("##content", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableNextRow();
+
+			// the tree on the left side
+			ImGui::TableSetColumnIndex(0);
+			ImGui::BeginChild("##treeContainer", ImVec2(0, -bottomBarHeight));
+			for (auto node : m_treeCache)
+				m_renderTree(node);
+			m_renderRecent(render);
+			ImGui::EndChild();
+
+			// content on the right side
+			ImGui::TableSetColumnIndex(1);
+			ImGui::BeginChild("##contentContainer", ImVec2(0, -bottomBarHeight));
+			m_renderContent();
+			ImGui::EndChild();
+			if (ImGui::IsItemHovered() && ImGui::GetIO().KeyCtrl && ImGui::GetIO().MouseWheel != 0.0f) {
+				m_zoom = std::min<float>(25.0f, std::max<float>(1.0f, m_zoom + ImGui::GetIO().MouseWheel));
+				m_refreshIconPreview();
+			}
+
+			// New file, New directory and Delete popups
+			m_renderPopups();
+
+			ImGui::EndTable();
+		}
+
+
+
 		/***** BOTTOM BAR *****/
 		ImGui::Text("File name:");
 		ImGui::SameLine();

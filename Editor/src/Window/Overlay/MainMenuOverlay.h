@@ -10,6 +10,7 @@
 
 #pragma once
 #include "Instance/Instance.h"
+#include "Instance/EditTimeInstance.h"
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
@@ -35,12 +36,16 @@ namespace Tempest
         {
             return "";
         }
-        void init(Instance&) override
+        void init(Instance& instance) override
         {
             window_flags =
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 
             Service<EventManager>::Get().register_listener<OpenMainMenuTrigger>(&MainMenuOverlay::open_popup, this);
+            if (dynamic_cast<EditTimeInstance*>(&instance))
+            {
+                MainMenuUI = UI_SHOW::NEW_PROJECT;
+            }
         }
         void open_popup(const Event& e);
 

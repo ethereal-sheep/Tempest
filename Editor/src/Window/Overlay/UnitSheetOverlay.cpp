@@ -112,8 +112,8 @@ namespace Tempest
 
 				// Display the created units
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * 0.15f });
+				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				ImGui::BeginChild("##UnitsDisplay", { viewport->Size.x * 0.1f, viewport->Size.y * 0.7f }, true);
-
 				{
 					unsigned i = 0;
 					auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
@@ -125,7 +125,8 @@ namespace Tempest
 						auto& charac = instance.ecs.get<tc::Character>(id);
 						ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 165 });
 						auto CharIcon = tex_map["Assets/CharacterIcon.png"];
-						std::pair<bool,bool> PairResult = UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), "##" + std::to_string(i), SelectedID == id, { 0,0 }, { 1,1 });
+						std::pair<bool,bool> PairResult = UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), "##" + std::to_string(i), SelectedID == id,
+							{ 0,0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 });
 						if (PairResult.first)
 						{
 							SelectedID = id;
@@ -156,19 +157,21 @@ namespace Tempest
 						CurrentTab = TABS_TYPE::UNIT;
 					}
 				}
-
 				ImGui::EndChild();
+				ImGui::PopStyleColor();
 
 				// display unit picture here
-				//push_button_style();
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.12f, viewport->Size.y * 0.15f });
-				auto UnitImg = tex_map["Assets/UnitIdle.png"];
-				if (UI::UIImageButton((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth()*1.0f,UnitImg->GetHeight() * 1.0f }))
+				if (cs)
 				{
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.12f, viewport->Size.y * 0.15f });
+					auto UnitImg = tex_map["Assets/UnitIdle.png"];
+					const ImVec4 color{ cs->color.x, cs->color.y, cs->color.z, 1 };
+					ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
 
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.33f, viewport->Size.y * 0.85f });
+					ImGui::ColorEdit4("##colorbuttonunit", glm::value_ptr(cs->color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
 				}
-				//pop_button_style();
-			
+
 				// tabs 
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.15f });
@@ -844,7 +847,7 @@ namespace Tempest
 											   static_cast<float>(tex_map["Assets/ActionTabUnlit.png"]->GetHeight()) };
 	}
 
-	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return; 
@@ -856,6 +859,8 @@ namespace Tempest
 		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+
+		ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 		ImGui::BeginChild("##UnitsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 
 		// display the character info
@@ -946,16 +951,18 @@ namespace Tempest
 
 		}
 		ImGui::PopFont();
-		ImGui::ColorEdit3("##color", glm::value_ptr(cs->color), ImGuiColorEditFlags_AlphaBar | 0);
 		ImGui::EndChild();
+		ImGui::PopStyleColor();
 	}
 
-	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return;
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+
+		ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 		ImGui::BeginChild("##WeaponsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 		unsigned i = 0;
 		unsigned j = 0;
@@ -969,6 +976,7 @@ namespace Tempest
 				auto PairResult = UI::UIButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
 				if (PairResult.first)
 				{
+					OverlayOpen = false;
 					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 					Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance, weap_id);
 				}
@@ -1003,9 +1011,10 @@ namespace Tempest
 		}
 
 		ImGui::EndChild();
+		ImGui::PopStyleColor();
 	}
 
-	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return;
@@ -1014,12 +1023,13 @@ namespace Tempest
 		(void)instance;
 	}
 
-	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance) const
+	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance)
 	{
 		if (!cs)
 			return;
 
 		ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f, viewport.Size.y * 0.25f });
+		ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 		ImGui::BeginChild("##ActionsInformationDisplay", { viewport.Size.x * 0.6f, viewport.Size.y * 0.55f }, true);
 		unsigned i = 0;
 		unsigned j = 0;
@@ -1033,6 +1043,7 @@ namespace Tempest
 				auto PairResult = UI::UIButtonWithDelete(action->g.name.c_str(), string("##actionn" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
 				if (PairResult.first)
 				{
+					OverlayOpen = false;
 					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 					Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(id, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
 				}
@@ -1068,5 +1079,6 @@ namespace Tempest
 		}
 
 		ImGui::EndChild();
+		ImGui::PopStyleColor();
 	}
 }

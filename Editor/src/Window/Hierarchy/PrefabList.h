@@ -1,3 +1,12 @@
+/**********************************************************************************
+* \author		Cantius Chew (c.chew@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 #pragma once
 #include "Instance/Instance.h"
 #include "Util/UIElements.h"
@@ -54,10 +63,10 @@ namespace Tempest
 							ImGui::TableSetColumnIndex(0);
 
 							auto pos = pf.get<tc::Transform>().position;
-							auto check = instance.scene.get_map().find((int)pos.x, (int)pos.z);
+							//auto check = instance.scene.get_map().find((int)pos.x, (int)pos.z);
 
 							auto c = UI::CreateLabelWithId("", id);
-							if (ImGui::Selectable(c.c_str(), id == check,
+							if (ImGui::Selectable(c.c_str(), id == instance.selected,
 								ImGuiSelectableFlags_SpanAllColumns |
 								ImGuiSelectableFlags_AllowItemOverlap))
 							{

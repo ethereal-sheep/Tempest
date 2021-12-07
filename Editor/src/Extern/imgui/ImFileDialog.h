@@ -30,6 +30,7 @@ namespace ifd {
 		bool Open(const std::string& key, const std::string& title, const std::string& filter, bool isMultiselect = false, const std::string& startingDir = "");
 
 		bool IsDone(const std::string& key);
+		bool IsDone(const std::string& key, std::vector<std::filesystem::path>* recent);
 
 		inline bool HasResult() { return m_result.size(); }
 		inline void ClearResult() { return m_result.clear();; }
@@ -121,6 +122,7 @@ namespace ifd {
 		std::vector<FileTreeNode*> m_treeCache;
 		void m_clearTree(FileTreeNode* node);
 		void m_renderTree(FileTreeNode* node);
+		void m_renderRecent(std::vector<std::filesystem::path>* render);
 
 		unsigned int m_sortColumn;
 		unsigned int m_sortDirection;
@@ -131,6 +133,7 @@ namespace ifd {
 
 		void m_renderPopups();
 		void m_renderFileDialog();
+		void m_renderFileDialog(std::vector<std::filesystem::path>* render);
 	};
 
 	static const char* GetDefaultFolderIcon();

@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -79,8 +79,9 @@ namespace Tempest
 	{
 		// assume instance is valid here
 		instance->register_window<DiagnosticsWindow>()->visible = false;
-
-		instance->register_always<MainMenuWindow>();
+		instance->register_always<MainMenuOverlay>();
+		//instance->register_always<MainMenuWindow>();
+		
 
 		instance->register_always<NewProjectPopup>();
 		instance->register_always<OpenProjectPopup>();
@@ -109,18 +110,18 @@ namespace Tempest
 	void InstanceManager::register_edittime_windows()
 	{
 		// assume instance is valid here
-		instance->register_window<ViewportWindow>();
+		instance->register_always<ViewportWindow>();
 		
-		instance->register_window<PrefabList>();
+		instance->register_window<PrefabList>()->visible = false;
 		
 		//instance->register_window<AssetManagerWindow>();
 		instance->register_window<DiagnosticsWindow>()->visible = false;
-		//instance->register_window<HierarchyWindow>()->visible = false;
-		//instance->register_window<InspectorWindow>()->visible = false;
+		instance->register_window<HierarchyWindow>()->visible = false;
+		instance->register_window<InspectorWindow>()->visible = false;
 
 		instance->register_window<test_window>()->visible = false;
 		//instance->register_window<test_window2>()->visible = false;
-		instance->register_window<Test_UIWindow>();
+		//instance->register_window<Test_UIWindow>();
 		//instance->register_window<test_window3>()->visible = false;
 
 		instance->register_always<EditTimeMenuBar>();
@@ -168,8 +169,8 @@ namespace Tempest
 		instance->register_window<DiagnosticsWindow>()->visible = false;
 		//instance->register_window<test_window>()->visible = false;
 		//instance->register_window<test_window3>();
-		instance->register_always<CombatModeOverlay>();
 		instance->register_always<TurnOrderOverlay>();
+		instance->register_always<CombatModeOverlay>();
 		instance->register_always<PlaceUnitsOverlay>();
 		instance->register_always<PauseOverlay>();
 		//instance->register_always<TurnOrderOverlay>();

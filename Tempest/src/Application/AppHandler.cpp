@@ -11,6 +11,7 @@
 #include "AppHandler.h"
 #include "Application.h"
 #include "Logger/Log.h"
+#include "Util/quitter.h"
 
 namespace Tempest
 {
@@ -34,7 +35,7 @@ namespace Tempest
 		MSG msg = {};
 		bool running = true;
 
-		try
+		
 		{
 			while (running)
 			{
@@ -53,16 +54,12 @@ namespace Tempest
 					s_pApp->OnEngineRender();
 					s_pContext->SwapBuffer();
 				}
+
+				if (get_quitter().quit == true)
+					running = false;
 			}
 		}
-		catch (const std::exception& a)
-		{
-			LOG(a.what());
-		}
-		catch (...)
-		{
-			__debugbreak();
-		}
+		
 		
 
 		s_pApp->OnEngineExit();

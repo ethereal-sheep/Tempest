@@ -68,6 +68,15 @@ namespace Tempest
 
 		ax::NodeEditor::NavigateToContent();
 	}
+
+	void AttackSystemOverlay::close_popup(const Event& e)
+	{
+		auto a = event_cast<CloseOverlayTrigger>(e);
+		if (a.current == QUICKMENU_POPUP_TYPE::ACTIONS ||
+			a.current == QUICKMENU_POPUP_TYPE::SEQUENCES)
+			OverlayOpen = false;
+	}
+
 	void AttackSystemOverlay::show(Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -174,7 +183,7 @@ namespace Tempest
 
 
 				// graph name (got bug, first letter always hidden when entering new name)
-				if (id && instance.ecs.has<tc::ActionGraph>(id))
+				if (id && instance.ecs.has<tc::Graph>(id))
 				{
 					ImGui::PushFont(FONT_HEAD);
 					ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);

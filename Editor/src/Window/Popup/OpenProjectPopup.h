@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -44,7 +44,10 @@ namespace Tempest
                 enable_popup = false;
             }
 
-            if (ifd::FileDialog::Instance().IsDone("ProjectOpenDialog")) {
+            std::vector<tpath> recents;
+            Service<EventManager>::Get().instant_dispatch<GetRecentUtil>(recents);
+
+            if (ifd::FileDialog::Instance().IsDone("ProjectOpenDialog", &recents)) {
                 if (ifd::FileDialog::Instance().HasResult()) 
                 {
                     path = ifd::FileDialog::Instance().GetResult();

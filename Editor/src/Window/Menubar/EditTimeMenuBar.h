@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -165,17 +165,12 @@ namespace Tempest
 
 			}
 			if (demo_visible)
-			{
-				ImGui::ShowDemoWindow();
-			}
-
-			if (demo_visible)
 				ImGui::ShowDemoWindow();
 			if (implot_demo_visible)
 				ImPlot::ShowDemoWindow();
 		}
 		
-		bool toggle = true;
+		bool toggle = false;
 		bool demo_visible = false;
 		bool implot_demo_visible = false;
 	};

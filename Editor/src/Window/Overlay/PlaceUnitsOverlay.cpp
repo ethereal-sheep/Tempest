@@ -14,6 +14,7 @@
 #include "Triggers/Triggers.h"
 #include "Instance/RuntimeInstance.h"
 #include "ECS/Prototypes/Prototype_Category.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -245,6 +246,9 @@ namespace Tempest
 									auto prefab = proto_p ? proto_p->instance() : create_new_prototype("Unit").instance();
 									auto entity = instance.ecs.create(prefab);
 
+									AudioEngine ae;
+									ae.Play("Sounds2D/ObjectPlacement.wav", "sfx_bus");
+
 									chars[selected] = entity;
 									LOG_ASSERT(instance.ecs.has<tc::Character>(entity));
 									LOG_ASSERT(instance.ecs.has<tc::Transform>(entity));
@@ -396,7 +400,8 @@ namespace Tempest
 
 				auto unitIcon = tex_map["Assets/Unit_Black.png"];
 				ImGui::SetCursorPosX(-10.f);
-				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, character.name.c_str(), "##PlaceUnit" + std::to_string(i), i == selected || chars[i] != INVALID))
+				if (UI::UICharTurnButton((void*)static_cast<size_t>(unitIcon->GetID()), { (float)unitIcon->GetWidth(), (float)unitIcon->GetHeight() }, character.name.c_str(), "##PlaceUnit" + std::to_string(i), i == selected || chars[i] != INVALID, 
+					false, ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ character.color.x,character.color.y,character.color.z,1 }))
 				{
 					selected = i;
 				}

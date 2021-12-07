@@ -70,7 +70,7 @@ namespace Tempest
         void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
-        void SubmitLights(const Point_Light& plight, const Transform& transform);           // Submitting Point Light {Transform to be used for pos}
+        void SubmitLights(const Point_Light& plight);                                       // Submitting Point Light {Transform to be used for pos}
         void SubmitLights(const SpotLight& slight, const Transform& transform);             // Submitting SpotLight {Transform to be used for pos}
 
         void DrawLine(const Line& line, const glm::vec4& color);                            // Drawing Lines
@@ -97,6 +97,7 @@ namespace Tempest
         glm::mat4 lightSpaceMatrix;
 
         uint32_t MAX_POINT_LIGHT = 5;
+        uint32_t NumPLight = 0;
 
         // To be changed to objects instead of global values
         float shininess = 32.f;

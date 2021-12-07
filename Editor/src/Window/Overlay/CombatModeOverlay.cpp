@@ -680,7 +680,6 @@ namespace Tempest
 		auto ray = cam.GetMouseRay();
 		auto start = cam.GetPosition();
 		float dist = 0;
-		glm::ivec2 mouse = { -INT_MAX, -INT_MAX };
 		Entity door = INVALID;
 		if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 		{
@@ -694,8 +693,11 @@ namespace Tempest
 				auto c_y = (int)std::round(inter.z - .5f);
 				auto a_x = (int)std::round(inter.x);
 				auto b_x = (int)std::round(inter.x) - 1;
+
 				if (auto check = instance.door_map[a_x][c_y][b_x][c_y])
-					door = check;
+				{
+					door = instance.door_map[a_x][c_y][b_x][c_y];
+				}
 
 			}
 			else if (abs(r_y) < 0.1f)
@@ -703,8 +705,11 @@ namespace Tempest
 				auto c_x = (int)std::round(inter.x - .5f);
 				auto a_y = (int)std::round(inter.z);
 				auto b_y = (int)std::round(inter.z) - 1;
+
 				if (auto check = instance.door_map[c_x][a_y][c_x][b_y])
-					door = check;
+				{
+					door = instance.door_map[c_x][a_y][c_x][b_y];
+				}
 			}
 		}
 
@@ -937,8 +942,9 @@ namespace Tempest
 				if (ImGui::BeginChild("Select other entity attack", child_size, true))
 				{
 					unsigned i = 0;
-					for (auto id : units)
+					for ([[maybe_unused]]auto id : units)
 					{
+						auto &charac = instance.ecs.get<tc::Character>(id);
 						if (curr_turn != i++)
 						{
 							if (!i)
@@ -947,11 +953,13 @@ namespace Tempest
 							//	ImGui::SameLine();
 							}
 							
-							UI::UICharButton_NoDelete((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", false);
+							UI::UICharButton_NoDelete((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", false,
+								ImVec2{ 0,0 }, ImVec2{ 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x,charac.color.y, charac.color.z, 1});
 						}
 							
 						else
-							UI::UICharButton_Arrow((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", true);
+							UI::UICharButton_Arrow((void*)static_cast<size_t>(charac_icon->GetID()), ImVec2{ charac_icon->GetWidth() * 1.0f, charac_icon->GetHeight() * 1.0f }, "", "noID", true,
+								ImVec2{ 0,0 }, ImVec2{ 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x,charac.color.y, charac.color.z, 1 });
 
 						ImGui::SameLine();
 					}
@@ -1681,6 +1689,11 @@ namespace Tempest
 
 			if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 			{
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+				{
+					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+				}
 
 				//static int selected = -1;
 				//static tvector<Entity> chars(4, INVALID);

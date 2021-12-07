@@ -12,13 +12,16 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "ConflictResOverlay.h"
+#include <Editor/src/InstanceManager/InstanceConfig.h>
+#include <Tempest/src/Instance/EditTimeInstance.h>
 
 namespace Tempest
 {
 	void ConflictResOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
-		ConflictBg = tex_map["Assets/ConflictBG.png"];
+		SelectedConflictRes = 0;
+		SelectedSequences.clear();
 	}
 	void ConflictResOverlay::show([[maybe_unused]]Instance& instance)
 	{
@@ -30,51 +33,104 @@ namespace Tempest
 		{
 			window_flags |= ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
-			//ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.3f));
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.8f));
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
-			if (ImGui::Begin("Conflict Resolution", &visible, window_flags))
+			if (ImGui::Begin("ConflictResolution", nullptr, window_flags))
 			{
-				auto drawlist = ImGui::GetWindowDrawList();
-				auto pos = ImGui::GetCursorPos();
-				ImVec2 max = { pos.x + viewport->Size.x,pos.y + viewport->Size.y };
-				
-				drawlist->AddImage((void*)static_cast<size_t>(ConflictBg->GetID()), pos, max);
-				auto scale = viewport->Size / initViewPortSize ;
-				auto scale2 = initViewPortSize / viewport->Size ;
-				auto scale3 = scale * scale2 ;
+				// render the select map image
+				auto image = tex_map["Assets/SelectCR_BG.png"];
+				ImVec2 point = ImGui::GetCursorScreenPos();
+				ImVec2 Min{ point.x, point.y };
+				ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
 
-				ImGui::Dummy({ 0, 70.f });
-				UI::SubHeader("Conflict Resolution");
-				ImGui::SetCursorPos({0.f, pos.y + viewport->Size.y * 0.2f});
-				auto curPos = ImGui::GetCursorPos();
-				for (int i = 0; i < 3; i++)
-				{
-					ImGui::SetCursorPos(curPos);
-					ImGui::Dummy({ pos.x + viewport->Size.x * 0.3f, 0.f });
-					ImGui::SameLine();
-					string str = "CONFLICT RES##" + std::to_string(i);
-					UI::UIConflictSelectable(str.c_str(), false, 1);
-					//ImGui::Dummy({ 0.f, 60.f });
-					ImGui::Dummy({ 0.f, viewport->Size.y * 0.07f });
-					curPos = ImGui::GetCursorPos();
-					
-				}
-				
-				auto tex = tex_map["Assets/BackMenuBtn.png"];
+				// render title
+				ImGui::SetCursorPos(ImVec2{ 0,0 });
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+				UI::SubHeader("Select Conflict Resolution");
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+
+
+				// render back button
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-				if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+				image = tex_map["Assets/BackMenuBtn.png"];
+
+				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 				{
 					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
 				}
+					
+
 				ImGui::PopStyleColor(3);
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4{ 0,0,0,0 });
+
+				// draw the child
+				const ImVec2 child_size{ viewport->Size.x * 0.25f, viewport->Size.y * 0.55f };
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - child_size.x * 0.5f, viewport->Size.y * 0.55f - child_size.y * 0.5f });
+				if (ImGui::BeginChild("##LoadConflictRes", child_size, true))
+				{
+					const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+					// TODO: load the conflict stuff here
+
+					//for (int i = 0; i < SelectedConflictRes; i++)
+					{
+						ImGui::PushID(std::string{ "Conflict Res " + std::to_string(0) }.c_str());
+						if (UI::UIButton_2("Sample_Conflict", "Sample_Conflict", ImVec2{ cusor.x, cusor.y + 0 * 90.0f }, { 50,20 }, FONT_BTN, SelectedConflictRes == 0))
+						{
+							SelectedConflictRes = 0;
+						}
+						ImGui::PopID();
+					}
+				}
+
+				ImGui::EndChild();
+
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.8f - child_size.x * 0.5f, viewport->Size.y * 0.55f - child_size.y * 0.5f });
+
+				if (ImGui::BeginChild("##LoadSequenceConflictRes", child_size, true))
+				{
+					const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+
+					// TODO: render all the sequences from selected conflict
+					// TODO: make a popup menu
+
+					int i = 0;
+					std::string seq_name = "Unit vs Unit";
+					ImGui::PushID(seq_name.c_str());
+					bool selected = SelectedSequences.size();
+					if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, false))
+					{
+						Service<EventManager>::Get().instant_dispatch<MainMenuSequencePopupTrigger>(SelectedSequences);
+					}
+					ImGui::PopID();
+
+					++i;
+				}
+
+				ImGui::EndChild();
+				ImGui::PopStyleColor(1);
+
+				ImGui::PushID("conflictresnext");
+				if (UI::UIButton_2("Next", "Next", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.95f }, { -20,20 }, FONT_BTN))
+				{
+					OverlayOpen = false;
+					//Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+					dynamic_cast<EditTimeInstance&>(instance).save();
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
+						MemoryStrategy{},
+						InstanceType::RUN_TIME);
+				}
+				ImGui::PopID();
 			}
-			ImGui::PopStyleVar();
 			ImGui::End();
+			ImGui::PopStyleVar();
+			ImGui::PopStyleColor();
 			
-			//ImGui::PopStyleColor();
 		}
 	}
 }

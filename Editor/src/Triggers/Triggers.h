@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -170,6 +170,13 @@ namespace Tempest
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}
 		tpath open_path;
+	};
+
+
+	struct GetRecentUtil : public Event
+	{
+		GetRecentUtil(std::vector<fs::path>& p) : paths{ p } {}
+		std::vector<fs::path>& paths;
 	};
 
 	struct ShowRecentUtil : public Event {};
