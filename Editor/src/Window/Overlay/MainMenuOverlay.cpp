@@ -15,6 +15,7 @@
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 #include "Util/quitter.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -95,7 +96,12 @@ namespace Tempest
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			
 			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::PROJECTS;
+			}
+				
 
 			if (ImGui::IsItemHovered())
 			{
@@ -109,7 +115,12 @@ namespace Tempest
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			
-			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+			}
+
 			if (ImGui::IsItemHovered())
 			{
 				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
@@ -121,7 +132,12 @@ namespace Tempest
 			selectable = "Credits";
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			ImGui::Selectable(selectable.c_str(), false);
+			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+			}
+
 			if (ImGui::IsItemHovered())
 			{
 				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
@@ -135,6 +151,8 @@ namespace Tempest
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				get_quitter().quit = true;
 			}
 			if (ImGui::IsItemHovered())
@@ -165,6 +183,8 @@ namespace Tempest
 
 				if (ImGui::Selectable(selectable.c_str(), false))
 				{
+					AudioEngine ae;
+					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 					MainMenuUI = UI_SHOW::NEW_PROJECT;
 				
 				}
@@ -182,6 +202,8 @@ namespace Tempest
 
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Creating new project...");
 				Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
 				//MainMenuUI = UI_SHOW::NEW_PROJECT;
@@ -205,6 +227,8 @@ namespace Tempest
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
 				Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
 			}
@@ -222,7 +246,12 @@ namespace Tempest
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::INITIAL;
+			}
+				
 			if (ImGui::IsItemHovered())
 			{
 				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
@@ -246,7 +275,9 @@ namespace Tempest
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
-			{		
+			{	
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::CONFLICT_RES;
 			}
 				
@@ -264,6 +295,8 @@ namespace Tempest
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MapTitle = selectable;
 				MainMenuUI = UI_SHOW::SELECT_MAP;
 			}
@@ -281,6 +314,8 @@ namespace Tempest
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MapTitle = selectable;
 				MainMenuUI = UI_SHOW::SELECT_MAP;
 			}
@@ -296,7 +331,12 @@ namespace Tempest
 			ImGui::SetCursorPos(button_pos);
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 			if (ImGui::Selectable(selectable.c_str(), false))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::PROJECTS;
+			}
+				
 			if (ImGui::IsItemHovered())
 			{
 				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
@@ -333,6 +373,8 @@ namespace Tempest
 					jank = 0;
 				if (UI::UIConflictSelectable(str.c_str(), false, jank).first)
 				{
+					AudioEngine ae;
+					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 					if (jank)
 					{
 						OverlayOpen = false;
@@ -351,7 +393,12 @@ namespace Tempest
 			image = tex_map["Assets/BackMenuBtn.png"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::NEW_PROJECT;
+			}
+				
 
 			ImGui::PopStyleColor(3);
 
@@ -381,7 +428,12 @@ namespace Tempest
 			image = tex_map["Assets/BackMenuBtn.png"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::NEW_PROJECT;
+			}
+				
 
 			ImGui::PopStyleColor(3);
 
@@ -423,7 +475,12 @@ namespace Tempest
 			image = tex_map["Assets/BackMenuBtn.png"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::SELECT_MAP;
+			}
+				
 
 			ImGui::PopStyleColor(3);
 
@@ -440,6 +497,8 @@ namespace Tempest
 				// render all the maps here
 				if (map_pair.first)
 				{
+					AudioEngine ae;
+					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 					if (MapTitle == "Map Builder")
 					{
 						Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
@@ -484,7 +543,12 @@ namespace Tempest
 			image = tex_map["Assets/BackMenuBtn.png"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 				MainMenuUI = UI_SHOW::LOAD_MAP;
+			}
+				
 
 			ImGui::PopStyleColor(3);
 
