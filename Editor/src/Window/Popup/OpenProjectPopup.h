@@ -44,7 +44,10 @@ namespace Tempest
                 enable_popup = false;
             }
 
-            if (ifd::FileDialog::Instance().IsDone("ProjectOpenDialog")) {
+            std::vector<tpath> recents;
+            Service<EventManager>::Get().instant_dispatch<GetRecentUtil>(recents);
+
+            if (ifd::FileDialog::Instance().IsDone("ProjectOpenDialog", &recents)) {
                 if (ifd::FileDialog::Instance().HasResult()) 
                 {
                     path = ifd::FileDialog::Instance().GetResult();

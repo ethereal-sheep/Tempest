@@ -172,6 +172,13 @@ namespace Tempest
 		tpath open_path;
 	};
 
+
+	struct GetRecentUtil : public Event
+	{
+		GetRecentUtil(std::vector<fs::path>& p) : paths{ p } {}
+		std::vector<fs::path>& paths;
+	};
+
 	struct ShowRecentUtil : public Event {};
 	struct AddRecentUtil : public Event {};
 	struct ToggleMenuBar : public Event {};

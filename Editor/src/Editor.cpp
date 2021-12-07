@@ -31,6 +31,8 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+std::string persistent_ini_filepath;
+
 namespace Tempest
 {
 	void init_font();
@@ -63,6 +65,25 @@ namespace Tempest
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
+
+			char* pValue;
+			size_t len;
+			[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
+			if (pValue)
+			{
+				tpath path{ pValue };
+				free(pValue); // It's OK to call free with NULL
+				path /= "Documents";
+				path /= "CoReSys";
+				path /= "ImGui";
+
+				persistent_ini_filepath = path.string();
+
+				io.IniFilename = persistent_ini_filepath.c_str();
+			}
+			else
+				io.IniFilename = nullptr;
+
 			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
 			ImGui_ImplOpenGL3_Init("#version 460");
 
@@ -74,7 +95,7 @@ namespace Tempest
 
 			AudioEngine ae;
 			ae.Play("Sounds2D/BGM_1.wav", "bgm_bus", 0.2f, true);
-
+			ae.SetMasterVolume(2.f);
 			//testing_scene();
 		}
 

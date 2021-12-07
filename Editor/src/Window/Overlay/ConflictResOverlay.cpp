@@ -66,6 +66,7 @@ namespace Tempest
 					
 
 				ImGui::PopStyleColor(3);
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4{ 0,0,0,0 });
 
 				// draw the child
 				const ImVec2 child_size{ viewport->Size.x * 0.25f, viewport->Size.y * 0.55f };
@@ -89,6 +90,7 @@ namespace Tempest
 				ImGui::EndChild();
 
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.8f - child_size.x * 0.5f, viewport->Size.y * 0.55f - child_size.y * 0.5f });
+
 				if (ImGui::BeginChild("##LoadSequenceConflictRes", child_size, true))
 				{
 					const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
@@ -110,6 +112,7 @@ namespace Tempest
 				}
 
 				ImGui::EndChild();
+				ImGui::PopStyleColor(1);
 
 				ImGui::PushID("conflictresnext");
 				if (UI::UIButton_2("Next", "Next", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.95f }, { -20,20 }, FONT_BTN))
