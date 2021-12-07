@@ -10,7 +10,6 @@
 
 #include "CombatModeOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "AttackSystemOverlay.h"
 #include "Util/UIElements.h"
 

@@ -1,5 +1,6 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300

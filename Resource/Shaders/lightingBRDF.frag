@@ -1,5 +1,14 @@
-#version 400 core
-
+#version 460 core
+/**********************************************************************************
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 in vec2 TexCoords;
 in vec3 envMapCoords;
 
@@ -39,7 +48,7 @@ uniform samplerCube envMapPrefilter;
 uniform sampler2D envMapLUT;
 
 uniform sampler2D shadowMap;
-uniform samplerCube shadowCube;
+uniform samplerCube shadowCube[10];
 
 uniform int gBufferView;
 uniform bool pointMode;
@@ -168,7 +177,7 @@ void main()
 					shadow = computeShadow(i);
 				
                 //color += ( ((diffuse * kD) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
-				color += ( ((diffuse * kDisney) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
+				color += ( ((diffuse * kD) * (1.0f - shadow))  + specular ) * (kRadiance) ; // * NdotL
             }
         }
 
@@ -415,11 +424,11 @@ float computeShadow(int ptnum)
 	int samples = 20;
 	
 	float viewDistance = length(camPos - viewPos);
-	float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+	float diskRadius = (1.0 + (viewDistance / far_plane)) / 50.0;
 
 	for (int i = 0; i < samples; ++i)
 	{
-		float closestDepth = texture(shadowCube, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+		float closestDepth = texture(shadowCube[ptnum], fragToLight + gridSamplingDisk[i] * diskRadius).r;
 		closestDepth *= far_plane;   // undo mapping [0;1]
 		if (currentDepth - bias > closestDepth)
 			shadow += 1.0;

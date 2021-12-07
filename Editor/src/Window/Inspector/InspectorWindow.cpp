@@ -12,7 +12,6 @@
 #include "Util/GuizmoController.h"
 #include "Tempest/src/Actions/Action.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
 

@@ -9,7 +9,6 @@
 **********************************************************************************/
 
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "PauseOverlay.h"
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 

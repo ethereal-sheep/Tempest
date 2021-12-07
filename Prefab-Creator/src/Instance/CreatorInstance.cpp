@@ -9,7 +9,6 @@
 **********************************************************************************/
 
 #include "CreatorInstance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
 #include "ECS/Components/Components.h"
 #include <Physics/Util/px_math.h>
 

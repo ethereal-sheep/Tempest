@@ -10,7 +10,6 @@
 
 #include "SimulateOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "MainMenuOverlay.h"
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>

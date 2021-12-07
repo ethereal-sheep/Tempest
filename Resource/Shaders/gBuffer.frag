@@ -1,5 +1,14 @@
-#version 400 core
-
+#version 460 core
+/**********************************************************************************
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 layout (location = 0) out vec4 gPosition;
 layout (location = 1) out vec4 gAlbedo;
 layout (location = 2) out vec4 gNormal;
@@ -58,8 +67,8 @@ void main()
     gAlbedo.a =  vec3(texture(texRoughness, TexCoords)).r;
 	gAlbedo.a =  0.0f;
 	
-    gNormal.rgb = computeTexNormal(normal, texNormal);
-    //gNormal.rgb = normalize(normal);
+    //gNormal.rgb = computeTexNormal(normal, texNormal);
+    gNormal.rgb = normalize(normal);
 	
     gNormal.a = vec3(texture(texMetalness, TexCoords)).r;
     gEffects.r = vec3(texture(texAO, TexCoords)).r;

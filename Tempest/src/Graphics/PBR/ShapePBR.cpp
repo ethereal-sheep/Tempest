@@ -1,5 +1,6 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -134,21 +135,14 @@ namespace Tempest
     {
         lightingShader->Bind();
 
-        //GLint modelLoc = glGetUniformLocation(lightingShader.Program, "model");
-        //GLint viewLoc = glGetUniformLocation(lightingShader.Program, "view");
-        //GLint projLoc = glGetUniformLocation(lightingShader.Program, "projection");
-        //glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         lightingShader->SetMat4fv(view, "view");
-        //glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
         lightingShader->SetMat4fv(projection, "projection");
-        //glUniform3f(glGetUniformLocation(lightingShader.Program, "viewPos"), camera.cameraPosition.x, camera.cameraPosition.y, camera.cameraPosition.z);
         lightingShader->SetVec3f(camera.GetPosition(), "viewPos");
 
         glm::mat4 model;
         model = glm::translate(model, this->shapePosition);
         model = glm::scale(model, this->shapeScale);
         model = glm::rotate(model, this->shapeAngle, this->shapeRotationAxis);
-        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         lightingShader->SetMat4fv(model, "model");
 
         glBindVertexArray(this->shapeVAO);

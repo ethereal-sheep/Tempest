@@ -10,7 +10,6 @@
 
 #include "TurnOrderOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "Triggers/Triggers.h"
 
 namespace Tempest

@@ -10,7 +10,6 @@
 
 #include "SimulateOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "Triggers/SimulationTriggers.h"
 #include "Triggers/Triggers.h"
 #include "Instance/EditTimeInstance.h"

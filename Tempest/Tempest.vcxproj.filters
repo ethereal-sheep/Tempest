@@ -125,7 +125,6 @@
     <ClInclude Include="src\Graphics\Basics\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
     <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />
-    <ClInclude Include="src\Graphics\Test\TestModel.h" />
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
     <ClInclude Include="src\Instance\Instance.h" />
     <ClInclude Include="src\Instance\NullTimeInstance.h" />
