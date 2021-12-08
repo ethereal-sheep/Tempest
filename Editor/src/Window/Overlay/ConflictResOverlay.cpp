@@ -60,7 +60,10 @@ namespace Tempest
 				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 				{
 					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						instance.get_full_path(),
+						MemoryStrategy{},
+						InstanceType::EDIT_TIME);
 				}
 				ImGui::PopStyleColor(3);
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4{ 0,0,0,0 });
