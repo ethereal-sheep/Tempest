@@ -25,7 +25,6 @@
 #include "Audio/AudioEngine.h"
 
 #include "Graphics/Basics/RenderSystem.h"
-#include "Graphics/Test/TestModel.h"
 
 namespace Tempest
 {

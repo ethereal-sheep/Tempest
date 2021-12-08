@@ -10,7 +10,6 @@
 
 #pragma once
 #include "Instance/Instance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
 #include "RNG/dice_bag.h"
 #include "RNG/dice_distribution.h"
 

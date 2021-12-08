@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300

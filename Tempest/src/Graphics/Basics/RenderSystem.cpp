@@ -1,5 +1,7 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -353,16 +355,8 @@ namespace Tempest
         envMapPrefilter.computeTexMipmap();
         envMapLUT.setTextureHDR(512, 512, GL_RG, GL_RG16F, GL_FLOAT, GL_LINEAR);
 
-
         objectModel.loadModel("models/shaderball/shaderball.a");
-        
-        objectAlbedo2.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
-        objectNormal2.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
-        objectRoughness2.setTexture("textures/pbr/rustediron/rustediron_roughness.png", "ironRoughness", true);
-        objectMetalness2.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);
-        objectAO2.setTexture("textures/pbr/rustediron/rustediron_ao.png", "ironAO", true);
-
-        objectModel2.loadModel("models/shaderball/shaderball.a");
+     
 
         materialF0 = glm::vec3(0.04f);
         //---------------
@@ -754,16 +748,20 @@ namespace Tempest
         glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
 
-        if (!pt_lights.empty())
-        {
-            glActiveTexture(GL_TEXTURE10);
-            glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
-        }
+        //if (!pt_lights.empty())
+        //{
+        //    glActiveTexture(GL_TEXTURE10);
+        //    glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
+        //    m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
+        //}
         
 
-        for (int pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
+        for (size_t pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
         {
+            glActiveTexture(GL_TEXTURE10 + (int)pt_light_);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[pt_light_].m_cubemap);
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10 + (int)pt_light_, ("shadowCube[" + std::to_string((int)pt_light_) + "]").c_str());
+
             glm::vec3 lightPositionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(pt_lights[pt_light_].Position, 1.0f));
 
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightPositionViewSpace, ("lightPointArray[" + std::to_string(pt_light_) + "].position").c_str());
@@ -774,7 +772,7 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pt_lights[pt_light_].hide, pointLightHide.data());
         }
 
-        for (int dLight = 0; dLight < dir_lights.size(); dLight++)
+        for (size_t dLight = 0; dLight < dir_lights.size(); dLight++)
         {
             glm::vec3 lightDirectionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(dir_lights[dLight].Direction, 0.0f));
 

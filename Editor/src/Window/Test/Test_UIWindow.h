@@ -10,7 +10,6 @@
 
 #pragma once
 #include "Instance/Instance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
 #include "Util/UIElements.h"
 #include "rttr/type.h"
 #include "rttr/registration.h"

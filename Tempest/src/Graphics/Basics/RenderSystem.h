@@ -1,5 +1,7 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -96,7 +98,7 @@ namespace Tempest
         glm::mat4 lightProjection, lightView;
         glm::mat4 lightSpaceMatrix;
 
-        uint32_t MAX_POINT_LIGHT = 5;
+        uint32_t MAX_POINT_LIGHT = 10;
         uint32_t NumPLight = 0;
 
         // To be changed to objects instead of global values
@@ -182,18 +184,6 @@ namespace Tempest
         GLfloat materialMetallicity = 0.02f; // Global for now (but should be per object/material).
         GLfloat ambientIntensity = 0.005f;   // Global for now (but should be per object/material).
 
-        // Model 2 for testing, using same as model 1 rot and scale (also same prevMVP so motion blur does not work) 
-        glm::vec3 modelPosition2 = glm::vec3(-2.0f, 0.0f, 0.0f);
-        ModelPBR objectModel2;
-
-        TexturePBR objectAlbedo2;
-        TexturePBR objectNormal2;
-        TexturePBR objectRoughness2;
-        TexturePBR objectMetalness2;
-        TexturePBR objectAO2;
-        glm::mat4 model2;
-        glm::vec3 modelScale2 = glm::vec3(0.1f);
-
         ShapePBR quadRender; // FBO to draw the scene
 
         // Enviroment Map 
@@ -204,38 +194,6 @@ namespace Tempest
         TexturePBR envMapPrefilter;
         TexturePBR envMapLUT;
         glm::mat4 envMapProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
-
-        // for ref what an object needs
-        struct PBRobject
-        {
-            // model (could be saved in another place then this will just be std::string)
-            ModelPBR model; 
-
-            // texture (5 Texture but also can be saved in a Texture container then refererenced)
-            TexturePBR objectAlbedo;
-            TexturePBR objectNormal;
-            TexturePBR objectRoughness;
-            TexturePBR objectMetalness;
-            TexturePBR objectAO;
-
-            // Should be just the transform/rigid body component 
-            glm::vec3 modelPosition = glm::vec3(0.0f);
-            glm::vec3 modelRotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
-            glm::vec3 modelScale = glm::vec3(0.1f);
-            GLfloat modelRotationSpeed = 1.0f;
-            glm::mat4 modelMat; //model mat
-
-            // Ususally just set 0.04 as base but can be adjusted
-            glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric
-            GLfloat materialRoughness = 0.01f;
-            GLfloat materialMetallicity = 0.02f;
-            GLfloat ambientIntensity = 0.005f;
-
-            // The model current MVP
-            glm::mat4 projViewModel;
-            // The model Previous MVP for motion blur
-            glm::mat4 prevProjViewModel = projViewModel;
-        };
 
         void iblSetup();
 

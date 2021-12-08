@@ -1,7 +1,13 @@
 #version 460
-
-//layout(origin_upper_left) in vec4 gl_FragCoord;
-
+/**********************************************************************************
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 in vec3 nearPoint;
 in vec3 farPoint;
 in mat4 fragView;

@@ -10,7 +10,6 @@
 
 #pragma once
 #include "Instance/Instance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
 #include "Util/UIElements.h"
 #include "ECS/Prototypes/Prototype_Category.h"
 #include "../Viewport/CameraControls.h"

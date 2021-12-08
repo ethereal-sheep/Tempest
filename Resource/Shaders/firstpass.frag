@@ -1,5 +1,14 @@
-#version 400 core
-
+#version 460
+/**********************************************************************************
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
+* \version		1.0
+* \date			2021
+* \note			Course: GAM300
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 in vec2 TexCoords;
 out vec4 colorOutput;
 
@@ -19,7 +28,6 @@ uniform sampler2D sao;
 uniform sampler2D gEffects;
 
 uniform int gBufferView;
-//uniform int motionBlurMaxSamples;
 uniform int tonemappingMode;
 uniform bool saoMode;
 uniform bool fxaaMode;
@@ -27,7 +35,6 @@ uniform bool tiltShiftMode;
 uniform float cameraAperture;
 uniform float cameraShutterSpeed;
 uniform float cameraISO;
-//uniform float motionBlurScale;
 uniform vec2 screenTextureSize;
 
 

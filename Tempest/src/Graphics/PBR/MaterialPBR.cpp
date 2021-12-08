@@ -1,5 +1,6 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -55,8 +56,6 @@ namespace Tempest
             glActiveTexture(GL_TEXTURE0 + i);
             currentTex.useTexture();
             matShader->Set1i(i, currentUniformName.c_str());
-           // glUniform1i(glGetUniformLocation(this->matShader.Program, currentUniformName.c_str()), i);
-
             std::cout << "------" << std::endl;
         }
 

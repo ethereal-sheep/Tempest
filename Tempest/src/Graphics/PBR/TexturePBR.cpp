@@ -84,7 +84,7 @@ namespace Tempest
         return false;
     }
 
-    void TexturePBR::setTexture(const char* texPath, std::string texName, bool texFlip)
+    void TexturePBR::setTexture(const char* texPath, std::string texName, bool texFlip1)
     {
         if (!strcmp(texName.c_str(), "0"))
         {
@@ -96,7 +96,7 @@ namespace Tempest
 
         std::string tempPath = std::string(texPath);
         
-        if (texFlip)
+        if (texFlip1)
             stbi_set_flip_vertically_on_load(true);
         else
             stbi_set_flip_vertically_on_load(false);
@@ -161,9 +161,9 @@ namespace Tempest
         }
     }
 
-    void TexturePBR::setTextureDDS(const char* texPath, std::string texName, bool texFlip)
+    void TexturePBR::setTextureDDS(const char* texPath, std::string texName, bool texFlip1)
     {
-        (void*)texFlip;
+        (void*)texFlip1;
         DDSFile Texture;
         auto ret = Texture.Load(texPath);
         if (tinyddsloader::Result::Success != ret) 
@@ -321,13 +321,13 @@ namespace Tempest
         //return TextureName;
     }
     
-    void TexturePBR::setTextureHDR(const char* texPath, std::string texName, bool texFlip)
+    void TexturePBR::setTextureHDR(const char* texPath, std::string texName, bool texFlip1)
     {
         this->texType = GL_TEXTURE_2D;
 
         std::string tempPath = std::string(texPath);
 
-        if (texFlip)
+        if (texFlip1)
             stbi_set_flip_vertically_on_load(true);
         else
             stbi_set_flip_vertically_on_load(false);
@@ -422,7 +422,7 @@ namespace Tempest
     }
 
 
-    void TexturePBR::setTextureCube(std::vector<const char*>& faces, bool texFlip)
+    void TexturePBR::setTextureCube(std::vector<const char*>& faces, bool texFlip1)
     {
         this->texType = GL_TEXTURE_CUBE_MAP;
 
@@ -434,7 +434,7 @@ namespace Tempest
             cubemapFaces.push_back(tempPath);
         }
 
-        if (texFlip)
+        if (texFlip1)
             stbi_set_flip_vertically_on_load(true);
         else
             stbi_set_flip_vertically_on_load(false);
@@ -568,11 +568,11 @@ namespace Tempest
     {
         glBindTexture(this->texType, this->texID);
     }
-    void TexturePBR::setTexturePath(const char* texPath, std::string texName, bool texFlip, TextureFileType TexType)
+    void TexturePBR::setTexturePath(const char* texPath, std::string texName, bool texFlip1, TextureFileType TexType)
     {
         this->texFileType = TexType;
         this->tName = texName;
         this->tPath = texPath;
-        this->texFlip = texFlip;
+        this->texFlip = texFlip1;
     }
 }
