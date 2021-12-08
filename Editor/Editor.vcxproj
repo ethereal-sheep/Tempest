@@ -340,7 +340,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ResourceCompile Include="Editor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\Cantius\Downloads\CoReSys.ico" />
+    <Image Include="CoReSys.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

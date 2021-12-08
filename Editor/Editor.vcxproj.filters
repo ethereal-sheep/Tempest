@@ -417,7 +417,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\Cantius\Downloads\CoReSys.ico">
+    <Image Include="CoReSys.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
