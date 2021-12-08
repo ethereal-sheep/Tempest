@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		(_@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
