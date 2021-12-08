@@ -452,6 +452,7 @@ namespace Tempest
 				ar.StartObject();
 				ar.Member("Charater_Name", component.name);
 				ar.Member("Color", component.color);
+				ar.Member("IsInCombat", component.isInCombat);
 				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
 				//ar.Vector("Charater_DeltaStats", component.StatsDelta);
@@ -522,7 +523,7 @@ namespace Tempest
 				return make_range(stats);
 			}
 
-
+			bool isInCombat = false;
 			string name = "Char";
 			Entity chosen_weapon = UNDEFINED; // no need to serialize this
 			tvector<Entity> weapons;
@@ -531,7 +532,6 @@ namespace Tempest
 		private:
 			tvector<int> stats;
 			tvector<int> StatsDelta;
-
 		};
 
 		struct Weapon

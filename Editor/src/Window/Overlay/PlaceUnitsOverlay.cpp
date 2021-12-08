@@ -23,7 +23,17 @@ namespace Tempest
 		OverlayOpen = true;
 		auto a = event_cast<OpenPlaceUnitsOverlay>(e);
 		entities = a.entities;
-		chars.assign(entities.size(), INVALID);
+		OpenCombat = a.openNewCombat;
+
+		chars.clear();
+		selected = 0;
+		for (auto id : entities)
+		{
+			if (!a.instance.ecs.get<tc::Character>(id).isInCombat)
+				chars.emplace_back(INVALID);
+			else
+				chars.emplace_back(id);
+		}
 
 		window_flags |= ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoBackground;
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
@@ -39,7 +49,7 @@ namespace Tempest
 
 		Service<EventManager>::Get().register_listener<OpenPlaceUnitsOverlay>(&PlaceUnitsOverlay::open_popup, this);
 
-		chars.assign(4, INVALID);
+	//	chars.assign(4, INVALID);
 	}
 
 
@@ -131,7 +141,11 @@ namespace Tempest
 						if (i == INVALID) okay = false;
 					if (okay)
 					{
-						Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
+						if (OpenCombat)
+							Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
+						else 
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+
 						OverlayOpen = false;
 					}
 				}
@@ -282,7 +296,7 @@ namespace Tempest
 									*/
 									if (random_char_id)
 										instance.ecs.get<tc::Character>(entity) = entities[selected] ? instance.ecs.get<tc::Character>(entities[selected]) : instance.ecs.get<tc::Character>(random_char_id);
-
+									instance.ecs.get<tc::Character>(entity).isInCombat = true;
 									transform.position = inter;
 								}
 							}
