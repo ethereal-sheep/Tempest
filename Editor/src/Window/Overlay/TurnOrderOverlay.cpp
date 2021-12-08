@@ -416,35 +416,35 @@ namespace Tempest
 					
 				}
 
-				//ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.025f });
-				//ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
-				//ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
-				//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-				//auto image = tex_map["Assets/BackMenuBtn.dds"];
-				//ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
-				//ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
-				//if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }, { 0, 0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
-				//{
-				//	//Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
-				//	switch (turn_order_state)
-				//	{
-				//	case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
-				//		Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				//		OverlayOpen = false;
-				//		//turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
-				//		break;
-				//	case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
-				//	case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
-				//	case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
-				//	case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
-				//	case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
-				//		turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
-				//		break;
-				//	default:
-				//		break;
-				//	}
-				//}
-				//ImGui::PopStyleColor(3);
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.025f });
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+				auto image = tex_map["Assets/BackMenuBtn.dds"];
+				ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+				ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
+				if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }, { 0, 0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+				{
+					//Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+					switch (turn_order_state)
+					{
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
+						Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+						OverlayOpen = false;
+						//turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+						break;
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
+					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
+						turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+						break;
+					default:
+						break;
+					}
+				}
+				ImGui::PopStyleColor(3);
 
 			}
 
