@@ -1,5 +1,6 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Lim Ziyi Jean(ziyijean.lim@digipen.edu),
+*				Huang Xurong(h.xurong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -7,7 +8,6 @@
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
-
 #include "Instance/Instance.h"
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
