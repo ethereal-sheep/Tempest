@@ -233,6 +233,7 @@
     <ClInclude Include="src\Util\shape_manip.h" />
     <ClInclude Include="src\Util\pathfinding.h" />
     <ClInclude Include="src\Util\quitter.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
@@ -242,5 +243,11 @@
     <None Include="src\Util\Serializer\Private\Writer.inl" />
     <None Include="src\Serializer\Reader.inl" />
     <None Include="src\Serializer\Writer.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tempest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Cantius\Downloads\CoReSys.ico" />
   </ItemGroup>
 </Project>

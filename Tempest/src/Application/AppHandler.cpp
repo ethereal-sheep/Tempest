@@ -12,6 +12,7 @@
 #include "Application.h"
 #include "Logger/Log.h"
 #include "Util/quitter.h"
+#include "../resource.h"
 
 namespace Tempest
 {
@@ -194,12 +195,12 @@ namespace Tempest
 		wcex.cbClsExtra = 0;
 		wcex.cbWndExtra = 0;
 		wcex.hInstance = hInstance;
-		wcex.hIcon = nullptr; // icon LoadIcon(hInstance, MAKEINTRESOURCE(IDI_WIN32DEMO));
+		wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 		wcex.hCursor = LoadCursor(hInstance, IDC_ARROW);
 		wcex.hbrBackground = (HBRUSH)COLOR_BACKGROUND;
 		wcex.lpszMenuName = nullptr;
 		wcex.lpszClassName = L"Tempest";
-		wcex.hIconSm = nullptr; // smol icon LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+		wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
 		return RegisterClassExW(&wcex);
 	}

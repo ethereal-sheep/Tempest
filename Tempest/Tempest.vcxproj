@@ -264,6 +264,7 @@
     <ClCompile Include="src\Graphics\PBR\TexturePBR.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
     <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
     <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />
@@ -425,6 +426,12 @@
     <None Include="src\Util\Serializer\Private\Writer.inl" />
     <None Include="src\Serializer\Reader.inl" />
     <None Include="src\Serializer\Writer.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tempest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Cantius\Downloads\CoReSys.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
