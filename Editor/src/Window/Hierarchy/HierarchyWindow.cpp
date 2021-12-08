@@ -31,51 +31,51 @@ namespace Tempest
 			// menu bar
 			if (ImGui::BeginMenuBar())
 			{
-				if (ImGui::BeginMenu(ICON_FA_PLUS))
+				//if (ImGui::BeginMenu(ICON_FA_PLUS))
 				{
-					if (ImGui::MenuItem("Add Cube"))
-					{
-						// we can do factories for entities here
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Cube";
+					//if (ImGui::MenuItem("Add Cube"))
+					//{
+					//	// we can do factories for entities here
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Cube";
 
-						auto transform = instance.ecs.emplace<tc::Transform>(entity);
-						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
+					//	auto transform = instance.ecs.emplace<tc::Transform>(entity);
+					//	auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
+					//	instance.ecs.emplace<tc::Mesh>(entity, MeshCode::CUBE);
 		
-						rb->shape_data = SHAPE_TYPE::BOX;
-						rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
-						rigidbody_config staticBody;
-						staticBody.is_static = true;
-						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
-						instance.po.AddActorToScene(rb->internal_rb.get());
-						instance.action_history.Commit<AddEntity>(entity);
+					//	rb->shape_data = SHAPE_TYPE::BOX;
+					//	rb->shape_data.shapeData = { 0.5f, 0.5f, 0.5f };
+					//	rigidbody_config staticBody;
+					//	staticBody.is_static = true;
+					//	rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+					//	instance.po.AddActorToScene(rb->internal_rb.get());
+					//	instance.action_history.Commit<AddEntity>(entity);
 
-						instance.selected = entity;
-						
-					}
-					if (ImGui::MenuItem("Add Sphere"))
-					{
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Sphere";
-						auto transform = instance.ecs.emplace<tc::Transform>(entity);
-						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
-						instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
+					//	instance.selected = entity;
+					//	
+					//}
+					//if (ImGui::MenuItem("Add Sphere"))
+					//{
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Sphere";
+					//	auto transform = instance.ecs.emplace<tc::Transform>(entity);
+					//	auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
+					//	instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
 
-						
-						//auto& transform = instance.ecs.get<Components::Transform>(entity);
-						rb->shape_data = SHAPE_TYPE::SPHERE;
-						rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
-						rigidbody_config staticBody;
-						staticBody.is_static = true;
-						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
-						instance.po.AddActorToScene(rb->internal_rb.get());
-						instance.action_history.Commit<AddEntity>(entity);
+					//	
+					//	//auto& transform = instance.ecs.get<Components::Transform>(entity);
+					//	rb->shape_data = SHAPE_TYPE::SPHERE;
+					//	rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
+					//	rigidbody_config staticBody;
+					//	staticBody.is_static = true;
+					//	rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+					//	instance.po.AddActorToScene(rb->internal_rb.get());
+					//	instance.action_history.Commit<AddEntity>(entity);
 
-						instance.selected = entity;
-					}
+					//	instance.selected = entity;
+					//}
 					//if (ImGui::MenuItem("Add Capsule", "", false))
 					//{
 					//	auto entity = instance.ecs.create();
@@ -92,73 +92,73 @@ namespace Tempest
 					//	rb.internal_rb = instance.po.createRigidbody(rb.rb_config, rb.shape_data, position);
 					//	instance.po.AddActorToScene(rb.internal_rb.get());*/
 					//}
-					if (ImGui::MenuItem("Add Statline"))
-					{
-						// we can do factories for entities here
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Statline";
-						instance.ecs.emplace<tc::Statline>(entity);
-						instance.action_history.Commit<AddEntity>(entity);
-					}
-					if (ImGui::MenuItem("Add Character"))
-					{
-						// we can do factories for entities here
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Character";
-						instance.ecs.emplace<tc::Character>(entity);
-						instance.action_history.Commit<AddEntity>(entity);
-					}
-					if (ImGui::MenuItem("Add Chair"))
-					{
-						// we can do factories for entities here
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Chair";
-						auto transform = instance.ecs.emplace<tc::Transform>(entity);
-						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
-						//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
-						instance.ecs.emplace<tc::Model>(entity, "Models/Sofa_Sci-Fi.a");
+					//if (ImGui::MenuItem("Add Statline"))
+					//{
+					//	// we can do factories for entities here
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Statline";
+					//	instance.ecs.emplace<tc::Statline>(entity);
+					//	instance.action_history.Commit<AddEntity>(entity);
+					//}
+					//if (ImGui::MenuItem("Add Character"))
+					//{
+					//	// we can do factories for entities here
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Character";
+					//	instance.ecs.emplace<tc::Character>(entity);
+					//	instance.action_history.Commit<AddEntity>(entity);
+					//}
+					//if (ImGui::MenuItem("Add Chair"))
+					//{
+					//	// we can do factories for entities here
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Chair";
+					//	auto transform = instance.ecs.emplace<tc::Transform>(entity);
+					//	auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
+					//	//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
+					//	instance.ecs.emplace<tc::Model>(entity, "Models/Sofa_Sci-Fi.a");
 
 
-						//auto& transform = instance.ecs.get<Components::Transform>(entity);
-						rb->shape_data = SHAPE_TYPE::SPHERE;
-						rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
-						rigidbody_config staticBody;
-						staticBody.is_static = true;
-						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
-						instance.po.AddActorToScene(rb->internal_rb.get());
-						instance.action_history.Commit<AddEntity>(entity);
+					//	//auto& transform = instance.ecs.get<Components::Transform>(entity);
+					//	rb->shape_data = SHAPE_TYPE::SPHERE;
+					//	rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
+					//	rigidbody_config staticBody;
+					//	staticBody.is_static = true;
+					//	rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+					//	instance.po.AddActorToScene(rb->internal_rb.get());
+					//	instance.action_history.Commit<AddEntity>(entity);
 
 
-						instance.selected = entity;
-					}
+					//	instance.selected = entity;
+					//}
 
-					if (ImGui::MenuItem("Add Table"))
-					{
-						// we can do factories for entities here
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Table";
-						auto transform = instance.ecs.emplace<tc::Transform>(entity);
-						auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
-						//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
-						instance.ecs.emplace<tc::Model>(entity, "Models/Table.fbx");
-
-
-						//auto& transform = instance.ecs.get<Components::Transform>(entity);
-						rb->shape_data = SHAPE_TYPE::SPHERE;
-						rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
-						rigidbody_config staticBody;
-						staticBody.is_static = true;
-						rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
-						instance.po.AddActorToScene(rb->internal_rb.get());
-						instance.action_history.Commit<AddEntity>(entity);
+					//if (ImGui::MenuItem("Add Table"))
+					//{
+					//	// we can do factories for entities here
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Table";
+					//	auto transform = instance.ecs.emplace<tc::Transform>(entity);
+					//	auto rb = instance.ecs.emplace<tc::Rigidbody>(entity);
+					//	//instance.ecs.emplace<tc::Mesh>(entity, MeshCode::SPHERE);
+					//	instance.ecs.emplace<tc::Model>(entity, "Models/Table.fbx");
 
 
-						instance.selected = entity;
-					}
+					//	//auto& transform = instance.ecs.get<Components::Transform>(entity);
+					//	rb->shape_data = SHAPE_TYPE::SPHERE;
+					//	rb->shape_data.shapeData = { 1.f, 1.f, 1.f };
+					//	rigidbody_config staticBody;
+					//	staticBody.is_static = true;
+					//	rb->internal_rb = instance.po.create_actor(staticBody, rb->shape_data, transform->position, transform->rotation, entity);
+					//	instance.po.AddActorToScene(rb->internal_rb.get());
+					//	instance.action_history.Commit<AddEntity>(entity);
+
+
+					//	instance.selected = entity;
+					//}
 
 					//if (ImGui::MenuItem("Add PointLight"))
 					//{
@@ -185,22 +185,22 @@ namespace Tempest
 					//	instance.selected = entity;
 					//}
 
-					if (ImGui::MenuItem("Add Spear"))
-					{
-						// we can do factories for entities here
-						auto entity = instance.ecs.create();
-						auto meta = instance.ecs.emplace<tc::Meta>(entity);
-						meta->name = "Spear";
-						auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
-						weapon->name = "Spear";
-						weapon->set_stat(1, 2);
-						weapon->set_stat(2, 1);
-						instance.action_history.Commit<AddEntity>(entity);
+					//if (ImGui::MenuItem("Add Spear"))
+					//{
+					//	// we can do factories for entities here
+					//	auto entity = instance.ecs.create();
+					//	auto meta = instance.ecs.emplace<tc::Meta>(entity);
+					//	meta->name = "Spear";
+					//	auto weapon = instance.ecs.emplace<tc::Weapon>(entity);
+					//	weapon->name = "Spear";
+					//	weapon->set_stat(1, 2);
+					//	weapon->set_stat(2, 1);
+					//	instance.action_history.Commit<AddEntity>(entity);
 
 
-						instance.selected = entity;
-					}
-					ImGui::EndMenu();
+					//	instance.selected = entity;
+					//}
+					//ImGui::EndMenu();
 				}
 				UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Simple UI for selecting objects. We should improve the UI once the UI/UX for it is done.", false);
 
@@ -271,19 +271,19 @@ namespace Tempest
 						}
 					}
 
-					for (auto id : destroyed_list)
-					{
-						if (id == instance.selected)
-							instance.selected = INVALID;
-						instance.ecs.emplace<tc::Destroyed>(id);
-						// remove rb from scene
-						if (auto rb = instance.ecs.get_if<tc::Rigidbody>(id))
-						{
-							instance.po.RemoveActorFromScene(rb->internal_rb.get());
-						}
+					//for (auto id : destroyed_list)
+					//{
+					//	if (id == instance.selected)
+					//		instance.selected = INVALID;
+					//	instance.ecs.emplace<tc::Destroyed>(id);
+					//	// remove rb from scene
+					//	if (auto rb = instance.ecs.get_if<tc::Rigidbody>(id))
+					//	{
+					//		instance.po.RemoveActorFromScene(rb->internal_rb.get());
+					//	}
 
-						instance.action_history.Commit<RemoveEntity>(id);
-					}
+					//	instance.action_history.Commit<RemoveEntity>(id);
+					//}
 
 
 					ImGui::EndTable();

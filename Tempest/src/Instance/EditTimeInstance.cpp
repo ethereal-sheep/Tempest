@@ -30,7 +30,7 @@ namespace Tempest
 		}
 		
 
-		for (auto id : view)
+		/*for (auto id : view)
 		{
 			auto& rb = ecs.get<Components::Rigidbody>(id);
 			auto& transform = ecs.get<Components::Transform>(id);
@@ -39,7 +39,7 @@ namespace Tempest
 			rb.internal_rb = po.create_actor(staticBody, rb.shape_data, transform.position, transform.rotation, id);
 			po.AddActorToScene(rb.internal_rb.get());
 
-		}
+		}*/
 	}
 	void EditTimeInstance::_update(float)
 	{
@@ -80,13 +80,13 @@ namespace Tempest
 	}
 	void EditTimeInstance::_exit()
 	{
-		auto view = ecs.view<Components::Rigidbody, tc::Transform>();
+		/*auto view = ecs.view<Components::Rigidbody, tc::Transform>();
 		for (auto id : view)
 		{
 			auto& rb = ecs.get<Components::Rigidbody>(id);
 			po.RemoveActorFromScene(rb.internal_rb.get());
 			rb.internal_rb = nullptr;
 
-		}
+		}*/
 	}
 }

@@ -89,7 +89,7 @@ namespace Tempest
                     {
                         auto g = instance.ecs.get_if<tc::Graph>(id);
 
-                        bool selected = std::find(selected_seqs->begin(), selected_seqs->end(), id) != selected_seqs->end();
+                        bool selected = std::find(selected_seqs->begin(), selected_seqs->end(), (int)id) != selected_seqs->end();
                         std::string seq_name = g->g.get_name();
                         if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), { cursor.x + i++ * 230, cursor.y + j * 100 }, { 5, 20 }, FONT_PARA, selected))
                         {

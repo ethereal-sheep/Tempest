@@ -109,7 +109,7 @@ namespace Tempest
 
 	}
 
-	bool PhysicsObject::advance(float dt)
+	bool PhysicsObject::advance(float )
 	{
 		//accumulator += dt;
 		//if (accumulator < step_size)
@@ -202,7 +202,7 @@ namespace Tempest
 		return actor;
 	}
 
-	tpair<id_t, bool> PhysicsObject::raycast(vec3 origin, vec3 dir)
+	tpair<id_t, bool> PhysicsObject::raycast(vec3 , vec3 )
 	{
 		//PxRaycastBuffer result;
 		//auto max_dist = 100.f;

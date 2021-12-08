@@ -71,7 +71,7 @@ namespace Tempest
 			root{ path },
 			memory_object(strategy),
 
-			po(memory_object.get()),
+			//po(memory_object.get()),
 			scene(),
 			ecs(memory_object.get()),
 			srm(memory_object.get()),
@@ -185,7 +185,7 @@ namespace Tempest
 		MemoryObject memory_object;
 		
 	public:
-		PhysicsObject po;
+		//PhysicsObject po;
 		Scene scene;
 		ECS ecs;
 		SRM srm;
