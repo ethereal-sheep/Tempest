@@ -46,7 +46,7 @@ namespace Tempest
 			if (ImGui::Begin("MainMenu", nullptr, window_flags))
 			{
 				// Draw the background
-				auto BGimg = tex_map["Assets/StartScreenBG.png"];
+				auto BGimg = tex_map["Assets/StartScreenBG.dds"];
 				ImVec2 point = ImGui::GetCursorScreenPos();
 				ImVec2 Min{ point.x, point.y };
 				ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
@@ -74,7 +74,7 @@ namespace Tempest
 		// render the title image
 		if (MainMenuUI < UI_SHOW::CONFLICT_RES)
 		{
-			auto title_img = tex_map["Assets/MainMenuTitle.png"];
+			auto title_img = tex_map["Assets/MainMenuTitle.dds"];
 			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
 			button_pos.x = viewport.Size.x * 0.2f - title_size.x * 0.5f;
 			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.45f - title_size.y * 0.5f });
@@ -348,7 +348,7 @@ namespace Tempest
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
 		{
-			auto image = tex_map["Assets/ConflictBG.png"];
+			auto image = tex_map["Assets/ConflictBG.dds"];
 			ImVec2 point = ImGui::GetCursorScreenPos();
 			ImVec2 Min{ point.x, point.y };
 			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
@@ -389,7 +389,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-			image = tex_map["Assets/BackMenuBtn.png"];
+			image = tex_map["Assets/BackMenuBtn.dds"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
@@ -406,7 +406,7 @@ namespace Tempest
 		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_MAP:
 		{
 			// render the select map image
-			auto image = tex_map["Assets/MM_SelectMap.png"];
+			auto image = tex_map["Assets/MM_SelectMap.dds"];
 			ImVec2 point = ImGui::GetCursorScreenPos();
 			ImVec2 Min{ point.x, point.y };
 			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
@@ -424,7 +424,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-			image = tex_map["Assets/BackMenuBtn.png"];
+			image = tex_map["Assets/BackMenuBtn.dds"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
@@ -453,7 +453,7 @@ namespace Tempest
 		case Tempest::MainMenuOverlay::UI_SHOW::LOAD_MAP:
 		{
 			// render the select map image
-			auto image = tex_map["Assets/MM_LoadMap.png"];
+			auto image = tex_map["Assets/MM_LoadMap.dds"];
 			ImVec2 point = ImGui::GetCursorScreenPos();
 			ImVec2 Min{ point.x, point.y };
 			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
@@ -471,7 +471,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-			image = tex_map["Assets/BackMenuBtn.png"];
+			image = tex_map["Assets/BackMenuBtn.dds"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
@@ -521,7 +521,7 @@ namespace Tempest
 		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
 		{
 			// render the select map image
-			auto image = tex_map["Assets/MM_SelectCR.png"];
+			auto image = tex_map["Assets/MM_SelectCR.dds"];
 			ImVec2 point = ImGui::GetCursorScreenPos();
 			ImVec2 Min{ point.x, point.y };
 			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
@@ -539,7 +539,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-			image = tex_map["Assets/BackMenuBtn.png"];
+			image = tex_map["Assets/BackMenuBtn.dds"];
 
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{

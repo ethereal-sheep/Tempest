@@ -83,7 +83,7 @@ namespace Tempest
 					break;
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 				{
-					auto tex = tex_map["Assets/TurnOrderLogo.png"];
+					auto tex = tex_map["Assets/TurnOrderLogo.dds"];
 					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
@@ -101,9 +101,9 @@ namespace Tempest
 							turn_order_state = TURN_ORDER_STATE::ORDER_DICE;
 						}
 						if (ImGui::IsItemHovered())
-							buttons[0] = tex_map["Assets/DiceRollButtonLit.png"];
+							buttons[0] = tex_map["Assets/DiceRollButtonLit.dds"];
 						else
-							buttons[0] = tex_map["Assets/DiceRollButtonUnlit.png"];
+							buttons[0] = tex_map["Assets/DiceRollButtonUnlit.dds"];
 
 						ImVec2 cursor = ImGui::GetCursorPos();
 
@@ -116,9 +116,9 @@ namespace Tempest
 							turn_order_state = TURN_ORDER_STATE::ORDER_STAT;
 						}
 						if (ImGui::IsItemHovered())
-							buttons[2] = tex_map["Assets/StatsButtonLit.png"];
+							buttons[2] = tex_map["Assets/StatsButtonLit.dds"];
 						else
-							buttons[2] = tex_map["Assets/StatsButtonUnlit.png"];
+							buttons[2] = tex_map["Assets/StatsButtonUnlit.dds"];
 
 						ImGui::SetCursorPos(cursor);
 						ImGui::Dummy(ImVec2{ 0.f, 10.0f });
@@ -127,9 +127,9 @@ namespace Tempest
 							turn_order_state = TURN_ORDER_STATE::ORDER_DICE_STAT;
 						}
 						if (ImGui::IsItemHovered())
-							buttons[1] = tex_map["Assets/DiceRollStatsButtonLit.png"];
+							buttons[1] = tex_map["Assets/DiceRollStatsButtonLit.dds"];
 						else
-							buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.png"];
+							buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.dds"];
 
 						ImGui::SameLine();
 						ImGui::Dummy(ImVec2{ 20.f, 0.f });
@@ -140,9 +140,9 @@ namespace Tempest
 							turn_order_state = TURN_ORDER_STATE::ORDER_CUSTOM;
 						}
 						if (ImGui::IsItemHovered())
-							buttons[3] = tex_map["Assets/CustomButtonLit.png"];
+							buttons[3] = tex_map["Assets/CustomButtonLit.dds"];
 						else
-							buttons[3] = tex_map["Assets/CustomButtonUnlit.png"];
+							buttons[3] = tex_map["Assets/CustomButtonUnlit.dds"];
 					}
 					ImGui::EndChild();
 					
@@ -150,7 +150,7 @@ namespace Tempest
 					break;
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
 				{
-					auto tex = tex_map["Assets/DiceRollLogo.png"];
+					auto tex = tex_map["Assets/DiceRollLogo.dds"];
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
@@ -167,7 +167,7 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 20.f, 100.0f });
 						for (int i = 1; i < 6; ++i)
 						{
-							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".png"];
+							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".dds"];
 							ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 							ImGui::SameLine();
 							ImGui::Dummy(ImVec2{ 10.f, 0.f });
@@ -185,7 +185,7 @@ namespace Tempest
 					break;
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
 				{
-					auto tex = tex_map["Assets/StatsLogo.png"];
+					auto tex = tex_map["Assets/StatsLogo.dds"];
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
@@ -250,7 +250,7 @@ namespace Tempest
 					break;
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
 				{
-					auto tex = tex_map["Assets/CombinedLogo.png"];
+					auto tex = tex_map["Assets/CombinedLogo.dds"];
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
@@ -268,7 +268,7 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 20.f, 100.0f });
 						for (int i = 1; i < 6; ++i)
 						{
-							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".png"];
+							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".dds"];
 							ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 							ImGui::SameLine();
 							ImGui::Dummy(ImVec2{ 10.f, 0.f });
@@ -286,7 +286,7 @@ namespace Tempest
 					break;
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
 				{
-					auto tex = tex_map["Assets/CustomLogo.png"];
+					auto tex = tex_map["Assets/CustomLogo.dds"];
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 

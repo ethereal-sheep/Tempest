@@ -58,8 +58,8 @@ namespace Tempest
                     ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
                     ImGui::PopFont();
 
-                    auto img = tex_map["Assets/Charac.png"];
-                    auto halfToneImg = tex_map["Assets/HalftoneWhite.png"];
+                    auto img = tex_map["Assets/Charac.dds"];
+                    auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
                     ImVec2 imgMin = { winMin.x + ImGui::GetWindowWidth() * 0.1f, winMin.y + ImGui::GetWindowHeight() * 0.1f };
                     ImVec2 imgMax = { imgMin.x + img->GetWidth() * 0.7f, imgMin.y + img->GetHeight() * 0.7f };
                     ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };

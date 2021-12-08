@@ -96,7 +96,7 @@ namespace Tempest
 
 			if (ImGui::Begin("Edit Unit Sheet", nullptr, window_flags))
 			{
-				auto tex = tex_map["Assets/UnitsBG.png"];
+				auto tex = tex_map["Assets/UnitsBG.dds"];
 				
 				ImVec2 point{ 0,0 };
 				{
@@ -124,7 +124,7 @@ namespace Tempest
 					{
 						auto& charac = instance.ecs.get<tc::Character>(id);
 						ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 165 });
-						auto CharIcon = tex_map["Assets/CharacterIcon.png"];
+						auto CharIcon = tex_map["Assets/CharacterIcon.dds"];
 						std::pair<bool,bool> PairResult = UI::UICharButton_WithDelete((void*)static_cast<size_t>(CharIcon->GetID()), { (float)CharIcon->GetWidth(), (float)CharIcon->GetHeight() }, charac.name.c_str(), "##" + std::to_string(i), SelectedID == id,
 							{ 0,0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 });
 						if (PairResult.first)
@@ -164,7 +164,7 @@ namespace Tempest
 				if (cs)
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.12f, viewport->Size.y * 0.15f });
-					auto UnitImg = tex_map["Assets/UnitIdle.png"];
+					auto UnitImg = tex_map["Assets/UnitIdle.dds"];
 					const ImVec4 color{ cs->color.x, cs->color.y, cs->color.z, 1 };
 					ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
 
@@ -204,7 +204,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-					tex = tex_map["Assets/BackMenuBtn.png"];
+					tex = tex_map["Assets/BackMenuBtn.dds"];
 
 					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 					{
@@ -218,7 +218,7 @@ namespace Tempest
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
 
-					tex = tex_map["Assets/QuickMenuBtn.png"];
+					tex = tex_map["Assets/QuickMenuBtn.dds"];
 
 					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 					{
@@ -826,25 +826,25 @@ namespace Tempest
 
 	void UnitSheetOverlay::initialise_tabs()
 	{
-		Tabs[TABS_TYPE::UNIT].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/UnitTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::UNIT].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/UnitTabLit.png"]->GetID());
-		Tabs[TABS_TYPE::UNIT].size = ImVec2{ static_cast<float>(tex_map["Assets/UnitTabUnlit.png"]->GetWidth()), 
-											 static_cast<float>(tex_map["Assets/UnitTabUnlit.png"]->GetHeight()) };
+		Tabs[TABS_TYPE::UNIT].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/UnitTabUnlit.dds"]->GetID());
+		Tabs[TABS_TYPE::UNIT].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/UnitTabLit.dds"]->GetID());
+		Tabs[TABS_TYPE::UNIT].size = ImVec2{ static_cast<float>(tex_map["Assets/UnitTabUnlit.dds"]->GetWidth()), 
+											 static_cast<float>(tex_map["Assets/UnitTabUnlit.dds"]->GetHeight()) };
 
-		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/WeaponTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/WeaponTabLit.png"]->GetID());
-		Tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/WeaponTabUnlit.png"]->GetWidth()), 
-											   static_cast<float>(tex_map["Assets/WeaponTabUnlit.png"]->GetHeight()) };
+		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/WeaponTabUnlit.dds"]->GetID());
+		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/WeaponTabLit.dds"]->GetID());
+		Tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/WeaponTabUnlit.dds"]->GetWidth()), 
+											   static_cast<float>(tex_map["Assets/WeaponTabUnlit.dds"]->GetHeight()) };
 
-		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabLit.png"]->GetID());
-		Tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/ItemTabUnlit.png"]->GetWidth()),
-											 static_cast<float>(tex_map["Assets/ItemTabUnlit.png"]->GetHeight()) };
+		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabUnlit.dds"]->GetID());
+		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabLit.dds"]->GetID());
+		Tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/ItemTabUnlit.dds"]->GetWidth()),
+											 static_cast<float>(tex_map["Assets/ItemTabUnlit.dds"]->GetHeight()) };
 
-		Tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/ActionTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ActionTabLit.png"]->GetID());
-		Tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/ActionTabUnlit.png"]->GetWidth()),
-											   static_cast<float>(tex_map["Assets/ActionTabUnlit.png"]->GetHeight()) };
+		Tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/ActionTabUnlit.dds"]->GetID());
+		Tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ActionTabLit.dds"]->GetID());
+		Tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/ActionTabUnlit.dds"]->GetWidth()),
+											   static_cast<float>(tex_map["Assets/ActionTabUnlit.dds"]->GetHeight()) };
 	}
 
 	void UnitSheetOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance)

@@ -70,7 +70,7 @@ namespace Tempest
                     // simulate backdrop
                     const float offsetX = (ImGui::GetContentRegionAvailWidth() - contentSize) * 0.5f;
 
-                    auto tex = tex_map["Assets/SimulationBackdrop.png"];
+                    auto tex = tex_map["Assets/SimulationBackdrop.dds"];
                     ImVec2 point = ImGui::GetCursorPos();
                     {
 

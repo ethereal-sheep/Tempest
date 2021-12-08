@@ -31,7 +31,7 @@ namespace Tempest
 		padding = ImGui::GetMainViewport()->Size.y * 0.02f;
 		win = 0;
 		lose = 0;
-		enter_button = tex_map["Assets/EnterButton.png"];
+		enter_button = tex_map["Assets/EnterButton.dds"];
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -78,7 +78,7 @@ namespace Tempest
 
 			if (ImGui::Begin("Select Unit Sheet", nullptr, window_flags))
 			{
-				auto tex = tex_map["Assets/SimulationBG.png"];
+				auto tex = tex_map["Assets/SimulationBG.dds"];
 				{
 
 					ImVec2 Min{ 0,0 };
@@ -121,7 +121,7 @@ namespace Tempest
 				pop_button_style();
 
 				// success title
-				tex = tex_map["Assets/CoSTitle.png"];
+				tex = tex_map["Assets/CoSTitle.dds"];
 				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.4f - tex->GetHeight() * 0.5f });
 				ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2((float)tex->GetWidth(), (float)tex->GetHeight()));
 
@@ -200,7 +200,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-					tex = tex_map["Assets/BackMenuBtn.png"];
+					tex = tex_map["Assets/BackMenuBtn.dds"];
 
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
@@ -212,7 +212,7 @@ namespace Tempest
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
 
-					tex = tex_map["Assets/QuickMenuBtn.png"];
+					tex = tex_map["Assets/QuickMenuBtn.dds"];
 
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
@@ -222,7 +222,7 @@ namespace Tempest
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
 
-					tex = tex_map["Assets/TutorialBtn.png"];
+					tex = tex_map["Assets/TutorialBtn.dds"];
 
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
@@ -498,7 +498,7 @@ namespace Tempest
 
 		// character display
 		ImGui::SetCursorPos(ImVec2{start_pos.x - 35.0f, start_pos.y - 60.0f });
-		auto tex = tex_map["Assets/CharacterIcon.png"];
+		auto tex = tex_map["Assets/CharacterIcon.dds"];
 		std::string chara_name{ "CHARACTER" };
 		if (*temp != UNDEFINED)
 		{

@@ -902,7 +902,7 @@ namespace ifd {
 
 			if (data.Path.has_extension()) {
 				std::string ext = data.Path.extension().u8string();
-				if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".tga") {
+				if (ext == ".png" || ext == ".dds" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".tga") {
 					int width, height, nrChannels;
 					unsigned char* image = stbi_load(data.Path.u8string().c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
 

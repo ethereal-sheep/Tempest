@@ -35,7 +35,7 @@ namespace Tempest
             enable_popup = true;
             auto a = event_cast<MainMenuSequencePopupTrigger>(e);
             selected_seqs = &a.selected_seqs;
-            img = img = tex_map["Assets/Chain.png"];
+            img = img = tex_map["Assets/Chain.dds"];
         }
 
         void show(Instance& instance) override
@@ -74,7 +74,7 @@ namespace Tempest
                     ImVec2 imgMax = { imgMin.x + img->GetWidth() * 0.7f, imgMin.y + img->GetHeight() * 0.7f };
                     ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(img->GetID()), imgMin, imgMax);
 
-                    auto halfToneImg = tex_map["Assets/HalftoneWhite.png"];
+                    auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
                     ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
                     ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
                     ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);

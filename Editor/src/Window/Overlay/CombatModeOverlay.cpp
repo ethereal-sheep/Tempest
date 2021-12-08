@@ -936,7 +936,7 @@ namespace Tempest
 			else
 			{
 				// draw character turn data here
-				auto& charac_icon = tex_map["Assets/CharacterIcon.png"];
+				auto& charac_icon = tex_map["Assets/CharacterIcon.dds"];
 				const ImVec2 child_size{ charac_icon->GetWidth() * units.size() * 1.1f + 20.0f * units.size() - 1, charac_icon->GetHeight() * 2.f };
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - child_size.x * 0.5f, viewport->Size.y * 0.2f - child_size.y * 0.5f});
 				if (ImGui::BeginChild("Select other entity attack", child_size, true))
@@ -1407,7 +1407,7 @@ namespace Tempest
 
 
 		// draw the combat roll
-		auto tex = tex_map["Assets/CombatRollBG.png"];
+		auto tex = tex_map["Assets/CombatRollBG.dds"];
 		ImVec2 point{ 0.0f,viewport->Size.y * 0.2f };
 		{
 			ImVec2 Min{ point.x, point.y };
@@ -1643,10 +1643,10 @@ namespace Tempest
 		// hardget the entities
 		units = a.units;
 
-		placeholder_height = (float)tex_map["Assets/Placeholder_Character.png"]->GetHeight();
-		action_background_size = ImVec2{ tex_map["Assets/ActionBackdrop.png"]->GetWidth() * 1.0f, tex_map["Assets/ActionBackdrop.png"]->GetHeight() * 1.0f};
+		placeholder_height = (float)tex_map["Assets/Placeholder_Character.dds"]->GetHeight();
+		action_background_size = ImVec2{ tex_map["Assets/ActionBackdrop.dds"]->GetWidth() * 1.0f, tex_map["Assets/ActionBackdrop.dds"]->GetHeight() * 1.0f};
 
-		action_button_diff = (float)tex_map["Assets/SkillSelected.png"]->GetWidth() - (float)tex_map["Assets/SkillUnselected.png"]->GetWidth();
+		action_button_diff = (float)tex_map["Assets/SkillSelected.dds"]->GetWidth() - (float)tex_map["Assets/SkillUnselected.dds"]->GetWidth();
 		battle_state = BATTLE_STATE::CURR_TURN; 
 		state = State::MENU;
 
@@ -1664,7 +1664,7 @@ namespace Tempest
 	void CombatModeOverlay::visibility(const Event& e)
 	{
 		OverlayOpen = event_cast<CombatModeVisibility>(e).isVisible;
-		action_button_diff = (float)tex_map["Assets/SkillSelected.png"]->GetWidth() - tex_map["Assets/SkillUnselected.png"]->GetWidth();
+		action_button_diff = (float)tex_map["Assets/SkillSelected.dds"]->GetWidth() - tex_map["Assets/SkillUnselected.dds"]->GetWidth();
 		battle_state = BATTLE_STATE::CURR_TURN;
 	}
 

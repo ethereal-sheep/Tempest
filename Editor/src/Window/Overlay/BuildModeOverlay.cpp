@@ -62,8 +62,8 @@ namespace Tempest
 
 		if (ImGui::Begin("Btm Build Mode Screen", nullptr, window_flags))
 		{
-			auto combatBtn = tex_map["Assets/CombatModeBtn.png"];
-			auto bannerTex = tex_map["Assets/BuildModeBanner.png"];
+			auto combatBtn = tex_map["Assets/CombatModeBtn.dds"];
+			auto bannerTex = tex_map["Assets/BuildModeBanner.dds"];
 
 			auto cPos = ImGui::GetCursorPos();
 			auto io = ImGui::GetIO();

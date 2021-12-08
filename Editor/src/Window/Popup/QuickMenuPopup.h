@@ -24,12 +24,12 @@ namespace Tempest
         void init(Instance&) override
         {
             Service<EventManager>::Get().register_listener<QuickMenuPopupTrigger>(&QuickMenuPopup::open_popup, this);
-            Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.png"];
-            Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.png"];
-            Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.png"];
-            Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.png"];
-            Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.png"];
-            Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.png"];
+            Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.dds"];
+            Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.dds"];
+            Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.dds"];
+            Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.dds"];
+            Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.dds"];
+            Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.dds"];
             button_size = ImVec2{ 1.f, 1.f * Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() / Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() };
         }
 
@@ -59,7 +59,7 @@ namespace Tempest
 
                 if (ImGui::BeginPopupModal("Quick Menu", NULL, flags))
                 {
-                    auto tex = tex_map["Assets/QuickMenuBG.png"];
+                    auto tex = tex_map["Assets/QuickMenuBG.dds"];
 
                     ImVec2 point{ 0,0 };
                     {
@@ -74,7 +74,7 @@ namespace Tempest
                     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
                     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
-                    tex = tex_map["Assets/BackMenuBtn.png"];
+                    tex = tex_map["Assets/BackMenuBtn.dds"];
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
                     {
@@ -85,7 +85,7 @@ namespace Tempest
                     ImGui::Dummy(ImVec2{ 20.0f, 0.0f });
                     ImGui::SameLine();
 
-                    tex = tex_map["Assets/QuickMenuBtn.png"];
+                    tex = tex_map["Assets/QuickMenuBtn.dds"];
 
                     if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
                     {
@@ -110,9 +110,9 @@ namespace Tempest
 
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SIMULATE)
-                        Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainLit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainLit.dds"];
                     else
-                        Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.dds"];
 
                     ImGui::SameLine();
 
@@ -127,9 +127,9 @@ namespace Tempest
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::UNITS)
-                        Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainLit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainLit.dds"];
                     else
-                        Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.dds"];
 
                     ImGui::SameLine();
 
@@ -144,9 +144,9 @@ namespace Tempest
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ACTIONS)
-                        Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainLit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainLit.dds"];
                     else
-                        Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.dds"];
 
                     ImGui::SameLine();
 
@@ -161,9 +161,9 @@ namespace Tempest
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SEQUENCES)
-                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainLit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainLit.dds"];
                     else
-                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.dds"];
 
                     ImGui::SameLine();
 
@@ -178,9 +178,9 @@ namespace Tempest
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::WEAPONS)
-                        Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainLit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainLit.dds"];
                     else
-                        Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.dds"];
 
                     ImGui::SameLine();
 
@@ -191,9 +191,9 @@ namespace Tempest
                     }
 
                     if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ITEMS)
-                        Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainLit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainLit.dds"];
                     else
-                        Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.png"];
+                        Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.dds"];
 
                     ImGui::PopStyleVar();
                     ImGui::PopStyleColor(3);

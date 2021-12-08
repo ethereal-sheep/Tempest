@@ -37,7 +37,7 @@ namespace Tempest
 			if (ImGui::Begin("ConflictResolution", nullptr, window_flags))
 			{
 				// render the select map image
-				auto image = tex_map["Assets/SelectCR_BG.png"];
+				auto image = tex_map["Assets/SelectCR_BG.dds"];
 				ImVec2 point = ImGui::GetCursorScreenPos();
 				ImVec2 Min{ point.x, point.y };
 				ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
@@ -55,7 +55,7 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-				image = tex_map["Assets/BackMenuBtn.png"];
+				image = tex_map["Assets/BackMenuBtn.dds"];
 
 				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 				{

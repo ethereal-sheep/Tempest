@@ -33,11 +33,11 @@ namespace Tempest
         void open_popup(const Event&)
         {
             currentIndex = 0;
-            tutorial_Arr[0] = tex_map["Assets/Tutorial_0.png"];
-            tutorial_Arr[1] = tex_map["Assets/Tutorial_1.png"];
-            tutorial_Arr[2] = tex_map["Assets/Tutorial_2.png"];
-            tutorial_Arr[3] = tex_map["Assets/Tutorial_3.png"];
-            tutorial_Arr[4] = tex_map["Assets/Tutorial_4.png"];
+            tutorial_Arr[0] = tex_map["Assets/Tutorial_0.dds"];
+            tutorial_Arr[1] = tex_map["Assets/Tutorial_1.dds"];
+            tutorial_Arr[2] = tex_map["Assets/Tutorial_2.dds"];
+            tutorial_Arr[3] = tex_map["Assets/Tutorial_3.dds"];
+            tutorial_Arr[4] = tex_map["Assets/Tutorial_4.dds"];
             enable_popup = true;
         }
 
@@ -52,7 +52,7 @@ namespace Tempest
                 
                 if (ImGui::Begin("Tutorial", &visible, window_flags))
                 {
-                    auto tut_Arrow = tex_map["Assets/Tutorial_Arrow.png"];
+                    auto tut_Arrow = tex_map["Assets/Tutorial_Arrow.dds"];
                     ImVec2 arrow_Size = { (float)tut_Arrow->GetWidth(), (float)tut_Arrow->GetHeight()};
                     
                     
@@ -88,7 +88,7 @@ namespace Tempest
                         ImGui::PopID();
                     }
                     
-                    auto tex = tex_map["Assets/closeBtn.png"];
+                    auto tex = tex_map["Assets/closeBtn.dds"];
                     ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.85f,viewport->Size.y * 0.1f });
                     if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
                     {

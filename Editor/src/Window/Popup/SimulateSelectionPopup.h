@@ -50,19 +50,19 @@ namespace Tempest
             {
             case SIMULATE_POPUP_TYPE::UNIT:
                 popup_title = "ADDING UNITS";
-                img = tex_map["Assets/Charac.png"];
+                img = tex_map["Assets/Charac.dds"];
                 break;
             case SIMULATE_POPUP_TYPE::WEAPON:
                 popup_title = "ADDING WEAPONS";
-                img = tex_map["Assets/Sword.png"];
+                img = tex_map["Assets/Sword.dds"];
                 break;
             case SIMULATE_POPUP_TYPE::ACTION:
                 popup_title = "ADDING ACTIONS";
-                img = tex_map["Assets/Actions.png"];
+                img = tex_map["Assets/Actions.dds"];
                 break;
             case SIMULATE_POPUP_TYPE::SEQUENCE:
                 popup_title = "ADDING SEQUENCE";
-                img = tex_map["Assets/Chain.png"];
+                img = tex_map["Assets/Chain.dds"];
                 break;
             default:
                 break;
@@ -114,7 +114,7 @@ namespace Tempest
                     }
                    
 
-                    auto halfToneImg = tex_map["Assets/HalftoneWhite.png"];
+                    auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
                     ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
                     ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
                     ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);
@@ -136,7 +136,7 @@ namespace Tempest
                         for (auto id : view)
                         {
                             auto& charac = instance.ecs.get<tc::Character>(id);
-                            auto charc_icon = tex_map["Assets/CharacterIcon.png"];
+                            auto charc_icon = tex_map["Assets/CharacterIcon.dds"];
                             ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 120, cursor.y + j * 140 });
                             if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(charc_icon->GetID()), { 90,90 }, charac.name.c_str(), "##" + std::to_string(id), data == id,
                                 ImVec2{ 0,0 }, ImVec2{ 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 }))

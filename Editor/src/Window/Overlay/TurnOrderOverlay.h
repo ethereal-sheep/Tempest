@@ -41,12 +41,12 @@ namespace Tempest
             OverlayOpen = true;
 
             turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
-            character_icon = tex_map["Assets/CharacterIcon.png"];
-            unit_black = tex_map["Assets/Unit_Black.png"];
-            buttons[0] = tex_map["Assets/DiceRollButtonUnlit.png"];
-            buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.png"];
-            buttons[2] = tex_map["Assets/StatsButtonUnlit.png"];
-            buttons[3] = tex_map["Assets/CustomButtonUnlit.png"];
+            character_icon = tex_map["Assets/CharacterIcon.dds"];
+            unit_black = tex_map["Assets/Unit_Black.dds"];
+            buttons[0] = tex_map["Assets/DiceRollButtonUnlit.dds"];
+            buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.dds"];
+            buttons[2] = tex_map["Assets/StatsButtonUnlit.dds"];
+            buttons[3] = tex_map["Assets/CustomButtonUnlit.dds"];
             current_stat = "";
         }
 

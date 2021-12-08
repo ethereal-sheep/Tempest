@@ -38,7 +38,7 @@ namespace Tempest
         {
             if (enable_popup)
             {
-                ifd::FileDialog::Instance().Open("TextureOpenDialog", "Open a texture", "Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*");
+                ifd::FileDialog::Instance().Open("TextureOpenDialog", "Open a texture", "Image file (*.png;*dds;*.jpg;*.jpeg;*.bmp;*.tga){.png,.dds,.jpg,.jpeg,.bmp,.tga},.*");
                 enable_popup = false;
             }
 

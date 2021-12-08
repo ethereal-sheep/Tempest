@@ -93,8 +93,8 @@ namespace Tempest::UI
 				col = { 0.980f, 0.768f, 0.509f, 0.7f };
 				textcol = { 0,0,0,0.7f };
 			}
-			auto bgImg = tex_map["Assets/Popup_Backdrop.png"];
-			auto warnImg = tex_map["Assets/WarningIco.png"];
+			auto bgImg = tex_map["Assets/Popup_Backdrop.dds"];
+			auto warnImg = tex_map["Assets/WarningIco.dds"];
 			string te = "CONFIRMATION";
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
 			ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
@@ -177,8 +177,8 @@ namespace Tempest::UI
 				textcol = { 0,0,0,0.7f };
 			}
 
-			auto bgImg = tex_map["Assets/Popup_Backdrop.png"];
-			auto warnImg = tex_map["Assets/WarningIco.png"];
+			auto bgImg = tex_map["Assets/Popup_Backdrop.dds"];
+			auto warnImg = tex_map["Assets/WarningIco.dds"];
 			string te = "CONFIRMATION";
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
 			ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
@@ -975,7 +975,7 @@ namespace Tempest::UI
 	void SubHeader(const char* str)
 	{
 		ImGui::PushFont(FONT_HEAD);
-		auto curr_tex = tex_map["Assets/SubHeaderStyle.png"];
+		auto curr_tex = tex_map["Assets/SubHeaderStyle.dds"];
 		auto windowWidth = ImGui::GetWindowSize().x;
 		auto textWidth = ImGui::CalcTextSize(str).x;
 
@@ -995,7 +995,7 @@ namespace Tempest::UI
 	void Header_1(const char* str)
 	{
 		ImGui::PushFont(FONT_HEAD);
-		auto curr_tex = tex_map["Assets/HeaderStyle1.png"];
+		auto curr_tex = tex_map["Assets/HeaderStyle1.dds"];
 		auto windowWidth = ImGui::GetWindowSize().x;
 		auto textWidth = ImGui::CalcTextSize(str).x;
 
@@ -1014,7 +1014,7 @@ namespace Tempest::UI
 	void Header_2(const char* str)
 	{
 		ImGui::PushFont(FONT_HEAD);
-		auto curr_tex = tex_map["Assets/HeaderStyle2.png"];
+		auto curr_tex = tex_map["Assets/HeaderStyle2.dds"];
 		auto windowWidth = ImGui::GetWindowSize().x;
 		auto textWidth = ImGui::CalcTextSize(str).x;
 		ImGui::BeginGroup();
@@ -1394,7 +1394,7 @@ namespace Tempest::UI
 
 		if (id != UNDEFINED)
 		{
-			auto SearchIcon = tex_map["Assets/Search_Icon.png"];
+			auto SearchIcon = tex_map["Assets/Search_Icon.dds"];
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
@@ -1544,7 +1544,7 @@ namespace Tempest::UI
 
 		if (id != UNDEFINED)
 		{
-			auto SearchIcon = tex_map["Assets/Search_Icon.png"];
+			auto SearchIcon = tex_map["Assets/Search_Icon.dds"];
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
@@ -1698,7 +1698,7 @@ namespace Tempest::UI
 
 		if (id != UNDEFINED)
 		{
-			auto SearchIcon = tex_map["Assets/Search_Icon.png"];
+			auto SearchIcon = tex_map["Assets/Search_Icon.dds"];
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
@@ -1833,7 +1833,7 @@ namespace Tempest::UI
 		}
 		if (selected)
 		{
-			auto SearchIcon = tex_map["Assets/Loading.png"];
+			auto SearchIcon = tex_map["Assets/Loading.dds"];
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
@@ -1956,7 +1956,7 @@ namespace Tempest::UI
 		}
 		if (selected)
 		{
-			auto SearchIcon = tex_map["Assets/CheckMark.png"];
+			auto SearchIcon = tex_map["Assets/CheckMark.dds"];
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
@@ -2253,7 +2253,7 @@ namespace Tempest::UI
 		if (hovered || selected)
 		{
 			//Getting the texture and centering the position of the Image
-			auto highlightImg = tex_map["Assets/MainMenuButton.png"];
+			auto highlightImg = tex_map["Assets/MainMenuButton.dds"];
 			const ImU32 col = ImGui::GetColorU32({ 0.980f, 0.768f, 0.509f, 1.f });
 			float tex_width = highlightImg->GetWidth() * 0.5f;
 			//float tex_height = highlightImg->GetHeight() * 0.5f;
@@ -2303,7 +2303,7 @@ namespace Tempest::UI
 		const ImGuiStyle& style = g.Style;
 		const ImGuiID id = window->GetID(label);
 		const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
-		auto curr_tex = tex_map["Assets/Unselected.png"];
+		auto curr_tex = tex_map["Assets/Unselected.dds"];
 		const float square_sz = ImGui::GetFrameHeight();
 		//const float square_sz = curr_tex->GetHeight();
 		const ImVec2 pos = window->DC.CursorPos;
@@ -2346,7 +2346,7 @@ namespace Tempest::UI
 		else if (*v)
 		{
 			const float pad = ImMax(1.0f, IM_FLOOR(square_sz / 6.0f));
-			curr_tex = tex_map["Assets/Selected.png"];
+			curr_tex = tex_map["Assets/Selected.dds"];
 			window->DrawList->AddImage((void*)static_cast<size_t>(curr_tex->GetID()), check_bb.Min, check_bb.Max);
 			//ImGui::RenderCheckMark(window->DrawList, { check_bb.Min.x + pad, check_bb.Min.y + pad }, check_col, square_sz - pad * 2.0f);
 		}
@@ -2371,30 +2371,30 @@ namespace Tempest::UI
 		const ImGuiStyle& style = g.Style;
 
 		//Loading Of texture
-		auto texIndex_Selection = tex_map["Assets/+_Unselected.png"];
-		auto texConflictBg = tex_map["Assets/ConflictUnSelected.png"];
+		auto texIndex_Selection = tex_map["Assets/+_Unselected.dds"];
+		auto texConflictBg = tex_map["Assets/ConflictUnSelected.dds"];
 		switch (type)
 		{
 		case 1:
-			texIndex_Selection = tex_map["Assets/01_Unselected.png"];
-			texConflictBg = tex_map["Assets/ConflictSelected.png"];
+			texIndex_Selection = tex_map["Assets/01_Unselected.dds"];
+			texConflictBg = tex_map["Assets/ConflictSelected.dds"];
 		break;
 		case 2:
-			texIndex_Selection = tex_map["Assets/02_Unselected.png"];
-			texConflictBg = tex_map["Assets/ConflictSelected.png"];
+			texIndex_Selection = tex_map["Assets/02_Unselected.dds"];
+			texConflictBg = tex_map["Assets/ConflictSelected.dds"];
 			break;
 		case 3:
-			texIndex_Selection = tex_map["Assets/03_Unselected.png"];
-			texConflictBg = tex_map["Assets/ConflictSelected.png"];
+			texIndex_Selection = tex_map["Assets/03_Unselected.dds"];
+			texConflictBg = tex_map["Assets/ConflictSelected.dds"];
 			break;
 		default:
-			texIndex_Selection = tex_map["Assets/+_Unselected.png"];
-			texConflictBg = tex_map["Assets/ConflictUnSelected.png"];
+			texIndex_Selection = tex_map["Assets/+_Unselected.dds"];
+			texConflictBg = tex_map["Assets/ConflictUnSelected.dds"];
 			break;
 		}
 
 
-		auto texConflictDel = tex_map["Assets/ConflictDelete.png"];
+		auto texConflictDel = tex_map["Assets/ConflictDelete.dds"];
 		ImVec2 boxSize = { (float)texConflictBg->GetWidth()*0.7f, (float)texConflictBg->GetHeight() * 0.7f };
 
 
@@ -2522,16 +2522,16 @@ namespace Tempest::UI
 			switch (type)
 			{
 			case 1:
-				texIndex_Selection = tex_map["Assets/01_Selected.png"];
+				texIndex_Selection = tex_map["Assets/01_Selected.dds"];
 				break;
 			case 2:
-				texIndex_Selection = tex_map["Assets/02_Selected.png"];
+				texIndex_Selection = tex_map["Assets/02_Selected.dds"];
 				break;
 			case 3:
-				texIndex_Selection = tex_map["Assets/03_Selected.png"];
+				texIndex_Selection = tex_map["Assets/03_Selected.dds"];
 				break;
 			default:
-				texIndex_Selection = tex_map["Assets/+_Selected.png"];
+				texIndex_Selection = tex_map["Assets/+_Selected.dds"];
 				break;
 			}
 		}
@@ -2620,10 +2620,10 @@ namespace Tempest::UI
 		const ImGuiStyle& style = g.Style;
 
 		//Loading Of texture
-		auto texMapBg = tex_map["Assets/MapSelectable.png"];
+		auto texMapBg = tex_map["Assets/MapSelectable.dds"];
 		
 
-		auto texConflictDel = tex_map["Assets/ConflictDelete.png"];
+		auto texConflictDel = tex_map["Assets/ConflictDelete.dds"];
 		ImVec2 boxSize = { (float)texMapBg->GetWidth() * 0.83f, (float)texMapBg->GetHeight() * 0.83f };
 
 
@@ -2888,7 +2888,7 @@ namespace Tempest::UI
 		float alpha = selected ? 1.f : 0;
 		if (window->SkipItems)
 			return { false,false };
-		auto arrowImg = tex_map["Assets/SelectArrow.png"];
+		auto arrowImg = tex_map["Assets/SelectArrow.dds"];
 		ImVec2 arrowSize = { (float)arrowImg->GetWidth(), (float)arrowImg->GetHeight() };
 		ImVec2 newsize = { size.x, size.y + arrowSize.y };
 		const ImRect bb(window->DC.CursorPos, { window->DC.CursorPos.x + newsize.x + padding.x * 2, window->DC.CursorPos.y + newsize.y + padding.y * 2 });
@@ -2967,7 +2967,7 @@ namespace Tempest::UI
 		float alpha = selected ? 1.f : 0.f;
 		if (window->SkipItems)
 			return  false;
-		auto arrowImg = tex_map["Assets/Arrow_glow.png"];
+		auto arrowImg = tex_map["Assets/Arrow_glow.dds"];
 		ImVec2 arrowSize = { (float)arrowImg->GetWidth(), (float)arrowImg->GetHeight() };
 		ImVec2 newsize = { size.x, size.y + arrowSize.y };
 		const ImRect bb(window->DC.CursorPos, { window->DC.CursorPos.x + newsize.x + padding.x * 2, window->DC.CursorPos.y + newsize.y + padding.y * 2 });
@@ -3149,8 +3149,8 @@ namespace Tempest::UI
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 
 		
-		auto defaultImg = tex_map["Assets/SkillUnselected.png"];
-		auto selectedImg = tex_map["Assets/SkillSelected.png"];
+		auto defaultImg = tex_map["Assets/SkillUnselected.dds"];
+		auto selectedImg = tex_map["Assets/SkillSelected.dds"];
 		ImVec2 size = { 0,0 };
 		ImTextureID texture_id = 0;
 		if (selected)
@@ -3237,12 +3237,12 @@ namespace Tempest::UI
 		
 		if (window->SkipItems)
 			return  false;
-		auto arrowImg = tex_map["Assets/Arrow_glow.png"];
+		auto arrowImg = tex_map["Assets/Arrow_glow.dds"];
 		ImVec2 arrowSize = { (float)arrowImg->GetWidth(), (float)arrowImg->GetHeight() };
 		ImVec2 newsize = { size.x, size.y + arrowSize.y };
 
-		auto unselectedImg = tex_map["Assets/TurnUnselectedBtn.png"];
-		auto selectedImg = tex_map["Assets/TurnSelectedBtn.png"];
+		auto unselectedImg = tex_map["Assets/TurnUnselectedBtn.dds"];
+		auto selectedImg = tex_map["Assets/TurnSelectedBtn.dds"];
 		auto newSize = size;
 		auto font = FONT_TURN;
 		ImTextureID selectedID = 0;
@@ -3253,8 +3253,8 @@ namespace Tempest::UI
 		else
 		{	//selectedSize = { selectedSize.x / 1.68f, selectedSize.y / 1.68f };
 			font = FONT_OPEN;
-			unselectedImg = tex_map["Assets/SmallTurnUnselectedBtn.png"];
-			selectedImg = tex_map["Assets/SmallTurnSelectedBtn.png"];
+			unselectedImg = tex_map["Assets/SmallTurnUnselectedBtn.dds"];
+			selectedImg = tex_map["Assets/SmallTurnSelectedBtn.dds"];
 		}
 		if (selected)
 		{
@@ -3343,11 +3343,11 @@ namespace Tempest::UI
 		
 		
 		auto character = instance.ecs.get_if<tc::Character>(id);
-		auto characterImg = tex_map["Assets/Unit_Black.png"];
+		auto characterImg = tex_map["Assets/Unit_Black.dds"];
 
 		if (selected)
 		{
-			auto selectedImg = tex_map["Assets/TurnSelected.png"];
+			auto selectedImg = tex_map["Assets/TurnSelected.dds"];
 			ImVec2 selectedMax = { Min.x + selectedImg->GetWidth(), Min.y + selectedImg->GetHeight() };
 			ImVec2 characterImgMin = { Min.x + selectedImg->GetWidth() * 0.1f, Min.y };
 			ImVec2 characterImgMax = { characterImgMin.x + characterImg->GetWidth(), characterImgMin.y + characterImg->GetHeight() };
@@ -3365,7 +3365,7 @@ namespace Tempest::UI
 		}
 		else
 		{
-			auto unselectedImg = tex_map["Assets/TurnUnselected.png"];
+			auto unselectedImg = tex_map["Assets/TurnUnselected.dds"];
 			ImVec2 unselectedMax = { Min.x + unselectedImg->GetWidth(), Min.y + unselectedImg->GetHeight() };
 			ImVec2 characterImgMax = { Min.x + characterImg->GetWidth(), Min.y + characterImg->GetHeight() };
 			window->AddImage((void*)static_cast<size_t>(unselectedImg->GetID()), Min, unselectedMax);
@@ -3388,15 +3388,15 @@ namespace Tempest::UI
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
 		auto character = instance.ecs.get_if<tc::Character>(id);
 
-		auto selectedImg = tex_map["Assets/CharacterBackdrop.png"];
-		auto characterImg = tex_map["Assets/Placeholder_Character.png"];
+		auto selectedImg = tex_map["Assets/CharacterBackdrop.dds"];
+		auto characterImg = tex_map["Assets/Placeholder_Character.dds"];
 		bool ret = false;
 		ImVec2 Min = { windowPos.x + pos.x, windowPos.y + pos.y };
 		
 
 		if (isRightSide)
 		{
-			selectedImg = tex_map["Assets/ActionBackdrop.png"];
+			selectedImg = tex_map["Assets/ActionBackdrop.dds"];
 			Min = { Min.x - selectedImg->GetWidth(), Min.y };
 		}
 		ImVec2 charImgMax = { Min.x + characterImg->GetWidth(), Min.y + characterImg->GetHeight() };
@@ -3503,7 +3503,7 @@ namespace Tempest::UI
 	{
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
-		auto actionImg = tex_map["Assets/ActionBackdrop.png"];
+		auto actionImg = tex_map["Assets/ActionBackdrop.dds"];
 
 		ImVec2 topleft = { pos.x - actionImg->GetWidth(), pos.y };
 		ImVec2 Min = { windowPos.x + topleft.x, windowPos.y + topleft.y };
@@ -3520,7 +3520,7 @@ namespace Tempest::UI
 	{
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
-		auto arrowImg = tex_map["Assets/SuccessArrow.png"];
+		auto arrowImg = tex_map["Assets/SuccessArrow.dds"];
 
 		//ImVec2 arrowMin = { windowPos.x + pos.x, windowPos.y + pos.y };
 		ImVec2 arrowMin = { windowPos.x + pos.x - arrowImg->GetWidth() * 0.5f, windowPos.y + pos.y - arrowImg->GetHeight() * 0.5f };

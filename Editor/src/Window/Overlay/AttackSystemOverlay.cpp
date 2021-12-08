@@ -124,7 +124,7 @@ namespace Tempest
 				//}
 				//ImGui::Separator();
 
-				auto tex = tex_map["Assets/GraphBG.png"];
+				auto tex = tex_map["Assets/GraphBG.dds"];
 				{
 
 					ImVec2 Min{ 0,0 };
@@ -368,7 +368,7 @@ namespace Tempest
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-						tex = tex_map["Assets/BackMenuBtn.png"];
+						tex = tex_map["Assets/BackMenuBtn.dds"];
 
 						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 						{
@@ -381,7 +381,7 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 						ImGui::SameLine();
 
-						tex = tex_map["Assets/QuickMenuBtn.png"];
+						tex = tex_map["Assets/QuickMenuBtn.dds"];
 
 						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 						{

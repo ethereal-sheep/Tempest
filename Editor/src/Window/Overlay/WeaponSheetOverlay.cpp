@@ -59,7 +59,7 @@ namespace Tempest
 
 			if (ImGui::Begin("Edit Weapon Sheet", nullptr, window_flags))
 			{
-				auto tex = tex_map["Assets/WeaponsBG.png"];
+				auto tex = tex_map["Assets/WeaponsBG.dds"];
 
 				ImVec2 point{ 0,0 };
 				{
@@ -137,7 +137,7 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.15f, viewport->Size.y * 0.3f });
-				auto UnitImg = tex_map["Assets/WeaponImage.png"];
+				auto UnitImg = tex_map["Assets/WeaponImage.dds"];
 				if (UI::UIImageButton((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }))
 				{
 
@@ -173,7 +173,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-					tex = tex_map["Assets/BackMenuBtn.png"];
+					tex = tex_map["Assets/BackMenuBtn.dds"];
 
 					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 					{
@@ -187,7 +187,7 @@ namespace Tempest
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
 
-					tex = tex_map["Assets/QuickMenuBtn.png"];
+					tex = tex_map["Assets/QuickMenuBtn.dds"];
 
 					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 					{
@@ -221,15 +221,15 @@ namespace Tempest
 
 	void WeaponSheetOverlay::initialise_tabs()
 	{
-		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/NewWeaponInfoTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/NewWeaponInfoTabLit.png"]->GetID());
-		Tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/NewWeaponInfoTabLit.png"]->GetWidth()),
-											 static_cast<float>(tex_map["Assets/NewWeaponInfoTabLit.png"]->GetHeight()) };
+		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/NewWeaponInfoTabUnlit.dds"]->GetID());
+		Tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/NewWeaponInfoTabLit.dds"]->GetID());
+		Tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/NewWeaponInfoTabLit.dds"]->GetWidth()),
+											 static_cast<float>(tex_map["Assets/NewWeaponInfoTabLit.dds"]->GetHeight()) };
 
-		Tabs[TABS_TYPE::USE].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/UseInfoTabUnlit.png"]->GetID());
-		Tabs[TABS_TYPE::USE].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/UseInfoTabLit.png"]->GetID());
-		Tabs[TABS_TYPE::USE].size = ImVec2{ static_cast<float>(tex_map["Assets/UseInfoTabUnlit.png"]->GetWidth()),
-											   static_cast<float>(tex_map["Assets/UseInfoTabUnlit.png"]->GetHeight()) };
+		Tabs[TABS_TYPE::USE].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/UseInfoTabUnlit.dds"]->GetID());
+		Tabs[TABS_TYPE::USE].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/UseInfoTabLit.dds"]->GetID());
+		Tabs[TABS_TYPE::USE].size = ImVec2{ static_cast<float>(tex_map["Assets/UseInfoTabUnlit.dds"]->GetWidth()),
+											   static_cast<float>(tex_map["Assets/UseInfoTabUnlit.dds"]->GetHeight()) };
 	}
 
 	template<typename F>

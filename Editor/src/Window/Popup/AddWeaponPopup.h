@@ -58,8 +58,8 @@ namespace Tempest
                     ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
                     ImGui::PopFont();
                     
-                    auto swordImg = tex_map["Assets/Sword.png"];
-                    auto halfToneImg = tex_map["Assets/HalftoneWhite.png"];
+                    auto swordImg = tex_map["Assets/Sword.dds"];
+                    auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
                     ImVec2 swordMin = { winMin.x + ImGui::GetWindowWidth() * 0.1f, winMin.y + ImGui::GetWindowHeight() * 0.2f };
                     ImVec2 swordMax = { swordMin.x + swordImg->GetWidth() * 0.7f, swordMin.y + swordImg->GetHeight() * 0.7f };
                     ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
