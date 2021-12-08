@@ -16617,11 +16617,11 @@ f 19 17 16
 f 18 20 21
 f 21 19 18
 p NULL
-p Models\Bed_Sci-Fi.fbm\Material_2375_Base_color.png
+p Models\Bed_Sci-Fi.fbm\Material_2375_Base_color.dds
 p NULL
 p NULL
 p NULL
-p Models\Bed_Sci-Fi.fbm\CYBERPUNK19_3.png
+p Models\Bed_Sci-Fi.fbm\CYBERPUNK19_3.dds
 m 448
 m 52
 m 121
