@@ -15,9 +15,13 @@
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 namespace Tempest
 {
-	void TurnOrderOverlay::open_popup(const Event&)
+	void TurnOrderOverlay::open_popup(const Event& e)
 	{
+		auto a = event_cast<OpenTurnOrderOverlay>(e);
+		new_instance = a.newInstance;
 		OverlayOpen = true;
+		if (!new_instance)
+			added_entities = a.entities;
 	}
 
 	void TurnOrderOverlay::show(Instance& instance)
@@ -386,7 +390,13 @@ namespace Tempest
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 						// change the state
 						OverlayOpen = false;
-						Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities);
+						if (new_instance)
+							Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities);
+						else
+						{
+							Service<EventManager>::Get().instant_dispatch<ChangeTurnOrder>(added_entities);
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+						}
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
 						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;

@@ -48,9 +48,11 @@ namespace Tempest
 
             Service<EventManager>::Get().register_listener<OpenCombatModeTrigger>(&CombatModeOverlay::open_popup, this);
             Service<EventManager>::Get().register_listener<CombatModeVisibility>(&CombatModeOverlay::visibility, this);
+            Service<EventManager>::Get().register_listener<ChangeTurnOrder>(&CombatModeOverlay::change_turn_order, this);
         }
         void open_popup(const Event& e);
         void visibility(const Event& e);
+        void change_turn_order(const Event& e);
 
         void show(Instance&) override;
         void push_style_color() const;

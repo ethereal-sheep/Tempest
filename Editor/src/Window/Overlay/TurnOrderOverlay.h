@@ -56,6 +56,7 @@ namespace Tempest
 
         bool OverlayOpen = true;
 
+        bool new_instance{ true };
         std::string overlay_title{ "" };
         std::string current_stat{ "" };
         TURN_ORDER_STATE turn_order_state{ TURN_ORDER_STATE::ORDER_ADD_UNITS };

@@ -1667,6 +1667,13 @@ namespace Tempest
 		battle_state = BATTLE_STATE::CURR_TURN;
 	}
 
+	void CombatModeOverlay::change_turn_order(const Event& e)
+	{
+		units = event_cast<ChangeTurnOrder>(e).entities;
+		curr_entity = units.front();
+		curr_turn = 0;
+	}
+
 	void CombatModeOverlay::show(Instance& instance)
 	{
 		if (!dynamic_cast<RuntimeInstance*>(&instance))
@@ -1752,7 +1759,7 @@ namespace Tempest
 
 			if (UI::UIButton_2("Turn Order", "Turn Order", ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
 			{
-				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
+				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>(false, units);
 				Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
 			}
 
