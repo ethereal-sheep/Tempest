@@ -759,7 +759,6 @@ namespace Tempest
 		}
 	}
 
-
 	void CombatModeOverlay::attacking(RuntimeInstance& instance, const glm::ivec2& world_mouse)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();

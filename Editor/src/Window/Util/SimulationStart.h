@@ -100,7 +100,7 @@ namespace Tempest
 			case State::LOAD:
 				setup_simulate(instance);
 				state = State::RUN;
-				ImGui::OpenPopup("Simulating Conflict");
+				//ImGui::OpenPopup("Simulating Conflict");
 				[[fallthrough]];
 			case State::RUN:
 			{
