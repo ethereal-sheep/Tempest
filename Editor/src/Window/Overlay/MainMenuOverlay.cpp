@@ -292,8 +292,25 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				MapTitle = selectable;
-				MainMenuUI = UI_SHOW::SELECT_MAP;
+
+				if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
+				{
+					MapTitle = selectable;
+					MainMenuUI = UI_SHOW::SELECT_MAP;
+				}
+				else if(!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+				{
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+				}
+				else if (!instance.ecs.view_first<tc::ConflictGraph>())
+				{
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
+				}
+				else
+				{
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
+				}
+
 			}
 			if (ImGui::IsItemHovered())
 			{

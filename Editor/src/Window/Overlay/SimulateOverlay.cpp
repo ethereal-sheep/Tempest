@@ -187,8 +187,25 @@ namespace Tempest
 					// open testing combat in map
 					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
 					edit.save();
-					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
-					OverlayOpen = false;
+
+					if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
+					{
+						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
+						OverlayOpen = false;
+					}
+					else if (!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+					{
+						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+					}
+					else if (!instance.ecs.view_first<tc::ConflictGraph>())
+					{
+						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
+					}
+					else
+					{
+						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
+					}
+
 					/*Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 						edit.get_full_path(),
 						MemoryStrategy{},
@@ -207,6 +224,11 @@ namespace Tempest
 					{
 						OverlayOpen = false;
 						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
+						{
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+						}
 					}
 
 					ImGui::SameLine();

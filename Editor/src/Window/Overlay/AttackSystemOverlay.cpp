@@ -13,6 +13,7 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "AttackSystemOverlay.h"
 #include "Util/UIElements.h"
+#include "Instance/EditTimeInstance.h"
 
 namespace Tempest
 {
@@ -375,6 +376,12 @@ namespace Tempest
 						{
 							OverlayOpen = false;
 							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+
+							if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
+							{
+								Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+								Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+							}
 							//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 						}
 

@@ -91,8 +91,23 @@ namespace Tempest
 			ImGui::BeginChild("Child", ImVec2{}, false);
 			if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 			{
-				OverlayOpen = false;
-				Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
+				{
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+				}
+				else if (!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+				{
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+				}
+				else if (!instance.ecs.view_first<tc::ConflictGraph>())
+				{
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
+				}
+				else
+				{
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
+				}
 			}
 			ImGui::EndChild();
 			ImGui::PopStyleColor(1);

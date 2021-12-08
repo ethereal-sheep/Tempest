@@ -12,6 +12,7 @@
 #include "UnitSheetOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/Basics/RenderSystem.h"
+#include "Instance/EditTimeInstance.h"
 
 namespace Tempest
 {
@@ -212,6 +213,11 @@ namespace Tempest
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
 						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
+						{
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+						}
 						//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
 					}
 

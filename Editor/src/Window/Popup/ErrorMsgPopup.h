@@ -47,6 +47,7 @@ namespace Tempest
 
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+            ImGui::SetNextWindowSize(ImVec2(0.f, 0.0f), ImGuiCond_Appearing);
             if (ImGui::BeginPopupModal("Error has occured!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
             {
                 ImGui::Text(ICON_FA_EXCLAMATION_CIRCLE);
