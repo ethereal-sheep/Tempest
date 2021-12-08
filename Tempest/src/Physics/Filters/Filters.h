@@ -1,5 +1,7 @@
 /**********************************************************************************
-* \author		Cantius Chew (c.chew@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu),
+                Lim Ziyi Jean(ziyijean.lim@digipen.edu),
+*				Huang Xurong(h.xurong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
