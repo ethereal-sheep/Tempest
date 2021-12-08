@@ -425,6 +425,7 @@
     <None Include="src\Util\Serializer\Private\Writer.inl" />
     <None Include="src\Serializer\Reader.inl" />
     <None Include="src\Serializer\Writer.inl" />
+    <None Include="Tempest.aps" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tempest.rc" />

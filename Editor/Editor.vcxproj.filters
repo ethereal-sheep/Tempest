@@ -409,6 +409,7 @@
     <None Include="src\Extern\imgui\imgui_node_editor_internal.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Editor.aps" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc">

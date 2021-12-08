@@ -2361,7 +2361,7 @@ namespace Tempest::UI
 		return pressed;
 	}
 
-	std::pair<bool, bool> UIConflictSelectable(const char* label, bool selected, int type, ImGuiSelectableFlags flags, const ImVec2& size_arg)
+	std::pair<bool, bool> UIConflictSelectable(const char* label, bool selected, int type, ImGuiSelectableFlags flags, [[maybe_unused]]const ImVec2& size_arg)
 	{
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
@@ -2564,7 +2564,7 @@ namespace Tempest::UI
 			hovered = true;
 		if (hovered || selected)
 		{
-			const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+			//[[maybe_unused]] const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
 			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
 			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
 			ImGui::SetMouseCursor(7);
@@ -2610,7 +2610,7 @@ namespace Tempest::UI
 		return { false,false };
 	}
 
-	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool selected, int type, ImGuiSelectableFlags flags, const ImVec2& size_arg)
+	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool selected, [[maybe_unused]] int type, ImGuiSelectableFlags flags, [[maybe_unused]] const ImVec2& size_arg)
 	{
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
@@ -2774,7 +2774,7 @@ namespace Tempest::UI
 			hovered = true;
 		if (hovered || selected)
 		{
-			const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+			//const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
 			//ImGui::RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
 			//ImGui::RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
 			ImGui::SetMouseCursor(7);

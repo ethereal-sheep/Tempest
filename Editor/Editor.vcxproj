@@ -331,6 +331,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Editor.aps" />
     <None Include="src\Extern\imgui\imgui_bezier_math.inl" />
     <None Include="src\Extern\imgui\imgui_extra_math.inl" />
     <None Include="src\Extern\imgui\imgui_node_editor_internal.inl" />

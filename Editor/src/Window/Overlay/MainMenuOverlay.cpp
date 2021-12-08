@@ -585,7 +585,7 @@ namespace Tempest
 				int i = 0;
 				std::string seq_name = "Unit vs Unit";
 				ImGui::PushID(seq_name.c_str());
-				bool selected = SelectedSequences.size();
+				//bool selected = SelectedSequences.size();
 				if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, false))
 				{
 					Service<EventManager>::Get().instant_dispatch<MainMenuSequencePopupTrigger>(SelectedSequences);

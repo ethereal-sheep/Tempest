@@ -11,7 +11,7 @@
 
 namespace Tempest
 {
-	void BuildModeOverlay::open_popup(const Event& e)
+	void BuildModeOverlay::open_popup(const Event& )
 	{
 		OverlayOpen = true;
 	}
@@ -20,7 +20,7 @@ namespace Tempest
 
 	void BuildModeOverlay::show(Instance& instance)
 	{
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		//const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		//ImGui::SetNextWindowPos(viewport->Pos);
 		//ImGui::SetNextWindowSize(viewport->Size);
 		if (OverlayOpen)
@@ -67,7 +67,7 @@ namespace Tempest
 
 			auto cPos = ImGui::GetCursorPos();
 			auto io = ImGui::GetIO();
-			auto bbY = viewport->Size.y - swidth;
+			//auto bbY = viewport->Size.y - swidth;
 			ImVec2 MousePos = { 0,0 };
 			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 			{
@@ -118,7 +118,7 @@ namespace Tempest
 		ImGui::PopStyleColor(1);
 	}
 
-	void BuildModeOverlay::draw_splitter(float posY)
+	void BuildModeOverlay::draw_splitter(float )
 	{
 		//ImVec2 backup_pos = ImGui::GetCursorPos();
 		//ImGui::SetCursorPosY(posY + swidth);
