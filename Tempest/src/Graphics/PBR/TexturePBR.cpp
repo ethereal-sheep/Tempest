@@ -173,7 +173,7 @@ namespace Tempest
             errorText += "]. Result :  ";
             errorText += std::to_string(int(ret));
             errorText += ".";
-            LOG_CRITICAL(errorText.c_str());
+            LOG_ERROR(errorText.c_str());
             return;
         }
 
