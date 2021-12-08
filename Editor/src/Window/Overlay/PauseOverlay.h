@@ -34,5 +34,6 @@ namespace Tempest
         void show(Instance&) override;
 
         bool OverlayOpen = false;
+        bool EscDuringPause = false;
     };
 }
