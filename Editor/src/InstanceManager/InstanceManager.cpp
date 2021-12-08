@@ -176,7 +176,7 @@ namespace Tempest
 		//instance->register_always<TurnOrderOverlay>();
 		instance->register_always<SimulationStart>();
 		//instance->register_window<test_window4>();
-
+		instance->register_always<ConflictResOverlay>();
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();

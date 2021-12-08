@@ -1,5 +1,5 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Huang Xurong(h.xurong@digipen.edu)
 * \version		1.0
 * \date			2021
 * \note			Course: GAM300
@@ -60,7 +60,10 @@ namespace Tempest
 				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 				{
 					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						instance.get_full_path(),
+						MemoryStrategy{},
+						InstanceType::EDIT_TIME);
 				}
 				ImGui::PopStyleColor(3);
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4{ 0,0,0,0 });
@@ -116,11 +119,19 @@ namespace Tempest
 				{
 					OverlayOpen = false;
 					//Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
-					dynamic_cast<EditTimeInstance&>(instance).save();
-					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-						dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
-						MemoryStrategy{},
-						InstanceType::RUN_TIME);
+					if (dynamic_cast<RuntimeInstance*>(&instance))
+					{
+						Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
+					}
+					else
+					{
+						dynamic_cast<EditTimeInstance&>(instance).save();
+						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+							dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
+							MemoryStrategy{},
+							InstanceType::RUN_TIME);
+					}
+					
 				}
 				ImGui::PopID();
 			}

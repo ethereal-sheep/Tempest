@@ -76,9 +76,9 @@ namespace Tempest
 
                     tex = tex_map["Assets/BackMenuBtn.dds"];
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
                     {
-                        // do what here?
+                        enable_popup = false;
                     }
 
                     ImGui::SameLine();
@@ -87,7 +87,7 @@ namespace Tempest
 
                     tex = tex_map["Assets/QuickMenuBtn.dds"];
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
                     {
                         enable_popup = false;
                         ImGui::CloseCurrentPopup();
@@ -98,7 +98,7 @@ namespace Tempest
                     // render the buttons yo
                     ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.33f});
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetID()), button_size))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetID()), button_size))
                     {
                         enable_popup = false;
                         AudioEngine ae;
@@ -116,7 +116,7 @@ namespace Tempest
 
                     ImGui::SameLine();
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::UNITS]->GetID()), button_size))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::UNITS]->GetID()), button_size))
                     {
                         enable_popup = false;
                         AudioEngine ae;
@@ -133,7 +133,7 @@ namespace Tempest
 
                     ImGui::SameLine();
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ACTIONS]->GetID()), button_size))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ACTIONS]->GetID()), button_size))
                     {
                         enable_popup = false;
                         AudioEngine ae;
@@ -150,7 +150,7 @@ namespace Tempest
 
                     ImGui::SameLine();
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size))
                     {
                         enable_popup = false;
                         AudioEngine ae;
@@ -167,7 +167,7 @@ namespace Tempest
 
                     ImGui::SameLine();
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::WEAPONS]->GetID()), button_size))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::WEAPONS]->GetID()), button_size))
                     {
                         enable_popup = false;
                         AudioEngine ae;
@@ -184,7 +184,7 @@ namespace Tempest
 
                     ImGui::SameLine();
 
-                    if (ImGui::ImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ITEMS]->GetID()), button_size))
+                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ITEMS]->GetID()), button_size))
                     {
                         AudioEngine ae;
                         ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
@@ -211,5 +211,7 @@ namespace Tempest
         QUICKMENU_POPUP_TYPE previous{ QUICKMENU_POPUP_TYPE::SIMULATE };
         ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
                          ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
+        ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+        ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
     };
 }
