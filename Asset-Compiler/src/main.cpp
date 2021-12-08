@@ -356,7 +356,9 @@ bool LoadModel(const std::string& path)
 			if (check == std::string::npos) continue;
 
 			std::string tex_path = full_path.substr(check, full_path.length());
-			mMesh.textures.push_back(tex_path);
+			std::filesystem::path es{ tex_path };
+			es.replace_extension(".dds");
+			mMesh.textures.push_back(es.string());
 		}
 		else
 			mMesh.textures.push_back("NULL");
