@@ -248,6 +248,6 @@
     <ResourceCompile Include="Tempest.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\Cantius\Downloads\CoReSys.ico" />
+    <Image Include="CoReSys.ico" />
   </ItemGroup>
 </Project>

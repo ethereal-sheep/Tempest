@@ -431,7 +431,7 @@
     <ResourceCompile Include="Tempest.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\Cantius\Downloads\CoReSys.ico" />
+    <Image Include="CoReSys.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
