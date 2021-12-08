@@ -21,6 +21,7 @@ namespace Tempest
 		auto a = event_cast<OpenTurnOrderOverlay>(e);
 		new_instance = a.newInstance;
 		OverlayOpen = true;
+		turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
 		if (!new_instance)
 			added_entities = a.entities;
 	}
@@ -77,6 +78,9 @@ namespace Tempest
 						for (auto id : instance.ecs.view<Components::Character>())
 						{
 							auto& charac = instance.ecs.get<tc::Character>(id);
+
+							if (charac.isInCombat)
+								continue;
 							if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f },
 								charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, true, ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 }))
 							{
@@ -391,13 +395,10 @@ namespace Tempest
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 						// change the state
 						OverlayOpen = false;
-						if (new_instance)
-							Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities);
-						else
-						{
+						if (!new_instance)
 							Service<EventManager>::Get().instant_dispatch<ChangeTurnOrder>(added_entities);
-							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
-						}
+
+						Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities, instance, new_instance);
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
 						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;

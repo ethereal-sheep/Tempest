@@ -19,7 +19,7 @@ namespace Tempest
 {
     class PlaceUnitsOverlay : public Window
     {
-
+        bool OpenCombat = true;
         bool OverlayOpen = true;
         CameraControls cam_ctrl;
         int selected = -1;

@@ -168,8 +168,10 @@ namespace Tempest
 
 	struct OpenPlaceUnitsOverlay : public Event 
 	{
-		OpenPlaceUnitsOverlay(const tvector<Entity> entity) : entities{ entity } {}
+		OpenPlaceUnitsOverlay(const tvector<Entity> entity, Instance& in, bool openNewCombat = true) : entities{ entity }, instance{ in }, openNewCombat{ openNewCombat } {}
 		tvector<Entity> entities;
+		bool openNewCombat;
+		Instance& instance;
 	};
 	struct OpenBuildModeOverlay : public Event {};
 	struct SaveCurrentBeforeOpenTrigger : public Event 
