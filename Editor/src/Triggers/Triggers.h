@@ -159,7 +159,13 @@ namespace Tempest
 		Instance& instance;
 		Entity entity;
 	};
-	struct OpenTurnOrderOverlay : public Event {};
+	struct OpenTurnOrderOverlay : public Event
+	{
+		OpenTurnOrderOverlay(bool isNewInstance = true, tvector<Entity> exsitingEntities = tvector<Entity>{}) : newInstance{ isNewInstance }, entities{ exsitingEntities } {}
+		bool newInstance;
+		tvector<Entity> entities;
+	};
+
 	struct OpenPlaceUnitsOverlay : public Event 
 	{
 		OpenPlaceUnitsOverlay(const tvector<Entity> entity) : entities{ entity } {}
@@ -182,4 +188,10 @@ namespace Tempest
 	struct ShowRecentUtil : public Event {};
 	struct AddRecentUtil : public Event {};
 	struct ToggleMenuBar : public Event {};
+
+	struct ChangeTurnOrder : public Event
+	{
+		ChangeTurnOrder(tvector<Entity> newTurnOrder) : entities { newTurnOrder } {}
+		tvector<Entity> entities;
+	};
 }
