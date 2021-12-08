@@ -143,8 +143,12 @@ namespace Tempest
 					{
 						if (OpenCombat)
 							Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
-						else 
-							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+						else
+						{
+							Service<EventManager>::Get().instant_dispatch<ChangeTurnOrder>(chars);
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);	
+						}
+							
 
 						OverlayOpen = false;
 					}
