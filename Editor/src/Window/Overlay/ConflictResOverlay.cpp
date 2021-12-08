@@ -62,8 +62,6 @@ namespace Tempest
 					OverlayOpen = false;
 					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
 				}
-					
-
 				ImGui::PopStyleColor(3);
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4{ 0,0,0,0 });
 

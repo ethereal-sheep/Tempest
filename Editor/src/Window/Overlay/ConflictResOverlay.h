@@ -41,5 +41,7 @@ namespace Tempest
         ImVec2 initViewPortSize = ImGui::GetMainViewport()->Size;
         int SelectedConflictRes{ 0 };
         std::vector<int> SelectedSequences; // will this be an entity id?
+        ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+        ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
     };
 }
