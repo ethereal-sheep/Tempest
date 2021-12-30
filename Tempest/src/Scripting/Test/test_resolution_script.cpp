@@ -248,8 +248,8 @@ namespace Tempest
 
 		// There is only 3 comparison case, hence 0,1,2, the 3 test cases.
 		tempFN(5, 2, 0);
-		tempFN(5, 2, 1);
-		tempFN(5, 2, 2);
+		tempFN(5, 5, 1);
+		tempFN(2, 5, 2);
 	}
 
 	void TestingDice()
