@@ -176,32 +176,32 @@ namespace Tempest
         {
         case Tempest::SwitchNode::inner_type::TwoSwitch:
             return instance.srm.add_script(
-                CreateBranchScript<int(int), 2 + 2>(
+                CreateBranchScript<std::tuple<int>(int), 2 + 2>(
                     [](const auto& x) { return std::make_tuple(x); },
                     std::placeholders::_1));
         case Tempest::SwitchNode::inner_type::ThreeSwitch:
             return instance.srm.add_script(
-                CreateBranchScript<int(int), 3 + 2>(
+                CreateBranchScript<std::tuple<int>(int), 3 + 2>(
                     [](const auto& x) { return std::make_tuple(x); },
                     std::placeholders::_1));
         case Tempest::SwitchNode::inner_type::FiveSwitch:
             return instance.srm.add_script(
-                CreateBranchScript<int(int), 5 + 2>(
+                CreateBranchScript<std::tuple<int>(int), 5 + 2>(
                     [](const auto& x) { return std::make_tuple(x); },
                     std::placeholders::_1));
         case Tempest::SwitchNode::inner_type::TenSwitch:
             return instance.srm.add_script(
-                CreateBranchScript<int(int), 10 + 2>(
+                CreateBranchScript<std::tuple<int>(int), 10 + 2>(
                     [](const auto& x) { return std::make_tuple(x); },
                     std::placeholders::_1));
         case Tempest::SwitchNode::inner_type::TwentySwitch:
             return instance.srm.add_script(
-                CreateBranchScript<int(int), 20 + 2>(
+                CreateBranchScript<std::tuple<int>(int), 20 + 2>(
                     [](const auto& x) { return std::make_tuple(x); },
                     std::placeholders::_1));
         case Tempest::SwitchNode::inner_type::ThirtySwitch:
             return instance.srm.add_script(
-                CreateBranchScript<int(int), 30 + 2>(
+                CreateBranchScript<std::tuple<int>(int), 30 + 2>(
                     [](const auto& x) { return std::make_tuple(x); },
                     std::placeholders::_1));
         default:

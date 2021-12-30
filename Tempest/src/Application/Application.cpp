@@ -49,6 +49,8 @@ namespace Tempest
 		AudioEngine::Init();
 
 		OnInit();
+
+		TestingDice();
 	}
 
 	void Application::OnEngineUpdate()

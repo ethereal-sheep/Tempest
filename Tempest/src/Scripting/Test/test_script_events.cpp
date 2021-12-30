@@ -24,7 +24,7 @@ namespace Tempest
 
 		auto test3 = CreateDataScript<string>("string");
 
-		auto test4 = CreateBranchScript<int(int), 2 + 1>(
+		auto test4 = CreateBranchScript<std::tuple<int>(int), 2 + 1>(
 			[](const auto& x) { return std::make_tuple(x); },
 			std::placeholders::_1);
 

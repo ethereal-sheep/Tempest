@@ -39,12 +39,18 @@ namespace Tempest
         {
         case Tempest::CompareNode::inner_type::CompareFlow:
             node.set_name("Compare Flow");
+            
             node.add_input(pin_type::Flow, "");
             node.add_input(pin_type::Int, "lhs ");
             node.add_input(pin_type::Int, "rhs ");
+            
             node.add_output(pin_type::Flow, (const char*)u8"\uf531");
             node.add_output(pin_type::Flow, (const char*)u8"\uf52c");
             node.add_output(pin_type::Flow, (const char*)u8"\uf536");
+
+            node.add_output(pin_type::Int, "lhs_out ");
+            node.add_output(pin_type::Int, "rhs_out ");
+
             break;
         default:
             break;
@@ -59,9 +65,8 @@ namespace Tempest
         {
         case Tempest::CompareNode::inner_type::CompareFlow:
             return instance.srm.add_script(
-                CreateBranchScript<std::tuple<int>(int, int), 3>(
+                CreateBranchScript<std::tuple<int, int, int>(int, int), 3>(
                     [&instance, entity](int lhs, int rhs) {
-
 
                         if (auto var = instance.srm.get_variable_to_id(entity, "AttackRollOutput"))
                         {
@@ -76,10 +81,10 @@ namespace Tempest
 
 
                         if (lhs > rhs)
-                            return std::make_tuple(0);
+                            return std::make_tuple(0, lhs, rhs);
                         if (lhs == rhs)
-                            return std::make_tuple(1);
-                        return std::make_tuple(2);
+                            return std::make_tuple(1, lhs, rhs);
+                        return std::make_tuple(2, lhs, rhs);
                     },
                     std::placeholders::_1, std::placeholders::_2));
         default:
