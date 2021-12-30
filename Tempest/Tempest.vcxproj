@@ -251,6 +251,7 @@
     <ClCompile Include="src\Scripting\Nodes\ActionNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\UtilNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\VariableNode.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_compare_node.cpp" />
     <ClCompile Include="src\Scripting\Test\test_data.cpp" />
     <ClCompile Include="src\Scripting\Test\test_graph.cpp" />
     <ClCompile Include="src\ECS\Test\test_prototype.cpp" />

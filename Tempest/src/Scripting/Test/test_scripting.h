@@ -16,4 +16,6 @@ namespace Tempest
 	void testing_graph();
 	void testing_data();
 	void testing_script_event();
+	
+	void TestCompareNode();
 }

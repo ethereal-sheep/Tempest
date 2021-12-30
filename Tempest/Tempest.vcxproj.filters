@@ -79,6 +79,7 @@
     <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Scripting\Nodes\GroupNode.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_compare_node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
