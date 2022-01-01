@@ -212,13 +212,13 @@ namespace Tempest
 					{
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+						//Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
 						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
 						{
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
 							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
 						}
-						//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 					}
 
 					ImGui::SameLine();

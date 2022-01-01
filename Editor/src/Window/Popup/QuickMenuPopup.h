@@ -75,15 +75,7 @@ namespace Tempest
                     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
                     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
-                    tex = tex_map["Assets/BackMenuBtn.dds"];
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
-                    {
-                        enable_popup = false;
-                    }
-
-                    ImGui::SameLine();
-                    ImGui::Dummy(ImVec2{ 20.0f, 0.0f });
+                    ImGui::Dummy(ImVec2{ 150.0f, 0.0f });
                     ImGui::SameLine();
 
                     tex = tex_map["Assets/QuickMenuBtn.dds"];
