@@ -48,6 +48,7 @@ namespace Tempest
             node.add_output(pin_type::Flow, (const char*)u8"\uf52c");
             node.add_output(pin_type::Flow, (const char*)u8"\uf536");
 
+            node.add_output(pin_type::Int, "result ");
             node.add_output(pin_type::Int, "lhs_out ");
             node.add_output(pin_type::Int, "rhs_out ");
 

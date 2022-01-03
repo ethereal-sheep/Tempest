@@ -320,6 +320,7 @@ namespace Tempest
 				}
 				
 
+
 				// character added section
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f, viewport->Size.y * 0.3f });
 				const ImVec2 ChildSize{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f };
@@ -341,7 +342,10 @@ namespace Tempest
 						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
 							ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 }))
 						{
-							remove.push_back(i-1);
+							if (cs && !cs->isInCombat)
+							{
+								remove.push_back(i - 1);
+							}
 						}
 						if (cs)
 						{
@@ -357,10 +361,15 @@ namespace Tempest
 						}
 					}
 				}
-				for (auto i : remove)
+
+				if (turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS)
 				{
-					added_entities.erase(std::begin(added_entities) + i);
+					for (auto i : remove)
+					{
+						added_entities.erase(std::begin(added_entities) + i);
+					}
 				}
+
 				remove.clear();
 
 
