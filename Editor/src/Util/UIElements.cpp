@@ -3418,7 +3418,7 @@ namespace Tempest::UI
 			window->AddImage((void*)static_cast<size_t>(characterImg->GetID()), Min, charImgMax, ImVec2{ 0,0 }, ImVec2{ 1,1 }, ImGui::GetColorU32(ImVec4{ character->color.x, character->color.y,character->color.z, 1.0f }));
 		}
 		
-		ImVec2 namePos = { selectedMin.x + selectedImg->GetWidth() * 0.55f, selectedMin.y + selectedImg->GetHeight() * 0.08f };
+		ImVec2 namePos = { selectedMin.x + selectedImg->GetWidth() * 0.55f, selectedMin.y + selectedImg->GetHeight() * 0.09f };
 		ImVec2 hpPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight()   * 0.3f  };
 		ImVec2 atkPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight()  * 0.425f  };
 		ImVec2 defPos = { selectedMin.x + selectedImg->GetWidth() * 0.60f, selectedMin.y + selectedImg->GetHeight()  * 0.55f  };
@@ -3509,7 +3509,7 @@ namespace Tempest::UI
 		ImVec2 topleft = { pos.x - actionImg->GetWidth(), pos.y };
 		ImVec2 Min = { windowPos.x + topleft.x, windowPos.y + topleft.y };
 		ImVec2 Max = { Min.x + actionImg->GetWidth(), Min.y + actionImg->GetHeight() };
-		ImVec2 titlePos = { Min.x + actionImg->GetWidth() * 0.18f, Min.y + actionImg->GetHeight() * 0.08f };
+		ImVec2 titlePos = { Min.x + actionImg->GetWidth() * 0.1f, Min.y + actionImg->GetHeight() * 0.09f };
 
 		window->AddImage((void*)static_cast<size_t>(actionImg->GetID()), Min, Max);
 		ImGui::PushFont(FONT_TURN);

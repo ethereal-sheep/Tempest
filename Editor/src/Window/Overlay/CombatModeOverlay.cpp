@@ -577,24 +577,53 @@ namespace Tempest
 						{
 						case Tempest::CombatModeOverlay::BATTLE_STATE::CURR_TURN:
 						{
+							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
 							// action
-							if (UI::UIButton_2("ACTION", "ACTION", ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.3f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { -150,80 }, FONT_SHEAD))
+							const ImVec2 imgSize{ (float)combat_button_tex[0]->GetWidth(), (float)combat_button_tex[0]->GetHeight() };
+							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
+							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
 							}
+							if (ImGui::IsItemHovered())
+								combat_button_tex[0] = tex_map["Assets/CActionSelected.dds"];
+							else
+								combat_button_tex[0] = tex_map["Assets/CActionUnselected.dds"];
 
 							ImGui::SameLine();
 							const ImVec2 cursor{ ImGui::GetCursorPos() };
 							const ImVec2 avail_region{ ImGui::GetContentRegionAvail() };
-							if (UI::UIButton_2("ITEMS", "ITEMS", ImVec2{ cursor.x + avail_region.x * 0.5f, cursor.y - avail_region.y * 0.25f }, { -200,10 }, FONT_SHEAD))
-							{
+							const ImVec2 imgSize2{ (float)combat_button_tex[1]->GetWidth(), (float)combat_button_tex[1]->GetHeight() };
 
+							// item
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f, cursor.y + avail_region.y * 0.22f - imgSize2.y * 0.5f });
+
+							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[1]->GetID()), imgSize2))
+							{
 							}
 
-							if (UI::UIButton_2("MOVE", "MOVE", ImVec2{ cursor.x + avail_region.x * 0.5f, cursor.y + avail_region.y * 0.6f }, { -200,10 }, FONT_SHEAD))
+							if (ImGui::IsItemHovered())
+								combat_button_tex[1] = tex_map["Assets/CItemSelected.dds"];
+							else
+								combat_button_tex[1] = tex_map["Assets/CItemUnselected.dds"];
+
+							// move
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f, cursor.y + avail_region.y * 0.68f - imgSize2.y * 0.5f });
+
+							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[2]->GetID()), imgSize2))
 							{
 								state = State::MOVING;
 							}
+
+							if (ImGui::IsItemHovered())
+								combat_button_tex[2] = tex_map["Assets/CMoveSelected.dds"];
+							else
+								combat_button_tex[2] = tex_map["Assets/CMoveUnselected.dds"];
+
+							ImGui::PopStyleColor(3);
 						}
 						break;
 						case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_ACTION: // TODO: account for no actions
@@ -794,12 +823,23 @@ namespace Tempest
 						{
 						case Tempest::CombatModeOverlay::BATTLE_STATE::CURR_TURN:
 						{
+							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
 							// action
-							if (UI::UIButton_2("ACTION", "ACTION", ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.3f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, { -150,80 }, FONT_SHEAD))
+							const ImVec2 imgSize{ (float)combat_button_tex[0]->GetWidth(), (float)combat_button_tex[0]->GetHeight() };
+							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
+							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
 							}
+							if (ImGui::IsItemHovered())
+								combat_button_tex[0] = tex_map["Assets/CActionSelected.dds"];
+							else
+								combat_button_tex[0] = tex_map["Assets/CActionUnselected.dds"];
 
+							ImGui::PopStyleColor(3);
 							/*ImGui::SameLine();
 							const ImVec2 cursor{ ImGui::GetCursorPos() };
 							const ImVec2 avail_region{ ImGui::GetContentRegionAvail() };
@@ -1646,7 +1686,10 @@ namespace Tempest
 		placeholder_height = (float)tex_map["Assets/Placeholder_Character.dds"]->GetHeight();
 		action_background_size = ImVec2{ tex_map["Assets/ActionBackdrop.dds"]->GetWidth() * 1.0f, tex_map["Assets/ActionBackdrop.dds"]->GetHeight() * 1.0f};
 
-		action_button_diff = (float)tex_map["Assets/SkillSelected.dds"]->GetWidth() - (float)tex_map["Assets/SkillUnselected.dds"]->GetWidth();
+		combat_button_tex[0] = tex_map["Assets/CActionUnselected.dds"];
+		combat_button_tex[1] = tex_map["Assets/CItemUnselected.dds"];
+		combat_button_tex[2] = tex_map["Assets/CMoveUnselected.dds"];
+
 		battle_state = BATTLE_STATE::CURR_TURN; 
 		state = State::MENU;
 
@@ -1664,7 +1707,6 @@ namespace Tempest
 	void CombatModeOverlay::visibility(const Event& e)
 	{
 		OverlayOpen = event_cast<CombatModeVisibility>(e).isVisible;
-		action_button_diff = (float)tex_map["Assets/SkillSelected.dds"]->GetWidth() - tex_map["Assets/SkillUnselected.dds"]->GetWidth();
 		battle_state = BATTLE_STATE::CURR_TURN;
 	}
 

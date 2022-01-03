@@ -167,7 +167,7 @@ namespace Tempest
         bool atk_rolled = false;
         bool def_rolled = false;
 
-        float action_button_diff = 0.0f;
+        float action_button_diff = 40.0f;
         float placeholder_height = 0.0f;
         ImVec2 action_background_size{0.f,0.f};
         bool display_curr_stat{ false };
@@ -175,6 +175,7 @@ namespace Tempest
         INFO_TYPE info_type{ INFO_TYPE::CHAR};
         BATTLE_STATE battle_state{ BATTLE_STATE::CURR_TURN };
 
+        tsptr<Texture> combat_button_tex[3];
 
         tmap<int, tmap<int, uint32_t>> range_map;
         tmap<int, tmap<int, bool>> visited;
