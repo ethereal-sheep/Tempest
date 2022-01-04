@@ -341,7 +341,8 @@ namespace Tempest
 						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
 							ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 }))
 						{
-							remove.push_back(i-1);
+							if (turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS)
+								remove.push_back(i-1);
 						}
 						if (cs)
 						{
