@@ -163,6 +163,7 @@ namespace Tempest::UI
 	// Button size will not scale with Text
 	// Beige Button for Select Sequence Btn
 	bool UIButton_Simulate(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+	bool UIButton_CustomMap(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 
 	bool UIButton_EndTurn(ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 

@@ -1399,7 +1399,7 @@ namespace Tempest::UI
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.6f, new_pos.y - 1.f });
+			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.6f, new_pos.y});
 			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f});
 		}
 		return res;
@@ -1412,8 +1412,8 @@ namespace Tempest::UI
 		const float default_padding_y = 8.f;
 		const float border_size = 1.5f;
 
-		const ImVec4 default_border_col = { 0.609f, 0.745f, 0.325f, 1.f };
-		const ImVec4 hovered_border_col = { 0.686f, 0.796f, 0.459f, 1.f };
+		const ImVec4 default_border_col = { 0.627f, 0.333f, 0.859f, 1.f };
+		const ImVec4 hovered_border_col = { 0.701f, 0.466f, 0.886f, 1.f };
 		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
 		string str = "aaaaaaaaaaaaaaa000000";
 		float rounding = 0.f;
@@ -1549,7 +1549,7 @@ namespace Tempest::UI
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.6f, new_pos.y - 1.f });
+			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.6f, new_pos.y});
 			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f });
 		}
 		return res;
@@ -1838,15 +1838,157 @@ namespace Tempest::UI
 			ImVec2 iconMin = { pos.x,  pos.y };
 			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
 			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.5f, new_pos.y - 1.f });
-			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f });
+			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.5f, new_pos.y});
+			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.75f, (float)SearchIcon->GetHeight() * 0.75f });
 		}
 
 		
 
 		return res;
 	}
+	bool UIButton_CustomMap(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	{
+		const float default_padding_x = 8.f;
+		const float default_padding_y = 8.f;
+		const float border_size = 1.5f;
 
+		const ImVec4 default_border_col = { 0.217f, 0.545f, 0.784f, 1.f };
+		const ImVec4 hovered_border_col = { 0.392f, 0.686f, 0.898f, 1.f };
+		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
+
+		string str = "aaaaaaaaaaaaaaa000000";
+		float rounding = 0.f;
+		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+		padding.y += 10.f;
+
+		// button shit
+		ImGui::PushFont(font);
+		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 act_text_size = {
+			std::max(text_size.x, alt_text_size.x),
+			std::max(text_size.y, alt_text_size.y)
+		};
+		ImGui::PopFont();
+
+		ImVec2 button_size = {
+			act_text_size.x + default_padding_x + padding.x,
+			act_text_size.y + default_padding_y + padding.y
+		};
+
+		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
+		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
+
+
+		ImGui::SetCursorPos(new_pos);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+		ImGui::InvisibleButton("##NiceButton", button_size);
+		ImGui::PopStyleVar(1);
+		bool hovered = ImGui::IsItemHovered();
+		bool res = false;
+
+
+
+		ImGui::SetCursorPos(new_pos);
+		if (selected)
+		{
+			ImVec4 col = default_border_col;
+			if (hovered)
+				col = hovered_border_col;
+			auto SearchIcon = tex_map["Assets/CustomMapIcon.dds"];
+			ImVec2 iconMin = { pos.x,  pos.y };
+			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
+
+			ImGui::SetCursorPos(new_pos);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+
+			ImGui::PushStyleColor(ImGuiCol_Border, col);
+			ImGui::PushStyleColor(ImGuiCol_Button, col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(2);
+			
+			//Drawing Image
+			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.47f, new_pos.y });
+			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.75f, (float)SearchIcon->GetHeight() * 0.75f });
+
+			//Text
+			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.35f - test.x * 0.5f, text_pos.y });
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1.f });
+			ImGui::PushFont(font);
+			ImGui::Text(unselected.c_str());
+			ImGui::PopFont();
+			ImGui::PopStyleColor();
+			auto io = ImGui::GetIO();
+			if (hovered && ImGui::IsMouseClicked(0))
+			{
+				res = true;
+			}
+		}
+		else if (!ImGui::IsItemHovered())
+		{
+			// default
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, default_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushStyleColor(ImGuiCol_Text, default_border_col);
+			ImGui::PushFont(font);
+			ImGui::Text(unselected.c_str());
+			ImGui::PopFont();
+			ImGui::PopStyleColor();
+		}
+		else
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushStyleColor(ImGuiCol_Text, hovered_border_col);
+			ImGui::PushFont(font);
+			ImGui::Text(unselected.c_str());
+			ImGui::PopFont();
+			ImGui::PopStyleColor();
+
+			auto io = ImGui::GetIO();
+			if (ImGui::IsMouseClicked(0))
+			{
+				res = true;
+			}
+		}
+		//if (selected)
+		//{
+		//	auto SearchIcon = tex_map["Assets/CustomMapIcon.dds"];
+		//	ImVec2 iconMin = { pos.x,  pos.y };
+		//	ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
+		//	//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
+		//	ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.38f, new_pos.y - 1.f });
+		//	ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.75f, (float)SearchIcon->GetHeight() * 0.75f });
+		//}
+
+
+
+		return res;
+	}
 	bool UIButton_EndTurn(ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
 	{
 		const float default_padding_x = 8.f;
