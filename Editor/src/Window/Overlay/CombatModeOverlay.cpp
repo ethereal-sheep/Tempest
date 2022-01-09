@@ -1514,17 +1514,56 @@ namespace Tempest
 					display_curr_stat = false;
 				}
 
-				push_style_color();
+				auto more_info_BG = tex_map["Assets/MIBG.dds"];
+				const ImVec2 BG_size{ more_info_BG->GetWidth() * 1.0f, more_info_BG->GetHeight() * 1.0f};
 
-				const float infoSize = viewport->Size.y * 0.8f / 3.0f;
+				ImGui::SetCursorPos(ImVec2{ 0.f, viewport->Size.y - BG_size.y });
+				if (ImGui::BeginChild(std::string{ "More Info" + std::to_string(character) }.c_str(), BG_size))
+				{
+
+					auto &charac = instance.ecs.get<tc::Character>(character);
+					ImVec2 img_min = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+					ImVec2 img_max = { img_min.x + ImGui::GetWindowWidth(), img_min.y + ImGui::GetWindowHeight()};
+					const ImVec2 content_region_offset{ ImGui::GetCursorPosX() +  ImGui::GetContentRegionAvailWidth() * 0.1f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.15f };
+
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(more_info_BG->GetID()), img_min, img_max);
+
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
+					render_tabs(TABS_TYPE::STAT, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_unit_stats(*viewport, instance, &charac);
+					});
+
+					render_tabs(TABS_TYPE::WEAPON, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
+					});
+
+					render_tabs(TABS_TYPE::ITEM, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_items(*viewport, instance, &charac);
+					});
+
+					render_tabs(TABS_TYPE::ACTION, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_actions(*viewport, instance, &charac);
+					});
+
+					ImGui::PopStyleColor(3);
+				}
+				ImGui::EndChild();
+
+				
+		/*		const float infoSize = viewport->Size.y * 0.8f / 3.0f;
 				ImGui::SetCursorPos(ImVec2{ 0.f, viewport->Size.y * 0.2f });
 				render_more_info(instance, *viewport, INFO_TYPE::CHAR, character);
 				ImGui::SetCursorPos(ImVec2{ 0.f, viewport->Size.y * 0.2f + infoSize });
 				render_more_info(instance, *viewport, INFO_TYPE::ACTIONS, character);
 				ImGui::SetCursorPos(ImVec2{ 0.f, viewport->Size.y * 0.2f + infoSize * 2.0f });
-				render_more_info(instance, *viewport, INFO_TYPE::WEAPONS, character);
-
-				pop_style_color();
+				render_more_info(instance, *viewport, INFO_TYPE::WEAPONS, character);*/
 			}
 		}
 		
@@ -1605,7 +1644,49 @@ namespace Tempest
 					display_other_stat = false;
 				}
 
-				push_style_color();
+				auto more_info_BG = tex_map["Assets/MIBG.dds"];
+				const ImVec2 BG_size{ more_info_BG->GetWidth() * 1.0f, more_info_BG->GetHeight() * 1.0f };
+
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x - BG_size.x, viewport->Size.y - BG_size.y });
+				if (ImGui::BeginChild(std::string{ "More Info" + std::to_string(character) }.c_str(), BG_size))
+				{
+
+					auto& charac = instance.ecs.get<tc::Character>(character);
+					ImVec2 img_min = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+					ImVec2 img_max = { img_min.x + ImGui::GetWindowWidth(), img_min.y + ImGui::GetWindowHeight() };
+					const ImVec2 content_region_offset{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.1f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.15f };
+
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(more_info_BG->GetID()), img_min, img_max);
+
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
+					render_tabs(TABS_TYPE::STAT, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_unit_stats(*viewport, instance, &charac);
+					});
+
+					render_tabs(TABS_TYPE::WEAPON, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
+					});
+
+					render_tabs(TABS_TYPE::ITEM, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_items(*viewport, instance, &charac);
+					});
+
+					render_tabs(TABS_TYPE::ACTION, [&]() {
+						ImGui::SetCursorPos(content_region_offset);
+						CombatModeOverlay::display_actions(*viewport, instance, &charac);
+					});
+
+					ImGui::PopStyleColor(3);
+				}
+				ImGui::EndChild();
+
+			/*	push_style_color();
 
 				const float infoSize = viewport->Size.y * 0.8f / 3.0f;
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.7f, viewport->Size.y * 0.2f });
@@ -1615,7 +1696,7 @@ namespace Tempest
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.7f, viewport->Size.y * 0.2f + infoSize * 2.0f });
 				render_more_info(instance, *viewport, INFO_TYPE::WEAPONS, character);
 
-				pop_style_color();
+				pop_style_color();*/
 			}
 
 		}
@@ -2108,140 +2189,143 @@ namespace Tempest
 		const int identifier = static_cast<int>(type) + static_cast<int>(entity * 2.5f); // this is a scam
 		if (ImGui::BeginChild(std::string("Char more info" + std::to_string(identifier)).c_str(), ImVec2{ viewport.Size.x * 0.3f, viewport.Size.y * 0.8f / 3.0f }, true))
 		{
-			auto& charac = instance.ecs.get<tc::Character>(entity);
-
-			ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
-			ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
-			ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.5f, winMin.y + ImGui::GetWindowHeight() * 0.1f };
-			ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
-			ImVec4 textcol = { 0,0,0,1 };
-			if (!ImGui::IsWindowFocused())
 			{
-				col = { 0.980f, 0.768f, 0.509f, 0.7f };
-				textcol = { 0,0,0,0.7f };
+				//auto& charac = instance.ecs.get<tc::Character>(entity);
+
+		//ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+		//ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
+		//ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.5f, winMin.y + ImGui::GetWindowHeight() * 0.1f };
+		//ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+		//ImVec4 textcol = { 0,0,0,1 };
+		//if (!ImGui::IsWindowFocused())
+		//{
+		//	col = { 0.980f, 0.768f, 0.509f, 0.7f };
+		//	textcol = { 0,0,0,0.7f };
+		//}
+
+		//ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+		//ImGui::PushFont(FONT_OPEN);
+		//switch (type)
+		//{
+		//case Tempest::CombatModeOverlay::INFO_TYPE::CHAR:
+		//	ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), charac.name.c_str());
+		//	break;
+		//case Tempest::CombatModeOverlay::INFO_TYPE::ACTIONS:
+		//	ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), "ACTIONS");
+		//	break;
+		//case Tempest::CombatModeOverlay::INFO_TYPE::WEAPONS:
+		//	ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), "WEAPONS");
+		//	break;
+		//default:
+		//	break;
+		//}
+
+		//ImGui::Dummy(ImVec2{0, 30.0f});
+
+		//if (ImGui::BeginChild(std::string("Internal content" + std::to_string(identifier)).c_str(), ImVec2{ ImGui::GetContentRegionAvailWidth() * 0.95f, ImGui::GetContentRegionAvail().y * 0.8f }, true))
+		//{
+		//	ImVec2 cursor{ ImGui::GetCursorPosX() + 100.0f, ImGui::GetCursorPosY() + 30.0f };
+		//	unsigned i = 0; 
+		//	unsigned j = 0;
+		//	switch (type)
+		//	{
+		//	case Tempest::CombatModeOverlay::INFO_TYPE::CHAR:
+		//	{
+		//		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+		//		Entity StateLineId = UNDEFINED;
+		//		for (auto id : StatsView)
+		//			StateLineId = id;
+		//		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
+
+		//		ImGui::Dummy(ImVec2{ 0.0f, 10.0f });
+		//		ImGui::PushFont(FONT_BODY);
+		//		bool NextLine = false;
+		//		ImVec2 PrevPos{ 0.f ,0.f };
+		//		float frontPadding = 5.f;
+		//		for (auto counter = 0; counter < sl->size(); counter++)
+		//		{
+		//			if ((*sl)(counter))
+		//			{
+		//				string stat = sl->operator[](counter) + " " + std::to_string(charac.get_stat(counter));
+
+		//				if (!NextLine)
+		//				{
+		//					ImGui::Dummy({ frontPadding * 15, 0 });
+		//					ImGui::SameLine();
+		//					PrevPos = ImGui::GetCursorPos();
+		//					ImGui::Text(stat.c_str());
+		//					ImGui::Dummy({ frontPadding * 15, 0 });
+		//					ImGui::SameLine();
+		//				}
+
+		//				else
+		//				{
+		//					ImGui::SetCursorPos(PrevPos);
+		//					ImGui::Dummy({ 250.f - frontPadding * 15, 0.f });
+		//					ImGui::SameLine();
+
+		//					ImGui::Text(stat.c_str());
+		//					ImGui::Dummy({ 250 + frontPadding, 0 });
+		//					ImGui::SameLine();
+
+		//					ImGui::SetCursorPos(PrevPos);
+		//					ImGui::Dummy({ 0, 50.f });
+		//				}
+
+		//				NextLine = !NextLine;
+
+		//			}
+
+		//		}
+		//		ImGui::PopFont();
+		//	}
+		//		// display stas
+		//		break;
+		//	case Tempest::CombatModeOverlay::INFO_TYPE::ACTIONS:
+		//		// display actions
+		//		for (auto id : charac.actions)
+		//		{
+		//			auto& action = instance.ecs.get<tc::Graph>(id);
+		//			if (UI::UIButton_2(action.g.name.c_str(), action.g.name.c_str(), { cursor.x + i++ * 190, cursor.y + j * 50 }, { 0,0 }, FONT_PARA))
+		//			{
+		//				// go edit page
+		//			}
+
+		//			if (i / 2)
+		//			{
+		//				i = 0;
+		//				++j;
+		//			}
+		//		}
+		//		break;
+		//	case Tempest::CombatModeOverlay::INFO_TYPE::WEAPONS:
+		//		// display weapons
+		//		for (auto id : charac.weapons)
+		//		{
+		//			auto& weapon = instance.ecs.get<tc::Weapon>(id);
+		//			if (UI::UIButton_2(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 190, cursor.y + j * 50 }, { 0,0 }, FONT_PARA))
+		//			{
+		//				// go edit page
+		//			}
+
+		//			if (i / 2)
+		//			{
+		//				i = 0;
+		//				++j;
+		//			}
+		//		}
+		//		break;
+		//	default:
+		//		break;
+		//	}
+		//}
+		//ImGui::EndChild();
+		//
+		//ImGui::PopFont();
+
+		//// display the edit here	
 			}
-
-			ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
-			ImGui::PushFont(FONT_OPEN);
-			switch (type)
-			{
-			case Tempest::CombatModeOverlay::INFO_TYPE::CHAR:
-				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), charac.name.c_str());
-				break;
-			case Tempest::CombatModeOverlay::INFO_TYPE::ACTIONS:
-				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), "ACTIONS");
-				break;
-			case Tempest::CombatModeOverlay::INFO_TYPE::WEAPONS:
-				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), "WEAPONS");
-				break;
-			default:
-				break;
-			}
-
-			ImGui::Dummy(ImVec2{0, 30.0f});
-
-			if (ImGui::BeginChild(std::string("Internal content" + std::to_string(identifier)).c_str(), ImVec2{ ImGui::GetContentRegionAvailWidth() * 0.95f, ImGui::GetContentRegionAvail().y * 0.8f }, true))
-			{
-				ImVec2 cursor{ ImGui::GetCursorPosX() + 100.0f, ImGui::GetCursorPosY() + 30.0f };
-				unsigned i = 0; 
-				unsigned j = 0;
-				switch (type)
-				{
-				case Tempest::CombatModeOverlay::INFO_TYPE::CHAR:
-				{
-					auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
-					Entity StateLineId = UNDEFINED;
-					for (auto id : StatsView)
-						StateLineId = id;
-					auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
-
-					ImGui::Dummy(ImVec2{ 0.0f, 10.0f });
-					ImGui::PushFont(FONT_BODY);
-					bool NextLine = false;
-					ImVec2 PrevPos{ 0.f ,0.f };
-					float frontPadding = 5.f;
-					for (auto counter = 0; counter < sl->size(); counter++)
-					{
-						if ((*sl)(counter))
-						{
-							string stat = sl->operator[](counter) + " " + std::to_string(charac.get_stat(counter));
-
-							if (!NextLine)
-							{
-								ImGui::Dummy({ frontPadding * 15, 0 });
-								ImGui::SameLine();
-								PrevPos = ImGui::GetCursorPos();
-								ImGui::Text(stat.c_str());
-								ImGui::Dummy({ frontPadding * 15, 0 });
-								ImGui::SameLine();
-							}
-
-							else
-							{
-								ImGui::SetCursorPos(PrevPos);
-								ImGui::Dummy({ 250.f - frontPadding * 15, 0.f });
-								ImGui::SameLine();
-
-								ImGui::Text(stat.c_str());
-								ImGui::Dummy({ 250 + frontPadding, 0 });
-								ImGui::SameLine();
-
-								ImGui::SetCursorPos(PrevPos);
-								ImGui::Dummy({ 0, 50.f });
-							}
-
-							NextLine = !NextLine;
-
-						}
-
-					}
-					ImGui::PopFont();
-				}
-					// display stas
-					break;
-				case Tempest::CombatModeOverlay::INFO_TYPE::ACTIONS:
-					// display actions
-					for (auto id : charac.actions)
-					{
-						auto& action = instance.ecs.get<tc::Graph>(id);
-						if (UI::UIButton_2(action.g.name.c_str(), action.g.name.c_str(), { cursor.x + i++ * 190, cursor.y + j * 50 }, { 0,0 }, FONT_PARA))
-						{
-							// go edit page
-						}
-
-						if (i / 2)
-						{
-							i = 0;
-							++j;
-						}
-					}
-					break;
-				case Tempest::CombatModeOverlay::INFO_TYPE::WEAPONS:
-					// display weapons
-					for (auto id : charac.weapons)
-					{
-						auto& weapon = instance.ecs.get<tc::Weapon>(id);
-						if (UI::UIButton_2(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 190, cursor.y + j * 50 }, { 0,0 }, FONT_PARA))
-						{
-							// go edit page
-						}
-
-						if (i / 2)
-						{
-							i = 0;
-							++j;
-						}
-					}
-					break;
-				default:
-					break;
-				}
-			}
-			ImGui::EndChild();
-			
-			ImGui::PopFont();
-
-			// display the edit here	
+		
 		}
 		ImGui::EndChild();
 	}
@@ -2268,5 +2352,221 @@ namespace Tempest
 			curr_turn = 0;
 
 		return units[curr_turn];
+	}
+
+	template<typename F>
+	void CombatModeOverlay::render_tabs(TABS_TYPE type, F&& func)
+	{
+		ImVec2 prev_cursor_pos{ 0.f, 10.f };
+
+		if (ImGui::ImageButton(tabs[type].image_id[tabs[type].current_state], tabs[type].size))
+		{
+			tabs[current_tab].current_state = TabImageData::STATE::UNHOVER;
+			tabs[current_tab].is_active = false;
+			tabs[type].is_active = true;
+
+			current_tab = type;
+		}
+
+		if (ImGui::IsItemHovered() || tabs[type].is_active)
+			tabs[type].current_state = TabImageData::STATE::HOVER;
+		else
+			tabs[type].current_state = TabImageData::STATE::UNHOVER;
+
+		if (type != TABS_TYPE::ACTION)
+		{
+			ImGui::SameLine();
+			prev_cursor_pos = ImGui::GetCursorPos();
+		}
+
+		if (tabs[type].is_active)
+		{
+			func();
+		}
+
+
+		// Get ready for next render of tab
+		ImGui::SetCursorPos(prev_cursor_pos);
+	}
+
+	void CombatModeOverlay::initialise_tabs()
+	{
+		tabs[TABS_TYPE::STAT].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIStatsUnselected.dds"]->GetID());
+		tabs[TABS_TYPE::STAT].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIStatsSelected.dds"]->GetID());
+		tabs[TABS_TYPE::STAT].size = ImVec2{ static_cast<float>(tex_map["Assets/MIStatsUnselected.dds"]->GetWidth() * 0.9f),
+											 static_cast<float>(tex_map["Assets/MIStatsUnselected.dds"]->GetHeight()) * 0.9f };
+
+		tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetID());
+		tabs[TABS_TYPE::WEAPON].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIWeaponsSelected.dds"]->GetID());
+		tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetWidth() * 0.9f),
+											   static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetHeight() * 0.9f) };
+
+		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsUnselected.dds"]->GetID());
+		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsSelected.dds"]->GetID());
+		tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetWidth() * 0.9f),
+											 static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetHeight() * 0.9f) };
+
+		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsUnselected.dds"]->GetID());
+		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsSelected.dds"]->GetID());
+		tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/MIActionsUnselected.dds"]->GetWidth() * 0.9f),
+											   static_cast<float>(tex_map["Assets/MIActionsUnselected.dds"]->GetHeight() * 0.9f) };
+	}
+
+	void CombatModeOverlay::display_unit_stats(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)
+	{
+		(void)viewport;
+		
+		if (!cs)
+			return;
+
+		auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+		Entity StateLineId = UNDEFINED;
+		for (auto id : StatsView)
+			StateLineId = id;
+		auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
+
+		ImGui::BeginChild("##UnitsInformationDisplay", { ImGui::GetContentRegionAvailWidth() * 0.85f, ImGui::GetContentRegionAvail().y * 0.85f });
+
+		// display the character info
+		float frontPadding = 5.f;
+		ImGui::PushFont(FONT_BODY);
+		ImGui::Dummy({ frontPadding, 0 });
+		ImGui::SameLine();
+		ImGui::Text("Name");
+
+		ImGui::Dummy({ frontPadding, 0 });
+		ImGui::SameLine();
+		ImGui::PushItemWidth(350.f);
+		ImGui::InputText("##CharacterName", &cs->name);
+		bool NameDisabled = cs->name.size() > 15;
+		ImGui::SameLine();
+		if (NameDisabled)
+		{
+			ImGui::Text("15 Char only");
+		}
+		else
+		{
+			ImGui::Dummy({ 100.f, 10.f });
+		}
+		ImGui::Dummy({ 0, 10.f });
+
+		bool NextLine = false;
+		ImVec2 PrevPos{ 0.f ,0.f };
+		for (auto i = 0; i < sl->size(); i++)
+		{
+			if ((*sl)(i))
+			{
+				string stat = sl->operator[](i) + " :";
+				string label = "##" + stat;
+				string WeaponData = "";
+
+				if (!NextLine)
+				{
+					ImGui::Dummy({ frontPadding, 0 });
+					ImGui::SameLine();
+					PrevPos = ImGui::GetCursorPos();
+					ImGui::Text(stat.c_str());
+					ImGui::Dummy({ frontPadding, 0 });
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.f);
+					ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
+					ImGui::PopItemWidth();
+					ImGui::SameLine();
+					ImGui::Text(WeaponData.c_str());
+				}
+
+				else
+				{
+					ImGui::SetCursorPos(PrevPos);
+					ImGui::Dummy({ 250.f - frontPadding, 0.f });
+					ImGui::SameLine();
+
+					ImGui::Text(stat.c_str());
+					ImGui::Dummy({ 250 + frontPadding, 0 });
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.f);
+					ImGui::InputInt(label.c_str(), &cs->get_stat(i), 0);
+					ImGui::PopItemWidth();
+					ImGui::SameLine();
+					ImGui::Text(WeaponData.c_str());
+
+					ImGui::SetCursorPos(PrevPos);
+					ImGui::Dummy({ 0, 70.f });
+				}
+
+				NextLine = !NextLine;
+
+			}
+
+		}
+		ImGui::PopFont();
+		ImGui::EndChild();
+	}
+
+	void CombatModeOverlay::display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)
+	{
+		(void)viewport;
+		if (!cs)
+			return;
+
+		unsigned i = 0;
+		unsigned j = 0;
+
+		ImGui::BeginChild("##WeaponsInformationDisplay", { ImGui::GetContentRegionAvailWidth() * 0.85f, ImGui::GetContentRegionAvail().y * 0.85f });
+
+		const ImVec2 cursor{ ImGui::GetCursorPosX() + 120.0f, ImGui::GetCursorPosY() + 30.0f };
+		for (auto weap_id : cs->weapons)
+		{
+			if (auto weapon = instance.ecs.get_if<tc::Weapon>(weap_id))
+			{
+				UI::UIButton_2(weapon->name.c_str(), weapon->name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, false);
+
+				// display in rows of 2
+				if (i / 2)
+				{
+					i = 0;
+					j++;
+				}
+			}
+		}
+
+		ImGui::EndChild();
+	}
+
+	void CombatModeOverlay::display_items(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)
+	{
+		(void)viewport;
+		(void)instance;
+		(void)cs;
+	}
+
+	void CombatModeOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)
+	{
+		(void)viewport;
+		if (!cs)
+			return;
+
+		unsigned i = 0;
+		unsigned j = 0;
+
+		ImGui::BeginChild("##ActionsInformationDisplay", { ImGui::GetContentRegionAvailWidth() * 0.85f, ImGui::GetContentRegionAvail().y * 0.85f });
+
+		const ImVec2 cursor{ ImGui::GetCursorPosX() + 120.0f, ImGui::GetCursorPosY() + 30.0f };
+		for (auto action_id : cs->actions)
+		{
+			if (auto action = instance.ecs.get_if<tc::Graph>(action_id))
+			{
+				UI::UIButton_2(action->g.name.c_str(), action->g.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, false);
+
+				// display in rows of 2
+				if (i / 2)
+				{
+					i = 0;
+					j++;
+				}
+			}
+		}
+
+		ImGui::EndChild();
 	}
 }
