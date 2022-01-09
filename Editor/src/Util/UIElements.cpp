@@ -2819,7 +2819,11 @@ namespace Tempest::UI
 		//Creating Delete Button
 		auto CurPos = ImGui::GetCursorPos();
 		auto winPos = ImGui::GetWindowPos();
-		ImGui::SetCursorPos({ bb.Min.x - winPos.x + boxSize.x * 0.80f ,bb.Min.y - winPos.y + boxSize.y * 0.6f });
+		//ImGui::SetCursorPos({ bb.Min.x - winPos.x + boxSize.x * 0.80f ,bb.Min.y - winPos.y + boxSize.y * 0.6f });
+
+
+		ImGui::SetCursorPosX(bb.Min.x - winPos.x + boxSize.x * 0.80f);
+		ImGui::SetCursorPosY(CurPos.y - 70.f);
 
 		ImVec2 delSize = { (float)texConflictDel->GetWidth() * 0.7f,(float)texConflictDel->GetHeight() * 0.7f };
 		//ImVec4 tinCol = { 0.7f, 0.7f, 0.7f,1 };
@@ -2960,6 +2964,7 @@ namespace Tempest::UI
 		if (UIMapSelectable(label,date, *p_selected, type, flags, size_arg).first)
 		{
 			*p_selected = !*p_selected;
+			
 			return { true,false };
 		}
 
