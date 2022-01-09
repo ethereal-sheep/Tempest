@@ -348,8 +348,31 @@ namespace Tempest
 						{
 							ImGui::Text(cs->name.c_str());
 						}
+
 						ImGui::EndGroup();
 						ImGui::PopID();
+
+						if (turn_order_state == TURN_ORDER_STATE::ORDER_CUSTOM)
+						{
+							if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+							{
+								ImGui::SetDragDropPayload("CUSTOM_TURN_ORDERING", &i, sizeof(unsigned));
+								ImGui::Text("Swap %s", cs->name.c_str());
+								ImGui::EndDragDropSource();
+							}
+
+							if (ImGui::BeginDragDropTarget())
+							{
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CUSTOM_TURN_ORDERING"))
+								{
+									unsigned payload_id = *(const unsigned*)payload->Data - 1;
+									const auto temp_id = id;
+									added_entities[i - 1] = added_entities[payload_id];
+									added_entities[payload_id] = temp_id;
+								}
+								ImGui::EndDragDropTarget();
+							}
+						}
 						
 						if (i / 5)
 						{
