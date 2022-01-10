@@ -26,6 +26,7 @@
 
 #include "Audio/AudioEngine.h"
 #include "ECS/Test/test_entity.h"
+#include "Scripting/Test/test_scripting.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -98,6 +99,8 @@ namespace Tempest
 			ae.Play("Sounds2D/BGM_1.wav", "bgm_bus", 0.2f, true);
 			ae.SetMasterVolume(2.f);
 			//testing_scene();
+
+			TestCompareNode();
 		}
 
 		void OnUpdate() override

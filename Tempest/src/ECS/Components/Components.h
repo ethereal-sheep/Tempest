@@ -461,7 +461,7 @@ namespace Tempest
 				return ar.EndObject();
 			}
 
-			Character() : stats(STAT_TOTAL,0), StatsDelta(STAT_TOTAL,0)
+			Character() : stats(STAT_TOTAL, 0), StatsDelta(STAT_TOTAL, 0)
 			{
 
 			}
@@ -631,11 +631,17 @@ namespace Tempest
 				component.stat_list[3] = tpair<bool, string>(true, "Range");
 				component.stat_list[4] = tpair<bool, string>(true, "Move");
 
+				ar.Vector("Stats_Description", component.stats_desc);
+				component.stats_desc[0] = "Health Point";
+				component.stats_desc[1] = "Attack";
+				component.stats_desc[2] = "Defence Point";
+				component.stats_desc[3] = "Attack Range";
+				component.stats_desc[4] = "Movement Point";
 
 				return ar.EndObject();
 			}
 
-			Statline() : stat_list(STAT_TOTAL)
+			Statline() : stat_list(STAT_TOTAL), stats_desc(STAT_TOTAL)
 			{
 				/*stats.push_back("HP");
 				stats.push_back("ATK");
@@ -652,6 +658,19 @@ namespace Tempest
 				stat_list[7] = tpair<bool, string>(false, "Stat3");
 				stat_list[8] = tpair<bool, string>(false, "Stat4");
 				stat_list[9] = tpair<bool, string>(false, "Stat5");
+
+				stats_desc[0] = "Health Point";
+				stats_desc[1] = "Attack";
+				stats_desc[2] = "Defence Point";
+				stats_desc[3] = "Attack Range";
+				stats_desc[4] = "Movement Point";
+
+				stats_desc[5] = "~ No Description ~";
+				stats_desc[6] = "~ No Description ~";
+				stats_desc[7] = "~ No Description ~";
+				stats_desc[8] = "~ No Description ~";
+				stats_desc[9] = "~ No Description ~";
+
 			}
 
 			[[deprecated("No more removal of stat")]] 
@@ -699,6 +718,11 @@ namespace Tempest
 				return stat_list[index].second;
 			}
 
+			[[nodiscard]] string& get_statsDesription(size_t index)
+			{
+				return stats_desc[index];
+			}
+
 			[[nodiscard]] bool& operator()(size_t index)
 			{
 				return stat_list[index].first;
@@ -743,7 +767,7 @@ namespace Tempest
 		private:
 
 			tvector<string> stats;
-
+			tvector<string> stats_desc;
 			tvector<tpair<bool, string>> stat_list;
 		};
 

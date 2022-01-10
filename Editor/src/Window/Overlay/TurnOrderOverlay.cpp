@@ -320,6 +320,7 @@ namespace Tempest
 				}
 				
 
+
 				// character added section
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f, viewport->Size.y * 0.3f });
 				const ImVec2 ChildSize{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f };
@@ -381,10 +382,15 @@ namespace Tempest
 						}
 					}
 				}
-				for (auto i : remove)
+
+				if (turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS)
 				{
-					added_entities.erase(std::begin(added_entities) + i);
+					for (auto i : remove)
+					{
+						added_entities.erase(std::begin(added_entities) + i);
+					}
 				}
+
 				remove.clear();
 
 
