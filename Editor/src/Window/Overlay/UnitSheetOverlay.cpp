@@ -924,8 +924,12 @@ namespace Tempest
 					ImGui::SameLine();
 					PrevPos = ImGui::GetCursorPos();
 					ImGui::Text(stat.c_str());
-					ImGui::SameLine();
-					UI::HelpMarker(sl->get_statsDesription(i).c_str());
+					if (i < 5)
+					{
+						ImGui::SameLine();
+						UI::HelpMarker(sl->get_statsDesription(i).c_str());
+					}
+					
 					ImGui::Dummy({ frontPadding, 0 });
 					ImGui::SameLine();
 					ImGui::PushItemWidth(100.f);
@@ -942,8 +946,11 @@ namespace Tempest
 					ImGui::SameLine();
 
 					ImGui::Text(stat.c_str());
-					ImGui::SameLine();
-					UI::HelpMarker(sl->get_statsDesription(i).c_str());
+					if (i < 5)
+					{
+						ImGui::SameLine();
+						UI::HelpMarker(sl->get_statsDesription(i).c_str());
+					}
 					ImGui::Dummy({ 250 + frontPadding, 0 });
 					ImGui::SameLine();
 					ImGui::PushItemWidth(100.f);
