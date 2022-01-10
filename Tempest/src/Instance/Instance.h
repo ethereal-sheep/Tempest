@@ -91,8 +91,8 @@ namespace Tempest
 				strategy
 			)
 		{
-			scene.load(root);
-			ecs.load(root);
+			//scene.load(root);
+			//ecs.load(root);
 		}
 
 		[[nodiscard]] const debug_mr* get_debug() const
