@@ -27,6 +27,16 @@ written consent of DigiPen Institute of Technology is prohibited.
 thread_local Assimp::Importer s_Importer;
 thread_local const aiScene* s_Scene;
 
+/*
+*	Check to see if Mesh has Bones	pMesh->HasBones();
+* 
+*	#1 - Has Bones	[ Bone Animation ] (Pain in the ass)
+*	#2 - No Bones	[ KeyFrame Animation] 
+* 
+*	KF -- Vertices stay the same for each key frame. different matrix for different keyframe. interpolate the matrix based on duration of each frame
+*	Figure out a way to store matrices?
+*/
+
 struct Mesh
 {
 	std::vector<glm::vec3> pos;
@@ -316,6 +326,26 @@ bool LoadModel(const std::string& path)
 	uint32_t offset = 0;
 	Mesh mMesh;
 	ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
+
+	for (uint32_t i = 0; i < s_Scene->mNumAnimations; ++i)
+	{
+		aiMesh* pMesh = s_Scene->mMeshes[0];
+		auto qqqqq = pMesh->HasBones();
+		aiAnimation* pAnim = s_Scene->mAnimations[i];
+		auto t = pAnim->mNumChannels;
+		auto a = pAnim->mNumMeshChannels;
+		for (uint32_t q = 0; q < t; ++q)
+		{
+			auto* pChannel = pAnim->mChannels[q];
+			auto asd = pChannel->mPreState;
+			auto pp = pChannel->mPostState;
+			auto as = pChannel->mNumPositionKeys;
+			auto ads = pChannel->mPositionKeys[2];
+			auto qwe = pChannel->mNodeName;
+		}
+		
+	}
+	
 
 	for (uint32_t i = 0; i < s_Scene->mNumMaterials; ++i)
 	{
