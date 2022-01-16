@@ -462,16 +462,19 @@ namespace Tempest
 					switch (turn_order_state)
 					{
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
-						Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+						if (new_instance)
+							Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+						else
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
 						OverlayOpen = false;
-						//turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
+						turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
-						turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
 						break;
 					default:
 						break;

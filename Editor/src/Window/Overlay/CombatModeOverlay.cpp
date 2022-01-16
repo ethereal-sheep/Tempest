@@ -1425,7 +1425,10 @@ namespace Tempest
 		if (UI::UIButton_2("Cancel", "Cancel", ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 		{
 			//battle_state = BATTLE_STATE::SELECT_OTHER;
+			display_curr_stat = false;
+			display_other_stat = false;
 			instance.selected = INVALID;
+			state = State::MENU;
 			battle_state = BATTLE_STATE::CURR_TURN; // temp testing
 		}
 	}
@@ -1509,18 +1512,13 @@ namespace Tempest
 			}
 			else
 			{
-				if (UI::UIButton_2("< Hide", "< Hide", ImVec2{ viewport->Size.x * 0.3f, viewport->Size.y * 0.15f }, { 0.f, 8.0f }, FONT_BODY))
-				{
-					display_curr_stat = false;
-				}
-
 				auto more_info_BG = tex_map["Assets/MIBG.dds"];
 				const ImVec2 BG_size{ more_info_BG->GetWidth() * 1.0f, more_info_BG->GetHeight() * 1.0f};
 
 				ImGui::SetCursorPos(ImVec2{ 0.f, viewport->Size.y - BG_size.y });
 				if (ImGui::BeginChild(std::string{ "More Info" + std::to_string(character) }.c_str(), BG_size))
 				{
-
+					const ImVec2 end_pos{ ImGui::GetCursorPos() + BG_size };
 					auto &charac = instance.ecs.get<tc::Character>(character);
 					ImVec2 img_min = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
 					ImVec2 img_max = { img_min.x + ImGui::GetWindowWidth(), img_min.y + ImGui::GetWindowHeight()};
@@ -1532,6 +1530,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
+					ImGui::BeginGroup();
 					render_tabs(TABS_TYPE::STAT, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_unit_stats(*viewport, instance, &charac);
@@ -1551,8 +1550,15 @@ namespace Tempest
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_actions(*viewport, instance, &charac);
 					});
+					ImGui::EndGroup();
 
 					ImGui::PopStyleColor(3);
+
+
+					if (UI::UIButton_2("Confirm", "Confirm", ImVec2{ end_pos.x - 160.0f, end_pos.y - 80.0f }, { 0.f, 8.0f }, FONT_BODY))
+					{
+						display_curr_stat = false;
+					}
 				}
 				ImGui::EndChild();
 
@@ -1639,18 +1645,13 @@ namespace Tempest
 
 			else
 			{
-				if (UI::UIButton_2("Hide >", "Hide >", ImVec2{ viewport->Size.x * 0.7f, viewport->Size.y * 0.15f }, { 0.f, 8.0f }, FONT_BODY))
-				{
-					display_other_stat = false;
-				}
-
 				auto more_info_BG = tex_map["Assets/MIBG.dds"];
 				const ImVec2 BG_size{ more_info_BG->GetWidth() * 1.0f, more_info_BG->GetHeight() * 1.0f };
 
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x - BG_size.x, viewport->Size.y - BG_size.y });
 				if (ImGui::BeginChild(std::string{ "More Info" + std::to_string(character) }.c_str(), BG_size))
 				{
-
+					const ImVec2 end_pos{ ImGui::GetCursorPos() + BG_size };
 					auto& charac = instance.ecs.get<tc::Character>(character);
 					ImVec2 img_min = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
 					ImVec2 img_max = { img_min.x + ImGui::GetWindowWidth(), img_min.y + ImGui::GetWindowHeight() };
@@ -1662,6 +1663,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
+					ImGui::BeginGroup();
 					render_tabs(TABS_TYPE::STAT, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_unit_stats(*viewport, instance, &charac);
@@ -1681,8 +1683,14 @@ namespace Tempest
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_actions(*viewport, instance, &charac);
 					});
+					ImGui::EndGroup();
 
 					ImGui::PopStyleColor(3);
+
+					if (UI::UIButton_2("Confirm", "Confirm", ImVec2{ end_pos.x - 160.0f, end_pos.y - 80.0f }, { 0.f, 8.0f }, FONT_BODY))
+					{
+						display_other_stat = false;
+					}
 				}
 				ImGui::EndChild();
 
@@ -1881,15 +1889,13 @@ namespace Tempest
 				}
 			}
 
-			if (UI::UIButton_2("Turn Order", "Turn Order", ImVec2{ viewport->Size.x * 0.8f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
+			auto add_units = tex_map["Assets/AddUnitsButton.dds"];
+
+			ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.9f - add_units->GetWidth() * 0.5f, viewport->Size.y * 0.06f });
+			if (ImGui::ImageButton((void*)static_cast<size_t>(add_units->GetID()), ImVec2{ add_units->GetWidth() * 0.9f, add_units->GetHeight() * 0.9f}))
 			{
 				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>(false, units);
 				Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
-			}
-
-			if (UI::UIButton_2("Place Units", "Place Units", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.06f }, { 10.f,10.f }, FONT_PARA))
-			{
-
 			}
 
 			ImGui::End();
