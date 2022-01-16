@@ -28,7 +28,23 @@ namespace Tempest
 			meta->name = "StatsData";
 			ecs.emplace<tc::Statline>(StatsLine);
 		}
-		
+		/*else
+		{
+			for (auto id : sl)
+			{
+				auto& StatsLine = ecs.get<Components::Statline>(id);
+				if (StatsLine.size() < tc::STAT_TOTAL)
+				{
+					for (auto i = StatsLine.size(); i < tc::STAT_TOTAL; i++)
+					{
+						string str = "Stats" + std::to_string(i);
+						LOG("FK");
+					}
+				
+				}
+			}
+			
+		}*/
 
 		/*for (auto id : view)
 		{

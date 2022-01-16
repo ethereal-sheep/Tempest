@@ -400,7 +400,7 @@ namespace Tempest
 			if ((*sl)(i))
 			{
 				string stat = sl->operator[](i) + " :";
-				string label = "##" + stat;
+				string label = "##" + stat + std::to_string(i);
 				string WeaponData = "";
 		/*		if (cs.weapon != UNDEFINED)
 				{

@@ -75,7 +75,6 @@ namespace Tempest::UI
 		ImGui::SetNextWindowSize(ImVec2(600, 300));
 		ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
 			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
-
 		ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
