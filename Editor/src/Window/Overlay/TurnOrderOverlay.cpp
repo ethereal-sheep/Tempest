@@ -328,13 +328,14 @@ namespace Tempest
 				if (ImGui::BeginChild("Character added", ChildSize))
 				{
 					unsigned i = 0;
+					unsigned counter = 0;
 					float ypos = ImGui::GetCursorPosY();
 					// TODO: loop through the added units here
 					for ([[maybe_unused]]auto id : added_entities)
 					{
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + i++ * (ChildSize.x - (character_icon->GetWidth() + 2.0f) * 5) * 0.5f);
 						ImGui::SetCursorPosY(ypos);
-						ImGui::PushID(i);
+						ImGui::PushID(++counter);
 						ImGui::BeginGroup();
 
 						auto cs = instance.ecs.get_if<tc::Character>(id);
@@ -343,7 +344,7 @@ namespace Tempest
 							ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 }))
 						{
 							if (turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS)
-								remove.push_back(i-1);
+								remove.push_back(counter - 1);
 						}
 						if (cs)
 						{
@@ -357,7 +358,7 @@ namespace Tempest
 						{
 							if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 							{
-								ImGui::SetDragDropPayload("CUSTOM_TURN_ORDERING", &i, sizeof(unsigned));
+								ImGui::SetDragDropPayload("CUSTOM_TURN_ORDERING", &counter, sizeof(unsigned));
 								ImGui::Text("Swap %s", cs->name.c_str());
 								ImGui::EndDragDropSource();
 							}
@@ -368,7 +369,7 @@ namespace Tempest
 								{
 									unsigned payload_id = *(const unsigned*)payload->Data - 1;
 									const auto temp_id = id;
-									added_entities[i - 1] = added_entities[payload_id];
+									added_entities[counter - 1] = added_entities[payload_id];
 									added_entities[payload_id] = temp_id;
 								}
 								ImGui::EndDragDropTarget();
