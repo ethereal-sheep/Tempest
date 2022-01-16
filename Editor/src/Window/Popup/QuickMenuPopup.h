@@ -78,7 +78,7 @@ namespace Tempest
                     ImGui::Dummy(ImVec2{ 150.0f, 0.0f });
                     ImGui::SameLine();
 
-                    tex = tex_map["Assets/QuickMenuBtn.dds"];
+                    tex = tex_map["Assets/QuickMenuBtn_Toggled.dds"];
 
                     if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
                     {

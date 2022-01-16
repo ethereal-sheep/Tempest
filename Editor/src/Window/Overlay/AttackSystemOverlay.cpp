@@ -134,6 +134,7 @@ namespace Tempest
 					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
 				}
 
+
 				// draw the context
 				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				draw_context(instance, graph_context_height);
@@ -364,15 +365,17 @@ namespace Tempest
 				// display top buttons (why doesn't this work w simulate -- add the close graph triggger
 				{
 					ImGui::SetCursorPos(ImVec2{ 0,0 });
-					if (ImGui::BeginChild("Top Buttons", ImVec2{ 400.0f, 100.0f }, false))
+					if (ImGui::BeginChild("Top Buttons", ImVec2{ 470.0f, 100.0f }, false))
 					{
 						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+						ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
+						ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
 						tex = tex_map["Assets/BackMenuBtn.dds"];
 
-						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 						{
 							OverlayOpen = false;
 							//Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
@@ -391,10 +394,24 @@ namespace Tempest
 
 						tex = tex_map["Assets/QuickMenuBtn.dds"];
 
-						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 						{
 							QUICKMENU_POPUP_TYPE t = type == OPEN_GRAPH_TYPE::GRAPH_ACTION ? QUICKMENU_POPUP_TYPE::ACTIONS : QUICKMENU_POPUP_TYPE::SEQUENCES;
 							Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(t);
+						}
+
+						ImGui::SameLine();
+						ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
+						ImGui::SameLine();
+
+						tex = tex_map["Assets/TutorialBtn.dds"];
+						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+						{
+							
+							if(type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+								Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::GRAPH_ACTION_TUT);
+							else if (type == OPEN_GRAPH_TYPE::GRAPH_SEQUENCE)
+								Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::GRAPH_SEQUENCE_TUT);
 						}
 
 						ImGui::PopStyleColor(3);
