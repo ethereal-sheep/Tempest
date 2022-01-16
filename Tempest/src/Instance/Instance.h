@@ -165,6 +165,28 @@ namespace Tempest
 		const tpath& get_path() const { return root; }
 		const tpath& get_full_path() const { return full_path; }
 
+		bool load_new_scene_by_path(const tpath& path);
+		bool load_new_scene_by_name(const string& name);
+		bool load_new_conflict_resolution_by_path(const tpath& path);
+
+		bool unload_current_conflict_resolution();
+		bool unload_current_scene();
+
+		tvector<tpair<int, tpath>> get_scene_paths();
+		tvector<tpair<bool, tpath>> get_conflict_resolution_paths();
+
+
+		const string& get_current_scene_name() const {
+			return current_scene_name;
+		}
+		const string& get_current_res_name() const {
+			return current_res_name;
+		}
+
+		auto get_current_res_index() const {
+			return current_res_index;
+		}
+
 	private:
 
 		void internal_init();
@@ -183,6 +205,10 @@ namespace Tempest
 		tpath root;
 
 		MemoryObject memory_object;
+
+		int current_res_index = 0;
+		string current_scene_name = "";
+		string current_res_name = "";
 		
 	public:
 		//PhysicsObject po;

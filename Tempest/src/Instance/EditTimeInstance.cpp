@@ -17,9 +17,9 @@ namespace Tempest
 {
 	void EditTimeInstance::_init()
 	{
-		auto view = ecs.view<Components::Rigidbody, tc::Transform>(exclude_t<tc::Destroyed>());
-
-
+	}
+	void EditTimeInstance::_update(float)
+	{
 		auto sl = ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
 		if (sl.size_hint() == 0)
 		{
@@ -28,21 +28,7 @@ namespace Tempest
 			meta->name = "StatsData";
 			ecs.emplace<tc::Statline>(StatsLine);
 		}
-		
 
-		/*for (auto id : view)
-		{
-			auto& rb = ecs.get<Components::Rigidbody>(id);
-			auto& transform = ecs.get<Components::Transform>(id);
-			rigidbody_config staticBody;
-			staticBody.is_static = true;
-			rb.internal_rb = po.create_actor(staticBody, rb.shape_data, transform.position, transform.rotation, id);
-			po.AddActorToScene(rb.internal_rb.get());
-
-		}*/
-	}
-	void EditTimeInstance::_update(float)
-	{
 		scene.get_map().update();
 
 		for (auto& [id, pf] : scene.get_map())
@@ -93,7 +79,9 @@ namespace Tempest
 	void EditTimeInstance::save()
 	{
 		//scene.save(root);
+		save_current_scene();
 		//ecs.save(root);
+		save_current_conflict_resolution();
 		//graph_manager.save_all_to(root);
 	}
 
@@ -101,100 +89,99 @@ namespace Tempest
 	{
 	}
 
-	void EditTimeInstance::load_new_scene(const string& scene_name)
-	{
-		current_scene_name = scene_name;
-	}
-
-	void EditTimeInstance::load_new_conflict_resolution(const string& res_name)
-	{
-		current_res_name = res_name;
-	}
-
-	void EditTimeInstance::load_new_scene_by_path(const tpath& path)
-	{
-		// try to get the name in the path
-		string scene_name;
-		for (auto entry : fs::directory_iterator(path))
-		{
-			if (entry.path().extension() == ".json")
-				scene_name = entry.path().string();
-		}
-		current_scene_name = scene_name;
-		scene = Scene();
-		scene.load(path);
-	}
-
-	void EditTimeInstance::load_new_conflict_resolution_by_path(const tpath& path)
-	{
-		// try to get the name in the path
-		string res_name;
-		for (auto entry : fs::directory_iterator(path))
-		{
-			if (entry.path().extension() == ".json")
-				res_name = entry.path().string();
-		}
-		current_res_name = res_name;
-		ecs.clear();
-		ecs.load(path);
-	}
+	
 
 	void EditTimeInstance::save_current_scene()
 	{
-		scene.save(root / "scenes" / current_scene_name);
+		if (current_scene_name != "")
+		{
+			scene.save(root / "scenes" / current_scene_name);
+			LOG_INFO("Saved {0}", current_scene_name);
+		}
 	}
 
 	void EditTimeInstance::save_current_conflict_resolution()
 	{
-		ecs.save(root / "conflict_resolutions" / current_res_name);
+		if (current_res_name != "" && current_res_index != 0)
+		{
+			ecs.save(root / "conflict_resolutions" / std::to_string(current_res_index), current_res_name);
+			LOG_INFO("Saved {0}:{1}", current_res_name, current_res_index);
+		}
 	}
 
-	void EditTimeInstance::create_new_scene(const string& scene_name)
+	bool EditTimeInstance::delete_scene(const string& scene_name)
 	{
+		// assume not loaded
+		auto path = root / "scenes" / scene_name;
+		if (fs::exists(path)) {
+			fs::remove_all(path);
+			return true;
+		}
+		return false;
+	}
 
+	bool EditTimeInstance::delete_conflict_resolution(int i)
+	{
+		// assume not loaded
+		auto path = root / "conflict_resolutions" / std::to_string(i);
+		if (fs::exists(path)) {
+			fs::remove_all(path);
+			return true;
+		}
+		return false;
+	}
+
+	string EditTimeInstance::create_new_scene(const string& scene_name)
+	{
+		if (scene_name == "")
+		{
+			LOG_INFO("Failed to create scene; Scene name is empty!");
+			return "";
+		}
+
+		auto path = root / "scenes";
+		if (!fs::exists(path))
+			fs::create_directories(path);
+		tvector<string> names;
+		for (auto entry : fs::directory_iterator(path))
+		{
+			if (fs::is_directory(entry.path()))
+			{
+				names.push_back(entry.path().stem().string());
+			}
+		}
+
+		auto new_name = algo::get_next_name(scene_name, names.begin(), names.end(), [](const string& a, const string& new_name) { return a == new_name; });
+		path /= new_name;
+		if (!fs::exists(path))
+			fs::create_directories(path);
+
+		Scene().save(path);
+		LOG_INFO("Created {0}", scene_name);
+
+		return new_name;
 	}
 
 	void EditTimeInstance::create_new_conflict_resolution(int i, const string& res_name)
 	{
-		auto path = root / "conflict_resolutions" / std::to_string(i);
+		if (res_name == "")
+		{
+			LOG_INFO("Failed to create resolution; Resolution name is empty!");
+			return;
+		}
+		if (i <= 0 || i > 3)
+		{
+			LOG_INFO("Failed to create resolution; Slot out of range!");
+			return;
+		}
+
+		auto path = root / "conflict_resolutions" / std::to_string(i) / res_name;
 		if (!fs::exists(path))
-			fs::create_directory(path);
+			fs::create_directories(path);
 
-		current_res_name = res_name;
-		ecs.clear();
+		LOG_INFO("Created {0}:{1}", res_name, i);
 	}
 
-	tvector<tpair<int, tpath>> EditTimeInstance::get_scene_paths()
-	{
-		tvector<tpair<int, tpath>> paths;
-		
-		int i = 1;
-		for (auto entry : fs::directory_iterator(root / "scenes"))
-		{
-			// each directory is a scene
-			paths.push_back(std::make_pair(i++, entry.path()));
-		}
-
-		return paths;
-	}
-
-	tvector<tpair<bool, tpath>> EditTimeInstance::get_conflict_resolution_paths()
-	{
-		tvector<tpair<bool, tpath>> paths(3);
-
-		for (auto entry : fs::directory_iterator(root / "conflict_resolutions"))
-		{
-			// each directory is a conflict res
-			// it should be from 1 to 3
-			if (fs::is_directory(entry.path()))
-			{
-				string a = entry.path().filename().string();
-				if(a == "0" || a == "1" || a == "2")
-					paths[std::atoi(a.c_str())] = std::make_pair(true, entry.path());
-			}
-		}
-
-		return paths;
-	}
+	
 
 }
