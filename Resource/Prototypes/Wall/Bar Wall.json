@@ -63,7 +63,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bar_Wall.a"
+                "Path": "Models\\Bar_Wall.a",
+                "TexturePath": "Assets\\ThumbNail_Bar_Wall.jpg"
             }
         },
         {

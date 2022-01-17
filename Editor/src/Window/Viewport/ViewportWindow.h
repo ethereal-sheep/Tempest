@@ -16,6 +16,9 @@
 #include "Actions/EditorAction.h"
 #include "Util/shape_manip.h"
 
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#include "stb_image_write.h"
+
 namespace Tempest
 {
 	class ViewportWindow : public Window
@@ -109,7 +112,7 @@ namespace Tempest
 					{
 						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
 						{
-							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving only con res...");
 							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>(); 
 						}
 					}
@@ -120,6 +123,31 @@ namespace Tempest
 						current = INVALID;
 					}
 					break;
+					case 'o':
+					{
+						auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
+						AAgridShow = !AAgridShow;
+						auto& saoMode = Service<RenderSystem>::Get().saoMode;
+						saoMode = !saoMode;
+						for (auto& window : instance.window_manager.get_windows())
+						{
+							if(strcmp(window->window_name(), " Diagnostics") == 0);
+								window->visible = !window->visible;
+						}
+					}
+					break;
+					//case 'p':
+					//{						
+					//	vec2 size = vec2(viewport->Size.x, viewport->Size.y);
+					//	//auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
+					//	unsigned char* buffer = new unsigned char[size.x * size.y * 3 / 2];
+					//	GLint offset = (size.x - size.y) / 2;
+					//	glReadPixels(size.x / 4, 0, size.x/2, size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+					//	stbi_flip_vertically_on_write(1);
+					//	//stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
+					//	stbi_write_jpg(Service<RenderSystem>::Get().thumbnailName.data(), size.x / 2, size.y, 3, buffer, size.x * 3);
+					//}
+					//break;
 					default:
 						break;
 					}

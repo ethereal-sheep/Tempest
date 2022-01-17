@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bar_SmallTable2.a"
+                "Path": "Models\\Bar_SmallTable2.a",
+                "TexturePath": "Assets\\ThumbNail_Bar_Single_Table.jpg"
             }
         },
         {

@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bookshelf.a"
+                "Path": "Models\\Bookshelf.a",
+                "TexturePath": "Assets\\ThumbNail_Bookshelf.jpg"
             }
         },
         {

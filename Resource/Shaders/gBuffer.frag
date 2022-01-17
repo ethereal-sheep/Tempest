@@ -13,7 +13,7 @@ layout (location = 0) out vec4 gPosition;
 layout (location = 1) out vec4 gAlbedo;
 layout (location = 2) out vec4 gNormal;
 layout (location = 3) out vec3 gEffects;
-
+layout (location = 4) out vec4 gViewPos;
 in vec3 viewPos;
 in vec2 TexCoords;
 in vec3 normal;
@@ -50,10 +50,20 @@ void main()
 	if (texID != 0)
 	{
 		gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
+		//gAlbedo.rgb *= 1.2;
+		
+				
 	}
 	else
 	{
 		gAlbedo.rgb = vec3(colour);
+		//gAlbedo.rgb *= 1.5;
+		if (gAlbedo.r > 0.05f  && gAlbedo.r < 0.5f)
+			gAlbedo.r *= 1.2f;
+		if (gAlbedo.g > 0.05f  && gAlbedo.g < 0.5f)
+			gAlbedo.g *= 1.2f;
+		if (gAlbedo.b > 0.05f  && gAlbedo.b < 0.5f)
+			gAlbedo.b *= 1.2f;
 	}
 	//gAlbedo.rgb = vec3(colour);
 	//if(TestPBR == 1)
@@ -73,6 +83,7 @@ void main()
     gNormal.a = vec3(texture(texMetalness, TexCoords)).r;
     gEffects.r = vec3(texture(texAO, TexCoords)).r;
     gEffects.gb = fragPosA - fragPosB;
+	gViewPos = fragPosition;
 }
 
 

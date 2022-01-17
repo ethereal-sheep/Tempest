@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bed_Sci-Fi.a"
+                "Path": "Models\\Bed_Sci-Fi.a",
+                "TexturePath": "Assets\\ThumbNail_Bed.jpg"
             }
         },
         {

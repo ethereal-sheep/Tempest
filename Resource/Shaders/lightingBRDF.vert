@@ -12,9 +12,10 @@
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texCoords;
 
+layout (location = 4) in vec4 gViewPos;
 out vec2 TexCoords;
 out vec3 envMapCoords;
-
+out vec4 FragPos;
 uniform mat4 inverseView;
 uniform mat4 inverseProj;
 //uniform mat4 lightSpaceMatrix;
@@ -32,4 +33,5 @@ void main()
 	
     gl_Position = vec4(position, 1.0f);
 	vs_pos = position;
+	FragPos = gViewPos;
 }

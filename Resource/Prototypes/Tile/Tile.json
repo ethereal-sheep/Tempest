@@ -69,7 +69,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\WoodenFloor.a"
+                "Path": "Models\\WoodenFloor.a",
+                "TexturePath": "Assets\\Tile.jpg"
             }
         },
         {

@@ -219,6 +219,8 @@ namespace Tempest
 						{
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
 							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+
+							instance.unload_current_conflict_resolution();
 						}
 						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 					}

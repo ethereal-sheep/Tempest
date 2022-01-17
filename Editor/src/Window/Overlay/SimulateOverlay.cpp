@@ -33,6 +33,7 @@ namespace Tempest
 		win = 0;
 		lose = 0;
 		enter_button = tex_map["Assets/EnterButton.dds"];
+
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -229,6 +230,8 @@ namespace Tempest
 						{
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
 							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+
+							instance.unload_current_conflict_resolution();
 						}
 					}
 

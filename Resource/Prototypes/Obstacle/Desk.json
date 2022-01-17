@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Desk_Sci-Fi.a"
+                "Path": "Models\\Desk_Sci-Fi.a",
+                "TexturePath": "Assets\\ThumbNail_Desk.jpg"
             }
         },
         {

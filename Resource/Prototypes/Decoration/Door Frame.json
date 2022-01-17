@@ -64,7 +64,7 @@
             },
             "Component": {
                 "Path": "Models\\Entrance.a",
-                "TexturePath": "Assets\\Doorframe.dds"
+                "TexturePath": "Assets\\ThumbNail_Door_Frame.jpg"
             }
         },
         {

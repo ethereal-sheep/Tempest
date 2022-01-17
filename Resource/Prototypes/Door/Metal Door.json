@@ -71,7 +71,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\MetalDoor.a"
+                "Path": "Models\\MetalDoor.a",
+                "TexturePath": "Assets\\ThumbNail_Metal_Door.jpg"
             }
         },
         {

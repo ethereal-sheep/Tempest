@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Chair.a"
+                "Path": "Models\\Chair.a",
+                "TexturePath": "Assets\\ThumbNail_Chair.jpg"
             }
         },
         {

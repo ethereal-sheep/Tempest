@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Column.a"
+                "Path": "Models\\Column.a",
+                "TexturePath": "Assets\\ThumbNail_Column.jpg"
             }
         },
         {

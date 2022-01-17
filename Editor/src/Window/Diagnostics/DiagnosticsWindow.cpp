@@ -16,6 +16,8 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "Audio/AudioEngine.h"
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 namespace Tempest
 {
@@ -416,6 +418,25 @@ namespace Tempest
 			auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;
 			ImGui::SliderFloat("Global Ambient", &ambientStrength, 0.0f, 3.0f);
 
+			auto& clearColor = Service<RenderSystem>::Get().clearColor;
+			UI::DragFloat3ColorBox("Clear Color", "##ClearColor", ImVec2{ padding , 0.f }, value_ptr(clearColor), 0.f, 0.1f).first;
+
+			//auto& thumbnail = Service<RenderSystem>::Get().thumbnailName;
+			static std::string thumbnailName{ "test.jpg" };
+			ImGui::InputText("thumbnail name", &thumbnailName);
+			if (ImGui::Button("Capture Image"))
+			{
+				ImGuiViewport* viewport = ImGui::GetMainViewport();
+				vec2 size = vec2(viewport->Size.x, viewport->Size.y);
+				//auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
+				unsigned char* buffer = new unsigned char[size.x * size.y * 3 / 2];
+				GLint offset = (size.x - size.y) / 2;
+				glReadPixels(size.x / 4, 0, size.x / 2, size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+				stbi_flip_vertically_on_write(1);
+				//stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
+				stbi_write_jpg(thumbnailName.data(), size.x / 2, size.y, 3, buffer, size.x * 3);
+			}
+
 			if(ImGui::TreeNode("Gbuffer Mode"))
 			{
 				auto& gBufferView = Service<RenderSystem>::Get().gBufferView;
@@ -715,7 +736,7 @@ namespace Tempest
 
 				if (ImGui::Button("Rusted iron"))
 				{
-					objectAlbedo.setTexture("textures/pbr/rustediron/rustediron_albedo.png", "ironAlbedo", true);
+					objectAlbedo.setTexture("textures/pbr/rustediron/rustediron_albedo4", "ironAlbedo", true);
 					objectNormal.setTexture("textures/pbr/rustediron/rustediron_normal.png", "ironNormal", true);
 					objectRoughness.setTexture("textures/pbr/rustediron/rustediron_roughness.png", "ironRoughness", true);
 					objectMetalness.setTexture("textures/pbr/rustediron/rustediron_metalness.png", "ironMetalness", true);

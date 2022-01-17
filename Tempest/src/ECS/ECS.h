@@ -480,13 +480,13 @@ namespace Tempest
 		 * If folder doesn't exist, a folder is created. 
 		 * If it exists, the folder's contents will be overwritten.
 		 */
-		void save(const tpath& root_filepath) const
+		void save(const tpath& root_filepath, const string& save_folder = default_folder) const
 		{
-			tpath folder = root_filepath / default_folder;
+			tpath folder = root_filepath / save_folder;
 
 			// if directory doesn't exist, create new_directory
 			if(!std::filesystem::exists(folder))
-				std::filesystem::create_directory(folder);
+				std::filesystem::create_directories(folder);
 			
 			// delete everything in components
 			for(auto file : std::filesystem::directory_iterator(folder))
@@ -504,9 +504,9 @@ namespace Tempest
 		 * If folder doesn't exist, a folder is created.
 		 * If it exists, the folder's contents will be overwritten.
 		 */
-		void load(const tpath& root_filepath)
+		void load(const tpath& root_filepath, const string& load_folder = default_folder)
 		{
-			tpath folder = root_filepath / default_folder;
+			tpath folder = root_filepath / load_folder;
 
 			// check if file path exists
 			if (!std::filesystem::exists(folder))
