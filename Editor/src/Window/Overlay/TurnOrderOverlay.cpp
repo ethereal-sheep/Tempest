@@ -477,11 +477,13 @@ namespace Tempest
 					switch (turn_order_state)
 					{
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
-						if (new_instance)
-							Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-						else
-							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
-						OverlayOpen = false;
+						// TODO: Do a popup for comfirmation. Exit to Main menu screen if yes.
+
+						// if (new_instance)
+						// 	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+						// else
+						// 	Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+						// OverlayOpen = false;
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:

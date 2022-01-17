@@ -168,6 +168,7 @@ namespace Tempest
 		bool load_new_scene_by_path(const tpath& path);
 		bool load_new_scene_by_name(const string& name);
 		bool load_new_conflict_resolution_by_path(const tpath& path);
+		bool load_new_conflict_resolution_by_int(int i);
 
 		bool unload_current_conflict_resolution();
 		bool unload_current_scene();

@@ -184,35 +184,35 @@ namespace Tempest
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
 				}
 
-				if (UI::UIButton_CustomMap("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY,true))
-				{
-					// open testing combat in map
-					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
-					edit.save();
+				// if (UI::UIButton_CustomMap("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY,true))
+				// {
+				// 	// open testing combat in map
+				// 	auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+				// 	edit.save();
 
-					if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
-					{
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
-						OverlayOpen = false;
-					}
-					else if (!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
-					{
-						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
-					}
-					else if (!instance.ecs.view_first<tc::ConflictGraph>())
-					{
-						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
-					}
-					else
-					{
-						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
-					}
+				// 	if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
+				// 		OverlayOpen = false;
+				// 	}
+				// 	else if (!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+				// 	}
+				// 	else if (!instance.ecs.view_first<tc::ConflictGraph>())
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
+				// 	}
+				// 	else
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
+				// 	}
 
-					/*Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-						edit.get_full_path(),
-						MemoryStrategy{},
-						InstanceType::RUN_TIME);*/
-				}
+				// 	/*Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+				// 		edit.get_full_path(),
+				// 		MemoryStrategy{},
+				// 		InstanceType::RUN_TIME);*/
+				// }
 
 				// display top buttons
 				{

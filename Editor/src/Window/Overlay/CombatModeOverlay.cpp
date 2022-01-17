@@ -894,7 +894,9 @@ namespace Tempest
 								atker.chosen_weapon = selected_weapon;
 								defer.chosen_weapon = other_selected_weapon;
 
-								auto sequence = instance.ecs.view_first<tc::ConflictGraph>();
+								auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
+
+								auto sequence = runtime.sequences[0];
 
 								/*SimulateConflict s{
 									instance.selected,
