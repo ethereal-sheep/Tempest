@@ -484,12 +484,11 @@ namespace Tempest
 						OverlayOpen = false;
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
-						turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
-						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
 						break;
 					default:
 						break;
