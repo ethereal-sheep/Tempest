@@ -417,8 +417,11 @@ float computeShadowDir()
 // Shadow calulations for point lights
 float computeShadow(int ptnum)
 {
-	vec3 viewPos = FragPos.xyz;//texture(gPosition, TexCoords).rgb;
-	vec3 fragToLight = viewPos - lightPointArray[ptnum].position;
+	//vec3 viewPos = FragPos.xyz;//texture(gPosition, TexCoords).rgb;
+	vec3 viewPos = texture(gPosition, TexCoords).rgb;
+	viewPos = vec3(inverseView * vec4(viewPos, 1.0));
+	//vec3 ftoL = viewPos - vec3(inverseView * lightPointArray[ptnum].position);
+	vec3 fragToLight = viewPos - vec3(inverseView * vec4(lightPointArray[ptnum].position,1.0));
 	float currentDepth = length(fragToLight);
 	float shadow = 0.0f;
 	float bias = 0.15f;
