@@ -65,15 +65,15 @@ namespace Tempest
 
 	void MainMenuOverlay::OpenLocalUI(Instance& instance, const ImGuiViewport& viewport)
 	{
-		ImVec2 button_pos{ 0, viewport.Size.y * 0.55f };
+		ImVec2 button_pos{ 0, viewport.Size.y * 0.42f };
 
 		// render the title image
 		if (MainMenuUI < UI_SHOW::CONFLICT_RES)
 		{
 			auto title_img = tex_map["Assets/MainMenuTitle.dds"];
 			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
-			button_pos.x = viewport.Size.x * 0.2f - title_size.x * 0.5f;
-			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.45f - title_size.y * 0.5f });
+			button_pos.x = viewport.Size.x * 0.35f - title_size.x * 0.5f;
+			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.35f - title_size.y * 0.5f });
 			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
 		}
 

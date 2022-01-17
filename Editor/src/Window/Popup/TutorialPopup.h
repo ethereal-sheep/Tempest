@@ -31,14 +31,52 @@ namespace Tempest
             
         }
 
-        void open_popup(const Event&)
+        void open_popup(const Event& e)
         {
+            auto a = event_cast<TutorialPopupTrigger>(e);
+            type = a.type;
             currentIndex = 0;
-            tutorial_Arr[0] = tex_map["Assets/Tutorial_0.dds"];
-            tutorial_Arr[1] = tex_map["Assets/Tutorial_1.dds"];
-            tutorial_Arr[2] = tex_map["Assets/Tutorial_2.dds"];
-            tutorial_Arr[3] = tex_map["Assets/Tutorial_3.dds"];
-            tutorial_Arr[4] = tex_map["Assets/Tutorial_4.dds"];
+            // SIMULATE TUTORIAL IMAGE
+            if (a.type == TUTORIAL_POPUP_TYPES::SIMULATE_TUT)
+            {
+                tutorial_Arr.clear();
+                tutorial_Arr.emplace_back( tex_map["Assets/Tutorial_0.dds"]);
+                tutorial_Arr.emplace_back( tex_map["Assets/Tutorial_1.dds"]);
+                tutorial_Arr.emplace_back( tex_map["Assets/Tutorial_2.dds"]);
+                tutorial_Arr.emplace_back( tex_map["Assets/Tutorial_3.dds"]);
+                tutorial_Arr.emplace_back( tex_map["Assets/Tutorial_4.dds"]);
+            }
+            // SIMULATE UNITS IMAGE
+            else if (a.type == TUTORIAL_POPUP_TYPES::UNITS_TUT)
+            {
+                tutorial_Arr.clear();
+                tutorial_Arr.emplace_back(tex_map["Assets/Unit_Tut_01.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Unit_Tut_02.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Unit_Tut_03.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Unit_Tut_04.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Unit_Tut_05.dds"]);
+            }
+            // UNITS TUTORIAL IMAGE
+            else if (a.type == TUTORIAL_POPUP_TYPES::GRAPH_ACTION_TUT)
+            {
+                tutorial_Arr.clear();
+                tutorial_Arr.emplace_back(tex_map["Assets/Action_Tut_01.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Action_Tut_02.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Action_Tut_03.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Action_Tut_04.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Action_Tut_05.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Action_Tut_06.dds"]);
+            }
+            // GRAPH TUTORIAL IMAGE
+            else if (a.type == TUTORIAL_POPUP_TYPES::GRAPH_SEQUENCE_TUT)
+            {
+                tutorial_Arr.clear();
+                tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_01.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_02.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_03.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_04.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_05.dds"]);
+            }
             enable_popup = true;
         }
 
@@ -78,7 +116,7 @@ namespace Tempest
                         }
                         ImGui::PopID();
                     }
-                    if (currentIndex != 4)
+                    if (currentIndex != tutorial_Arr.size()-1)
                     {
                         ImGui::SetCursorPos({ pos.x + viewport->Size.x - arrow_Size.x - (viewport->Size.x * 0.01f),   (viewport->Size.y * 0.5f) - (arrow_Size.y * 0.5f) });
                         ImGui::PushID("Next");
@@ -103,7 +141,8 @@ namespace Tempest
        
         bool enable_popup = false;
         int currentIndex = 0;
-        tsptr<Texture> tutorial_Arr[5];
+        std::vector<tsptr<Texture>> tutorial_Arr;
+        TUTORIAL_POPUP_TYPES type = TUTORIAL_POPUP_TYPES::SIMULATE_TUT;
         ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
         ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
         ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };

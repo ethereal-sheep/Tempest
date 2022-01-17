@@ -154,9 +154,8 @@ namespace Tempest
                         }
                         
                         // create units here
-                        if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPosX() + (i + 1) * 120.0f, cursor.y + (!j ? 60.0f : j * 190.0f) }, { 55,30 }, FONT_HEAD))
+                        if (UI::UIButton_1("+", "+", ImVec2{ cursor.x + 50.0f + i++ * 120, cursor.y + 50.0f + j * 140 }, { 55,30 }, FONT_HEAD))
                         {
-                            // TODO: take out id/data
                             enable_popup = false;
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
