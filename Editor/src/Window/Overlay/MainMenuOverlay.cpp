@@ -293,7 +293,11 @@ namespace Tempest
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 
-				if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
+
+				MapTitle = selectable;
+				MainMenuUI = UI_SHOW::SELECT_MAP;
+
+				/*if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
 				{
 					MapTitle = selectable;
 					MainMenuUI = UI_SHOW::SELECT_MAP;
@@ -309,7 +313,7 @@ namespace Tempest
 				else
 				{
 					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
-				}
+				}*/
 
 			}
 			if (ImGui::IsItemHovered())
@@ -570,6 +574,7 @@ namespace Tempest
 						if (MapTitle == "Map Builder")
 						{
 							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							instance.load_new_scene_by_path(path);
 							OverlayOpen = false;
 						}
 						else
@@ -630,14 +635,17 @@ namespace Tempest
 			{
 				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
 				// TODO: load the conflict stuff here
-
-				//for (int i = 0; i < SelectedConflictRes; i++)
+				int i = 0;
+				for (auto& [b, path] : instance.get_conflict_resolution_paths())
 				{
-					ImGui::PushID(std::string{ "Conflict Res " + std::to_string(0) }.c_str());
-					if (UI::UIButton_2("Sample_Conflict", "Sample_Conflict", ImVec2{ cusor.x, cusor.y + 0 * 90.0f }, { 50,20 }, FONT_BTN, SelectedConflictRes == 0))
+					string name = path.stem().string();
+
+					ImGui::PushID(std::string{ name + std::to_string(i) }.c_str());
+					if (UI::UIButton_2(std::string{ name + std::to_string(i) }.c_str(), std::string{ name + std::to_string(i) }.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 }, FONT_BTN, SelectedConflictRes == i))
 					{
-						SelectedConflictRes = 0;
+						SelectedConflictRes = i;
 					}
+					i++;
 					ImGui::PopID();
 				}
 			}
