@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bar_Shelf.a"
+                "Path": "Models\\Bar_Shelf.a",
+                "TexturePath": "Assets\\ThumbNail_Bar_Shelf.jpg"
             }
         },
         {

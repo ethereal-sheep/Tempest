@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bar_Stool.a"
+                "Path": "Models\\Bar_Stool.a",
+                "TexturePath": "Assets\\ThumbNail_Bar_Stool.jpg"
             }
         },
         {

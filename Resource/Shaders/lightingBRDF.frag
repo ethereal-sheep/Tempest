@@ -14,6 +14,7 @@ in vec3 envMapCoords;
 
 in vec4 FragPosLightSpace;
 in vec3 vs_pos;
+in vec4 FragPos;
 out vec4 colorOutput;
 
 
@@ -416,7 +417,7 @@ float computeShadowDir()
 // Shadow calulations for point lights
 float computeShadow(int ptnum)
 {
-	vec3 viewPos = texture(gPosition, TexCoords).rgb;
+	vec3 viewPos = FragPos.xyz;//texture(gPosition, TexCoords).rgb;
 	vec3 fragToLight = viewPos - lightPointArray[ptnum].position;
 	float currentDepth = length(fragToLight);
 	float shadow = 0.0f;

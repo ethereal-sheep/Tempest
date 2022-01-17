@@ -71,7 +71,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Door.a"
+                "Path": "Models\\Door.a",
+                "TexturePath": "Assets\\ThumbNail_Door.jpg"
             }
         },
         {

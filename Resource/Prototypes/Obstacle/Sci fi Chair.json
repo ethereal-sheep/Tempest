@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Chair_Sci-Fi.a"
+                "Path": "Models\\Chair_Sci-Fi.a",
+                "TexturePath": "Assets\\ThumbNail_Sci_Fi_Chair.jpg"
             }
         },
         {

@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Sofa_Sci-Fi.a"
+                "Path": "Models\\Sofa_Sci-Fi.a",
+                "TexturePath": "Assets\\ThumbNail_Sofa.jpg"
             }
         },
         {

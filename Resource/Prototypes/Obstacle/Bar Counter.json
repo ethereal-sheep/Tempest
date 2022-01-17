@@ -77,7 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Bar_Counter1.a"
+                "Path": "Models\\Bar_Counter1.a",
+                "TexturePath": "Assets\\ThumbNail_Bar_Counter.jpg"
             }
         },
         {
