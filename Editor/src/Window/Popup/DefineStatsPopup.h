@@ -93,7 +93,7 @@ namespace Tempest
                     ImU32 lineCol = ImGui::GetColorU32({ 0.48f, 0.48f, 0.48f, 0.5f });
                     ImVec2 lineMin{ ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvailWidth() * 0.1f, ImGui::GetCursorScreenPos().y };
                     ImVec2 lineMax{ ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvailWidth() * 0.9f, ImGui::GetCursorScreenPos().y };
-
+                    
                     ImGui::GetWindowDrawList()->AddLine(
                         lineMin, lineMax, lineCol, 2.0f);
 
@@ -118,6 +118,7 @@ namespace Tempest
                             ImGui::PushStyleColor(ImGuiCol_Text, textCol);
                             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
                         }
+
                         ImGui::InputText(("##stats" + std::to_string(i)).c_str(), &(tempStat)[i]);
                         if(!(tempStat)(i))
                             ImGui::PopItemFlag();
@@ -140,16 +141,29 @@ namespace Tempest
                         }
 
                         ImGui::PopStyleColor(2);
+                        if (sl->exist((tempStat)[i]))
+                        {
+                            wordExist = true;
+                        }
                     }
                     ImGui::PopFont();
                     ImGui::PopItemWidth();
+
+                    
+
                     ImGui::SetCursorPosX(0);
                     if (UI::UIButton_1("Save", "Save", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.4f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 80.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
-                        *sl = tempStat;
-                        ImGui::CloseCurrentPopup();
-                        enable_popup = false;
-                        PopUpClose = true;
+                        /*if (wordExist)
+                        {
+                        }
+                        else
+                        {*/
+                            *sl = tempStat;
+                            ImGui::CloseCurrentPopup();
+                            enable_popup = false;
+                            PopUpClose = true;
+                        //}
                     }
                     if (UI::UIButton_1("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.65f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 80.0f }, { 90.f, 0.f }, FONT_PARA))
                     {
@@ -166,7 +180,7 @@ namespace Tempest
                 ImGui::PopStyleColor();
             }
         }
-
+        bool wordExist = false;
         bool enable_popup = false;
         bool PopUpClose = true;
         tc::Statline tempStat;
