@@ -53,6 +53,7 @@ namespace Tempest
 		auto a = event_cast<CloseOverlayTrigger>(e);
 		if (a.current == QUICKMENU_POPUP_TYPE::WEAPONS)
 			OverlayOpen = false;
+		weap = nullptr;
 	}
 
 	void WeaponSheetOverlay::show(Instance& instance)
@@ -145,7 +146,7 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.15f, viewport->Size.y * 0.3f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.12f, viewport->Size.y * 0.35f });
 				auto UnitImg = tex_map["Assets/WeaponImage.dds"];
 				if (UI::UIImageButton((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }))
 				{
@@ -188,10 +189,10 @@ namespace Tempest
 					{
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
-						//Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						//Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 
-						instance.unload_current_conflict_resolution();
+						
 					}
 
 					ImGui::SameLine();

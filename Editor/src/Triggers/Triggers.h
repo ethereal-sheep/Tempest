@@ -36,6 +36,7 @@ namespace Tempest
 	//Popup Trigger
 	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION, SEQUENCE, EDIT_UNIT, EDIT_WEAPON};
 	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCES,WEAPONS,ITEMS};
+	enum TUTORIAL_POPUP_TYPES{SIMULATE_TUT,UNITS_TUT,GRAPH_ACTION_TUT, GRAPH_SEQUENCE_TUT};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
 	struct AddingUnitsTrigger : public Event {};
@@ -86,7 +87,11 @@ namespace Tempest
 		bool for_unitpage;
 		Entity data;
 	};
-	struct TutorialPopupTrigger : public Event {};
+	struct TutorialPopupTrigger : public Event 
+	{
+		TutorialPopupTrigger(TUTORIAL_POPUP_TYPES t) : type{ t } {}
+		TUTORIAL_POPUP_TYPES type;
+	};
 
 	struct MainMenuSequencePopupTrigger : public Event
 	{

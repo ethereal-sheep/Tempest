@@ -140,9 +140,9 @@ namespace Tempest
 		LOG_INFO("Loaded {0}", current_scene_name);
 		return true;
 	}
-	bool Instance::load_new_scene_by_name(const string& name)
+	bool Instance::load_new_scene_by_name(const string& scene_name)
 	{
-		return load_new_scene_by_path(root / "scenes" / name);
+		return load_new_scene_by_path(root / "scenes" / scene_name);
 	}
 
 	bool Instance::load_new_conflict_resolution_by_path(const tpath& load_path)
@@ -162,6 +162,26 @@ namespace Tempest
 		}
 		LOG_WARN("Failed to load resolution at {0}", load_path.string());
 		return false;
+	}
+
+	bool Instance::load_new_conflict_resolution_by_int(int i)
+	{
+		auto path = root / "conflict_resolutions" / std::to_string(i);
+		if (i >= 1 && i <= 3 && fs::exists(path))
+		{
+			for (auto inside : fs::directory_iterator(path))
+			{
+				if (fs::is_directory(inside.path()))
+				{
+					return load_new_conflict_resolution_by_path(inside.path());
+				}
+			}
+		}
+
+
+		LOG_WARN("Failed to load resolution at {0}", path.string());
+		return false;
+
 	}
 
 	bool Instance::unload_current_scene()

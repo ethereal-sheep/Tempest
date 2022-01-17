@@ -328,31 +328,68 @@ namespace Tempest
 				if (ImGui::BeginChild("Character added", ChildSize))
 				{
 					unsigned i = 0;
+					unsigned counter = 0;
 					float ypos = ImGui::GetCursorPosY();
 					// TODO: loop through the added units here
 					for ([[maybe_unused]]auto id : added_entities)
 					{
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + i++ * (ChildSize.x - (character_icon->GetWidth() + 2.0f) * 5) * 0.5f);
 						ImGui::SetCursorPosY(ypos);
-						ImGui::PushID(i);
+						ImGui::PushID(++counter);
 						ImGui::BeginGroup();
 
 						auto cs = instance.ecs.get_if<tc::Character>(id);
-
-						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
-							ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 }))
+						if (turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS)
 						{
-							if (cs && !cs->isInCombat)
+							auto PairResult = UI::UICharButton_WithDelete((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
+								cs->name.c_str(), string("##unitcombat" + std::to_string(id)), false, { 0,0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y, cs->color.z,1 });
+						
+							if (PairResult.second)
 							{
-								remove.push_back(i - 1);
+								ImGui::OpenPopup(string("RemoveUnitCombat##" + std::to_string(id)).c_str());
+							}
+
+							if (UI::ConfirmDeletePopup(string("RemoveUnitCombat##" + std::to_string(id)).c_str(), "Remove this unit?"))
+							{
+								remove.push_back(counter - 1);
 							}
 						}
-						if (cs)
+						else 
 						{
-							ImGui::Text(cs->name.c_str());
+							ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
+								ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 });
+
+							if (cs)
+							{
+								ImGui::Text(cs->name.c_str());
+							}
 						}
+						
+
 						ImGui::EndGroup();
 						ImGui::PopID();
+
+						if (turn_order_state == TURN_ORDER_STATE::ORDER_CUSTOM)
+						{
+							if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+							{
+								ImGui::SetDragDropPayload("CUSTOM_TURN_ORDERING", &counter, sizeof(unsigned));
+								ImGui::Text("Swap %s", cs->name.c_str());
+								ImGui::EndDragDropSource();
+							}
+
+							if (ImGui::BeginDragDropTarget())
+							{
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CUSTOM_TURN_ORDERING"))
+								{
+									unsigned payload_id = *(const unsigned*)payload->Data - 1;
+									const auto temp_id = id;
+									added_entities[counter - 1] = added_entities[payload_id];
+									added_entities[payload_id] = temp_id;
+								}
+								ImGui::EndDragDropTarget();
+							}
+						}
 						
 						if (i / 5)
 						{
@@ -440,9 +477,13 @@ namespace Tempest
 					switch (turn_order_state)
 					{
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
-						Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-						OverlayOpen = false;
-						//turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+						// TODO: Do a popup for comfirmation. Exit to Main menu screen if yes.
+
+						// if (new_instance)
+						// 	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
+						// else
+						// 	Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+						// OverlayOpen = false;
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:

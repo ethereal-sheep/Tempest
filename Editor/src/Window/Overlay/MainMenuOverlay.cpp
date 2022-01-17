@@ -65,15 +65,15 @@ namespace Tempest
 
 	void MainMenuOverlay::OpenLocalUI(Instance& instance, const ImGuiViewport& viewport)
 	{
-		ImVec2 button_pos{ 0, viewport.Size.y * 0.55f };
+		ImVec2 button_pos{ 0, viewport.Size.y * 0.42f };
 
 		// render the title image
 		if (MainMenuUI < UI_SHOW::CONFLICT_RES)
 		{
 			auto title_img = tex_map["Assets/MainMenuTitle.dds"];
 			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
-			button_pos.x = viewport.Size.x * 0.2f - title_size.x * 0.5f;
-			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.45f - title_size.y * 0.5f });
+			button_pos.x = viewport.Size.x * 0.35f - title_size.x * 0.5f;
+			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.35f - title_size.y * 0.5f });
 			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
 		}
 
@@ -293,12 +293,76 @@ namespace Tempest
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 
-				if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
+				if (instance.get_scene_paths().empty())
 				{
-					MapTitle = selectable;
-					MainMenuUI = UI_SHOW::SELECT_MAP;
+					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Map found!");
 				}
-				else if(!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+				else
+				{
+					// check every con res
+					bool empty = true;
+					for (auto [b, load_path] : instance.get_conflict_resolution_paths()) {
+						if(b) empty = false;
+					}
+
+					if (empty)
+					{
+						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!"); // no conres
+					}
+					else
+					{
+						auto check_unit_and_seq = [](tpath& load_path, std::vector<std::pair<Entity, string>>& sequences) {
+							
+							ECS ecs;
+							string res_name = load_path.stem().string();
+							auto path = load_path.parent_path();
+							int a = std::atoi(path.stem().string().c_str());
+							if (a >= 1 && a <= 3)
+							{
+								ecs.load(path, res_name);
+
+								if(ecs.view_first<tc::Character>() && ecs.view_first<tc::ConflictGraph>())
+								{
+									for (auto id : ecs.view<tc::ConflictGraph>())
+									{
+										const auto& name = ecs.get<tc::Graph>(id).g.get_name();
+										sequences.push_back(std::make_pair(id, name));
+									}
+									return true;
+								}
+							}
+
+							return false;
+						};
+
+						bool allowed = false;
+						int i = 0;
+						for (auto [b, load_path] : instance.get_conflict_resolution_paths())
+						{
+							ConResSequences[i].clear();
+							if (check_unit_and_seq(load_path, ConResSequences[i]))
+							{
+								OkayConRes[i] = true;
+								allowed = true;
+							}
+							++i;
+						}
+
+						if (allowed)
+						{
+							// go ahead
+							MapTitle = selectable;
+							MainMenuUI = UI_SHOW::LOAD_MAP;
+						}
+						else
+						{
+							Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+						}
+					}
+
+
+				}
+				/*else if(!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
 				{
 					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
 				}
@@ -309,7 +373,7 @@ namespace Tempest
 				else
 				{
 					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
-				}
+				}*/
 
 			}
 			if (ImGui::IsItemHovered())
@@ -383,7 +447,7 @@ namespace Tempest
 				ImGui::SameLine();
 				string str = path.stem().string() + " " + std::to_string(i);
 
-				auto [selected, deleted] = UI::UIConflictSelectable(str.c_str(), false, b);
+				auto [selected, deleted] = UI::UIConflictSelectable(str.c_str(), false, i);
 
 				if (selected)
 				{
@@ -542,7 +606,7 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				MainMenuUI = UI_SHOW::SELECT_MAP;
+				MainMenuUI = UI_SHOW::NEW_PROJECT;
 			}
 				
 
@@ -570,10 +634,14 @@ namespace Tempest
 						if (MapTitle == "Map Builder")
 						{
 							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							instance.load_new_scene_by_path(path);
 							OverlayOpen = false;
 						}
 						else
+						{
+							SelectedMap = scene_name;
 							MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
+						}
 					}
 
 					else if (map_pair.second)
@@ -630,14 +698,27 @@ namespace Tempest
 			{
 				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
 				// TODO: load the conflict stuff here
-
-				//for (int i = 0; i < SelectedConflictRes; i++)
+				int i = 0, u = 0; // i for positioning, u for index
+				for (auto& [b, path] : instance.get_conflict_resolution_paths())
 				{
-					ImGui::PushID(std::string{ "Conflict Res " + std::to_string(0) }.c_str());
-					if (UI::UIButton_2("Sample_Conflict", "Sample_Conflict", ImVec2{ cusor.x, cusor.y + 0 * 90.0f }, { 50,20 }, FONT_BTN, SelectedConflictRes == 0))
+
+					string name = path.stem().string();
+
+					ImGui::PushID(std::string{ name + std::to_string(u) }.c_str());
+
+					if (OkayConRes[u])
 					{
-						SelectedConflictRes = 0;
+						if (UI::UIButton_2(
+							std::string{ name + " " + std::to_string(u+1) }.c_str(),
+							std::string{ name + " " + std::to_string(u+1) }.c_str(),
+							ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 },
+							FONT_BTN, SelectedConflictRes == u))
+						{
+							SelectedConflictRes = u;
+						}
+						++i;
 					}
+					u++;
 					ImGui::PopID();
 				}
 			}
@@ -645,7 +726,7 @@ namespace Tempest
 			ImGui::EndChild();
 
 			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.8f - child_size.x * 0.5f, viewport.Size.y * 0.55f - child_size.y * 0.5f });
-			if (ImGui::BeginChild("##LoadSequenceMainMenu", child_size, true))
+			if (ImGui::BeginChild("##LoadSequenceMainMenu", child_size, true) && SelectedConflictRes >= 0 && SelectedConflictRes < 3 && OkayConRes[SelectedConflictRes])
 			{
 				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
 
@@ -653,14 +734,22 @@ namespace Tempest
 				// TODO: make a popup menu
 
 				int i = 0;
-				std::string seq_name = "Unit vs Unit";
-				ImGui::PushID(seq_name.c_str());
 				//bool selected = SelectedSequences.size();
-				if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, false))
+
+				for (auto& [id, name] : ConResSequences[SelectedConflictRes])
 				{
-					Service<EventManager>::Get().instant_dispatch<MainMenuSequencePopupTrigger>(SelectedSequences);
+					ImGui::PushID(name.c_str());
+					if (UI::UIButton_2(name.c_str(), name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, SelectedSequences.empty() ? false : SelectedSequences[0] == id))
+					{
+						SelectedSequences.clear();
+						SelectedSequences.push_back(id);
+						//Service<EventManager>::Get().instant_dispatch<MainMenuSequencePopupTrigger>(SelectedSequences);
+					}
+					i++;
+					ImGui::PopID();
 				}
-				ImGui::PopID();
+
+
 
 				++i;
 			}
@@ -676,7 +765,10 @@ namespace Tempest
 				Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 					MemoryStrategy{},
-					InstanceType::RUN_TIME);
+					InstanceType::RUN_TIME,
+					SelectedMap,
+					SelectedConflictRes + 1,
+					SelectedSequences);
 
 			}
 

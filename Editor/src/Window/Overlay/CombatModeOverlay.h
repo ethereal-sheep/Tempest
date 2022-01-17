@@ -28,6 +28,29 @@ namespace Tempest
             WEAPONS
         };
 
+        enum TABS_TYPE
+        {
+            STAT,
+            WEAPON,
+            ITEM,
+            ACTION,
+            TOTAL
+        };
+
+        struct TabImageData
+        {
+            enum STATE
+            {
+                UNHOVER,
+                HOVER
+            };
+
+            std::array< void*, 2> image_id;
+            STATE current_state{ UNHOVER };
+            ImVec2 size{ 0,0 };
+            bool is_active{ false };
+        };
+
         enum class BATTLE_STATE
         {
             CURR_TURN,       // display character information and action options
@@ -50,7 +73,10 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<OpenCombatModeTrigger>(&CombatModeOverlay::open_popup, this);
             Service<EventManager>::Get().register_listener<CombatModeVisibility>(&CombatModeOverlay::visibility, this);
             Service<EventManager>::Get().register_listener<ChangeTurnOrder>(&CombatModeOverlay::change_turn_order, this);
+
+            initialise_tabs();
         }
+
         void open_popup(const Event& e);
         void visibility(const Event& e);
         void change_turn_order(const Event& e);
@@ -126,6 +152,15 @@ namespace Tempest
             }
         }
 
+        void initialise_tabs();
+        void display_unit_stats(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs);
+        void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs);
+        void display_items(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs);
+        void display_actions(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs);
+
+        template<typename F>
+        void render_tabs(TABS_TYPE type, F&& func);
+
         bool OverlayOpen = false;
 
         tvector<Entity> units;
@@ -167,7 +202,7 @@ namespace Tempest
         bool atk_rolled = false;
         bool def_rolled = false;
 
-        float action_button_diff = 0.0f;
+        float action_button_diff = 40.0f;
         float placeholder_height = 0.0f;
         ImVec2 action_background_size{0.f,0.f};
         bool display_curr_stat{ false };
@@ -175,8 +210,11 @@ namespace Tempest
         INFO_TYPE info_type{ INFO_TYPE::CHAR};
         BATTLE_STATE battle_state{ BATTLE_STATE::CURR_TURN };
 
+        tsptr<Texture> combat_button_tex[3];
 
         tmap<int, tmap<int, uint32_t>> range_map;
         tmap<int, tmap<int, bool>> visited;
+        std::array<TabImageData, TOTAL> tabs;
+        TABS_TYPE current_tab{ TABS_TYPE::STAT };
     };
 }

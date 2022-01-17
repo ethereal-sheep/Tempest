@@ -162,7 +162,8 @@ namespace Tempest
 				display_unit_section(instance, { viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
 				display_unit_section(instance, { viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, false);
 
-				if (UI::UIButton_2("Simulate", "Simulate", { viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))
+				
+				if (UI::UIButton_Simulate("Simulate", "Simulate", { viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY, true))
 				{
 					// TODO: check for invalid inputs
 					freq = std::clamp(freq, 1u, 100000u);
@@ -183,35 +184,35 @@ namespace Tempest
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
 				}
 
-				if (UI::UIButton_2("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { 10.f, 10.f }, FONT_PARA))
-				{
-					// open testing combat in map
-					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
-					edit.save();
+				// if (UI::UIButton_CustomMap("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY,true))
+				// {
+				// 	// open testing combat in map
+				// 	auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+				// 	edit.save();
 
-					if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
-					{
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
-						OverlayOpen = false;
-					}
-					else if (!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
-					{
-						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
-					}
-					else if (!instance.ecs.view_first<tc::ConflictGraph>())
-					{
-						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
-					}
-					else
-					{
-						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
-					}
+				// 	if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(5);
+				// 		OverlayOpen = false;
+				// 	}
+				// 	else if (!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+				// 	}
+				// 	else if (!instance.ecs.view_first<tc::ConflictGraph>())
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
+				// 	}
+				// 	else
+				// 	{
+				// 		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
+				// 	}
 
-					/*Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-						edit.get_full_path(),
-						MemoryStrategy{},
-						InstanceType::RUN_TIME);*/
-				}
+				// 	/*Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+				// 		edit.get_full_path(),
+				// 		MemoryStrategy{},
+				// 		InstanceType::RUN_TIME);*/
+				// }
 
 				// display top buttons
 				{
@@ -230,6 +231,7 @@ namespace Tempest
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
 							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
 
+							edit_instance->save_current_conflict_resolution();
 							instance.unload_current_conflict_resolution();
 						}
 					}
@@ -252,261 +254,9 @@ namespace Tempest
 
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
-						Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>();
+						Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::SIMULATE_TUT);
 					}
 					ImGui::PopStyleColor(3);
-				}
-				
-
-				{
-					//// Drag drop section
-			//{
-			//	const float availRegion = ImGui::GetContentRegionAvail().y * 0.3f;
-			//	auto curr_tex = tex_map["Assets/ButtonSlot.png"];
-			//	const ImVec2 button_slot_size{ curr_tex->GetWidth() * 0.68f, curr_tex->GetHeight() * 0.67f };
-
-			//	ImGui::BeginChild("##DragDropSectionSimulate", ImVec2(contentSize, availRegion), false, window_flags | ImGuiWindowFlags_NoScrollbar);
-
-			//	// Attacker section
-			//	{
-			//		ImGui::BeginChild("##DragDropAttackerSimulate", ImVec2(contentSize * 0.45f, availRegion - 2.0f), false, window_flags );
-
-			//		// Attacker image
-			//		ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.05f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.11f });
-			//		ImGui::Image((void*)static_cast<size_t>(tex_map["Assets/Attacker.png"]->GetID()), {tex_map["Assets/Attacker.png"]->GetWidth() * 0.9f, tex_map["Assets/Attacker.png"]->GetHeight() * 0.9f });
-
-			//		ImGui::SameLine();
-
-			//		// Button slot
-			//		ImVec2 buttonPos{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.45f - button_slot_size.x * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - button_slot_size.y * 0.5f};
-			//		
-			//		ImGui::SetCursorPos(buttonPos);
-			//		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), button_slot_size); // Image draws from top left
-			//		if (ImGui::BeginDragDropTarget())
-			//		{
-			//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UNIT_CONTENT_ITEM"))
-			//			{
-			//				Attacker = *(const Entity*)payload->Data;
-			//			}
-
-			//			ImGui::EndDragDropTarget();
-			//		}
-
-			//		if (Attacker != UNDEFINED)
-			//		{
-			//			auto& character = instance.ecs.get<tc::Character>(Attacker);
-			//			if (UI::UIButton_2(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f}, { 60, 15 }, FONT_PARA))
-			//				Attacker = UNDEFINED;
-			//		}
-
-			//		ImGui::EndChild();
-			//	
-			//	}
-			//	ImGui::SameLine();
-			//	ImGui::BeginChild("##VSChild", ImVec2(contentSize * 0.1f, availRegion - 2.0f), false, window_flags);
-			//	ImGui::PushFont(FONT_HEAD);
-			//	ImGui::Dummy({ 0.f, ImGui::GetContentRegionAvail().y * 0.41f });
-			//	ImGui::Dummy({ ImGui::GetContentRegionAvail().x * 0.25f, 0.f });
-			//	ImGui::SameLine();
-			//	ImGui::Text("VS");
-			//	ImGui::PopFont();
-			//	ImGui::EndChild();
-			//	ImGui::SameLine(0,0);
-
-			//	// Defender section
-			//	{
-			//		ImGui::BeginChild("##DragDropDefenderSimulate", ImVec2(contentSize * 0.45f, availRegion - 2.0f), false, window_flags );
-
-			//		ImGui::SameLine();
-
-			//		// Button slot
-			//		ImVec2 buttonPos{ ImGui::GetCursorPosX() - 20.0f * 0.5f + ImGui::GetContentRegionAvailWidth() * 0.35f - button_slot_size.x * 0.5f,
-			//						  ImGui::GetCursorPosY() + 15.0f * 0.5f + ImGui::GetContentRegionAvail().y * 0.5f - button_slot_size.y * 0.5f};
-
-			//		ImGui::SetCursorPos(buttonPos);
-			//		ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), button_slot_size); // Image draws from top left
-			//		if (ImGui::BeginDragDropTarget())
-			//		{
-			//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UNIT_CONTENT_ITEM"))
-			//			{
-			//				Defender = *(const Entity*)payload->Data;
-			//			}
-
-			//			ImGui::EndDragDropTarget();
-			//		}
-
-			//		
-			//		ImGui::SameLine();
-
-			//		// Defender image
-			//		ImGui::SetCursorPos({ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.56f - (tex_map["Assets/Defender.png"]->GetWidth() * 0.9f) * 0.5f , ImGui::GetCursorPosY() - (tex_map["Assets/Defender.png"]->GetHeight() * 0.9f) * 0.5f + 15.0f});
-			//		ImGui::Image((void*)static_cast<size_t>(tex_map["Assets/Defender.png"]->GetID()), { tex_map["Assets/Defender.png"]->GetWidth() * 0.9f, tex_map["Assets/Defender.png"]->GetHeight() * 0.9f });
-
-			//		if (Defender != UNDEFINED)
-			//		{
-			//			auto& character = instance.ecs.get<tc::Character>(Defender);
-			//			if (UI::UIButton_2(character.name.c_str(), character.name.c_str(), ImVec2{ buttonPos.x + button_slot_size.x * 0.5f, buttonPos.y + button_slot_size.y * 0.5f }, { 60, 15 }, FONT_PARA))
-			//				Defender = UNDEFINED;
-			//		}
-			//		ImGui::EndChild();
-			//	}
-			//	ImGui::EndChild();
-			//}
-
-			//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
-
-			//// Content selection section
-			//ImGui::BeginChild("##ContentSectionSimulate", ImVec2(contentSize, ImGui::GetContentRegionAvail().y * 0.8f), false, ImGuiWindowFlags_NoScrollWithMouse);
-			//
-			//const auto regoinAvailWidth = ImGui::GetContentRegionAvailWidth() / 3.0f - Padding;
-			//const auto regoinAvailHeight = ImGui::GetContentRegionAvail().y;
-
-			//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (ImGui::GetContentRegionAvailWidth() - regoinAvailWidth * 3 - Padding) * 0.4f);
-			//ImGui::SetCursorPosY(ImGui::GetCursorPosY() + HalfPadding);
-
-			//{
-			//	ImGui::BeginChild("##LeftSideSimulate", ImVec2(regoinAvailWidth, regoinAvailHeight - Padding));
-			//	const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-			//	auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
-
-			//	unsigned i = 0;
-			//	for (auto id : view)
-			//	{
-			//		ImGui::PushID(id);
-			//		ImGui::BeginGroup();
-			//		const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
-
-			//		auto& Charac = instance.ecs.get<tc::Character>(id);
-			//		if (UI::UIButton_2(Charac.name.c_str(), Charac.name.c_str(), pos, { 60, 15 }, FONT_PARA)) {}
-
-			//		ImGui::EndGroup();
-			//
-			//		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-			//		{
-			//			ImGui::SetDragDropPayload("UNIT_CONTENT_ITEM", &id, sizeof(Entity));
-			//			UI::UIButton_2(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y }, { 60, 15 }, FONT_PARA);
-			//			ImGui::EndDragDropSource();
-			//		}
-
-			//		ImGui::PopID();
-			//
-			//	}
-
-			//	ImGui::EndChild();
-
-			//}
-
-			//ImGui::SameLine();
-			//ImGui::Dummy({ HalfPadding, 0 });
-			//ImGui::SameLine();
-
-			//// Add more things ehre
-			//{
-			//	ImGui::BeginChild("##MiddleSideSimulate", ImVec2(regoinAvailWidth, regoinAvailHeight - Padding));
-
-			//	const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-			//	int index = 0;
-			//	for (auto id : instance.ecs.view<tc::ActionGraph>())
-			//	{
-			//		auto& g = instance.ecs.get<tc::Graph>(id);
-			//		g.g.get_name();
-			//		bool selected = false;
-			//		if (id == ActionID)
-			//			selected = true;
-			//		if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x , cursor.y + index * 80 }, { 60.f, 15.f }, FONT_PARA, selected))
-			//		{
-			//			//OverlayOpen = false;
-			//			//Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
-			//			
-			//			if (selected == true)
-			//				ActionID = UNDEFINED;
-			//			else
-			//				ActionID = id;
-
-			//		}
-			//		index++;
-			//	}
-
-			//	ImGui::EndChild();
-
-			//}
-
-			//ImGui::SameLine();
-			//ImGui::Dummy({ HalfPadding, 0 });
-			//ImGui::SameLine();
-
-			//{
-			//	ImGui::BeginChild("##RightSideSimulate", ImVec2(regoinAvailWidth, regoinAvailHeight - Padding));
-
-			//	const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-			//	int index = 0;
-			//	for (auto id : instance.ecs.view<tc::ConflictGraph>())
-			//	{
-			//		auto& g = instance.ecs.get<tc::Graph>(id);
-			//		bool selected = false;
-			//		if (id == LinkID)
-			//			selected = true;
-			//		g.g.get_name();
-			//		if (UI::UIButton_2(g.g.get_name() + std::to_string(id), g.g.get_name() + std::to_string(id), { cursor.x + 10.f , cursor.y + index * 80 }, { 60.f, 15.f}, FONT_PARA, selected))
-			//		{
-			//			// make sure i can simulate
-			//			// 1. have atk and def 
-			//			// 2. atk and def have characters
-			//			// 3. have conflict and conflict graph
-			//			
-
-			//			if (selected == true)
-			//				LinkID = UNDEFINED;
-			//			else
-			//				LinkID = id;
-			//			//if (Defender != INVALID &&
-			//			//	Attacker != INVALID &&
-			//			//	instance.ecs.has<tc::Character>(Defender) &&
-			//			//	instance.ecs.has<tc::Character>(Attacker)
-			//			//)
-			//			//{
-
-			//			//}
-
-			//		}
-			//		index++;
-			//	}
-			//	ImGui::EndChild();
-			//}
-
-			//ImGui::EndChild();
-
-			//// Cancel button
-			//
-
-			//// Simulate button
-			//bool disable = false;
-			//if (LinkID == UNDEFINED || Attacker == UNDEFINED || Defender == UNDEFINED)
-			//	disable = true;
-			//
-			//if (disable)
-			//{
-			//	ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			//	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-			//}
-			//if (UI::UIButton_2("Simulate", "Simulate", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.6f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
-			//{
-			//	Service<EventManager>::Get().instant_dispatch<OpenSimulateResultTrigger>(Attacker, Defender, LinkID);
-			//	OverlayOpen = false;
-			//}
-			//if (UI::UIButton_2("Custom Map", "Custom Map", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.75f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
-			//{
-
-			//}
-			//if (disable)
-			//{
-			//	ImGui::PopItemFlag();
-			//	ImGui::PopStyleVar();
-			//}
-			//if (UI::UIButton_2("Cancel", "Cancel", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.895f ,ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y - 50.0f }, { 10.f, 10.f }, FONT_PARA))
-			//{
-			//	OverlayOpen = false;
-			//}
 				}
 			
 			}
@@ -547,7 +297,6 @@ namespace Tempest
 		ImGui::PushID("chara" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
-			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_UNIT, is_attacker, *temp);
 		}
@@ -568,7 +317,6 @@ namespace Tempest
 		ImGui::PushID("weapon" + is_attacker);
 		if (*temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 		{
-			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_WEAPON, is_attacker, *temp);
 		}

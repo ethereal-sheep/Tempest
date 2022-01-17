@@ -89,25 +89,15 @@ namespace Tempest
 
 			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.f));
 			ImGui::BeginChild("Child", ImVec2{}, false);
-			if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+			
+			//if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+			if (UI::UIButton_2("Save & Return", "Save & Return", ImVec2{ cPos.x + ImGui::GetWindowWidth() * 0.45f,cPos.y + ImGui::GetWindowHeight() * 0.05f }, { 0,0 }, FONT_BODY))
 			{
-				if (instance.ecs.view_first<tc::Character>() && instance.ecs.view_first<tc::ConflictGraph>())
-				{
-					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				}
-				else if (!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
-				{
-					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
-				}
-				else if (!instance.ecs.view_first<tc::ConflictGraph>())
-				{
-					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
-				}
-				else
-				{
-					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
-				}
+				auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+				edit.save_current_scene();
+				edit.unload_current_scene();
+				OverlayOpen = false;
+				Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
 			}
 			ImGui::EndChild();
 			ImGui::PopStyleColor(1);

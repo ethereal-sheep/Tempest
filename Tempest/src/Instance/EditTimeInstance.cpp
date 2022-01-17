@@ -28,7 +28,7 @@ namespace Tempest
 			meta->name = "StatsData";
 			ecs.emplace<tc::Statline>(StatsLine);
 		}
-
+		
 		scene.get_map().update();
 
 		for (auto& [id, pf] : scene.get_map())

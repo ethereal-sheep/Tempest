@@ -112,8 +112,9 @@ namespace Tempest
 					{
 						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
 						{
-							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving only con res...");
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
 							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>(); 
+							edit_instance->save();
 						}
 					}
 					break;

@@ -26,6 +26,16 @@ namespace Tempest
 		entities = a.entities;
 		OpenCombat = a.openNewCombat;
 
+		// destroy entities that are removed from the add units page
+		for (const auto thisUnit : chars)
+		{
+			if (std::find(entities.begin(), entities.end(), thisUnit) == entities.end())
+			{
+				a.instance.ecs.remove<tc::Unit>(thisUnit);
+				a.instance.ecs.emplace<tc::Destroyed>(thisUnit);
+			}
+		}
+
 		chars.clear();
 		selected = 0;
 		for (auto id : entities)
