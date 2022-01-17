@@ -339,17 +339,32 @@ namespace Tempest
 						ImGui::BeginGroup();
 
 						auto cs = instance.ecs.get_if<tc::Character>(id);
+						if (turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS)
+						{
+							auto PairResult = UI::UICharButton_WithDelete((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
+								cs->name.c_str(), string("##unitcombat" + std::to_string(id)), false, { 0,0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y, cs->color.z,1 });
+						
+							if (PairResult.second)
+							{
+								ImGui::OpenPopup(string("RemoveUnitCombat##" + std::to_string(id)).c_str());
+							}
 
-						if (ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
-							ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 }))
-						{
-							if (turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS)
+							if (UI::ConfirmDeletePopup(string("RemoveUnitCombat##" + std::to_string(id)).c_str(), "Remove this unit?"))
+							{
 								remove.push_back(counter - 1);
+							}
 						}
-						if (cs)
+						else 
 						{
-							ImGui::Text(cs->name.c_str());
+							ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
+								ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 });
+
+							if (cs)
+							{
+								ImGui::Text(cs->name.c_str());
+							}
 						}
+						
 
 						ImGui::EndGroup();
 						ImGui::PopID();
