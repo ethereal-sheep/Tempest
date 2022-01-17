@@ -121,4 +121,128 @@ namespace Tempest
 	{
 		window_manager.exit(*this);
 	}
+
+	bool Instance::load_new_scene_by_path(const tpath& path)
+	{
+		// try to get the name in the path
+		// and assume it is valid
+		auto okay = fs::exists(path) && fs::is_directory(path) && fs::exists(path / "scene.json");
+		if (!okay)
+		{
+			LOG_WARN("Failed to load map at {0}", path.string());
+			return false;
+		}
+
+		string scene_name = path.stem().string();
+		current_scene_name = scene_name;
+		scene = Scene();
+		scene.load(path);
+		LOG_INFO("Loaded {0}", current_scene_name);
+		return true;
+	}
+	bool Instance::load_new_scene_by_name(const string& name)
+	{
+		return load_new_scene_by_path(root / "scenes" / name);
+	}
+
+	bool Instance::load_new_conflict_resolution_by_path(const tpath& load_path)
+	{
+		// try to get the name in the path
+		string res_name = load_path.stem().string();
+		auto path = load_path.parent_path();
+		int a = std::atoi(path.stem().string().c_str());
+		if (a >= 1 && a <= 3)
+		{
+			current_res_name = res_name;
+			current_res_index = a;
+			ecs.clear();
+			ecs.load(path, res_name);
+			LOG_INFO("Loaded {0}:{1}", current_res_name, current_res_index);
+			return true;
+		}
+		LOG_WARN("Failed to load resolution at {0}", load_path.string());
+		return false;
+	}
+
+	bool Instance::unload_current_scene()
+	{
+		if (current_scene_name != "")
+		{
+			LOG_INFO("Unloaded {0}", current_scene_name);
+			current_scene_name = "";
+			scene = Scene();
+			return true;
+		}
+		return false;
+	}
+
+	bool Instance::unload_current_conflict_resolution()
+	{
+		if (current_res_name != "")
+		{
+			LOG_INFO("Unloaded {0}:{1}", current_res_name, current_res_index);
+			current_res_name = "";
+			current_res_index = 0;
+			ecs.clear();
+			return true;
+		}
+		return false;
+	}
+
+
+	tvector<tpair<int, tpath>> Instance::get_scene_paths()
+	{
+		tvector<tpair<int, tpath>> paths;
+		try
+		{
+			int i = 1;
+			for (auto entry : fs::directory_iterator(root / "scenes"))
+			{
+				// each directory is a scene
+				// if it contains a scene.json
+				if (fs::exists(entry.path() / "scene.json"))
+					paths.push_back(std::make_pair(i++, entry.path()));
+			}
+		}
+		catch (const std::exception&)
+		{
+			// do nothing
+		}
+
+		return paths;
+	}
+
+	tvector<tpair<bool, tpath>> Instance::get_conflict_resolution_paths()
+	{
+		tvector<tpair<bool, tpath>> paths(3);
+		try
+		{
+			for (auto entry : fs::directory_iterator(root / "conflict_resolutions"))
+			{
+				// each directory is a conflict res
+				// it should be from 1 to 3
+				if (fs::is_directory(entry.path()))
+				{
+					string a = entry.path().filename().string();
+					if (a == "1" || a == "2" || a == "3")
+					{
+						for (auto inside : fs::directory_iterator(entry.path()))
+						{
+							if (fs::is_directory(inside.path()))
+							{
+								paths[std::atoi(a.c_str()) - 1] = std::make_pair(true, inside.path());
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (const std::exception&)
+		{
+			// do nothing
+		}
+
+		return paths;
+	}
 }

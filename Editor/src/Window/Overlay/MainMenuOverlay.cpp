@@ -374,7 +374,52 @@ namespace Tempest
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 			auto cur_pos = ImGui::GetCursorPos();
-			for (int i = 1; i < 4; i++)
+			
+			int i = 1;
+			for (auto& [b, path] : instance.get_conflict_resolution_paths())
+			{
+				ImGui::SetCursorPos(cur_pos);
+				ImGui::Dummy({ viewport.Size.x * 0.3f, 0.f });
+				ImGui::SameLine();
+				string str = path.stem().string() + " " + std::to_string(i);
+
+				auto [selected, deleted] = UI::UIConflictSelectable(str.c_str(), false, b);
+
+				if (selected)
+				{
+					AudioEngine ae;
+					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+					if (b) // if b is true, there is a conres at this position
+					{
+						OverlayOpen = false;
+						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening " + str);
+						instance.load_new_conflict_resolution_by_path(path);
+
+					}
+					else // there is none, create
+					{
+						if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
+						{
+							edit->create_new_conflict_resolution(i, "Conflict Resolution");
+						}
+					}
+				}
+				else if (deleted)
+				{
+					// should have confirmation here
+					/*if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
+					{
+						edit->delete_conflict_resolution(i);
+					}*/
+				}
+
+				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
+				cur_pos = ImGui::GetCursorPos();
+				++i;
+			}
+
+			/*for (int i = 1; i < 4; i++)
 			{
 				ImGui::SetCursorPos(cur_pos);
 				ImGui::Dummy({ viewport.Size.x * 0.3f, 0.f });
@@ -395,7 +440,7 @@ namespace Tempest
 				}
 				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
 				cur_pos = ImGui::GetCursorPos();
-			}
+			}*/
 
 			// render back button
 			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.02f,viewport.Size.y * 0.03f });
@@ -453,8 +498,15 @@ namespace Tempest
 			// render bottom two buttons
 			if (UI::UIButton_2("New Map", "New Map", ImVec2{ viewport.Size.x * 0.34f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
 			{
-				Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
-				OverlayOpen = false;
+				if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
+				{
+					auto name = edit->create_new_scene();
+					if (name != "" && edit->load_new_scene_by_name(name))
+					{
+						Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+						OverlayOpen = false;
+					}
+				}
 			}
 
 			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
@@ -504,25 +556,30 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 			if (ImGui::BeginChild("##LoadMapMainMenu", child_size, true))
 			{
-				const std::pair<bool, bool> map_pair = UI::UIMapSelectable("MAP_01", "Date created: 12/31/2021", false, 1);
 
-				// render all the maps here
-				if (map_pair.first)
+				for (auto& [b, path] : instance.get_scene_paths())
 				{
-					AudioEngine ae;
-					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-					if (MapTitle == "Map Builder")
+					auto scene_name = path.stem().string();
+					const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: 12/31/2021", false, 1);
+
+					// render all the maps here
+					if (map_pair.first)
 					{
-						Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
-						OverlayOpen = false;
+						AudioEngine ae;
+						ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+						if (MapTitle == "Map Builder")
+						{
+							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							OverlayOpen = false;
+						}
+						else
+							MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
 					}
-					else
-						MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
-				}
 
-				else if (map_pair.second)
-				{
-					// TODO: delete map
+					else if (map_pair.second)
+					{
+						// TODO: delete map
+					}
 				}
 			}
 

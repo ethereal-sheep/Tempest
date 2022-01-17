@@ -44,33 +44,17 @@ namespace Tempest
 
 		void save_as(const tpath&);
 
-
-		void load_new_scene(const string& scene_name);
-		void load_new_conflict_resolution(const string& res_name);
-
-		void load_new_scene_by_path(const tpath& path);
-		void load_new_conflict_resolution_by_path(const tpath& path);
-
 		void save_current_scene();
 		void save_current_conflict_resolution();
 
-		void create_new_scene(const string& scene_name);
+		bool delete_scene(const string& scene_name);
+		bool delete_conflict_resolution(int i);
+
+		string create_new_scene(const string& scene_name = "Map");
 		void create_new_conflict_resolution(int i, const string& res_name);
 
-		tvector<tpair<int, tpath>> get_scene_paths();
-		tvector<tpair<bool, tpath>> get_conflict_resolution_paths();
+		
 
-
-		const string& get_current_scene_name() const {
-			return current_scene_name;
-		}
-		const string& get_current_res_name() const {
-			return current_res_name;
-		}
-
-	private:
-		string current_scene_name;
-		string current_res_name;
 
 	public:
 	};
