@@ -53,6 +53,7 @@ namespace Tempest
 		auto a = event_cast<CloseOverlayTrigger>(e);
 		if (a.current == QUICKMENU_POPUP_TYPE::WEAPONS)
 			OverlayOpen = false;
+		weap = nullptr;
 	}
 
 	void WeaponSheetOverlay::show(Instance& instance)
@@ -189,7 +190,7 @@ namespace Tempest
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
 						//Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
-						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
+						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 
 						
 					}

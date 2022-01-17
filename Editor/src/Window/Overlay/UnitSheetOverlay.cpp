@@ -59,6 +59,7 @@ namespace Tempest
 		auto a = event_cast<CloseOverlayTrigger>(e);
 		if (a.current == QUICKMENU_POPUP_TYPE::UNITS)
 			OverlayOpen = false;
+		cs = nullptr;
 	}
 
 	void UnitSheetOverlay::confirm_data(const Event& e)
@@ -215,13 +216,6 @@ namespace Tempest
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
 						//Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
-						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
-						{
-							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
-							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
-
-							instance.unload_current_conflict_resolution();
-						}
 						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 					}
 
