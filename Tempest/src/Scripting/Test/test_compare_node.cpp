@@ -24,7 +24,7 @@ namespace Tempest
 	{
 		NullTimeInstance instance;
 
-		int flow_out; //, lhs_out, rhs_out;
+		//int flow_out; //, lhs_out, rhs_out;
 
 		auto tempFN = [&instance](int lhs, int rhs, int assert_value)
 		{
