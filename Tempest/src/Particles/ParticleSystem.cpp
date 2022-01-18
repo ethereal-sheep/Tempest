@@ -9,6 +9,22 @@
 #include "Particle_System.h"
 #include <glm.hpp>
 
+ParticleSystem::Particle::Particle()
+	: m_size{0.f}
+	, m_lifeTime {0.f}
+	, m_lifeRemaining {0.f}
+{}
+
+ParticleSystem::Emitter::Emitter()
+	: m_startSize{1.f}
+	, m_endSize {1.f}
+	, m_sizeVariation{1.f}
+	, m_lifeTime{0.f}
+	, m_loop{0.f}
+	, m_maxParticles{500}
+	, m_rateOvertime{0.f}
+{}
+
 void ParticleSystem::Emitter::Update(const float dt)
 {
 	static float timeInterval = 0.f;
@@ -61,9 +77,9 @@ void ParticleSystem::Emitter::Update(const float dt)
 
 				// Colour
 				newParticle.m_colour = m_colourBegin;
-				newParticle.m_colour.x = std::rand() % static_cast<int>(std::abs(m_colourEnd.x - m_colourBegin.x));
-				newParticle.m_colour.y = std::rand() % static_cast<int>(std::abs(m_colourEnd.y - m_colourBegin.y));
-				newParticle.m_colour.z = std::rand() % static_cast<int>(std::abs(m_colourEnd.z - m_colourBegin.z));
+				newParticle.m_colour.x = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.x - m_colourBegin.x)));
+				newParticle.m_colour.y = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.y - m_colourBegin.y)));
+				newParticle.m_colour.z = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.z - m_colourBegin.z)));
 
 				// Size
 				newParticle.m_size = m_startSize;

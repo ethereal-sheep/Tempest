@@ -25,6 +25,8 @@ struct ParticleSystem
 {
 	struct Particle
 	{
+		Particle();
+
 		els::vec2f m_position;
 		els::vec2f m_velocity;
 		
@@ -36,13 +38,14 @@ struct ParticleSystem
 
 	struct Emitter
 	{
+		Emitter();
 		void Update(const float dt);
 
 		els::vec2f m_position;
 		// The particle it emitts
 		std::vector<Particle> m_particles;
 
-		// Data the User can manipulate
+		// Data the User can manipulate - This idea is put on hold for now. TO be handled by backend programemrs.
 		// Velocity Controls (3)
 		els::vec2f m_startVelocity, m_endVelocity;	// Velocity of particles
 		els::vec2f m_velocityVariation;				// Different velocity spawn
@@ -55,11 +58,11 @@ struct ParticleSystem
 		els::vec4f m_colourBegin, m_colourEnd;	// Colour transition of particles
 
 		// Other controls (...)
-		float m_lifeTime;		// Life time of the particles
-		bool m_loop;			// Can the emitter loop spawn
-		int m_maxParticles;		// Max amount of particles an emitter can have 
+		float m_lifeTime;				// Life time of the particles
+		bool m_loop;					// Can the emitter loop spawn
+		int m_maxParticles;				// Max amount of particles an emitter can have 
 
-		float m_rateOvertime;	// How much particles to spawn per unit of time
+		float m_rateOvertime;			// How much particles to spawn per unit of time
 	};
 
 	struct Handler
@@ -80,7 +83,7 @@ struct ParticleSystem
 		}
 	};
 
-	Handler Register()
+	Handler Register() //Weak pointer here - to be change
 	{
 		auto emitter = std::make_shared<Emitter>();
 		m_emitters.push_back(emitter);
