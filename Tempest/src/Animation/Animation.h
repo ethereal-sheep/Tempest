@@ -13,7 +13,7 @@ namespace Tempest
 
 	struct Animation
 	{
-		std::vector<Frame> frames;
-		std::vector<float> timestamps;
+		std::vector<std::tuple<float, Frame>> mesh_frames;		// Vector of Different Meshes' Frames with their corresponding timestamps	
+		float start_time = 0.f;
 	};
 }
