@@ -132,7 +132,7 @@ namespace Tempest
 						else
 							buttons[2] = tex_map["Assets/StatsButtonUnlit.dds"];
 
-						ImGui::SetCursorPos(cursor);
+						/*ImGui::SetCursorPos(cursor);
 						ImGui::Dummy(ImVec2{ 0.f, 10.0f });
 						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[1]->GetID()), ImVec2{ buttons[1]->GetWidth() * 1.0f,buttons[1]->GetHeight() * 1.0f }))
 						{
@@ -145,7 +145,7 @@ namespace Tempest
 
 						ImGui::SameLine();
 						ImGui::Dummy(ImVec2{ 20.f, 0.f });
-						ImGui::SameLine();
+						ImGui::SameLine();*/
 
 						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[3]->GetID()), ImVec2{ buttons[3]->GetWidth() * 1.0f,buttons[3]->GetHeight() * 1.0f }))
 						{
@@ -172,11 +172,11 @@ namespace Tempest
 					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
 					{
 						ImGui::PushFont(FONT_BODY);
-						std::string text = "Select the dice that you want to use to decide the turn order of the units.";
+						std::string text = "Roll to randomly arrange the turn order of the units.";
 						ImGui::TextWrapped(text.c_str());
 						ImGui::PopFont();
 
-						ImGui::Dummy(ImVec2{ 20.f, 100.0f });
+						/*ImGui::Dummy(ImVec2{ 20.f, 100.0f });
 						for (int i = 1; i < 6; ++i)
 						{
 							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".dds"];
@@ -184,7 +184,7 @@ namespace Tempest
 							ImGui::SameLine();
 							ImGui::Dummy(ImVec2{ 10.f, 0.f });
 							ImGui::SameLine();
-						}
+						}*/
 						
 
 						if (UI::UIButton_2("Roll", "Roll", ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.4f }, { 0,0 }, FONT_PARA))

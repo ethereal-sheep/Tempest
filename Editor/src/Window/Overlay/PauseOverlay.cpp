@@ -52,7 +52,7 @@ namespace Tempest
 					UI::SubHeader("Paused");
 					ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
-					if (hasSaveLoad)
+					/*if (hasSaveLoad)
 					{
 						if (UI::UIButton_2("Save", "Save", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.4f }, { 50,20 }, FONT_BTN))
 						{
@@ -63,17 +63,17 @@ namespace Tempest
 						{
 
 						}
-					}
+					}*/
 				
 
-					if (UI::UIButton_2("Return", "Return", ImVec2{ viewport->Size.x * 0.5f, hasSaveLoad ? viewport->Size.y * 0.6f : viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
+					if (UI::UIButton_2("Return", "Return", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
 					{
 						OverlayOpen = false;
 						EscDuringPause = false;
 					}
 
 					// where does this go to?
-					if (UI::UIButton_2("Quit", "Quit", ImVec2{ viewport->Size.x * 0.5f, hasSaveLoad ? viewport->Size.y * 0.7f : viewport->Size.y * 0.6f }, { 50,20 }, FONT_BTN))
+					if (UI::UIButton_2("Quit", "Quit", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.6f }, { 50,20 }, FONT_BTN))
 					{
 						OverlayOpen = false;
 						EscDuringPause = false;

@@ -476,10 +476,10 @@ namespace Tempest
 
 				if (UI::ConfirmDeletePopup(string("DeleteCR##" + std::to_string(i)).c_str(), "Delete this conflict resolution?"))
 				{
-					/*if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
+					if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
 					{
 						edit->delete_conflict_resolution(i);
-					}*/
+					}
 				}
 
 				ImGui::Dummy({ 0.f, viewport.Size.y * 0.07f });
@@ -606,11 +606,22 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
+
+
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				MainMenuUI = UI_SHOW::NEW_PROJECT;
+
+				if (MapTitle == "Map Builder")
+				{
+					MainMenuUI = UI_SHOW::SELECT_MAP;
+				}
+				else
+				{
+					MainMenuUI = UI_SHOW::NEW_PROJECT;
+				}
+
 			}
 				
 
@@ -628,7 +639,7 @@ namespace Tempest
 				for (auto& [b, path] : instance.get_scene_paths())
 				{
 					auto scene_name = path.stem().string();
-					const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: 12/31/2021", false, 1);
+					const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: WIP", false, MapTitle == "Map Builder", 1);
 
 					// render all the maps here
 					if (map_pair.first)
@@ -655,7 +666,10 @@ namespace Tempest
 
 					if (UI::ConfirmDeletePopup(string("DeleteMap##" + scene_name).c_str(), "Delete this map?"))
 					{
-						//TODO: Delete the map here
+						if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
+						{
+							edit->delete_scene(scene_name);
+						}
 					}
 				}
 			}
@@ -778,7 +792,6 @@ namespace Tempest
 					SelectedMap,
 					SelectedConflictRes + 1,
 					SelectedSequences);
-
 			}
 
 		}
