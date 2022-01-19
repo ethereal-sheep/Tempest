@@ -75,7 +75,11 @@ namespace Tempest
 		QUICKMENU_POPUP_TYPE current;
 	};
 
-	struct PauseOverlayTrigger : public Event {};
+	struct PauseOverlayTrigger : public Event
+	{
+		PauseOverlayTrigger(bool hasSaveLoad = true) : hasSaveLoad{ hasSaveLoad } {}
+		bool hasSaveLoad;
+	};
 
 	//Confirm Trigger
 	struct SimulateSelectionConfirm : public Event

@@ -463,7 +463,7 @@ namespace Tempest
 					}
 					
 				}
-
+				
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.025f });
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
@@ -477,6 +477,7 @@ namespace Tempest
 					switch (turn_order_state)
 					{
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
+						ImGui::OpenPopup("TurnOrderGoBackConfirmation##");
 						// TODO: Do a popup for comfirmation. Exit to Main menu screen if yes.
 
 						// if (new_instance)
@@ -496,6 +497,25 @@ namespace Tempest
 						break;
 					}
 				}
+
+				if (UI::ConfirmDeletePopup("TurnOrderGoBackConfirmation##", new_instance ? "Go back to select conflict resolution?": "Go back to combat mode?"))
+				{
+					OverlayOpen = false;
+
+					if (new_instance)
+					{
+						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+							instance.get_full_path(),
+							MemoryStrategy{},
+							InstanceType::EDIT_TIME);
+						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+					}
+						
+					else
+						Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+					
+				}
+
 				ImGui::PopStyleColor(3);
 
 			}

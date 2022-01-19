@@ -471,7 +471,11 @@ namespace Tempest
 				}
 				else if (deleted)
 				{
-					// should have confirmation here
+					ImGui::OpenPopup(string("DeleteCR##" + std::to_string(i)).c_str());
+				}
+
+				if (UI::ConfirmDeletePopup(string("DeleteCR##" + std::to_string(i)).c_str(), "Delete this conflict resolution?"))
+				{
 					/*if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
 					{
 						edit->delete_conflict_resolution(i);
@@ -644,9 +648,14 @@ namespace Tempest
 						}
 					}
 
-					else if (map_pair.second)
+					if (map_pair.second)
 					{
-						// TODO: delete map
+						ImGui::OpenPopup(string("DeleteMap##" + scene_name).c_str());
+					}
+
+					if (UI::ConfirmDeletePopup(string("DeleteMap##" + scene_name).c_str(), "Delete this map?"))
+					{
+						//TODO: Delete the map here
 					}
 				}
 			}
