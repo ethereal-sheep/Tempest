@@ -447,7 +447,7 @@ namespace Tempest
 				ImGui::SameLine();
 				string str = path.stem().string() + " " + std::to_string(i);
 
-				auto [selected, deleted] = UI::UIConflictSelectable(str.c_str(), false, i);
+				auto [selected, deleted] = UI::UIConflictSelectable(str.c_str(), false, b ? i : 0);
 
 				if (selected)
 				{
