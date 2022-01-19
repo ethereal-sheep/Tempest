@@ -639,7 +639,7 @@ namespace Tempest
 				for (auto& [b, path] : instance.get_scene_paths())
 				{
 					auto scene_name = path.stem().string();
-					const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: WIP", false, 1);
+					const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: WIP", false, MapTitle == "Map Builder", 1);
 
 					// render all the maps here
 					if (map_pair.first)
@@ -659,7 +659,7 @@ namespace Tempest
 						}
 					}
 
-					if (map_pair.second && MapTitle == "Map Builder")
+					if (map_pair.second)
 					{
 						ImGui::OpenPopup(string("DeleteMap##" + scene_name).c_str());
 					}
@@ -792,7 +792,6 @@ namespace Tempest
 					SelectedMap,
 					SelectedConflictRes + 1,
 					SelectedSequences);
-
 			}
 
 		}
