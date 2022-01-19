@@ -58,8 +58,10 @@ namespace Tempest
 	{
 		auto a = event_cast<CloseOverlayTrigger>(e);
 		if (a.current == QUICKMENU_POPUP_TYPE::UNITS)
+		{
 			OverlayOpen = false;
-		cs = nullptr;
+			cs = nullptr;
+		}
 	}
 
 	void UnitSheetOverlay::confirm_data(const Event& e)
