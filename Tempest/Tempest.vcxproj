@@ -185,6 +185,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
+    <ClCompile Include="src\Animation\Animation.cpp" />
+    <ClCompile Include="src\Animation\AnimationManager.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />
@@ -266,6 +268,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Animation\Animation.h" />
+    <ClInclude Include="src\Animation\AnimationManager.h" />
     <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
     <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
     <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />

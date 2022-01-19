@@ -377,7 +377,6 @@ void ProcessKeyFrameAnimation(std::vector<Animation>& animations)
 	for (uint32_t i = 0; i < s_Scene->mNumAnimations; ++i)
 	{
 		Animation anim;
-		s_Scene->mName;
 		aiAnimation* pAnim = s_Scene->mAnimations[i];
 
 		anim.name = pAnim->mName;
