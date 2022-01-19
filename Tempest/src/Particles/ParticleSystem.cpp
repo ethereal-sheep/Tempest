@@ -7,7 +7,6 @@
 
 
 #include "Particle_System.h"
-#include <glm.hpp>
 
 ParticleSystem::Particle::Particle()
 	: m_size{0.f}
