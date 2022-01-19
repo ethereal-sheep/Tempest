@@ -15,6 +15,7 @@
 #include "rttr/type.h"
 #include "rttr/registration.h"
 #include "ECS/Rttr_Register.h"
+#include "Particles/Particle_System.h"
 
 namespace Tempest
 {
@@ -24,6 +25,7 @@ namespace Tempest
 		const unsigned numOfButtons = 10;
 		const float padding = 50.0f;
 		const float halfPadding = padding * 0.5f;
+		ParticleSystem particleSys;
 
 		const char* window_name() override
 		{
@@ -136,8 +138,19 @@ namespace Tempest
 				UI::UIButton_EndTurn({ 300.f,300.f }, { 0,0 }, FONT_PARA, true);*/
 
 				
-				UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
-					
+				//UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
+				auto& io = ImGui::GetIO();
+				auto drawlist = ImGui::GetForegroundDrawList();
+				if (ImGui::IsMouseClicked(0))
+				{
+					auto reg = particleSys.Register();
+					//reg.m_weakEmmitters.
+				}
+				/*for (auto& i : particle)
+				{
+					i.x++;
+					drawlist->AddCircleFilled(i, 4, ImGui::GetColorU32({ 1,0,0,1 }));
+				}*/
 				
 				if (instance.selected == INVALID)
 				{

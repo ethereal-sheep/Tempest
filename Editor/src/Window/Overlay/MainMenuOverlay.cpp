@@ -148,7 +148,8 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				get_quitter().quit = true;
+				OverlayOpen = false;
+				//get_quitter().quit = true;
 			}
 			if (ImGui::IsItemHovered())
 			{
