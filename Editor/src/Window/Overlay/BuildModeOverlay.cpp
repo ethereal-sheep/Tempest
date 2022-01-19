@@ -81,7 +81,7 @@ namespace Tempest
 			ImVec2 MousePos = { 0,0 };
 			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 			{
-				Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+				Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(false);
 			}
 			//camEnable(instance);
 
