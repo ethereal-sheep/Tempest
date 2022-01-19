@@ -28,14 +28,18 @@ struct ParticleSystem
 	struct Particle
 	{
 		Particle();
+		Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive);
 
 		glm::vec2 m_position;
 		glm::vec2 m_velocity;
 		
+		float m_rotation;
+
 		glm::vec4 m_colour;
 		float m_size;
 		float m_lifeTime;
 		float m_lifeRemaining;
+		bool  m_isActive;
 	};
 
 	struct Emitter
@@ -43,17 +47,22 @@ struct ParticleSystem
 		Emitter();
 		void Update(const float dt);
 
+		// Test Function
+		void Emit();
+
 		glm::vec2 m_position;
+		
 		// The particle it emitts
 		std::vector<Particle> m_particles;
 
+		//------------------------------
 		// Data the User can manipulate - This idea is put on hold for now. TO be handled by backend programemrs.
 		// Velocity Controls (3)
 		glm::vec2 m_startVelocity, m_endVelocity;	// Velocity of particles
 		glm::vec2 m_velocityVariation;				// Different velocity spawn
 
 		// Size Controls (3)
-		float m_startSize, m_endSize;			// Size transition of particles
+		float m_sizeBegin, m_sizeEnd;			// Size transition of particles
 		float m_sizeVariation;					// Different size spawning
 
 		// Colour Controls (2)
@@ -85,12 +94,12 @@ struct ParticleSystem
 		}
 	};
 
-	Handler Register() //Weak pointer here - to be change
+	Handler Register()
 	{
 		auto emitter = std::make_shared<Emitter>();
 		m_emitters.push_back(emitter);
 
-		return emitter;
+		return emitter; // Weak ptr, refer to Handler
 	}
 
 	void Update(const float dt);
