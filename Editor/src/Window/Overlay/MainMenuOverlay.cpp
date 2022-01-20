@@ -31,6 +31,10 @@ namespace Tempest
 				inter_nest[i].start(.8f, .3f, .5f, i * .05f, [](float x) { return glm::cubicEaseOut(x); });
 			}
 		}
+		else if (MainMenuUI == UI_SHOW::LOAD_MAP)
+		{
+			inter_nest[0].start(0.5f, 0.5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
+		}
 	}
 
 	void MainMenuOverlay::open_popup(const Event& e)
@@ -41,7 +45,7 @@ namespace Tempest
 		SelectedConflictRes = 0;
 		SelectedSequences.clear();
 		change_state(static_cast<UI_SHOW>(a.menuType));
-		window_flags =  ImGuiWindowFlags_NoTitleBar;
+		window_flags |=  ImGuiWindowFlags_NoTitleBar;
 	}
 
 	void MainMenuOverlay::show(Instance& instance)
@@ -499,10 +503,19 @@ namespace Tempest
 					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 					if (b) // if b is true, there is a conres at this position
 					{
-						OverlayOpen = false;
-						Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
-						Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening " + str);
-						instance.load_new_conflict_resolution_by_path(path);
+
+						inter_nest[i-1].start(.3f, .5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
+
+						auto fn = [&, path = path, str]()
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening " + str);
+							instance.load_new_conflict_resolution_by_path(path);
+						};
+
+						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.5f, .2f, 0.f, fn);
+
 
 					}
 					else // there is none, create
@@ -714,56 +727,57 @@ namespace Tempest
 			// draw the child
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 10.0f, 10.f });
 			const ImVec2 child_size{viewport.Size.x * 0.5f, viewport.Size.y * 0.55f};
-			ImGui::SetCursorPos(ImVec2{viewport.Size.x * 0.65f - child_size.x * 0.5f, viewport.Size.y * 0.5f - child_size.y * 0.5f });
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.65f - child_size.x * 0.5f, viewport.Size.y * 0.5f - child_size.y * 0.5f });
 
 			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
-			if (ImGui::BeginChild("##LoadMapMainMenu", child_size, true))
+			for (auto& [b, path] : instance.get_scene_paths())
 			{
+				auto scene_name = path.stem().string();
+				ImGui::SetCursorPosX(viewport.Size.x * 0.65f - child_size.x * (SelectedMap == scene_name ? inter_nest[0].get() : 0.5f));
 
-				for (auto& [b, path] : instance.get_scene_paths())
+				const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: WIP", false, MapTitle == "Map Builder", 1);
+
+				// render all the maps here
+				if (map_pair.first)
 				{
-					auto scene_name = path.stem().string();
-					const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: WIP", false, MapTitle == "Map Builder", 1);
+					AudioEngine ae;
+					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
 
-					// render all the maps here
-					if (map_pair.first)
+					if (MapTitle == "Map Builder")
 					{
-						AudioEngine ae;
-						ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-						if (MapTitle == "Map Builder")
+						SelectedMap = scene_name;
+						inter_nest[0].start(.5f, -.5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
+						auto fn = [&, p = path]()
 						{
-							auto fn = [&, p = path]()
-							{
-								Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
-								instance.load_new_scene_by_path(p);
-								OverlayOpen = false;
-							};
-							// fade in, fade out, visible
-							Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-						}
-						else
-						{
-							SelectedMap = scene_name;
-							MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
-						}
+							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							instance.load_new_scene_by_path(p);
+							OverlayOpen = false;
+						};
+						// fade in, fade out, visible
+						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.5f, .15f, .0f, fn);
 					}
-
-					if (map_pair.second)
+					else
 					{
-						ImGui::OpenPopup(string("DeleteMap##" + scene_name).c_str());
+						SelectedMap = scene_name;
+						MainMenuUI = UI_SHOW::SELECT_CONFLICT_RES;
 					}
+				}
 
-					if (UI::ConfirmDeletePopup(string("DeleteMap##" + scene_name).c_str(), "Delete this map?"))
+				if (map_pair.second)
+				{
+					ImGui::OpenPopup(string("DeleteMap##" + scene_name).c_str());
+				}
+
+				if (UI::ConfirmDeletePopup(string("DeleteMap##" + scene_name).c_str(), "Delete this map?"))
+				{
+					if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
 					{
-						if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
-						{
-							edit->delete_scene(scene_name);
-						}
+						edit->delete_scene(scene_name);
 					}
 				}
 			}
 
-			ImGui::EndChild();
+
 			ImGui::PopStyleVar();
 			ImGui::PopStyleColor();
 		}

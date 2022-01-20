@@ -68,7 +68,8 @@ namespace Tempest
 		}
 
 		ax::NodeEditor::NavigateToContent();
-		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
+		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
+		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // graphs 
 	}
 
 	void AttackSystemOverlay::close_popup(const Event& e)

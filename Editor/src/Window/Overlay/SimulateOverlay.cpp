@@ -22,7 +22,7 @@ namespace Tempest
 	{
 		auto a = event_cast<OpenSimulateTrigger>(e);
 		OverlayOpen = true;
-		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar;
+		window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoFocusOnAppearing;;
 		attacker.Reset(a.instance);
 		defender.Reset(a.instance);
 
@@ -256,16 +256,22 @@ namespace Tempest
 
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
-						OverlayOpen = false;
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
 						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
 						{
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
-							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();
-
 							edit_instance->save_current_conflict_resolution();
 							instance.unload_current_conflict_resolution();
 						}
+
+						auto fn = [&]()
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();
+						};
+
+						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, 0.f, fn);
+
 					}
 
 					ImGui::SameLine();

@@ -28,7 +28,7 @@ namespace Tempest
         void init(Instance&) override
         {
             window_flags =
-                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar;
+                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoFocusOnAppearing;
 
             Service<EventManager>::Get().register_listener<OpenGraphTrigger>(&AttackSystemOverlay::open_popup, this);
             Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&AttackSystemOverlay::close_popup, this);
@@ -106,5 +106,6 @@ namespace Tempest
         ImGuiTextFilter filter;
 
         interpolater<float> inter{};
+        std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
     };
 }
