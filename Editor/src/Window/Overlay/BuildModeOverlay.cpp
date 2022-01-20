@@ -93,11 +93,18 @@ namespace Tempest
 			//if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 			if (UI::UIButton_2("Save & Return", "Save & Return", ImVec2{ cPos.x + ImGui::GetWindowWidth() * 0.45f,cPos.y + ImGui::GetWindowHeight() * 0.05f }, { 0,0 }, FONT_BODY))
 			{
-				auto& edit = dynamic_cast<EditTimeInstance&>(instance);
-				edit.save_current_scene();
-				edit.unload_current_scene();
-				OverlayOpen = false;
-				Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+				// go ahead
+				auto fn = [&]()
+				{
+					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+					edit.save_current_scene();
+					edit.unload_current_scene();
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+				};
+				// fade in, fade out, visible
+				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+
 			}
 			ImGui::EndChild();
 			ImGui::PopStyleColor(1);

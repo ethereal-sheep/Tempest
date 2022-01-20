@@ -51,7 +51,15 @@ namespace Tempest
 			Tabs[TABS_TYPE::ITEM].is_active = false;
 			Tabs[TABS_TYPE::ACTION].is_active = false;
 		}
-			
+
+		/*for (int i = 0; i < inter_nest.size(); ++i)
+		{
+			inter_nest[i].start(-.18 * ImGui::GetMainViewport()->Size.x, .0f, .4f, i * .05f, [](float x) { return glm::cubicEaseOut(x); });
+		}*/
+		inter_nest[0].start(1.f, .35f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // tabs
+		inter_nest[1].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // units 
+		inter_nest[2].start(0.f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // define stats
+		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 	}
 
 	void UnitSheetOverlay::close_popup(const Event& e)
@@ -100,7 +108,15 @@ namespace Tempest
 		
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
-		
+
+		{
+			float dt = ImGui::GetIO().DeltaTime;
+			for (auto& i : inter_nest)
+				i.update(dt);
+
+			inter.update(dt);
+		}
+
 		if (OverlayOpen)
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
@@ -122,7 +138,7 @@ namespace Tempest
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 				// Display the created units
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * 0.15f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * inter_nest[1].get() });
 				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				ImGui::BeginChild("##UnitsDisplay", { viewport->Size.x * 0.1f, viewport->Size.y * 0.7f }, true);
 				{
@@ -185,7 +201,7 @@ namespace Tempest
 
 				// tabs 
 				{
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.15f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter_nest[0].get(), viewport->Size.y * 0.15f });
 
 					push_button_style();
 
@@ -213,7 +229,7 @@ namespace Tempest
 				ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
 				// display top buttons
 				{
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(),viewport->Size.y * 0.03f });
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -254,7 +270,7 @@ namespace Tempest
 
 				// define stats button
 				auto image = tex_map["Assets/DefineStat.dds"];
-				ImGui::SetCursorPos({ viewport->Size.x * 0.85f, viewport->Size.y * 0.04f });
+				ImGui::SetCursorPos({ viewport->Size.x * (1 - inter_nest[2].get()), viewport->Size.y * 0.04f });
 				if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }, { 0, 0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 				{
 				//if (UI::UIButton_2("Define stats", "Define stats", { viewport->Size.x * 0.92f, viewport->Size.y * 0.05f }, { 0,0 }, FONT_PARA))
@@ -313,6 +329,7 @@ namespace Tempest
 			Tabs[type].is_active = true;
 
 			CurrentTab = type;
+
 		}
 
 		if (ImGui::IsItemHovered() || Tabs[type].is_active)

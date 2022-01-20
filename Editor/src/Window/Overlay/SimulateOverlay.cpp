@@ -34,6 +34,11 @@ namespace Tempest
 		lose = 0;
 		enter_button = tex_map["Assets/EnterButton.dds"];
 
+		for (int i = 0; i < inter_nest.size(); ++i)
+		{
+			inter_nest[i].start(-.18f * ImGui::GetMainViewport()->Size.x, .0f, .4f, i * .05f, [](float x) { return glm::cubicEaseOut(x); });
+		}
+		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -92,6 +97,14 @@ namespace Tempest
 
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
+
+		{
+			float dt = ImGui::GetIO().DeltaTime;
+			for (auto& i : inter_nest)
+				i.update(dt);
+
+			inter.update(dt);
+		}
 
 		if (OverlayOpen)
 		{
@@ -179,7 +192,7 @@ namespace Tempest
 				
 				// attack section
 				display_unit_section(instance, { viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
-				display_unit_section(instance, { viewport->Size.x * 0.82f,viewport->Size.y * 0.5f }, false);
+				display_unit_section(instance, { viewport->Size.x * (1.f - 0.18f),viewport->Size.y * 0.5f }, false);
 
 				
 				if (UI::UIButton_Simulate("Simulate", "Simulate", { viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY, true))
@@ -235,7 +248,7 @@ namespace Tempest
 
 				// display top buttons
 				{
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(),viewport->Size.y * 0.03f });
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -292,7 +305,10 @@ namespace Tempest
 		ImVec4 tint{ 1,1,1,1 };
 
 		// character display
-		ImGui::SetCursorPos(ImVec2{start_pos.x - 35.0f, start_pos.y - 60.0f });
+		float offset1 = inter_nest[0].get();
+		if (!is_attacker) offset1 = -offset1;
+
+		ImGui::SetCursorPos(ImVec2{start_pos.x - 35.0f + offset1, start_pos.y - 60.0f });
 		auto tex = tex_map["Assets/CharacterIcon.dds"];
 		std::string chara_name{ "CHARACTER" };
 		if (*temp != UNDEFINED)
@@ -310,6 +326,7 @@ namespace Tempest
 				SIMULATE_POPUP_TYPE::UNIT, is_attacker, *temp);
 		}
 
+
 		ImGui::SameLine();
 		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() - 15.0f, ImGui::GetCursorPosY() + 15.0f});
 		push_button_style();
@@ -323,8 +340,12 @@ namespace Tempest
 		pop_button_style();
 
 		// weapon
+
+		float offset2 = inter_nest[1].get();
+		if (!is_attacker) offset2 = -offset2;
+
 		temp = is_attacker ? &attacker.weapon : &defender.weapon;
-		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 4.0f });
+		ImGui::SetCursorPos({ start_pos.x + offset2, start_pos.y + padding * 4.0f });
 		if (UI::UIButton_Weapon(instance, *temp, "SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
@@ -344,8 +365,13 @@ namespace Tempest
 
 
 		// action
+
+		float offset3 = inter_nest[2].get();
+		if (!is_attacker) offset3 = -offset3;
+
+
 		temp =  is_attacker ? &attacker.action : &defender.action;
-		ImGui::SetCursorPos({ start_pos.x, start_pos.y + padding * 7.0f });
+		ImGui::SetCursorPos({ start_pos.x + offset3, start_pos.y + padding * 7.0f });
 		ImGui::PushID("action" + is_attacker);
 		if (UI::UIButton_Action(instance, *temp,"SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{

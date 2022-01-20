@@ -14,6 +14,7 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -95,6 +96,10 @@ namespace Tempest
         Entity SelectedID = INVALID;
         Entity TempWeapon = UNDEFINED;
         Entity TempAction = UNDEFINED;
+
+
+        interpolater<float> inter{};
+        std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;

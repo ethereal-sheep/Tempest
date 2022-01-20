@@ -14,11 +14,13 @@
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
 #include "InstanceManager/InstanceConfig.h"
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
 	class MainMenuWindow : public Window
 	{
+		
 
 		const char* window_name() override
 		{
@@ -37,6 +39,7 @@ namespace Tempest
 
 		void show(Instance& ) override
 		{
+
 			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 			ImVec2 size = ImGui::GetMainViewport()->Size;
 			ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));

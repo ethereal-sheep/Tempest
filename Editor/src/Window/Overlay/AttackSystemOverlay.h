@@ -14,6 +14,7 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -103,5 +104,7 @@ namespace Tempest
         std::string sidebar_title{""};
         OPEN_GRAPH_TYPE type{ OPEN_GRAPH_TYPE::GRAPH_ACTION };
         ImGuiTextFilter filter;
+
+        interpolater<float> inter{};
     };
 }

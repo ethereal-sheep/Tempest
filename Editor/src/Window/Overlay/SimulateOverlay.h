@@ -13,6 +13,7 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -74,5 +75,8 @@ namespace Tempest
         float padding{ 0.0f };
         ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
         ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
+
+        interpolater<float> inter;
+        std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
     };
 }

@@ -14,6 +14,7 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -80,5 +81,7 @@ namespace Tempest
         tc::Weapon NewWeapon;
         tc::Weapon* weap = nullptr; // help
         Entity SelectedID = INVALID;
+        interpolater<float> inter{};
+        std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
     };
 }

@@ -46,6 +46,9 @@ namespace Tempest
 			if (weap)
 				Tabs[TABS_TYPE::WEAPON].is_active = true;
 		}
+
+		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
+		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // weapons 
 	}
 
 	void WeaponSheetOverlay::close_popup(const Event& e)
@@ -71,6 +74,13 @@ namespace Tempest
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
 
+		{
+			float dt = ImGui::GetIO().DeltaTime;
+			for (auto& i : inter_nest)
+				i.update(dt);
+
+			inter.update(dt);
+		}
 		if (OverlayOpen)
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
@@ -92,7 +102,7 @@ namespace Tempest
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 				// Display the created units
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * 0.15f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f, viewport->Size.y * inter_nest[0].get() });
 
 				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 				ImGui::BeginChild("##WeaponsDisplay", { viewport->Size.x * 0.12f, viewport->Size.y * 0.7f }, true);
@@ -187,7 +197,7 @@ namespace Tempest
 
 				// display top buttons
 				{
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(), viewport->Size.y * 0.03f });
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
