@@ -33,6 +33,11 @@ namespace Tempest
 		//const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		//ImGui::SetNextWindowPos(viewport->Pos);
 		//ImGui::SetNextWindowSize(viewport->Size);
+
+		banner.update(ImGui::GetIO().DeltaTime);
+		if(banner.is_finished())
+			banner.start(1, 0, 10);
+
 		if (OverlayOpen)
 		{
 			//renderTop();
@@ -109,8 +114,11 @@ namespace Tempest
 			ImGui::EndChild();
 			ImGui::PopStyleColor(1);
 
+			ImVec2 min_pos = viewport->WorkPos;
+			ImVec2 max_pos = { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + bannerTex->GetHeight() };
+
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), min_pos, max_pos, {banner.get(), 0}, {1 + banner.get(), 1});
 			
-			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), viewport->WorkPos, { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + bannerTex->GetHeight() });
 			float posY = (viewport->WorkPos.y + viewport->Size.y - swidth);
 			float endY = (viewport->WorkPos.y + viewport->Size.y);
 			ImGui::SetCursorPos({ viewport->WorkPos.x,posY });
