@@ -52,7 +52,15 @@ namespace Tempest
 	{
 		auto a = event_cast<CloseOverlayTrigger>(e);
 		if (a.current == QUICKMENU_POPUP_TYPE::WEAPONS)
+		{
 			OverlayOpen = false;
+			weap = nullptr;
+		}
+	}
+
+	void WeaponSheetOverlay::force_close(const Event& e)
+	{
+		OverlayOpen = false;
 		weap = nullptr;
 	}
 

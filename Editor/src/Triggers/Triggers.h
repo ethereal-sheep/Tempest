@@ -43,6 +43,7 @@ namespace Tempest
 	struct AddingWeaponsTrigger : public Event {};
 	struct AddingActionsTrigger : public Event {};
 	struct SelectSequenceTrigger : public Event {};
+	struct CloseAllConResOverlayTrigger : public Event {};
 	struct CharacterStatsTrigger : public Event
 	{
 		CharacterStatsTrigger(Entity a) : entity{ a } {}

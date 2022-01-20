@@ -64,6 +64,12 @@ namespace Tempest
 		}
 	}
 
+	void UnitSheetOverlay::force_close(const Event& e)
+	{
+		OverlayOpen = false;
+		cs = nullptr;
+	}
+
 	void UnitSheetOverlay::confirm_data(const Event& e)
 	{
 		auto a = event_cast<SimulateSelectionConfirm>(e);

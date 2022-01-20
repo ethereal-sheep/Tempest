@@ -43,6 +43,25 @@ namespace Tempest
 			OverlayOpen = false;
 	}
 
+	void SimulateOverlay::force_close(const Event& e)
+	{
+		OverlayOpen = false;
+		attacker.unit_id = UNDEFINED;
+		attacker.weapon = UNDEFINED;
+		attacker.action = UNDEFINED;
+		defender.unit_id = UNDEFINED;
+		defender.weapon = UNDEFINED;
+		defender.action = UNDEFINED;
+		sequence = UNDEFINED;
+
+		win = 0;
+		lose = 0;
+		attack = UNDEFINED;
+		defend = UNDEFINED;
+		finish = false;
+
+	}
+
 	void SimulateOverlay::confirm_data(const Event& e)
 	{
 		auto a = event_cast<SimulateSelectionConfirm>(e);
@@ -229,7 +248,7 @@ namespace Tempest
 						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
 						{
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
-							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
+							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();
 
 							edit_instance->save_current_conflict_resolution();
 							instance.unload_current_conflict_resolution();
