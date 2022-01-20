@@ -186,6 +186,7 @@ namespace Tempest
                         if (UI::UIButton_2("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
                         {
                             enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
                         }
@@ -214,6 +215,7 @@ namespace Tempest
                         if (UI::UIButton_2("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
                         {
                             enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
                         }

@@ -78,6 +78,16 @@ namespace Tempest
 			OverlayOpen = false;
 	}
 
+	void AttackSystemOverlay::force_close(const Event& e)
+	{
+		OverlayOpen = false;
+		attack_action = false;
+		defend_action = false;
+		id = UNDEFINED;
+	}
+
+
+
 	void AttackSystemOverlay::show(Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();

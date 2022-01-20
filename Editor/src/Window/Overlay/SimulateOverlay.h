@@ -30,10 +30,12 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<OpenSimulateTrigger>(&SimulateOverlay::open_popup, this);
             Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&SimulateOverlay::close_popup, this);
             Service<EventManager>::Get().register_listener<SimulateSelectionConfirm>(&SimulateOverlay::confirm_data, this);
+            Service<EventManager>::Get().register_listener<CloseAllConResOverlayTrigger>(&SimulateOverlay::force_close, this);
         }
         void open_popup(const Event& e);
         void confirm_data(const Event& e);
         void close_popup(const Event& e);
+        void force_close(const Event& e);
 
         void show(Instance&) override;
 

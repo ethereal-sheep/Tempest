@@ -1,0 +1,71 @@
+{
+    "Metadata": {
+        "Type": "Character"
+    },
+    "Components": [
+        {
+            "Entity": 5,
+            "Component": {
+                "Charater_Name": "Character 1",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    10,
+                    9
+                ],
+                "Charater_Stats": [
+                    20,
+                    10,
+                    5,
+                    3,
+                    5,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    3
+                ]
+            }
+        },
+        {
+            "Entity": 6,
+            "Component": {
+                "Charater_Name": "Character 2",
+                "Color": [
+                    0.2743363380432129,
+                    0.0,
+                    1.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    10,
+                    9
+                ],
+                "Charater_Stats": [
+                    20,
+                    5,
+                    10,
+                    5,
+                    3,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    3
+                ]
+            }
+        }
+    ]
+}

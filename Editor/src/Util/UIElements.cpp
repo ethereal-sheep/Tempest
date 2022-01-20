@@ -2752,7 +2752,7 @@ namespace Tempest::UI
 		return { false,false };
 	}
 
-	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool selected, [[maybe_unused]] int type, ImGuiSelectableFlags flags, [[maybe_unused]] const ImVec2& size_arg)
+	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool selected,bool withDelete, [[maybe_unused]] int type, ImGuiSelectableFlags flags, [[maybe_unused]] const ImVec2& size_arg)
 	{
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
@@ -2814,26 +2814,29 @@ namespace Tempest::UI
 		ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
 		ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(texMapBg->GetID()), bb.Min, bb.Max);
 
-
-		//Creating Delete Button
-		auto CurPos = ImGui::GetCursorPos();
-		auto winPos = ImGui::GetWindowPos();
-		//ImGui::SetCursorPos({ bb.Min.x - winPos.x + boxSize.x * 0.80f ,bb.Min.y - winPos.y + boxSize.y * 0.6f });
-
-
-		ImGui::SetCursorPosX(bb.Min.x - winPos.x + boxSize.x * 0.80f);
-		ImGui::SetCursorPosY(CurPos.y - 70.f);
-
-		ImVec2 delSize = { (float)texConflictDel->GetWidth() * 0.7f,(float)texConflictDel->GetHeight() * 0.7f };
-		//ImVec4 tinCol = { 0.7f, 0.7f, 0.7f,1 };
-		
-		ImGui::PushID(label);
-		if (UIImageButton((void*)static_cast<size_t>(texConflictDel->GetID()), delSize, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+		if (withDelete)
 		{
-			del = true;
+			//Creating Delete Button
+			auto CurPos = ImGui::GetCursorPos();
+			auto winPos = ImGui::GetWindowPos();
+			//ImGui::SetCursorPos({ bb.Min.x - winPos.x + boxSize.x * 0.80f ,bb.Min.y - winPos.y + boxSize.y * 0.6f });
+
+
+			ImGui::SetCursorPosX(bb.Min.x - winPos.x + boxSize.x * 0.80f);
+			ImGui::SetCursorPosY(CurPos.y - 70.f);
+
+			ImVec2 delSize = { (float)texConflictDel->GetWidth() * 0.7f,(float)texConflictDel->GetHeight() * 0.7f };
+			//ImVec4 tinCol = { 0.7f, 0.7f, 0.7f,1 };
+
+			ImGui::PushID(label);
+			if (UIImageButton((void*)static_cast<size_t>(texConflictDel->GetID()), delSize, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+				del = true;
+			}
+			ImGui::PopID();
+			ImGui::SetCursorPos(CurPos);
 		}
-		ImGui::PopID();
-		ImGui::SetCursorPos(CurPos);
+		
 		
 
 
@@ -2958,16 +2961,16 @@ namespace Tempest::UI
 		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags);
 		return { pressed,del };
 	}
-	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool* p_selected, int type, ImGuiSelectableFlags flags, const ImVec2& size_arg)
+	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool* p_selected, bool withDelete, int type, ImGuiSelectableFlags flags, const ImVec2& size_arg)
 	{
-		if (UIMapSelectable(label,date, *p_selected, type, flags, size_arg).first)
+		if (UIMapSelectable(label,date, *p_selected, withDelete, type, flags, size_arg).first)
 		{
 			*p_selected = !*p_selected;
 			
 			return { true,false };
 		}
 
-		if (UIMapSelectable(label,date, *p_selected, type, flags, size_arg).second)
+		if (UIMapSelectable(label,date, *p_selected, withDelete, type, flags, size_arg).second)
 		{
 			return { false,true };
 		}
