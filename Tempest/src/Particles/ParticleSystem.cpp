@@ -33,8 +33,8 @@ ParticleSystem::Emitter::Emitter()
 	, m_sizeBegin{ 0.5f }
 	, m_sizeVariation{ 0.3f }
 	, m_sizeEnd{ 0.0f }
-	, m_lifeTime{ 1.0 }
-	, m_startVelocity { 0.0f, 0.0f }
+	, m_lifeTime{ 5.0f }
+	, m_startVelocity { 1.0f, 0.0f }
 	, m_endVelocity { 0.0f, 0.0f }
 	, m_velocityVariation { 3.0f, 1.0f }
 	, m_position { 0.0f, 0.0f }
@@ -47,12 +47,12 @@ ParticleSystem::Emitter::Emitter()
 
 void ParticleSystem::Emitter::Update(const float dt)
 {
-	LOG_INFO("Emitter Update");
-
 	static float timeInterval = 0.f;
 
+	//LOG_INFO("Emitter Update");
+
 	// Particles' Behaviour
-	for (auto particle : m_particles)
+	for (auto& particle : m_particles)
 	{
 		if (!particle.m_isActive)
 			continue;
@@ -64,19 +64,33 @@ void ParticleSystem::Emitter::Update(const float dt)
 		}
 		else
 		{
+			//LOG_INFO("Particles Update");
+
 			// Transform Update
 			particle.m_position += particle.m_velocity * dt;
 			particle.m_rotation += 0.01f * dt;
+
+			//LOG_INFO("Particle Position X");
+			//LOG_INFO(particle.m_position.x);
+
+			//LOG_INFO("Particle Position Y");
+			//LOG_INFO(particle.m_position.y);
+
+			//LOG_INFO("Particle Velocity X");
+			//LOG_INFO(particle.m_velocity.x);
+
+			//LOG_INFO("Particle Velocity Y");
+			//LOG_INFO(particle.m_velocity.y);
 
 			// Calculate the lifeTime remaining
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
 
 			// Size Update
-			particle.m_size = glm::mix(m_sizeEnd, m_sizeBegin, lifePercent);
+			//particle.m_size = glm::mix(m_sizeEnd, m_sizeBegin, lifePercent);
 
 			// Colour Update
 			particle.m_colour = glm::mix(m_colourEnd, m_colourBegin, lifePercent);
-			// 
+
 			// Reduce the particle life
 			particle.m_lifeRemaining -= dt;
 		}
@@ -110,9 +124,9 @@ void ParticleSystem::Emitter::Update(const float dt)
 
 				// Colour
 				newParticle.m_colour = m_colourBegin;
-				newParticle.m_colour.x = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.x - m_colourBegin.x)));
-				newParticle.m_colour.y = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.y - m_colourBegin.y)));
-				newParticle.m_colour.z = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.z - m_colourBegin.z)));
+				//newParticle.m_colour.x = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.x - m_colourBegin.x)));
+				//newParticle.m_colour.y = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.y - m_colourBegin.y)));
+				//newParticle.m_colour.z = static_cast<float>(std::rand() % static_cast<int>(std::abs(m_colourEnd.z - m_colourBegin.z)));
 
 				// Size
 				newParticle.m_size = m_sizeBegin;
@@ -122,46 +136,58 @@ void ParticleSystem::Emitter::Update(const float dt)
 				// Add the particle into the emitter
 				m_particles.push_back(newParticle);
 			}
+
+			// Reset time interval
+			timeInterval = 0.f;
 		}
 
 		// Reset time interval
-		timeInterval = 0.f;
+		timeInterval += dt;
 	}
 }
 
-void ParticleSystem::Emitter::Emit()
+void ParticleSystem::Emitter::Emit(const int particleAmount)
 {
-	LOG_INFO("Emit");
+	for (short i = 0; i < particleAmount; ++i)
+	{
+		//LOG_INFO("Emit");
 
-	//Particle particle(m_position, m_startVelocity, m_colourBegin, m_sizeBegin, m_lifeTime, true);
-	Particle particle(m_position, m_startVelocity, m_colourBegin, m_sizeBegin, m_lifeTime, true);
+		//Particle particle(m_position, m_startVelocity, m_colourBegin, m_sizeBegin, m_lifeTime, true);
+		Particle particle(m_position, m_startVelocity, m_colourBegin, m_sizeBegin, m_lifeTime, true);
 
-	particle.m_isActive = true;
-	particle.m_position = m_position;
-	//particle.m_rotation = Random::Float() * 2.0f * glm::pi<float>();
-	particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
+		particle.m_isActive = true;
+		
+		particle.m_position = m_position;
 
-	// Velocity
-	particle.m_velocity = m_startVelocity;
-	particle.m_velocity.x += m_velocityVariation.x * (Random::Float() - 0.5f);
-	particle.m_velocity.y += m_velocityVariation.y * (Random::Float() - 0.5f);
 
-	// Color
-	particle.m_colour = m_colourBegin;
+		//particle.m_rotation = Random::Float() * 2.0f * glm::pi<float>();
+		particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
 
-	particle.m_lifeTime = m_lifeTime;
-	particle.m_lifeRemaining = m_lifeTime;
-	particle.m_size = m_sizeBegin + m_sizeVariation * (Random::Float() - 0.5f);
+		// Velocity
+		particle.m_velocity = m_startVelocity;
+		particle.m_velocity.x += m_velocityVariation.x * (Random::Float() - 0.5f);
+		particle.m_velocity.y += m_velocityVariation.y * (Random::Float() - 0.5f);
 
-	// Add the particle into the emitter
-	m_particles.push_back(particle);
+		// Color
+		particle.m_colour = m_colourBegin;
+		particle.m_colour.r = (Random::Float() - 0.5f);
+		particle.m_colour.g = (Random::Float() - 0.5f);
+		particle.m_colour.b = (Random::Float() - 0.5f);
+
+		particle.m_lifeTime = m_lifeTime;
+		particle.m_lifeRemaining = m_lifeTime;
+		particle.m_size = m_sizeBegin + m_sizeVariation * (Random::Float() - 0.5f);
+
+		// Add the particle into the emitter
+		m_particles.push_back(particle);
+	}
 }
 
 void ParticleSystem::Update(const float dt)
 {
-	LOG_INFO("ParticleSystem Update");
+	//LOG_INFO("ParticleSystem Update");
 
 	// Update all the emitters here
-	for (auto emitter : m_emitters)
+	for (auto& emitter : m_emitters)
 		emitter->Update(dt);
 }

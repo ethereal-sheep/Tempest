@@ -48,7 +48,7 @@ struct ParticleSystem
 		void Update(const float dt);
 
 		// Test Function
-		void Emit();
+		void Emit(const int particleAmount);
 
 		glm::vec2 m_position;
 		
@@ -94,12 +94,13 @@ struct ParticleSystem
 		}
 	};
 
-	Handler Register()
+	Handler Register(glm::vec2 pos)
 	{
 		auto emitter = std::make_shared<Emitter>();
+		emitter->m_position = pos;
 		m_emitters.push_back(emitter);
 
-		return emitter; // Weak ptr, refer to Handler
+		return Handler(emitter); // Weak ptr, refer to Handler
 	}
 
 	void Update(const float dt);

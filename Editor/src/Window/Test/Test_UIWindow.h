@@ -141,16 +141,52 @@ namespace Tempest
 				//UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
 				auto& io = ImGui::GetIO();
 				auto drawlist = ImGui::GetForegroundDrawList();
-				if (ImGui::IsMouseClicked(0))
+				
+				if (ImGui::IsMouseDown(0))//ImGui::IsMouseClicked(0))
 				{
-					auto reg = particleSys.Register();
-					//reg.m_weakEmmitters.
+					glm::vec2 tempVec;
+					tempVec.x = ImGui::GetMousePos().x;
+					tempVec.y = ImGui::GetMousePos().y;
+
+					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
+					reg->Emit(5);
 				}
-				/*for (auto& i : particle)
+
+				// Update the emitters
+				for (auto& emitter : particleSys.get_emitters())
 				{
-					i.x++;
-					drawlist->AddCircleFilled(i, 4, ImGui::GetColorU32({ 1,0,0,1 }));
-				}*/
+					emitter->Update(0.16f);
+
+					// Update the particle
+					for (auto& particles : emitter->m_particles)
+					{
+						if (particles.m_isActive)
+						{
+							//LOG_INFO("Draw Particle");
+
+							ImVec2 pos;
+							pos.x = particles.m_position.x;
+							pos.y = particles.m_position.y;
+
+							ImVec4 colour;
+							colour.x = particles.m_colour.r;
+							colour.y = particles.m_colour.g;
+							colour.z = particles.m_colour.b;
+							colour.w = particles.m_colour.a;
+
+						/*	LOG_INFO("Draw Position X");
+							LOG_INFO(pos.x);
+
+							LOG_INFO("Draw Position Y");
+							LOG_INFO(pos.y);*/
+
+							//i.x++;
+							//drawlist->AddCircleFilled(particles->m_position, 4, ImGui::GetColorU32({ 1,0,0,1 }));
+							//drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ 1,0,0,1 }));
+							drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ colour }));
+						}
+					}
+				}
 				
 				if (instance.selected == INVALID)
 				{
