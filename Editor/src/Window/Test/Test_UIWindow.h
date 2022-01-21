@@ -15,7 +15,7 @@
 #include "rttr/type.h"
 #include "rttr/registration.h"
 #include "ECS/Rttr_Register.h"
-#include "Particles/Particle_System.h"
+#include "Particles/ParticleSystem_2D.h"
 
 namespace Tempest
 {
@@ -25,7 +25,7 @@ namespace Tempest
 		const unsigned numOfButtons = 10;
 		const float padding = 50.0f;
 		const float halfPadding = padding * 0.5f;
-		ParticleSystem particleSys;
+		ParticleSystem_2D particleSys;
 
 		const char* window_name() override
 		{
@@ -149,7 +149,7 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->Emit(5);
+					reg->Emit(1);
 				}
 
 				// Update the emitters
@@ -158,21 +158,38 @@ namespace Tempest
 					emitter->Update(0.16f);
 
 					// Update the particle
-					for (auto& particles : emitter->m_particles)
+					for (auto& particle : emitter->m_particles)
 					{
-						if (particles.m_isActive)
+						if (particle.m_isActive)
 						{
 							//LOG_INFO("Draw Particle");
 
 							ImVec2 pos;
-							pos.x = particles.m_position.x;
-							pos.y = particles.m_position.y;
+							pos.x = particle.m_position.x;
+							pos.y = particle.m_position.y;
 
 							ImVec4 colour;
-							colour.x = particles.m_colour.r;
-							colour.y = particles.m_colour.g;
-							colour.z = particles.m_colour.b;
-							colour.w = particles.m_colour.a;
+							colour.x = particle.m_colour.r;
+							colour.y = particle.m_colour.g;
+							colour.z = particle.m_colour.b;
+							colour.w = particle.m_colour.a;
+
+							ImVec2 min, max;
+							min.x = particle.minX;
+							min.y = particle.minY;
+
+							max.x = particle.maxX;
+							max.y = particle.maxY;
+
+							//LOG_INFO("Draw Min X");
+							//LOG_INFO("Draw Max X");
+							//LOG_INFO(min.x);
+							//LOG_INFO(max.x);
+
+							//LOG_INFO("Draw Min Y");
+							//LOG_INFO("Draw Max Y");
+							//LOG_INFO(min.y);
+							//LOG_INFO(max.y);
 
 						/*	LOG_INFO("Draw Position X");
 							LOG_INFO(pos.x);
@@ -183,7 +200,9 @@ namespace Tempest
 							//i.x++;
 							//drawlist->AddCircleFilled(particles->m_position, 4, ImGui::GetColorU32({ 1,0,0,1 }));
 							//drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ 1,0,0,1 }));
-							drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ colour }));
+							
+							//drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ colour }));
+							drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
 						}
 					}
 				}

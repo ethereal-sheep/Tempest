@@ -1,8 +1,8 @@
 
 
 
-#ifndef PARTICLE_SYSTEM_H
-#define PARTICLE_SYSTEM_H
+#ifndef PARTICLE_SYSTEM_2D_H
+#define PARTICLE_SYSTEM_2D_H
 
 #include "Core.h"
 
@@ -10,6 +10,8 @@
 #include "Math//elsVector4.h"
 
 #include <glm.hpp>
+
+//#include "../../Editor/src/Extern/imgui/imgui.h"
 
 // Forward Declaration
 struct ParticleSystem;
@@ -23,7 +25,7 @@ struct ParticleSystem;
 //	ParticleSystem particleSystem;
 //};
 
-struct ParticleSystem
+struct ParticleSystem_2D
 {
 	struct Particle
 	{
@@ -40,6 +42,10 @@ struct ParticleSystem
 		float m_lifeTime;
 		float m_lifeRemaining;
 		bool  m_isActive;
+
+		//
+		float minX, maxX;
+		float minY, maxY;
 	};
 
 	struct Emitter
@@ -49,6 +55,7 @@ struct ParticleSystem
 
 		// Test Function
 		void Emit(const int particleAmount);
+		void EmitSquare(const int particleAmount);
 
 		glm::vec2 m_position;
 		
@@ -70,10 +77,10 @@ struct ParticleSystem
 
 		// Other controls (...)
 		float m_lifeTime;				// Life time of the particles
-		bool m_loop;					// Can the emitter loop spawn
+		//bool m_loop;					// Can the emitter loop spawn
 		int m_maxParticles;				// Max amount of particles an emitter can have 
 
-		float m_rateOvertime;			// How much particles to spawn per unit of time
+		//float m_rateOvertime;			// How much particles to spawn per unit of time
 	};
 
 	struct Handler
@@ -114,4 +121,4 @@ private:
 	std::vector <std::shared_ptr<Emitter>> m_emitters;
 };
 
-#endif // !PARTICLE_SYSTEM_H
+#endif // !PARTICLE_SYSTEM_2D_H
