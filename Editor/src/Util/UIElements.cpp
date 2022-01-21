@@ -3698,6 +3698,31 @@ namespace Tempest::UI
 		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
 		ImGui::PopFont();
 	}
+	void TutArea(ImVec2 pos, ImVec2 size)
+	{
+		
+		auto drawlist = ImGui::GetWindowDrawList();
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImVec2 min = pos;
+		ImVec2 max = { min.x + size.x, min.y + size.y };
+		auto tex = tex_map["Assets/MIBG.dds"];
 
+		ImRect TopBox = { {0.f,0.f}, {viewport->Size.x , min.y} };
+		ImRect RightBox = { {max.x ,min.y}, {viewport->Size.x , viewport->Size.y} };
+		ImRect BtmBox = { {0.f , max.y}, {viewport->Size.x - RightBox.GetWidth() , viewport->Size.y} };
+		ImRect LeftBox = { {0.f ,min.y}, {min.x , max.y} };
+
+		//drawlist->AddRectFilled(TopBox.Min, TopBox.Max, ImGui::GetColorU32({ 0,0,0,0.5f }));
+		//drawlist->AddRectFilled(RightBox.Min, RightBox.Max, ImGui::GetColorU32({ 0,0,0,0.5f }));
+		//drawlist->AddRectFilled(BtmBox.Min, BtmBox.Max, ImGui::GetColorU32({ 0,0,0,0.5f }));
+		//drawlist->AddRectFilled(LeftBox.Min, LeftBox.Max, ImGui::GetColorU32({ 0,0,0,0.5f }));
+		
+		drawlist->AddImage((void*)static_cast<size_t>(tex->GetID()), TopBox.Min, TopBox.Max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 0,0,0,0.5f }));
+		drawlist->AddImage((void*)static_cast<size_t>(tex->GetID()), RightBox.Min, RightBox.Max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 0,0,0,0.5f }));
+		drawlist->AddImage((void*)static_cast<size_t>(tex->GetID()), BtmBox.Min, BtmBox.Max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 0,0,0,0.5f }));
+		drawlist->AddImage((void*)static_cast<size_t>(tex->GetID()), LeftBox.Min, LeftBox.Max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 0,0,0,0.5f }));
+
+		
+	}
 }
 

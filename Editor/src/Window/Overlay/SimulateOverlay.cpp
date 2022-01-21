@@ -214,7 +214,9 @@ namespace Tempest
 					}
 
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
+					
 				}
+				UI::TutArea({ viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { 100.f, 100.f });
 
 				// if (UI::UIButton_CustomMap("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY,true))
 				// {
