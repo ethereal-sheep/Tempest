@@ -25,12 +25,19 @@ struct ParticleSystem;
 //	ParticleSystem particleSystem;
 //};
 
+// Note, glm::vectors are used to utilise the mix function
 struct ParticleSystem_2D
 {
+	enum class ParticleType
+	{
+		Circle = 0
+		, Square = 1
+	};
+
 	struct Particle
 	{
 		Particle();
-		Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive);
+		Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType);
 
 		glm::vec2 m_position;
 		glm::vec2 m_velocity;
@@ -43,9 +50,11 @@ struct ParticleSystem_2D
 		float m_lifeRemaining;
 		bool  m_isActive;
 
-		//
+		// For square drawlist
 		float minX, maxX;
 		float minY, maxY;
+
+		ParticleType m_type;
 	};
 
 	struct Emitter
@@ -54,8 +63,8 @@ struct ParticleSystem_2D
 		void Update(const float dt);
 
 		// Test Function
-		void Emit(const int particleAmount);
-		void EmitSquare(const int particleAmount);
+		void Emit(const int particleAmount, ParticleType particleType);
+		//void EmitSquare(const int particleAmount);
 
 		glm::vec2 m_position;
 		

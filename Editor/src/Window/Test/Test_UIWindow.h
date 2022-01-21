@@ -149,8 +149,19 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->Emit(1);
+					reg->Emit(1, ParticleSystem_2D::ParticleType::Circle);
 				}
+				if (ImGui::IsMouseDown(1))//ImGui::IsMouseClicked(0))
+				{
+					glm::vec2 tempVec;
+					tempVec.x = ImGui::GetMousePos().x;
+					tempVec.y = ImGui::GetMousePos().y;
+
+					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
+					reg->Emit(1, ParticleSystem_2D::ParticleType::Square);
+				}
+
+
 
 				// Update the emitters
 				for (auto& emitter : particleSys.get_emitters())
@@ -201,8 +212,10 @@ namespace Tempest
 							//drawlist->AddCircleFilled(particles->m_position, 4, ImGui::GetColorU32({ 1,0,0,1 }));
 							//drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ 1,0,0,1 }));
 							
-							//drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ colour }));
-							drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
+							if (particle.m_type == ParticleSystem_2D::ParticleType::Circle)
+								drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ colour }));
+							else if(particle.m_type == ParticleSystem_2D::ParticleType::Square)
+								drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
 						}
 					}
 				}

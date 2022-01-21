@@ -14,6 +14,7 @@ ParticleSystem_2D::Particle::Particle()
 	, m_lifeTime{ 1.0f }
 	, m_lifeRemaining{ 1.0f }
 	, m_isActive {false}
+	, m_type{ParticleSystem_2D::ParticleType::Circle}
 {
 	minX = m_position.x - m_size * 0.5f;
 	maxX = m_position.x + m_size * 0.5f;
@@ -22,7 +23,7 @@ ParticleSystem_2D::Particle::Particle()
 	maxY = m_position.y + m_size * 0.5f;
 }
 
-ParticleSystem_2D::Particle::Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive)
+ParticleSystem_2D::Particle::Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType)
 	: m_position{ pos }
 	, m_velocity{ vec }
 	, m_rotation{ 0.0f }
@@ -31,6 +32,7 @@ ParticleSystem_2D::Particle::Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 co
 	, m_lifeTime {lifeTime}
 	, m_lifeRemaining {lifeTime}
 	, m_isActive {isActive}
+	, m_type{ particleType }
 {
 	// Initialise the min and max
 	minX = m_position.x - size * 0.5f;
@@ -165,19 +167,18 @@ void ParticleSystem_2D::Emitter::Update(const float dt)
 	//}
 }
 
-void ParticleSystem_2D::Emitter::Emit(const int particleAmount)
+void ParticleSystem_2D::Emitter::Emit(const int particleAmount, ParticleType particleType)
 {
 	for (short i = 0; i < particleAmount; ++i)
 	{
 		//LOG_INFO("Emit");
 
 		//Particle particle(m_position, m_startVelocity, m_colourBegin, m_sizeBegin, m_lifeTime, true);
-		Particle particle(m_position, m_startVelocity, m_colourBegin, m_sizeBegin, m_lifeTime, true);
+		Particle particle(m_position, m_startVelocity, m_colourBegin, m_sizeBegin, m_lifeTime, true, particleType);
 
 		particle.m_isActive = true;
 		
 		particle.m_position = m_position;
-
 
 		//particle.m_rotation = Random::Float() * 2.0f * glm::pi<float>();
 		particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
