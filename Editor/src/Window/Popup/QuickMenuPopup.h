@@ -13,6 +13,8 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
+#include "Util/interpolater.h"
+
 namespace Tempest
 {
 
@@ -36,168 +38,222 @@ namespace Tempest
 
         void open_popup(const Event& e)
         {
-            enable_popup = true;
-            auto a = event_cast<QuickMenuPopupTrigger>(e);
-            previous = a.current;
-            current = a.current;
-        }
-
-        void show(Instance& instance) override
-        {
-            if (enable_popup)
+            if (state == State::CLOSED)
             {
-                const auto viewport = ImGui::GetMainViewport();
+                auto a = event_cast<QuickMenuPopupTrigger>(e);
+                previous = a.current;
+                current = a.current;
 
-                ImGui::OpenPopup("Quick Menu");
-                ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, 0.f}, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-                ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, viewport->Size.y * 0.45f));
-
-
-                button_size = ImVec2{ 1.f, 1.f * Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() / Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() };
-
-                button_size.x *= viewport->Size.x / 6 * 0.95f;
-                button_size.y *= viewport->Size.x / 6 * 0.95f;
-
-                if (ImGui::BeginPopupModal("Quick Menu", NULL, flags))
-                {
-                    auto tex = tex_map["Assets/QuickMenuBG.dds"];
-
-                    ImVec2 point{ 0,0 };
-                    {
-                        ImVec2 Min{ point.x, point.y };
-                        ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y * 0.4f};
-                        ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
-                    }
-
-                    ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.25f });
-
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
-                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
-                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-
-                    ImGui::Dummy(ImVec2{ 150.0f, 0.0f });
-                    ImGui::SameLine();
-
-                    tex = tex_map["Assets/QuickMenuBtn_Toggled.dds"];
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
-                    {
-                        enable_popup = false;
-                        ImGui::CloseCurrentPopup();
-                    }
-
-                    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-
-                    // render the buttons yo
-                    ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.33f});
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetID()), button_size))
-                    {
-                        enable_popup = false;
-                        AudioEngine ae;
-                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-                        ImGui::CloseCurrentPopup();
-                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
-                        Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
-                    }
-
-
-                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SIMULATE)
-                        Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainLit.dds"];
-                    else
-                        Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.dds"];
-
-                    ImGui::SameLine();
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::UNITS]->GetID()), button_size))
-                    {
-                        enable_popup = false;
-                        AudioEngine ae;
-                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-                        ImGui::CloseCurrentPopup();
-                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
-                        Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
-                    }
-
-                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::UNITS)
-                        Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainLit.dds"];
-                    else
-                        Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.dds"];
-
-                    ImGui::SameLine();
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ACTIONS]->GetID()), button_size))
-                    {
-                        enable_popup = false;
-                        AudioEngine ae;
-                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-                        ImGui::CloseCurrentPopup();
-                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
-                        Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
-                    }
-
-                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ACTIONS)
-                        Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainLit.dds"];
-                    else
-                        Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.dds"];
-
-                    ImGui::SameLine();
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size))
-                    {
-                        enable_popup = false;
-                        AudioEngine ae;
-                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-                        ImGui::CloseCurrentPopup();
-                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
-                        Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
-                    }
-
-                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SEQUENCES)
-                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainLit.dds"];
-                    else
-                        Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.dds"];
-
-                    ImGui::SameLine();
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::WEAPONS]->GetID()), button_size))
-                    {
-                        enable_popup = false;
-                        AudioEngine ae;
-                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-                        ImGui::CloseCurrentPopup();
-                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
-                        Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
-                    }
-
-                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::WEAPONS)
-                        Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainLit.dds"];
-                    else
-                        Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.dds"];
-
-                    ImGui::SameLine();
-
-                    if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ITEMS]->GetID()), button_size))
-                    {
-                        AudioEngine ae;
-                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-                    }
-
-                    if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ITEMS)
-                        Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainLit.dds"];
-                    else
-                        Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.dds"];
-
-                    ImGui::PopStyleVar();
-                    ImGui::PopStyleColor(3);
-
-                }
-
-                ImGui::EndPopup();
+                state = State::START;
             }
         }
 
-        bool enable_popup = false;
+        bool draw_menu(Instance& instance, float y, bool still_working = true)
+        {
+            const auto viewport = ImGui::GetMainViewport();
+            button_size = ImVec2{ 1.f, 1.f * Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() / Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() };
+
+            button_size.x *= viewport->Size.x / 6 * 0.95f;
+            button_size.y *= viewport->Size.x / 6 * 0.95f;
+
+            bool return_v = false;
+
+            ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, y }, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+            ImGui::SetNextWindowFocus();
+            if (ImGui::BeginPopupModal("Quick Menu", NULL, flags))
+            {
+                auto tex = tex_map["Assets/QuickMenuBG.dds"];
+
+                ImVec2 point{ 0,0 };
+                {
+                    ImVec2 Min{ point.x, y };
+                    ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y * 0.4f + y };
+                    ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
+                }
+
+                ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.25f + y });
+
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
+                ImGui::Dummy(ImVec2{ 150.0f, 0.0f });
+                ImGui::SameLine();
+
+                tex = tex_map["Assets/QuickMenuBtn_Toggled.dds"];
+
+                if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }) && still_working)
+                {
+                    return_v = true;
+                }
+
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+
+                // render the buttons yo
+                ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.33f + y });
+
+                if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetID()), button_size) && still_working)
+                {
+                    if (current != QUICKMENU_POPUP_TYPE::SIMULATE)
+                    {
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
+                        Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+                    }
+                    return_v = true;
+                }
+
+
+                if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SIMULATE)
+                    Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainLit.dds"];
+                else
+                    Tabs[QUICKMENU_POPUP_TYPE::SIMULATE] = tex_map["Assets/SimulateMainUnlit.dds"];
+
+                ImGui::SameLine();
+
+                if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::UNITS]->GetID()), button_size) && still_working)
+                {
+                    if (current != QUICKMENU_POPUP_TYPE::UNITS)
+                    {
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
+                        Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
+                    }
+                    return_v = true;
+                }
+
+                if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::UNITS)
+                    Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainLit.dds"];
+                else
+                    Tabs[QUICKMENU_POPUP_TYPE::UNITS] = tex_map["Assets/UnitsMainUnlit.dds"];
+
+                ImGui::SameLine();
+
+                if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ACTIONS]->GetID()), button_size) && still_working)
+                {
+                    if (current != QUICKMENU_POPUP_TYPE::ACTIONS)
+                    {
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
+                        Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
+                    }
+                    return_v = true;
+                }
+
+                if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ACTIONS)
+                    Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainLit.dds"];
+                else
+                    Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.dds"];
+
+                ImGui::SameLine();
+
+                if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES]->GetID()), button_size) && still_working)
+                {
+                    if (current != QUICKMENU_POPUP_TYPE::SEQUENCES)
+                    {
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
+                        Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
+                    }
+                    return_v = true;
+                }
+
+                if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::SEQUENCES)
+                    Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainLit.dds"];
+                else
+                    Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.dds"];
+
+                ImGui::SameLine();
+
+                if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::WEAPONS]->GetID()), button_size) && still_working)
+                {
+                    if (current != QUICKMENU_POPUP_TYPE::WEAPONS)
+                    {
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+                        Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
+                        Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
+                    }
+                    return_v = true;
+                }
+
+                if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::WEAPONS)
+                    Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainLit.dds"];
+                else
+                    Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.dds"];
+
+                ImGui::SameLine();
+
+                if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ITEMS]->GetID()), button_size) && still_working)
+                {
+                    /*AudioEngine ae;
+                    ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");*/
+                }
+
+                /*if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ITEMS)
+                    Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainLit.dds"];
+                else*/
+                    Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.dds"];
+
+                ImGui::PopStyleVar();
+                ImGui::PopStyleColor(3);
+
+                ImGui::EndPopup();
+            }
+
+            return return_v;
+        }
+
+
+        void show(Instance& instance) override
+        {
+            const auto viewport = ImGui::GetMainViewport();
+            switch (state)
+            {
+            case Tempest::QuickMenuPopup::State::CLOSED:
+                break;
+            case Tempest::QuickMenuPopup::State::START:
+            {
+                ImGui::OpenPopup("Quick Menu");
+                ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, viewport->Size.y * 0.45f));
+                inter.start(-(viewport->Size.y * .22f), 0, .2f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+
+                state = State::OPENING;
+            }
+                [[fallthrough]];
+            case Tempest::QuickMenuPopup::State::OPENING:
+                inter.update(ImGui::GetIO().DeltaTime);
+                draw_menu(instance, inter.get());
+                if (inter.is_finished())
+                    state = State::OPEN;
+                break;
+            case Tempest::QuickMenuPopup::State::OPEN:
+                if (draw_menu(instance, 0))
+                {
+                    inter.start(0, -(viewport->Size.y * .22f), .2f, 0.f, [](float x) { return glm::sineEaseIn(x); });
+                    state = State::CLOSING;
+                }
+                break;
+            case Tempest::QuickMenuPopup::State::CLOSING:
+                inter.update(ImGui::GetIO().DeltaTime);
+                ImGui::SetNextWindowBgAlpha(0);
+                draw_menu(instance, inter.get(), false);
+
+                if (inter.is_finished())
+                {
+                    state = State::CLOSED;
+                    ImGui::CloseCurrentPopup();
+                }
+                break;
+            default:
+                break;
+            }
+        }
+
         ImVec2 button_size{ 0.f,0.f };
         std::array<tsptr<Texture>, 6> Tabs;
         QUICKMENU_POPUP_TYPE current{ QUICKMENU_POPUP_TYPE::SIMULATE};
@@ -206,5 +262,18 @@ namespace Tempest
                          ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
         ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
         ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
+
+        enum struct State 
+        {
+            CLOSED,
+            START,
+            OPENING,
+            OPEN,
+            CLOSING
+        };
+
+        State state = State::CLOSED;
+
+        interpolater<float> inter;
     };
 }

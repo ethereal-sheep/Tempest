@@ -68,6 +68,8 @@ namespace Tempest
 		}
 
 		ax::NodeEditor::NavigateToContent();
+		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
+		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // graphs 
 	}
 
 	void AttackSystemOverlay::close_popup(const Event& e)
@@ -78,7 +80,7 @@ namespace Tempest
 			OverlayOpen = false;
 	}
 
-	void AttackSystemOverlay::force_close(const Event& e)
+	void AttackSystemOverlay::force_close(const Event&)
 	{
 		OverlayOpen = false;
 		attack_action = false;
@@ -94,6 +96,15 @@ namespace Tempest
 		
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
+
+		{
+			float dt = ImGui::GetIO().DeltaTime;
+			/*
+			for (auto& i : inter_nest)
+				i.update(dt);*/
+
+			inter.update(dt);
+		}
 
 		if (OverlayOpen)
 		{
@@ -377,7 +388,7 @@ namespace Tempest
 					ImGui::SetCursorPos(ImVec2{ 0,0 });
 					if (ImGui::BeginChild("Top Buttons", ImVec2{ 470.0f, 100.0f }, false))
 					{
-						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(),viewport->Size.y * 0.03f });
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -603,7 +614,9 @@ namespace Tempest
 					twidth = ImGui::CalcTextSize(name.c_str()).x;
 				}
 				else
+				{
 					ImGui::Text(n->get_name().c_str());
+				}
 				ImGui::PopFont();
 			}
 
@@ -907,17 +920,18 @@ namespace Tempest
 				else
 					ImGui::TextUnformatted(ICON_FA_PROJECT_DIAGRAM " Node");
 
-
 				ImGui::Separator();
 
 				ImGui::Text("Category: %s", magic_enum::enum_name(node->get_category()).data());
+				ImGui::SameLine();
+				UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Test");
 				ImGui::Separator();
 
 				if (ImGui::MenuItem("Delete"))
 					ax::NodeEditor::DeleteNode(contextNodeId);
 
-				if (ImGui::MenuItem("Copy", "", false, ax::NodeEditor::GetSelectedObjectCount()))
-					copy_selected();
+				/*if (ImGui::MenuItem("Copy", "", false, ax::NodeEditor::GetSelectedObjectCount()))
+					copy_selected();*/
 			}
 			else
 			{

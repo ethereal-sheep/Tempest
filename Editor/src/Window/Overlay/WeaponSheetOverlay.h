@@ -14,6 +14,7 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -47,7 +48,7 @@ namespace Tempest
         void init(Instance&) override
         {
             window_flags =
-                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
+                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
 
             Service<EventManager>::Get().register_listener<OpenWeaponSheetTrigger>(&WeaponSheetOverlay::open_popup, this);
             Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&WeaponSheetOverlay::close_popup, this);
@@ -80,5 +81,7 @@ namespace Tempest
         tc::Weapon NewWeapon;
         tc::Weapon* weap = nullptr; // help
         Entity SelectedID = INVALID;
+        interpolater<float> inter{};
+        std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
     };
 }

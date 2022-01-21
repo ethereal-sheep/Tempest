@@ -15,6 +15,7 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -39,8 +40,8 @@ namespace Tempest
         }
         void init(Instance& instance) override
         {
-            window_flags =
-                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
+            window_flags |=
+                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
 
             Service<EventManager>::Get().register_listener<OpenMainMenuTrigger>(&MainMenuOverlay::open_popup, this);
             if (dynamic_cast<EditTimeInstance*>(&instance))
@@ -48,6 +49,7 @@ namespace Tempest
                 MainMenuUI = UI_SHOW::NEW_PROJECT;
             }
         }
+        void change_state(UI_SHOW state);
         void open_popup(const Event& e);
 
         void show(Instance&) override;
@@ -63,5 +65,7 @@ namespace Tempest
         std::vector<bool> OkayConRes = std::vector(3, false);
         std::vector<std::vector<std::pair<Entity, string>>> ConResSequences = std::vector(3, std::vector<std::pair<Entity, string>>());
 
+        interpolater<float> inter{};
+        std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
     };
 }

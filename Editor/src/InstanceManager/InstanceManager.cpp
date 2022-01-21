@@ -52,6 +52,7 @@
 #include "Window/Popup/SelectSequencePopup.h"
 #include "Window/Popup/TutorialPopup.h"
 #include "Window/Popup/MainMenuSequencePopup.h"
+#include "Window/Popup/WipePopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
 #include "Window/Util/SimulationStart.h"
@@ -159,6 +160,7 @@ namespace Tempest
 		
 
 		instance->register_always<ShowRecent>();
+		instance->register_always<WipePopup>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{

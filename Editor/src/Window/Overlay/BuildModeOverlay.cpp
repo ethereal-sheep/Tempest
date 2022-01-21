@@ -33,6 +33,11 @@ namespace Tempest
 		//const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		//ImGui::SetNextWindowPos(viewport->Pos);
 		//ImGui::SetNextWindowSize(viewport->Size);
+
+		banner.update(ImGui::GetIO().DeltaTime);
+		if(banner.is_finished())
+			banner.start(1, 0, 10);
+
 		if (OverlayOpen)
 		{
 			//renderTop();
@@ -93,17 +98,27 @@ namespace Tempest
 			//if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 			if (UI::UIButton_2("Save & Return", "Save & Return", ImVec2{ cPos.x + ImGui::GetWindowWidth() * 0.45f,cPos.y + ImGui::GetWindowHeight() * 0.05f }, { 0,0 }, FONT_BODY))
 			{
-				auto& edit = dynamic_cast<EditTimeInstance&>(instance);
-				edit.save_current_scene();
-				edit.unload_current_scene();
-				OverlayOpen = false;
-				Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+				// go ahead
+				auto fn = [&]()
+				{
+					auto& edit = dynamic_cast<EditTimeInstance&>(instance);
+					edit.save_current_scene();
+					edit.unload_current_scene();
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+				};
+				// fade in, fade out, visible
+				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+
 			}
 			ImGui::EndChild();
 			ImGui::PopStyleColor(1);
 
+			ImVec2 min_pos = viewport->WorkPos;
+			ImVec2 max_pos = { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + bannerTex->GetHeight() };
+
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), min_pos, max_pos, {banner.get(), 0}, {1 + banner.get(), 1});
 			
-			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), viewport->WorkPos, { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + bannerTex->GetHeight() });
 			float posY = (viewport->WorkPos.y + viewport->Size.y - swidth);
 			float endY = (viewport->WorkPos.y + viewport->Size.y);
 			ImGui::SetCursorPos({ viewport->WorkPos.x,posY });

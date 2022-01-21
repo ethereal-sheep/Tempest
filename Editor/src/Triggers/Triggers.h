@@ -206,4 +206,14 @@ namespace Tempest
 		ChangeTurnOrder(tvector<Entity> newTurnOrder) : entities { newTurnOrder } {}
 		tvector<Entity> entities;
 	};
+
+	struct WipeTrigger : public Event
+	{
+		WipeTrigger(float _fade_in_time = 0.15f, float _fade_out_time = 0.15f, float _visible_time = 0.f, std::function<void(void)> _do_on_fade = []() {}) : fade_in_time(_fade_in_time), fade_out_time(_fade_out_time), visible_time(_visible_time), do_on_fade(_do_on_fade)
+		{
+
+		}
+		float fade_in_time, fade_out_time, visible_time;
+		std::function<void(void)> do_on_fade;
+	};
 }

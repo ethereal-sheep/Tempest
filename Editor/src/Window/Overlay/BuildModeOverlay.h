@@ -17,6 +17,7 @@
 #include "Util/shape_manip.h"
 #include "Window/Viewport/CameraControls.h"
 #include "Graphics/Basics/RenderSystem.h"
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -55,5 +56,7 @@ namespace Tempest
         float swidth = 250.f;
         float min_swidth = 150.f;
         float max_swidth = 500.f;
+
+        interpolater<float> banner;
     };
 }

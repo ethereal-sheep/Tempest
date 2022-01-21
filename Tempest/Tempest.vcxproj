@@ -364,6 +364,7 @@
     <ClInclude Include="src\Scripting\Util\script.h" />
     <ClInclude Include="src\Scripting\Util\var_data.h" />
     <ClInclude Include="src\Scripting\Util\var_set.h" />
+    <ClInclude Include="src\Util\interpolater.h" />
     <ClInclude Include="src\Util\pathfinding.h" />
     <ClInclude Include="src\Util\quitter.h" />
     <ClInclude Include="src\Util\shape_manip.h" />

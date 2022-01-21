@@ -238,6 +238,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Particles\Particle_System.h" />
     <ClInclude Include="src\Particles\Random.h" />
+    <ClInclude Include="src\Util\interpolater.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
