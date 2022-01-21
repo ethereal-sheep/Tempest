@@ -46,7 +46,11 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<OpenMainMenuTrigger>(&MainMenuOverlay::open_popup, this);
             if (dynamic_cast<EditTimeInstance*>(&instance))
             {
-                MainMenuUI = UI_SHOW::NEW_PROJECT;
+                change_state(UI_SHOW::NEW_PROJECT);
+            }
+            else
+            {
+                change_state(UI_SHOW::INITIAL);
             }
         }
         void change_state(UI_SHOW state);
