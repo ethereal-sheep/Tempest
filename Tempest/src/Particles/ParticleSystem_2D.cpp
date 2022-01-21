@@ -16,11 +16,10 @@ ParticleSystem_2D::Particle::Particle()
 	, m_isActive {false}
 	, m_type{ParticleSystem_2D::ParticleType::Circle}
 {
-	minX = m_position.x - m_size * 0.5f;
+	/*minX = m_position.x - m_size * 0.5f;
 	maxX = m_position.x + m_size * 0.5f;
-
 	minY = m_position.y - m_size * 0.5f;
-	maxY = m_position.y + m_size * 0.5f;
+	maxY = m_position.y + m_size * 0.5f;*/
 }
 
 ParticleSystem_2D::Particle::Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType)
@@ -35,11 +34,10 @@ ParticleSystem_2D::Particle::Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 co
 	, m_type{ particleType }
 {
 	// Initialise the min and max
-	minX = m_position.x - size * 0.5f;
+	/*minX = m_position.x - size * 0.5f;
 	maxX = m_position.x + size * 0.5f;
-
 	minY = m_position.y - size * 0.5f;
-	maxY = m_position.y + size * 0.5f;
+	maxY = m_position.y + size * 0.5f;*/
 }
 ParticleSystem_2D::Emitter::Emitter()
 	: m_colourBegin { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f }
@@ -83,23 +81,20 @@ void ParticleSystem_2D::Emitter::Update(const float dt)
 			// Transform Update
 			particle.m_position += particle.m_velocity * dt;
 			
-			particle.minX = m_position.x - particle.m_size * 0.5f;
+			/*particle.minX = m_position.x - particle.m_size * 0.5f;
 			particle.maxX = m_position.x + particle.m_size * 0.5f;
-
 			particle.minY = m_position.y - particle.m_size * 0.5f;
-			particle.maxY = m_position.y + particle.m_size * 0.5f;
+			particle.maxY = m_position.y + particle.m_size * 0.5f;*/
 
 			particle.m_rotation += 0.01f * dt;
 
 			//LOG_INFO("Particle Position X");
 			//LOG_INFO(particle.m_position.x);
-
 			//LOG_INFO("Particle Position Y");
 			//LOG_INFO(particle.m_position.y);
 
 			//LOG_INFO("Particle Velocity X");
 			//LOG_INFO(particle.m_velocity.x);
-
 			//LOG_INFO("Particle Velocity Y");
 			//LOG_INFO(particle.m_velocity.y);
 
@@ -107,7 +102,7 @@ void ParticleSystem_2D::Emitter::Update(const float dt)
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
 
 			// Size Update
-			//particle.m_size = glm::mix(m_sizeEnd, m_sizeBegin, lifePercent);
+			particle.m_size = glm::mix(m_sizeEnd, m_sizeBegin, lifePercent);
 
 			// Colour Update
 			particle.m_colour = glm::mix(m_colourEnd, m_colourBegin, lifePercent);

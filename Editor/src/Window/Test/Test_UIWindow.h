@@ -186,11 +186,11 @@ namespace Tempest
 							colour.w = particle.m_colour.a;
 
 							ImVec2 min, max;
-							min.x = particle.minX;
-							min.y = particle.minY;
+							min.x = pos.x - particle.m_size * 0.5f;
+							max.x = pos.x + particle.m_size * 0.5f;
 
-							max.x = particle.maxX;
-							max.y = particle.maxY;
+							min.y = pos.y - particle.m_size * 0.5f;
+							max.y = pos.y + particle.m_size * 0.5f;
 
 							//LOG_INFO("Draw Min X");
 							//LOG_INFO("Draw Max X");
@@ -213,7 +213,7 @@ namespace Tempest
 							//drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ 1,0,0,1 }));
 							
 							if (particle.m_type == ParticleSystem_2D::ParticleType::Circle)
-								drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ colour }));
+								drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
 							else if(particle.m_type == ParticleSystem_2D::ParticleType::Square)
 								drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
 						}

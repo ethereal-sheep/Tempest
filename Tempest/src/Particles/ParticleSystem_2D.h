@@ -51,8 +51,8 @@ struct ParticleSystem_2D
 		bool  m_isActive;
 
 		// For square drawlist
-		float minX, maxX;
-		float minY, maxY;
+		/*float minX, maxX;
+		float minY, maxY;*/
 
 		ParticleType m_type;
 	};
