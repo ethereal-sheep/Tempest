@@ -149,7 +149,7 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->m_type = ParticleSystem_2D::ParticleType::Circle;
+					reg->m_type = ParticleType::Circle;
 					reg->Emit(1);
 				}
 				if (ImGui::IsMouseDown(1))
@@ -159,7 +159,7 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->m_type = ParticleSystem_2D::ParticleType::Square;
+					reg->m_type = ParticleType::Square;
 					reg->Emit(20);
 				}
 
@@ -208,9 +208,9 @@ namespace Tempest
 							LOG_INFO("Draw Position Y");
 							LOG_INFO(pos.y);*/
 
-							if (particle.m_type == ParticleSystem_2D::ParticleType::Circle)
+							if (particle.m_type == ParticleType::Circle)
 								drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
-							else if(particle.m_type == ParticleSystem_2D::ParticleType::Square)
+							else if(particle.m_type == ParticleType::Square)
 								drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
 						}
 					}

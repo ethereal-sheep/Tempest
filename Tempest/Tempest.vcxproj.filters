@@ -82,6 +82,8 @@
     <ClCompile Include="src\Scripting\Test\test_compare_node.cpp" />
     <ClCompile Include="src\Particles\ParticleSystem_2D.cpp" />
     <ClCompile Include="src\Particles\Random.cpp" />
+    <ClCompile Include="src\Particles\Particle.cpp" />
+    <ClCompile Include="src\Particles\Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -239,6 +241,8 @@
     <ClInclude Include="src\Particles\ParticleSystem_2D.h" />
     <ClInclude Include="src\Particles\Random.h" />
     <ClInclude Include="src\Util\interpolater.h" />
+    <ClInclude Include="src\Particles\Particles.h" />
+    <ClInclude Include="src\Particles\Emitter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
