@@ -5,5 +5,6 @@ void ParticleSystem_2D::Update(const float dt)
 {
 	// Update all the emitters here
 	for (auto& emitter : m_emitters)
-		emitter->Update(dt);
+		if(emitter->m_active)
+			emitter->Update(dt);
 }

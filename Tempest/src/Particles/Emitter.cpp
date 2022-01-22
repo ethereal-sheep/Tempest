@@ -1,41 +1,73 @@
 
 
+// Main Include
 #include "Emitter.h"
 
+// Additional Includes
 #include "Random.h"
 #include "Util.h"
 #include <numbers>
 
-
-
-Emitter::Emitter()
-	: m_colourBegin{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f }
-	, m_colourEnd{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f }
-	, m_sizeBegin{ 50.0f }
-	, m_sizeVariation{ 0.3f }
-	, m_sizeEnd{ 0.0f }
-	, m_lifeTime{ 5.0f }
-	, m_startVelocity{ 100.0f, 0.0f }
+ParticleArchetype::ParticleArchetype()
+	: m_startVelocity{ 100.0f, 0.0f }
 	, m_endVelocity{ 0.0f, 0.0f }
 	, m_velocityVariation{ 3.0f, 1.0f }
-	, m_position{ 0.0f, 0.0f }
-	//, m_loop{ false }
-	, m_rateOvertime{ 0 }
-	, m_maxParticles{ 1000 } // Hard coded for now
-	, m_particleIndex{ 0 }
+
+	, m_sizeBegin{ 50.0f }
+	, m_sizeEnd{ 0.0f }
+	, m_sizeVariation{ 0.3f }
+
+	, m_colourBegin{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f }
+	, m_colourEnd{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f }
+	//, m_colourVariation { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f }
+
+	, m_lifeTime{ 5.0f }
+	//, m_lifeVariation{ 5.0f }
+
 	, m_type{ ParticleType::Circle }
+{}
+
+Emitter::Emitter()
+	: m_position{ 0.0f, 0.0f }
+	, m_lifeTime{ 10.0f }
+	, m_active { true }
+	, m_preWarm { true }
+	//, m_loop{ false }
+	, m_countTimer{0.0f}
+	, m_spawnTimeInterval{ 5.0f }
+	, m_spawnCount{ 1 }
+	, m_maxParticles{ 1000 } // Hard coded for now
 {
 	m_particles.resize(m_maxParticles);
 
 	// Store all available slots
 	for (short i = 0; i < m_maxParticles; ++i)
 		m_available_ParticleSlots.push(i);
+
+	if (m_preWarm)
+		Emit(m_spawnCount);
 }
 
 void Emitter::Update(const float dt)
 {
-	static float timeInterval = 0.f;
+	// Emitter emittion
+	if (m_countTimer <= 0.f)
+	{
+		// Emit particle
+		Emit(m_spawnCount);
 
+		// Reset time interval
+		m_countTimer = m_spawnTimeInterval;
+	}
+	else
+		m_countTimer -= dt;
+
+	if (m_lifeTime <= 0.f)
+		m_active = false;
+	else
+		m_lifeTime -= dt;
+
+	// Particles Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
 	{
 		auto& particle = m_particles[i];
@@ -67,27 +99,15 @@ void Emitter::Update(const float dt)
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
 
 			// Size Update
-			particle.m_size = glm::mix(m_sizeEnd, m_sizeBegin, lifePercent);
+			particle.m_size = glm::mix(m_PA.m_sizeEnd, m_PA.m_sizeBegin, lifePercent);
 
 			// Colour Update
-			particle.m_colour = glm::mix(m_colourEnd, m_colourBegin, lifePercent);
+			particle.m_colour = glm::mix(m_PA.m_colourEnd, m_PA.m_colourBegin, lifePercent);
 
 			// Reduce the particle life
 			particle.m_lifeRemaining -= dt;
 		}
 	}
-
-	// TO DO, Emitter Behaviour - One second is per unit time
-	if (timeInterval >= 1.f)
-	{
-		// Emit particle
-		Emit(m_rateOvertime);
-
-		// Reset time interval
-		timeInterval = 0.f;
-	}
-	else
-		timeInterval += dt;
 }
 
 void Emitter::Emit(const int particleAmount)
@@ -105,18 +125,20 @@ void Emitter::Emit(const int particleAmount)
 			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
 
 			// Velocity
-			particle.m_velocity.x += m_velocityVariation.x * (Random::Float() - 0.5f);
-			particle.m_velocity.y += m_velocityVariation.y * (Random::Float() - 0.5f);
+			particle.m_velocity.x += m_PA.m_velocityVariation.x * (Random::Float() - 0.5f);
+			particle.m_velocity.y += m_PA.m_velocityVariation.y * (Random::Float() - 0.5f);
 
 			// Color
 			particle.m_colour.r = (Random::Float() - 0.5f);
 			particle.m_colour.g = (Random::Float() - 0.5f);
 			particle.m_colour.b = (Random::Float() - 0.5f);
+			
+			particle.m_type = m_PA.m_type;
 
-			particle.m_lifeTime = m_lifeTime;
-			particle.m_lifeRemaining = m_lifeTime;
-			particle.m_size = m_sizeBegin + m_sizeVariation * (Random::Float() - 0.5f);
-
+			// Lifetime
+			particle.m_lifeTime = m_PA.m_lifeTime;
+			particle.m_lifeRemaining = m_PA.m_lifeTime;
+			particle.m_size = m_PA.m_sizeBegin + m_PA.m_sizeVariation * (Random::Float() - 0.5f);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

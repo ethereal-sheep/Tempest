@@ -10,7 +10,7 @@ Particle::Particle()
 	, m_size{ 1.0f }
 	, m_lifeTime{ 1.0f }
 	, m_lifeRemaining{ 1.0f }
-	, m_isActive{ false }
+	, m_isActive{ true }
 	, m_type{ ParticleType::Circle }
 {
 }

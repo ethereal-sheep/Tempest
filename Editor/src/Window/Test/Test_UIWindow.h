@@ -149,8 +149,7 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->m_type = ParticleType::Circle;
-					reg->Emit(1);
+					reg->m_PA.m_type = ParticleType::Circle;
 				}
 				if (ImGui::IsMouseDown(1))
 				{
@@ -159,61 +158,61 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->m_type = ParticleType::Square;
-					reg->Emit(20);
+					reg->m_PA.m_type = ParticleType::Square;
 				}
 
 				// Update the emitters
 				for (auto& emitter : particleSys.get_emitters())
 				{
-					emitter->Update(0.16f);
+					emitter->Update(0.016f);
 
-					// Update the particle
-					for (auto& particle : emitter->m_particles)
-					{
-						if (particle.m_isActive)
+					// Render the particle
+					if(emitter->m_active)
+						for (auto& particle : emitter->m_particles)
 						{
-							//LOG_INFO("Draw Particle");
+							if (particle.m_isActive)
+							{
+								//LOG_INFO("Draw Particle");
 
-							ImVec2 pos;
-							pos.x = particle.m_position.x;
-							pos.y = particle.m_position.y;
+								ImVec2 pos;
+								pos.x = particle.m_position.x;
+								pos.y = particle.m_position.y;
 
-							ImVec4 colour;
-							colour.x = particle.m_colour.r;
-							colour.y = particle.m_colour.g;
-							colour.z = particle.m_colour.b;
-							colour.w = particle.m_colour.a;
+								ImVec4 colour;
+								colour.x = particle.m_colour.r;
+								colour.y = particle.m_colour.g;
+								colour.z = particle.m_colour.b;
+								colour.w = particle.m_colour.a;
 
-							ImVec2 min, max;
-							min.x = pos.x - particle.m_size * 0.5f;
-							max.x = pos.x + particle.m_size * 0.5f;
+								ImVec2 min, max;
+								min.x = pos.x - particle.m_size * 0.5f;
+								max.x = pos.x + particle.m_size * 0.5f;
 
-							min.y = pos.y - particle.m_size * 0.5f;
-							max.y = pos.y + particle.m_size * 0.5f;
+								min.y = pos.y - particle.m_size * 0.5f;
+								max.y = pos.y + particle.m_size * 0.5f;
 
-							/*LOG_INFO("Draw Min X");
-							LOG_INFO("Draw Max X");
-							LOG_INFO(min.x);
-							LOG_INFO(max.x);
+								/*LOG_INFO("Draw Min X");
+								LOG_INFO("Draw Max X");
+								LOG_INFO(min.x);
+								LOG_INFO(max.x);
 
-							LOG_INFO("Draw Min Y");
-							LOG_INFO("Draw Max Y");
-							LOG_INFO(min.y);
-							LOG_INFO(max.y);
+								LOG_INFO("Draw Min Y");
+								LOG_INFO("Draw Max Y");
+								LOG_INFO(min.y);
+								LOG_INFO(max.y);
 
-							LOG_INFO("Draw Position X");
-							LOG_INFO(pos.x);
+								LOG_INFO("Draw Position X");
+								LOG_INFO(pos.x);
 
-							LOG_INFO("Draw Position Y");
-							LOG_INFO(pos.y);*/
+								LOG_INFO("Draw Position Y");
+								LOG_INFO(pos.y);*/
 
-							if (particle.m_type == ParticleType::Circle)
-								drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
-							else if(particle.m_type == ParticleType::Square)
-								drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
+								if (particle.m_type == ParticleType::Circle)
+									drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
+								else if(particle.m_type == ParticleType::Square)
+									drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
+							}
 						}
-					}
 				}
 				
 				if (instance.selected == INVALID)

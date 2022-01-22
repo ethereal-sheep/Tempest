@@ -39,7 +39,6 @@ struct ParticleSystem_2D
 	}
 
 	void Update(const float dt);
-
 	auto get_emitters() const
 	{
 		return m_emitters;
