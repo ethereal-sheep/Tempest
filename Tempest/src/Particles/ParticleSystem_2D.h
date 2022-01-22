@@ -6,24 +6,11 @@
 
 #include "Core.h"
 
-#include "Math/elsVector2.h"
-#include "Math//elsVector4.h"
-
 #include <glm.hpp>
+#include <queue>
 
 //#include "../../Editor/src/Extern/imgui/imgui.h"
 
-// Forward Declaration
-struct ParticleSystem;
-
-//class instance
-//{
-//public:
-//	void Update(const float dt) { particleSystem.Update(dt); }
-//
-//private:
-//	ParticleSystem particleSystem;
-//};
 
 // Note, glm::vectors are used to utilise the mix function
 struct ParticleSystem_2D
@@ -42,7 +29,7 @@ struct ParticleSystem_2D
 		glm::vec2 m_position;
 		glm::vec2 m_velocity;
 		
-		float m_rotation;
+		//float m_rotation;
 
 		glm::vec4 m_colour;
 		float m_size;
@@ -50,46 +37,42 @@ struct ParticleSystem_2D
 		float m_lifeRemaining;
 		bool  m_isActive;
 
-		// For square drawlist
-		/*float minX, maxX;
-		float minY, maxY;*/
-
 		ParticleType m_type;
 	};
 
 	struct Emitter
 	{
+		glm::vec2 m_position;
+
+		// Particles Management
+		std::vector<Particle> m_particles;
+		std::queue<short> m_available_ParticleSlots;
+
 		Emitter();
 		void Update(const float dt);
 
 		// Test Function
-		void Emit(const int particleAmount, ParticleType particleType);
+		void Emit(const int particleAmount);
 		//void EmitSquare(const int particleAmount);
 
-		glm::vec2 m_position;
-		
-		// The particle it emitts
-		std::vector<Particle> m_particles;
+		glm::vec2 m_startVelocity, m_endVelocity;
+		glm::vec2 m_velocityVariation;
 
-		//------------------------------
-		// Data the User can manipulate - This idea is put on hold for now. TO be handled by backend programemrs.
-		// Velocity Controls (3)
-		glm::vec2 m_startVelocity, m_endVelocity;	// Velocity of particles
-		glm::vec2 m_velocityVariation;				// Different velocity spawn
+		float m_sizeBegin, m_sizeEnd;
+		float m_sizeVariation;		
 
-		// Size Controls (3)
-		float m_sizeBegin, m_sizeEnd;			// Size transition of particles
-		float m_sizeVariation;					// Different size spawning
+		glm::vec4 m_colourBegin, m_colourEnd;
 
-		// Colour Controls (2)
-		glm::vec4 m_colourBegin, m_colourEnd;	// Colour transition of particles
+		float m_lifeTime;							
+		//bool m_loop						
+		int m_maxParticles;
+		int m_particleIndex;
+		short m_rateOvertime; // How much particles to spawn per unit of time
 
-		// Other controls (...)
-		float m_lifeTime;				// Life time of the particles
-		//bool m_loop;					// Can the emitter loop spawn
-		int m_maxParticles;				// Max amount of particles an emitter can have 
+		ParticleType m_type;
 
-		//float m_rateOvertime;			// How much particles to spawn per unit of time
+		bool  m_clockwise;
+		float m_xOffset, m_yOffset;
 	};
 
 	struct Handler

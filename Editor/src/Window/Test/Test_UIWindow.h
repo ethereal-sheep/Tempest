@@ -149,19 +149,19 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->Emit(1, ParticleSystem_2D::ParticleType::Circle);
+					reg->m_type = ParticleSystem_2D::ParticleType::Circle;
+					reg->Emit(1);
 				}
-				if (ImGui::IsMouseDown(1))//ImGui::IsMouseClicked(0))
+				if (ImGui::IsMouseDown(1))
 				{
 					glm::vec2 tempVec;
 					tempVec.x = ImGui::GetMousePos().x;
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->Emit(1, ParticleSystem_2D::ParticleType::Square);
+					reg->m_type = ParticleSystem_2D::ParticleType::Square;
+					reg->Emit(20);
 				}
-
-
 
 				// Update the emitters
 				for (auto& emitter : particleSys.get_emitters())
@@ -192,26 +192,22 @@ namespace Tempest
 							min.y = pos.y - particle.m_size * 0.5f;
 							max.y = pos.y + particle.m_size * 0.5f;
 
-							//LOG_INFO("Draw Min X");
-							//LOG_INFO("Draw Max X");
-							//LOG_INFO(min.x);
-							//LOG_INFO(max.x);
+							/*LOG_INFO("Draw Min X");
+							LOG_INFO("Draw Max X");
+							LOG_INFO(min.x);
+							LOG_INFO(max.x);
 
-							//LOG_INFO("Draw Min Y");
-							//LOG_INFO("Draw Max Y");
-							//LOG_INFO(min.y);
-							//LOG_INFO(max.y);
+							LOG_INFO("Draw Min Y");
+							LOG_INFO("Draw Max Y");
+							LOG_INFO(min.y);
+							LOG_INFO(max.y);
 
-						/*	LOG_INFO("Draw Position X");
+							LOG_INFO("Draw Position X");
 							LOG_INFO(pos.x);
 
 							LOG_INFO("Draw Position Y");
 							LOG_INFO(pos.y);*/
 
-							//i.x++;
-							//drawlist->AddCircleFilled(particles->m_position, 4, ImGui::GetColorU32({ 1,0,0,1 }));
-							//drawlist->AddCircleFilled(pos, 10, ImGui::GetColorU32({ 1,0,0,1 }));
-							
 							if (particle.m_type == ParticleSystem_2D::ParticleType::Circle)
 								drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
 							else if(particle.m_type == ParticleSystem_2D::ParticleType::Square)
