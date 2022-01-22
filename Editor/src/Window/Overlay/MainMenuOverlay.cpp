@@ -24,17 +24,32 @@ namespace Tempest
 		MainMenuUI = state;
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 
-		if (MainMenuUI == UI_SHOW::CONFLICT_RES)
+		switch (MainMenuUI)
 		{
+		case Tempest::MainMenuOverlay::UI_SHOW::INITIAL: [[fallthrough]];
+		case Tempest::MainMenuOverlay::UI_SHOW::PROJECTS: [[fallthrough]];
+		case Tempest::MainMenuOverlay::UI_SHOW::NEW_PROJECT:
+			inter_nest[0].start(0.f, 1, .25f, 0.f, 
+				[](float x) { return glm::sineEaseOut(x); 
+			});
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
 			for (int i = 0; i < inter_nest.size(); ++i)
 			{
 				inter_nest[i].start(.8f, .3f, .5f, i * .05f, [](float x) { return glm::cubicEaseOut(x); });
 			}
-		}
-		else if (MainMenuUI == UI_SHOW::LOAD_MAP)
-		{
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_MAP:
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::LOAD_MAP:
 			inter_nest[0].start(0.5f, 0.5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
+			break;
+		default:
+			break;
 		}
+
 	}
 
 	void MainMenuOverlay::open_popup(const Event& e)
@@ -111,6 +126,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 			// render the selectables
 			std::string selectable = "";
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get()});
 			ImGui::PushFont(FONT_BTN);
 			selectable = "Projects";
 			ImGui::SetCursorPos(button_pos);
@@ -120,7 +136,12 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				change_state(UI_SHOW::PROJECTS);
+				auto fn = [&]()
+				{
+					change_state(UI_SHOW::PROJECTS);
+				};
+				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 				
 
@@ -184,7 +205,7 @@ namespace Tempest
 			}
 
 			ImGui::PopFont();
-			ImGui::PopStyleColor(2);
+			ImGui::PopStyleColor(3);
 		}
 			
 			break;
@@ -194,6 +215,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
@@ -207,7 +229,12 @@ namespace Tempest
 				{
 					AudioEngine ae;
 					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-					change_state(UI_SHOW::NEW_PROJECT);
+					auto fn = [&]()
+					{
+						change_state(UI_SHOW::NEW_PROJECT);
+					};
+					inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+					Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 				
 				}
 				if (ImGui::IsItemHovered())
@@ -271,7 +298,12 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				change_state(UI_SHOW::INITIAL);
+				auto fn = [&]()
+				{
+					change_state(UI_SHOW::INITIAL);
+				};
+				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 				
 			if (ImGui::IsItemHovered())
@@ -281,7 +313,7 @@ namespace Tempest
 			}
 
 			ImGui::PopFont();
-			ImGui::PopStyleColor(2);
+			ImGui::PopStyleColor(3);
 		}
 			break;
 
@@ -290,6 +322,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
@@ -459,7 +492,12 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				change_state(UI_SHOW::PROJECTS);
+				auto fn = [&]()
+				{
+					change_state(UI_SHOW::PROJECTS);
+				};
+				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 				
 			if (ImGui::IsItemHovered())
@@ -469,7 +507,7 @@ namespace Tempest
 			}
 
 			ImGui::PopFont();
-			ImGui::PopStyleColor(2);
+			ImGui::PopStyleColor(3);
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:

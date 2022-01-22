@@ -73,6 +73,7 @@
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
+#include "Window/Util/Delay.h"
 
 namespace Tempest
 {
@@ -91,6 +92,8 @@ namespace Tempest
 		instance->register_always<BottomRightOverlayPopup>();
 
 		instance->register_always<ShowRecent>();
+		instance->register_always<WipePopup>();
+		instance->register_always<Delay>();
 	}
 
 	void InstanceManager::register_physicstime_windows()
@@ -161,6 +164,7 @@ namespace Tempest
 
 		instance->register_always<ShowRecent>();
 		instance->register_always<WipePopup>();
+		instance->register_always<Delay>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{
@@ -182,6 +186,8 @@ namespace Tempest
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
+		instance->register_always<WipePopup>();
+		instance->register_always<Delay>();
 	}
 
 }

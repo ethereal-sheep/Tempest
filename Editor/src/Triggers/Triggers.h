@@ -216,4 +216,14 @@ namespace Tempest
 		float fade_in_time, fade_out_time, visible_time;
 		std::function<void(void)> do_on_fade;
 	};
+
+	struct DelayTrigger : public Event
+	{
+		DelayTrigger(float _wait_time, std::function<void(void)> _do) : wait_time(_wait_time), do_fn(_do)
+		{
+
+		}
+		float wait_time;
+		std::function<void(void)> do_fn;
+	};
 }
