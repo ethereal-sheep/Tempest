@@ -44,6 +44,9 @@ struct ParticleSystem_2D
 		return m_emitters;
 	}
 
+	// Not supposed to be here - NOT TO BE SHARED POINTER
+	void ButtonEmitter(Emitter& emitter);
+
 private:
 	std::vector <std::shared_ptr<Emitter>> m_emitters;
 };

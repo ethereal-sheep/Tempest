@@ -137,7 +137,6 @@ namespace Tempest
 				UI::UIButton_Simulate("TEST", "TEST", { 300.f,250.f }, { 0,0 }, FONT_PARA, true);
 				UI::UIButton_EndTurn({ 300.f,300.f }, { 0,0 }, FONT_PARA, true);*/
 
-				
 				//UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
 				//auto& io = ImGui::GetIO();
 				auto drawlist = ImGui::GetForegroundDrawList();
@@ -159,7 +158,8 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->m_PA.m_type = ParticleType::Square;
+
+			/*		reg->m_PA.m_type = ParticleType::Square;
 					reg->m_velocity.x = -500.0f;
 					reg->m_lifeTime = 1000.0f;
 
@@ -178,7 +178,9 @@ namespace Tempest
 					reg->m_wayPoints.push_back(wayPoint_1);
 					reg->m_wayPoints.push_back(wayPoint_2);
 					reg->m_wayPoints.push_back(wayPoint_3);
-					reg->m_wayPoints.push_back(wayPoint_4);
+					reg->m_wayPoints.push_back(wayPoint_4);*/
+
+					particleSys.ButtonEmitter(*reg);
 				}
 
 				// Update the emitters
