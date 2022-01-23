@@ -221,7 +221,6 @@ namespace Tempest
 					
 				}
 
-				
 
 				// if (UI::UIButton_CustomMap("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY,true))
 				// {
@@ -324,7 +323,6 @@ namespace Tempest
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE)+ "Click here to access the quick menu.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-							ImGui::GetIO().WantCaptureMouse = false;
 						}
 						break;
 						case 1:
@@ -362,9 +360,7 @@ namespace Tempest
 						}
 						break;
 					}
-					
 				}
-			
 			}
 
 			ImGui::PopStyleVar();
