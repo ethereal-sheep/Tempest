@@ -96,8 +96,8 @@ namespace Tempest
 			init_ui_textures();
 
 			AudioEngine ae;
-			ae.Play("Sounds2D/BGM_1.wav", "bgm_bus", 0.2f, true);
-			ae.SetMasterVolume(2.f);
+			ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.5f, true);
+			ae.SetMasterVolume(1.f);
 			//testing_scene();
 
 			TestCompareNode();

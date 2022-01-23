@@ -267,7 +267,7 @@ namespace Tempest
 						{
 							auto [it, b] = instance.scene.get_map().create(proto);
 							AudioEngine ae;
-							ae.Play("Sounds2D/ObjectPlacement.wav", "sfx_bus");
+							ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
 							instance.selected = it->first;
 							if (auto transform = it->second.force_if<tc::Transform>())
 							{
@@ -464,7 +464,7 @@ namespace Tempest
 				}
 				instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 				instance.selected = INVALID;
 				return;
 			}
