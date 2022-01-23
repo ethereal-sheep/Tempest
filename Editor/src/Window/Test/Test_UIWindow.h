@@ -164,7 +164,7 @@ namespace Tempest
 				// Update the emitters
 				for (auto& emitter : particleSys.get_emitters())
 				{
-					emitter->Update(0.016f);
+					emitter->Update(0.16f);
 
 					// Render the particle
 					if(emitter->m_active)

@@ -44,12 +44,18 @@ Emitter::Emitter()
 	for (short i = 0; i < m_maxParticles; ++i)
 		m_available_ParticleSlots.push(i);
 
-	if (m_preWarm)
-		Emit(m_spawnCount);
+	//if (m_preWarm)
+	//	Emit(m_spawnCount);
 }
 
 void Emitter::Update(const float dt)
 {
+	if (m_preWarm)
+	{
+		Emit(m_spawnCount);
+		m_preWarm = false;
+	}
+
 	// Emitter emittion
 	if (m_countTimer <= 0.f)
 	{
