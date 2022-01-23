@@ -10,14 +10,15 @@ namespace Tempest
 
 	public:
 
-		void PlayAnimation(uint32_t id, Animation& animation, float time, glm::mat4& anim_matrix);
+		void PlayAnimation(uint32_t id, Animation& animation, float time, std::vector<glm::mat4>& anim_matrix);
 
 	private:
 
-		glm::mat4 InterpolatePosition(const Animation& animation, const float time);
-		glm::mat4 InterpolateRoatation(const Animation& animation, const float time);
-		glm::mat4 InterpolateScale(const Animation& animation, const float scale);
-
+		glm::mat4 GetAnimationMatrix(std::vector<std::pair<float, Frame>>& animation, const float time);
+		glm::mat4 InterpolatePosition(std::vector<std::pair<float, Frame>>& animation, const float time);
+		glm::mat4 InterpolateRoatation(std::vector<std::pair<float, Frame>>& animation, const float time);
+		glm::mat4 InterpolateScale(std::vector<std::pair<float, Frame>>& animation, const float time);
+		float GetLinearFactor(const float t0, const float t1, const float time);
 
 	};
 }

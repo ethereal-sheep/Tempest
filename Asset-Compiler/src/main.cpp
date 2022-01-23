@@ -44,6 +44,8 @@ struct Animation
 	std::vector<aiVectorKey> sizes;
 
 	aiString name;
+	float ticks;
+	float duration;
 };
 
 struct Mesh
@@ -293,6 +295,14 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 			ss << i.name.C_Str();
 			ss << "\n";
 
+			ss << "ticks ";
+			ss << i.ticks;
+			ss << "\n";
+
+			ss << "duration ";
+			ss << i.duration;
+			ss << "\n";
+
 			for (auto& k : i.positions)
 			{
 				ss << "ap ";
@@ -381,6 +391,8 @@ void ProcessKeyFrameAnimation(std::vector<Animation>& animations)
 		aiAnimation* pAnim = s_Scene->mAnimations[i];
 
 		anim.name = pAnim->mName;
+		anim.ticks = pAnim->mTicksPerSecond;
+		anim.duration = pAnim->mDuration;
 
 		for (uint32_t q = 0; q < pAnim->mNumChannels; ++q)
 		{

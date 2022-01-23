@@ -12,6 +12,7 @@
 #include "Logger/Log.h"
 #include <filesystem>
 #include <cstring>
+#include "Animation/Animation.h"
 
 namespace Tempest
 {
@@ -194,6 +195,35 @@ namespace Tempest
 				}
 
 				else if (prefix == "Diffuse" && line != "")
+				{
+					glm::vec3 q;
+					file_line >> q.x >> q.y >> q.z;
+
+					colours.push_back(q);
+				}
+
+				else if (prefix == "aa" && line != "")
+				{
+					glm::vec3 q;
+					file_line >> q.x >> q.y >> q.z;
+
+					colours.push_back(q);
+				}
+				else if (prefix == "ap" && line != "")
+				{
+					glm::vec3 q;
+					file_line >> q.x >> q.y >> q.z;
+
+					colours.push_back(q);
+				}
+				else if (prefix == "ar" && line != "")
+				{
+					glm::vec3 q;
+					file_line >> q.x >> q.y >> q.z;
+
+					colours.push_back(q);
+				}
+				else if (prefix == "as" && line != "")
 				{
 					glm::vec3 q;
 					file_line >> q.x >> q.y >> q.z;
