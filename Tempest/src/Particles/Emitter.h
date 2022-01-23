@@ -34,6 +34,7 @@ struct ParticleArchetype
 struct Emitter
 {
 	glm::vec2 m_position;
+	glm::vec2 m_velocity;
 
 	// Particles Management
 	std::vector<Particle> m_particles;
@@ -51,7 +52,11 @@ struct Emitter
 	float m_spawnTimeInterval; 
 	short m_spawnCount; // How much particles to spawn per unit of time
 	//bool m_loop;
-	
+
+	std::vector<glm::vec2> m_wayPoints;
+	short m_wayPointIndex;
+	bool m_recalculateVelocity;
+
 	//bool  m_clockwise;
 	//float m_xOffset, m_yOffset;
 
@@ -59,6 +64,7 @@ struct Emitter
 	void Update(const float dt);
 
 private:
+	void SelfUpdate(const float dt);
 	void Emit(const int particleAmount);
 };
 

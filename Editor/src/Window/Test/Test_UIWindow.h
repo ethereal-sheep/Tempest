@@ -139,7 +139,7 @@ namespace Tempest
 
 				
 				//UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
-				auto& io = ImGui::GetIO();
+				//auto& io = ImGui::GetIO();
 				auto drawlist = ImGui::GetForegroundDrawList();
 				
 				if (ImGui::IsMouseDown(0))//ImGui::IsMouseClicked(0))
@@ -150,6 +150,7 @@ namespace Tempest
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
 					reg->m_PA.m_type = ParticleType::Circle;
+					reg->m_velocity.x = -500.0f;
 				}
 				if (ImGui::IsMouseDown(1))
 				{
@@ -159,12 +160,31 @@ namespace Tempest
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
 					reg->m_PA.m_type = ParticleType::Square;
+					reg->m_velocity.x = -500.0f;
+					reg->m_lifeTime = 1000.0f;
+
+					glm::vec2 wayPoint_1 = tempVec;
+					wayPoint_1.x += 300;
+
+					glm::vec2 wayPoint_2 = wayPoint_1;
+					wayPoint_2.y -= 50;
+
+					glm::vec2 wayPoint_3 = wayPoint_2;
+					wayPoint_3.x -= 300;
+
+					glm::vec2 wayPoint_4 = wayPoint_3;
+					wayPoint_4.y += 50;
+
+					reg->m_wayPoints.push_back(wayPoint_1);
+					reg->m_wayPoints.push_back(wayPoint_2);
+					reg->m_wayPoints.push_back(wayPoint_3);
+					reg->m_wayPoints.push_back(wayPoint_4);
 				}
 
 				// Update the emitters
 				for (auto& emitter : particleSys.get_emitters())
 				{
-					emitter->Update(0.16f);
+					emitter->Update(0.016f);
 
 					// Render the particle
 					if(emitter->m_active)
