@@ -39,6 +39,10 @@ namespace Tempest
 			inter_nest[i].start(-.18f * ImGui::GetMainViewport()->Size.x, .0f, .4f, i * .05f, [](float x) { return glm::cubicEaseOut(x); });
 		}
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
+
+		tutorial_index = 0;
+		tutorial_enable = true;
+		
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -216,7 +220,8 @@ namespace Tempest
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
 					
 				}
-				UI::TutArea({ viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { 100.f, 100.f });
+
+				
 
 				// if (UI::UIButton_CustomMap("Custom Map", "Custom Map", { viewport->Size.x * 0.57f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY,true))
 				// {
@@ -285,7 +290,12 @@ namespace Tempest
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+						
+						//Tutorial progression
+						if (tutorial_enable && tutorial_index == 0)
+							tutorial_index = 1;
 					}
+					
 					ImGui::SameLine();
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
@@ -297,6 +307,62 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::SIMULATE_TUT);
 					}
 					ImGui::PopStyleColor(3);
+				}
+
+
+				if (tutorial_enable)
+				{
+					auto drawlist = ImGui::GetForegroundDrawList();
+					//Exit Tutorial button
+					switch (tutorial_index)
+					{
+						// Click to quick menu
+						case 0:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
+							ImVec2 size = { 200.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE)+ "Click here to access the quick menu.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							ImGui::GetIO().WantCaptureMouse = false;
+						}
+						break;
+						case 1:
+						{
+							ImVec2 pos = {0.f, 0.f };
+							ImVec2 size = { viewport->Size.x, viewport->Size.y * 0.25f };
+							UI::TutArea(pos, size);
+							string str = "";
+							str = "Quick Menu";
+							ImGui::PushFont(FONT_BTN);
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							ImGui::PopFont();
+
+							drawlist->AddLine({ pos.x + size.x * 0.5f, size.y }, { pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }),2.f);
+							drawlist->AddLine({ pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, { pos.x + size.x * 0.1f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }),2.f);
+
+							str = "The quick menu allows you to quickly access all";
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 25.f }, ImGui::GetColorU32({1,1,1,1 }), str.c_str());
+							str = "the pages in the conflict resolution screen.";
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 40.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (ImGui::IsMouseClicked(0))
+								tutorial_index = 2;
+						}
+						break;
+						case 2:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.18f, viewport->Size.y * 0.1f };
+							ImVec2 size = { 310.f, 140.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access units page.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+					}
+					
 				}
 			
 			}
