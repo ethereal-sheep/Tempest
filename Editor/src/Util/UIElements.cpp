@@ -3720,7 +3720,7 @@ namespace Tempest::UI
 		ImGui::SetNextWindowPos(TopBox.Min);
 		ImGui::SetNextWindowSize({ TopBox.GetWidth(), TopBox.GetHeight() });
 		if (ImGui::Begin("top", nullptr, window_flags)){} ImGui::End();
-
+		
 		ImGui::SetNextWindowPos(RightBox.Min);
 		ImGui::SetNextWindowSize({ RightBox.GetWidth(), RightBox.GetHeight() });
 		if (ImGui::Begin("right", nullptr, window_flags)) {} ImGui::End();
@@ -3738,8 +3738,7 @@ namespace Tempest::UI
 		ImGui::SetWindowFocus("top");
 		ImGui::SetWindowFocus("right");
 		ImGui::SetWindowFocus("btm");
-		ImGui::SetWindowFocus("left");
-		*/
+		ImGui::SetWindowFocus("left");*/
 		
 		drawlist->AddRectFilled(TopBox.Min, TopBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(RightBox.Min, RightBox.Max, ImGui::GetColorU32(col));
