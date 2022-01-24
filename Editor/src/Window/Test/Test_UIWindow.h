@@ -139,18 +139,26 @@ namespace Tempest
 
 				//UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
 				//auto& io = ImGui::GetIO();
+
 				auto drawlist = ImGui::GetForegroundDrawList();
+
 				ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
 				ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
 				auto tex = tex_map["Assets/Loading.dds"];
 				//ImVec2 size = { (float)tex->GetWidth() * 0.7f,(float)tex->GetHeight() * 0.7f };
 				ImVec2 size = { (float)tex->GetWidth() * 1.0f,(float)tex->GetHeight() * 1.0f };
-				//ImVec2 pos = ImGui::GetCursorPos();
+				ImVec2 pos = ImGui::GetCursorPos();
 
 				// Top left button
 				glm::vec2 real_buttonSize;
 				real_buttonSize.x = size.x;
 				real_buttonSize.y = size.y;
+
+				// Top left position
+				glm::vec2 real_mousePosition;
+				real_mousePosition.x = pos.x;
+				real_mousePosition.y = pos.y;
+
 
 				if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), size, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 				{
