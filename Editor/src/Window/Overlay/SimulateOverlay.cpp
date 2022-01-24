@@ -313,9 +313,16 @@ namespace Tempest
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
 					//Exit Tutorial button
+					auto img = tex_map["Assets/ExitTutBtn.dds"];
+					/*ImGui::SetCursorPos({ viewport->Size.x * 0.8f, viewport->Size.y * 0.1f });
+					if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ img->GetWidth() * 0.7f, img->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+					{
+						tutorial_enable = false;
+					}*/
 					switch (tutorial_index)
 					{
 						// Click to quick menu
+
 						case 0:
 						{
 							ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
@@ -345,6 +352,7 @@ namespace Tempest
 							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 40.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 							str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
 							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
 
 							if (ImGui::IsMouseClicked(0))
 								tutorial_index = 2;
