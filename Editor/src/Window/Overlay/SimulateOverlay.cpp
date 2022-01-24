@@ -41,7 +41,7 @@ namespace Tempest
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
 		tutorial_index = 0;
-		tutorial_enable = true;
+		tutorial_enable = false;
 		
 	}
 
