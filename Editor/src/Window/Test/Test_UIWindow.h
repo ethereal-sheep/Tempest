@@ -207,7 +207,7 @@ namespace Tempest
 					//glm::vec2 buttonSize = glm::uvec2{ 300.f, 200.f };
 					//particleSys.ButtonEmitter_2(*reg, buttonPos, buttonSize);
 
-					particleSys.ButtonEmitter_2(*reg, buttonPos, real_buttonSize);
+					particleSys.ButtonEmitter_2(*reg, real_mousePosition, real_buttonSize);
 				}
 
 				// Update the emitters

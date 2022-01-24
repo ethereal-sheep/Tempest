@@ -61,7 +61,7 @@ void ParticleSystem_2D::ButtonEmitter(Emitter& emitter)
 	emitter.m_wayPoints.push_back(wayPoint_4);
 }
 
-void ParticleSystem_2D::ButtonEmitter_2(Emitter& emitter, glm::vec2 buttonPos, glm::vec2 buttonSize)
+void ParticleSystem_2D::ButtonEmitter_2(Emitter& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
 	// Emitter values - Without consideration for default ctor values
 	emitter.m_velocity.x = -500.0f;
@@ -94,14 +94,17 @@ void ParticleSystem_2D::ButtonEmitter_2(Emitter& emitter, glm::vec2 buttonPos, g
 
 
 	// Center position of the button
-	emitter.m_position = buttonPos;
+	emitter.m_position = topLeftPos;
 
 	// Shift to one corner of the button - Left Bottom
-	emitter.m_position.x -= buttonSize.x * 0.5f;
-	emitter.m_position.y -= buttonSize.y * 0.5f;
+	//emitter.m_position.x -= buttonSize.x * 0.5f;
+	//emitter.m_position.y -= buttonSize.y * 0.5f;
 
 	// Prepare the waypoints
-	glm::vec2 wp_RightBottom = emitter.m_position;
+	glm::vec2 wp_LeftBottom = topLeftPos;
+	wp_LeftBottom.y += buttonSize.y;
+
+	glm::vec2 wp_RightBottom = wp_LeftBottom;
 	wp_RightBottom.x += buttonSize.x;
 
 	glm::vec2 wp_RightTop = wp_RightBottom;
@@ -110,12 +113,9 @@ void ParticleSystem_2D::ButtonEmitter_2(Emitter& emitter, glm::vec2 buttonPos, g
 	glm::vec2 wp_LeftTop = wp_RightTop;
 	wp_LeftTop.x -= buttonSize.x;
 
-	glm::uvec2 wp_LeftBottom = wp_LeftTop;
-	wp_LeftBottom.y += buttonSize.y;
-
 	// Add the waypoints
+	emitter.m_wayPoints.push_back(wp_LeftBottom);
 	emitter.m_wayPoints.push_back(wp_RightBottom);
 	emitter.m_wayPoints.push_back(wp_RightTop);
 	emitter.m_wayPoints.push_back(wp_LeftTop);
-	emitter.m_wayPoints.push_back(wp_LeftBottom);
 }
