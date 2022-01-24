@@ -226,4 +226,6 @@ namespace Tempest
 		float wait_time;
 		std::function<void(void)> do_fn;
 	};
+
+	struct SettingsTrigger : public Event {};
 }

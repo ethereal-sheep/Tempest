@@ -276,7 +276,7 @@ namespace Tempest
 									auto entity = instance.ecs.create(prefab);
 
 									AudioEngine ae;
-									ae.Play("Sounds2D/ObjectPlacement.wav", "sfx_bus");
+									ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
 
 									chars[selected] = entity;
 									LOG_ASSERT(instance.ecs.has<tc::Character>(entity));

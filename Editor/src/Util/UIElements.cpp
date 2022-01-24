@@ -1087,7 +1087,7 @@ namespace Tempest::UI
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1135,7 +1135,7 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1204,7 +1204,7 @@ namespace Tempest::UI
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1248,7 +1248,7 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1339,7 +1339,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1388,7 +1388,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 
@@ -1489,7 +1489,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1538,7 +1538,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 
@@ -1643,7 +1643,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1692,7 +1692,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 
@@ -2093,7 +2093,7 @@ namespace Tempest::UI
 				res = true;
 
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		if (selected)
@@ -2174,7 +2174,7 @@ namespace Tempest::UI
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -2208,7 +2208,7 @@ namespace Tempest::UI
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -2237,7 +2237,7 @@ namespace Tempest::UI
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -3062,7 +3062,7 @@ namespace Tempest::UI
 		if (ImGui::Button((string(ICON_FA_TRASH) + label).c_str()))
 		{
 			AudioEngine ae;
-			ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+			ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 			//ImGui::PopStyleVar();
 			remove = true;
 		}
@@ -3261,7 +3261,7 @@ namespace Tempest::UI
 		if (pressed)
 		{
 			AudioEngine ae;
-			ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+			ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 		}
 
 		return pressed;
@@ -3355,7 +3355,7 @@ namespace Tempest::UI
 		if (pressed)
 		{
 			AudioEngine ae;
-			ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+			ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 		}
 
 		return pressed;
