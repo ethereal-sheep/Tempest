@@ -48,6 +48,19 @@ struct Animation
 	float duration;
 };
 
+struct BoneAnimation
+{
+	std::vector<aiVectorKey> positions;
+	std::vector<aiQuatKey> rotations;
+	std::vector<aiVectorKey> sizes;
+	std::vector<float> weights;
+	std::vector<uint32_t> ids;
+
+	aiString name;
+	float ticks;
+	float duration;
+};
+
 struct Mesh
 {
 	std::vector<glm::vec3> pos;
@@ -60,6 +73,7 @@ struct Mesh
 
 	std::vector<std::string> textures;
 	std::vector<Animation> animations;
+	std::vector<BoneAnimation> b_animations;
 
 	std::vector<aiColor3D> Diffuse;
 	std::vector<aiColor3D> Ambient;
@@ -79,6 +93,7 @@ void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform, Mesh& mes
 void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, uint32_t& offset);
 
 void ProcessKeyFrameAnimation(std::vector<Animation>& animations);
+void ProcessBoneAnimation(std::vector<BoneAnimation>& animations);
 
 void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform, Mesh& mesh, uint32_t& offset)
 {
@@ -423,13 +438,19 @@ bool LoadModel(const std::string& path)
 	if (!s_Scene)
 		return false;
 
-	//if (s_Scene->mRootNode->mNumChildren != 0)		// Bone Animation
-	//{
-	//	s_Scene->mAnimations;
-	//}
-	//
-	//else                                            // KeyFrame Animation, Normal Model Loading
-	//{
+	if (s_Scene->mNumMeshes == 0)
+		return false;
+
+	if (s_Scene->mMeshes[0]->HasBones())		// Bone Animation
+	{
+		uint32_t offset = 0;
+		Mesh mMesh;
+		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
+		ProcessBoneAnimation(mMesh.b_animations);
+	}
+	
+	else                                            // KeyFrame Animation, Normal Model Loading
+	{
 		uint32_t offset = 0;
 		Mesh mMesh;
 		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
@@ -492,7 +513,7 @@ bool LoadModel(const std::string& path)
 
 		if (!WriteToFile(mMesh, path))
 			return false;
-	//}
+	}
 
 	return true;
 }
