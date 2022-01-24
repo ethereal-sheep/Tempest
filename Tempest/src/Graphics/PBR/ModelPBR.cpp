@@ -13,6 +13,7 @@
 #include <filesystem>
 #include <cstring>
 #include "Animation/Animation.h"
+#include "Animation/BoneAnimation.h"
 
 namespace Tempest
 {

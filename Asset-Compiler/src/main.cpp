@@ -423,74 +423,76 @@ bool LoadModel(const std::string& path)
 	if (!s_Scene)
 		return false;
 
-	uint32_t offset = 0;
-	Mesh mMesh;
-	ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
+	//if (s_Scene->mRootNode->mNumChildren != 0)		// Bone Animation
+	//{
+	//	s_Scene->mAnimations;
+	//}
+	//
+	//else                                            // KeyFrame Animation, Normal Model Loading
+	//{
+		uint32_t offset = 0;
+		Mesh mMesh;
+		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
 
-	
-	aiMesh* pMesh = s_Scene->mMeshes[0];
-	auto bones = pMesh->HasBones();
-	if (!bones)
-	{
 		ProcessKeyFrameAnimation(mMesh.animations);
-	}
-	
-	for (uint32_t i = 0; i < s_Scene->mNumMaterials; ++i)
-	{
-		aiString atex;
 
-		const auto* pMaterial = s_Scene->mMaterials[i];
-
-		aiColor3D tDiffuse;
-		aiColor3D tAmbient;
-		aiColor3D tSpecular;
-		aiColor3D tEmissive;
-		aiColor3D tTransparent;
-		aiColor3D tReflective;
-
-		pMaterial->Get(AI_MATKEY_REFRACTI, mMesh.Refraction);
-		pMaterial->Get(AI_MATKEY_REFLECTIVITY, mMesh.Reflection);
-		pMaterial->Get(AI_MATKEY_SHININESS, mMesh.Shininess);
-		pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, mMesh.ShininessStrength);
-		pMaterial->Get(AI_MATKEY_OPACITY, mMesh.Opacity);
-
-		pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, tDiffuse);
-		pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, tAmbient);
-		pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, tSpecular);
-		pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, tEmissive);
-		pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, tTransparent);
-		pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, tReflective);
-
-		pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, 0), atex);
-
-		if (atex.length)
+		for (uint32_t i = 0; i < s_Scene->mNumMaterials; ++i)
 		{
-			std::string full_path{ atex.data };
-			std::string lower_path{ atex.data };
-			std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
-				[](char c) { return (char)std::tolower((int)c); });
+			aiString atex;
 
-			auto check = lower_path.find("models");
-			if (check == std::string::npos) continue;
+			const auto* pMaterial = s_Scene->mMaterials[i];
 
-			std::string tex_path = full_path.substr(check, full_path.length());
-			std::filesystem::path es{ tex_path };
-			es.replace_extension(".dds");
-			mMesh.textures.push_back(es.string());
+			aiColor3D tDiffuse;
+			aiColor3D tAmbient;
+			aiColor3D tSpecular;
+			aiColor3D tEmissive;
+			aiColor3D tTransparent;
+			aiColor3D tReflective;
+
+			pMaterial->Get(AI_MATKEY_REFRACTI, mMesh.Refraction);
+			pMaterial->Get(AI_MATKEY_REFLECTIVITY, mMesh.Reflection);
+			pMaterial->Get(AI_MATKEY_SHININESS, mMesh.Shininess);
+			pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, mMesh.ShininessStrength);
+			pMaterial->Get(AI_MATKEY_OPACITY, mMesh.Opacity);
+
+			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, tDiffuse);
+			pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, tAmbient);
+			pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, tSpecular);
+			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, tEmissive);
+			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, tTransparent);
+			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, tReflective);
+
+			pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, 0), atex);
+
+			if (atex.length)
+			{
+				std::string full_path{ atex.data };
+				std::string lower_path{ atex.data };
+				std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+					[](char c) { return (char)std::tolower((int)c); });
+
+				auto check = lower_path.find("models");
+				if (check == std::string::npos) continue;
+
+				std::string tex_path = full_path.substr(check, full_path.length());
+				std::filesystem::path es{ tex_path };
+				es.replace_extension(".dds");
+				mMesh.textures.push_back(es.string());
+			}
+			else
+				mMesh.textures.push_back("NULL");
+
+			mMesh.Diffuse.push_back(tDiffuse);
+			mMesh.Ambient.push_back(tAmbient);
+			mMesh.Emissive.push_back(tEmissive);
+			mMesh.Specular.push_back(tSpecular);
+			mMesh.Reflective.push_back(tReflective);
+			mMesh.Transparent.push_back(tTransparent);
 		}
-		else
-			mMesh.textures.push_back("NULL");
 
-		mMesh.Diffuse.push_back(tDiffuse);
-		mMesh.Ambient.push_back(tAmbient);
-		mMesh.Emissive.push_back(tEmissive);
-		mMesh.Specular.push_back(tSpecular);
-		mMesh.Reflective.push_back(tReflective);
-		mMesh.Transparent.push_back(tTransparent);
-	}
-
-	if (!WriteToFile(mMesh, path))
-		return false;
+		if (!WriteToFile(mMesh, path))
+			return false;
+	//}
 
 	return true;
 }
