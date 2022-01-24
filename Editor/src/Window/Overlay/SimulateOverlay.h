@@ -60,6 +60,7 @@ namespace Tempest
             Entity weapon{ UNDEFINED };
             Entity action{ UNDEFINED };
             void Reset(Instance& instance);
+            void Clear();
         };
 
         UnitData attacker{};

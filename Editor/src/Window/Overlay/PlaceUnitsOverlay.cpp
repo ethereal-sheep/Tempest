@@ -152,6 +152,21 @@ namespace Tempest
 						if (i == INVALID) okay = false;
 					if (okay)
 					{
+
+						// give default action for units with no actions
+						for (const auto id : chars)
+						{
+							auto& charac = instance.ecs.get<tc::Character>(id);
+							if (charac.actions.empty())
+							{
+								auto new_graph = instance.ecs.create();
+								instance.ecs.emplace<tc::ActionGraph>(new_graph);
+								instance.ecs.emplace<tc::Graph>(new_graph, "NOTHING", graph_type::action);
+								charac.actions.emplace_back(new_graph);
+							}
+						}
+
+						// go to combat mode
 						if (OpenCombat)
 							Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
 						else
