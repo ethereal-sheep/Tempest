@@ -140,7 +140,23 @@ namespace Tempest
 				//UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
 				//auto& io = ImGui::GetIO();
 				auto drawlist = ImGui::GetForegroundDrawList();
-				
+				ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
+				ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
+				auto tex = tex_map["Assets/Loading.dds"];
+				//ImVec2 size = { (float)tex->GetWidth() * 0.7f,(float)tex->GetHeight() * 0.7f };
+				ImVec2 size = { (float)tex->GetWidth() * 1.0f,(float)tex->GetHeight() * 1.0f };
+				//ImVec2 pos = ImGui::GetCursorPos();
+
+				// Top left button
+				glm::vec2 real_buttonSize;
+				real_buttonSize.x = size.x;
+				real_buttonSize.y = size.y;
+
+				if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), size, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+
+				}
+
 				if (ImGui::IsMouseDown(0))//ImGui::IsMouseClicked(0))
 				{
 					glm::vec2 tempVec;
@@ -162,19 +178,14 @@ namespace Tempest
 			/*		reg->m_PA.m_type = ParticleType::Square;
 					reg->m_velocity.x = -500.0f;
 					reg->m_lifeTime = 1000.0f;
-
 					glm::vec2 wayPoint_1 = tempVec;
 					wayPoint_1.x += 300;
-
 					glm::vec2 wayPoint_2 = wayPoint_1;
 					wayPoint_2.y -= 50;
-
 					glm::vec2 wayPoint_3 = wayPoint_2;
 					wayPoint_3.x -= 300;
-
 					glm::vec2 wayPoint_4 = wayPoint_3;
 					wayPoint_4.y += 50;
-
 					reg->m_wayPoints.push_back(wayPoint_1);
 					reg->m_wayPoints.push_back(wayPoint_2);
 					reg->m_wayPoints.push_back(wayPoint_3);
@@ -184,10 +195,11 @@ namespace Tempest
 
 					// Test prepared functions for XR
 					glm::vec2 buttonPos = glm::vec2{ 640.f, 640.f };
-					glm::vec2 buttonSize = glm::uvec2{ 300.f, 200.f };
+					
+					//glm::vec2 buttonSize = glm::uvec2{ 300.f, 200.f };
+					//particleSys.ButtonEmitter_2(*reg, buttonPos, buttonSize);
 
-
-					particleSys.ButtonEmitter_2(*reg, buttonPos, buttonSize);
+					particleSys.ButtonEmitter_2(*reg, buttonPos, real_buttonSize);
 				}
 
 				// Update the emitters
