@@ -200,7 +200,7 @@ namespace Tempest
 				OverlayOpen = false;
 				//get_quitter().quit = true;
 				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
-				get_quitter().quit = true;
+				//get_quitter().quit = true;
 			}
 			if (ImGui::IsItemHovered())
 			{

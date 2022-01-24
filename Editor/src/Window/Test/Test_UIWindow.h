@@ -180,7 +180,14 @@ namespace Tempest
 					reg->m_wayPoints.push_back(wayPoint_3);
 					reg->m_wayPoints.push_back(wayPoint_4);*/
 
-					particleSys.ButtonEmitter(*reg);
+					//particleSys.ButtonEmitter(*reg);
+
+					// Test prepared functions for XR
+					glm::vec2 buttonPos = glm::vec2{ 640.f, 640.f };
+					glm::vec2 buttonSize = glm::uvec2{ 300.f, 200.f };
+
+
+					particleSys.ButtonEmitter_2(*reg, buttonPos, buttonSize);
 				}
 
 				// Update the emitters
