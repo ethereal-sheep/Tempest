@@ -1437,14 +1437,18 @@ namespace Tempest
 
 	void CombatModeOverlay::fight(RuntimeInstance& instance)
 	{
+		static bool display_other_end_cycle = false;
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, true))
+		// check if the other_entity has health (only other for now)
+		auto& charac = instance.ecs.get<tc::Character>(other_entity);
+
+		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, !atk_rolled))
 		{
 			// attacker roll
 			atk_rolled = true;
 		}
 
-		if (UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true, true))
+		if (UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true, !def_rolled))
 		{
 			// defender roll
 			def_rolled = true;
@@ -1483,15 +1487,128 @@ namespace Tempest
 		if (atk_rolled && def_rolled && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
 		{
 			// TODO: affect the entities
+			if (charac.get_stat(0) + charac.get_statDelta(0) <= 0)
+				display_other_end_cycle = true;
 
-			instance.selected = INVALID;
-			other_entity = INVALID;
-			battle_state = BATTLE_STATE::CURR_TURN; // temp testing
-			state = State::MENU;
+			else
+			{
+				instance.selected = INVALID;
+				other_entity = INVALID;
+				battle_state = BATTLE_STATE::CURR_TURN; // temp testing
+				state = State::MENU;
 
-			//  TODO: change to the next entity turn
-			selected_action = UNDEFINED;
-			selected_weapon = UNDEFINED;
+				//  TODO: change to the next entity turn
+				selected_action = UNDEFINED;
+				selected_weapon = UNDEFINED;
+			}
+		}
+
+		if (display_other_end_cycle)
+		{
+
+			// pop up of three ending options
+			// TODO: shift to new function
+
+			ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
+			ImGui::OpenPopup("End Unit Cycle");
+			ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+			ImGui::SetNextWindowSize(ImVec2(500, 550));
+
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
+			ImGui::PushStyleColor(ImGuiCol_PopupBg, { 0.06f,0.06f, 0.06f, 0.85f });
+
+			ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
+							   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
+
+			if (ImGui::BeginPopupModal("End Unit Cycle", NULL, flags))
+			{
+				static int end_selection = -1;
+				// background
+				ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+				ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
+				ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.5f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
+				ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+				ImVec4 textcol = { 0,0,0,1 };
+
+				// text
+				ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+				ImGui::PushFont(FONT_OPEN);
+				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), std::string{ charac.name + "'s HP has reached 0" }.c_str());
+				ImGui::PopFont();
+
+				// halftone
+				auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
+				ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
+				ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);
+
+				ImGui::BeginChild("##SimualteStuff", ImVec2{ 500,470 });
+
+				if (UI::UIButton_2("Revive with full HP", "Revive with full HP", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.35f },
+					ImVec2{ 0,0 }, FONT_PARA, end_selection == 0))
+				{
+					end_selection = 0;
+				}
+
+				if (UI::UIButton_2("Delete from map", "Delete from map", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.5f },
+					ImVec2{ 0,0 }, FONT_PARA, end_selection == 1))
+				{
+					end_selection = 1;
+				}
+
+				if (UI::UIButton_2("Ignore", "Ignore", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.65f },
+					ImVec2{ 0,0 }, FONT_PARA, end_selection == 2))
+				{
+					end_selection = 2;
+				}
+
+				ImGui::EndChild();
+
+				// check for stuff here
+				if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.9f }, { 0.f, 0.f }, FONT_PARA) && end_selection != -1)
+				{
+					switch (end_selection)
+					{
+					case 0:
+						// full health
+						charac.set_statDelta(0, 0);
+						break;
+					case 1:
+						// totally remove from map
+						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+						instance.ecs.destroy(other_entity);
+						break;
+					case 2:
+						// ignore
+						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+						break;
+					default:
+						break;
+					}
+
+					end_selection = -1;
+					display_other_end_cycle = false;
+					ImGui::CloseCurrentPopup();
+
+					// clear
+					instance.selected = INVALID;
+					other_entity = INVALID;
+					battle_state = BATTLE_STATE::CURR_TURN; // temp testing
+					state = State::MENU;
+
+					//  TODO: change to the next entity turn
+					selected_action = UNDEFINED;
+					selected_weapon = UNDEFINED;
+				}
+			}
+
+			ImGui::EndPopup();
+
+			ImGui::PopStyleVar(3);
+			ImGui::PopStyleColor(2);
 		}
 	}
 
