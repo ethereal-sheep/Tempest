@@ -53,12 +53,15 @@ struct BoneAnimation
 	std::vector<aiVectorKey> positions;
 	std::vector<aiQuatKey> rotations;
 	std::vector<aiVectorKey> sizes;
-	std::vector<float> weights;
-	std::vector<uint32_t> ids;
 
-	aiString name;
-	float ticks;
-	float duration;
+	std::vector<uint32_t> numPositions;
+	std::vector<uint32_t> numRotations;
+	std::vector<uint32_t> numScale;
+
+	std::vector<aiString> name;
+	std::vector<float> ticks;
+	std::vector<float> duration;
+	std::vector<uint32_t> channels;
 };
 
 struct Mesh
@@ -73,7 +76,11 @@ struct Mesh
 
 	std::vector<std::string> textures;
 	std::vector<Animation> animations;
-	std::vector<BoneAnimation> b_animations;
+
+	BoneAnimation b_animations;
+	std::vector<float> weights;
+	std::vector<uint32_t> ids;
+	std::vector<uint32_t> numWeights;
 
 	std::vector<aiColor3D> Diffuse;
 	std::vector<aiColor3D> Ambient;
@@ -93,7 +100,43 @@ void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform, Mesh& mes
 void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, uint32_t& offset);
 
 void ProcessKeyFrameAnimation(std::vector<Animation>& animations);
-void ProcessBoneAnimation(std::vector<BoneAnimation>& animations);
+void ProcessBoneAnimation(BoneAnimation& animations);
+
+bool WriteBones(const Mesh& m, const std::string& path);
+bool WriteToFile(const Mesh& m, const std::string& path);
+
+void ProcessMaterials(Mesh& mMesh);
+
+void ProcessBoneAnimation(BoneAnimation& animations)
+{
+	for (uint32_t i = 0; i < s_Scene->mNumAnimations; ++i)
+	{
+		aiAnimation* pAnim = s_Scene->mAnimations[i];
+
+		animations.name.push_back(pAnim->mName);
+		animations.ticks.push_back(pAnim->mTicksPerSecond);
+		animations.duration.push_back(pAnim->mDuration);
+		animations.channels.push_back(pAnim->mNumChannels);
+
+		for (uint32_t q = 0; q < pAnim->mNumChannels; ++q)
+		{
+			auto* pChannel = pAnim->mChannels[q];
+
+			animations.numPositions.push_back(pChannel->mNumPositionKeys);
+			animations.numRotations.push_back(pChannel->mNumRotationKeys);
+			animations.numScale.push_back(pChannel->mNumScalingKeys);
+
+			for (auto j = 0; j < pChannel->mNumPositionKeys; ++j)
+				animations.positions.push_back(pChannel->mPositionKeys[j]);
+
+			for (auto j = 0; j < pChannel->mNumRotationKeys; ++j)
+				animations.rotations.push_back(pChannel->mRotationKeys[j]);
+
+			for (auto j = 0; j < pChannel->mNumScalingKeys; ++j)
+				animations.sizes.push_back(pChannel->mScalingKeys[j]);
+		}
+	}
+}
 
 void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform, Mesh& mesh, uint32_t& offset)
 {
@@ -106,7 +149,20 @@ void ProcessNodeData(const aiNode* node, const aiMatrix4x4& transform, Mesh& mes
 
 void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, uint32_t& offset)
 {
-	auto ads = mesh->mName;
+	if (mesh->HasBones())
+	{
+		for (uint32_t i = 0; i < mesh->mNumBones; ++i)
+		{
+			auto weights = mesh->mBones[i]->mNumWeights;
+			m.numWeights.push_back(mesh->mBones[i]->mNumWeights);
+			for (uint32_t j = 0; j < weights; ++j)
+			{
+				m.weights.push_back(mesh->mBones[i]->mWeights[j].mWeight);
+				m.ids.push_back(mesh->mBones[i]->mWeights[j].mVertexId);
+			}
+		}
+	}
+
 	// Store vertices, normals and uv
 	const aiVector3D zero3D(0.f, 0.f, 0.f);
 	for (size_t i = 0; i < mesh->mNumVertices; ++i)
@@ -120,7 +176,6 @@ void ProcessMeshData(const aiMesh* mesh, const aiMatrix4x4& transform, Mesh& m, 
 		m.norm.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));
 		m.tex.push_back(glm::vec2(pTexCoord->x, pTexCoord->y));
 
-		//std::cout << "Normals: " << pNormal->x << ", " << pNormal->y << ", " << pNormal->z << std::endl;
 	}
 	m.nvertices.push_back(mesh->mNumVertices);
 
@@ -397,6 +452,315 @@ bool WriteToFile(const Mesh& m, const std::string& path)
 	return true;
 }
 
+bool WriteBones(const Mesh& m, const std::string& path)
+{
+	std::filesystem::path p{ path };
+	auto name = p.replace_extension(".a");
+	std::ofstream file{ name.string() };
+	if (!file.is_open())
+	{
+		std::cout << "Failed to Open File" << std::endl;
+		return false;
+	}
+
+	else
+	{
+		for (auto& i : m.pos)
+		{
+			std::stringstream ss;
+			ss << "v ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.norm)
+		{
+			std::stringstream ss;
+			ss << "n ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.tex)
+		{
+			std::stringstream ss;
+			ss << "t ";
+			ss << i.x << " ";
+			ss << i.y;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.indices)
+		{
+			std::stringstream ss;
+			ss << "f ";
+			ss << i.x << " ";
+			ss << i.y << " ";
+			ss << i.z;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.textures)
+		{
+			std::stringstream ss;
+			ss << "p ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.nvertices)
+		{
+			std::stringstream ss;
+			ss << "m ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.nfaces)
+		{
+			std::stringstream ss;
+			ss << "w ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.matindex)
+		{
+			std::stringstream ss;
+			ss << "g ";
+			ss << i;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Ambient)
+		{
+			std::stringstream ss;
+			ss << "Ambient ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Diffuse)
+		{
+			std::stringstream ss;
+			ss << "Diffuse ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Specular)
+		{
+			std::stringstream ss;
+			ss << "Specular ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Emissive)
+		{
+			std::stringstream ss;
+			ss << "Emissive ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Transparent)
+		{
+			std::stringstream ss;
+			ss << "Transparent ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		for (auto& i : m.Reflective)
+		{
+			std::stringstream ss;
+
+			ss << "Reflective ";
+			ss << i.r << " ";
+			ss << i.g << " ";
+			ss << i.b;
+
+			file << ss.str() << "\n";
+		}
+
+		std::stringstream ss;
+
+		ss << "Refraction ";
+		ss << m.Refraction;
+
+		file << ss.str() << "\n";
+
+		ss.str(std::string());
+
+		ss << "Reflection ";
+		ss << m.Reflection;
+
+		file << ss.str() << "\n";
+
+		ss.str(std::string());
+
+		ss << "Shininess ";
+		ss << m.Shininess;
+
+		file << ss.str() << "\n";
+
+		ss.str(std::string());
+
+		ss << "ShininessStrength ";
+		ss << m.ShininessStrength;
+
+		file << ss.str() << "\n";
+
+		ss.str(std::string());
+
+		ss << "Opacity ";
+		ss << m.Opacity;
+
+		file << ss.str() << "\n";
+
+		ss.str(std::string());
+
+		for (auto& i : m.b_animations.name)
+		{
+			ss << "aa ";
+			ss << i.C_Str();
+			ss << "\n";
+		}
+		
+		for (auto& i : m.b_animations.ticks)
+		{
+			ss << "ticks ";
+			ss << i;
+			ss << "\n";
+		}
+		
+
+		for (auto& i : m.b_animations.duration)
+		{
+			ss << "duration ";
+			ss << i;
+			ss << "\n";
+		}
+		
+
+		for (auto& i : m.b_animations.positions)
+		{
+			ss << "ap ";
+			ss << i.mValue.x << " ";
+			ss << i.mValue.y << " ";
+			ss << i.mValue.z << " ";
+			ss << "\n";
+		}
+
+		for (auto& i : m.b_animations.rotations)
+		{
+			ss << "ar ";
+			ss << i.mValue.x << " ";
+			ss << i.mValue.y << " ";
+			ss << i.mValue.z << " ";
+			ss << i.mValue.w << " ";
+			ss << "\n";
+		}
+
+		for (auto& i : m.b_animations.sizes)
+		{
+			ss << "as ";
+			ss << i.mValue.x << " ";
+			ss << i.mValue.y << " ";
+			ss << i.mValue.z << " ";
+			ss << "\n";
+		}
+
+		for (auto& i : m.b_animations.sizes)
+		{
+			ss << "at ";
+			ss << i.mTime;
+			ss << "\n";
+		}
+
+		for (auto& i : m.b_animations.numRotations)
+		{
+			ss << "nr ";
+			ss << i;
+			ss << "\n";
+		}
+
+		for (auto& i : m.b_animations.numScale)
+		{
+			ss << "ns ";
+			ss << i;
+			ss << "\n";
+		}
+
+		for (auto& i : m.b_animations.channels)
+		{
+			ss << "nc ";
+			ss << i;
+			ss << "\n";
+		}
+
+		for (auto& i : m.weights)
+		{
+			ss << "weights ";
+			ss << i;
+			ss << "\n";
+		}
+
+		for (auto& i : m.ids)
+		{
+			ss << "id ";
+			ss << i;
+			ss << "\n";
+		}
+
+		for (auto& i : m.b_animations.numPositions)
+		{
+			ss << "np ";
+			ss << i;
+			ss << "\n";
+		}
+
+		for (auto& i : m.numWeights)
+		{
+			ss << "nw ";
+			ss << i;
+			ss << "\n";
+		}
+
+		file << ss.str() << "\n";
+	}
+
+	return true;
+}
+
 void ProcessKeyFrameAnimation(std::vector<Animation>& animations)
 {
 	for (uint32_t i = 0; i < s_Scene->mNumAnimations; ++i)
@@ -428,6 +792,63 @@ void ProcessKeyFrameAnimation(std::vector<Animation>& animations)
 
 }
 
+void ProcessMaterials(Mesh& mMesh)
+{
+	for (uint32_t i = 0; i < s_Scene->mNumMaterials; ++i)
+	{
+		aiString atex;
+
+		const auto* pMaterial = s_Scene->mMaterials[i];
+
+		aiColor3D tDiffuse;
+		aiColor3D tAmbient;
+		aiColor3D tSpecular;
+		aiColor3D tEmissive;
+		aiColor3D tTransparent;
+		aiColor3D tReflective;
+
+		pMaterial->Get(AI_MATKEY_REFRACTI, mMesh.Refraction);
+		pMaterial->Get(AI_MATKEY_REFLECTIVITY, mMesh.Reflection);
+		pMaterial->Get(AI_MATKEY_SHININESS, mMesh.Shininess);
+		pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, mMesh.ShininessStrength);
+		pMaterial->Get(AI_MATKEY_OPACITY, mMesh.Opacity);
+
+		pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, tDiffuse);
+		pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, tAmbient);
+		pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, tSpecular);
+		pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, tEmissive);
+		pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, tTransparent);
+		pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, tReflective);
+
+		pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, 0), atex);
+
+		if (atex.length)
+		{
+			std::string full_path{ atex.data };
+			std::string lower_path{ atex.data };
+			std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+				[](char c) { return (char)std::tolower((int)c); });
+
+			auto check = lower_path.find("models");
+			if (check == std::string::npos) continue;
+
+			std::string tex_path = full_path.substr(check, full_path.length());
+			std::filesystem::path es{ tex_path };
+			es.replace_extension(".dds");
+			mMesh.textures.push_back(es.string());
+		}
+		else
+			mMesh.textures.push_back("NULL");
+
+		mMesh.Diffuse.push_back(tDiffuse);
+		mMesh.Ambient.push_back(tAmbient);
+		mMesh.Emissive.push_back(tEmissive);
+		mMesh.Specular.push_back(tSpecular);
+		mMesh.Reflective.push_back(tReflective);
+		mMesh.Transparent.push_back(tTransparent);
+	}
+}
+
 bool LoadModel(const std::string& path)
 {
 	s_Scene = s_Importer.ReadFile(path,
@@ -445,72 +866,24 @@ bool LoadModel(const std::string& path)
 	{
 		uint32_t offset = 0;
 		Mesh mMesh;
+
 		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
 		ProcessBoneAnimation(mMesh.b_animations);
+		ProcessMaterials(mMesh);
+
+		if (!WriteBones(mMesh, path))
+			return false;
 	}
 	
 	else                                            // KeyFrame Animation, Normal Model Loading
 	{
 		uint32_t offset = 0;
 		Mesh mMesh;
+
 		ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
-
 		ProcessKeyFrameAnimation(mMesh.animations);
-
-		for (uint32_t i = 0; i < s_Scene->mNumMaterials; ++i)
-		{
-			aiString atex;
-
-			const auto* pMaterial = s_Scene->mMaterials[i];
-
-			aiColor3D tDiffuse;
-			aiColor3D tAmbient;
-			aiColor3D tSpecular;
-			aiColor3D tEmissive;
-			aiColor3D tTransparent;
-			aiColor3D tReflective;
-
-			pMaterial->Get(AI_MATKEY_REFRACTI, mMesh.Refraction);
-			pMaterial->Get(AI_MATKEY_REFLECTIVITY, mMesh.Reflection);
-			pMaterial->Get(AI_MATKEY_SHININESS, mMesh.Shininess);
-			pMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, mMesh.ShininessStrength);
-			pMaterial->Get(AI_MATKEY_OPACITY, mMesh.Opacity);
-
-			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, tDiffuse);
-			pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, tAmbient);
-			pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, tSpecular);
-			pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, tEmissive);
-			pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, tTransparent);
-			pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, tReflective);
-
-			pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, 0), atex);
-
-			if (atex.length)
-			{
-				std::string full_path{ atex.data };
-				std::string lower_path{ atex.data };
-				std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
-					[](char c) { return (char)std::tolower((int)c); });
-
-				auto check = lower_path.find("models");
-				if (check == std::string::npos) continue;
-
-				std::string tex_path = full_path.substr(check, full_path.length());
-				std::filesystem::path es{ tex_path };
-				es.replace_extension(".dds");
-				mMesh.textures.push_back(es.string());
-			}
-			else
-				mMesh.textures.push_back("NULL");
-
-			mMesh.Diffuse.push_back(tDiffuse);
-			mMesh.Ambient.push_back(tAmbient);
-			mMesh.Emissive.push_back(tEmissive);
-			mMesh.Specular.push_back(tSpecular);
-			mMesh.Reflective.push_back(tReflective);
-			mMesh.Transparent.push_back(tTransparent);
-		}
-
+		ProcessMaterials(mMesh);
+		
 		if (!WriteToFile(mMesh, path))
 			return false;
 	}

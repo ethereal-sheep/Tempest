@@ -32,7 +32,7 @@ namespace Tempest
     public:
         ModelPBR();
         ~ModelPBR();
-        void loadModel(std::string file);
+        void loadModel(std::string file, bool bones = false);
         void Draw();
 
         std::vector<MeshPBR> meshes;

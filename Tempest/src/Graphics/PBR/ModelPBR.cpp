@@ -29,7 +29,7 @@ namespace Tempest
     }
 
 
-    void ModelPBR::loadModel(std::string file)
+    void ModelPBR::loadModel(std::string file, bool bones)
     {
 		std::filesystem::path asd{ file };
 		//Assimp::Importer importer;
@@ -54,6 +54,33 @@ namespace Tempest
 			this->processNode(scene->mRootNode, scene);
 		}
 
+		else if (bones)
+		{
+			std::vector<glm::vec3> pos;			// v
+			std::vector<glm::vec3> norm;		// n
+			std::vector<glm::vec2> tex;			// t
+			std::vector<glm::ivec3> faces;		// f
+			std::vector<std::string> textures;	// p
+			std::vector<uint32_t> sizes;		// m
+			std::vector<uint32_t> sides;		// w
+			// mats								// g
+
+			std::vector<std::string> names;		// aa
+			std::vector<uint32_t> ticks;		// ticks
+			std::vector<float> duration;		// duration
+			std::vector<glm::vec3> poskeys;		// ap
+			std::vector<glm::quat> rotkeys;		// ar
+			std::vector<glm::vec3> scakeys;		// as
+			std::vector<float> timestamps;		// at
+			std::vector<float> channels;		// nc
+			std::vector<uint32_t> numPos;		// np
+			std::vector<uint32_t> numRot;		// nr
+			std::vector<uint32_t> numSca;		// ns
+			std::vector<float> weights;			// weights
+			std::vector<uint32_t> numWeights;	// nw
+			std::vector<uint32_t> ids;			// id
+		}
+
 		else
 		{
 			std::vector<glm::vec3> pos;
@@ -63,6 +90,7 @@ namespace Tempest
 			std::vector<std::string> textures;
 			std::vector<uint32_t> sizes;
 			std::vector<uint32_t> sides;
+
 
 			std::string temp_x, temp_y, temp_z;
 
