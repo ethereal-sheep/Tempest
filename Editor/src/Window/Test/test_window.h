@@ -21,7 +21,8 @@ namespace Tempest
 		{
 			return "test_window";
 		}
-
+		std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(2);
+		interpolater<float> inter{};
 		/*bool button(
 			const string& default_text,
 			const string& hover_text,
@@ -34,9 +35,16 @@ namespace Tempest
 
 		}*/
 
-
 		void show(Instance& instance [[maybe_unused]] ) override
 		{
+			{
+				float dt = ImGui::GetIO().DeltaTime;
+				for (auto& i : inter_nest)
+					i.update(dt);
+
+				inter.update(dt);
+			}
+
 			if (ImGui::Begin(window_name(), &visible, window_flags))
 			{
 				string unselected = "Unselected";
@@ -80,6 +88,45 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
 				}
+
+				// funky stuff put here first cuz laze, mirgrating it out to somewhere else
+				// i'll just assume that it's max 2 numbers
+				static bool startAnim = false;
+				static int randNum = 0;
+				static string numToString = "";
+				if (ImGui::Button("ANIMATE NUM") && !startAnim)
+				{
+					startAnim = true;
+					randNum = std::rand() % 100;
+					numToString = std::to_string(randNum);
+					inter_nest[0].start(1.5f, 1.0f, .3f, 0.f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					inter_nest[1].start(1.5f, 1.0f, .3f, 0.1f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+				}
+
+				ImGui::SameLine();
+				if (ImGui::BeginChild("##SomeWeirdTest", ImVec2{ 300.0f,200.0f }, true))
+				{
+					ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2{ 100.0f, 50.0f });
+					for (int i = 0; i < numToString.size(); i++)
+					{
+						FONT_HEAD->Scale = inter_nest[i].get();
+						ImGui::PushFont(FONT_HEAD);
+						ImGui::Text(std::string{ numToString[i] }.c_str());
+						ImGui::PopFont();
+						ImGui::SameLine();
+					}
+
+					if (!numToString.empty() && inter_nest[numToString.size() - 1].is_finished())
+						startAnim = false;
+				}
+				ImGui::EndChild();
+				FONT_HEAD->Scale = 1.0f; // rest to original scale
+
+
 				UI::UISelectable("TEST", false);
 				
 				
