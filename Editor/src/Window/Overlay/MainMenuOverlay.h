@@ -65,6 +65,7 @@ namespace Tempest
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
         string SelectedMap = "";
+        string NewMapName = "Map";
         std::vector<Entity> SelectedSequences; // will this be an entity id?
         std::vector<bool> OkayConRes = std::vector(3, false);
         std::vector<std::vector<std::pair<Entity, string>>> ConResSequences = std::vector(3, std::vector<std::pair<Entity, string>>());
