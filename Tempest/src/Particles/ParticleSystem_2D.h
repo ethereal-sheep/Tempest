@@ -38,16 +38,23 @@ struct ParticleSystem_2D
 		return Handler(emitter); // Weak ptr, refer to Handler
 	}
 
-	void Update(const float dt);
+	//Emitter& Register(glm::vec2 pos)
+	//{
+	//	auto emitter = std::make_shared<Emitter>();
+	//	emitter->m_GM.m_position = pos;
+	//	m_emitters.push_back(emitter);
+
+	//	return *emitter.get(); // Weak ptr, refer to Handler
+	//}
+
+	void Update();
 	auto get_emitters() const
 	{
 		return m_emitters;
 	}
 
 	// Not supposed to be here - NOT TO BE SHARED POINTER
-	void ButtonEmitter(Emitter& emitter);
-
-	void ButtonEmitter_2(Emitter& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	void ButtonEmitter(glm::vec2 topleftPos, glm::vec2 buttonSize);
 
 private:
 	std::vector <std::shared_ptr<Emitter>> m_emitters;

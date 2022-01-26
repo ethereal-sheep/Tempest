@@ -7,8 +7,8 @@
 #include "Particles.h"
 
 #include <glm.hpp> // glm::vec2, glm::vec4
-#include <queue>
-#include <vector>
+//#include <queue>
+//#include <vector>
 
 struct MainModule
 {

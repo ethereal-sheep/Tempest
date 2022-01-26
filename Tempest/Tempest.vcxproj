@@ -239,6 +239,7 @@
     <ClCompile Include="src\Particles\Particle.cpp" />
     <ClCompile Include="src\Particles\ParticleSystem_2D.cpp" />
     <ClCompile Include="src\Particles\Random.cpp" />
+    <ClCompile Include="src\Particles\WaypointEmitter.cpp" />
     <ClCompile Include="src\Physics\PhysicsObject.cpp" />
     <ClCompile Include="src\Physics\ShapeFactory\ShapeFactory.cpp" />
     <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp" />
@@ -345,6 +346,7 @@
     <ClInclude Include="src\Particles\Particles.h" />
     <ClInclude Include="src\Particles\ParticleSystem_2D.h" />
     <ClInclude Include="src\Particles\Random.h" />
+    <ClInclude Include="src\Particles\WaypointEmitter.h" />
     <ClInclude Include="src\Physics\Filters\Filters.h" />
     <ClInclude Include="src\Physics\Physics.h" />
     <ClInclude Include="src\Physics\PhysicsObject.h" />

@@ -30,10 +30,10 @@ struct Emitter
 	bool m_recalculateVelocity;
 
 	Emitter();
-	void Update(const float dt);
+	void Update();
 
-private:
-	void SelfUpdate(const float dt);
+protected:
+	virtual void SelfUpdate();
 	void Emit(const int particleAmount);
 };
 

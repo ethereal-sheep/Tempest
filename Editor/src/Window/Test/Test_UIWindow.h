@@ -172,57 +172,31 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
+					//auto& reg = particleSys.Register(tempVec);
 					reg->m_RM.m_type = ParticleType::Circle;
 					reg->m_GM.m_velocity.x = -500.0f;
 				}
 				if (ImGui::IsMouseDown(1))
 				{
-					glm::vec2 tempVec;
-					tempVec.x = ImGui::GetMousePos().x;
-					tempVec.y = ImGui::GetMousePos().y;
-
-					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-
-			/*		reg->m_PA.m_type = ParticleType::Square;
-					reg->m_velocity.x = -500.0f;
-					reg->m_lifeTime = 1000.0f;
-					glm::vec2 wayPoint_1 = tempVec;
-					wayPoint_1.x += 300;
-					glm::vec2 wayPoint_2 = wayPoint_1;
-					wayPoint_2.y -= 50;
-					glm::vec2 wayPoint_3 = wayPoint_2;
-					wayPoint_3.x -= 300;
-					glm::vec2 wayPoint_4 = wayPoint_3;
-					wayPoint_4.y += 50;
-					reg->m_wayPoints.push_back(wayPoint_1);
-					reg->m_wayPoints.push_back(wayPoint_2);
-					reg->m_wayPoints.push_back(wayPoint_3);
-					reg->m_wayPoints.push_back(wayPoint_4);*/
-
-					//particleSys.ButtonEmitter(*reg);
+					//glm::vec2 tempVec;
+					//tempVec.x = ImGui::GetMousePos().x;
+					//tempVec.y = ImGui::GetMousePos().y;
 
 					// Test prepared functions for XR
-					glm::vec2 buttonPos = glm::vec2{ 640.f, 640.f };
-					
-					//glm::vec2 buttonSize = glm::uvec2{ 300.f, 200.f };
-					//particleSys.ButtonEmitter_2(*reg, buttonPos, buttonSize);
-
-					particleSys.ButtonEmitter_2(*reg, real_mousePosition, real_buttonSize);
+					particleSys.ButtonEmitter(real_mousePosition, real_buttonSize);
 				}
 
 				// Update the emitters
-				for (auto& emitter : particleSys.get_emitters())
+				for (auto& emitter : particleSys.get_emitters()) 
 				{
-					emitter->Update(0.016f);
+					emitter->Update();
 
 					// Render the particle
 					if(emitter->m_GM.m_active)
-						for (auto& particle : emitter->m_particles)
+						for (auto& particle : emitter->m_particles) 
 						{
-							if (particle.m_isActive)
+							if (particle.m_isActive) 
 							{
-								//LOG_INFO("Draw Particle");
-
 								ImVec2 pos;
 								pos.x = particle.m_position.x;
 								pos.y = particle.m_position.y;
@@ -239,22 +213,6 @@ namespace Tempest
 
 								min.y = pos.y - particle.m_size * 0.5f;
 								max.y = pos.y + particle.m_size * 0.5f;
-
-								/*LOG_INFO("Draw Min X");
-								LOG_INFO("Draw Max X");
-								LOG_INFO(min.x);
-								LOG_INFO(max.x);
-
-								LOG_INFO("Draw Min Y");
-								LOG_INFO("Draw Max Y");
-								LOG_INFO(min.y);
-								LOG_INFO(max.y);
-
-								LOG_INFO("Draw Position X");
-								LOG_INFO(pos.x);
-
-								LOG_INFO("Draw Position Y");
-								LOG_INFO(pos.y);*/
 
 								if (particle.m_type == ParticleType::Circle)
 									drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
