@@ -172,8 +172,8 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					reg->m_PA.m_type = ParticleType::Circle;
-					reg->m_velocity.x = -500.0f;
+					reg->m_RM.m_type = ParticleType::Circle;
+					reg->m_GM.m_velocity.x = -500.0f;
 				}
 				if (ImGui::IsMouseDown(1))
 				{
@@ -216,7 +216,7 @@ namespace Tempest
 					emitter->Update(0.016f);
 
 					// Render the particle
-					if(emitter->m_active)
+					if(emitter->m_GM.m_active)
 						for (auto& particle : emitter->m_particles)
 						{
 							if (particle.m_isActive)

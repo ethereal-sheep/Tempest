@@ -32,7 +32,7 @@ struct ParticleSystem_2D
 	Handler Register(glm::vec2 pos)
 	{
 		auto emitter = std::make_shared<Emitter>();
-		emitter->m_position = pos;
+		emitter->m_GM.m_position = pos;
 		m_emitters.push_back(emitter);
 
 		return Handler(emitter); // Weak ptr, refer to Handler

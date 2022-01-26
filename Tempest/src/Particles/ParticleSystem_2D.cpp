@@ -5,7 +5,7 @@ void ParticleSystem_2D::Update(const float dt)
 {
 	// Update all the emitters here
 	for (auto& emitter : m_emitters)
-		if (emitter->m_active)
+		if (emitter->m_GM.m_active)
 		{
 			emitter->Update(dt);
 		}
@@ -14,36 +14,36 @@ void ParticleSystem_2D::Update(const float dt)
 void ParticleSystem_2D::ButtonEmitter(Emitter& emitter)
 {
 	// Emitter values - Without consideration for default ctor values
-	emitter.m_velocity.x = -500.0f;
-	emitter.m_lifeTime = 1000.0f;
-	emitter.m_active = true;
-	emitter.m_preWarm = true;
+	emitter.m_GM.m_velocity.x = -500.0f;
+	emitter.m_MM.m_duration = 1000.0f;
+	emitter.m_GM.m_active = true;
+	//emitter.m_preWarm = true;
 
-	emitter.m_spawnTimeInterval = 0.080f; // 5x slower of dt
-	emitter.m_countTimer = emitter.m_spawnTimeInterval;
-	emitter.m_spawnCount = 1;
-	emitter.m_maxParticles = 1000;
+	emitter.m_EM.m_spawnTimeInterval = 0.080f; // 5x slower of dt
+	emitter.m_EM.m_spawnCountTimer = emitter.m_EM.m_spawnTimeInterval;
+	emitter.m_EM.m_rateOverTime = 1;
+	emitter.m_MM.m_maxParticles = 1000;
 
 	emitter.m_wayPointIndex = 0;
 	emitter.m_recalculateVelocity = true;
 
 	// Particle Architype values - without consideration for default ctor
-	emitter.m_PA.m_startVelocity = glm::vec2{ 0.f, 0.f };
-	emitter.m_PA.m_endVelocity = glm::vec2{ 0.f, 0.f };
-	emitter.m_PA.m_velocityVariation = glm::vec2{ 3.0f, 1.0f };
+	emitter.m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.m_PAM.m_velocityVariation = glm::vec2{ 3.0f, 1.0f };
 	
-	emitter.m_PA.m_sizeBegin = 20.0f;
-	emitter.m_PA.m_sizeEnd = 0.0f;
-	emitter.m_PA.m_sizeVariation = 0.3f;
+	emitter.m_PAM.m_sizeBegin = 20.0f;
+	emitter.m_PAM.m_sizeEnd = 0.0f;
+	emitter.m_PAM.m_sizeVariation = 0.3f;
 
-	emitter.m_PA.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	emitter.m_PA.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
+	emitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
 
-	emitter.m_PA.m_lifeTime = 2.0f;
+	emitter.m_PAM.m_lifeTime= 2.0f;
 
-	emitter.m_PA.m_type = ParticleType::Square;
+	emitter.m_RM.m_type = ParticleType::Square;
 
-	glm::vec2 wayPoint_1 = emitter.m_position;
+	glm::vec2 wayPoint_1 = emitter.m_GM.m_position;
 	wayPoint_1.x += 300;
 
 	glm::vec2 wayPoint_2 = wayPoint_1;
@@ -64,41 +64,40 @@ void ParticleSystem_2D::ButtonEmitter(Emitter& emitter)
 void ParticleSystem_2D::ButtonEmitter_2(Emitter& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
 	// Emitter values - Without consideration for default ctor values
-	emitter.m_velocity.x = -500.0f;
-	emitter.m_lifeTime = 1000.0f;
-	emitter.m_active = true;
-	emitter.m_preWarm = true;
+	emitter.m_GM.m_velocity.x = -500.0f;
+	emitter.m_MM.m_duration = 1000.0f;
+	emitter.m_GM.m_active = true;
+	//emitter.m_preWarm = true;
 
-	emitter.m_spawnTimeInterval = 0.080f; // 5x slower of dt
-	emitter.m_countTimer = emitter.m_spawnTimeInterval;
-	emitter.m_spawnCount = 1;
-	emitter.m_maxParticles = 1000;
+	emitter.m_EM.m_spawnTimeInterval = 0.080f; // 5x slower of dt
+	emitter.m_EM.m_spawnCountTimer = emitter.m_EM.m_spawnTimeInterval;
+	emitter.m_EM.m_rateOverTime = 1;
+	emitter.m_MM.m_maxParticles = 1000;
 
 	emitter.m_wayPointIndex = 0;
 	emitter.m_recalculateVelocity = true;
 
 	// Particle Architype values - without consideration for default ctor
-	emitter.m_PA.m_startVelocity = glm::vec2{ 0.f, 0.f };
-	emitter.m_PA.m_endVelocity = glm::vec2{ 0.f, 0.f };
-	emitter.m_PA.m_velocityVariation = glm::vec2{ 3.0f, 1.0f };
+	emitter.m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.m_PAM.m_velocityVariation = glm::vec2{ 3.0f, 1.0f };
 
-	emitter.m_PA.m_sizeBegin = 20.0f;
-	emitter.m_PA.m_sizeEnd = 0.0f;
-	emitter.m_PA.m_sizeVariation = 0.3f;
+	emitter.m_PAM.m_sizeBegin = 20.0f;
+	emitter.m_PAM.m_sizeEnd = 0.0f;
+	emitter.m_PAM.m_sizeVariation = 0.3f;
 
-	emitter.m_PA.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	emitter.m_PA.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
+	emitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
 
-	emitter.m_PA.m_lifeTime = 2.0f;
-	emitter.m_PA.m_type = ParticleType::Square;
-
+	emitter.m_PAM.m_lifeTime = 2.0f;
+	emitter.m_RM.m_type = ParticleType::Square;
 
 	// Center position of the button
-	emitter.m_position = topLeftPos;
+	emitter.m_GM.m_position = topLeftPos;
 
 	// Shift to one corner of the button - Left Bottom
-	//emitter.m_position.x -= buttonSize.x * 0.5f;
-	//emitter.m_position.y -= buttonSize.y * 0.5f;
+	//emitter.m_GM.m_position.x -= buttonSize.x * 0.5f;
+	//emitter.m_GM.m_position.y -= buttonSize.y * 0.5f;
 
 	// Prepare the waypoints
 	glm::vec2 wp_LeftBottom = topLeftPos;

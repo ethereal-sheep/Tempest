@@ -84,6 +84,7 @@
     <ClCompile Include="src\Particles\Random.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
     <ClCompile Include="src\Particles\Emitter.cpp" />
+    <ClCompile Include="src\Particles\EmissionModules.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="src\Util\interpolater.h" />
     <ClInclude Include="src\Particles\Particles.h" />
     <ClInclude Include="src\Particles\Emitter.h" />
+    <ClInclude Include="src\Particles\EmissionModules.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
