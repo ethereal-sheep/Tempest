@@ -32,6 +32,7 @@
 #include "Graphics/PBR/MaterialPBR.h"
 
 #include "Graphics/PBR/ModelPBR.h"
+
 /**
  * @brief 
  * @param RenderSystem Umbrella interface  
@@ -112,7 +113,7 @@ namespace Tempest
         GLuint saoFBO, saoBlurFBO, saoBuffer, saoBlurBuffer;
         GLuint postprocessFBO, postprocessBuffer;
         GLuint envToCubeFBO, irradianceFBO, prefilterFBO, brdfLUTFBO, envToCubeRBO, irradianceRBO, prefilterRBO, brdfLUTRBO;
-
+        GLuint gBuffer2, gBuffer2t;
         
         GLint gBufferView = 1;     // To see the different buffers
         GLint tonemappingMode = 2; // Tonemapping types 
@@ -156,6 +157,9 @@ namespace Tempest
 
         bool AAgridShow = true;
         bool TestPBR = false;
+        bool USO = false;
+        //bool captured = false;
+        //vec2 vp_size = vec2(0.f);
         glm::vec4 clearColor{0.4f, 0.5f, 0.6f, 1.0f};
 
 
@@ -199,6 +203,8 @@ namespace Tempest
 
         uint32_t getHeight();
         uint32_t getWidth();
+
+        unsigned char* USObuffer = new unsigned char[1600 * 900 * 4];
 
         void LoadTextures();
 
