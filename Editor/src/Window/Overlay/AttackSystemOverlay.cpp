@@ -462,12 +462,7 @@ namespace Tempest
 
 			update_create(g);
 			update_delete(g);
-			draw_context(g, instance);
 
-
-			// context
-			// ---------
-			// ---------
 
 
 			// draw nodes
@@ -488,6 +483,11 @@ namespace Tempest
 
 				draw_link(link_id, from, to, pin->get_type());
 			}
+
+			// context
+			// ---------
+			draw_context(g, instance);
+			// ---------
 			// ---------
 			ax::NodeEditor::End();
 			// -----------------------------------------------------------------
@@ -903,6 +903,7 @@ namespace Tempest
 
 
 		ax::NodeEditor::Resume();
+
 	}
 
 	void AttackSystemOverlay::draw_node_context(graph& g, Instance& , ax::NodeEditor::NodeId contextNodeId)
@@ -997,6 +998,13 @@ namespace Tempest
 			else
 			{
 				ImGui::Text("Unknown link: %u", linkid);
+			}
+			ImGui::Separator();
+			if (ImGui::MenuItem("Flow"))
+			{
+				//ax::NodeEditor::Resume();
+				ax::NodeEditor::Flow(contextLinkId);
+				//ax::NodeEditor::Suspend();
 			}
 			ImGui::Separator();
 

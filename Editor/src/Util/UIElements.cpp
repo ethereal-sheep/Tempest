@@ -1087,7 +1087,7 @@ namespace Tempest::UI
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1135,7 +1135,7 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1204,7 +1204,7 @@ namespace Tempest::UI
 			if (hovered && ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1248,7 +1248,7 @@ namespace Tempest::UI
 			if (ImGui::IsMouseClicked(0))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				return true;
 			}
 		}
@@ -1339,7 +1339,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1388,7 +1388,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 
@@ -1489,7 +1489,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1538,7 +1538,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 
@@ -1643,7 +1643,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		else if (!ImGui::IsItemHovered())
@@ -1692,7 +1692,7 @@ namespace Tempest::UI
 			{
 				res = true;
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 
@@ -2093,7 +2093,7 @@ namespace Tempest::UI
 				res = true;
 
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 		}
 		if (selected)
@@ -2174,7 +2174,7 @@ namespace Tempest::UI
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -2208,7 +2208,7 @@ namespace Tempest::UI
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -2237,7 +2237,7 @@ namespace Tempest::UI
 			if (ImGui::Button(string(ICON_FA_TRASH + id).c_str()))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 				ImGui::PopStyleVar();
 				return{ false, true };
 			}
@@ -3062,7 +3062,7 @@ namespace Tempest::UI
 		if (ImGui::Button((string(ICON_FA_TRASH) + label).c_str()))
 		{
 			AudioEngine ae;
-			ae.Play("Sounds2D/DeleteObject.wav", "sfx_bus");
+			ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 			//ImGui::PopStyleVar();
 			remove = true;
 		}
@@ -3261,7 +3261,7 @@ namespace Tempest::UI
 		if (pressed)
 		{
 			AudioEngine ae;
-			ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+			ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 		}
 
 		return pressed;
@@ -3355,7 +3355,7 @@ namespace Tempest::UI
 		if (pressed)
 		{
 			AudioEngine ae;
-			ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+			ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 		}
 
 		return pressed;
@@ -3698,6 +3698,55 @@ namespace Tempest::UI
 		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
 		ImGui::PopFont();
 	}
+	void TutArea(ImVec2 pos, ImVec2 size)
+	{
+		
+		auto drawlist = ImGui::GetForegroundDrawList();
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImVec2 min = pos;
+		ImVec2 max = { min.x + size.x, min.y + size.y };
+		auto tex = tex_map["Assets/MIBG.dds"];
+		auto& io = ImGui::GetIO();
+		ImRect TopBox = { {0.f,0.f}, {viewport->Size.x , min.y} };
+		ImRect RightBox = { {max.x ,min.y}, {viewport->Size.x , viewport->Size.y} };
+		ImRect BtmBox = { {0.f , max.y}, {viewport->Size.x - RightBox.GetWidth() , viewport->Size.y} };
+		ImRect LeftBox = { {0.f ,min.y}, {min.x , max.y} };
+		ImVec4 col = { 0,0,0,0.7f };
+		int window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
 
+		/*ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
+		ImGui::SetNextWindowPos(TopBox.Min);
+		ImGui::SetNextWindowSize({ TopBox.GetWidth(), TopBox.GetHeight() });
+		if (ImGui::Begin("top", nullptr, window_flags)){} ImGui::End();
+		
+		ImGui::SetNextWindowPos(RightBox.Min);
+		ImGui::SetNextWindowSize({ RightBox.GetWidth(), RightBox.GetHeight() });
+		if (ImGui::Begin("right", nullptr, window_flags)) {} ImGui::End();
+
+		ImGui::SetNextWindowPos(BtmBox.Min);
+		ImGui::SetNextWindowSize({ BtmBox.GetWidth(), BtmBox.GetHeight() });
+		if (ImGui::Begin("btm", nullptr, window_flags)) {} ImGui::End();
+
+		ImGui::SetNextWindowPos(LeftBox.Min);
+		ImGui::SetNextWindowSize({ LeftBox.GetWidth(), LeftBox.GetHeight() });
+		if (ImGui::Begin("left", nullptr, window_flags)) {} ImGui::End();
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor();
+
+		ImGui::SetWindowFocus("top");
+		ImGui::SetWindowFocus("right");
+		ImGui::SetWindowFocus("btm");
+		ImGui::SetWindowFocus("left");*/
+		
+		drawlist->AddRectFilled(TopBox.Min, TopBox.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(RightBox.Min, RightBox.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(BtmBox.Min, BtmBox.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(LeftBox.Min, LeftBox.Max, ImGui::GetColorU32(col));
+		drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
+
+		
+	}
 }
 
