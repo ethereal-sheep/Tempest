@@ -192,9 +192,18 @@ namespace Tempest
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.12f, viewport->Size.y * 0.15f });
 					auto UnitImg = tex_map["Assets/UnitIdle.dds"];
+					if (ImGui::BeginChild("RenderUnit##", ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+					{
 					const ImVec4 color{ cs->color.x, cs->color.y, cs->color.z, 1 };
-					ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
+					//ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
+					ImGuiViewport* viewport = ImGui::GetMainViewport();
+					vec2 size = vec2(viewport->Size.x, viewport->Size.y);
+					ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0, 1), ImVec2(1, 0));
+					//ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().USObuffer), ImVec2(Service<RenderSystem>::Get().getWidth(), Service<RenderSystem>::Get().getHeight()), ImVec2(0, .2), ImVec2(.2, 0));
 
+					}
+					ImGui::EndChild();
+					
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.33f, viewport->Size.y * 0.85f });
 					ImGui::ColorEdit4("##colorbuttonunit", glm::value_ptr(cs->color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
 				}
@@ -277,12 +286,29 @@ namespace Tempest
 				//{
 					Service<EventManager>::Get().instant_dispatch<DefineStatsTrigger>();
 				}
-				
 			}
 			
 			ImGui::PopStyleVar();
 			ImGui::End();
+			
+			//ImGui::Begin("GameWindow", true);
+			//{
+			//	// Using a Child allow to fill all the space of the window.
+			//	// It also alows customization
+			//	ImGui::BeginChild("GameRender");
+			//	// Get the size of the child (i.e. the whole draw size of the windows).
+			//	ImVec2 wsize = ImGui::GetWindowSize();
+			//	// Because I use the texture from OpenGL, I need to invert the V from the UV.
+			//	ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().gBuffer), ImVec2(200, 200), ImVec2(0, 1), ImVec2(1, 0));
+			//	ImGui::EndChild();
+			//}
+			//ImGui::End();
+			
+			Service<RenderSystem>::Get().USO = true;
+
 		}
+		else
+			Service<RenderSystem>::Get().USO = false;
 	}
 
 	void UnitSheetOverlay::push_button_style() const

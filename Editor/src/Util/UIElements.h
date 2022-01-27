@@ -212,6 +212,8 @@ namespace Tempest::UI
 	// Pos is from Middle of arrow 
 	void AttackSuccessUI(string name, const ImVec2 pos, int successVal);
 
+	void TutArea(ImVec2 pos, ImVec2 size);
+
 }
 
 namespace Tempest

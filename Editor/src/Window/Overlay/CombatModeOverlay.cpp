@@ -1579,13 +1579,11 @@ namespace Tempest
 					case 1:
 						// totally remove from map
 						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
-						instance.ecs.remove<tc::Unit>(other_entity);
-						instance.ecs.emplace<tc::Destroyed>(other_entity);
+						instance.ecs.destroy(other_entity);
 						break;
 					case 2:
 						// ignore
 						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
-						// how to make it inselectable?
 						break;
 					default:
 						break;
