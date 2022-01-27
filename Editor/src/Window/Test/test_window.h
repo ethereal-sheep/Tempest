@@ -21,7 +21,7 @@ namespace Tempest
 		{
 			return "test_window";
 		}
-		std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(2);
+		std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 		interpolater<float> inter{};
 		/*bool button(
 			const string& default_text,
@@ -99,18 +99,35 @@ namespace Tempest
 					startAnim = true;
 					randNum = std::rand() % 100;
 					numToString = std::to_string(randNum);
-					inter_nest[0].start(1.5f, 1.0f, .3f, 0.f,
+					inter_nest[0].start(2.0f, 1.0f, .5f, 0.f,
 						[](float x) { return glm::elasticEaseOut(x);
 					});
-					inter_nest[1].start(1.5f, 1.0f, .3f, 0.1f,
+					inter_nest[1].start(2.0f, 1.0f, .5f, 0.2f,
 						[](float x) { return glm::elasticEaseOut(x);
+					});
+					inter_nest[2].start(0.5f, 2.f, .15f, 0.0f,
+						[](float x) { return glm::backEaseInOut(x);
 					});
 				}
 
 				ImGui::SameLine();
 				if (ImGui::BeginChild("##SomeWeirdTest", ImVec2{ 300.0f,200.0f }, true))
 				{
-					ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2{ 100.0f, 50.0f });
+					const ImVec2 renderPos{ ImGui::GetCursorPos() + ImVec2{ 150.0f, 100.0f } };
+					FONT_HEAD->Scale = 2.0f;
+					ImGui::PushFont(FONT_HEAD);
+					const ImVec2 textSize{ImGui::CalcTextSize(numToString.c_str())};
+					ImGui::PopFont();
+
+					// draw the image bg
+					// maybe have some tint color
+					auto tex = tex_map["Assets/Selected.dds"];
+					ImGui::SetCursorPos(ImVec2{ renderPos.x - textSize.x * inter_nest[2].get() * 0.6f, renderPos.y - textSize.y * (inter_nest[2].get() * 0.5f) * 0.7f});
+					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ textSize.x * inter_nest[2].get(),textSize.y * (inter_nest[2].get() *0.5f) },
+						ImVec2{ 0,0 }, ImVec2{ 1,1 }, ImVec4{1.0f, 0.64f, 0.0f, 1.0f});
+
+					// render the funky text
+					ImGui::SetCursorPos(ImVec2{ renderPos.x - textSize.x * 0.5f, renderPos.y - textSize.y * 0.5f });
 					for (int i = 0; i < numToString.size(); i++)
 					{
 						FONT_HEAD->Scale = inter_nest[i].get();
@@ -120,11 +137,12 @@ namespace Tempest
 						ImGui::SameLine();
 					}
 
+					// reset animation
 					if (!numToString.empty() && inter_nest[numToString.size() - 1].is_finished())
 						startAnim = false;
 				}
 				ImGui::EndChild();
-				FONT_HEAD->Scale = 1.0f; // rest to original scale
+				FONT_HEAD->Scale = 1.0f; // reset to original scale
 
 
 				UI::UISelectable("TEST", false);
