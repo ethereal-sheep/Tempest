@@ -119,6 +119,20 @@ namespace Tempest
         // Check if the framebuffer is complete before continuing
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             LOG_CRITICAL("Framebuffer not complete !");
+
+/* 
+        // test
+        glGenFramebuffers(1, &gBuffer2);
+        glBindFramebuffer(GL_FRAMEBUFFER, gBuffer2);
+        glGenTextures(1, &gBuffer2t);
+        glBindTexture(GL_TEXTURE_2D, gBuffer2t);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gBuffer2t, 0);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            std::cout << "SAO Framebuffer not complete !" << std::endl; */
     }
 
     void RenderSystem::saoSetup()
@@ -537,6 +551,10 @@ namespace Tempest
 
     void RenderSystem::Render()
     {
+        if (USO)
+        {
+            GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
+        }
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
 
@@ -846,16 +864,22 @@ namespace Tempest
         glBindTexture(GL_TEXTURE_2D, gEffects);
 
         quadRender.drawShape();
-
+/* 
+        glGetTexImage(postprocessBuffer, 0, GL_RGBA, GL_FLOAT, USObuffer); */
+/* 
+        glBlitNamedFramebuffer(gBuffer, gBuffer2, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST); */
        
         //-----------------------
         // Forward Pass rendering
         //-----------------------
         glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        
 
         // Copy the depth informations from the Geometry Pass into the default framebuffer
         glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+        
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
        
     }
@@ -907,6 +931,16 @@ namespace Tempest
 
     void RenderSystem::EndFrame()
     {
+        if (USO)
+        {
+            //unsigned char* buffer = new unsigned char[vp_size.x * vp_size.y * 3 * 4];
+            //glReadPixels(0, 0, vp_size.x * 2 , vp_size.y * 2, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+            //stbi_flip_vertically_on_write(1);
+            //stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
+            //stbi_write_jpg("testtest.jpg", vp_size.x * 2, vp_size.y * 2, 3, buffer, vp_size.x * 3 * 2);
+            glReadPixels(0, 0, 1600, 900, GL_RGBA, GL_UNSIGNED_BYTE, USObuffer);
+            //captured = true;
+        }
         m_FrameBuffer.Draw();
 
     }

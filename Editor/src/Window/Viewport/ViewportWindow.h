@@ -15,6 +15,7 @@
 #include "CameraControls.h"
 #include "Actions/EditorAction.h"
 #include "Util/shape_manip.h"
+#include "stb_image_write.h"
 
 //#define STB_IMAGE_WRITE_IMPLEMENTATION
 //#include "stb_image_write.h"
@@ -137,18 +138,17 @@ namespace Tempest
 						}
 					}
 					break;
-					//case 'p':
-					//{						
-					//	vec2 size = vec2(viewport->Size.x, viewport->Size.y);
-					//	//auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
-					//	unsigned char* buffer = new unsigned char[size.x * size.y * 3 / 2];
-					//	GLint offset = (size.x - size.y) / 2;
-					//	glReadPixels(size.x / 4, 0, size.x/2, size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-					//	stbi_flip_vertically_on_write(1);
-					//	//stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
-					//	stbi_write_jpg(Service<RenderSystem>::Get().thumbnailName.data(), size.x / 2, size.y, 3, buffer, size.x * 3);
-					//}
-					//break;
+					case 'p':
+					{						
+						vec2 size = vec2(viewport->Size.x, viewport->Size.y);
+						//auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
+						unsigned char* buffer = new unsigned char[size.x * size.y * 3];
+						glReadPixels(0, 0, size.x, size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+						stbi_flip_vertically_on_write(1);
+						//stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
+						stbi_write_jpg("testtests.jpg", size.x, size.y, 3, buffer, size.x * 3);
+					}
+					break;
 					default:
 						break;
 					}
