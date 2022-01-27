@@ -227,5 +227,7 @@ namespace Tempest
         interpolater<float> inter4;
         interpolater<float> inter5;
         interpolater<float> inter6;
+
+        std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
     };
 }

@@ -1824,7 +1824,7 @@ namespace Tempest
 
 					rand1 = els::random::uniform_rand(0, 3);
 					rand2 = els::random::uniform_rand(0, 3);;
-
+					
 
 					float sec = 2.5f;
 					float delay = 1.7f;
@@ -1832,6 +1832,20 @@ namespace Tempest
 					inter4.start(0, 1.f, sec, 0.f, [](float x) { return glm::sineEaseIn(x); });
 					inter5.start(0, 1.f, 1.f, delay, [](float x) { return glm::elasticEaseOut(x); });
 					inter6.start(0, 1.f, delay, delay, [](float x) { return glm::sineEaseIn(x); });
+
+
+					inter_nest[0].start(2.0f, 1.0f, delay, 0.f,
+						[](float x) { return glm::elasticEaseOut(x);
+						});
+					inter_nest[1].start(2.0f, 1.0f, delay - 0.05f, 0.05f,
+						[](float x) { return glm::elasticEaseOut(x);
+						});
+					inter_nest[2].start(2.0f, 1.0f, delay - 0.1f, 0.1f,
+						[](float x) { return glm::elasticEaseOut(x);
+						});
+
+					cam_ctrl.shake(cam, .25f, .5f, 17.f);
+
 					auto fn = []()
 					{
 						auto fn = []()
@@ -1849,6 +1863,7 @@ namespace Tempest
 				}
 
 			}
+
 			if (triggered)
 			{
 				auto position = instance.ecs.get<tc::Transform>(other_entity).position;
@@ -1861,26 +1876,42 @@ namespace Tempest
 
 				// Draw the damage
 				{
-					std::string text = std::to_string(damage);
 					glm::vec3 col(1, 0, 0);
+
+					std::string text = std::to_string(damage);
 
 					if (damage == 0)
 						col = vec3(1, 1, 1);
-
+					else if (damage < 0)
+					{
+						text = std::to_string(-damage);
+						col = vec3(0, 1, 0);
+					}
 
 					ImGui::PushFont(FONT_HEAD);
-					// the text colour
-					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, 1.f - inter4.get()));
 					auto text_size = ImGui::CalcTextSize(text.c_str());
+					ImGui::PopFont();
 					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
 					ImGui::SetCursorPos(cursor_pos);
-					ImGui::BeginGroup();
-					// the text thingy
-					ImGui::Text(text.c_str());
 
+					ImGui::BeginGroup();
+					for (int i = 0; i < text.size() && i < 3; ++i)
+					{
+						float scale = FONT_HEAD->Scale;
+						FONT_HEAD->Scale = inter_nest[i].get();
+						ImGui::PushFont(FONT_HEAD);
+						// the text colour
+						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, 1.f - inter4.get()));
+						// the text thingy
+						ImGui::Text(std::string{ text[i] }.c_str());
+						ImGui::SameLine(0);
+
+						ImGui::PopStyleColor();
+						ImGui::PopFont();
+						FONT_HEAD->Scale = scale;
+					}
 					ImGui::EndGroup();
-					ImGui::PopStyleColor();
-					ImGui::PopFont();
+
 				}
 				ImGui::SetCursorPos(temp);
 			}
@@ -2424,6 +2455,9 @@ namespace Tempest
 			inter4.update(dt);
 			inter5.update(dt);
 			inter6.update(dt);
+
+			for (auto& i : inter_nest)
+				i.update(dt);
 		}
 
 

@@ -64,8 +64,12 @@ namespace Tempest
 		glm::quat end_rotation{1,0,0,0};
 		glm::vec3 start_position{};
 		glm::vec3 end_position{};
+		glm::vec3 curr_position{};
 
 		glm::vec3 orbit_axis{};
+
+		float magnitude = 0.f;
+		float speed = 7.f;
 
 		float total_rot_time = 1.f;
 		float current_rot_time = 1.f;
@@ -73,6 +77,8 @@ namespace Tempest
 		float current_orbit_time = 1.f;
 		float total_pos_time = 1.f;
 		float current_pos_time = 1.f;
+		float total_shake_time = 1.f;
+		float current_shake_time = 1.f;
 
 
 
@@ -550,7 +556,9 @@ namespace Tempest
 				current_pos_time += ImGui::GetIO().DeltaTime;
 				auto t = easing(glm::clamp(current_pos_time / total_pos_time, 0.f, 1.f));
 
-				cam.SetPosition(glm::mix(start_position, end_position, t));
+				curr_position = glm::mix(start_position, end_position, t);
+
+				cam.SetPosition(curr_position);
 			}
 		}
 
@@ -597,6 +605,30 @@ namespace Tempest
 			}
 		}
 
+		void update_shake(Camera& cam)
+		{
+			if (current_shake_time < total_shake_time)
+			{
+				current_shake_time += ImGui::GetIO().DeltaTime;
+				auto t = glm::backEaseIn(glm::clamp(current_orbit_time / total_orbit_time, 0.f, 1.f));
+
+				// set rotation
+
+				// set position
+				float x = els::noise::normalised_octave_noise2D(1.f, current_shake_time * speed, 4);
+				float y = els::noise::normalised_octave_noise2D(10.f, current_shake_time * speed, 4);
+
+				glm::vec3 vec = y * cam.GetUp() + x * cam.GetLeft();
+				//auto mag = glm::mix(magnitude, 0.f, t);
+				cam.SetPosition(curr_position + vec * magnitude);
+
+				if (current_shake_time >= total_shake_time)
+				{
+					cam.SetPosition(curr_position);
+				}
+			}
+		}
+
 	public:
 		CameraControls(CameraControlMode _mode = CameraControlMode::WORLD) : mode(_mode) {}
 
@@ -639,6 +671,7 @@ namespace Tempest
 				update_rotation(cam);
 				update_position(cam);
 				update_orbit(cam);
+				update_shake(cam);
 				break;
 			case Tempest::CameraControlMode::FIXED_ORBIT:
 				update_rotation(cam);
@@ -725,9 +758,14 @@ namespace Tempest
 			return current_orbit_time < total_orbit_time;
 		}
 
+		bool is_shaking() const
+		{
+			return current_shake_time < total_shake_time;
+		}
+
 		bool is_any_movement() const
 		{
-			return is_moving() || is_rotating() || is_orbiting();
+			return is_moving() || is_rotating() || is_orbiting() || is_shaking();
 		}
 
 		bool is_still() const
@@ -812,6 +850,16 @@ namespace Tempest
 			}
 		}
 
+		void shake(Camera& cam, float time = 1.f, float _magnitude = .5f, float sample_speed = 7.f)
+		{
+			current_shake_time = 0.f;
+			total_shake_time = time;
+
+			magnitude = _magnitude;
+			speed = sample_speed;
+
+			curr_position = cam.GetPosition();
+		}
 
 
 		void set_world_camera()
