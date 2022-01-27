@@ -4,11 +4,11 @@
 
 void WaypointEmitter::SelfUpdate()
 {
-	//if (m_preWarm)
-	//{
-	//	Emit(m_EM.m_rateOverTime);
-	//	m_preWarm = false;
-	//}
+	if (m_MM.m_preWarm)
+	{
+		Emit(m_EM.m_rateOverTime);
+		m_MM.m_preWarm = false;
+	}
 
 	// Update Emittor position
 	if (m_wayPoints.size())

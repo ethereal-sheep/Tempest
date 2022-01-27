@@ -19,6 +19,7 @@ struct MainModule
 	short m_maxParticles;	// Max amount of particles 
 
 	float m_simulationSpeed;	// What DT to run in
+	bool m_preWarm;
 };
 
 struct GameObjectModule

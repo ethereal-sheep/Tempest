@@ -5,9 +5,10 @@
 
 MainModule::MainModule()
 	: m_duration{ 10.0f }
-	, m_looping {true }
+	, m_looping {false }
 	, m_maxParticles{ 1000 }
 	, m_simulationSpeed {0.016f}
+	, m_preWarm{ false }
 {}
 
 GameObjectModule::GameObjectModule()

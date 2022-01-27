@@ -55,6 +55,7 @@ struct ParticleSystem_2D
 
 	// Not supposed to be here - NOT TO BE SHARED POINTER
 	void ButtonEmitter(glm::vec2 topleftPos, glm::vec2 buttonSize);
+	void ExplosionEmitter_2(glm::vec2 spawnPos);
 
 private:
 	std::vector <std::shared_ptr<Emitter>> m_emitters;

@@ -5,9 +5,9 @@
 
 #include "Emitter.h"
 
-struct WaypointEmitter final :public Emitter
+struct WaypointEmitter final : public Emitter
 {
-	void SelfUpdate() override final;
+	void SelfUpdate() override;
 };
 
 #endif // !WAYPOINT_EMITTER_H

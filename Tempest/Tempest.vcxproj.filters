@@ -86,6 +86,7 @@
     <ClCompile Include="src\Particles\Emitter.cpp" />
     <ClCompile Include="src\Particles\EmissionModules.cpp" />
     <ClCompile Include="src\Particles\WaypointEmitter.cpp" />
+    <ClCompile Include="src\Particles\ExplosionEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -247,6 +248,7 @@
     <ClInclude Include="src\Particles\Emitter.h" />
     <ClInclude Include="src\Particles\EmissionModules.h" />
     <ClInclude Include="src\Particles\WaypointEmitter.h" />
+    <ClInclude Include="src\Particles\ExplosionEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

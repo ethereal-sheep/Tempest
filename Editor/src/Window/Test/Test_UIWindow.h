@@ -171,19 +171,22 @@ namespace Tempest
 					tempVec.x = ImGui::GetMousePos().x;
 					tempVec.y = ImGui::GetMousePos().y;
 
-					auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
+					//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
 					//auto& reg = particleSys.Register(tempVec);
-					reg->m_RM.m_type = ParticleType::Circle;
-					reg->m_GM.m_velocity.x = -500.0f;
+					particleSys.ExplosionEmitter_2(tempVec);
+					//reg->m_RM.m_type = ParticleType::Circle;
+					//reg->m_GM.m_velocity.x = -500.0f;
 				}
 				if (ImGui::IsMouseDown(1))
 				{
-					//glm::vec2 tempVec;
-					//tempVec.x = ImGui::GetMousePos().x;
-					//tempVec.y = ImGui::GetMousePos().y;
+					glm::vec2 tempVec;
+					tempVec.x = ImGui::GetMousePos().x;
+					tempVec.y = ImGui::GetMousePos().y;
 
 					// Test prepared functions for XR
-					particleSys.ButtonEmitter(real_mousePosition, real_buttonSize);
+					//particleSys.ButtonEmitter(real_mousePosition, real_buttonSize);
+
+					particleSys.ExplosionEmitter_2(tempVec);
 				}
 
 				// Update the emitters

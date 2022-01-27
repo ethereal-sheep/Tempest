@@ -34,7 +34,7 @@ struct Emitter
 
 protected:
 	virtual void SelfUpdate();
-	void Emit(const int particleAmount);
+	virtual void Emit(const int particleAmount);
 };
 
 

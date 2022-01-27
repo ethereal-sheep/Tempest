@@ -18,17 +18,17 @@ Emitter::Emitter()
 	for (short i = 0; i < m_MM.m_maxParticles; ++i)
 		m_available_ParticleSlots.push(i);
 
-	//if (m_preWarm)
-	//	Emit(m_EM.m_rateOverTime);
+	if (m_MM.m_preWarm)
+		Emit(m_EM.m_rateOverTime);
 }
 
 void Emitter::SelfUpdate()
 {
-	//if (m_preWarm)
-	//{
-	//	Emit(m_EM.m_rateOverTime);
-	//	m_preWarm = false;
-	//}
+	if (m_MM.m_preWarm)
+	{
+		Emit(m_EM.m_rateOverTime);
+		m_MM.m_preWarm = false;
+	}
 
 	// Update Emittor position
 	m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;

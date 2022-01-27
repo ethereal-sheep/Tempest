@@ -236,6 +236,7 @@
     <ClCompile Include="src\Memory\Resource\malloc_resource.cpp" />
     <ClCompile Include="src\Particles\EmissionModules.cpp" />
     <ClCompile Include="src\Particles\Emitter.cpp" />
+    <ClCompile Include="src\Particles\ExplosionEmitter.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
     <ClCompile Include="src\Particles\ParticleSystem_2D.cpp" />
     <ClCompile Include="src\Particles\Random.cpp" />
@@ -343,6 +344,7 @@
     <ClInclude Include="src\Memory\Util\aligned_malloc.h" />
     <ClInclude Include="src\Particles\EmissionModules.h" />
     <ClInclude Include="src\Particles\Emitter.h" />
+    <ClInclude Include="src\Particles\ExplosionEmitter.h" />
     <ClInclude Include="src\Particles\Particles.h" />
     <ClInclude Include="src\Particles\ParticleSystem_2D.h" />
     <ClInclude Include="src\Particles\Random.h" />
