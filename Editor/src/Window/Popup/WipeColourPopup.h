@@ -18,7 +18,7 @@
 
 namespace Tempest
 {
-    class WipePopup : public Window
+    class WipeColourPopup : public Window
     {
 
         enum struct state
@@ -30,8 +30,10 @@ namespace Tempest
             INVISIBLE
         };
 
+        glm::vec3 colour;
         float fade_in_time = 0, fade_out_time = 0, visible_time = 0;
         std::function<void(void)> to_do;
+        std::function<void(void)> to_do_when_done;
         interpolater<float> inter;
         state state = state::INVISIBLE;
 
@@ -49,20 +51,21 @@ namespace Tempest
                 ImGuiWindowFlags_NoFocusOnAppearing |
                 ImGuiWindowFlags_NoNav;
 
-            Service<EventManager>::Get().register_listener<WipeTrigger>(&WipePopup::open_popup, this);
+            Service<EventManager>::Get().register_listener<WipeColourTrigger>(&WipeColourPopup::open_popup, this);
         }
 
         void open_popup(const Event& e)
         {
             if (state == state::INVISIBLE)
             {
-                auto& a = event_cast<WipeTrigger>(e);
+                auto& a = event_cast<WipeColourTrigger>(e);
 
+                colour = a.colour;
                 fade_in_time = a.fade_in_time;
                 fade_out_time = a.fade_out_time;
                 visible_time = a.visible_time;
                 to_do = a.do_on_fade;
-
+                to_do_when_done = a.do_on_end;
                 state = state::APPEAR;
             }
         }
@@ -95,13 +98,14 @@ namespace Tempest
             [[fallthrough]];
             case state::FADING_IN:
                 ImGui::SetNextWindowFocus();
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(colour.r, colour.g, colour.b, inter.get()));
                 ImGui::SetNextWindowBgAlpha(inter.get()); // Transparent background
-                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
-                if (ImGui::Begin("WIPE##WIPE", nullptr, window_flags))
+                if (ImGui::Begin("WIPECOLOUR##WIPECOLOUR", nullptr, window_flags))
                 {
                 }
                 ImGui::End();
                 ImGui::PopStyleColor(1);
+
                 if (inter.is_finished())
                 {
                     state = state::VISIBLE;
@@ -112,8 +116,8 @@ namespace Tempest
             case state::VISIBLE:
             {
                 ImGui::SetNextWindowBgAlpha(end); // Transparent background
-                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
-                if (ImGui::Begin("WIPE##WIPE", nullptr, window_flags))
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(colour.r, colour.g, colour.b, inter.get()));
+                if (ImGui::Begin("WIPECOLOUR##WIPECOLOUR", nullptr, window_flags))
                 {
                 }
                 ImGui::End();
@@ -127,8 +131,8 @@ namespace Tempest
             }
             case state::FADING_OUT:
                 ImGui::SetNextWindowBgAlpha(inter.get()); // Transparent background
-                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
-                if (ImGui::Begin("WIPE##WIPE", nullptr, window_flags))
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(colour.r, colour.g, colour.b, inter.get()));
+                if (ImGui::Begin("WIPECOLOUR##WIPECOLOUR", nullptr, window_flags))
                 {
                 }
                 ImGui::End();
@@ -136,6 +140,7 @@ namespace Tempest
                 if (inter.is_finished())
                 {
                     state = state::INVISIBLE;
+                    std::invoke(to_do_when_done);
                 }
                 break;
             case state::INVISIBLE:
