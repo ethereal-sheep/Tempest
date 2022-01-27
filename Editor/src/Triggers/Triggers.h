@@ -217,6 +217,25 @@ namespace Tempest
 		std::function<void(void)> do_on_fade;
 	};
 
+	struct WipeColourTrigger : public Event
+	{
+		WipeColourTrigger(
+			glm::vec3 _colour,
+			float _fade_in_time = 0.15f, 
+			float _fade_out_time = 0.15f, 
+			float _visible_time = 0.f, 
+			std::function<void(void)> _do_on_fade = []() {},
+			std::function<void(void)> _do_on_end = []() {})
+			: colour(_colour), fade_in_time(_fade_in_time), fade_out_time(_fade_out_time), visible_time(_visible_time), do_on_fade(_do_on_fade), do_on_end(_do_on_end)
+		{
+
+		}
+		glm::vec3 colour;
+		float fade_in_time, fade_out_time, visible_time;
+		std::function<void(void)> do_on_fade;
+		std::function<void(void)> do_on_end;
+	};
+
 	struct DelayTrigger : public Event
 	{
 		DelayTrigger(float _wait_time, std::function<void(void)> _do) : wait_time(_wait_time), do_fn(_do)

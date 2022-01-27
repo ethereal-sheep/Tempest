@@ -75,6 +75,7 @@ namespace Tempest
 		float current_pos_time = 1.f;
 
 
+
 		void world_controls(Camera& cam)
 		{
 			ImGuiIO& io = ImGui::GetIO();
@@ -330,15 +331,15 @@ namespace Tempest
 			if (true)
 			{
 				auto direction = els::to_vec2(io.MouseDelta);
-				//auto yaw_speed = 1.f / 4;
+				auto yaw_speed = 1.f / 4;
 				//auto pitch_speed = 1.f / 4;
-				auto pan_speed = 1.f / 4.f;
+				// auto pan_speed = 1.f / 4.f;
 				auto forward_speed = 1.f / 4.f;
 				auto scroll_speed = forward_speed * 4.f;
 
 				auto pan_time = .01f;
-				auto other_pan_time = .05f;
-				//auto rotate_time = .05f;
+				[[maybe_unused]] auto other_pan_time = .05f;
+				auto rotate_time = .05f;
 				auto zoom_time = .05f;
 
 				if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
@@ -351,11 +352,11 @@ namespace Tempest
 				{
 
 				}
-				else if (io.MouseDown[0]) // pan parellel to plane
+				else if (io.MouseDown[0]) // nothing
 				{
 					
 				}
-				else if (io.MouseDown[1]) // rotate
+				else if (io.MouseDown[1]) // pan
 				{
 					if (!els::is_zero(direction))
 					{
@@ -383,26 +384,31 @@ namespace Tempest
 						}
 					}
 				}
-				else if (io.MouseDown[2]) // Pan
+				else if (io.MouseDown[2]) // rotate around center
 				{
 					if (!els::is_zero(direction))
 					{
-						auto up = glm::vec3{ 0, 1, 0 };
-						auto right = cam.GetLeft();
-
 						auto currentPos = cam.GetPosition();
-						auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
-						auto newPos = end_position - worldSpaceDirection * pan_speed;
+						auto now = cam.GetFront();
+						float now_dist = 0;
+						bool now_intersect = glm::intersectRayPlane(currentPos, now, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
+						auto now_pos = currentPos + now * now_dist;
 
+						if (now_intersect)
+						{
+							start_rotation = cam.GetQuatRotation();
+							auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+							auto rot = end_rotation * yaw;
 
+							end_rotation = rot;
+							current_orbit_time = 0.f;
+							total_orbit_time = rotate_time;
 
-						current_pos_time = 0.f;
-						total_pos_time = other_pan_time;
+							orbit_axis = now_pos;
 
-						start_position = currentPos;
-						end_position = newPos;
+							easing = EasingMode::LINEAR;
+						}
 
-						easing = EasingMode::LINEAR;
 						//cam.SetPosition(newPos);
 					}
 				}
@@ -566,6 +572,31 @@ namespace Tempest
 			}
 		}
 
+		void update_fixed_orbit(Camera& cam)
+		{
+			if (current_orbit_time < total_orbit_time)
+			{
+				//
+				current_orbit_time += ImGui::GetIO().DeltaTime;
+				auto t = easing(glm::clamp(current_orbit_time / total_orbit_time, 0.f, 1.f));
+
+				// get orbit axis based on fixed pos
+				auto currentPos = cam.GetPosition();
+				auto now = cam.GetMouseRay();
+				float now_dist = 0;
+				[[maybe_unused]] bool now_intersect = glm::intersectRayPlane(currentPos, now, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
+				auto now_pos = currentPos + now * now_dist;
+
+				// set rotation
+				auto slerped = glm::slerp(start_rotation, end_rotation, t);
+				cam.SetRotation(slerped);
+
+				// set position
+				auto inverse = glm::inverse(slerped) * glm::vec3(0, 0, 1) * glm::length(now);
+				cam.SetPosition(inverse + now_pos);
+			}
+		}
+
 	public:
 		CameraControls(CameraControlMode _mode = CameraControlMode::WORLD) : mode(_mode) {}
 
@@ -603,13 +634,16 @@ namespace Tempest
 				update_rotation(cam);
 				update_position(cam);
 				update_orbit(cam);
+				break;
 			case Tempest::CameraControlMode::FIXED:
 				update_rotation(cam);
 				update_position(cam);
+				update_orbit(cam);
+				break;
 			case Tempest::CameraControlMode::FIXED_ORBIT:
 				update_rotation(cam);
 				update_position(cam);
-				update_orbit(cam);
+				update_fixed_orbit(cam);
 				break;
 			default:
 				break;
@@ -675,6 +709,32 @@ namespace Tempest
 
 		}*/
 
+
+		bool is_moving() const
+		{
+			return current_pos_time < total_pos_time;
+		}
+
+		bool is_rotating() const
+		{
+			return current_rot_time < total_rot_time;
+		}
+
+		bool is_orbiting() const
+		{
+			return current_orbit_time < total_orbit_time;
+		}
+
+		bool is_any_movement() const
+		{
+			return is_moving() || is_rotating() || is_orbiting();
+		}
+
+		bool is_still() const
+		{
+			return !is_any_movement();
+		}
+
 		void look_at(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
 			auto pos = point - cam.GetPosition();
@@ -685,7 +745,7 @@ namespace Tempest
 
 			auto angle = glm::orientedAngle(glm::normalize(v2), glm::normalize(v1));
 			auto yaw = glm::angleAxis(angle, glm::vec3{ 0, 1, 0 });
-			auto rot = end_rotation * yaw;
+			auto rot = yaw;
 
 
 			front = glm::conjugate(rot)* glm::vec3{ 0.f, 0.f, -1.f };
