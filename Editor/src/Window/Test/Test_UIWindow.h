@@ -164,7 +164,8 @@ namespace Tempest
 
 				}
 
-				if (ImGui::IsMouseDown(0))//ImGui::IsMouseClicked(0))
+				//if (ImGui::IsMouseDown(0))
+				if (ImGui::IsMouseClicked(0))
 				{
 					glm::vec2 tempVec;
 					tempVec.x = ImGui::GetMousePos().x;
@@ -175,8 +176,11 @@ namespace Tempest
 					ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 					//reg->m_RM.m_type = ParticleType::Circle;
 					//reg->m_GM.m_velocity.x = -500.0f;
+
+					LOG_INFO("ExplossionEmitter");
 				}
-				if (ImGui::IsMouseDown(1))
+				//if (ImGui::IsMouseDown(1))
+				if (ImGui::IsMouseClicked(1))
 				{
 					glm::vec2 tempVec;
 					tempVec.x = ImGui::GetMousePos().x;
