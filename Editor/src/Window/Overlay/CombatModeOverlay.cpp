@@ -1112,9 +1112,14 @@ namespace Tempest
 
 							LOG_ASSERT(instance.ecs.has<tc::Character>(attacker));
 							LOG_ASSERT(instance.ecs.has<tc::Character>(other_entity));
+							LOG_ASSERT(instance.ecs.has<tc::Transform>(other_entity));
 
 							// for now we just cancel
 							//state = State::MENU;
+
+							// rotate the other fella
+							auto& otransform = instance.ecs.get<tc::Transform>(other_entity);
+							otransform.rotation = transform.rotation * glm::angleAxis(glm::radians(180.f), vec3{ 0,1,0 });
 						}
 					}
 					else
@@ -1399,6 +1404,10 @@ namespace Tempest
 
 			try_build_all(instance);
 
+			// create temp entities so we can check whats the damage, if any
+			auto temp_cc = instance.ecs.get<tc::Character>(curr_entity);
+			auto temp_oc = instance.ecs.get<tc::Character>(other_entity);
+
 			instance.srm.instant_dispatch_to_id<Simulate>(sequence, curr_entity, other_entity, selected_action, other_selected_action);
 			if (auto var = instance.srm.get_variable_to_id(sequence, "Win"))
 			{
@@ -1413,6 +1422,11 @@ namespace Tempest
 			{
 				def_output = var->get<int>();
 			}
+
+			auto cs = instance.ecs.get<tc::Character>(other_entity);
+
+			damage = temp_oc.get_statDelta(0) - cs.get_statDelta(0);
+
 			atk_rolled = false;
 			def_rolled = false;
 			// clear
@@ -1424,7 +1438,7 @@ namespace Tempest
 			selected_weapon = UNDEFINED;
 		}
 
-		if (UI::UIButton_2("Cancel", "Cancel", ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
+		if (finish && UI::UIButton_2("Cancel", "Cancel", ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 		{
 			//battle_state = BATTLE_STATE::SELECT_OTHER;
 			display_curr_stat = false;
@@ -1440,18 +1454,20 @@ namespace Tempest
 		static bool display_other_end_cycle = false;
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		// check if the other_entity has health (only other for now)
-		auto& charac = instance.ecs.get<tc::Character>(other_entity);
+		//auto& charac = instance.ecs.get<tc::Character>(other_entity);
 
 		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, !atk_rolled))
 		{
 			// attacker roll
 			atk_rolled = true;
+			inter1.start(0, 1);
 		}
 
 		if (UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true, !def_rolled))
 		{
 			// defender roll
 			def_rolled = true;
+			inter2.start(0, 1);
 		}
 
 
@@ -1471,12 +1487,24 @@ namespace Tempest
 		ImGui::PushFont(FONT_HEAD);
 
 		std::string roll = atk_rolled ? std::to_string(atk_output) : "";
+		if (inter1.is_in_progress())
+		{
+			roll = std::to_string(els::random::uniform_rand(0, 999));
+			
+		}
+
+
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(attacker.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(attacker.name.c_str());
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
 		ImGui::Text(roll.c_str());
 
 		roll = def_rolled ? std::to_string(def_output) : "";
+		if (inter2.is_in_progress())
+		{
+			roll = std::to_string(els::random::uniform_rand(0, 999));
+		}
+
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(defender.name.c_str());
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
@@ -1484,14 +1512,184 @@ namespace Tempest
 		ImGui::PopFont();
 
 		// only trigger this if no more rolls
-		if (atk_rolled && def_rolled && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
+		if (inter1.is_finished() && inter2.is_finished() && atk_rolled && def_rolled && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
 		{
 			// TODO: affect the entities
-			if (charac.get_stat(0) + charac.get_statDelta(0) <= 0)
-				display_other_end_cycle = true;
 
-			else
+			///////////////////////// MOVE THIS TO END STATE OF CINEMATIC //////////////////////
+			//if (charac.get_stat(0) + charac.get_statDelta(0) <= 0)
+			//	display_other_end_cycle = true;
+
+			//else
+			//{
+			//	instance.selected = INVALID;
+			//	other_entity = INVALID;
+			//	battle_state = BATTLE_STATE::CURR_TURN; // temp testing
+			//	state = State::MENU;
+
+			//	//  TODO: change to the next entity turn
+			//	selected_action = UNDEFINED;
+			//	selected_weapon = UNDEFINED;
+			//}
+
+
+			auto fn = [&]()
 			{
+				battle_state = BATTLE_STATE::CURR_TURN; // temp testing
+				state = State::CINEMATIC;
+			};
+
+			Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, fn));
+
+		}
+
+		// this stuff moved to show_cinematic state
+		//if (display_other_end_cycle)
+		//{
+
+		//	// pop up of three ending options
+		//	// TODO: shift to new function
+
+		//	ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
+		//	ImGui::OpenPopup("End Unit Cycle");
+		//	ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		//	ImGui::SetNextWindowSize(ImVec2(500, 550));
+
+		//	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
+		//	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+		//	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+		//	ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
+		//	ImGui::PushStyleColor(ImGuiCol_PopupBg, { 0.06f,0.06f, 0.06f, 0.85f });
+
+		//	ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
+		//					   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
+
+		//	if (ImGui::BeginPopupModal("End Unit Cycle", NULL, flags))
+		//	{
+		//		static int end_selection = -1;
+		//		// background
+		//		ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+		//		ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
+		//		ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.5f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
+		//		ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+		//		ImVec4 textcol = { 0,0,0,1 };
+
+		//		// text
+		//		ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+		//		ImGui::PushFont(FONT_OPEN);
+		//		ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), std::string{ charac.name + "'s HP has reached 0" }.c_str());
+		//		ImGui::PopFont();
+
+		//		// halftone
+		//		auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
+		//		ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
+		//		ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
+		//		ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);
+
+		//		ImGui::BeginChild("##SimualteStuff", ImVec2{ 500,470 });
+
+		//		if (UI::UIButton_2("Revive with full HP", "Revive with full HP", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.35f },
+		//			ImVec2{ 0,0 }, FONT_PARA, end_selection == 0))
+		//		{
+		//			end_selection = 0;
+		//		}
+
+		//		if (UI::UIButton_2("Delete from map", "Delete from map", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.5f },
+		//			ImVec2{ 0,0 }, FONT_PARA, end_selection == 1))
+		//		{
+		//			end_selection = 1;
+		//		}
+
+		//		if (UI::UIButton_2("Ignore", "Ignore", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.65f },
+		//			ImVec2{ 0,0 }, FONT_PARA, end_selection == 2))
+		//		{
+		//			end_selection = 2;
+		//		}
+
+		//		ImGui::EndChild();
+
+		//		// check for stuff here
+		//		if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.9f }, { 0.f, 0.f }, FONT_PARA) && end_selection != -1)
+		//		{
+		//			switch (end_selection)
+		//			{
+		//			case 0:
+		//				// full health
+		//				charac.set_statDelta(0, 0);
+		//				break;
+		//			case 1:
+		//				// totally remove from map
+		//				units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+		//				instance.ecs.destroy(other_entity);
+		//				break;
+		//			case 2:
+		//				// ignore
+		//				units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+		//				break;
+		//			default:
+		//				break;
+		//			}
+
+		//			end_selection = -1;
+		//			display_other_end_cycle = false;
+		//			ImGui::CloseCurrentPopup();
+
+		//			// clear
+		//			instance.selected = INVALID;
+		//			other_entity = INVALID;
+		//			battle_state = BATTLE_STATE::CURR_TURN; // temp testing
+		//			state = State::MENU;
+
+		//			//  TODO: change to the next entity turn
+		//			selected_action = UNDEFINED;
+		//			selected_weapon = UNDEFINED;
+		//		}
+		//	}
+
+		//	ImGui::EndPopup();
+
+		//	ImGui::PopStyleVar(3);
+		//	ImGui::PopStyleColor(2);
+		//}
+	}
+	
+	void CombatModeOverlay::show_cinematic([[maybe_unused]] RuntimeInstance& instance)
+	{
+		const float dist_from_char = 2.f;
+		const float dist_from_ground = 1.f;
+		const float angle = 45.f;
+		const float oangle = -angle;
+
+		static vec3 cam_pos;
+		static quat cam_rot;
+		static bool triggered = false;
+
+		static int jump_times = 0;
+
+		static vec3 old_pos;;
+		static uint32_t rand1;
+		static uint32_t rand2;
+
+
+		if (curr_entity && instance.ecs.has<tc::Character>(curr_entity) && instance.ecs.has<tc::Transform>(curr_entity) && instance.ecs.has<tc::Unit>(curr_entity)
+			&& other_entity && instance.ecs.has<tc::Character>(other_entity) && instance.ecs.has<tc::Transform>(other_entity) && instance.ecs.has<tc::Unit>(other_entity))
+		{
+			[[maybe_unused]]auto& cs = instance.ecs.get<tc::Character>(curr_entity);
+			[[maybe_unused]] auto& unit = instance.ecs.get<tc::Unit>(curr_entity);
+			[[maybe_unused]] auto& xform = instance.ecs.get<tc::Transform>(curr_entity);
+
+			[[maybe_unused]] auto& ocs = instance.ecs.get<tc::Character>(other_entity);
+			[[maybe_unused]] auto& ounit = instance.ecs.get<tc::Unit>(other_entity);
+			[[maybe_unused]] auto& oxform = instance.ecs.get<tc::Transform>(other_entity);
+
+			[[maybe_unused]] auto& cam = Service<RenderSystem>::Get().GetCamera();
+
+			auto back_to_main = [&]() {
+
+				cam.SetPosition(cam_pos);
+				cam.SetRotation(cam_rot);
+
+				// clear
 				instance.selected = INVALID;
 				other_entity = INVALID;
 				battle_state = BATTLE_STATE::CURR_TURN; // temp testing
@@ -1500,15 +1698,299 @@ namespace Tempest
 				//  TODO: change to the next entity turn
 				selected_action = UNDEFINED;
 				selected_weapon = UNDEFINED;
+			};
+
+		// use battle state for internal state
+		switch (battle_state)
+		{
+		case Tempest::CombatModeOverlay::BATTLE_STATE::CURR_TURN: // init
+			// start interpolater
+			
+			battle_state = BATTLE_STATE::SELECT_ACTION;
+			
+			// save old cam pos
+			cam_pos = cam.GetPosition();
+			cam_rot = cam.GetQuatRotation();
+
+			// telepoint the camera to the player
+			auto new_cam_rot = glm::inverse(xform.rotation) *glm::angleAxis(glm::radians(angle), vec3{ 0,1,0 });
+			auto dir = vec3{ 0,0,-1 } * dist_from_char;
+			dir = dir * new_cam_rot;
+			auto new_cam_pos = xform.position + dir;
+			new_cam_pos.y = dist_from_ground;
+			cam.SetPosition(new_cam_pos);
+			/*auto right = vec3{ 1,0,0 } * new_cam_rot;
+			auto down = glm::angleAxis(glm::radians(90.f), right);
+			cam.SetRotation(down);*/
+			auto look_at_pos = xform.position;
+			look_at_pos.y = dist_from_ground;
+			cam_ctrl.look_at(cam, look_at_pos, 1.f);
+
+			[[fallthrough]];
+		case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_ACTION: // pan the camera if any
+
+			if (cam_ctrl.is_still())
+			{
+				// once inter is done go the next shit
+				battle_state = BATTLE_STATE::SELECT_WEAPON;
+				// set up for next shit also
+
+				// play whatever anim u want here
+				old_pos = xform.position;
+				// for now just jump on the spot
+				tvector<glm::ivec2> v;
+				int p_x = (int)std::floor(oxform.position.x);
+				int p_y = (int)std::floor(oxform.position.z);
+				v.push_back({ p_x , p_y });
+				unit.set_path(v, xform);
+
+				triggered = false;
+			}
+
+
+			break;
+		case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_WEAPON: // attack
+		{
+
+			// once done -> we can go to the next fella
+			// wipe
+			if (!unit.is_moving() && !triggered)
+			{
+				triggered = true;
+				// reset the attacker pos
+
+				inter1.start(0, 1, 0.7f);
+				auto fn = [&, oxform, dist_from_char, dist_from_ground, angle]()
+				{
+					auto new_cam_rot = glm::inverse(oxform.rotation) *glm::angleAxis(glm::radians(-angle), vec3{ 0,1,0 });
+					auto dir = vec3{ 0,0,-1 } *dist_from_char;
+					dir = dir * new_cam_rot;
+					auto new_cam_pos = oxform.position + dir;
+					new_cam_pos.y = dist_from_ground;
+
+					xform.position = old_pos;
+
+					cam.SetPosition(new_cam_pos);
+					cam.SetRotation(new_cam_rot * glm::angleAxis(glm::radians(180.f), vec3{ 0,1,0 }));
+					/*auto look_at_pos = oxform.position;
+					look_at_pos.y = dist_from_ground;
+					cam_ctrl.look_at(cam, look_at_pos, 2.f);*/
+				};
+
+				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, fn));
+			}
+			if (inter1.is_finished() && triggered)
+			{
+				battle_state = BATTLE_STATE::SELECT_OTHER;
+
+				tvector<glm::ivec2> v;
+				int p_x = (int)std::floor(xform.position.x);
+				int p_y = (int)std::floor(xform.position.z);
+				v.push_back({ p_x , p_y });
+				p_x = (int)std::floor(oxform.position.x);
+				p_y = (int)std::floor(oxform.position.z);
+				v.push_back({ p_x , p_y });
+				unit.set_path(v, xform);
+
+				triggered = false;
+
+				inter1.start(0, 1, 0.1f);
 			}
 		}
+		break;
+		case Tempest::CombatModeOverlay::BATTLE_STATE::SELECT_OTHER:
+			// once done -> we can go to the next fella
+			// wipe
+			if (inter1.is_finished() && !triggered)
+			{
+				triggered = true;
+				//if (damage == 0)
+				//{
+				//	inter2.start(0, 1, 2.f);
+				//	tvector<glm::ivec2> v;
+				//	int p_x = (int)std::floor(oxform.position.x);
+				//	int p_y = (int)std::floor(oxform.position.z);
+				//	v.push_back({ p_x , p_y });
+				//	/*p_x = (int)std::floor(xform.position.x);
+				//	p_y = (int)std::floor(xform.position.z);*/
 
-		if (display_other_end_cycle)
+				//	glm::vec3 a = glm::inverse(oxform.rotation) * vec3{ 0,0,-1 };
+
+				//	v.push_back({ p_x + (int)std::round(a.x) , p_y + (int)std::round(a.z) });
+				//	ounit.set_path(v, oxform);
+				//}
+				//else
+				{
+
+					rand1 = els::random::uniform_rand(0, 3);
+					rand2 = els::random::uniform_rand(0, 3);;
+					
+
+					float sec = 2.5f;
+					float delay = 1.7f;
+					inter3.start(0, 1.f, sec, 0.f, [](float x) { return glm::circularEaseOut(x); });
+					inter4.start(0, 1.f, sec, 0.f, [](float x) { return glm::sineEaseIn(x); });
+					inter5.start(0, 1.f, 1.f, delay, [](float x) { return glm::elasticEaseOut(x); });
+					inter6.start(0, 1.f, delay, delay, [](float x) { return glm::sineEaseIn(x); });
+
+
+					inter_nest[0].start(2.0f, 1.0f, delay, 0.f,
+						[](float x) { return glm::elasticEaseOut(x);
+						});
+					inter_nest[1].start(2.0f, 1.0f, delay - 0.05f, 0.05f,
+						[](float x) { return glm::elasticEaseOut(x);
+						});
+					inter_nest[2].start(2.0f, 1.0f, delay - 0.1f, 0.1f,
+						[](float x) { return glm::elasticEaseOut(x);
+						});
+
+					cam_ctrl.shake(cam, .25f, .5f, 17.f);
+
+					auto fn = []()
+					{
+						auto fn = []()
+						{
+							Service<EventManager>::Get().instant_dispatch<WipeColourTrigger>(WipeColourTrigger({ 1,1,1 }, .05f, .05f, 0.0f));
+						};
+						auto empty = []() {};
+
+						Service<EventManager>::Get().instant_dispatch<WipeColourTrigger>(WipeColourTrigger({ 1,1,1 }, .05f, .05f, 0.0f, empty, fn));
+					};
+
+					auto empty = []() {};
+
+					Service<EventManager>::Get().instant_dispatch<WipeColourTrigger>(WipeColourTrigger({ 1,1,1 }, .05f, .05f, 0.0f, empty, fn));
+				}
+
+			}
+
+			if (triggered)
+			{
+				auto position = instance.ecs.get<tc::Transform>(other_entity).position;
+				position.y += 1.4f + inter3.get() * .3f;
+				auto ss = cam.WorldspaceToScreenspace(position);
+				auto vp = cam.GetViewport();
+				ss.x = (1 + ss.x) / 2 * vp.z;
+				ss.y = vp.w - ((1 + ss.y) / 2 * vp.w);
+				auto temp = ImGui::GetCursorPos();
+
+				// Draw the damage
+				{
+					glm::vec3 col(1, 0, 0);
+
+					std::string text = std::to_string(damage);
+
+					if (damage == 0)
+						col = vec3(1, 1, 1);
+					else if (damage < 0)
+					{
+						text = std::to_string(-damage);
+						col = vec3(0, 1, 0);
+					}
+
+					ImGui::PushFont(FONT_HEAD);
+					auto text_size = ImGui::CalcTextSize(text.c_str());
+					ImGui::PopFont();
+					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					ImGui::SetCursorPos(cursor_pos);
+
+					ImGui::BeginGroup();
+					for (int i = 0; i < text.size() && i < 3; ++i)
+					{
+						float scale = FONT_HEAD->Scale;
+						FONT_HEAD->Scale = inter_nest[i].get();
+						ImGui::PushFont(FONT_HEAD);
+						// the text colour
+						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, 1.f - inter4.get()));
+						// the text thingy
+						ImGui::Text(std::string{ text[i] }.c_str());
+						ImGui::SameLine(0);
+
+						ImGui::PopStyleColor();
+						ImGui::PopFont();
+						FONT_HEAD->Scale = scale;
+					}
+					ImGui::EndGroup();
+
+				}
+				ImGui::SetCursorPos(temp);
+			}
+
+			if (triggered)
+			{
+				auto position = instance.ecs.get<tc::Transform>(other_entity).position;
+				position.y += 1.0f + inter5.get() * .2f;
+				auto ss = cam.WorldspaceToScreenspace(position);
+				auto vp = cam.GetViewport();
+				ss.x = (1 + ss.x) / 2 * vp.z;
+				ss.y = vp.w - ((1 + ss.y) / 2 * vp.w);
+				auto temp = ImGui::GetCursorPos();
+
+				// Draw the damage
+				{
+
+					const char* sads[] = { ICON_FA_SAD_TEAR, ICON_FA_SAD_CRY, ICON_FA_FROWN, ICON_FA_FROWN_OPEN };
+					const char* happys[] = { ICON_FA_GRIN_TONGUE_SQUINT, ICON_FA_LAUGH_BEAM, ICON_FA_LAUGH_SQUINT, ICON_FA_LAUGH_WINK };
+					const char* deads[] = { ICON_FA_SKULL_CROSSBONES, ICON_FA_SKULL };
+
+					std::string text = sads[rand1];
+					glm::vec3 col(1, 0, 0);
+
+					if (damage == 0)
+					{
+						col = vec3(0, 1, 0);
+						text = happys[rand2];
+					}
+					if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
+					{
+						col = vec3(0, 0, 0);
+						text = deads[rand2 % 2];
+					}
+
+					ImGui::PushFont(FONT_HEAD);
+					// the text colour
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, inter5.get()));
+					auto text_size = ImGui::CalcTextSize(text.c_str());
+					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					ImGui::SetCursorPos(cursor_pos);
+					{
+						ImGui::BeginGroup();
+						// the text thingy
+						ImGui::Text(text.c_str());
+
+						ImGui::EndGroup();
+					}
+					ImGui::PopStyleColor();
+					ImGui::PopFont();
+				}
+				ImGui::SetCursorPos(temp);
+			}
+
+
+			if (inter2.is_finished() && inter3.is_finished() && inter5.is_finished() && inter6.is_finished() && triggered)
+			{
+				triggered = false;
+				inter1.start(0, 1, 1.f); // just to make sure we do not activate the top shit
+
+				if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
+				{
+					battle_state = BATTLE_STATE::BATTLE_GLIMPSE;
+				}
+				else
+				{
+					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
+				}
+			}
+
+			break;
+		case Tempest::CombatModeOverlay::BATTLE_STATE::BATTLE_GLIMPSE:
+
 		{
 
 			// pop up of three ending options
 			// TODO: shift to new function
 
+			const ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
 			ImGui::OpenPopup("End Unit Cycle");
 			ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
@@ -1536,7 +2018,7 @@ namespace Tempest
 				// text
 				ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
 				ImGui::PushFont(FONT_OPEN);
-				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), std::string{ charac.name + "'s HP has reached 0" }.c_str());
+				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), std::string{ ocs.name + "'s HP has reached 0" }.c_str());
 				ImGui::PopFont();
 
 				// halftone
@@ -1574,34 +2056,41 @@ namespace Tempest
 					{
 					case 0:
 						// full health
-						charac.set_statDelta(0, 0);
+						ocs.set_statDelta(0, 0);
 						break;
 					case 1:
 						// totally remove from map
 						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
 						instance.ecs.destroy(other_entity);
+						other_entity = INVALID;
 						break;
 					case 2:
 						// ignore
 						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+						if (auto dead = instance.scene.get_prototype_if("Unit", "Dead"))
+						{
+							// create a new entity
+							auto new_e = instance.ecs.create(dead->instance());
+							LOG_ASSERT(instance.ecs.has<tc::Transform>(new_e));
+							LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
+
+							instance.ecs.get<tc::Transform>(new_e) = oxform;
+							instance.ecs.get<tc::Character>(new_e) = ocs;
+
+							instance.ecs.destroy(other_entity);
+						}
+						other_entity = INVALID;
+
 						break;
 					default:
 						break;
 					}
 
 					end_selection = -1;
-					display_other_end_cycle = false;
+					//display_other_end_cycle = false;
 					ImGui::CloseCurrentPopup();
 
-					// clear
-					instance.selected = INVALID;
-					other_entity = INVALID;
-					battle_state = BATTLE_STATE::CURR_TURN; // temp testing
-					state = State::MENU;
-
-					//  TODO: change to the next entity turn
-					selected_action = UNDEFINED;
-					selected_weapon = UNDEFINED;
+					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
 				}
 			}
 
@@ -1610,6 +2099,30 @@ namespace Tempest
 			ImGui::PopStyleVar(3);
 			ImGui::PopStyleColor(2);
 		}
+			break;
+		case Tempest::CombatModeOverlay::BATTLE_STATE::COMMENCE_BATTLE:
+		{
+			auto fn = [&]()
+			{
+				battle_state = BATTLE_STATE::CURR_TURN; // temp testing
+				state = State::MENU;
+			};
+
+			Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, fn));
+		}
+			break;
+		default:
+			break;
+		}
+
+
+		}
+		else
+		{
+			battle_state = BATTLE_STATE::CURR_TURN;
+			state = State::MENU;
+		}
+
 	}
 
 	void CombatModeOverlay::display_selected(RuntimeInstance& instance, Entity character)
@@ -1930,6 +2443,24 @@ namespace Tempest
 		if (!dynamic_cast<RuntimeInstance*>(&instance))
 			return;
 
+		{
+			float dt = ImGui::GetIO().DeltaTime;
+			/*
+			for (auto& i : inter_nest)
+				i.update(dt);*/
+
+			inter1.update(dt);
+			inter2.update(dt);
+			inter3.update(dt);
+			inter4.update(dt);
+			inter5.update(dt);
+			inter6.update(dt);
+
+			for (auto& i : inter_nest)
+				i.update(dt);
+		}
+
+
 		auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
 
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -1957,8 +2488,14 @@ namespace Tempest
 				//bool selectable_hovered = false;
 				auto& cam = Service<RenderSystem>::Get().GetCamera();
 
-				cam_ctrl.controls(cam);
+
+				if (state != State::CINEMATIC)
+				{
+					cam_ctrl.controls(cam);
+				}
+				
 				cam_ctrl.update(cam);
+
 				glm::ivec2 world_mouse = calculate_world_mouse(cam);
 
 				ImGui::Dummy(ImVec2{ 5.0f,0.f });
@@ -1977,6 +2514,7 @@ namespace Tempest
 					state = State::NO_SELECTED;
 					other_entity = INVALID;
 				}*/
+
 
 				switch (state)
 				{
@@ -2003,18 +2541,24 @@ namespace Tempest
 				case State::FIGHT:
 					fight(runtime);
 					break;
+				case State::CINEMATIC:
+					show_cinematic(runtime);
+					break;
 				default:
 					break;
 				}
 			}
 
-			auto add_units = tex_map["Assets/AddUnitsButton.dds"];
-
-			ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.9f - add_units->GetWidth() * 0.5f, viewport->Size.y * 0.06f });
-			if (ImGui::ImageButton((void*)static_cast<size_t>(add_units->GetID()), ImVec2{ add_units->GetWidth() * 0.9f, add_units->GetHeight() * 0.9f}))
+			if (state != State::CINEMATIC)
 			{
-				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>(false, units);
-				Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+				auto add_units = tex_map["Assets/AddUnitsButton.dds"];
+
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.9f - add_units->GetWidth() * 0.5f, viewport->Size.y * 0.06f });
+				if (ImGui::ImageButton((void*)static_cast<size_t>(add_units->GetID()), ImVec2{ add_units->GetWidth() * 0.9f, add_units->GetHeight() * 0.9f }))
+				{
+					Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>(false, units);
+					Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+				}
 			}
 
 			ImGui::End();
@@ -2309,7 +2853,7 @@ namespace Tempest
 		//}
 	}
 
-	void CombatModeOverlay::render_more_info(Instance& instance, const ImGuiViewport& viewport, INFO_TYPE type, Entity entity)
+	void CombatModeOverlay::render_more_info([[maybe_unused]]Instance& instance, const ImGuiViewport& viewport, INFO_TYPE type, Entity entity)
 	{
 		const int identifier = static_cast<int>(type) + static_cast<int>(entity * 2.5f); // this is a scam
 		if (ImGui::BeginChild(std::string("Char more info" + std::to_string(identifier)).c_str(), ImVec2{ viewport.Size.x * 0.3f, viewport.Size.y * 0.8f / 3.0f }, true))

@@ -53,6 +53,7 @@
 #include "Window/Popup/TutorialPopup.h"
 #include "Window/Popup/MainMenuSequencePopup.h"
 #include "Window/Popup/WipePopup.h"
+#include "Window/Popup/WipeColourPopup.h"
 #include "Window/Popup/SettingsPopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
@@ -95,6 +96,7 @@ namespace Tempest
 
 		instance->register_always<ShowRecent>();
 		instance->register_always<WipePopup>();
+		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
 	}
 
@@ -168,6 +170,7 @@ namespace Tempest
 
 		instance->register_always<ShowRecent>();
 		instance->register_always<WipePopup>();
+		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
 	}
 	void InstanceManager::register_runtime_windows()
@@ -191,6 +194,7 @@ namespace Tempest
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
 		instance->register_always<WipePopup>();
+		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
 		instance->register_always<SettingsPopup>();
 	}
