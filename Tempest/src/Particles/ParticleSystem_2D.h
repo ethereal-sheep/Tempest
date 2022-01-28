@@ -11,32 +11,34 @@
 
 struct ParticleSystem_2D
 {
-	struct Handler
-	{
-		Handler(std::shared_ptr<Emitter> emitter)
-			: m_weakEmmitters{ emitter }
-		{}
+	static ParticleSystem_2D& GetInstance();
 
-		std::weak_ptr<Emitter> m_weakEmmitters;
+	//struct Handler
+	//{
+	//	Handler(std::shared_ptr<Emitter> emitter)
+	//		: m_weakEmmitters{ emitter }
+	//	{}
 
-		void reset()
-		{
-			m_weakEmmitters.reset();
-		}
-		[[nodiscard]] bool IsDead()
-		{
-			return m_weakEmmitters.expired();
-		}
-	};
+	//	std::weak_ptr<Emitter> m_weakEmmitters;
 
-	Handler Register(glm::vec2 pos)
-	{
-		auto emitter = std::make_shared<Emitter>();
-		emitter->m_GM.m_position = pos;
-		m_emitters.push_back(emitter);
+	//	void reset()
+	//	{
+	//		m_weakEmmitters.reset();
+	//	}
+	//	[[nodiscard]] bool IsDead()
+	//	{
+	//		return m_weakEmmitters.expired();
+	//	}
+	//};
 
-		return Handler(emitter); // Weak ptr, refer to Handler
-	}
+	//Handler Register(glm::vec2 pos)
+	//{
+	//	auto emitter = std::make_shared<Emitter>();
+	//	emitter->m_GM.m_position = pos;
+	//	m_emitters.push_back(emitter);
+
+	//	return Handler(emitter); // Weak ptr, refer to Handler
+	//}
 
 	//Emitter& Register(glm::vec2 pos)
 	//{
@@ -44,7 +46,7 @@ struct ParticleSystem_2D
 	//	emitter->m_GM.m_position = pos;
 	//	m_emitters.push_back(emitter);
 
-	//	return *emitter.get(); // Weak ptr, refer to Handler
+	//	return *emitter.get(); // Bad local variable, please change this code
 	//}
 
 	void Update();
@@ -58,6 +60,7 @@ struct ParticleSystem_2D
 	void ExplosionEmitter_2(glm::vec2 spawnPos);
 
 private:
+	ParticleSystem_2D();
 	std::vector <std::shared_ptr<Emitter>> m_emitters;
 };
 

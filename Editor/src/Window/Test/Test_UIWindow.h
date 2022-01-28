@@ -25,7 +25,6 @@ namespace Tempest
 		const unsigned numOfButtons = 10;
 		const float padding = 50.0f;
 		const float halfPadding = padding * 0.5f;
-		ParticleSystem_2D particleSys;
 
 		const char* window_name() override
 		{
@@ -173,7 +172,7 @@ namespace Tempest
 
 					//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
 					//auto& reg = particleSys.Register(tempVec);
-					particleSys.ExplosionEmitter_2(tempVec);
+					ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 					//reg->m_RM.m_type = ParticleType::Circle;
 					//reg->m_GM.m_velocity.x = -500.0f;
 				}
@@ -184,16 +183,14 @@ namespace Tempest
 					tempVec.y = ImGui::GetMousePos().y;
 
 					// Test prepared functions for XR
-					//particleSys.ButtonEmitter(real_mousePosition, real_buttonSize);
-
-					particleSys.ExplosionEmitter_2(tempVec);
+					ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
 				}
 
 				// Update the emitters
-				for (auto& emitter : particleSys.get_emitters()) 
-				{
-					emitter->Update();
+				ParticleSystem_2D::GetInstance().Update();
 
+				for (auto& emitter : ParticleSystem_2D::GetInstance().get_emitters())
+				{
 					// Render the particle
 					if(emitter->m_GM.m_active)
 						for (auto& particle : emitter->m_particles) 

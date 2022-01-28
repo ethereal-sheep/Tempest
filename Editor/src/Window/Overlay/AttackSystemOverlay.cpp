@@ -15,6 +15,8 @@
 #include "Util/UIElements.h"
 #include "Instance/EditTimeInstance.h"
 
+#include "Particles/ParticleSystem_2D.h"
+
 namespace Tempest
 {
 	const float indent = 30.f;
@@ -1702,6 +1704,11 @@ namespace Tempest
 						if (ax::NodeEditor::AcceptNewItem(ImColor(128, 255, 128), 4.0f))
 						{
 							g.add_link(s, e);
+
+							glm::vec2 tempVec;
+							tempVec.x = mouse.x;
+							tempVec.y = mouse.y;
+							ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 						}
 					}
 				}

@@ -4,6 +4,15 @@
 #include "WaypointEmitter.h"
 #include "ExplosionEmitter.h"
 
+ParticleSystem_2D::ParticleSystem_2D()
+{}
+
+ParticleSystem_2D& ParticleSystem_2D::GetInstance()
+{
+	static ParticleSystem_2D instance;
+	return instance;
+}
+
 void ParticleSystem_2D::Update()
 {
 	// Update all the emitters here
@@ -85,7 +94,7 @@ void ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
 	// Emitter values - Without consideration for default ctor values
 	explosionEmitter.m_GM.m_position = spawnPos;
 	//explosionEmitter.m_GM.m_velocity.x = -500.0f;
-	explosionEmitter.m_MM.m_duration = 1000.0f;
+	explosionEmitter.m_MM.m_duration = 2.f;
 	explosionEmitter.m_GM.m_active = true;
 	explosionEmitter.m_MM.m_preWarm = true;
 
