@@ -318,6 +318,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Popup\SettingsPopup.h" />
     <ClInclude Include="src\Window\Popup\SimulateSelectionPopup.h" />
     <ClInclude Include="src\Window\Popup\TutorialPopup.h" />
+    <ClInclude Include="src\Window\Popup\WipeColourPopup.h" />
     <ClInclude Include="src\Window\Popup\WipePopup.h" />
     <ClInclude Include="src\Window\Test\Test_UIWindow.h" />
     <ClInclude Include="src\Window\Test\test_window.h" />
