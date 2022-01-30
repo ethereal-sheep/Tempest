@@ -41,8 +41,7 @@ namespace Tempest
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
 		tutorial_index = 0;
-		tutorial_enable = true;
-		
+		//ImGuiMouseButton 
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -291,7 +290,7 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 						
 						//Tutorial progression
-						if (tutorial_enable && tutorial_index == 0)
+						if (instance.tutorial_enable && tutorial_index == 0)
 							tutorial_index = 1;
 					}
 					
@@ -309,10 +308,9 @@ namespace Tempest
 				}
 
 
-				if (tutorial_enable)
+				if (instance.tutorial_enable)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
-					//Exit Tutorial button
 					switch (tutorial_index)
 					{
 						// Click to quick menu
@@ -360,6 +358,20 @@ namespace Tempest
 						}
 						break;
 					}
+
+					//Tutorial Exit Button
+					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+					if (UI::MouseIsWithin(tut_min, tut_max))
+					{
+						ImGui::SetMouseCursor(7);
+						if(ImGui::IsMouseClicked(0))
+							instance.tutorial_enable = false;
+					}
+						
 				}
 			}
 

@@ -221,7 +221,7 @@ namespace Tempest
 		ActionHistory action_history;
 		WindowManager window_manager;
 
-		
+		bool tutorial_enable = true;
 		Entity selected = INVALID;
 	};
 }

@@ -212,6 +212,7 @@ namespace Tempest::UI
 	void AttackSuccessUI(string name, const ImVec2 pos, int successVal);
 
 	void TutArea(ImVec2 pos, ImVec2 size);
+	bool MouseIsWithin(const ImVec2 min, const ImVec2 max);
 
 }
 
