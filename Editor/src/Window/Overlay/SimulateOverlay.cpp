@@ -377,6 +377,75 @@ namespace Tempest
 					}
 						
 				}
+
+				//Tutorial
+				if (instance.tutorial_enable)
+				{
+					auto drawlist = ImGui::GetForegroundDrawList();
+					switch (tutorial_index)
+					{
+						// Click to quick menu
+
+						case 0:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
+							ImVec2 size = { 200.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE)+ "Click here to access the quick menu.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+						case 1:
+						{
+							ImVec2 pos = {0.f, 0.f };
+							ImVec2 size = { viewport->Size.x, viewport->Size.y * 0.25f };
+							UI::TutArea(pos, size);
+							string str = "";
+							str = "Quick Menu";
+							ImGui::PushFont(FONT_BTN);
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							ImGui::PopFont();
+
+							drawlist->AddLine({ pos.x + size.x * 0.5f, size.y }, { pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }),2.f);
+							drawlist->AddLine({ pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, { pos.x + size.x * 0.1f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }),2.f);
+
+							str = "The quick menu allows you to quickly access all";
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 25.f }, ImGui::GetColorU32({1,1,1,1 }), str.c_str());
+							str = "the pages in the conflict resolution screen.";
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 40.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
+							drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+
+							if (ImGui::IsMouseClicked(0))
+								tutorial_index = 2;
+						}
+						break;
+						case 2:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.18f, viewport->Size.y * 0.1f };
+							ImVec2 size = { 310.f, 140.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access units page.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+					}
+
+					//Tutorial Exit Button
+					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+					if (UI::MouseIsWithin(tut_min, tut_max))
+					{
+						ImGui::SetMouseCursor(7);
+						if(ImGui::IsMouseClicked(0))
+							instance.tutorial_enable = false;
+					}
+						
+				}
 			}
 
 			ImGui::PopStyleVar();
