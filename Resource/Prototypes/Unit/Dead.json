@@ -1,0 +1,122 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Unit"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Unit"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 1
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    -1.9020519256591797,
+                    0.0,
+                    -0.8009920120239258
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    0.008999999612569809,
+                    0.008999999612569809,
+                    0.008999999612569809
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Character"
+            },
+            "Component": {
+                "Charater_Name": "Char",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [],
+                "Charater_Stats": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": []
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\UnitBlack_Death.a",
+                "TexturePath": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 1
+            }
+        }
+    ]
+}

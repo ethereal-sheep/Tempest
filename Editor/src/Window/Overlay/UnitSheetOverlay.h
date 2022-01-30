@@ -45,7 +45,7 @@ namespace Tempest
 
         const char* window_name() override
         {
-            return "";
+            return "UnitSheetOverlay";
         }
         void init(Instance&) override
         {

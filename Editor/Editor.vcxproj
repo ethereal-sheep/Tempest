@@ -315,8 +315,10 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Popup\QuickMenuPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveCurrentBeforeOpenPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\SettingsPopup.h" />
     <ClInclude Include="src\Window\Popup\SimulateSelectionPopup.h" />
     <ClInclude Include="src\Window\Popup\TutorialPopup.h" />
+    <ClInclude Include="src\Window\Popup\WipeColourPopup.h" />
     <ClInclude Include="src\Window\Popup\WipePopup.h" />
     <ClInclude Include="src\Window\Test\Test_UIWindow.h" />
     <ClInclude Include="src\Window\Test\test_window.h" />
@@ -324,6 +326,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Test\test_window3.h" />
     <ClInclude Include="src\Window\Test\test_window4.h" />
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
+    <ClInclude Include="src\Window\Util\Delay.h" />
     <ClInclude Include="src\Window\Util\LineDrawing.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Util\SimulationBuilder.h" />

@@ -53,6 +53,8 @@
 #include "Window/Popup/TutorialPopup.h"
 #include "Window/Popup/MainMenuSequencePopup.h"
 #include "Window/Popup/WipePopup.h"
+#include "Window/Popup/WipeColourPopup.h"
+#include "Window/Popup/SettingsPopup.h"
 
 #include "Window/Util/SimulationBuilder.h"
 #include "Window/Util/SimulationStart.h"
@@ -73,6 +75,7 @@
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
+#include "Window/Util/Delay.h"
 
 namespace Tempest
 {
@@ -89,8 +92,12 @@ namespace Tempest
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
+		instance->register_always<SettingsPopup>();
 
 		instance->register_always<ShowRecent>();
+		instance->register_always<WipePopup>();
+		instance->register_always<WipeColourPopup>();
+		instance->register_always<Delay>();
 	}
 
 	void InstanceManager::register_physicstime_windows()
@@ -105,6 +112,7 @@ namespace Tempest
 		instance->register_always<SaveCurrentBeforeOpenPopup>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
+		instance->register_always<SettingsPopup>();
 
 		instance->register_always<ShowRecent>();
 	}
@@ -141,6 +149,7 @@ namespace Tempest
 		instance->register_always<SelectSequencePopup>();
 		instance->register_always<TutorialPopup>();
 		instance->register_always<MainMenuSequencePopup>();
+		instance->register_always<SettingsPopup>();
 
 
 		instance->register_always<SaveBrowser>();
@@ -161,6 +170,8 @@ namespace Tempest
 
 		instance->register_always<ShowRecent>();
 		instance->register_always<WipePopup>();
+		instance->register_always<WipeColourPopup>();
+		instance->register_always<Delay>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{
@@ -182,6 +193,10 @@ namespace Tempest
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
+		instance->register_always<WipePopup>();
+		instance->register_always<WipeColourPopup>();
+		instance->register_always<Delay>();
+		instance->register_always<SettingsPopup>();
 	}
 
 }

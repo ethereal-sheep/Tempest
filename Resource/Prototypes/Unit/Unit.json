@@ -45,7 +45,9 @@
             "Metadata": {
                 "Type": "Collision"
             },
-            "Component": {}
+            "Component": {
+                "Cover": 0
+            }
         },
         {
             "Metadata": {
@@ -81,6 +83,7 @@
                     0.0,
                     0.0
                 ],
+                "IsInCombat": false,
                 "Weapon_Ids": [],
                 "Charater_Stats": [
                     0,
@@ -105,7 +108,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\UnitBlack_CombatStance.a"
+                "Path": "Models\\UnitBlack_CombatStance.a",
+                "TexturePath": ""
             }
         },
         {

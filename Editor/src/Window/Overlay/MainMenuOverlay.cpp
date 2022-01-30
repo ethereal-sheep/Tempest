@@ -24,17 +24,32 @@ namespace Tempest
 		MainMenuUI = state;
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 
-		if (MainMenuUI == UI_SHOW::CONFLICT_RES)
+		switch (MainMenuUI)
 		{
+		case Tempest::MainMenuOverlay::UI_SHOW::INITIAL: [[fallthrough]];
+		case Tempest::MainMenuOverlay::UI_SHOW::PROJECTS: [[fallthrough]];
+		case Tempest::MainMenuOverlay::UI_SHOW::NEW_PROJECT:
+			inter_nest[0].start(0.f, 1, .25f, 0.f, 
+				[](float x) { return glm::sineEaseOut(x); 
+			});
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
 			for (int i = 0; i < inter_nest.size(); ++i)
 			{
 				inter_nest[i].start(.8f, .3f, .5f, i * .05f, [](float x) { return glm::cubicEaseOut(x); });
 			}
-		}
-		else if (MainMenuUI == UI_SHOW::LOAD_MAP)
-		{
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_MAP:
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::LOAD_MAP:
 			inter_nest[0].start(0.5f, 0.5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
+			break;
+		default:
+			break;
 		}
+
 	}
 
 	void MainMenuOverlay::open_popup(const Event& e)
@@ -111,6 +126,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 			// render the selectables
 			std::string selectable = "";
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get()});
 			ImGui::PushFont(FONT_BTN);
 			selectable = "Projects";
 			ImGui::SetCursorPos(button_pos);
@@ -119,8 +135,13 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				change_state(UI_SHOW::PROJECTS);
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
+				auto fn = [&]()
+				{
+					change_state(UI_SHOW::PROJECTS);
+				};
+				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 				
 
@@ -139,7 +160,9 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
+				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
+
 			}
 
 			if (ImGui::IsItemHovered())
@@ -156,7 +179,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 
 			if (ImGui::IsItemHovered())
@@ -173,7 +196,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				get_quitter().quit = true;
 			}
 			if (ImGui::IsItemHovered())
@@ -183,7 +206,7 @@ namespace Tempest
 			}
 
 			ImGui::PopFont();
-			ImGui::PopStyleColor(2);
+			ImGui::PopStyleColor(3);
 		}
 			
 			break;
@@ -193,6 +216,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
@@ -205,8 +229,13 @@ namespace Tempest
 				if (ImGui::Selectable(selectable.c_str(), false))
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-					change_state(UI_SHOW::NEW_PROJECT);
+					ae.Play("Sounds2D/ButtonClick.wav", "SFX");
+					auto fn = [&]()
+					{
+						change_state(UI_SHOW::NEW_PROJECT);
+					};
+					inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+					Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 				
 				}
 				if (ImGui::IsItemHovered())
@@ -224,7 +253,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Creating new project...");
 				Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
 				//change_state(UI_SHOW::NEW_PROJECT;
@@ -249,7 +278,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
 				Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
 			}
@@ -269,8 +298,13 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				change_state(UI_SHOW::INITIAL);
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
+				auto fn = [&]()
+				{
+					change_state(UI_SHOW::INITIAL);
+				};
+				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 				
 			if (ImGui::IsItemHovered())
@@ -280,7 +314,7 @@ namespace Tempest
 			}
 
 			ImGui::PopFont();
-			ImGui::PopStyleColor(2);
+			ImGui::PopStyleColor(3);
 		}
 			break;
 
@@ -289,6 +323,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
 			// render the selectables
 			std::string selectable = "";
 			ImGui::PushFont(FONT_BTN);
@@ -298,7 +333,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 
 				auto fn = [&]()
 				{
@@ -325,7 +360,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 
 				if (instance.get_scene_paths().empty())
 				{
@@ -432,7 +467,7 @@ namespace Tempest
 			{
 
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				// go ahead
 				auto fn = [&, selectable]()
 				{
@@ -457,8 +492,13 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				change_state(UI_SHOW::PROJECTS);
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
+				auto fn = [&]()
+				{
+					change_state(UI_SHOW::PROJECTS);
+				};
+				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 				
 			if (ImGui::IsItemHovered())
@@ -468,7 +508,7 @@ namespace Tempest
 			}
 
 			ImGui::PopFont();
-			ImGui::PopStyleColor(2);
+			ImGui::PopStyleColor(3);
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
@@ -500,7 +540,7 @@ namespace Tempest
 				if (selected)
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+					ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 					if (b) // if b is true, there is a conres at this position
 					{
 
@@ -556,7 +596,7 @@ namespace Tempest
 				if (UI::UIConflictSelectable(str.c_str(), false, jank).first)
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+					ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 					if (jank)
 					{
 						OverlayOpen = false;
@@ -577,7 +617,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 
 				auto fn = [&]()
 				{
@@ -618,7 +658,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				auto fn = [&]()
 				{
 					change_state(UI_SHOW::NEW_PROJECT);
@@ -634,30 +674,16 @@ namespace Tempest
 			// render bottom two buttons
 			if (UI::UIButton_2("New Map", "New Map", ImVec2{ viewport.Size.x * 0.34f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
 			{
-
+				ImGui::OpenPopup("NEW MAP");
+				NewMapName = "Map";
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
-				auto fn = [&]()
-				{
-					if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
-					{
-						auto name = edit->create_new_scene();
-						if (name != "" && edit->load_new_scene_by_name(name))
-						{
-							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
-							OverlayOpen = false;
-						}
-					}
-				};
-				// fade in, fade out, visible
-				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-				
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 			}
 
 			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				auto fn = [&]()
 				{
 					change_state(UI_SHOW::LOAD_MAP);
@@ -668,6 +694,24 @@ namespace Tempest
 			}
 			
 			ImGui::PopFont();
+
+			if (UI::ConfirmInputNamePopup("NEW MAP", NewMapName))
+			{
+				auto fn = [&]()
+				{
+					if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
+					{
+						auto name = edit->create_new_scene(NewMapName);
+						if (name != "" && edit->load_new_scene_by_name(name))
+						{
+							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							OverlayOpen = false;
+						}
+					}
+				};
+				// fade in, fade out, visible
+				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+			}
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::LOAD_MAP:
@@ -698,7 +742,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 
 				if (MapTitle == "Map Builder")
 				{
@@ -741,7 +785,7 @@ namespace Tempest
 				if (map_pair.first)
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+					ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 
 					if (MapTitle == "Map Builder")
 					{
@@ -808,7 +852,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/ButtonClick.wav", "sfx_bus");
+				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
 				MainMenuUI = UI_SHOW::LOAD_MAP;
 
 				//auto fn = [&]()

@@ -59,6 +59,18 @@
                         "first": false,
                         "second": "Stat10"
                     }
+                ],
+                "Stats_Description": [
+                    "Health Point",
+                    "Attack",
+                    "Defence Point",
+                    "Attack Range",
+                    "Movement Point",
+                    "~ No Description ~",
+                    "~ No Description ~",
+                    "~ No Description ~",
+                    "~ No Description ~",
+                    "~ No Description ~"
                 ]
             }
         }

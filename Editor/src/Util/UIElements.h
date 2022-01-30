@@ -41,6 +41,7 @@ namespace Tempest::UI
 
 	bool ConfirmDeletePopup(const char* popupName, string str);
 	bool ConfirmDeletePopup_DefineStat(const char* popupName);
+	bool ConfirmInputNamePopup(const char* popupName, string &str);
 
 	void ShowLabel(const char* label, ImColor color);
 

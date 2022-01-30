@@ -54,14 +54,17 @@ namespace Tempest
 
         void open_popup(const Event& e)
         {
-            auto& a = event_cast<WipeTrigger>(e);
+            if (state == state::INVISIBLE)
+            {
+                auto& a = event_cast<WipeTrigger>(e);
 
-            fade_in_time = a.fade_in_time;
-            fade_out_time = a.fade_out_time;
-            visible_time = a.visible_time;
-            to_do = a.do_on_fade;
+                fade_in_time = a.fade_in_time;
+                fade_out_time = a.fade_out_time;
+                visible_time = a.visible_time;
+                to_do = a.do_on_fade;
 
-            state = state::APPEAR;
+                state = state::APPEAR;
+            }
         }
 
 
@@ -93,10 +96,12 @@ namespace Tempest
             case state::FADING_IN:
                 ImGui::SetNextWindowFocus();
                 ImGui::SetNextWindowBgAlpha(inter.get()); // Transparent background
-                if (ImGui::Begin("##WIPE", nullptr, window_flags))
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
+                if (ImGui::Begin("WIPE##WIPE", nullptr, window_flags))
                 {
                 }
                 ImGui::End();
+                ImGui::PopStyleColor(1);
                 if (inter.is_finished())
                 {
                     state = state::VISIBLE;
@@ -107,10 +112,12 @@ namespace Tempest
             case state::VISIBLE:
             {
                 ImGui::SetNextWindowBgAlpha(end); // Transparent background
-                if (ImGui::Begin("##WIPE", nullptr, window_flags))
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
+                if (ImGui::Begin("WIPE##WIPE", nullptr, window_flags))
                 {
                 }
                 ImGui::End();
+                ImGui::PopStyleColor(1);
                 if (inter.is_finished())
                 {
                     state = state::FADING_OUT;
@@ -120,10 +127,12 @@ namespace Tempest
             }
             case state::FADING_OUT:
                 ImGui::SetNextWindowBgAlpha(inter.get()); // Transparent background
-                if (ImGui::Begin("##WIPE", nullptr, window_flags))
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
+                if (ImGui::Begin("WIPE##WIPE", nullptr, window_flags))
                 {
                 }
                 ImGui::End();
+                ImGui::PopStyleColor(1);
                 if (inter.is_finished())
                 {
                     state = state::INVISIBLE;

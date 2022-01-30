@@ -46,7 +46,11 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<OpenMainMenuTrigger>(&MainMenuOverlay::open_popup, this);
             if (dynamic_cast<EditTimeInstance*>(&instance))
             {
-                MainMenuUI = UI_SHOW::NEW_PROJECT;
+                change_state(UI_SHOW::NEW_PROJECT);
+            }
+            else
+            {
+                change_state(UI_SHOW::INITIAL);
             }
         }
         void change_state(UI_SHOW state);
@@ -61,6 +65,7 @@ namespace Tempest
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
         string SelectedMap = "";
+        string NewMapName = "Map";
         std::vector<Entity> SelectedSequences; // will this be an entity id?
         std::vector<bool> OkayConRes = std::vector(3, false);
         std::vector<std::vector<std::pair<Entity, string>>> ConResSequences = std::vector(3, std::vector<std::pair<Entity, string>>());
