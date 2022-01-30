@@ -190,6 +190,10 @@ namespace Tempest
 				// display unit picture here
 				if (cs)
 				{
+					//auto newEnt = instance.ecs.create();
+					//
+					//instance.ecs.emplace<tc::Model>(newEnt, "UnitBlack_Idle.a");
+
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.12f, viewport->Size.y * 0.15f });
 					auto UnitImg = tex_map["Assets/UnitIdle.dds"];
 					if (ImGui::BeginChild("RenderUnit##", ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
@@ -198,7 +202,9 @@ namespace Tempest
 					//ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
 					ImGuiViewport* viewport = ImGui::GetMainViewport();
 					vec2 size = vec2(viewport->Size.x, viewport->Size.y);
-					ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0, 1), ImVec2(1, 0));
+					//ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0.2, 0.7), ImVec2(0.7, 0.2));
+
+					ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
 					//ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().USObuffer), ImVec2(Service<RenderSystem>::Get().getWidth(), Service<RenderSystem>::Get().getHeight()), ImVec2(0, .2), ImVec2(.2, 0));
 
 					}

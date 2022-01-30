@@ -555,6 +555,11 @@ namespace Tempest
         {
             GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
         }
+        auto s = glm::scale(glm::vec3(0.02f));
+        auto t = glm::translate(glm::vec3(0.0f));
+        //auto r = 
+        SubmitModel("Models/UnitBlack_Idle.a", (s*t));
+
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
 
