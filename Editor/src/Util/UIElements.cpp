@@ -3819,8 +3819,17 @@ namespace Tempest::UI
 		drawlist->AddRectFilled(BtmBox.Min, BtmBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(LeftBox.Min, LeftBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
+	}
 
-		
+	bool MouseIsWithin(const ImVec2 min, const ImVec2 max)
+	{
+		auto mousePos = ImGui::GetMousePos();
+		if (mousePos.x > min.x && mousePos.y < max.x
+			&& mousePos.y > min.y && mousePos.y < max.y)
+			return true;
+
+
+		return false;
 	}
 }
 
