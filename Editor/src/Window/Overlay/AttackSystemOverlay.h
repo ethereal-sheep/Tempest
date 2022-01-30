@@ -89,6 +89,8 @@ namespace Tempest
 
 		graph temp_graph;
         Entity id = UNDEFINED;
+
+        int tutorial_index = 0;
         
         // copyable stuff
         tvector<node> nodes_copied;

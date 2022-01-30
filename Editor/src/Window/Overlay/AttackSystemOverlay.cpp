@@ -66,6 +66,7 @@ namespace Tempest
 			overlay_title = "Editing Sequence";
 			sidebar_title = "SEQUENCES";
 		}
+		tutorial_index = 0;
 
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
@@ -363,7 +364,9 @@ namespace Tempest
 							{
 								instance.ecs.emplace<tc::ActionGraph>(new_graph);
 								instance.ecs.emplace<tc::Graph>(new_graph, "ACTION", graph_type::action);
-								
+								//Tutorial progression
+								if (instance.tutorial_enable && tutorial_index == 0)
+									tutorial_index = 1;
 							}
 							else
 							{
@@ -413,6 +416,8 @@ namespace Tempest
 						{
 							QUICKMENU_POPUP_TYPE t = type == OPEN_GRAPH_TYPE::GRAPH_ACTION ? QUICKMENU_POPUP_TYPE::ACTIONS : QUICKMENU_POPUP_TYPE::SEQUENCES;
 							Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(t);
+							if (instance.tutorial_enable && tutorial_index == 2)
+								tutorial_index = 3;
 						}
 
 						ImGui::SameLine();
@@ -434,6 +439,90 @@ namespace Tempest
 					ImGui::EndChild();
 				}
 			
+
+				if (instance.tutorial_enable)
+				{
+					auto drawlist = ImGui::GetForegroundDrawList();
+
+					if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+					{
+						switch (tutorial_index)
+						{
+						case 0:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
+							ImVec2 size = { 200.f, 70.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new action.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 1:
+						{
+							// render the tasks for action
+						}
+						break;
+
+						case 2:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.102f, viewport->Size.y * 0.0261f };
+							ImVec2 size = { 200.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 3:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.505f, viewport->Size.y * 0.1f };
+							ImVec2 size = { 310.f, 140.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the sequence page.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						}
+					}
+					else
+					{
+						switch (tutorial_index)
+						{
+						case 0:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
+							ImVec2 size = { 200.f, 70.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new sequence.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 1:
+						{
+							// render the tasks for sequence
+						}
+						break;
+
+						}
+					}
+					
+
+					//Tutorial Exit Button
+					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+					if (UI::MouseIsWithin(tut_min, tut_max))
+					{
+						ImGui::SetMouseCursor(7);
+						if (ImGui::IsMouseClicked(0))
+							instance.tutorial_enable = false;
+					}
+				}
 			}
 			ImGui::End();
 		}
