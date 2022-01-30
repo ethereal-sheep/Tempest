@@ -60,6 +60,10 @@ namespace Tempest
 		inter_nest[1].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // units 
 		inter_nest[2].start(0.f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // define stats
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
+
+		auto& cam = Service<RenderSystem>::Get().GetCamera();
+		cam_ctrl.set_orbit_camera(cam, vec3(0.f, 0.f, 0.f));
+		cam_ctrl.update(cam);
 	}
 
 	void UnitSheetOverlay::close_popup(const Event& e)
@@ -198,15 +202,18 @@ namespace Tempest
 					auto UnitImg = tex_map["Assets/UnitIdle.dds"];
 					if (ImGui::BeginChild("RenderUnit##", ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 					{
-					const ImVec4 color{ cs->color.x, cs->color.y, cs->color.z, 1 };
-					//ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
-					ImGuiViewport* viewport = ImGui::GetMainViewport();
-					vec2 size = vec2(viewport->Size.x, viewport->Size.y);
-					//ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0.2, 0.7), ImVec2(0.7, 0.2));
-
-					ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
-					//ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().USObuffer), ImVec2(Service<RenderSystem>::Get().getWidth(), Service<RenderSystem>::Get().getHeight()), ImVec2(0, .2), ImVec2(.2, 0));
-
+						auto& cam = Service<RenderSystem>::Get().GetCamera();
+						if (ImGui::IsWindowHovered())
+						{
+							cam_ctrl.preview_controls(cam);
+						}
+						cam_ctrl.update(cam);
+						const ImVec4 color{ cs->color.x, cs->color.y, cs->color.z, 1 };
+						//ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
+						ImGuiViewport* viewport = ImGui::GetMainViewport();
+						vec2 size = vec2(viewport->Size.x, viewport->Size.y);
+						ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0, 1), ImVec2(1, 0));
+						//ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().USObuffer), ImVec2(Service<RenderSystem>::Get().getWidth(), Service<RenderSystem>::Get().getHeight()), ImVec2(0, .2), ImVec2(.2, 0));
 					}
 					ImGui::EndChild();
 					

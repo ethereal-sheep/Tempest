@@ -541,7 +541,10 @@ namespace Tempest
         else
         {
             int WIDTH = getWidth(), HEIGHT = getHeight();
-            glViewport(0, 0, WIDTH, HEIGHT);
+            if (USO)
+                glViewport(-700, 0, WIDTH, HEIGHT);
+            else
+                glViewport(0, 0, WIDTH, HEIGHT);
             glEnable(GL_DEPTH_TEST);
             glDepthFunc(GL_LESS);
             glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -553,7 +556,7 @@ namespace Tempest
     {
         if (USO)
         {
-            GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
+            //GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
         }
         auto s = glm::scale(glm::vec3(0.02f));
         auto t = glm::translate(glm::vec3(0.0f));

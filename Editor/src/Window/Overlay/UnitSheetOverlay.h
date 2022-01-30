@@ -15,6 +15,7 @@
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
+#include "Window/Viewport/CameraControls.h"
 
 namespace Tempest
 {
@@ -101,6 +102,7 @@ namespace Tempest
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
+        CameraControls cam_ctrl;
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;
         bool CreateOpen = false;
