@@ -16,6 +16,7 @@
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
 #include "Instance/RuntimeInstance.h"
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -92,6 +93,7 @@ namespace Tempest
         void attacking(RuntimeInstance& instance, const glm::ivec2& world_mouse);
         void moving(RuntimeInstance& instance, const glm::ivec2& world_mouse);
         void glimpse(RuntimeInstance& instance);
+        void show_cinematic(RuntimeInstance& instance);
         void fight(RuntimeInstance& instance);
         void display_selected(RuntimeInstance& instance, Entity character);
         void display_selected_right(RuntimeInstance& instance, Entity character);
@@ -174,6 +176,7 @@ namespace Tempest
             MOVING,
             GLIMPSE,
             FIGHT,
+            CINEMATIC,
             NEXT,
         };
 
@@ -196,6 +199,7 @@ namespace Tempest
         std::atomic_int32_t defend;
         std::atomic_bool finish;
 
+        int damage = 0;
         int result = 0;
         int atk_output = 0;
         int def_output = 0;
@@ -216,5 +220,14 @@ namespace Tempest
         tmap<int, tmap<int, bool>> visited;
         std::array<TabImageData, TOTAL> tabs;
         TABS_TYPE current_tab{ TABS_TYPE::STAT };
+
+        interpolater<int> inter1;
+        interpolater<int> inter2;
+        interpolater<float> inter3;
+        interpolater<float> inter4;
+        interpolater<float> inter5;
+        interpolater<float> inter6;
+
+        std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
     };
 }

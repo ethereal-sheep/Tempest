@@ -674,24 +674,10 @@ namespace Tempest
 			// render bottom two buttons
 			if (UI::UIButton_2("New Map", "New Map", ImVec2{ viewport.Size.x * 0.34f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
 			{
-
+				ImGui::OpenPopup("NEW MAP");
+				NewMapName = "Map";
 				AudioEngine ae;
 				ae.Play("Sounds2D/ButtonClick.wav", "SFX");
-				auto fn = [&]()
-				{
-					if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
-					{
-						auto name = edit->create_new_scene();
-						if (name != "" && edit->load_new_scene_by_name(name))
-						{
-							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
-							OverlayOpen = false;
-						}
-					}
-				};
-				// fade in, fade out, visible
-				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-				
 			}
 
 			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
@@ -708,6 +694,24 @@ namespace Tempest
 			}
 			
 			ImGui::PopFont();
+
+			if (UI::ConfirmInputNamePopup("NEW MAP", NewMapName))
+			{
+				auto fn = [&]()
+				{
+					if (auto edit = dynamic_cast<EditTimeInstance*>(&instance))
+					{
+						auto name = edit->create_new_scene(NewMapName);
+						if (name != "" && edit->load_new_scene_by_name(name))
+						{
+							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							OverlayOpen = false;
+						}
+					}
+				};
+				// fade in, fade out, visible
+				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+			}
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::LOAD_MAP:

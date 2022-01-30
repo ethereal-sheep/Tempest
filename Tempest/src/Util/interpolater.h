@@ -51,7 +51,7 @@ namespace Tempest
 				clamped = 1;
 
 
-			return els::lerp(start_v, end_v, clamped);
+			return static_cast<T>(els::lerp(start_v, end_v, clamped));
 		}
 
 		T update(float dt)
