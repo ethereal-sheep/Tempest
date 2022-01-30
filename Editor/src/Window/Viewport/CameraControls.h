@@ -818,6 +818,109 @@ namespace Tempest
 		{
 			reset(cam, vec3{ 7,7,-7 }, vec3{});
 		}
+
+		void preview_controls(Camera& cam)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+
+			auto direction = els::to_vec2(io.MouseDelta);
+			auto yaw_speed = 1.f / 4;
+			auto pitch_speed = 1.f / 4;
+			auto forward_speed = 1.f / 4.f;
+			auto scroll_speed = forward_speed * 4.f;
+
+			auto rotate_time = .05f;
+			auto zoom_time = .05f;
+
+			if (io.MouseDown[0]) // rotate 
+			{
+				if (!els::is_zero(direction))
+				{
+					const float max_angle = glm::radians(270.f);
+					auto rel_pos = orbit_axis - cam.GetPosition();
+
+					start_rotation = cam.GetQuatRotation();
+
+					auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+					auto rot = end_rotation * yaw;
+
+					end_rotation = rot;
+					current_orbit_time = 0.f;
+					total_orbit_time = rotate_time;
+
+					easing = EasingMode::LINEAR;
+				}
+			}
+			else if (io.MouseDown[1]) // rotate around
+			{
+				if (!els::is_zero(direction))
+				{
+					const float max_angle = glm::radians(270.f);
+					auto rel_pos = orbit_axis - cam.GetPosition();
+
+
+
+					start_rotation = cam.GetQuatRotation();
+
+					auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+					auto rot = end_rotation * yaw;
+					auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+					auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
+					rot = rot * pitch;
+
+					end_rotation = rot;
+					current_orbit_time = 0.f;
+					total_orbit_time = rotate_time;
+
+					easing = EasingMode::LINEAR;
+				}
+
+			}
+			else if (io.MouseDown[2]) // Pan
+			{
+				if (!els::is_zero(direction))
+				{
+					const float max_angle = glm::radians(270.f);
+					auto rel_pos = orbit_axis - cam.GetPosition();
+
+					start_rotation = cam.GetQuatRotation();
+					auto rot = end_rotation;
+					auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+					auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
+					rot = end_rotation * pitch;
+
+					end_rotation = rot;
+					current_orbit_time = 0.f;
+					total_orbit_time = rotate_time;
+
+					easing = EasingMode::LINEAR;
+
+					//cam.SetPosition(newPos);
+				}
+			}
+
+			else if (abs(io.MouseWheel) > 0.001f)
+			{
+				auto currentPos = cam.GetPosition();
+				auto front = cam.GetFront();
+
+				auto newPos = currentPos + (front * (io.MouseWheel * scroll_speed));
+
+				const auto max_dolly = 1.f;
+				const auto max_dolly2 = max_dolly * max_dolly;
+				if (glm::dot(newPos - orbit_axis, -front) < max_dolly)
+				{
+					newPos = orbit_axis + -front * max_dolly;
+				}
+
+
+				current_pos_time = 0.f;
+				total_pos_time = zoom_time;
+
+				start_position = currentPos;
+				end_position = newPos;
+			}
+		}
 	};
 
 }
