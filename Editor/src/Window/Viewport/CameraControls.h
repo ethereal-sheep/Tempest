@@ -64,8 +64,12 @@ namespace Tempest
 		glm::quat end_rotation{1,0,0,0};
 		glm::vec3 start_position{};
 		glm::vec3 end_position{};
+		glm::vec3 curr_position{};
 
 		glm::vec3 orbit_axis{};
+
+		float magnitude = 0.f;
+		float speed = 7.f;
 
 		float total_rot_time = 1.f;
 		float current_rot_time = 1.f;
@@ -73,6 +77,8 @@ namespace Tempest
 		float current_orbit_time = 1.f;
 		float total_pos_time = 1.f;
 		float current_pos_time = 1.f;
+		float total_shake_time = 1.f;
+		float current_shake_time = 1.f;
 
 
 
@@ -550,7 +556,9 @@ namespace Tempest
 				current_pos_time += ImGui::GetIO().DeltaTime;
 				auto t = easing(glm::clamp(current_pos_time / total_pos_time, 0.f, 1.f));
 
-				cam.SetPosition(glm::mix(start_position, end_position, t));
+				curr_position = glm::mix(start_position, end_position, t);
+
+				cam.SetPosition(curr_position);
 			}
 		}
 
@@ -597,6 +605,29 @@ namespace Tempest
 			}
 		}
 
+		void update_shake(Camera& cam)
+		{
+			if (current_shake_time < total_shake_time)
+			{
+				current_shake_time += ImGui::GetIO().DeltaTime;
+
+				// set rotation
+
+				// set position
+				float x = els::noise::normalised_octave_noise2D(1.f, current_shake_time * speed, 4);
+				float y = els::noise::normalised_octave_noise2D(10.f, current_shake_time * speed, 4);
+
+				glm::vec3 vec = y * cam.GetUp() + x * cam.GetLeft();
+				//auto mag = glm::mix(magnitude, 0.f, t);
+				cam.SetPosition(curr_position + vec * magnitude);
+
+				if (current_shake_time >= total_shake_time)
+				{
+					cam.SetPosition(curr_position);
+				}
+			}
+		}
+
 	public:
 		CameraControls(CameraControlMode _mode = CameraControlMode::WORLD) : mode(_mode) {}
 
@@ -639,6 +670,7 @@ namespace Tempest
 				update_rotation(cam);
 				update_position(cam);
 				update_orbit(cam);
+				update_shake(cam);
 				break;
 			case Tempest::CameraControlMode::FIXED_ORBIT:
 				update_rotation(cam);
@@ -725,9 +757,14 @@ namespace Tempest
 			return current_orbit_time < total_orbit_time;
 		}
 
+		bool is_shaking() const
+		{
+			return current_shake_time < total_shake_time;
+		}
+
 		bool is_any_movement() const
 		{
-			return is_moving() || is_rotating() || is_orbiting();
+			return is_moving() || is_rotating() || is_orbiting() || is_shaking();
 		}
 
 		bool is_still() const
@@ -793,6 +830,24 @@ namespace Tempest
 			}
 		}
 
+		void force_reset_pos(Camera& cam)
+		{
+			start_position = cam.GetPosition();
+			end_position = cam.GetPosition();
+
+			current_pos_time = 1.f;
+			total_pos_time = 1.f;
+		}
+
+		void force_reset_rot(Camera& cam)
+		{
+			start_rotation = cam.GetQuatRotation();
+			end_rotation = cam.GetQuatRotation();
+
+			current_rot_time = 0.f;
+			total_rot_time = 1.f;
+		}
+
 		void set_fixed_camera(Camera& cam, float yaw = 0.f, float pitch = 45.f)
 		{
 			if (mode != CameraControlMode::FIXED)
@@ -801,6 +856,12 @@ namespace Tempest
 				auto left = glm::conjugate(rot) * vec3 { 1, 0, 0 };
 
 				rot = rot * glm::angleAxis(glm::radians(pitch), left);
+
+				start_position = cam.GetPosition();
+				end_position = cam.GetPosition();
+
+				current_pos_time = 1.f;
+				total_pos_time = 1.f;
 
 				start_rotation = cam.GetQuatRotation();
 				end_rotation = rot;
@@ -812,6 +873,16 @@ namespace Tempest
 			}
 		}
 
+		void shake(Camera& cam, float time = 1.f, float _magnitude = .5f, float sample_speed = 7.f)
+		{
+			current_shake_time = 0.f;
+			total_shake_time = time;
+
+			magnitude = _magnitude;
+			speed = sample_speed;
+
+			curr_position = cam.GetPosition();
+		}
 
 
 		void set_world_camera()
@@ -877,6 +948,109 @@ namespace Tempest
 		void reset(Camera& cam)
 		{
 			reset(cam, vec3{ 7,7,-7 }, vec3{});
+		}
+
+		void preview_controls(Camera& cam)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+
+			auto direction = els::to_vec2(io.MouseDelta);
+			auto yaw_speed = 1.f / 4;
+			auto pitch_speed = 1.f / 4;
+			auto forward_speed = 1.f / 4.f;
+			auto scroll_speed = forward_speed * 4.f;
+
+			auto rotate_time = .05f;
+			auto zoom_time = .05f;
+
+			if (io.MouseDown[0]) // rotate 
+			{
+				if (!els::is_zero(direction))
+				{
+					const float max_angle = glm::radians(270.f);
+					auto rel_pos = orbit_axis - cam.GetPosition();
+
+					start_rotation = cam.GetQuatRotation();
+
+					auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+					auto rot = end_rotation * yaw;
+
+					end_rotation = rot;
+					current_orbit_time = 0.f;
+					total_orbit_time = rotate_time;
+
+					easing = EasingMode::LINEAR;
+				}
+			}
+			else if (io.MouseDown[1]) // rotate around
+			{
+				if (!els::is_zero(direction))
+				{
+					const float max_angle = glm::radians(270.f);
+					auto rel_pos = orbit_axis - cam.GetPosition();
+
+
+
+					start_rotation = cam.GetQuatRotation();
+
+					auto yaw = glm::angleAxis(glm::radians(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
+					auto rot = end_rotation * yaw;
+					auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+					auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
+					rot = rot * pitch;
+
+					end_rotation = rot;
+					current_orbit_time = 0.f;
+					total_orbit_time = rotate_time;
+
+					easing = EasingMode::LINEAR;
+				}
+
+			}
+			else if (io.MouseDown[2]) // Pan
+			{
+				if (!els::is_zero(direction))
+				{
+					const float max_angle = glm::radians(270.f);
+					auto rel_pos = orbit_axis - cam.GetPosition();
+
+					start_rotation = cam.GetQuatRotation();
+					auto rot = end_rotation;
+					auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+					auto pitch = glm::angleAxis(glm::radians(pitch_speed * -io.MouseDelta.y), left);
+					rot = end_rotation * pitch;
+
+					end_rotation = rot;
+					current_orbit_time = 0.f;
+					total_orbit_time = rotate_time;
+
+					easing = EasingMode::LINEAR;
+
+					//cam.SetPosition(newPos);
+				}
+			}
+
+			else if (abs(io.MouseWheel) > 0.001f)
+			{
+				auto currentPos = cam.GetPosition();
+				auto front = cam.GetFront();
+
+				auto newPos = currentPos + (front * (io.MouseWheel * scroll_speed));
+
+				const auto max_dolly = 1.f;
+				const auto max_dolly2 = max_dolly * max_dolly;
+				if (glm::dot(newPos - orbit_axis, -front) < max_dolly)
+				{
+					newPos = orbit_axis + -front * max_dolly;
+				}
+
+
+				current_pos_time = 0.f;
+				total_pos_time = zoom_time;
+
+				start_position = currentPos;
+				end_position = newPos;
+			}
 		}
 	};
 

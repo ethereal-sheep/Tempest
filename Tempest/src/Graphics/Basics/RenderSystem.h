@@ -158,6 +158,8 @@ namespace Tempest
         bool AAgridShow = true;
         bool TestPBR = false;
         bool USO = false;
+
+        glm::vec4 USOcolor{ 0.0f };
         //bool captured = false;
         //vec2 vp_size = vec2(0.f);
         glm::vec4 clearColor{0.4f, 0.5f, 0.6f, 1.0f};
@@ -204,7 +206,6 @@ namespace Tempest
         uint32_t getHeight();
         uint32_t getWidth();
 
-        unsigned char* USObuffer = new unsigned char[1600 * 900 * 4];
 
         void LoadTextures();
 

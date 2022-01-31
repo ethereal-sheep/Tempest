@@ -8,9 +8,9 @@
             "Component": {
                 "Charater_Name": "Character 1",
                 "Color": [
-                    1.0,
-                    0.0,
-                    0.0
+                    0.715410590171814,
+                    0.7122914791107178,
+                    0.8008849620819092
                 ],
                 "IsInCombat": false,
                 "Weapon_Ids": [

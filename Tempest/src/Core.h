@@ -11,11 +11,6 @@
 #pragma once
 #define NOMINMAX
 
-
-#ifdef _DEBUG
-#include "Tracy.hpp"
-#endif
-
 #include <vector>
 #include <string>
 #include <set>
