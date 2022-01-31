@@ -1409,7 +1409,7 @@ namespace Tempest::UI
 			ImGui::PopFont();
 			ImGui::PopStyleColor();
 			auto io = ImGui::GetIO();
-			if (hovered && ImGui::IsMouseClicked(0))
+			if (hovered && ImGui::GetIO().MouseClicked[0])
 			{
 				res = true;
 				AudioEngine ae;
@@ -1458,7 +1458,7 @@ namespace Tempest::UI
 			ImGui::PopStyleColor();
 
 			auto io = ImGui::GetIO();
-			if (ImGui::IsMouseClicked(0))
+			if (ImGui::GetIO().MouseClicked[0])
 			{
 				res = true;
 				AudioEngine ae;
@@ -3088,7 +3088,7 @@ namespace Tempest::UI
 		if (bg_col.w > 0.0f)
 			window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, ImGui::GetColorU32(bg_col));
 
-		if (pressed || held)
+		if (pressed || held )
 		{
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_pressed));
 			ImGui::SetMouseCursor(7);
@@ -3100,6 +3100,8 @@ namespace Tempest::UI
 		}
 		else
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+
+		
 
 		return pressed;
 	}
