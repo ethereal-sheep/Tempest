@@ -542,7 +542,7 @@ namespace Tempest
         {
             int WIDTH = getWidth(), HEIGHT = getHeight();
             if (USO)
-                glViewport(-700, 0, WIDTH, HEIGHT);
+                glViewport(-750, 0, WIDTH, HEIGHT);
             else
                 glViewport(0, 0, WIDTH, HEIGHT);
             glEnable(GL_DEPTH_TEST);
@@ -562,13 +562,15 @@ namespace Tempest
             //glEnable( GL_BLEND );
             //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ); // = color * alpha + background * (1-alpha)
             //GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
-            auto s = glm::scale(glm::vec3(0.02f));
-           // auto t = glm::translate(glm::vec3(0.0f, 0.0f, -80.0f));
-            auto t = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
-            //auto r = 
-            //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
-            SubmitModel("Models/UnitBlack_Idle.a", (t*s));
+          
         }
+
+        auto s = glm::scale(glm::vec3(0.02f));
+        // auto t = glm::translate(glm::vec3(0.0f, 0.0f, -80.0f));
+        auto t = glm::translate(glm::vec3(-0.30f, 0.0f, -1.6f));
+        //auto r = 
+        //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
+        SubmitModel("Models/UnitBlack_Idle.a", (t * s));
 
 
         LoadTextures();
@@ -956,16 +958,6 @@ namespace Tempest
 
     void RenderSystem::EndFrame()
     {
-        if (USO)
-        {
-            //unsigned char* buffer = new unsigned char[vp_size.x * vp_size.y * 3 * 4];
-            //glReadPixels(0, 0, vp_size.x * 2 , vp_size.y * 2, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-            //stbi_flip_vertically_on_write(1);
-            //stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
-            //stbi_write_jpg("testtest.jpg", vp_size.x * 2, vp_size.y * 2, 3, buffer, vp_size.x * 3 * 2);
-            glReadPixels(0, 0, 1600, 900, GL_RGBA, GL_UNSIGNED_BYTE, USObuffer);
-            //captured = true;
-        }
         m_FrameBuffer.Draw();
 
     }

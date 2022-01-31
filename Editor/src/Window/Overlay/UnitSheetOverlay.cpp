@@ -62,7 +62,7 @@ namespace Tempest
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		cam_ctrl.set_orbit_camera(cam, vec3(0.f, 0.f, 0.f));
+		cam_ctrl.set_orbit_camera(cam, vec3(0.05f, 1.f, 0.f));
 		cam_ctrl.update(cam);
 	}
 
@@ -186,6 +186,18 @@ namespace Tempest
 						Tabs[TABS_TYPE::UNIT].is_active = true;
 
 						CurrentTab = TABS_TYPE::UNIT;
+
+						/*auto& cam = Service<RenderSystem>::Get().GetCamera();
+						cam.SetPosition(vec3(0.f, 2.f, -2.f));
+						
+						cam_ctrl.set_orbit_camera(cam, vec3(0.f, 1.f, 0.f));
+						cam_ctrl.update(cam);*/
+						
+						// snap camera when selected
+						//Service<RenderSystem>::Get().GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
+						
+						
+
 					}
 				}
 				ImGui::EndChild();
