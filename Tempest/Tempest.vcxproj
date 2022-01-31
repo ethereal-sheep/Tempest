@@ -184,7 +184,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />

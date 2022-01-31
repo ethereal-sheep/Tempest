@@ -24,6 +24,7 @@ namespace Tempest
 	void BuildModeOverlay::open_popup(const Event& )
 	{
 		OverlayOpen = true;
+		cam_ctrl.update(Service<RenderSystem>::Get().GetCamera());
 	}
 
 	

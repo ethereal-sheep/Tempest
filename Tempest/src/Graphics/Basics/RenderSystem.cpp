@@ -541,7 +541,10 @@ namespace Tempest
         else
         {
             int WIDTH = getWidth(), HEIGHT = getHeight();
-            glViewport(0, 0, WIDTH, HEIGHT);
+            if (USO)
+                glViewport(-750, 0, WIDTH, HEIGHT);
+            else
+                glViewport(0, 0, WIDTH, HEIGHT);
             glEnable(GL_DEPTH_TEST);
             glDepthFunc(GL_LESS);
             glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -553,14 +556,29 @@ namespace Tempest
     {
         if (USO)
         {
-            GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
+            //glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );              // background color
+            //glClear(GL_COLOR_BUFFER_BIT);                        // clear background with background color
+
+            //glEnable( GL_BLEND );
+            //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ); // = color * alpha + background * (1-alpha)
+            //GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
+          
         }
+
+        auto s = glm::scale(glm::vec3(0.02f));
+        // auto t = glm::translate(glm::vec3(0.0f, 0.0f, -80.0f));
+        auto t = glm::translate(glm::vec3(-0.30f, 0.0f, -1.6f));
+        //auto r = 
+        //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
+        SubmitModel("Models/UnitBlack_Idle.a", (t * s));
+
+
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
 
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        if(AAgridShow)
+        if(!USO && AAgridShow)
             RenderAAGrid();
 
         for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
@@ -581,10 +599,18 @@ namespace Tempest
             {                   
                 if (m_Pipeline.m_Models[i].m_Model->colours.size())
                 {
-                    if (j == 4)
+                    if (USO && (j == 1))
                     {
+                       m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x,USOcolor.y,USOcolor.z), "colour");
+                    }
+                    else if ((j == 4) && !USO )
+                    {
+                      
                         if (m_Pipeline.m_Models[i].hasColor)
                             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].color, "colour");
+
+                        //if(USO)
+                        //    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x,USOcolor.y,USOcolor.z), "colour");
                     }
                     else
                         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
@@ -592,6 +618,7 @@ namespace Tempest
                 else
                     m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
 
+                
 
                 glActiveTexture(GL_TEXTURE0);
                 if(m_Pipeline.m_Models[i].m_Model->mm.size())
@@ -931,16 +958,6 @@ namespace Tempest
 
     void RenderSystem::EndFrame()
     {
-        if (USO)
-        {
-            //unsigned char* buffer = new unsigned char[vp_size.x * vp_size.y * 3 * 4];
-            //glReadPixels(0, 0, vp_size.x * 2 , vp_size.y * 2, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-            //stbi_flip_vertically_on_write(1);
-            //stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
-            //stbi_write_jpg("testtest.jpg", vp_size.x * 2, vp_size.y * 2, 3, buffer, vp_size.x * 3 * 2);
-            glReadPixels(0, 0, 1600, 900, GL_RGBA, GL_UNSIGNED_BYTE, USObuffer);
-            //captured = true;
-        }
         m_FrameBuffer.Draw();
 
     }
