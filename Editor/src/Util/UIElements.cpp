@@ -3831,5 +3831,34 @@ namespace Tempest::UI
 
 		return false;
 	}
+
+	void TutProgressBar(ImDrawList* drawlist, const ImVec2& viewport, int step)
+	{
+		const float diamondStep = viewport.x / 6.0f;
+
+		// Tutorial progress line
+		drawlist->AddLine(ImVec2{ 0, viewport.y * 0.9f }, ImVec2{ viewport.x, viewport.y * 0.9f }, ImGui::GetColorU32({ 1,1,1,1 }), 4.0f);
+		drawlist->AddLine(ImVec2{ 0, viewport.y * 0.9f }, ImVec2{ 0 + diamondStep * step, viewport.y * 0.9f }, IM_COL32(232, 137, 64, 255), 4.0f);
+		const string words[6] = { "Create a unit", "Create a weapon", "Create a action","Create a sequence","Simulate" };
+		float currentDiamondPos = diamondStep;
+		auto diamondImg = tex_map["Assets/TutorialDiamond.dds"];
+		for (int i = 0; i < 5; ++i)
+		{
+			ImGui::PushFont(FONT_SHEAD);
+			const string stepText = "Step " + std::to_string(i + 1);
+			drawlist->AddText({ currentDiamondPos - diamondImg->GetWidth() * 0.5f - ImGui::CalcTextSize(stepText.c_str()).x * 0.5f, viewport.y * 0.82f }, i < step ? IM_COL32(232, 137, 64, 255) : ImGui::GetColorU32({ 1,1,1,1 }), stepText.c_str());
+			ImGui::PopFont();
+
+			ImGui::PushFont(FONT_BODY);
+			const string bottomText = words[i];
+			drawlist->AddText({ currentDiamondPos - diamondImg->GetWidth() * 0.5f - ImGui::CalcTextSize(bottomText.c_str()).x * 0.5f, viewport.y * 0.95f }, ImGui::GetColorU32({ 1,1,1,1 }), bottomText.c_str());
+			ImGui::PopFont();
+
+			ImVec2 diamond_min = { currentDiamondPos - diamondImg->GetWidth() * 1.0f, viewport.y * 0.925f - diamondImg->GetHeight() * 1.0f };
+			ImVec2 diamond_max = { diamond_min.x + diamondImg->GetWidth() * 1.0f, diamond_min.y + diamondImg->GetHeight() * 1.0f };
+			drawlist->AddImage((void*)static_cast<size_t>(diamondImg->GetID()), diamond_min, diamond_max, ImVec2{ 0,0 }, ImVec2{ 1,1 }, i < step ? IM_COL32(232, 137, 64, 255) : ImGui::GetColorU32({ 1,1,1,1 }));
+			currentDiamondPos += diamondStep;
+		}
+	}
 }
 

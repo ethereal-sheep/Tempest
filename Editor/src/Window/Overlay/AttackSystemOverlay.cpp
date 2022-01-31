@@ -485,6 +485,8 @@ namespace Tempest
 						break;
 
 						}
+
+						UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
 					}
 					else
 					{
@@ -507,6 +509,8 @@ namespace Tempest
 						break;
 
 						}
+
+						UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 4);
 					}
 					
 

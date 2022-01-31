@@ -214,6 +214,7 @@ namespace Tempest::UI
 
 	void TutArea(ImVec2 pos, ImVec2 size);
 	bool MouseIsWithin(const ImVec2 min, const ImVec2 max);
+	void TutProgressBar(ImDrawList* drawlist, const ImVec2 &viewport, int step);
 
 }
 
