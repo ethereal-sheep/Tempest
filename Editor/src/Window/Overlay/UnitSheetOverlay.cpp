@@ -429,7 +429,7 @@ namespace Tempest
 						if (ImGui::IsMouseClicked(0))
 							instance.tutorial_enable = false;
 					}
-
+					UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
 				}
 
 			}
