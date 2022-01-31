@@ -2424,6 +2424,10 @@ namespace Tempest
 			inter4.update(dt);
 			inter5.update(dt);
 			inter6.update(dt);
+
+			banner.update(dt);
+			if (banner.is_finished())
+				banner.start(1, 0, 10);
 		}
 
 
@@ -2452,8 +2456,13 @@ namespace Tempest
 				//static int selected = -1;
 				//static tvector<Entity> chars(4, INVALID);
 				//bool selectable_hovered = false;
-				auto& cam = Service<RenderSystem>::Get().GetCamera();
 
+				auto bannerTex = tex_map["Assets/PlayModeBanner.dds"];
+				ImVec2 min_pos = viewport->WorkPos;
+				ImVec2 max_pos = { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + bannerTex->GetHeight() };
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), min_pos, max_pos, { banner.get(), 0 }, { 1 + banner.get(), 1 });
+
+				auto& cam = Service<RenderSystem>::Get().GetCamera();
 
 				if (state != State::CINEMATIC)
 				{
@@ -2464,7 +2473,7 @@ namespace Tempest
 
 				glm::ivec2 world_mouse = calculate_world_mouse(cam);
 
-				ImGui::Dummy(ImVec2{ 5.0f,0.f });
+				ImGui::Dummy(ImVec2{ 5.0f,40.f });
 				bool first = true;
 				float padding = 0.0f;
 				for (auto id : units)
