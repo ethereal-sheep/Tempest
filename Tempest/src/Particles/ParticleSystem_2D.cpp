@@ -138,7 +138,7 @@ void ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
 
 	explosionEmitter.m_EM.m_spawnTimeInterval = 2.f; // 5x slower of dt
 	explosionEmitter.m_EM.m_spawnCountTimer = explosionEmitter.m_EM.m_spawnTimeInterval;
-	explosionEmitter.m_EM.m_rateOverTime = 5;
+	explosionEmitter.m_EM.m_rateOverTime = 20;
 	explosionEmitter.m_MM.m_maxParticles = 1000;
 
 	explosionEmitter.m_wayPointIndex = 0;
@@ -149,13 +149,13 @@ void ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
 	explosionEmitter.m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
 	explosionEmitter.m_PAM.m_velocityVariation = glm::vec2{ 3.0f, 1.0f };
 
-	explosionEmitter.m_PAM.m_sizeBegin = 20.0f;
+	explosionEmitter.m_PAM.m_sizeBegin = 10.0f;
 	explosionEmitter.m_PAM.m_sizeEnd = 0.0f;
 	explosionEmitter.m_PAM.m_sizeVariation = 0.3f;
 
 	explosionEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	explosionEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
 
-	explosionEmitter.m_PAM.m_lifeTime = 0.7f;
+	explosionEmitter.m_PAM.m_lifeTime = 0.3f;
 	explosionEmitter.m_RM.m_type = ParticleType::Square;
 }

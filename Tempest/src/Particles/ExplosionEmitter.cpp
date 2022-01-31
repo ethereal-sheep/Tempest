@@ -23,8 +23,8 @@ void ExplosionEmitter::Emit(const int particleAmount)
 			particle.m_velocity = m_PAM.m_startVelocity;
 
 			short spawnSector = std::rand() % 5;
-			short directionX = (std::rand() % 1000);
-			short directionY = (std::rand() % 1000);
+			short directionX = (std::rand() % 500);
+			short directionY = (std::rand() % 500);
 
 			switch (spawnSector)
 			{

@@ -146,8 +146,8 @@ namespace Tempest
 				auto tex = tex_map["Assets/Loading.dds"];
 				//ImVec2 size = { (float)tex->GetWidth() * 0.7f,(float)tex->GetHeight() * 0.7f };
 				ImVec2 size = { (float)tex->GetWidth() * 1.0f,(float)tex->GetHeight() * 1.0f };
-				ImVec2 pos = ImGui::GetCursorPos();
-
+				ImVec2 pos = ImGui::GetCursorPos() + ImGui::GetCurrentWindow()->Pos;
+				
 				// Top left button
 				glm::vec2 real_buttonSize;
 				real_buttonSize.x = size.x;
