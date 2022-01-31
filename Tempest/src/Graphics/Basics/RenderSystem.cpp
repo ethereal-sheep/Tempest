@@ -956,16 +956,16 @@ namespace Tempest
 
     void RenderSystem::EndFrame()
     {
-        if (USO)
-        {
+        //if (USO)
+        //{
             //unsigned char* buffer = new unsigned char[vp_size.x * vp_size.y * 3 * 4];
             //glReadPixels(0, 0, vp_size.x * 2 , vp_size.y * 2, GL_RGB, GL_UNSIGNED_BYTE, buffer);
             //stbi_flip_vertically_on_write(1);
             //stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
             //stbi_write_jpg("testtest.jpg", vp_size.x * 2, vp_size.y * 2, 3, buffer, vp_size.x * 3 * 2);
-            glReadPixels(0, 0, 1600, 900, GL_RGBA, GL_UNSIGNED_BYTE, USObuffer);
+            //glReadPixels(0, 0, 1600, 900, GL_RGBA, GL_UNSIGNED_BYTE, USObuffer);
             //captured = true;
-        }
+        //}
         m_FrameBuffer.Draw();
 
     }

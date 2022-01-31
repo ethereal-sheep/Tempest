@@ -206,7 +206,7 @@ namespace Tempest
         uint32_t getHeight();
         uint32_t getWidth();
 
-        unsigned char* USObuffer = new unsigned char[1600 * 900 * 4];
+        //unsigned char* USObuffer = new unsigned char[1600 * 900 * 4];
 
         void LoadTextures();
 
