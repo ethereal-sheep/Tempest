@@ -158,6 +158,8 @@ namespace Tempest
         bool AAgridShow = true;
         bool TestPBR = false;
         bool USO = false;
+
+        glm::vec4 USOcolor{ 0.0f };
         //bool captured = false;
         //vec2 vp_size = vec2(0.f);
         glm::vec4 clearColor{0.4f, 0.5f, 0.6f, 1.0f};

@@ -209,6 +209,9 @@ namespace Tempest
 						}
 						cam_ctrl.update(cam);
 						const ImVec4 color{ cs->color.x, cs->color.y, cs->color.z, 1 };
+						Service<RenderSystem>::Get().USOcolor.x = cs->color.x;
+						Service<RenderSystem>::Get().USOcolor.y = cs->color.y;
+						Service<RenderSystem>::Get().USOcolor.z = cs->color.z;
 						//ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
 						ImGuiViewport* viewport = ImGui::GetMainViewport();
 						vec2 size = vec2(viewport->Size.x, viewport->Size.y);
