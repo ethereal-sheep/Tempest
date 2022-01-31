@@ -1689,6 +1689,9 @@ namespace Tempest
 				cam.SetPosition(cam_pos);
 				cam.SetRotation(cam_rot);
 
+				cam_ctrl.force_reset_pos(cam);
+				cam_ctrl.force_reset_rot(cam);
+
 				// clear
 				instance.selected = INVALID;
 				other_entity = INVALID;
