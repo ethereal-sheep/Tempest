@@ -41,7 +41,7 @@ namespace Tempest
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
 		tutorial_index = 0;
-		//ImGuiMouseButton 
+		
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -375,7 +375,7 @@ namespace Tempest
 						if(ImGui::IsMouseClicked(0))
 							instance.tutorial_enable = false;
 					}
-
+					
 					UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
 				}
 			}

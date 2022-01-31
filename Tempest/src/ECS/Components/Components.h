@@ -524,7 +524,7 @@ namespace Tempest
 			}
 
 			bool isInCombat = false;
-			string name = "Char";
+			string name = "Combatant";
 			Entity chosen_weapon = UNDEFINED; // no need to serialize this
 			tvector<Entity> weapons;
 			tvector<Entity> actions;

@@ -3772,7 +3772,7 @@ namespace Tempest::UI
 		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
 		ImGui::PopFont();
 	}
-	void TutArea(ImVec2 pos, ImVec2 size)
+	void TutArea(ImVec2 pos, ImVec2 size, bool border)
 	{
 		
 		auto drawlist = ImGui::GetForegroundDrawList();
@@ -3818,7 +3818,8 @@ namespace Tempest::UI
 		drawlist->AddRectFilled(RightBox.Min, RightBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(BtmBox.Min, BtmBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(LeftBox.Min, LeftBox.Max, ImGui::GetColorU32(col));
-		drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
+		if(border)
+			drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
 	}
 
 	bool MouseIsWithin(const ImVec2 min, const ImVec2 max)
