@@ -253,11 +253,75 @@ namespace Tempest
 
 						case 1:
 						{
+							if (!weap)
+								break;
+
 							ImVec2 pos = { viewport->Size.x * 0.35f, viewport->Size.y * 0.22f };
 							ImVec2 size = { viewport->Size.x * 0.45f, viewport->Size.y * 0.7f };
-							UI::TutArea(pos, size);
+							auto selected = tex_map["Assets/Selected.dds"];
+							auto unselected = tex_map["Assets/Unselected.dds"];
+							bool taskCompleted = true;
+							UI::TutArea(pos, size, false);
 
 							// render the tasks
+							//Task List
+							string str = "";
+							str = string(ICON_FK_EXCLAMATION_CIRCLE);
+							ImGui::PushFont(FONT_HEAD);
+							drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+							str = " Tasks";
+							drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+							ImGui::PopFont();
+
+
+							ImGui::PushFont(FONT_BODY);
+							ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+							str = "Rename the weapon";
+							if (weap->name != "Weapon")
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+								taskCompleted &= true;
+							}
+							else
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+								taskCompleted &= false;
+							}
+							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+							str = "Assign 3 ATK to the weapon";
+							if (weap->get_stat(1) == 3)
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+								taskCompleted &= true;
+							}
+							else
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+								taskCompleted &= false;
+							}
+							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							ImGui::PopFont();
+
+							auto nextBtn = tex_map["Assets/NextBtn.dds"];
+							ImVec2 tut_min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+							if (taskCompleted)
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+								if (UI::MouseIsWithin(tut_min, tut_max))
+								{
+									ImGui::SetMouseCursor(7);
+									if (ImGui::IsMouseClicked(0))
+										tutorial_index = 2;
+								}
+							}
+							else
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
 						}
 						break;
 
