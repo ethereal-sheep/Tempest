@@ -4,6 +4,9 @@
 #include "WaypointEmitter.h"
 #include "ExplosionEmitter.h"
 
+// Debugging purpose
+//#include "Logger/Log.h"
+
 ParticleSystem_2D::ParticleSystem_2D()
 {}
 
@@ -16,18 +19,53 @@ ParticleSystem_2D& ParticleSystem_2D::GetInstance()
 void ParticleSystem_2D::Update()
 {
 	// Update all the emitters here
-	for (auto& emitter : m_emitters)
-		if (emitter->m_GM.m_active)
+	for (short i = 0; i < m_emitters.size(); ++i)
+	{
+		// Check for null pointer - shouldn't happen
+		if (m_emitters[i])
 		{
-			emitter->Update();
+			Emitter& emitter = *m_emitters[i];
+
+			// Update active emitter
+			if (emitter.m_GM.m_active)
+				emitter.Update();
+			else
+			{
+				// Store the unused slots to be reused later
+				if (!m_UniqueEmitterSlots.contains(i))
+				{  
+					m_UniqueEmitterSlots.insert(i);
+					m_availableEmitterSlots.push(i);
+				}
+			}
 		}
+	}
+}
+
+void ParticleSystem_2D::AddEmitter(const std::shared_ptr<Emitter> emitter)
+{
+	// There is an available slot
+	if (m_availableEmitterSlots.size())
+	{
+		// The index of the free slot
+		short freeSlot = m_availableEmitterSlots.front();
+
+		// Update the emitter memory management
+		m_availableEmitterSlots.pop();
+		m_UniqueEmitterSlots.erase(freeSlot);
+
+		// Allocate the emitter, destructor is handled s_ptr
+		m_emitters[freeSlot] = emitter;
+	}
+	else
+		m_emitters.push_back(emitter);
 }
 
 void ParticleSystem_2D::ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
 	auto tempEmitter = std::make_shared<WaypointEmitter>();
 	Emitter& emitter = *tempEmitter.get();
-	m_emitters.push_back(tempEmitter);
+	AddEmitter(tempEmitter);
 
 	// Emitter values - Without consideration for default ctor values
 	emitter.m_GM.m_velocity.x = -500.0f;
@@ -89,7 +127,7 @@ void ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
 {
 	auto tempEmitter = std::make_shared<ExplosionEmitter>();
 	Emitter& explosionEmitter = *tempEmitter.get();
-	m_emitters.push_back(tempEmitter);
+	AddEmitter(tempEmitter);
 
 	// Emitter values - Without consideration for default ctor values
 	explosionEmitter.m_GM.m_position = spawnPos;
@@ -118,6 +156,6 @@ void ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
 	explosionEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	explosionEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
 
-	explosionEmitter.m_PAM.m_lifeTime = 0.7;
+	explosionEmitter.m_PAM.m_lifeTime = 0.7f;
 	explosionEmitter.m_RM.m_type = ParticleType::Square;
 }

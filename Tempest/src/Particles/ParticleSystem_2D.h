@@ -62,6 +62,13 @@ struct ParticleSystem_2D
 private:
 	ParticleSystem_2D();
 	std::vector <std::shared_ptr<Emitter>> m_emitters;
+
+	// Emitter Management
+	std::set<short> m_UniqueEmitterSlots;
+	std::queue<short> m_availableEmitterSlots;
+
+	// Helper functions
+	void AddEmitter(const std::shared_ptr<Emitter> emitter);
 };
 
 #endif // !PARTICLE_SYSTEM_2D_H
