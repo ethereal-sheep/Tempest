@@ -172,6 +172,8 @@ namespace Tempest
 		instance->register_always<WipePopup>();
 		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
+
+
 	}
 	void InstanceManager::register_runtime_windows()
 	{

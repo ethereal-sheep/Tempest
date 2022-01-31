@@ -37,7 +37,7 @@ void WaypointEmitter::SelfUpdate()
 			float distanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
 
 			// 10 pixels difference
-			if (distanceSquared <= 20.0f)
+			if (distanceSquared <= 2.0f)
 			{
 				m_GM.m_position = m_wayPoints[m_wayPointIndex];
 				++m_wayPointIndex;

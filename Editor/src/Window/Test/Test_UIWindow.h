@@ -167,6 +167,12 @@ namespace Tempest
 				//if (ImGui::IsMouseDown(0))
 				if (ImGui::IsMouseClicked(0))
 				{
+					// Test prepared functions for XR
+					ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+				}
+				//if (ImGui::IsMouseDown(1))
+				if (ImGui::IsMouseClicked(1))
+				{
 					glm::vec2 tempVec;
 					tempVec.x = ImGui::GetMousePos().x;
 					tempVec.y = ImGui::GetMousePos().y;
@@ -178,16 +184,6 @@ namespace Tempest
 					//reg->m_GM.m_velocity.x = -500.0f;
 
 					LOG_INFO("ExplossionEmitter");
-				}
-				//if (ImGui::IsMouseDown(1))
-				if (ImGui::IsMouseClicked(1))
-				{
-					glm::vec2 tempVec;
-					tempVec.x = ImGui::GetMousePos().x;
-					tempVec.y = ImGui::GetMousePos().y;
-
-					// Test prepared functions for XR
-					ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
 				}
 
 				// Update the emitters
