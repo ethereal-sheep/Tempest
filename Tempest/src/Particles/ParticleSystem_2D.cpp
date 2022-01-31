@@ -154,7 +154,7 @@ void ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
 	explosionEmitter.m_PAM.m_sizeVariation = 0.3f;
 
 	explosionEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	explosionEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
+	explosionEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
 	explosionEmitter.m_PAM.m_lifeTime = 0.3f;
 	explosionEmitter.m_RM.m_type = ParticleType::Circle;

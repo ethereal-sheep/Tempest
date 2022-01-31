@@ -183,7 +183,7 @@ namespace Tempest
 					//reg->m_RM.m_type = ParticleType::Circle;
 					//reg->m_GM.m_velocity.x = -500.0f;
 
-					LOG_INFO("ExplossionEmitter");
+					//LOG_INFO("ExplossionEmitter");
 				}
 
 				// Update the emitters
