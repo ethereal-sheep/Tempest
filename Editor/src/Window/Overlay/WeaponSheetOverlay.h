@@ -75,6 +75,7 @@ namespace Tempest
         template<typename F>
         void render_tabs(TABS_TYPE type, F&& func);
 
+        int tutorial_index = 0;
         std::array<TabImageData, TOTAL> Tabs;
         TABS_TYPE CurrentTab{ TABS_TYPE::WEAPON };
         bool OverlayOpen = false;

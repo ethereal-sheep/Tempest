@@ -47,6 +47,8 @@ namespace Tempest
 				Tabs[TABS_TYPE::WEAPON].is_active = true;
 		}
 
+		tutorial_index = 0;
+
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // weapons 
 	}
@@ -154,6 +156,10 @@ namespace Tempest
 						Tabs[TABS_TYPE::WEAPON].is_active = true;
 
 						CurrentTab = TABS_TYPE::WEAPON;
+
+						//Tutorial progression
+						if (instance.tutorial_enable && tutorial_index == 0)
+							tutorial_index = 1;
 					}
 				}
 
@@ -222,9 +228,139 @@ namespace Tempest
 					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::WEAPONS);
+						//Tutorial progression
+						if (instance.tutorial_enable && tutorial_index == 2)
+							tutorial_index = 3;
 					}
 
 					ImGui::PopStyleColor(3);
+				}
+
+				if (instance.tutorial_enable)
+				{
+					auto drawlist = ImGui::GetForegroundDrawList();
+					switch (tutorial_index)
+					{
+						case 0:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.02f, viewport->Size.y * 0.19f };
+							ImVec2 size = { 200.f, 70.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new weapon.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 1:
+						{
+							if (!weap)
+								break;
+
+							ImVec2 pos = { viewport->Size.x * 0.35f, viewport->Size.y * 0.22f };
+							ImVec2 size = { viewport->Size.x * 0.45f, viewport->Size.y * 0.7f };
+							auto selected = tex_map["Assets/Selected.dds"];
+							auto unselected = tex_map["Assets/Unselected.dds"];
+							bool taskCompleted = true;
+							UI::TutArea(pos, size, false);
+
+							// render the tasks
+							//Task List
+							string str = "";
+							str = string(ICON_FK_EXCLAMATION_CIRCLE);
+							ImGui::PushFont(FONT_HEAD);
+							drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+							str = " Tasks";
+							drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+							ImGui::PopFont();
+
+
+							ImGui::PushFont(FONT_BODY);
+							ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+							str = "Rename the weapon";
+							if (weap->name != "Weapon")
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+								taskCompleted &= true;
+							}
+							else
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+								taskCompleted &= false;
+							}
+							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+							str = "Assign 3 ATK to the weapon";
+							if (weap->get_stat(1) == 3)
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+								taskCompleted &= true;
+							}
+							else
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+								taskCompleted &= false;
+							}
+							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							ImGui::PopFont();
+
+							auto nextBtn = tex_map["Assets/NextBtn.dds"];
+							ImVec2 tut_min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+							if (taskCompleted)
+							{
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+								if (UI::MouseIsWithin(tut_min, tut_max))
+								{
+									ImGui::SetMouseCursor(7);
+									if (ImGui::IsMouseClicked(0))
+										tutorial_index = 2;
+								}
+							}
+							else
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
+						}
+						break;
+
+						case 2:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.1052f, viewport->Size.y * 0.0261f };
+							ImVec2 size = { 200.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 3:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.345f, viewport->Size.y * 0.1f };
+							ImVec2 size = { 310.f, 140.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the actions page.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+					}
+
+					//Tutorial Exit Button
+					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+					if (UI::MouseIsWithin(tut_min, tut_max))
+					{
+						ImGui::SetMouseCursor(7);
+						if (ImGui::IsMouseClicked(0))
+							instance.tutorial_enable = false;
+					}
+
+					UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 2);
 				}
 			}
 

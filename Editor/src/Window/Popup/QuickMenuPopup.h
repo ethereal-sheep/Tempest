@@ -62,6 +62,10 @@ namespace Tempest
             ImGui::SetNextWindowFocus();
             if (ImGui::BeginPopupModal("Quick Menu", NULL, flags))
             {
+               /* if (instance.tutorial_enable)
+                    ImGui::GetIO().MouseClicked[0] = false;
+                else
+                    ImGui::GetIO().MouseClicked[0] = true;*/
                 auto tex = tex_map["Assets/QuickMenuBG.dds"];
 
                 ImVec2 point{ 0,0 };
