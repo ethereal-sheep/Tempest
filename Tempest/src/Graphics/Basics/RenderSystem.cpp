@@ -562,15 +562,16 @@ namespace Tempest
             //glEnable( GL_BLEND );
             //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ); // = color * alpha + background * (1-alpha)
             //GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
+
+            auto s = glm::scale(glm::vec3(0.02f));
+            // auto t = glm::translate(glm::vec3(0.0f, 0.0f, -80.0f));
+            auto t = glm::translate(glm::vec3(-0.30f, 0.0f, -1.6f));
+            //auto r = 
+            //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
+            SubmitModel("Models/UnitBlack_Idle.a", (t * s));
           
         }
 
-        auto s = glm::scale(glm::vec3(0.02f));
-        // auto t = glm::translate(glm::vec3(0.0f, 0.0f, -80.0f));
-        auto t = glm::translate(glm::vec3(-0.30f, 0.0f, -1.6f));
-        //auto r = 
-        //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
-        SubmitModel("Models/UnitBlack_Idle.a", (t * s));
 
 
         LoadTextures();
