@@ -1409,7 +1409,7 @@ namespace Tempest::UI
 			ImGui::PopFont();
 			ImGui::PopStyleColor();
 			auto io = ImGui::GetIO();
-			if (hovered && ImGui::IsMouseClicked(0))
+			if (hovered && ImGui::GetIO().MouseClicked[0])
 			{
 				res = true;
 				AudioEngine ae;
@@ -1458,7 +1458,7 @@ namespace Tempest::UI
 			ImGui::PopStyleColor();
 
 			auto io = ImGui::GetIO();
-			if (ImGui::IsMouseClicked(0))
+			if (ImGui::GetIO().MouseClicked[0])
 			{
 				res = true;
 				AudioEngine ae;
@@ -3088,7 +3088,7 @@ namespace Tempest::UI
 		if (bg_col.w > 0.0f)
 			window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, ImGui::GetColorU32(bg_col));
 
-		if (pressed || held)
+		if (pressed || held )
 		{
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_pressed));
 			ImGui::SetMouseCursor(7);
@@ -3100,6 +3100,8 @@ namespace Tempest::UI
 		}
 		else
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+
+		
 
 		return pressed;
 	}
@@ -3772,7 +3774,7 @@ namespace Tempest::UI
 		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
 		ImGui::PopFont();
 	}
-	void TutArea(ImVec2 pos, ImVec2 size)
+	void TutArea(ImVec2 pos, ImVec2 size, bool border)
 	{
 		
 		auto drawlist = ImGui::GetForegroundDrawList();
@@ -3818,9 +3820,48 @@ namespace Tempest::UI
 		drawlist->AddRectFilled(RightBox.Min, RightBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(BtmBox.Min, BtmBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(LeftBox.Min, LeftBox.Max, ImGui::GetColorU32(col));
-		drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
+		if(border)
+			drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
+	}
 
-		
+	bool MouseIsWithin(const ImVec2 min, const ImVec2 max)
+	{
+		auto mousePos = ImGui::GetMousePos();
+		if (mousePos.x > min.x && mousePos.y < max.x
+			&& mousePos.y > min.y && mousePos.y < max.y)
+			return true;
+
+
+		return false;
+	}
+
+	void TutProgressBar(ImDrawList* drawlist, const ImVec2& viewport, int step)
+	{
+		const float diamondStep = viewport.x / 6.0f;
+
+		// Tutorial progress line
+		drawlist->AddLine(ImVec2{ 0, viewport.y * 0.9f }, ImVec2{ viewport.x, viewport.y * 0.9f }, ImGui::GetColorU32({ 1,1,1,1 }), 4.0f);
+		drawlist->AddLine(ImVec2{ 0, viewport.y * 0.9f }, ImVec2{ 0 + diamondStep * step, viewport.y * 0.9f }, IM_COL32(232, 137, 64, 255), 4.0f);
+		const string words[6] = { "Create a unit", "Create a weapon", "Create a action","Create a sequence","Simulate" };
+		float currentDiamondPos = diamondStep;
+		auto diamondImg = tex_map["Assets/TutorialDiamond.dds"];
+		for (int i = 0; i < 5; ++i)
+		{
+			ImGui::PushFont(FONT_SHEAD);
+			const string stepText = "Step " + std::to_string(i + 1);
+			drawlist->AddText({ currentDiamondPos - diamondImg->GetWidth() * 0.5f - ImGui::CalcTextSize(stepText.c_str()).x * 0.5f, viewport.y * 0.82f }, i < step ? IM_COL32(232, 137, 64, 255) : ImGui::GetColorU32({ 1,1,1,1 }), stepText.c_str());
+			ImGui::PopFont();
+
+			ImGui::PushFont(FONT_BODY);
+			const string bottomText = words[i];
+			drawlist->AddText({ currentDiamondPos - diamondImg->GetWidth() * 0.5f - ImGui::CalcTextSize(bottomText.c_str()).x * 0.5f, viewport.y * 0.95f }, ImGui::GetColorU32({ 1,1,1,1 }), bottomText.c_str());
+			ImGui::PopFont();
+
+			ImVec2 diamond_min = { currentDiamondPos - diamondImg->GetWidth() * 1.0f, viewport.y * 0.925f - diamondImg->GetHeight() * 1.0f };
+			ImVec2 diamond_max = { diamond_min.x + diamondImg->GetWidth() * 1.0f, diamond_min.y + diamondImg->GetHeight() * 1.0f };
+			drawlist->AddImage((void*)static_cast<size_t>(diamondImg->GetID()), diamond_min, diamond_max, ImVec2{ 0,0 }, ImVec2{ 1,1 }, i < step ? IM_COL32(232, 137, 64, 255) : ImGui::GetColorU32({ 1,1,1,1 }));
+			currentDiamondPos += diamondStep;
+		}
 	}
 }
 

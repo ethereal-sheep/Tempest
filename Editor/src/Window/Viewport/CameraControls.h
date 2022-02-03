@@ -610,7 +610,6 @@ namespace Tempest
 			if (current_shake_time < total_shake_time)
 			{
 				current_shake_time += ImGui::GetIO().DeltaTime;
-				auto t = glm::backEaseIn(glm::clamp(current_orbit_time / total_orbit_time, 0.f, 1.f));
 
 				// set rotation
 
@@ -831,6 +830,24 @@ namespace Tempest
 			}
 		}
 
+		void force_reset_pos(Camera& cam)
+		{
+			start_position = cam.GetPosition();
+			end_position = cam.GetPosition();
+
+			current_pos_time = 1.f;
+			total_pos_time = 1.f;
+		}
+
+		void force_reset_rot(Camera& cam)
+		{
+			start_rotation = cam.GetQuatRotation();
+			end_rotation = cam.GetQuatRotation();
+
+			current_rot_time = 0.f;
+			total_rot_time = 1.f;
+		}
+
 		void set_fixed_camera(Camera& cam, float yaw = 0.f, float pitch = 45.f)
 		{
 			if (mode != CameraControlMode::FIXED)
@@ -839,6 +856,12 @@ namespace Tempest
 				auto left = glm::conjugate(rot) * vec3 { 1, 0, 0 };
 
 				rot = rot * glm::angleAxis(glm::radians(pitch), left);
+
+				start_position = cam.GetPosition();
+				end_position = cam.GetPosition();
+
+				current_pos_time = 1.f;
+				total_pos_time = 1.f;
 
 				start_rotation = cam.GetQuatRotation();
 				end_rotation = rot;

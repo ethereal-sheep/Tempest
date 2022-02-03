@@ -88,7 +88,7 @@ namespace Tempest
 
 			string p_str = instance.get_full_path().string();
 			LOG_ASSERT(fs::exists(p_str));
-
+			 
 			Writer writer;
 			writer.StartObject();
 			writer.Member("rec", p_str);

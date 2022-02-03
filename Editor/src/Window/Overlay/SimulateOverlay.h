@@ -47,7 +47,6 @@ namespace Tempest
         bool OverlayOpen = false;
         unsigned Tab = 0;
 
-        bool tutorial_enable = true;
         int tutorial_index = 0;
 
         const float Padding = 100.0f;

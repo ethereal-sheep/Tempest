@@ -101,6 +101,7 @@ namespace Tempest
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
+        int tutorial_index = 0;
 
         CameraControls cam_ctrl;
    /*     bool AddWeaponPopup = false;
