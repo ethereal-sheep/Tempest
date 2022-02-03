@@ -5,7 +5,7 @@
 #include "ExplosionEmitter.h"
 
 // Debugging purpose
-//#include "Logger/Log.h"
+#include "Logger/Log.h"
 
 ParticleSystem_2D::ParticleSystem_2D()
 {}
@@ -184,6 +184,11 @@ void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter
 	emitter->m_wayPoints.push_back(wp_RightBottom);
 	emitter->m_wayPoints.push_back(wp_RightTop);
 	emitter->m_wayPoints.push_back(wp_LeftTop);
+
+	//LOG_INFO("Btm Left  x: {0}, y: {1}", wp_LeftBottom.x, wp_LeftBottom.y);
+	//LOG_INFO("Btm Right x: {0}, y: {1}", wp_RightBottom.x, wp_RightBottom.y);
+	//LOG_INFO("Top Right x: {0}, y: {1}", wp_RightTop.x, wp_RightTop.y);
+	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 }
 
 Emitter& ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)

@@ -361,7 +361,7 @@ namespace Tempest
 						{
 							ImVec2 pos = { viewport->Size.x * 0.1052f, viewport->Size.y * 0.0261f };
 							ImVec2 size = { 200.f, 50.f };
-							UI::TutArea(pos, size);
+							UI::TutArea(pos, size, false);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -386,7 +386,7 @@ namespace Tempest
 						{
 							ImVec2 pos = { viewport->Size.x * 0.345f, viewport->Size.y * 0.1f };
 							ImVec2 size = { 310.f, 140.f };
-							UI::TutArea(pos, size);
+							UI::TutArea(pos, size, false);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the actions page.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
