@@ -61,7 +61,7 @@ void ParticleSystem_2D::AddEmitter(const std::shared_ptr<Emitter> emitter)
 		m_emitters.push_back(emitter);
 }
 
-std::shared_ptr<WaypointEmitter>& ParticleSystem_2D::ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
+const std::shared_ptr<WaypointEmitter>& ParticleSystem_2D::ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
 	auto tempEmitter = std::make_shared<WaypointEmitter>();
 	Emitter& emitter = *tempEmitter.get();
@@ -125,7 +125,7 @@ std::shared_ptr<WaypointEmitter>& ParticleSystem_2D::ButtonEmitter(glm::vec2 top
 	return tempEmitter;
 }
 
-void ParticleSystem_2D::ReuseButtonEmitter(std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
+void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
 	// Emitter values - Without consideration for default ctor values
 	emitter->m_GM.m_velocity.x = 0.0f;

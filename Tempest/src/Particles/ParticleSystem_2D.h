@@ -58,8 +58,8 @@ struct ParticleSystem_2D
 	}
 
 	// Not supposed to be here - NOT TO BE SHARED POINTER
-	std::shared_ptr<WaypointEmitter>& ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
-	void ReuseButtonEmitter(std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	const std::shared_ptr<WaypointEmitter>& ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
 	Emitter& ExplosionEmitter_2(glm::vec2 spawnPos);
 
 private:

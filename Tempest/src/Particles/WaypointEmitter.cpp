@@ -63,11 +63,11 @@ void WaypointEmitter::SelfUpdate()
 			// Check how near it is
 			float distanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
 
-			// Travel Progression
-			float travelProgression = (m_initialDistanceSquared - distanceSquared) / m_initialDistanceSquared;
+			// Travel Progression Velocity
+			//float travelProgression = (m_initialDistanceSquared - distanceSquared) / m_initialDistanceSquared;
+			//m_GM.m_velocity = glm::mix(m_startVelocity, m_endVelocity, travelProgression);
 
 			//Move towards waypoint
-			//m_GM.m_velocity = glm::mix(m_startVelocity, m_endVelocity, travelProgression);
 			m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
 
 			// 10 pixels difference
