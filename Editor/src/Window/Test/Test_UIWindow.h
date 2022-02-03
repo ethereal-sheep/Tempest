@@ -139,88 +139,88 @@ namespace Tempest
 				//UI::UIMapSelectable("CONFLICT RES 1##1", "DATE CREATED",false);
 				//auto& io = ImGui::GetIO();
 
-				auto drawlist = ImGui::GetForegroundDrawList();
+				//auto drawlist = ImGui::GetForegroundDrawList();
 
-				ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
-				ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
-				auto tex = tex_map["Assets/Loading.dds"];
-				//ImVec2 size = { (float)tex->GetWidth() * 0.7f,(float)tex->GetHeight() * 0.7f };
-				ImVec2 size = { (float)tex->GetWidth() * 1.0f,(float)tex->GetHeight() * 1.0f };
-				ImVec2 pos = ImGui::GetCursorPos() + ImGui::GetCurrentWindow()->Pos;
-				
-				// Top left button
-				glm::vec2 real_buttonSize;
-				real_buttonSize.x = size.x;
-				real_buttonSize.y = size.y;
+				//ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
+				//ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
+				//auto tex = tex_map["Assets/Loading.dds"];
+				////ImVec2 size = { (float)tex->GetWidth() * 0.7f,(float)tex->GetHeight() * 0.7f };
+				//ImVec2 size = { (float)tex->GetWidth() * 1.0f,(float)tex->GetHeight() * 1.0f };
+				//ImVec2 pos = ImGui::GetCursorPos() + ImGui::GetCurrentWindow()->Pos;
+				//
+				//// Top left button
+				//glm::vec2 real_buttonSize;
+				//real_buttonSize.x = size.x;
+				//real_buttonSize.y = size.y;
 
-				// Top left position
-				glm::vec2 real_mousePosition;
-				real_mousePosition.x = pos.x;
-				real_mousePosition.y = pos.y;
+				//// Top left position
+				//glm::vec2 real_mousePosition;
+				//real_mousePosition.x = pos.x;
+				//real_mousePosition.y = pos.y;
 
 
-				if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), size, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
-				{
+				//if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), size, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				//{
 
-				}
+				//}
 
-				//if (ImGui::IsMouseDown(0))
-				if (ImGui::IsMouseClicked(0))
-				{
-					// Test prepared functions for XR
-					ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
-				}
-				//if (ImGui::IsMouseDown(1))
-				if (ImGui::IsMouseClicked(1))
-				{
-					glm::vec2 tempVec;
-					tempVec.x = ImGui::GetMousePos().x;
-					tempVec.y = ImGui::GetMousePos().y;
+				////if (ImGui::IsMouseDown(0))
+				//if (ImGui::IsMouseClicked(0))
+				//{
+				//	// Test prepared functions for XR
+				//	ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+				//}
+				////if (ImGui::IsMouseDown(1))
+				//if (ImGui::IsMouseClicked(1))
+				//{
+				//	glm::vec2 tempVec;
+				//	tempVec.x = ImGui::GetMousePos().x;
+				//	tempVec.y = ImGui::GetMousePos().y;
 
-					//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-					//auto& reg = particleSys.Register(tempVec);
-					ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
-					//reg->m_RM.m_type = ParticleType::Circle;
-					//reg->m_GM.m_velocity.x = -500.0f;
+				//	//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
+				//	//auto& reg = particleSys.Register(tempVec);
+				//	ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
+				//	//reg->m_RM.m_type = ParticleType::Circle;
+				//	//reg->m_GM.m_velocity.x = -500.0f;
 
-					//LOG_INFO("ExplossionEmitter");
-				}
+				//	//LOG_INFO("ExplossionEmitter");
+				//}
 
-				// Update the emitters
-				ParticleSystem_2D::GetInstance().Update();
+				//// Update the emitters
+				//ParticleSystem_2D::GetInstance().Update();
 
-				for (auto& emitter : ParticleSystem_2D::GetInstance().get_emitters())
-				{
-					// Render the particle
-					if(emitter->m_GM.m_active)
-						for (auto& particle : emitter->m_particles) 
-						{
-							if (particle.m_isActive) 
-							{
-								ImVec2 pos;
-								pos.x = particle.m_position.x;
-								pos.y = particle.m_position.y;
+				//for (auto& emitter : ParticleSystem_2D::GetInstance().get_emitters())
+				//{
+				//	// Render the particle
+				//	if(emitter->m_GM.m_active)
+				//		for (auto& particle : emitter->m_particles) 
+				//		{
+				//			if (particle.m_isActive) 
+				//			{
+				//				ImVec2 pos;
+				//				pos.x = particle.m_position.x;
+				//				pos.y = particle.m_position.y;
 
-								ImVec4 colour;
-								colour.x = particle.m_colour.r;
-								colour.y = particle.m_colour.g;
-								colour.z = particle.m_colour.b;
-								colour.w = particle.m_colour.a;
+				//				ImVec4 colour;
+				//				colour.x = particle.m_colour.r;
+				//				colour.y = particle.m_colour.g;
+				//				colour.z = particle.m_colour.b;
+				//				colour.w = particle.m_colour.a;
 
-								ImVec2 min, max;
-								min.x = pos.x - particle.m_size * 0.5f;
-								max.x = pos.x + particle.m_size * 0.5f;
+				//				ImVec2 min, max;
+				//				min.x = pos.x - particle.m_size * 0.5f;
+				//				max.x = pos.x + particle.m_size * 0.5f;
 
-								min.y = pos.y - particle.m_size * 0.5f;
-								max.y = pos.y + particle.m_size * 0.5f;
+				//				min.y = pos.y - particle.m_size * 0.5f;
+				//				max.y = pos.y + particle.m_size * 0.5f;
 
-								if (particle.m_type == ParticleType::Circle)
-									drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
-								else if(particle.m_type == ParticleType::Square)
-									drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
-							}
-						}
-				}
+				//				if (particle.m_type == ParticleType::Circle)
+				//					drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
+				//				else if(particle.m_type == ParticleType::Square)
+				//					drawlist->AddRectFilled(min, max, ImGui::GetColorU32({ colour }));
+				//			}
+				//		}
+				//}
 				
 				if (instance.selected == INVALID)
 				{

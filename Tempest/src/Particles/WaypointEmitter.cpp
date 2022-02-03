@@ -2,6 +2,8 @@
 
 #include "WaypointEmitter.h"
 
+#include "Logger/Log.h"
+
 void WaypointEmitter::SelfUpdate()
 {
 	if (m_MM.m_preWarm)
@@ -16,14 +18,6 @@ void WaypointEmitter::SelfUpdate()
 		// Move in way point position
 		if (m_GM.m_position != m_wayPoints[m_wayPointIndex])
 		{
-			if (m_recalculateVelocity)
-			{
-				m_GM.m_velocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
-				m_recalculateVelocity = false;
-			}
-
-			//Move towards way point
-			m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
 
 			auto DistanceCalculation = [](glm::vec2 endPos, glm::vec2 startPos)
 			{
@@ -33,11 +27,51 @@ void WaypointEmitter::SelfUpdate()
 				return distanceSquared;
 			};
 
+
+			if (m_recalculateVelocity)
+			{
+				m_GM.m_velocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
+
+				m_startVelocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
+				
+				// 20% of the initial velocity
+				m_endVelocity = m_startVelocity * 0.5f;
+
+				m_initialDistanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
+
+				// Reducing velocity speed - Flawed Normalisation
+				//LOG_INFO("Before control velocity X : {0}", m_GM.m_velocity.x);
+				//LOG_INFO("Before control velocity Y : {0}", m_GM.m_velocity.y);
+
+				if (m_GM.m_velocity.x != 0.f)
+				{
+					m_GM.m_velocity.x /= std::abs(m_GM.m_velocity.x);
+					m_GM.m_velocity.x *= 200.0f;
+				}
+
+				if (m_GM.m_velocity.y != 0.f)
+				{
+					m_GM.m_velocity.y /= std::abs(m_GM.m_velocity.y);
+					m_GM.m_velocity.y *= 200.0f;
+				}
+
+				//LOG_INFO("After control velocity X : {0}", m_GM.m_velocity.x);
+				//LOG_INFO("After control velocity Y : {0}", m_GM.m_velocity.y);
+
+				m_recalculateVelocity = false;
+			}
 			// Check how near it is
 			float distanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
 
+			// Travel Progression
+			float travelProgression = (m_initialDistanceSquared - distanceSquared) / m_initialDistanceSquared;
+
+			//Move towards waypoint
+			//m_GM.m_velocity = glm::mix(m_startVelocity, m_endVelocity, travelProgression);
+			m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
+
 			// 10 pixels difference
-			if (distanceSquared <= 2.0f)
+			if (distanceSquared <= 10.0f)
 			{
 				m_GM.m_position = m_wayPoints[m_wayPointIndex];
 				++m_wayPointIndex;

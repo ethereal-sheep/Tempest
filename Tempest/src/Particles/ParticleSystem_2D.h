@@ -9,6 +9,8 @@
 
 //#include "../../Editor/src/Extern/imgui/imgui.h"
 
+struct WaypointEmitter;
+
 struct ParticleSystem_2D
 {
 	static ParticleSystem_2D& GetInstance();
@@ -56,8 +58,9 @@ struct ParticleSystem_2D
 	}
 
 	// Not supposed to be here - NOT TO BE SHARED POINTER
-	void ButtonEmitter(glm::vec2 topleftPos, glm::vec2 buttonSize);
-	void ExplosionEmitter_2(glm::vec2 spawnPos);
+	std::shared_ptr<WaypointEmitter>& ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	void ReuseButtonEmitter(std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	Emitter& ExplosionEmitter_2(glm::vec2 spawnPos);
 
 private:
 	ParticleSystem_2D();
