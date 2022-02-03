@@ -120,11 +120,6 @@ namespace Tempest
 
 				if (instance.tutorial_enable)
 				{
-					static bool particle_0 = false;
-					static bool particle_1 = false;
-					static bool particle_2 = false;
-
-
 					auto drawlist = ImGui::GetForegroundDrawList();
 					switch (tutorial_index)
 					{
@@ -447,6 +442,11 @@ namespace Tempest
 
 			ImGui::End();
 
+		}
+		else
+		{
+			if(m_waypointParticle)
+				m_waypointParticle->m_GM.m_active = false;
 		}
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)

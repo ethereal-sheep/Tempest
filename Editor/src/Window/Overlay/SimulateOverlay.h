@@ -86,5 +86,9 @@ namespace Tempest
 
         // For tutorial particle
         std::shared_ptr<WaypointEmitter> m_waypointParticle;
+
+        bool particle_0 = false;
+        bool particle_1 = false;
+        bool particle_2 = false;
     };
 }

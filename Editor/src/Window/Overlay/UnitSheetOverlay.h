@@ -17,6 +17,8 @@
 #include "Util/interpolater.h"
 #include "Window/Viewport/CameraControls.h"
 
+#include "Particles/WaypointEmitter.h"
+
 namespace Tempest
 {
     class UnitSheetOverlay : public Window
@@ -104,6 +106,15 @@ namespace Tempest
         int tutorial_index = 0;
 
         CameraControls cam_ctrl;
+
+        // For tutorial particle
+        std::shared_ptr<WaypointEmitter> m_waypointParticle;
+
+        bool particle_0 = false;
+        bool particle_1 = false;
+        bool particle_2 = false;
+        bool particle_3 = false;
+
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;
         bool CreateOpen = false;
@@ -115,6 +126,5 @@ namespace Tempest
         Entity SelectedID = INVALID;
         std::string NewStatName = "Stat";
         int NewStatValue = 0;*/
-
     };
 }

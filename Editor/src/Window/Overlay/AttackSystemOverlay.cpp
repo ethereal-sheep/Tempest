@@ -457,12 +457,29 @@ namespace Tempest
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new action.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (particle_0 == false)
+							{
+								glm::vec2 real_buttonSize;
+								real_buttonSize.x = size.x;
+								real_buttonSize.y = size.y;
+
+								glm::vec2 real_mousePosition;
+								real_mousePosition.x = pos.x;
+								real_mousePosition.y = pos.y;
+
+								m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+
+								particle_0 = true;
+							}
 						}
 						break;
 
 						case 1:
 						{
 							// render the tasks for action
+
+
 						}
 						break;
 
@@ -473,6 +490,21 @@ namespace Tempest
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (particle_2 == false)
+							{
+								glm::vec2 real_buttonSize;
+								real_buttonSize.x = size.x;
+								real_buttonSize.y = size.y;
+
+								glm::vec2 real_mousePosition;
+								real_mousePosition.x = pos.x;
+								real_mousePosition.y = pos.y;
+
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
+
+								particle_2 = true;
+							}
 						}
 						break;
 
@@ -483,6 +515,21 @@ namespace Tempest
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the sequence page.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (particle_3 == false)
+							{
+								glm::vec2 real_buttonSize;
+								real_buttonSize.x = size.x;
+								real_buttonSize.y = size.y;
+
+								glm::vec2 real_mousePosition;
+								real_mousePosition.x = pos.x;
+								real_mousePosition.y = pos.y;
+
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
+
+								particle_3 = true;
+							}
 						}
 						break;
 
@@ -531,6 +578,11 @@ namespace Tempest
 				}
 			}
 			ImGui::End();
+		}
+		else
+		{
+			if (m_waypointParticle)
+				m_waypointParticle->m_GM.m_active = false;
 		}
 	}
 	

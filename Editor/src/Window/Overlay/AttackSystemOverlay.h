@@ -16,6 +16,8 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
+#include "Particles/WaypointEmitter.h"
+
 namespace Tempest
 {
     class AttackSystemOverlay : public Window
@@ -109,5 +111,13 @@ namespace Tempest
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
+
+        // For tutorial particle
+        std::shared_ptr<WaypointEmitter> m_waypointParticle;
+
+        bool particle_0 = false;
+        //bool particle_1 = false;
+        bool particle_2 = false;
+        bool particle_3 = false;
     };
 }
