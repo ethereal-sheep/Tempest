@@ -12,6 +12,7 @@
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -40,7 +41,7 @@ namespace Tempest
 
             OverlayOpen = true;
 
-            turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+            change_state(TURN_ORDER_STATE::ORDER_ADD_UNITS);
             character_icon = tex_map["Assets/CharacterIcon.dds"];
             unit_black = tex_map["Assets/Unit_Black.dds"];
             buttons[0] = tex_map["Assets/DiceRollButtonUnlit.dds"];
@@ -51,6 +52,8 @@ namespace Tempest
         }
 
         void open_popup(const Event& e);
+
+        void change_state(TURN_ORDER_STATE state);
 
         void show(Instance&) override;
 
@@ -65,5 +68,6 @@ namespace Tempest
         std::array<tsptr<Texture>, 4> buttons;
         tvector<Entity> added_entities; // temp
 
+        std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(10);
     };
 }
