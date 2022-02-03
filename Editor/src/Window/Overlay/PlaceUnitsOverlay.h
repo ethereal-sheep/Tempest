@@ -14,6 +14,7 @@
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
 #include "../Viewport/CameraControls.h"
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
@@ -36,5 +37,7 @@ namespace Tempest
 
         void show(Instance&) override;
         void DrawSideBar(Instance& instance, ImVec2 size);
+
+        interpolater<float> inter;
     };
 }

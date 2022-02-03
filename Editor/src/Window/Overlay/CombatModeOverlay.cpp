@@ -564,13 +564,17 @@ namespace Tempest
 
 				if (battle_state == BATTLE_STATE::CURR_TURN || battle_state == BATTLE_STATE::SELECT_ACTION || battle_state == BATTLE_STATE::SELECT_WEAPON)
 				{
+					// end turn button
 					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA))
 					{
 						curr_entity = increase_turn();
 					}
 
 					UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f , viewport->Size.y - action_background_size.y * 0.7f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f - inter_nest[3].get() * 300.f , viewport->Size.y - action_background_size.y * 0.7f });
+
+					ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
+
 					if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, true, ImGuiWindowFlags_NoScrollbar))
 					{
 						switch (battle_state)
@@ -583,7 +587,7 @@ namespace Tempest
 
 							// action
 							const ImVec2 imgSize{ (float)combat_button_tex[0]->GetWidth(), (float)combat_button_tex[0]->GetHeight() };
-							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
+							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f - inter_nest[3].get() * 100.f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
@@ -692,6 +696,8 @@ namespace Tempest
 
 					}
 					ImGui::EndChild();
+
+					ImGui::PopStyleColor();
 				}
 
 				// display the back button at the top right
@@ -2426,6 +2432,8 @@ namespace Tempest
 		selected_weapon = UNDEFINED;
 		curr_turn = 0;
 		curr_entity = units[curr_turn];
+
+		inter_nest[3].start(-1.f, 0.f, .6f, 0.f, [](float x) { return glm::cubicEaseOut(x); });
 	};
 
 	void CombatModeOverlay::visibility(const Event& e)
@@ -3028,6 +3036,9 @@ namespace Tempest
 	{
 		if (++curr_turn >= units.size())
 			curr_turn = 0;
+		
+		// use inter_nest[0] and inter_nest[1]
+		
 
 		return units[curr_turn];
 	}

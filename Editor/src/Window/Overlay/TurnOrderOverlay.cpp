@@ -16,14 +16,35 @@
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 namespace Tempest
 {
+	float easyInBack(float x)
+	{
+		const float c1 = 1.3f;
+		const float c3 = c1 + 1;
+
+		return c3 * x * x * x - c1 * x * x;
+	}
+
+
+	const float left_time = .4f;
+	const float both_time = .6f;
+
+
 	void TurnOrderOverlay::open_popup(const Event& e)
 	{
 		auto a = event_cast<OpenTurnOrderOverlay>(e);
 		new_instance = a.newInstance;
 		OverlayOpen = true;
-		turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+		change_state(TURN_ORDER_STATE::ORDER_ADD_UNITS);
 		if (!new_instance)
 			added_entities = a.entities;
+
+		//
+	}
+
+	void TurnOrderOverlay::change_state(TURN_ORDER_STATE state)
+	{
+		turn_order_state = state;
+		inter_nest[0].start(-1.f, 0.f, both_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
 	}
 
 	void TurnOrderOverlay::show(Instance& instance)
@@ -32,6 +53,13 @@ namespace Tempest
 
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
+
+
+		{
+			float dt = ImGui::GetIO().DeltaTime;
+			for (auto& i : inter_nest)
+				i.update(dt);
+		}
 
 		if (OverlayOpen)
 		{
@@ -43,7 +71,7 @@ namespace Tempest
 				
 
 				// title
-				ImGui::SetCursorPos(ImVec2{ 0,0 });
+				ImGui::SetCursorPos(ImVec2{ 0,inter_nest[0].get() * 200.f });
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 				UI::SubHeader(turn_order_state == TURN_ORDER_STATE::ORDER_ADD_UNITS ? "Add Units" : "Turn Order");
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
@@ -60,18 +88,18 @@ namespace Tempest
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
 				{
 					// text displays
-					std::string text = "Select and add the units from the list that you want you in the game.";
+					std::string text = "Select and add the units from the list that you want in the game.";
 					ImGui::PushFont(FONT_BODY);
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.05f, viewport->Size.y * 0.25f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.05f + inter_nest[0].get() * 800.f, viewport->Size.y * 0.25f });
 					ImGui::Text(text.c_str());
 
 					text = "Currently selected units";
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.695f - ImGui::CalcTextSize(text.c_str()).x * 0.5f, viewport->Size.y * 0.25f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.695f - ImGui::CalcTextSize(text.c_str()).x * 0.5f - inter_nest[0].get() * 800.f, viewport->Size.y * 0.25f });
 					ImGui::Text(text.c_str());
 					ImGui::PopFont();
 
 					// character selection section
-					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.3f });
+					ImGui::SetCursorPos(ImVec2{ 0.f + inter_nest[0].get() * 1000.f, viewport->Size.y * 0.3f });
 					if (ImGui::BeginChild("Character adding", ImVec2{ viewport->Size.x * 0.35f, viewport->Size.y * 0.5f }))
 					{
 						unsigned i = 0;
@@ -96,10 +124,10 @@ namespace Tempest
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 				{
 					auto tex = tex_map["Assets/TurnOrderLogo.dds"];
-					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
-					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
 					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
@@ -110,7 +138,13 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 0.f, 100.0f });
 						if (ImGui::ImageButton((void*)static_cast<size_t>(buttons[0]->GetID()), ImVec2{ buttons[0]->GetWidth() * 1.0f,buttons[0]->GetHeight() * 1.0f }))
 						{
-							turn_order_state = TURN_ORDER_STATE::ORDER_DICE;
+
+							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+							auto fn = [&]() {
+								turn_order_state = TURN_ORDER_STATE::ORDER_DICE;
+								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+							};
+							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
 						}
 						if (ImGui::IsItemHovered())
 							buttons[0] = tex_map["Assets/DiceRollButtonLit.dds"];
@@ -125,7 +159,13 @@ namespace Tempest
 
 						if (ImGui::ImageButton((void*)static_cast<size_t>(buttons[2]->GetID()), ImVec2{ buttons[2]->GetWidth() * 1.0f,buttons[2]->GetHeight() * 1.0f }))
 						{
-							turn_order_state = TURN_ORDER_STATE::ORDER_STAT;
+							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+
+							auto fn = [&]() {
+								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+								turn_order_state = TURN_ORDER_STATE::ORDER_STAT;
+							};
+							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
 						}
 						if (ImGui::IsItemHovered())
 							buttons[2] = tex_map["Assets/StatsButtonLit.dds"];
@@ -147,9 +187,19 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 20.f, 0.f });
 						ImGui::SameLine();*/
 
-						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[3]->GetID()), ImVec2{ buttons[3]->GetWidth() * 1.0f,buttons[3]->GetHeight() * 1.0f }))
+						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[3]->GetID()), ImVec2{ buttons[3]->GetWidth() * 1.0f , buttons[3]->GetHeight() * 1.0f }))
 						{
-							turn_order_state = TURN_ORDER_STATE::ORDER_CUSTOM;
+
+							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+
+							auto fn = [&]() {
+								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+								turn_order_state = TURN_ORDER_STATE::ORDER_CUSTOM;
+							};
+							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+
+
+
 						}
 						if (ImGui::IsItemHovered())
 							buttons[3] = tex_map["Assets/CustomButtonLit.dds"];
@@ -163,10 +213,10 @@ namespace Tempest
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
 				{
 					auto tex = tex_map["Assets/DiceRollLogo.dds"];
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
-					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
 					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
@@ -198,10 +248,10 @@ namespace Tempest
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
 				{
 					auto tex = tex_map["Assets/StatsLogo.dds"];
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
-					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
 					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
@@ -263,10 +313,10 @@ namespace Tempest
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
 				{
 					auto tex = tex_map["Assets/CombinedLogo.dds"];
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
-					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
 					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
@@ -299,10 +349,10 @@ namespace Tempest
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
 				{
 					auto tex = tex_map["Assets/CustomLogo.dds"];
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
-					ImGui::SetCursorPos(ImVec2{ 0, viewport->Size.y * 0.4f });
+					ImGui::SetCursorPos(ImVec2{ 0 + +(inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.4f });
 					ImGui::Dummy(ImVec2{ 20.f, 0.f });
 					ImGui::SameLine();
 					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
@@ -322,7 +372,7 @@ namespace Tempest
 
 
 				// character added section
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f, viewport->Size.y * 0.3f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f - inter_nest[0].get() * 1000.f, viewport->Size.y * 0.3f });
 				const ImVec2 ChildSize{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f };
 				tvector<unsigned> remove;
 				if (ImGui::BeginChild("Character added", ChildSize))
@@ -433,8 +483,16 @@ namespace Tempest
 					switch (turn_order_state)
 					{
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
-						if(added_entities.size() > 1)
-							turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+						if (added_entities.size() > 1)
+						{
+							inter_nest[0].start(0.f, -1.f, both_time, 0.f, [](float x) { return easyInBack(x); });
+
+							auto fn = [&]() {
+								change_state(TURN_ORDER_STATE::ORDER_TURN_MAIN);
+							};
+							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(.6f, fn));
+
+						}
 						else
 							Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("At least two units required!");
 						break;
@@ -447,16 +505,52 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities, instance, new_instance);
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
-						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+					{
+						inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+
+						auto fn = [&]() {
+							turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+							inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+						};
+						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+
+					}
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
-						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+					{
+
+						inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+						auto fn = [&]() {
+							turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+							inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+						};
+						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+
+					}
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
-						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+					{
+
+						inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+						auto fn = [&]() {
+							turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+							inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+						};
+						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+
+					}
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
-						turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+					{
+
+						inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+						auto fn = [&]() {
+							turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+							inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+						};
+						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+
+					}
 						break;
 					default:
 						break;
@@ -491,7 +585,17 @@ namespace Tempest
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_STAT:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE_STAT:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_CUSTOM:
-						turn_order_state = TURN_ORDER_STATE::ORDER_ADD_UNITS;
+					{
+
+						inter_nest[0].start(0.f, -1.f, both_time, 0.f, [](float x) { return easyInBack(x); });
+
+						auto fn = [&]() {
+							change_state(TURN_ORDER_STATE::ORDER_ADD_UNITS);
+						};
+						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(.6f, fn));
+
+
+					}
 						break;
 					default:
 						break;
