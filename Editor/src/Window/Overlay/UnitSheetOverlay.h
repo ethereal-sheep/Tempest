@@ -108,7 +108,7 @@ namespace Tempest
         CameraControls cam_ctrl;
 
         // For tutorial particle
-        std::shared_ptr<WaypointEmitter> m_waypointParticle;
+        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
 
         bool particle_0 = false;
         bool particle_1 = false;

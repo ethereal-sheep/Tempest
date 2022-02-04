@@ -17,6 +17,7 @@
 #include "Util/interpolater.h"
 
 #include "Particles/WaypointEmitter.h"
+#include "Particles/ExplosionEmitter.h"
 
 namespace Tempest
 {
@@ -113,7 +114,8 @@ namespace Tempest
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
         // For tutorial particle
-        std::shared_ptr<WaypointEmitter> m_waypointParticle;
+        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+        std::shared_ptr<ExplosionEmitter> m_explosionEmitter;
 
         bool particle_0 = false;
         //bool particle_1 = false;

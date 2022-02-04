@@ -10,6 +10,7 @@
 //#include "../../Editor/src/Extern/imgui/imgui.h"
 
 struct WaypointEmitter;
+struct ExplosionEmitter;
 
 struct ParticleSystem_2D
 {
@@ -60,7 +61,8 @@ struct ParticleSystem_2D
 	// Not supposed to be here - NOT TO BE SHARED POINTER
 	const std::shared_ptr<WaypointEmitter>& ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
 	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
-	Emitter& ExplosionEmitter_2(glm::vec2 spawnPos);
+	const std::shared_ptr<ExplosionEmitter>& ExplosionEmitter_2(glm::vec2 spawnPos);
+	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, glm::vec2 spawnPos);
 
 private:
 	ParticleSystem_2D();

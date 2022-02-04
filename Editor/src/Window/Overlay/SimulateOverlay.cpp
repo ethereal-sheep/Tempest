@@ -149,10 +149,10 @@ namespace Tempest
 							real_mousePosition.x = pos.x;
 							real_mousePosition.y = pos.y;
 
-							if (!m_waypointParticle)
-								m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+							if (!m_waypointEmitter)
+								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
 							else
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 						}
 					}
 					break;
@@ -177,8 +177,8 @@ namespace Tempest
 						str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
 						drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 						
-						if (m_waypointParticle)
-							m_waypointParticle->m_GM.m_active = false;
+						if (m_waypointEmitter)
+							m_waypointEmitter->m_GM.m_active = false;
 
 						if (ImGui::IsMouseClicked(0))
 							tutorial_index = 2;
@@ -204,7 +204,7 @@ namespace Tempest
 							real_mousePosition.x = pos.x;
 							real_mousePosition.y = pos.y;
 
-							ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
+							ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
 							particle_2 = true;
 						}
@@ -437,8 +437,8 @@ namespace Tempest
 
 		}
 		
-		if(m_waypointParticle && (!OverlayOpen || !instance.tutorial_enable))
-			m_waypointParticle->m_GM.m_active = false;
+		if(m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointEmitter->m_GM.m_active = false;
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{

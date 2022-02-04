@@ -473,10 +473,10 @@ namespace Tempest
 								real_mousePosition.x = pos.x;
 								real_mousePosition.y = pos.y;
 
-								if (!m_waypointParticle)
-									m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+								if (!m_waypointEmitter)
+									m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
 								else
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 							}
 						}
 						break;
@@ -484,8 +484,8 @@ namespace Tempest
 						case 1:
 						{
 							// render the tasks for action
-							if (m_waypointParticle)
-								m_waypointParticle->m_GM.m_active = false;
+							if (m_waypointEmitter)
+								m_waypointEmitter->m_GM.m_active = false;
 						}
 						break;
 
@@ -507,7 +507,7 @@ namespace Tempest
 								real_mousePosition.x = pos.x;
 								real_mousePosition.y = pos.y;
 
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
 								particle_2 = true;
 							}
@@ -532,7 +532,7 @@ namespace Tempest
 								real_mousePosition.x = pos.x;
 								real_mousePosition.y = pos.y;
 
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
 								particle_3 = true;
 							}
@@ -560,8 +560,8 @@ namespace Tempest
 						case 1:
 						{
 							// render the tasks for sequence
-							if (m_waypointParticle)
-								m_waypointParticle->m_GM.m_active = false;
+							if (m_waypointEmitter)
+								m_waypointEmitter->m_GM.m_active = false;
 						}
 						break;
 
@@ -587,8 +587,8 @@ namespace Tempest
 			}
 			ImGui::End();
 		}
-		if (m_waypointParticle && (!OverlayOpen || !instance.tutorial_enable))
-			m_waypointParticle->m_GM.m_active = false;
+		if (m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointEmitter->m_GM.m_active = false;
 	}
 	
 	void AttackSystemOverlay::draw_context(Instance& instance, float height)
@@ -1855,10 +1855,16 @@ namespace Tempest
 						{
 							g.add_link(s, e);
 
+							mouse = ImGui::GetMousePos();
+
 							glm::vec2 tempVec;
 							tempVec.x = mouse.x;
 							tempVec.y = mouse.y;
-							ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
+
+							if(m_explosionEmitter)
+								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter, tempVec);
+							else
+								m_explosionEmitter = ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 						}
 					}
 				}

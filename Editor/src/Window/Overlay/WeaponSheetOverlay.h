@@ -88,7 +88,7 @@ namespace Tempest
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
         // For tutorial particle
-        std::shared_ptr<WaypointEmitter> m_waypointParticle;
+        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
 
         bool particle_0 = false;
         bool particle_1 = false;
