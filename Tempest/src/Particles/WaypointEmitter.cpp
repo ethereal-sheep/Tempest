@@ -27,21 +27,26 @@ void WaypointEmitter::SelfUpdate()
 				return distanceSquared;
 			};
 
-
 			if (m_recalculateVelocity)
 			{
 				m_GM.m_velocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
 
-				m_startVelocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
+			/*	LOG_INFO("wayPoint position X : {0}", m_wayPoints[m_wayPointIndex].x);
+				LOG_INFO("wayPoint position Y : {0}", m_wayPoints[m_wayPointIndex].y);
+
+				LOG_INFO("Position X : {0}", m_GM.m_position.x);
+				LOG_INFO("Position Y : {0}", m_GM.m_position.y);*/
+
+				//m_startVelocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
 				
 				// 20% of the initial velocity
-				m_endVelocity = m_startVelocity * 0.5f;
+				//m_endVelocity = m_startVelocity * 0.5f;
 
-				m_initialDistanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
+				//m_initialDistanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
 
 				// Reducing velocity speed - Flawed Normalisation
-				//LOG_INFO("Before control velocity X : {0}", m_GM.m_velocity.x);
-				//LOG_INFO("Before control velocity Y : {0}", m_GM.m_velocity.y);
+		/*		LOG_INFO("Before control velocity X : {0}", m_GM.m_velocity.x);
+				LOG_INFO("Before control velocity Y : {0}", m_GM.m_velocity.y);*/
 
 				if (m_GM.m_velocity.x != 0.f)
 				{
@@ -55,8 +60,8 @@ void WaypointEmitter::SelfUpdate()
 					m_GM.m_velocity.y *= 200.0f;
 				}
 
-				//LOG_INFO("After control velocity X : {0}", m_GM.m_velocity.x);
-				//LOG_INFO("After control velocity Y : {0}", m_GM.m_velocity.y);
+				/*LOG_INFO("After control velocity X : {0}", m_GM.m_velocity.x);
+				LOG_INFO("After control velocity Y : {0}", m_GM.m_velocity.y);*/
 
 				m_recalculateVelocity = false;
 			}
@@ -71,7 +76,7 @@ void WaypointEmitter::SelfUpdate()
 			m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
 
 			// 10 pixels difference
-			if (distanceSquared <= 10.0f)
+			if (distanceSquared <= 20.0f)
 			{
 				m_GM.m_position = m_wayPoints[m_wayPointIndex];
 				++m_wayPointIndex;

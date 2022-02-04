@@ -105,22 +105,29 @@ const std::shared_ptr<WaypointEmitter>& ParticleSystem_2D::ButtonEmitter(glm::ve
 	//emitter.m_GM.m_position.y -= buttonSize.y * 0.5f;
 
 	// Prepare the waypoints
-	glm::vec2 wp_LeftBottom = topLeftPos;
-	wp_LeftBottom.y += buttonSize.y;
-
-	glm::vec2 wp_RightBottom = wp_LeftBottom;
-	wp_RightBottom.x += buttonSize.x;
-
-	glm::vec2 wp_RightTop = wp_RightBottom;
-	wp_RightTop.y -= buttonSize.y;
-
 	glm::vec2 wp_LeftTop = topLeftPos;
 
+	glm::vec2 wp_RightTop = wp_LeftTop;
+	wp_RightTop.x += buttonSize.x;
+
+	glm::vec2 wp_LeftBottom = wp_LeftTop;
+	wp_LeftBottom.y += buttonSize.y;
+
+	glm::vec2 wp_RightBottom = wp_RightTop;
+	wp_RightBottom.y = wp_LeftBottom.y;
+
 	// Add the waypoints
-	emitter.m_wayPoints.push_back(wp_LeftBottom);
+	emitter.m_wayPoints.push_back(wp_LeftBottom); 
 	emitter.m_wayPoints.push_back(wp_RightBottom);
 	emitter.m_wayPoints.push_back(wp_RightTop);
 	emitter.m_wayPoints.push_back(wp_LeftTop);
+
+	//LOG_INFO("Given Value x: {0}, y: {1}", topLeftPos.x, topLeftPos.y);
+	//LOG_INFO("Button Size x: {0}, y: {1}", buttonSize.x, buttonSize.y);
+	//LOG_INFO("Btm Left  x: {0}, y: {1}", wp_LeftBottom.x, wp_LeftBottom.y);
+	//LOG_INFO("Btm Right x: {0}, y: {1}", wp_RightBottom.x, wp_RightBottom.y);
+	//LOG_INFO("Top Right x: {0}, y: {1}", wp_RightTop.x, wp_RightTop.y);
+	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 
 	return tempEmitter;
 }
@@ -170,16 +177,16 @@ void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter
 	//waypointEmitter.m_GM.m_position.y -= buttonSize.y * 0.5f;
 
 	// Prepare the waypoints
-	glm::vec2 wp_LeftBottom = topLeftPos;
+	glm::vec2 wp_LeftTop = topLeftPos;
+
+	glm::vec2 wp_RightTop = wp_LeftTop;
+	wp_RightTop.x += buttonSize.x;
+
+	glm::vec2 wp_LeftBottom = wp_LeftTop;
 	wp_LeftBottom.y += buttonSize.y;
 
-	glm::vec2 wp_RightBottom = wp_LeftBottom;
-	wp_RightBottom.x += buttonSize.x;
-
-	glm::vec2 wp_RightTop = wp_RightBottom;
-	wp_RightTop.y -= buttonSize.y;
-
-	glm::vec2 wp_LeftTop = topLeftPos;
+	glm::vec2 wp_RightBottom = wp_RightTop;
+	wp_RightBottom.y = wp_LeftBottom.y;
 
 	// Reset the waypoints
 	waypointEmitter.m_wayPoints.clear();
@@ -190,6 +197,8 @@ void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter
 	waypointEmitter.m_wayPoints.push_back(wp_RightTop);
 	waypointEmitter.m_wayPoints.push_back(wp_LeftTop);
 
+	//LOG_INFO("Given Value x: {0}, y: {1}", topLeftPos.x, topLeftPos.y);
+	//LOG_INFO("Button Size x: {0}, y: {1}", buttonSize.x, buttonSize.y);
 	//LOG_INFO("Btm Left  x: {0}, y: {1}", wp_LeftBottom.x, wp_LeftBottom.y);
 	//LOG_INFO("Btm Right x: {0}, y: {1}", wp_RightBottom.x, wp_RightBottom.y);
 	//LOG_INFO("Top Right x: {0}, y: {1}", wp_RightTop.x, wp_RightTop.y);

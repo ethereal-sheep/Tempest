@@ -1832,6 +1832,17 @@ namespace Tempest
 						{
 							g.remove_links_to_output_pin(s);
 							g.add_link(s, e);
+
+							mouse = ImGui::GetMousePos();
+
+							glm::vec2 tempVec;
+							tempVec.x = mouse.x;
+							tempVec.y = mouse.y;
+
+							if(m_explosionEmitter)
+								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter, tempVec);
+							else
+								m_explosionEmitter = ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 						}
 					}
 					else if (e_pin->get_type() != pin_type::Flow && e_pin->is_linked())
@@ -1841,6 +1852,17 @@ namespace Tempest
 						{
 							g.remove_links_to_input_pin(e);
 							g.add_link(s, e);
+
+							mouse = ImGui::GetMousePos();
+
+							glm::vec2 tempVec;
+							tempVec.x = mouse.x;
+							tempVec.y = mouse.y;
+
+							if (m_explosionEmitter)
+								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter, tempVec);
+							else
+								m_explosionEmitter = ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 						}
 					}
 					else if (s_pin->is_linked() && e_pin->is_linked())
