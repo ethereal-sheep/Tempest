@@ -92,7 +92,7 @@ namespace Tempest
 			init_font();
 			init_style();
 			init_file_dialog();
-			init_sounds();
+			//init_sounds();
 			init_ui_textures();
 
 			AudioEngine ae;

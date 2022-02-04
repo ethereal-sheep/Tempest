@@ -127,6 +127,9 @@ const std::shared_ptr<WaypointEmitter>& ParticleSystem_2D::ButtonEmitter(glm::ve
 
 void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
+	// Clear all previous particle of the emitter
+	emitter->ClearAllParticles();
+
 	// Emitter values - Without consideration for default ctor values
 	emitter->m_GM.m_velocity.x = 0.0f;
 	emitter->m_MM.m_duration = 1000.0f;

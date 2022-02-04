@@ -69,6 +69,9 @@ namespace Tempest
 			sidebar_title = "SEQUENCES";
 		}
 		tutorial_index = 0;
+		particle_0 = false;
+		particle_2 = false;
+		particle_3 = false;
 
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
@@ -460,6 +463,8 @@ namespace Tempest
 
 							if (particle_0 == false)
 							{
+								particle_0 = true;
+
 								glm::vec2 real_buttonSize;
 								real_buttonSize.x = size.x;
 								real_buttonSize.y = size.y;
@@ -468,9 +473,10 @@ namespace Tempest
 								real_mousePosition.x = pos.x;
 								real_mousePosition.y = pos.y;
 
-								m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
-
-								particle_0 = true;
+								if (!m_waypointParticle)
+									m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+								else
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
 							}
 						}
 						break;
@@ -478,8 +484,8 @@ namespace Tempest
 						case 1:
 						{
 							// render the tasks for action
-
-
+							if (m_waypointParticle)
+								m_waypointParticle->m_GM.m_active = false;
 						}
 						break;
 
@@ -554,6 +560,8 @@ namespace Tempest
 						case 1:
 						{
 							// render the tasks for sequence
+							if (m_waypointParticle)
+								m_waypointParticle->m_GM.m_active = false;
 						}
 						break;
 
@@ -579,11 +587,8 @@ namespace Tempest
 			}
 			ImGui::End();
 		}
-		else
-		{
-			if (m_waypointParticle)
-				m_waypointParticle->m_GM.m_active = false;
-		}
+		if (m_waypointParticle && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointParticle->m_GM.m_active = false;
 	}
 	
 	void AttackSystemOverlay::draw_context(Instance& instance, float height)

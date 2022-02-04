@@ -43,7 +43,9 @@ namespace Tempest
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
 		tutorial_index = 0;
-		
+		particle_0 = false;
+		particle_1 = false;
+		particle_2 = false;
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -137,6 +139,8 @@ namespace Tempest
 
 						if (particle_0 == false)
 						{
+							particle_0 = true;
+
 							glm::vec2 real_buttonSize;
 							real_buttonSize.x = size.x;
 							real_buttonSize.y = size.y;
@@ -145,9 +149,10 @@ namespace Tempest
 							real_mousePosition.x = pos.x;
 							real_mousePosition.y = pos.y;
 
-							m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
-
-							particle_0 = true;
+							if (!m_waypointParticle)
+								m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+							else
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
 						}
 					}
 					break;
@@ -172,20 +177,8 @@ namespace Tempest
 						str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
 						drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 						
-						if (particle_1 == false)
-						{
-							glm::vec2 real_buttonSize;
-							real_buttonSize.x = size.x;
-							real_buttonSize.y = size.y;
-
-							glm::vec2 real_mousePosition;
-							real_mousePosition.x = pos.x;
-							real_mousePosition.y = pos.y;
-
-							ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
-
-							particle_1 = true;
-						}
+						if (m_waypointParticle)
+							m_waypointParticle->m_GM.m_active = false;
 
 						if (ImGui::IsMouseClicked(0))
 							tutorial_index = 2;
@@ -443,11 +436,9 @@ namespace Tempest
 			ImGui::End();
 
 		}
-		else
-		{
-			if(m_waypointParticle)
-				m_waypointParticle->m_GM.m_active = false;
-		}
+		
+		if(m_waypointParticle && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointParticle->m_GM.m_active = false;
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{

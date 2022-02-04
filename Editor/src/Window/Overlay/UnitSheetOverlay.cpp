@@ -67,6 +67,11 @@ namespace Tempest
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		cam_ctrl.set_orbit_camera(cam, vec3(0.05f, 1.f, 0.f));
 		cam_ctrl.update(cam);
+
+		particle_0 = false;
+		particle_1 = false;
+		particle_2 = false;
+		particle_3 = false;
 	}
 
 	void UnitSheetOverlay::close_popup(const Event& e)
@@ -339,6 +344,8 @@ namespace Tempest
 
 							if (particle_0 == false)
 							{
+								particle_0 = true;
+
 								glm::vec2 real_buttonSize;
 								real_buttonSize.x = size.x;
 								real_buttonSize.y = size.y;
@@ -347,9 +354,10 @@ namespace Tempest
 								real_mousePosition.x = pos.x;
 								real_mousePosition.y = pos.y;
 
-								m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
-
-								particle_0 = true;
+								if (!m_waypointParticle)
+									m_waypointParticle = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+								else
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
 							}
 						}
 						break;
@@ -437,21 +445,9 @@ namespace Tempest
 							}
 							else
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
-							
-							if (particle_1 == false)
-							{
-								glm::vec2 real_buttonSize;
-								real_buttonSize.x = size.x;
-								real_buttonSize.y = size.y;
 
-								glm::vec2 real_mousePosition;
-								real_mousePosition.x = pos.x;
-								real_mousePosition.y = pos.y;
-
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointParticle, real_mousePosition, real_buttonSize);
-
-								particle_1 = true;
-							}
+							if (m_waypointParticle)
+								m_waypointParticle->m_GM.m_active = false;
 						}
 						break;
 						case 2:
@@ -531,11 +527,11 @@ namespace Tempest
 		}
 		else
 		{
-			if (m_waypointParticle)
-				m_waypointParticle->m_GM.m_active = false;
-
 			Service<RenderSystem>::Get().USO = false;
 		}
+
+		if (m_waypointParticle && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointParticle->m_GM.m_active = false;
 	}
 
 	void UnitSheetOverlay::push_button_style() const

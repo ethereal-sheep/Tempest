@@ -31,6 +31,7 @@ struct Emitter
 
 	Emitter();
 	void Update();
+	void ClearAllParticles();
 
 protected:
 	virtual void SelfUpdate();

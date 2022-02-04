@@ -131,3 +131,21 @@ void Emitter::Emit(const int particleAmount)
 		}
 	}
 }
+
+void Emitter::ClearAllParticles()
+{
+	// Particles Behaviour
+	for (short i = 0; i < m_particles.size(); ++i)
+	{
+		auto& particle = m_particles[i];
+
+		if (particle.m_isActive)
+		{
+			particle.m_lifeRemaining = 0;
+			particle.m_isActive = false;
+
+			// To be reused
+			m_available_ParticleSlots.push(i);
+		}
+	}
+}
