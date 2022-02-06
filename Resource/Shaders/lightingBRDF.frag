@@ -72,6 +72,7 @@ uniform vec3 camPos;
 uniform mat4 lightSpaceMatrix;
 uniform float ambientAmount;
 
+
 vec3 colorLinear(vec3 colorVector);
 float saturate(float f);
 vec2 getSphericalCoord(vec3 normalCoord);
@@ -177,6 +178,7 @@ void main()
 				if(pointShadowBool == 1)
 					shadow = computeShadow(i);
 				
+				shadow *= 1.5;
                 //color += ( ((diffuse * kD) * (1.0f - shadow))  + specular * (1.0f - shadow) ) * (kRadiance * (1.0f - shadow)) * NdotL;
 				color += ( ((diffuse * kD) * (1.0f - shadow))  + specular ) * (kRadiance) ; // * NdotL
             }
@@ -214,7 +216,7 @@ void main()
 				if(dirShadowBool == 1)
 					shadow = computeShadowDir();
 
-				
+				shadow *= 1.5;
 				color += ((diffuse * kDisney)+ specular ) * lightColor * NdotL * (1.0f - shadow);
 				
 				//color += ambient +(( diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);

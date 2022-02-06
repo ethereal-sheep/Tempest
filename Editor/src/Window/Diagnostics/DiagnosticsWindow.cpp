@@ -421,6 +421,9 @@ namespace Tempest
 			auto& clearColor = Service<RenderSystem>::Get().clearColor;
 			UI::DragFloat3ColorBox("Clear Color", "##ClearColor", ImVec2{ padding , 0.f }, value_ptr(clearColor), 0.f, 0.1f).first;
 
+			auto& gammaValue = Service<RenderSystem>::Get().gammaValue;
+			//UI::DragFloat3ColorBox("Gamme Value", "##GammeValue", ImVec2{ padding , 0.f }, &gammaValue, 0.f, 0.1f,0.0f,4.0f).first;
+			ImGui::SliderFloat("Gamme Value", &gammaValue, 0.0f, 4.0f);
 			//auto& thumbnail = Service<RenderSystem>::Get().thumbnailName;
 			static std::string thumbnailName{ "test.jpg" };
 			ImGui::InputText("thumbnail name", &thumbnailName);

@@ -569,10 +569,7 @@ namespace Tempest
             //auto r = 
             //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
             SubmitModel("Models/UnitBlack_Idle.a", (t * s));
-          
         }
-
-
 
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
@@ -878,8 +875,8 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tiltShiftMode, "tiltShiftMode");
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");;
-
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(gammaValue, "gammaValue");
         //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");;
         //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(fps / 144.f, "motionBlurScale");;
         //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMaxSamples, "motionBlurMaxSamples");;
