@@ -1,0 +1,125 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Door"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    1.319631576538086,
+                    0.000011075227121182252,
+                    -3.8696866035461427
+                ],
+                "LocalRotation": [
+                    9.099629210140847e-7,
+                    1.0,
+                    9.099629210140847e-7,
+                    8.280325210219264e-13
+                ],
+                "LocalScale": [
+                    0.009999947622418404,
+                    0.009999999776482582,
+                    0.009999947622418404
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\Door_Glass.a",
+                "TexturePath": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Door"
+            },
+            "Component": {
+                "States": [
+                    {
+                        "LocalPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            -9.77638545578217e-16,
+                            -0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "LocalPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            5.2815799733707539e-8,
+                            0.9715821743011475,
+                            5.2815799733707539e-8,
+                            -0.23670250177383424
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

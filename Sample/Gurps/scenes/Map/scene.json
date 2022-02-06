@@ -2,5 +2,1773 @@
     "Metadata": {
         "Type": "Map"
     },
-    "Prefabs": []
+    "Prefabs": [
+        {
+            "Metadata": {
+                "Cat": "Decoration",
+                "Proto": "Cell Door Frame"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Decoration",
+                "Proto": "Default Door Frame"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Glass Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Canteen Sink"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Canteen Table"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Cell Sink"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Door with Bars"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Decoration",
+                "Proto": "Cell Bench"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Security Chair"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Security Desk"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Prison Pillar"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Security Locker"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Cell Toilet"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Cell Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Decoration",
+                "Proto": "Default Door Frame"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            3.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            5.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            5.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            3.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Default Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Default Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.0,
+                            0.0,
+                            6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Default Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.0,
+                            0.0,
+                            6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Default Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.0,
+                            0.0,
+                            6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Default Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Cell Bed"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Cell Sink"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Cell Toilet"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Security Locker"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Cell Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Concrete Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
 }
