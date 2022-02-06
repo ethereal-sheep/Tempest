@@ -42,6 +42,8 @@ namespace Tempest
 		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> wall_map;
 
 	public:
+		glm::vec3 map_pos;
+
 		Map() = default; // empty map
 
 		void update();
@@ -170,6 +172,11 @@ namespace Tempest
 		void load_map(Reader& reader, Map& map_to_load)
 		{
 			reader.StartObject();
+
+			reader.StartMeta();
+			reader.Member("MapPos", map_to_load.map_pos);
+			reader.EndMeta();
+
 			size_t size;
 			reader.StartArray("Prefabs", &size);
 			for (size_t i = 0; i < size; ++i)
@@ -206,6 +213,7 @@ namespace Tempest
 
 			writer.StartMeta();
 			writer.Member("Type", "Map");
+			writer.Member("MapPos", map_to_save.map_pos);
 			writer.EndMeta();
 
 			writer.StartArray("Prefabs");

@@ -17,7 +17,6 @@
 #include "Instance/NullTimeInstance.h"
 #include "Events/Events/ScriptEvents.h"
 
-
 namespace Tempest
 {
 	void CompareNode_ComparisonTesting()

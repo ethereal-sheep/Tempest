@@ -46,6 +46,16 @@ namespace Tempest
 		Service<thread_pool>::Register(std::thread::hardware_concurrency());
 		Service<EventManager>::Register();
 
+		Service<RenderSystem>::Get().SubmitModel("Models\\UnitBlack_CombatStance.a", tc::Transform());
+		Service<RenderSystem>::Get().SubmitModel("Models\\UnitBlack_Death.a", tc::Transform());
+		Service<RenderSystem>::Get().SubmitModel("Models\\UnitBlack_Idle.a", tc::Transform());
+
+		auto v = glm::vec3{ .33f, -1.f, -.33f };
+		v = glm::normalize(v);
+		Service<RenderSystem>::Get().dir_lights[0].Direction = v;
+		Service<RenderSystem>::Get().gammaValue = 1.0f;
+
+
 		AudioEngine::Init();
 
 		OnInit();

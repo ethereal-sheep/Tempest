@@ -328,6 +328,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
     <ClInclude Include="src\Window\Util\Delay.h" />
     <ClInclude Include="src\Window\Util\LineDrawing.h" />
+    <ClInclude Include="src\Window\Util\ParticleDraw.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Util\SimulationBuilder.h" />
     <ClInclude Include="src\Window\Util\SimulationStart.h" />

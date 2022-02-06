@@ -15,6 +15,9 @@
 #include "Triggers/Triggers.h"
 #include "Instance/EditTimeInstance.h"
 #include "InstanceManager/InstanceConfig.h"
+#include <Tempest/src/Audio/AudioEngine.h>
+
+#include "../../Tempest/src/Particles/ParticleSystem_2D.h"
 
 namespace Tempest
 {
@@ -41,7 +44,10 @@ namespace Tempest
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
 		tutorial_index = 0;
-		
+		tutorial_p2 = false;
+		particle_0 = false;
+		particle_1 = false;
+		particle_2 = false;
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -90,6 +96,11 @@ namespace Tempest
 		}
 	}
 
+	void SimulateOverlay::simulate_tutorial_p2(const Event&)
+	{
+		tutorial_p2 = true;
+	}
+
 	void SimulateOverlay::show(Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -109,8 +120,16 @@ namespace Tempest
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 
-			if (ImGui::Begin("Select Unit Sheet", nullptr, window_flags))
+			if (ImGui::Begin("Simulate Page Configure", nullptr, window_flags))
 			{
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+				{
+				//	tutorial_p2 = true;
+				//	tutorial_index = 9;
+					tutorial_index = 0;
+					instance.tutorial_level = 2;
+				}
 				/*if(instance.tutorial_enable)
 					ImGui::GetIO().MouseClicked[0] = false;
 				else
@@ -119,58 +138,421 @@ namespace Tempest
 				if (instance.tutorial_enable)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
-					switch (tutorial_index)
-					{
-						// Click to quick menu
 
-					case 0:
+					if (instance.tutorial_level == 1)
 					{
-						ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
-						ImVec2 size = { 200.f, 50.f };
-						UI::TutArea(pos, size);
-						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
-						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
-							ImGui::GetIO().MouseClicked[0] = true;*/
+						if (!tutorial_p2)
+						{
+							switch (tutorial_index)
+							{
+								// Click to quick menu
+
+							case 0:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
+								ImVec2 size = { 200.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
+									ImGui::GetIO().MouseClicked[0] = true;*/
+							}
+							break;
+							case 1:
+							{
+								ImVec2 pos = { 0.f, 0.f };
+								ImVec2 size = { viewport->Size.x, viewport->Size.y * 0.25f };
+								UI::TutArea(pos, size);
+								string str = "";
+								str = "Quick Menu";
+								ImGui::PushFont(FONT_BTN);
+								drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								ImGui::PopFont();
+
+								drawlist->AddLine({ pos.x + size.x * 0.5f, size.y }, { pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								drawlist->AddLine({ pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, { pos.x + size.x * 0.1f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+								str = "The quick menu allows you to quickly access all";
+								drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 25.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								str = "the pages in the conflict resolution screen.";
+								drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 40.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
+								drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (m_waypointEmitter)
+									m_waypointEmitter->m_GM.m_active = false;
+
+								if (ImGui::IsMouseClicked(0))
+									tutorial_index = 2;
+							}
+							break;
+							case 2:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.18f, viewport->Size.y * 0.1f };
+								ImVec2 size = { 310.f, 140.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access units page.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
+									ImGui::GetIO().MouseClicked[0] = true;*/
+
+								if (particle_2 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_2 = true;
+								}
+							}
+							break;
+							}
+
+							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
+						}
+						else
+						{
+							switch (tutorial_index)
+							{
+							case 0:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.446f, viewport->Size.y * 0.18f };
+								ImVec2 size = { 200.f, 150.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							}
+							break;
+
+							case 1:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.387f, viewport->Size.y * 0.275f };
+								ImVec2 size = { 180.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (sequence != UNDEFINED)
+									tutorial_index = 2;
+							}
+							break;
+
+							case 2:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.14f, viewport->Size.y * 0.41f };
+								ImVec2 size = { 150.f, 150.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							}
+							break;
+
+							case 3:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.305f };
+								ImVec2 size = { 150.f, 150.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (attacker.unit_id != UNDEFINED)
+									tutorial_index = 4;
+							}
+							break;
+
+							case 4:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.555f };
+								ImVec2 size = { 180.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							}
+							break;
+
+							case 5:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
+								ImVec2 size = { 180.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (attacker.weapon != UNDEFINED)
+									tutorial_index = 6;
+							}
+							break;
+
+							case 6:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.615f };
+								ImVec2 size = { 180.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							}
+							break;
+
+							case 7:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
+								ImVec2 size = { 180.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (attacker.action != UNDEFINED)
+									tutorial_index = 8;
+							}
+							break;
+
+							// moar tasks
+							case 8:
+							{
+								auto selected = tex_map["Assets/Selected.dds"];
+								auto unselected = tex_map["Assets/Unselected.dds"];
+								bool taskCompleted = true;
+
+								//Task List
+								string str = "";
+								str = string(ICON_FK_EXCLAMATION_CIRCLE);
+								ImGui::PushFont(FONT_HEAD);
+								drawlist->AddText({ viewport->Size.x * 0.12f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								str = " Tasks";
+								drawlist->AddText({ viewport->Size.x * 0.12f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ 0.0f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x * 0.2f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								ImGui::PopFont();
+
+								ImGui::PushFont(FONT_BODY);
+								ImVec2 min = { viewport->Size.x * 0.17f, viewport->Size.y * 0.45f };
+								str = "Select a unit for Defender";
+
+								drawlist->AddText({ viewport->Size.x * 0.05f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (defender.unit_id != UNDEFINED)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									taskCompleted &= false;
+								}
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Select a weapon for Defender";
+								drawlist->AddText({ viewport->Size.x * 0.05f,  min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (defender.weapon != UNDEFINED)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									taskCompleted &= false;
+								}
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Select an action for Defender";
+								drawlist->AddText({ viewport->Size.x * 0.05f,  min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (defender.action != UNDEFINED)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									taskCompleted &= false;
+								}
+								ImGui::PopFont();
+
+								auto nextBtn = tex_map["Assets/NextBtn.dds"];
+								ImVec2 tut_min = { viewport->Size.x * 0.1f, min.y + unselected->GetWidth() * 0.9f };
+								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								if (taskCompleted)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+									if (UI::MouseIsWithin(tut_min, tut_max))
+									{
+										ImGui::SetMouseCursor(7);
+										if (ImGui::IsMouseClicked(0))
+											tutorial_index = 9;
+									}
+								}
+								else
+									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
+							}
+							break;
+
+							case 9:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.445f, viewport->Size.y * 0.63f };
+								ImVec2 size = { 220.f, 120.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to simulate the results.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							}
+							break;
+
+							case 10:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.3655f, viewport->Size.y * 0.35f };
+								ImVec2 size = { 500.f, 280.f };
+								UI::TutArea(pos, size);
+
+								auto nextBtn = tex_map["Assets/NextBtn.dds"];
+								ImVec2 tut_min = { viewport->Size.x * 0.75f,viewport->Size.y * 0.6f };
+								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+								if (UI::MouseIsWithin(tut_min, tut_max))
+								{
+									ImGui::SetMouseCursor(7);
+									if (ImGui::IsMouseClicked(0))
+										tutorial_index = 11;
+								}
+
+								UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 6);
+							}
+							break;
+
+							case 11:
+							{
+								UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 6);
+
+								UI::TutArea({ 0,0 }, { 0,0 }, false);
+
+								// render the complete level here
+
+								auto nextBtn = tex_map["Assets/NextBtn.dds"];
+								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
+								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+								if (UI::MouseIsWithin(tut_min, tut_max))
+								{
+									ImGui::SetMouseCursor(7);
+									if (ImGui::IsMouseClicked(0))
+									{
+										tutorial_index = 0;
+										tutorial_p2 = false;
+										instance.tutorial_level = 2;
+									}
+								}
+							}
+							break;
+
+							default:
+								break;
+							}
+
+							if (tutorial_index < 10)
+								UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 5);
+						}
 					}
-					break;
-					case 1:
+
+					else if (instance.tutorial_level == 2)
 					{
-						ImVec2 pos = { 0.f, 0.f };
-						ImVec2 size = { viewport->Size.x, viewport->Size.y * 0.25f };
-						UI::TutArea(pos, size);
-						string str = "";
-						str = "Quick Menu";
-						ImGui::PushFont(FONT_BTN);
-						drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-						ImGui::PopFont();
+						switch (tutorial_index)
+						{
+							case 0:
+								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance);
+								break;
 
-						drawlist->AddLine({ pos.x + size.x * 0.5f, size.y }, { pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-						drawlist->AddLine({ pos.x + size.x * 0.5f, viewport->Size.y * 0.4f + 20.f }, { pos.x + size.x * 0.1f, viewport->Size.y * 0.4f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+							case 1:
+							{
+								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance, true);
+								UI::TutArea({ 0,0 }, { 0,0 }, false);
 
-						str = "The quick menu allows you to quickly access all";
-						drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 25.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						str = "the pages in the conflict resolution screen.";
-						drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 40.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
-						drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								// render the complete level here
 
+								auto nextBtn = tex_map["Assets/NextBtn.dds"];
+								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
+								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
-						if (ImGui::IsMouseClicked(0))
-							tutorial_index = 2;
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+								if (UI::MouseIsWithin(tut_min, tut_max))
+								{
+									ImGui::SetMouseCursor(7);
+									if (ImGui::IsMouseClicked(0))
+									{
+										tutorial_index = 0;
+										instance.tutorial_level = 3;
+									}
+								}
+							}
+								break;
+
+							default:
+								break;
+						}
 					}
-					break;
-					case 2:
+
+					else if (instance.tutorial_level == 3)
 					{
-						ImVec2 pos = { viewport->Size.x * 0.18f, viewport->Size.y * 0.1f };
-						ImVec2 size = { 310.f, 140.f };
-						UI::TutArea(pos, size);
-						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access units page.";
-						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
-							ImGui::GetIO().MouseClicked[0] = true;*/
-					}
-					break;
+						switch (tutorial_index)
+						{
+						case 0:
+						{
+							UI::TutProgressBar3(drawlist, ImVec2{ viewport->Size }, 1);
+
+							if (win + lose)
+							{
+								float result = 0.0f;
+								result = 100.f * win / (win + lose);
+
+								if (result >= 50.f && result <= 60.f)
+									tutorial_index = 1;
+							}
+						}
+						break;
+
+						case 1:
+						{
+							UI::TutProgressBar3(drawlist, ImVec2{ viewport->Size }, 2);
+							UI::TutArea({ 0,0 }, { 0,0 }, false);
+
+							// render the complete level here
+
+							auto nextBtn = tex_map["Assets/NextBtn.dds"];
+							ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
+							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+							drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+							if (UI::MouseIsWithin(tut_min, tut_max))
+							{
+								ImGui::SetMouseCursor(7);
+								if (ImGui::IsMouseClicked(0))
+								{
+									tutorial_index = 0;
+									instance.tutorial_level = 1;
+									instance.tutorial_enable = false;
+								}
+							}
+						}
+						break;
+						default:
+							break;
+						}
+						
 					}
 
 					//Tutorial Exit Button
@@ -185,8 +567,6 @@ namespace Tempest
 						if (ImGui::IsMouseClicked(0))
 							instance.tutorial_enable = false;
 					}
-
-					UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
 				}
 
 
@@ -205,7 +585,7 @@ namespace Tempest
 				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 				// sequence display
-				ImGui::PushFont(FONT_BODY);
+				ImGui::PushFont(FONT_SHEAD);
 				const std::string seq_title{ "Sequence" };
 				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - (ImGui::CalcTextSize(seq_title.c_str()).x  + ImGui::GetFontSize() * 0.5f) * 0.5f, viewport->Size.y * 0.2f });
 				ImGui::Text(seq_title.c_str());
@@ -218,11 +598,14 @@ namespace Tempest
 
 				if (UI::UIButton_Sequence(instance, sequence, seq_name.c_str(), seq_name.c_str(), { viewport->Size.x * 0.5f, viewport->Size.x * 0.15f }, { 0,0 }, FONT_PARA))
 				{
+					if (instance.tutorial_enable && tutorial_p2)
+						tutorial_index = 1;
+
 					Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 						SIMULATE_POPUP_TYPE::SEQUENCE, false, sequence);
 				}
 				push_button_style();
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.24f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.25f });
 				ImGui::PushID("seq");
 				if (sequence != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 				{
@@ -273,8 +656,11 @@ namespace Tempest
 				display_unit_section(instance, { viewport->Size.x * (1.f - 0.18f),viewport->Size.y * 0.5f }, false);
 
 				
-				if (UI::UIButton_Simulate("Simulate", "Simulate", { viewport->Size.x * 0.43f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY, true))
+				if (UI::UIButton_Simulate("Simulate", "Simulate", { viewport->Size.x * 0.5f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY, true))
 				{
+					if (instance.tutorial_enable && tutorial_p2 && tutorial_index == 9)
+						tutorial_index = 10;
+
 					// TODO: check for invalid inputs
 					freq = std::clamp(freq, 1u, 100000u);
 
@@ -329,6 +715,7 @@ namespace Tempest
 				// display top buttons
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(),viewport->Size.y * 0.03f });
+					
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -359,20 +746,39 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, 0.f, fn);
 
 					}
-
 					ImGui::SameLine();
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
-
+					auto quickMenuPos = ImGui::GetCursorPos();
 					tex = tex_map["Assets/QuickMenuBtn.dds"];
-
+					
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 						
 						//Tutorial progression
-						if (instance.tutorial_enable && tutorial_index == 0)
+						if (instance.tutorial_enable && instance.tutorial_level == 1 && !tutorial_p2 && tutorial_index == 0)
 							tutorial_index = 1;
+					}
+					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished())
+					{ 
+						if (particle_0 == false)
+						{
+							particle_0 = true;
+
+							glm::vec2 real_buttonSize;
+							real_buttonSize.x = tex->GetWidth() * 0.7f;
+							real_buttonSize.y = tex->GetHeight() * 0.7f;
+
+							glm::vec2 real_mousePosition;
+							real_mousePosition.x = quickMenuPos.x;
+							real_mousePosition.y = quickMenuPos.y;
+
+							if (!m_waypointEmitter)
+								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+							else
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+						}
 					}
 					
 					ImGui::SameLine();
@@ -396,7 +802,18 @@ namespace Tempest
 
 			ImGui::End();
 
+			if (!ImGui::GetHoveredID())
+				HoveredID = 0;
+			else if (HoveredID != ImGui::GetHoveredID())
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Highlight.wav", "SFX", 0.8f);
+				HoveredID = ImGui::GetHoveredID();
+			}
 		}
+		
+		if(m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointEmitter->m_GM.m_active = false;
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{
@@ -421,6 +838,8 @@ namespace Tempest
 		if (UI::UICharButton_Toggle((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f },
 			chara_name, "##charaname" + is_attacker, temp != UNDEFINED, { 0, 0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, tint))
 		{
+			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
+				tutorial_index = 3;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::UNIT, is_attacker, temp);
 		}
@@ -447,6 +866,8 @@ namespace Tempest
 		ImGui::SetCursorPos({ start_pos.x + offset2, start_pos.y + padding * 4.0f });
 		if (UI::UIButton_Weapon(instance, temp, "SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
+			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
+				tutorial_index = 5;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, temp);
 		}
@@ -474,6 +895,8 @@ namespace Tempest
 		ImGui::PushID("action" + is_attacker);
 		if (UI::UIButton_Action(instance, temp,"SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
+			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
+				tutorial_index = 7;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::ACTION, is_attacker, temp);
 		}

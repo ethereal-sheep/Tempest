@@ -16,6 +16,9 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
+#include "Particles/WaypointEmitter.h"
+#include "Particles/ExplosionEmitter.h"
+
 namespace Tempest
 {
     class AttackSystemOverlay : public Window
@@ -86,7 +89,7 @@ namespace Tempest
 		ax::Drawing::IconType get_pin_icon(pin_type type);
 
 
-
+        ImGuiID HoveredID{ 0 };
 		graph temp_graph;
         Entity id = UNDEFINED;
 
@@ -109,5 +112,14 @@ namespace Tempest
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
+
+        // For tutorial particle
+        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+        std::shared_ptr<ExplosionEmitter> m_explosionEmitter;
+
+        bool particle_0 = false;
+        //bool particle_1 = false;
+        bool particle_2 = false;
+        bool particle_3 = false;
     };
 }

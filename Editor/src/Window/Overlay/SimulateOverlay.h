@@ -15,6 +15,8 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
+#include "Particles/WaypointEmitter.h"
+
 namespace Tempest
 {
     class SimulateOverlay : public Window
@@ -32,11 +34,13 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&SimulateOverlay::close_popup, this);
             Service<EventManager>::Get().register_listener<SimulateSelectionConfirm>(&SimulateOverlay::confirm_data, this);
             Service<EventManager>::Get().register_listener<CloseAllConResOverlayTrigger>(&SimulateOverlay::force_close, this);
+            Service<EventManager>::Get().register_listener<SimulateTutorialP2Trigger>(&SimulateOverlay::simulate_tutorial_p2, this);
         }
         void open_popup(const Event& e);
         void confirm_data(const Event& e);
         void close_popup(const Event& e);
         void force_close(const Event& e);
+        void simulate_tutorial_p2(const Event&);
 
         void show(Instance&) override;
 
@@ -45,6 +49,7 @@ namespace Tempest
         void pop_button_style() const;
 
         bool OverlayOpen = false;
+        bool tutorial_p2 = false;
         unsigned Tab = 0;
 
         int tutorial_index = 0;
@@ -62,6 +67,7 @@ namespace Tempest
             void Clear();
         };
 
+        ImGuiID HoveredID{ 0 };
         UnitData attacker{};
         UnitData defender{};
         Entity sequence{ UNDEFINED };
@@ -82,6 +88,11 @@ namespace Tempest
         interpolater<float> inter;
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        
+        // For tutorial particle
+        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+
+        bool particle_0 = false;
+        bool particle_1 = false;
+        bool particle_2 = false;
     };
 }
