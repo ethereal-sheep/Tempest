@@ -143,7 +143,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				auto fn = [&]()
 				{
 					change_state(UI_SHOW::PROJECTS);
@@ -168,7 +168,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
 
 			}
@@ -187,7 +187,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 			}
 
 			if (ImGui::IsItemHovered())
@@ -204,7 +204,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				get_quitter().quit = true;
 			}
 			if (ImGui::IsItemHovered())
@@ -237,7 +237,7 @@ namespace Tempest
 				if (ImGui::Selectable(selectable.c_str(), false))
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+					ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 					auto fn = [&]()
 					{
 						change_state(UI_SHOW::NEW_PROJECT);
@@ -261,7 +261,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Creating new project...");
 				Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
 				//change_state(UI_SHOW::NEW_PROJECT;
@@ -286,7 +286,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
 				Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
 			}
@@ -306,7 +306,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				auto fn = [&]()
 				{
 					change_state(UI_SHOW::INITIAL);
@@ -341,7 +341,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 
 				auto fn = [&]()
 				{
@@ -368,7 +368,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 
 				if (instance.get_scene_paths().empty())
 				{
@@ -475,7 +475,7 @@ namespace Tempest
 			{
 
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				// go ahead
 				auto fn = [&, selectable]()
 				{
@@ -500,7 +500,7 @@ namespace Tempest
 			if (ImGui::Selectable(selectable.c_str(), false))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				auto fn = [&]()
 				{
 					change_state(UI_SHOW::PROJECTS);
@@ -548,7 +548,7 @@ namespace Tempest
 				if (selected)
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+					ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 					if (b) // if b is true, there is a conres at this position
 					{
 
@@ -604,7 +604,7 @@ namespace Tempest
 				if (UI::UIConflictSelectable(str.c_str(), false, jank).first)
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+					ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 					if (jank)
 					{
 						OverlayOpen = false;
@@ -625,7 +625,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 
 				auto fn = [&]()
 				{
@@ -666,7 +666,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				auto fn = [&]()
 				{
 					change_state(UI_SHOW::NEW_PROJECT);
@@ -685,13 +685,13 @@ namespace Tempest
 				ImGui::OpenPopup("NEW MAP");
 				NewMapName = "Map";
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 			}
 
 			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				auto fn = [&]()
 				{
 					change_state(UI_SHOW::LOAD_MAP);
@@ -750,7 +750,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 
 				if (MapTitle == "Map Builder")
 				{
@@ -793,7 +793,7 @@ namespace Tempest
 				if (map_pair.first)
 				{
 					AudioEngine ae;
-					ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+					ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 
 					if (MapTitle == "Map Builder")
 					{
@@ -860,7 +860,7 @@ namespace Tempest
 			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				MainMenuUI = UI_SHOW::LOAD_MAP;
 
 				//auto fn = [&]()

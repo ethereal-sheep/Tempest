@@ -94,6 +94,14 @@ namespace Tempest
                     }
                     if (ImGui::BeginTabItem("Graphics"))
                     {
+                        // gamma
+                        {
+                            auto& gv = Service<RenderSystem>::Get().gammaValue;
+                            if (ImGui::SliderFloat("Gamma", &gv, 1.f, 4.f))
+                            {
+                                gv = std::clamp(gv, 1.f, 4.f);
+                            }
+                        }
                         ImGui::EndTabItem();
                     }
                     ImGui::EndTabBar();
