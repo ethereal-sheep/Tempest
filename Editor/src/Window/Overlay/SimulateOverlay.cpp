@@ -45,10 +45,12 @@ namespace Tempest
 
 		tutorial_index = 0;
 		tutorial_p2 = false;
+
 		particle_0 = false;
 		particle_1 = false;
 		particle_2 = false;
 
+		particle_00 = false;
 		particle_01 = false;
 		particle_02 = false;
 		particle_03 = false;
@@ -241,6 +243,37 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
+								if (particle_00 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_00 = true;
+								}
+							}
+							break;
+
+							case 1:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.387f, viewport->Size.y * 0.275f };
+								ImVec2 size = { 180.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (sequence != UNDEFINED)
+									tutorial_index = 2;
+
 								if (particle_01 == false)
 								{
 									glm::vec2 real_buttonSize;
@@ -261,16 +294,13 @@ namespace Tempest
 							}
 							break;
 
-							case 1:
+							case 2:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.387f, viewport->Size.y * 0.275f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 pos = { viewport->Size.x * 0.14f, viewport->Size.y * 0.41f };
+								ImVec2 size = { 150.f, 150.f };
 								UI::TutArea(pos, size);
-								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-								if (sequence != UNDEFINED)
-									tutorial_index = 2;
 
 								if (particle_02 == false)
 								{
@@ -292,13 +322,16 @@ namespace Tempest
 							}
 							break;
 
-							case 2:
+							case 3:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.14f, viewport->Size.y * 0.41f };
+								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.305f };
 								ImVec2 size = { 150.f, 150.f };
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (attacker.unit_id != UNDEFINED)
+									tutorial_index = 4;
 
 								if (particle_03 == false)
 								{
@@ -320,16 +353,13 @@ namespace Tempest
 							}
 							break;
 
-							case 3:
+							case 4:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.305f };
-								ImVec2 size = { 150.f, 150.f };
+								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.555f };
+								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
-								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-								if (attacker.unit_id != UNDEFINED)
-									tutorial_index = 4;
 
 								if (particle_04 == false)
 								{
@@ -351,13 +381,16 @@ namespace Tempest
 							}
 							break;
 
-							case 4:
+							case 5:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.555f };
+								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
 								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (attacker.weapon != UNDEFINED)
+									tutorial_index = 6;
 
 								if (particle_05 == false)
 								{
@@ -379,16 +412,13 @@ namespace Tempest
 							}
 							break;
 
-							case 5:
+							case 6:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
+								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.615f };
 								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
-								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-								if (attacker.weapon != UNDEFINED)
-									tutorial_index = 6;
 
 								if (particle_06 == false)
 								{
@@ -406,34 +436,6 @@ namespace Tempest
 										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
 									particle_06 = true;
-								}
-							}
-							break;
-
-							case 6:
-							{
-								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.615f };
-								ImVec2 size = { 180.f, 50.f };
-								UI::TutArea(pos, size);
-								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
-								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-								if (particle_07 == false)
-								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
-									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
-
-									particle_07 = true;
 								}
 							}
 							break;
@@ -472,6 +474,9 @@ namespace Tempest
 							// moar tasks
 							case 8:
 							{
+								if(m_waypointEmitter)
+									m_waypointEmitter->m_GM.m_active = false;
+
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;

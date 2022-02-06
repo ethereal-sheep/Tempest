@@ -95,6 +95,7 @@ namespace Tempest
         bool particle_1 = false;
         bool particle_2 = false;
 
+        bool particle_00 = false;
         bool particle_01 = false;
         bool particle_02 = false;
         bool particle_03 = false;
