@@ -356,7 +356,12 @@ namespace Tempest
 	
 					else if (instance.tutorial_level == 2)
 					{
+						UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, 2);
+					}
 
+					else if (instance.tutorial_level == 3)
+					{
+						UI::TutProgressBar3(drawlist, ImVec2{ viewport->Size }, 1);
 					}
 
 					//Tutorial Exit Button

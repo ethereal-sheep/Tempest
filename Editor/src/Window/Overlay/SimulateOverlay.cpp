@@ -190,19 +190,6 @@ namespace Tempest
 							break;
 							}
 
-							//Tutorial Exit Button
-							auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
-							ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-							ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
-							drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
-
-							if (UI::MouseIsWithin(tut_min, tut_max))
-							{
-								ImGui::SetMouseCursor(7);
-								if (ImGui::IsMouseClicked(0))
-									instance.tutorial_enable = false;
-							}
-
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
 						}
 						else
@@ -439,28 +426,16 @@ namespace Tempest
 									ImGui::SetMouseCursor(7);
 									if (ImGui::IsMouseClicked(0))
 									{
+										tutorial_index = 0;
 										tutorial_p2 = false;
 										instance.tutorial_level = 2;
 									}
-
 								}
 							}
 							break;
 
 							default:
 								break;
-							}
-							//Tutorial Exit Button
-							auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
-							ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-							ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
-							drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
-
-							if (UI::MouseIsWithin(tut_min, tut_max))
-							{
-								ImGui::SetMouseCursor(7);
-								if (ImGui::IsMouseClicked(0))
-									instance.tutorial_enable = false;
 							}
 
 							if (tutorial_index < 10)
@@ -470,9 +445,104 @@ namespace Tempest
 
 					else if (instance.tutorial_level == 2)
 					{
+						switch (tutorial_index)
+						{
+							case 0:
+								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, 1);
+								break;
 
+							case 1:
+							{
+								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, 4);
+								UI::TutArea({ 0,0 }, { 0,0 }, false);
+
+								// render the complete level here
+
+								auto nextBtn = tex_map["Assets/NextBtn.dds"];
+								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
+								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+								if (UI::MouseIsWithin(tut_min, tut_max))
+								{
+									ImGui::SetMouseCursor(7);
+									if (ImGui::IsMouseClicked(0))
+									{
+										tutorial_index = 0;
+										instance.tutorial_level = 3;
+									}
+								}
+							}
+								break;
+
+							default:
+								break;
+						}
 					}
-				
+
+					else if (instance.tutorial_level == 3)
+					{
+						switch (tutorial_index)
+						{
+						case 0:
+						{
+							UI::TutProgressBar3(drawlist, ImVec2{ viewport->Size }, 1);
+
+							if (win + lose)
+							{
+								float result = 0.0f;
+								result = 100.f * win / (win + lose);
+
+								if (result >= 50.f && result <= 60.f)
+									tutorial_index = 1;
+							}
+						}
+						break;
+
+						case 1:
+						{
+							UI::TutProgressBar3(drawlist, ImVec2{ viewport->Size }, 2);
+							UI::TutArea({ 0,0 }, { 0,0 }, false);
+
+							// render the complete level here
+
+							auto nextBtn = tex_map["Assets/NextBtn.dds"];
+							ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
+							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+							drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+							if (UI::MouseIsWithin(tut_min, tut_max))
+							{
+								ImGui::SetMouseCursor(7);
+								if (ImGui::IsMouseClicked(0))
+								{
+									tutorial_index = 0;
+									instance.tutorial_level = 1;
+									instance.tutorial_enable = false;
+								}
+							}
+						}
+						break;
+						default:
+							break;
+						}
+						
+					}
+
+					//Tutorial Exit Button
+					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+					if (UI::MouseIsWithin(tut_min, tut_max))
+					{
+						ImGui::SetMouseCursor(7);
+						if (ImGui::IsMouseClicked(0))
+							instance.tutorial_enable = false;
+					}
 				}
 
 
@@ -663,7 +733,7 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 						
 						//Tutorial progression
-						if (instance.tutorial_enable && tutorial_index == 0)
+						if (instance.tutorial_enable && instance.tutorial_level == 1 && !tutorial_p2 && tutorial_index == 0)
 							tutorial_index = 1;
 					}
 					
