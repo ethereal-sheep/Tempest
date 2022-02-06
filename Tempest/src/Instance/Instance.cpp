@@ -35,6 +35,7 @@ namespace Tempest
 	{
 		window_manager.show(*this);
 
+
 		// move this to instance call when test finish
 		auto view = ecs.view<tc::Mesh>(exclude_t<tc::Destroyed>());
 		for (auto id : view)
