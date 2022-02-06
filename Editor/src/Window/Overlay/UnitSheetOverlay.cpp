@@ -63,8 +63,11 @@ namespace Tempest
 
 		tutorial_index = 0;
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		cam_ctrl.set_orbit_camera(cam, vec3(0.05f, 1.f, 0.f));
-		cam_ctrl.update(cam);
+		cam.SetPosition(vec3(0.102f, 2.053f, -5.971f));
+		cam.SetRotation(glm::quat(glm::radians(vec3(170.f, -0.492f, 179.887f))));
+		cam_ctrl.set_orbit_camera(cam, vec3(0.05f, 1.f, .0f));
+		cam_ctrl.force_reset_pos(cam);
+		cam_ctrl.force_reset_rot(cam);
 	}
 
 	void UnitSheetOverlay::close_popup(const Event& e)
