@@ -16,6 +16,8 @@
 #include "Instance/EditTimeInstance.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
+#include "Particles/ParticleSystem_2D.h"
+
 namespace Tempest
 {
 	const float indent = 30.f;
@@ -68,6 +70,9 @@ namespace Tempest
 			sidebar_title = "SEQUENCES";
 		}
 		tutorial_index = 0;
+		particle_0 = false;
+		particle_2 = false;
+		particle_3 = false;
 
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
@@ -466,14 +471,34 @@ namespace Tempest
 							{
 								ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
 								ImVec2 size = { 200.f, 70.f };
-								UI::TutArea(pos, size);
+								UI::TutArea(pos, size, false);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (particle_0 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									particle_0 = true;
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+								}
 							}
 							break;
 
 							case 1:
 							{
+								if (m_waypointEmitter)
+								m_waypointEmitter->m_GM.m_active = false;
+
 								// Task List
 								string str = "";
 								auto selected = tex_map["Assets/Selected.dds"];
@@ -586,9 +611,24 @@ namespace Tempest
 							{
 								ImVec2 pos = { viewport->Size.x * 0.102f, viewport->Size.y * 0.0261f };
 								ImVec2 size = { 200.f, 50.f };
-								UI::TutArea(pos, size);
+								UI::TutArea(pos, size, false);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (particle_2 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_2 = true;
+								}
 							}
 							break;
 
@@ -596,15 +636,31 @@ namespace Tempest
 							{
 								ImVec2 pos = { viewport->Size.x * 0.505f, viewport->Size.y * 0.1f };
 								ImVec2 size = { 310.f, 140.f };
-								UI::TutArea(pos, size);
+								UI::TutArea(pos, size, false);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the sequence page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (particle_3 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_3 = true;
+								}
 							}
 							break;
 
 							}
 
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
+
 						}
 						else
 						{
@@ -765,6 +821,8 @@ namespace Tempest
 			}
 			ImGui::End();
 		}
+		if (m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointEmitter->m_GM.m_active = false;
 	}
 	
 	void AttackSystemOverlay::draw_context(Instance& instance, float height)
@@ -2008,6 +2066,17 @@ namespace Tempest
 						{
 							g.remove_links_to_output_pin(s);
 							g.add_link(s, e);
+
+							mouse = ImGui::GetMousePos();
+
+							glm::vec2 tempVec;
+							tempVec.x = mouse.x;
+							tempVec.y = mouse.y;
+
+							if(m_explosionEmitter)
+								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter, tempVec);
+							else
+								m_explosionEmitter = ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 						}
 					}
 					else if (e_pin->get_type() != pin_type::Flow && e_pin->is_linked())
@@ -2017,6 +2086,17 @@ namespace Tempest
 						{
 							g.remove_links_to_input_pin(e);
 							g.add_link(s, e);
+
+							mouse = ImGui::GetMousePos();
+
+							glm::vec2 tempVec;
+							tempVec.x = mouse.x;
+							tempVec.y = mouse.y;
+
+							if (m_explosionEmitter)
+								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter, tempVec);
+							else
+								m_explosionEmitter = ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 						}
 					}
 					else if (s_pin->is_linked() && e_pin->is_linked())
@@ -2030,6 +2110,17 @@ namespace Tempest
 						if (ax::NodeEditor::AcceptNewItem(ImColor(128, 255, 128), 4.0f))
 						{
 							g.add_link(s, e);
+
+							mouse = ImGui::GetMousePos();
+
+							glm::vec2 tempVec;
+							tempVec.x = mouse.x;
+							tempVec.y = mouse.y;
+
+							if(m_explosionEmitter)
+								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter, tempVec);
+							else
+								m_explosionEmitter = ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
 						}
 					}
 				}

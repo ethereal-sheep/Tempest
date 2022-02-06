@@ -17,6 +17,8 @@
 #include "InstanceManager/InstanceConfig.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
+#include "../../Tempest/src/Particles/ParticleSystem_2D.h"
+
 namespace Tempest
 {
 	void SimulateOverlay::open_popup(const Event& e)
@@ -43,6 +45,9 @@ namespace Tempest
 
 		tutorial_index = 0;
 		tutorial_p2 = false;
+		particle_0 = false;
+		particle_1 = false;
+		particle_2 = false;
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -174,6 +179,8 @@ namespace Tempest
 								str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click anywhere to continue.";
 								drawlist->AddText({ pos.x + size.x * 0.1f, pos.y + viewport->Size.y * 0.4f + 70.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
+								if (m_waypointEmitter)
+									m_waypointEmitter->m_GM.m_active = false;
 
 								if (ImGui::IsMouseClicked(0))
 									tutorial_index = 2;
@@ -188,6 +195,21 @@ namespace Tempest
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
 									ImGui::GetIO().MouseClicked[0] = true;*/
+
+								if (particle_2 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_2 = true;
+								}
 							}
 							break;
 							}
@@ -693,6 +715,7 @@ namespace Tempest
 				// display top buttons
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(),viewport->Size.y * 0.03f });
+					
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -723,13 +746,12 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, 0.f, fn);
 
 					}
-
 					ImGui::SameLine();
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
-
+					auto quickMenuPos = ImGui::GetCursorPos();
 					tex = tex_map["Assets/QuickMenuBtn.dds"];
-
+					
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
@@ -737,6 +759,26 @@ namespace Tempest
 						//Tutorial progression
 						if (instance.tutorial_enable && instance.tutorial_level == 1 && !tutorial_p2 && tutorial_index == 0)
 							tutorial_index = 1;
+					}
+					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished())
+					{ 
+						if (particle_0 == false)
+						{
+							particle_0 = true;
+
+							glm::vec2 real_buttonSize;
+							real_buttonSize.x = tex->GetWidth() * 0.7f;
+							real_buttonSize.y = tex->GetHeight() * 0.7f;
+
+							glm::vec2 real_mousePosition;
+							real_mousePosition.x = quickMenuPos.x;
+							real_mousePosition.y = quickMenuPos.y;
+
+							if (!m_waypointEmitter)
+								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+							else
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+						}
 					}
 					
 					ImGui::SameLine();
@@ -769,6 +811,9 @@ namespace Tempest
 				HoveredID = ImGui::GetHoveredID();
 			}
 		}
+		
+		if(m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+			m_waypointEmitter->m_GM.m_active = false;
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{
