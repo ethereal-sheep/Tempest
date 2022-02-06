@@ -32,11 +32,13 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<CloseOverlayTrigger>(&SimulateOverlay::close_popup, this);
             Service<EventManager>::Get().register_listener<SimulateSelectionConfirm>(&SimulateOverlay::confirm_data, this);
             Service<EventManager>::Get().register_listener<CloseAllConResOverlayTrigger>(&SimulateOverlay::force_close, this);
+            Service<EventManager>::Get().register_listener<SimulateTutorialP2Trigger>(&SimulateOverlay::simulate_tutorial_p2, this);
         }
         void open_popup(const Event& e);
         void confirm_data(const Event& e);
         void close_popup(const Event& e);
         void force_close(const Event& e);
+        void simulate_tutorial_p2(const Event&);
 
         void show(Instance&) override;
 
@@ -45,6 +47,7 @@ namespace Tempest
         void pop_button_style() const;
 
         bool OverlayOpen = false;
+        bool tutorial_p2 = false;
         unsigned Tab = 0;
 
         int tutorial_index = 0;
