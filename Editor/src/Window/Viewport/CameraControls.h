@@ -775,25 +775,27 @@ namespace Tempest
 
 		void look_at(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
+
 			auto pos = point - cam.GetPosition();
 			auto front = cam.GetFront();
+
+			end_rotation = cam.GetQuatRotation();
 
 			glm::vec2 v1{ pos.x, pos.z };
 			glm::vec2 v2{ front.x, front.z };
 
 			auto angle = glm::orientedAngle(glm::normalize(v2), glm::normalize(v1));
 			auto yaw = glm::angleAxis(angle, glm::vec3{ 0, 1, 0 });
-			auto rot = yaw;
+			auto rot = end_rotation * yaw;
 
 
-			front = glm::conjugate(rot)* glm::vec3{ 0.f, 0.f, -1.f };
+			front = glm::conjugate(rot) * glm::vec3{ 0.f, 0.f, -1.f };
 			auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
 
 			angle = glm::orientedAngle(glm::normalize(pos), glm::normalize(front), left);
 
 			auto pitch = glm::angleAxis(angle, left);
 			rot = rot * pitch;
-
 
 			start_rotation = cam.GetQuatRotation();
 			end_rotation = rot;

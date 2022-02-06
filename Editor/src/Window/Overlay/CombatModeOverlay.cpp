@@ -1764,6 +1764,10 @@ namespace Tempest
 			auto new_cam_pos = xform.position + dir;
 			new_cam_pos.y = dist_from_ground;
 			cam.SetPosition(new_cam_pos);
+
+
+			auto yaw = glm::angleAxis(3 * glm::pi<float>()/2.f, glm::vec3{ 0, 1, 0 });
+			cam.SetRotation(xform.rotation * yaw);
 			/*auto right = vec3{ 1,0,0 } * new_cam_rot;
 			auto down = glm::angleAxis(glm::radians(90.f), right);
 			cam.SetRotation(down);*/
