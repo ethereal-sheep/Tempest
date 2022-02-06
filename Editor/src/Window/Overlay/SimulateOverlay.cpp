@@ -196,7 +196,7 @@ namespace Tempest
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
 									ImGui::GetIO().MouseClicked[0] = true;*/
 
-								if (particle_2 == false)
+								if (particle_1 == false)
 								{
 									glm::vec2 real_buttonSize;
 									real_buttonSize.x = size.x;
@@ -206,9 +206,14 @@ namespace Tempest
 									real_mousePosition.x = pos.x;
 									real_mousePosition.y = pos.y;
 
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
-									particle_2 = true;
+									particle_1 = true;
+
+									LOG_INFO("blah 1");
 								}
 							}
 							break;
@@ -216,6 +221,8 @@ namespace Tempest
 
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
 						}
+
+						// Tutorial 1 Part 2
 						else
 						{
 							switch (tutorial_index)
@@ -227,6 +234,24 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (particle_01 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_01 = true;
+								}
 							}
 							break;
 
@@ -240,6 +265,24 @@ namespace Tempest
 
 								if (sequence != UNDEFINED)
 									tutorial_index = 2;
+
+								if (particle_02 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_02 = true;
+								}
 							}
 							break;
 
@@ -250,6 +293,24 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (particle_03 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_03 = true;
+								}
 							}
 							break;
 
@@ -263,6 +324,24 @@ namespace Tempest
 
 								if (attacker.unit_id != UNDEFINED)
 									tutorial_index = 4;
+
+								if (particle_04 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_04 = true;
+								}
 							}
 							break;
 
@@ -274,6 +353,23 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
+								if (particle_05 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_05 = true;
+								}
 							}
 							break;
 
@@ -287,6 +383,24 @@ namespace Tempest
 
 								if (attacker.weapon != UNDEFINED)
 									tutorial_index = 6;
+
+								if (particle_06 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_06 = true;
+								}
 							}
 							break;
 
@@ -297,6 +411,24 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (particle_07 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_07 = true;
+								}
 							}
 							break;
 
@@ -310,6 +442,24 @@ namespace Tempest
 
 								if (attacker.action != UNDEFINED)
 									tutorial_index = 8;
+
+								if (particle_07 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_07 = true;
+								}
 							}
 							break;
 
@@ -760,7 +910,7 @@ namespace Tempest
 						if (instance.tutorial_enable && instance.tutorial_level == 1 && !tutorial_p2 && tutorial_index == 0)
 							tutorial_index = 1;
 					}
-					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished())
+					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished() && !tutorial_p2)
 					{ 
 						if (particle_0 == false)
 						{
