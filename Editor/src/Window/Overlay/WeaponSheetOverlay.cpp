@@ -152,7 +152,9 @@ namespace Tempest
 							Tabs[CurrentTab].is_active = false;
 						}
 					}
-
+					ImGui::PushFont(FONT_HEAD);
+					auto pSize = ImGui::CalcTextSize("+");
+					ImGui::PopFont();
 					if (UI::UIButton_1("+", "+", { ImGui::GetCursorPosX() + 99,  ImGui::GetCursorPosY() + 80 }, { 140,-5 }, FONT_HEAD))
 					{
 						create_new_weapon(instance);
@@ -166,6 +168,26 @@ namespace Tempest
 						//Tutorial progression
 						if (instance.tutorial_enable && tutorial_index == 0)
 							tutorial_index = 1;
+					}
+					if (instance.tutorial_enable && tutorial_index == 0)
+					{
+						if (particle_0 == false)
+						{
+							particle_0 = true;
+
+							glm::vec2 real_buttonSize;
+							real_buttonSize.x = pSize.x + 140 + 8;
+							real_buttonSize.y = pSize.y + 20.f;
+
+							glm::vec2 real_mousePosition;
+							real_mousePosition.x = ImGui::GetCursorPos().x + real_buttonSize.x*0.5f - 37.f;
+							real_mousePosition.y = ImGui::GetCursorPos().y + 80 + pSize.y * 0.45f;
+
+							if (!m_waypointEmitter)
+								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+							else
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+						}
 					}
 				}
 
@@ -215,7 +237,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 					tex = tex_map["Assets/BackMenuBtn.dds"];
 
-					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 					{
 						OverlayOpen = false;
 						ImGui::CloseCurrentPopup();
@@ -228,15 +250,35 @@ namespace Tempest
 					ImGui::SameLine();
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
-
+					auto quickMenuPos = ImGui::GetCursorPos();
 					tex = tex_map["Assets/QuickMenuBtn.dds"];
 
-					if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::WEAPONS);
 						//Tutorial progression
 						if (instance.tutorial_enable && tutorial_index == 2)
 							tutorial_index = 3;
+					}
+					if (instance.tutorial_enable && tutorial_index == 2 && inter.is_finished())
+					{
+						if (particle_2 == false)
+						{
+							particle_2 = true;
+
+							glm::vec2 real_buttonSize;
+							real_buttonSize.x = tex->GetWidth() * 0.7f;
+							real_buttonSize.y = tex->GetHeight() * 0.7f;
+
+							glm::vec2 real_mousePosition;
+							real_mousePosition.x = quickMenuPos.x ;
+							real_mousePosition.y = quickMenuPos.y ;
+
+							if (!m_waypointEmitter)
+								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+							else
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+						}
 					}
 
 					ImGui::PopStyleColor(3);
@@ -255,23 +297,7 @@ namespace Tempest
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new weapon.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-							if (particle_0 == false)
-							{
-								particle_0 = true;
-
-								glm::vec2 real_buttonSize;
-								real_buttonSize.x = size.x;
-								real_buttonSize.y = size.y;
-
-								glm::vec2 real_mousePosition;
-								real_mousePosition.x = pos.x;
-								real_mousePosition.y = pos.y;
-
-								if (!m_waypointEmitter)
-									m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
-								else
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
-							}
+							
 						}
 						break;
 
@@ -359,20 +385,7 @@ namespace Tempest
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-							if (particle_2 == false)
-							{
-								glm::vec2 real_buttonSize;
-								real_buttonSize.x = size.x;
-								real_buttonSize.y = size.y;
-
-								glm::vec2 real_mousePosition;
-								real_mousePosition.x = pos.x;
-								real_mousePosition.y = pos.y;
-
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
-
-								particle_2 = true;
-							}
+							
 						}
 						break;
 

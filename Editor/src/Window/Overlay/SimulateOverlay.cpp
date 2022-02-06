@@ -137,7 +137,7 @@ namespace Tempest
 						/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
 							ImGui::GetIO().MouseClicked[0] = true;*/
 
-						if (particle_0 == false)
+						/*if (particle_0 == false)
 						{
 							particle_0 = true;
 
@@ -153,7 +153,7 @@ namespace Tempest
 								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
 							else
 								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
-						}
+						}*/
 					}
 					break;
 					case 1:
@@ -368,6 +368,7 @@ namespace Tempest
 				// display top buttons
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(),viewport->Size.y * 0.03f });
+					
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -398,13 +399,12 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, 0.f, fn);
 
 					}
-
 					ImGui::SameLine();
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
-
+					auto quickMenuPos = ImGui::GetCursorPos();
 					tex = tex_map["Assets/QuickMenuBtn.dds"];
-
+					
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
@@ -412,6 +412,26 @@ namespace Tempest
 						//Tutorial progression
 						if (instance.tutorial_enable && tutorial_index == 0)
 							tutorial_index = 1;
+					}
+					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished())
+					{ 
+						if (particle_0 == false)
+						{
+							particle_0 = true;
+
+							glm::vec2 real_buttonSize;
+							real_buttonSize.x = tex->GetWidth() * 0.7f;
+							real_buttonSize.y = tex->GetHeight() * 0.7f;
+
+							glm::vec2 real_mousePosition;
+							real_mousePosition.x = quickMenuPos.x;
+							real_mousePosition.y = quickMenuPos.y;
+
+							if (!m_waypointEmitter)
+								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+							else
+								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+						}
 					}
 					
 					ImGui::SameLine();
