@@ -3864,9 +3864,28 @@ namespace Tempest::UI
 		}
 	}
 
-	void TutProgressBar2(ImDrawList* drawlist, const ImVec2& viewport, int step)
+	void TutProgressBar2(ImDrawList* drawlist, const ImVec2& viewport, Instance& instance, bool isFullBar)
 	{
+		int step = 1;
 		const float diamondStep = viewport.x / 5.0f;
+
+		// funky stuff
+		if (!isFullBar && instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>()).size_hint() >= 2)
+		{
+			step = 2;
+
+			if (instance.ecs.view<Components::Weapon>(exclude_t<tc::Destroyed>()).size_hint() >= 2)
+			{
+				step = 3;
+
+				if (instance.ecs.view<Components::ActionGraph>(exclude_t<tc::Destroyed>()).size_hint() >= 2)
+				{
+					step = 4;
+				}
+			}
+		}
+		else if (isFullBar)
+			step = 5;
 
 		// Tutorial progress line
 		drawlist->AddLine(ImVec2{ 0, viewport.y * 0.9f }, ImVec2{ viewport.x, viewport.y * 0.9f }, ImGui::GetColorU32({ 1,1,1,1 }), 4.0f);

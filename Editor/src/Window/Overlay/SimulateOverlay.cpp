@@ -120,8 +120,10 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-					tutorial_p2 = true;
-					tutorial_index = 9;
+				//	tutorial_p2 = true;
+				//	tutorial_index = 9;
+					tutorial_index = 0;
+					instance.tutorial_level = 2;
 				}
 				/*if(instance.tutorial_enable)
 					ImGui::GetIO().MouseClicked[0] = false;
@@ -448,12 +450,12 @@ namespace Tempest
 						switch (tutorial_index)
 						{
 							case 0:
-								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, 1);
+								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance);
 								break;
 
 							case 1:
 							{
-								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, 4);
+								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance, true);
 								UI::TutArea({ 0,0 }, { 0,0 }, false);
 
 								// render the complete level here

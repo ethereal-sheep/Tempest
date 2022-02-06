@@ -356,7 +356,7 @@ namespace Tempest
 	
 					else if (instance.tutorial_level == 2)
 					{
-						UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, 2);
+						UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance);
 					}
 
 					else if (instance.tutorial_level == 3)
