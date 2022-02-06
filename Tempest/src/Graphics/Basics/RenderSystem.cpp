@@ -701,11 +701,12 @@ namespace Tempest
         if (!dir_lights[0].hide)
         {
             dir_lights[0].Bind();
-
-            lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+            //viewMatrix = LookAt(lighting.mCameraPosition, lighting.mCameraPosition + glm::normalize(directionalLight.mLightDirection), Vec3(0.0f, 1.0f, 0.0f));
+            lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
             lightView = glm::lookAt(10.f * -dir_lights[0].Direction,
                 glm::vec3(0.0f, 0.0f, 0.0f),
                 glm::vec3(0.0f, 1.0f, 0.0f));
+            //lightView = glm::lookAt(GetCamera().GetPosition(), GetCamera().GetPosition() + glm::normalize(dir_lights[0].Direction), glm::vec3(0.0f,1.0f,0.0f));
             lightSpaceMatrix = lightProjection * lightView;
 
             for (uint32_t j = 0; j < m_Pipeline.m_Models.size(); ++j)
