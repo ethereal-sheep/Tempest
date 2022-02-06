@@ -92,11 +92,11 @@ namespace Tempest
 			init_font();
 			init_style();
 			init_file_dialog();
-			init_sounds();
+			//init_sounds();
 			init_ui_textures();
 
 			AudioEngine ae;
-			ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.5f, true);
+			ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
 			ae.SetMasterVolume(1.f);
 			//testing_scene();
 

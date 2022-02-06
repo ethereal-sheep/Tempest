@@ -11,6 +11,8 @@
 #include "Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
 
+#include "Particles/ParticleSystem_2D.h"
+
 namespace Tempest
 {
 	void Instance::internal_init()
@@ -30,6 +32,8 @@ namespace Tempest
 			auto& door = ecs.get<tc::Door>(id);
 			door.update(dt);
 		}
+		
+		ParticleSystem_2D::GetInstance().Update();
 	}
 	void Instance::internal_render()
 	{

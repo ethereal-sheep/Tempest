@@ -77,6 +77,8 @@
 #include "Window/Util/ShowRecent.h"
 #include "Window/Util/Delay.h"
 
+#include "Window/Util/ParticleDraw.h"
+
 namespace Tempest
 {
 	void InstanceManager::register_nulltime_windows()
@@ -130,7 +132,7 @@ namespace Tempest
 
 		instance->register_window<test_window>()->visible = false;
 		//instance->register_window<test_window2>()->visible = false;
-		//instance->register_window<Test_UIWindow>();
+		instance->register_window<Test_UIWindow>();
 		//instance->register_window<test_window3>()->visible = false;
 
 		instance->register_always<EditTimeMenuBar>();
@@ -172,6 +174,8 @@ namespace Tempest
 		instance->register_always<WipePopup>();
 		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
+
+		instance->register_always<ParticleDraw>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{
