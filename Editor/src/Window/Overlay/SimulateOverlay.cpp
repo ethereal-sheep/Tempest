@@ -43,8 +43,8 @@ namespace Tempest
 		}
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
-		tutorial_index = 11;
-		tutorial_p2 = true;
+		tutorial_index = 0;
+		tutorial_p2 = false;
 
 		particle_0 = false;
 		particle_1 = false;
@@ -610,6 +610,8 @@ namespace Tempest
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
 								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								//Text Above Next button
 								ImGui::PushFont(FONT_BTN);
 								str = "Next up - ";
 								drawlist->AddText({ tut_min.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
@@ -617,8 +619,8 @@ namespace Tempest
 								str = "Level 2";
 								drawlist->AddText({ tut_min.x + strLen.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
 								ImGui::PopFont();
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
