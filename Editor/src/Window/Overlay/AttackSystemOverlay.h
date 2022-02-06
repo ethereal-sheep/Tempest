@@ -121,5 +121,6 @@ namespace Tempest
         //bool particle_1 = false;
         bool particle_2 = false;
         bool particle_3 = false;
+        bool particle_4 = false;
     };
 }

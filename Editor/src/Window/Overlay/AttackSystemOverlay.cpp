@@ -73,6 +73,7 @@ namespace Tempest
 		particle_0 = false;
 		particle_2 = false;
 		particle_3 = false;
+		particle_4 = false;
 
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
@@ -497,7 +498,7 @@ namespace Tempest
 							case 1:
 							{
 								if (m_waypointEmitter)
-								m_waypointEmitter->m_GM.m_active = false;
+									m_waypointEmitter->m_GM.m_active = false;
 
 								// Task List
 								string str = "";
@@ -673,12 +674,27 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								if (particle_4 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_4 = true;
+								}
 							}
 							break;
 
 							case 1:
 							{
 								//Task List
+								m_waypointEmitter->m_GM.m_active = false;
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
