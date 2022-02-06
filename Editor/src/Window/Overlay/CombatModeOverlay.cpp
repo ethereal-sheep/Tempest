@@ -1909,11 +1909,11 @@ namespace Tempest
 
 				AudioEngine ae;
 
-				ae.Play("Sounds2D/SFX_Hit.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/SFX_Hit.wav", "SFX", 1.0f);
 
 				// dead voice
 				if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
-					ae.Play("Sounds2D/SFX_UnitDeathVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX");
+					ae.Play("Sounds2D/SFX_UnitDeathVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
 			}
 
 			if (triggered)
