@@ -48,6 +48,14 @@ namespace Tempest
 		particle_0 = false;
 		particle_1 = false;
 		particle_2 = false;
+
+		particle_01 = false;
+		particle_02 = false;
+		particle_03 = false;
+		particle_04 = false;
+		particle_05 = false;
+		particle_06 = false;
+		particle_07 = false;
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -212,8 +220,6 @@ namespace Tempest
 										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
 									particle_1 = true;
-
-									LOG_INFO("blah 1");
 								}
 							}
 							break;
@@ -962,8 +968,10 @@ namespace Tempest
 			}
 		}
 		
-		if(m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+		if (m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+		{
 			m_waypointEmitter->m_GM.m_active = false;
+		}
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{
