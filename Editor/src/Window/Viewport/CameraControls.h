@@ -834,10 +834,35 @@ namespace Tempest
 		void move(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
 			start_position = cam.GetPosition();
-			end_rotation = point;
+			end_position = point;
 
 			current_pos_time = 0.f;
 			total_pos_time = time;
+		}
+
+		void move_look_at(Camera& cam, glm::vec3 point, float time = 1.f)
+		{
+			start_position = cam.GetPosition();
+
+			auto currentPos = cam.GetPosition();
+			auto now = cam.GetFrontRay();
+
+			float now_dist = 0.f;
+			bool now_intersect = glm::intersectRayPlane(currentPos, now, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
+
+			if (now_intersect)
+			{
+				auto now_pos = currentPos + now * now_dist;
+				auto v = point - now_pos;
+
+				current_pos_time = 0.f;
+				total_pos_time = time;
+
+				start_position = currentPos;
+				end_position = currentPos + v;
+
+				easing = EasingMode::INOUTSINE;
+			}
 		}
 
 		void set_orbit_camera(Camera& cam, glm::vec3 axis)

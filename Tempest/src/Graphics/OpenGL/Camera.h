@@ -48,6 +48,7 @@ namespace Tempest
 
 		vec3 camera_position = { 0.f, 0.f, 1.f };
 		vec3 mouse_ray = { 0.f, 0.f, 0.f };
+		vec3 front_ray = { 0.f, 0.f, 0.f };
 		quat orientation = { 1.f, 0.f, 0.f, 0.f };
 		mat4 projection = { };
 		mat4 reverseDepthProjection = { };
@@ -90,6 +91,7 @@ namespace Tempest
 		glm::vec3 GetPosition() const;
 		glm::vec3 GetMouseRay() const;
 		glm::vec3 GetFront() const;
+		glm::vec3 GetFrontRay() const;
 		glm::vec3 GetUp() const;
 		glm::vec3 GetLeft() const;
 		glm::quat GetQuatRotation() const;

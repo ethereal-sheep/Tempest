@@ -33,6 +33,8 @@ namespace Tempest
 				0.0f,				0.0f,		0.0f,					-1.0f,
 				0.0f,				0.0f,		near_clip_distance,		0.0f
 			};
+
+			front_ray = MousePositionToWorldRay(window_width / 2, window_height / 2);
 			break;
 		}
 		case CameraType::CAMERA_ORTHOGRAPHIC:
@@ -43,6 +45,8 @@ namespace Tempest
 				camera_position.z * 1.0f,
 				static_cast<float>(far_clip_distance),
 				static_cast<float>(near_clip_distance));
+
+			front_ray = MousePositionToWorldRay(window_width / 2, window_height / 2);
 			break;
 		}
 		}
@@ -52,6 +56,7 @@ namespace Tempest
 		view = glm::translate(view, -camera_position);
 		viewProjection = projection * view;
 		viewReverseDepthProjection = reverseDepthProjection * view;
+
 	}
 
 	void Camera::Pitch(float radians)
@@ -143,6 +148,7 @@ namespace Tempest
 		window_width = width;
 		window_height = height;
 		aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
+
 	}
 
 	void Camera::SetClipping(float near_clip, float far_clip)
@@ -189,6 +195,10 @@ namespace Tempest
 	glm::vec3 Camera::GetMouseRay() const
 	{
 		return mouse_ray;
+	}
+	glm::vec3 Camera::GetFrontRay() const
+	{
+		return front_ray;
 	}
 
 	glm::vec3 Camera::GetFront() const

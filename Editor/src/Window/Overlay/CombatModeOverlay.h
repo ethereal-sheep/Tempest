@@ -87,6 +87,8 @@ namespace Tempest
         void pop_style_color() const;
         void render_more_info(Instance& instance, const ImGuiViewport& viewport, INFO_TYPE type, Entity entity);
 
+        void reset_menu();
+
         glm::ivec2 calculate_world_mouse(const Camera& cam);
         void no_selected(RuntimeInstance& instance, const glm::ivec2& world_mouse);
         void menu(RuntimeInstance& instance, const glm::ivec2& world_mouse);
@@ -228,6 +230,8 @@ namespace Tempest
         interpolater<float> inter5;
         interpolater<float> inter6;
         interpolater<float> banner;
+        interpolater<float> menu1;
+        interpolater<float> menu2;
 
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
     };
