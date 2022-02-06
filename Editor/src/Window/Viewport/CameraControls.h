@@ -871,7 +871,7 @@ namespace Tempest
 			{
 				mode = CameraControlMode::ORBIT;
 				orbit_axis = axis;
-				look_at(cam, axis, 0.5);
+				//look_at(cam, axis, 0.5);
 			}
 		}
 		void set_fixed_orbit_camera(Camera& cam, glm::vec3 axis)
@@ -880,7 +880,7 @@ namespace Tempest
 			{
 				mode = CameraControlMode::FIXED_ORBIT;
 				orbit_axis = axis;
-				look_at(cam, axis, 0.5);
+				//look_at(cam, axis, 0.5);
 			}
 		}
 
