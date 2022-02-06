@@ -12,6 +12,7 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "PauseOverlay.h"
 #include <Editor/src/InstanceManager/InstanceConfig.h>
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -88,6 +89,15 @@ namespace Tempest
 
 				ImGui::PopStyleVar();
 				ImGui::PopStyleColor();
+			}
+
+			if (!ImGui::GetHoveredID())
+				HoveredID = 0;
+			else if (HoveredID != ImGui::GetHoveredID())
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Highlight.wav", "SFX", 0.8f);
+				HoveredID = ImGui::GetHoveredID();
 			}
 		}
 	}

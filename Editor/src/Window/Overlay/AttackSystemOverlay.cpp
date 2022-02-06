@@ -14,6 +14,7 @@
 #include "AttackSystemOverlay.h"
 #include "Util/UIElements.h"
 #include "Instance/EditTimeInstance.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -376,6 +377,15 @@ namespace Tempest
 
 							id = new_graph;
 							temp_graph = instance.ecs.get<tc::Graph>(id).g;
+						}
+
+						if (!ImGui::GetHoveredID())
+							HoveredID = 0;
+						else if (HoveredID != ImGui::GetHoveredID())
+						{
+							AudioEngine ae;
+							ae.Play("Sounds2D/Button_Highlight.wav", "SFX", 0.8f);
+							HoveredID = ImGui::GetHoveredID();
 						}
 					}
 

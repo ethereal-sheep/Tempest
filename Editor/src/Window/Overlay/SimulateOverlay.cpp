@@ -15,6 +15,7 @@
 #include "Triggers/Triggers.h"
 #include "Instance/EditTimeInstance.h"
 #include "InstanceManager/InstanceConfig.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -109,7 +110,7 @@ namespace Tempest
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 
-			if (ImGui::Begin("Select Unit Sheet", nullptr, window_flags))
+			if (ImGui::Begin("Simulate Page Configure", nullptr, window_flags))
 			{
 				/*if(instance.tutorial_enable)
 					ImGui::GetIO().MouseClicked[0] = false;
@@ -396,6 +397,14 @@ namespace Tempest
 
 			ImGui::End();
 
+			if (!ImGui::GetHoveredID())
+				HoveredID = 0;
+			else if (HoveredID != ImGui::GetHoveredID())
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Highlight.wav", "SFX", 0.8f);
+				HoveredID = ImGui::GetHoveredID();
+			}
 		}
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)

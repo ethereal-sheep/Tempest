@@ -86,7 +86,7 @@ namespace Tempest
 		ax::Drawing::IconType get_pin_icon(pin_type type);
 
 
-
+        ImGuiID HoveredID{ 0 };
 		graph temp_graph;
         Entity id = UNDEFINED;
 

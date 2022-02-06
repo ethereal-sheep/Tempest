@@ -62,6 +62,7 @@ namespace Tempest
             void Clear();
         };
 
+        ImGuiID HoveredID{ 0 };
         UnitData attacker{};
         UnitData defender{};
         Entity sequence{ UNDEFINED };

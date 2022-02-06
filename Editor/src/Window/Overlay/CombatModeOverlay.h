@@ -213,6 +213,7 @@ namespace Tempest
         bool display_other_stat{ false };
         INFO_TYPE info_type{ INFO_TYPE::CHAR};
         BATTLE_STATE battle_state{ BATTLE_STATE::CURR_TURN };
+        ImGuiID HoveredID{ 0 };
 
         tsptr<Texture> combat_button_tex[3];
 

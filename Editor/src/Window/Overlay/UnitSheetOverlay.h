@@ -97,7 +97,7 @@ namespace Tempest
         Entity SelectedID = INVALID;
         Entity TempWeapon = UNDEFINED;
         Entity TempAction = UNDEFINED;
-
+        ImGuiID HoveredID{ 0 };
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);

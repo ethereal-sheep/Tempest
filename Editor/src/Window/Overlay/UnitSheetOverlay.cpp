@@ -13,6 +13,7 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/Basics/RenderSystem.h"
 #include "Instance/EditTimeInstance.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -466,7 +467,14 @@ namespace Tempest
 		
 			
 			Service<RenderSystem>::Get().USO = true;
-
+			if (!ImGui::GetHoveredID())
+				HoveredID = 0;
+			else if (HoveredID != ImGui::GetHoveredID())
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Highlight.wav", "SFX", 0.8f);
+				HoveredID = ImGui::GetHoveredID();
+			}
 		}
 		else
 			Service<RenderSystem>::Get().USO = false;
