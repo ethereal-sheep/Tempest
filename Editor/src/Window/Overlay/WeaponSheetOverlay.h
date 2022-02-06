@@ -16,6 +16,8 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
+#include "Particles/WaypointEmitter.h"
+
 namespace Tempest
 {
     class WeaponSheetOverlay : public Window
@@ -75,6 +77,7 @@ namespace Tempest
         template<typename F>
         void render_tabs(TABS_TYPE type, F&& func);
 
+        ImGuiID HoveredID{ 0 };
         int tutorial_index = 0;
         std::array<TabImageData, TOTAL> Tabs;
         TABS_TYPE CurrentTab{ TABS_TYPE::WEAPON };
@@ -84,5 +87,13 @@ namespace Tempest
         Entity SelectedID = INVALID;
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
+
+        // For tutorial particle
+        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+
+        bool particle_0 = false;
+        bool particle_1 = false;
+        bool particle_2 = false;
+        bool particle_3 = false;
     };
 }

@@ -37,5 +37,6 @@ namespace Tempest
         bool OverlayOpen = false;
         bool EscDuringPause = false;
         bool hasSaveLoad = true;
+        ImGuiID HoveredID{ 0 };
     };
 }
