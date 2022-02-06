@@ -240,8 +240,11 @@ namespace Tempest
 				if (instance.tutorial_enable)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
-					switch (tutorial_index)
+
+					if (instance.tutorial_level == 1)
 					{
+						switch (tutorial_index)
+						{
 						case 0:
 						{
 							ImVec2 pos = { viewport->Size.x * 0.02f, viewport->Size.y * 0.19f };
@@ -346,6 +349,14 @@ namespace Tempest
 						}
 						break;
 
+						}
+
+						UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 2);
+					}
+	
+					else if (instance.tutorial_level == 2)
+					{
+
 					}
 
 					//Tutorial Exit Button
@@ -360,8 +371,7 @@ namespace Tempest
 						if (ImGui::IsMouseClicked(0))
 							instance.tutorial_enable = false;
 					}
-
-					UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 2);
+					
 				}
 			}
 

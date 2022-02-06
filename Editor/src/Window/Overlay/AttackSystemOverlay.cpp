@@ -456,286 +456,293 @@ namespace Tempest
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
 
-					if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+					if (instance.tutorial_level == 1)
 					{
-						switch (tutorial_index)
+						if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 						{
-						case 0:
-						{
-							ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
-							ImVec2 size = { 200.f, 70.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new action.";
-							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
-
-						case 1:
-						{
-							// Task List
-							string str = "";
-							auto selected = tex_map["Assets/Selected.dds"];
-							auto unselected = tex_map["Assets/Unselected.dds"];
-							bool taskCompleted = true;
-							str = string(ICON_FK_EXCLAMATION_CIRCLE);
-							ImGui::PushFont(FONT_HEAD);
-							drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
-							str = " Tasks";
-							drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-							drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-							ImGui::PopFont();
-
-							ImGui::PushFont(FONT_BODY);
-							ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
-							str = "Rename the action";
-							if (temp_graph.name != "ACTION")
+							switch (tutorial_index)
 							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
-							}
-							else
+							case 0:
 							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-								taskCompleted &= false;
+								ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
+								ImVec2 size = { 200.f, 70.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new action.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							break;
 
-							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							str = "Create a 'Get Attack' Node (Attacker)";
-							auto action_lambda1 = [&]() {
-								for (auto const& this_node : temp_graph.get_nodes())
+							case 1:
+							{
+								// Task List
+								string str = "";
+								auto selected = tex_map["Assets/Selected.dds"];
+								auto unselected = tex_map["Assets/Unselected.dds"];
+								bool taskCompleted = true;
+								str = string(ICON_FK_EXCLAMATION_CIRCLE);
+								ImGui::PushFont(FONT_HEAD);
+								drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								str = " Tasks";
+								drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								ImGui::PopFont();
+
+								ImGui::PushFont(FONT_BODY);
+								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+								str = "Rename the action";
+								if (temp_graph.name != "ACTION")
 								{
-									if (this_node.second->get_category() == category_type::Stat)
-										return true;
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
 								}
-								return false;
-							};
-
-							if (action_lambda1())
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
-							}
-							else
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-								taskCompleted &= false;
-							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							str = "Connect the 'Get Attack' node to the D6 node";
-
-							auto action_lambda2 = [&]() {
-								std::pair<pin_id_t, pin_id_t> pins;
-								for (auto const& this_node : temp_graph.get_nodes())
+								else
 								{
-									if (this_node.second->get_category() == category_type::Stat)
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Create a 'Get Attack' Node (Attacker)";
+								auto action_lambda1 = [&]() {
+									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										pins.first = this_node.second->get_output_pin(0)->get_id();
+										if (this_node.second->get_category() == category_type::Stat)
+											return true;
 									}
-									if (this_node.second->get_name() == "D6")
+									return false;
+								};
+
+								if (action_lambda1())
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Connect the 'Get Attack' node to the D6 node";
+
+								auto action_lambda2 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										pins.second = this_node.second->get_input_pin(0)->get_id();
+										if (this_node.second->get_category() == category_type::Stat)
+										{
+											pins.first = this_node.second->get_output_pin(0)->get_id();
+										}
+										if (this_node.second->get_name() == "D6")
+										{
+											pins.second = this_node.second->get_input_pin(0)->get_id();
+										}
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+									return false;
+								};
+								if (action_lambda2())
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								ImGui::PopFont();
+
+								auto nextBtn = tex_map["Assets/NextBtn.dds"];
+								ImVec2 tut_min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								if (taskCompleted)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+									if (UI::MouseIsWithin(tut_min, tut_max))
+									{
+										ImGui::SetMouseCursor(7);
+										if (ImGui::IsMouseClicked(0))
+											tutorial_index = 2;
 									}
 								}
-
-								for (auto const& this_link : temp_graph.get_links())
-								{
-									if (this_link == pins)
-										return true;
-								}
-								return false;
-							};
-							if (action_lambda2())
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
+								else
+									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
 							}
-							else
+							break;
+
+							case 2:
 							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-								taskCompleted &= false;
+								ImVec2 pos = { viewport->Size.x * 0.102f, viewport->Size.y * 0.0261f };
+								ImVec2 size = { 200.f, 50.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-							ImGui::PopFont();
+							break;
 
-							auto nextBtn = tex_map["Assets/NextBtn.dds"];
-							ImVec2 tut_min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
-
-							if (taskCompleted)
+							case 3:
 							{
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
-								if (UI::MouseIsWithin(tut_min, tut_max))
-								{
-									ImGui::SetMouseCursor(7);
-									if (ImGui::IsMouseClicked(0))
-										tutorial_index = 2;
-								}
+								ImVec2 pos = { viewport->Size.x * 0.505f, viewport->Size.y * 0.1f };
+								ImVec2 size = { 310.f, 140.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the sequence page.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 							}
-							else
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
+							break;
+
+							}
+
+							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
 						}
-						break;
-
-						case 2:
+						else
 						{
-							ImVec2 pos = { viewport->Size.x * 0.102f, viewport->Size.y * 0.0261f };
-							ImVec2 size = { 200.f, 50.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
-							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
+							switch (tutorial_index)
+							{
+							case 0:
+							{
+								ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
+								ImVec2 size = { 200.f, 70.f };
+								UI::TutArea(pos, size);
+								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new sequence.";
+								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							}
+							break;
 
-						case 3:
-						{
-							ImVec2 pos = { viewport->Size.x * 0.505f, viewport->Size.y * 0.1f };
-							ImVec2 size = { 310.f, 140.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the sequence page.";
-							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
+							case 1:
+							{
+								//Task List
+								auto selected = tex_map["Assets/Selected.dds"];
+								auto unselected = tex_map["Assets/Unselected.dds"];
+								bool taskCompleted = true;
+								string str = "";
+								str = string(ICON_FK_EXCLAMATION_CIRCLE);
+								ImGui::PushFont(FONT_HEAD);
+								drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								str = " Tasks";
+								drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								ImGui::PopFont();
 
-						}
 
-						UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
+								ImGui::PushFont(FONT_BODY);
+								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+								str = "Rename the sequence";
+								/*	if (cs->name != "Combatant")
+									{
+										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+										taskCompleted &= true;
+									}
+									else*/
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									//	taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Create a 'Defend Roll' Node";
+								/*	if (cs->get_stat(1) == 5)
+									{
+										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+										taskCompleted &= true;
+									}
+									else*/
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									//	taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Connect the 'Attack Roll' node to the 'Defend Roll' node";
+								/*if (cs->get_stat(0) == 5)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else*/
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									//	taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Connect the 'Defend Roll' node to the 'Compare Flow' node";
+								/*if (cs->get_stat(0) == 5)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else*/
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									//	taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								str = "Connect the output of the 'Defend Roll' to the input of the 'Compare Flow' node";
+								/*if (cs->get_stat(0) == 5)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else*/
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+									//	taskCompleted &= false;
+								}
+								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								ImGui::PopFont();
+
+								auto nextBtn = tex_map["Assets/NextBtn.dds"];
+								ImVec2 tut_min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								if (taskCompleted)
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+									if (UI::MouseIsWithin(tut_min, tut_max))
+									{
+										ImGui::SetMouseCursor(7);
+										if (ImGui::IsMouseClicked(0))
+										{
+											OverlayOpen = false;
+											Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+											Service<EventManager>::Get().instant_dispatch<SimulateTutorialP2Trigger>();
+										}
+									}
+								}
+								else
+									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
+							}
+							break;
+
+							}
+
+							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 4);
+						}
 					}
-					else
+
+					else if (instance.tutorial_level == 2)
 					{
-						switch (tutorial_index)
-						{
-						case 0:
-						{
-							ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
-							ImVec2 size = { 200.f, 70.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new sequence.";
-							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
 
-						case 1:
-						{
-							//Task List
-							auto selected = tex_map["Assets/Selected.dds"];
-							auto unselected = tex_map["Assets/Unselected.dds"];
-							bool taskCompleted = true;
-							string str = "";
-							str = string(ICON_FK_EXCLAMATION_CIRCLE);
-							ImGui::PushFont(FONT_HEAD);
-							drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
-							str = " Tasks";
-							drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-							drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-							ImGui::PopFont();
-
-
-							ImGui::PushFont(FONT_BODY);
-							ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
-							str = "Rename the sequence";
-						/*	if (cs->name != "Combatant")
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
-							}
-							else*/
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-							//	taskCompleted &= false;
-							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							str = "Create a 'Defend Roll' Node";
-						/*	if (cs->get_stat(1) == 5)
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
-							}
-							else*/
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-							//	taskCompleted &= false;
-							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							str = "Connect the 'Attack Roll' node to the 'Defend Roll' node";
-							/*if (cs->get_stat(0) == 5)
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
-							}
-							else*/
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-							//	taskCompleted &= false;
-							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							str = "Connect the 'Defend Roll' node to the 'Compare Flow' node";
-							/*if (cs->get_stat(0) == 5)
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
-							}
-							else*/
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-								//	taskCompleted &= false;
-							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							str = "Connect the output of the 'Defend Roll' to the input of the 'Compare Flow' node";
-							/*if (cs->get_stat(0) == 5)
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-								taskCompleted &= true;
-							}
-							else*/
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-								//	taskCompleted &= false;
-							}
-							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							ImGui::PopFont();
-
-							auto nextBtn = tex_map["Assets/NextBtn.dds"];
-							ImVec2 tut_min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
-
-							if (taskCompleted)
-							{
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
-								if (UI::MouseIsWithin(tut_min, tut_max))
-								{
-									ImGui::SetMouseCursor(7);
-									if (ImGui::IsMouseClicked(0))
-									{
-										OverlayOpen = false;
-										Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
-										Service<EventManager>::Get().instant_dispatch<SimulateTutorialP2Trigger>();
-									}
-								}
-							}
-							else
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
-						}
-						break;
-
-						}
-
-						UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 4);
 					}
-					
 
 					//Tutorial Exit Button
 					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];

@@ -325,9 +325,12 @@ namespace Tempest
 				if (instance.tutorial_enable)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
-					switch (tutorial_index)
+
+					if (instance.tutorial_level == 1)
 					{
-						// Click to quick menu
+						switch (tutorial_index)
+						{
+							// Click to quick menu
 						case 0:
 						{
 							ImVec2 pos = { viewport->Size.x * 0.034f, viewport->Size.y * 0.16f };
@@ -421,7 +424,7 @@ namespace Tempest
 							}
 							else
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
-							
+
 						}
 						break;
 						case 2:
@@ -443,6 +446,14 @@ namespace Tempest
 						}
 						break;
 
+						}
+
+						UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
+					}
+
+					else if (instance.tutorial_level == 2)
+					{
+
 					}
 
 					//Tutorial Exit Button
@@ -457,7 +468,7 @@ namespace Tempest
 						if (ImGui::IsMouseClicked(0))
 							instance.tutorial_enable = false;
 					}
-					UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
+					
 				}
 
 			}
