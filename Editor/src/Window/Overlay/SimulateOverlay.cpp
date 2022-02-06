@@ -203,9 +203,182 @@ namespace Tempest
 						{
 						case 0:
 						{
+							ImVec2 pos = { viewport->Size.x * 0.446f, viewport->Size.y * 0.18f };
+							ImVec2 size = { 200.f, 150.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 						}
 						break;
 
+						case 1:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.387f, viewport->Size.y * 0.275f };
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (sequence != UNDEFINED)
+								tutorial_index = 2;
+						}
+						break;
+
+						case 2:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.14f, viewport->Size.y * 0.41f };
+							ImVec2 size = { 150.f, 150.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 3:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.305f };
+							ImVec2 size = { 150.f, 150.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (attacker.unit_id != UNDEFINED)
+								tutorial_index = 4;
+						}
+						break;
+
+						case 4:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.555f };
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+						}
+						break;
+
+						case 5:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (attacker.weapon != UNDEFINED)
+								tutorial_index = 6;
+						}
+						break;
+
+						case 6:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.615f };
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 7:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							if (attacker.action != UNDEFINED)
+								tutorial_index = 8;
+						}
+						break;
+
+						// moar tasks
+						case 8:
+						//{
+						//	auto selected = tex_map["Assets/Selected.dds"];
+						//	auto unselected = tex_map["Assets/Unselected.dds"];
+						//	bool taskCompleted = true;
+
+						//	//Task List
+						//	string str = "";
+						//	str = string(ICON_FK_EXCLAMATION_CIRCLE);
+						//	ImGui::PushFont(FONT_HEAD);
+						//	drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+						//	str = " Tasks";
+						//	drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+						//	drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+						//	ImGui::PopFont();
+
+
+						//	ImGui::PushFont(FONT_BODY);
+						//	ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+						//	str = "Select a unit for Defender";
+						//	if (defender.unit_id != UNDEFINED)
+						//	{
+						//		drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+						//		taskCompleted &= true;
+						//	}
+						//	else
+						//	{
+						//		drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+						//		taskCompleted &= false;
+						//	}
+						//	drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+						//	min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+						//	str = "Select a weapon for Defender";
+						//	if (defender.weapon != UNDEFINED)
+						//	{
+						//		drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+						//		taskCompleted &= true;
+						//	}
+						//	else
+						//	{
+						//		drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+						//		taskCompleted &= false;
+						//	}
+						//	drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+						//	min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+						//	str = "Select an action for Defender";
+						//	if (defender.action != UNDEFINED)
+						//	{
+						//		drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+						//		taskCompleted &= true;
+						//	}
+						//	else
+						//	{
+						//		drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
+						//		taskCompleted &= false;
+						//	}
+						//	drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						//	ImGui::PopFont();
+
+						//	auto nextBtn = tex_map["Assets/NextBtn.dds"];
+						//	ImVec2 tut_min = { min.x, min.y + unselected->GetWidth() * 0.9f };
+						//	ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+						//	if (taskCompleted)
+						//	{
+						//		drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+
+						//		if (UI::MouseIsWithin(tut_min, tut_max))
+						//		{
+						//			ImGui::SetMouseCursor(7);
+						//			if (ImGui::IsMouseClicked(0))
+						//				tutorial_index = 2;
+						//		}
+						//	}
+						//	else
+						//		drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max, { 0,0 }, { 1,1 }, ImGui::GetColorU32({ 1,1,1,0.4f }));
+						//}
+
+						break;
+
+						default:
+							break;
 						}
 						//Tutorial Exit Button
 						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
@@ -253,11 +426,14 @@ namespace Tempest
 
 				if (UI::UIButton_Sequence(instance, sequence, seq_name.c_str(), seq_name.c_str(), { viewport->Size.x * 0.5f, viewport->Size.x * 0.15f }, { 0,0 }, FONT_PARA))
 				{
+					if (instance.tutorial_enable && tutorial_p2)
+						tutorial_index = 1;
+
 					Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 						SIMULATE_POPUP_TYPE::SEQUENCE, false, sequence);
 				}
 				push_button_style();
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.24f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.25f });
 				ImGui::PushID("seq");
 				if (sequence != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 				{
@@ -464,6 +640,8 @@ namespace Tempest
 		if (UI::UICharButton_Toggle((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f },
 			chara_name, "##charaname" + is_attacker, temp != UNDEFINED, { 0, 0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, tint))
 		{
+			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
+				tutorial_index = 3;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::UNIT, is_attacker, temp);
 		}
@@ -490,6 +668,8 @@ namespace Tempest
 		ImGui::SetCursorPos({ start_pos.x + offset2, start_pos.y + padding * 4.0f });
 		if (UI::UIButton_Weapon(instance, temp, "SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
+			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
+				tutorial_index = 5;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, temp);
 		}
@@ -517,6 +697,8 @@ namespace Tempest
 		ImGui::PushID("action" + is_attacker);
 		if (UI::UIButton_Action(instance, temp,"SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
+			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
+				tutorial_index = 7;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::ACTION, is_attacker, temp);
 		}
