@@ -720,71 +720,133 @@ namespace Tempest
 								ImGui::PushFont(FONT_BODY);
 								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
 								str = "Rename the sequence";
-								/*	if (cs->name != "Combatant")
-									{
-										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-										taskCompleted &= true;
-									}
-									else*/
+								if (temp_graph.name != "SEQUENCE")
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+									else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Create a 'Defend Roll' Node";
-								/*	if (cs->get_stat(1) == 5)
+								auto action_lambda1 = [&]() {
+									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-										taskCompleted &= true;
+										if (this_node.second->get_name() == "Defend Roll")
+											return true;
 									}
-									else*/
+									return false;
+								};
+								if (action_lambda1())
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Attack Roll' node to the 'Defend Roll' node";
-								/*if (cs->get_stat(0) == 5)
+								auto action_lambda2 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.second = this_node.second->get_input_pin(0)->get_id();
+										if (this_node.second->get_name() == "Attack Roll")
+											pins.first = this_node.second->get_output_pin(0)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda2())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Defend Roll' node to the 'Compare Flow' node";
-								/*if (cs->get_stat(0) == 5)
+								auto action_lambda3 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Compare Flow")
+											pins.second = this_node.second->get_input_pin(0)->get_id();
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.first = this_node.second->get_output_pin(0)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda3())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the output of the 'Defend Roll' to the input of the 'Compare Flow' node";
-								/*if (cs->get_stat(0) == 5)
+								auto action_lambda4 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Compare Flow")
+											pins.second = this_node.second->get_input_pin(2)->get_id();
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.first = this_node.second->get_output_pin(1)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda4())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 

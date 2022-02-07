@@ -840,6 +840,11 @@ namespace Tempest
 
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
 					
+					if (instance.tutorial_enable && instance.tutorial_level == 2 &&
+						sequence != UNDEFINED && attacker.unit_id != UNDEFINED && defender.unit_id != UNDEFINED)
+					{
+						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(3.0f, [&]() {tutorial_index = 1; });
+					}
 				}
 
 
