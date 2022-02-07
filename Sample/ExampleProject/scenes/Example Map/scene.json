@@ -20,6 +20,37 @@
                     },
                     "Component": {
                         "Position": [
+                            5.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             -1.0,
                             0.0,
                             -2.0
@@ -60,6 +91,37 @@
                             -0.7074013352394104,
                             0.0,
                             0.7068120837211609
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
                         ],
                         "Scale": [
                             1.0,
@@ -116,6 +178,37 @@
                             0.0,
                             0.0,
                             -2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bar Table"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -4.5
                         ],
                         "Rotation": [
                             0.0,
@@ -197,6 +290,37 @@
         {
             "Metadata": {
                 "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
                 "Proto": "Checkered"
             },
             "Components": [
@@ -259,6 +383,37 @@
         {
             "Metadata": {
                 "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
                 "Proto": "Checkered"
             },
             "Components": [
@@ -302,6 +457,37 @@
                             -2.5,
                             0.0,
                             -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -2.5
                         ],
                         "Rotation": [
                             0.0,
@@ -382,6 +568,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -424,6 +641,37 @@
                     "Component": {
                         "Position": [
                             -1.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
                             0.0,
                             -13.5
                         ],
@@ -506,6 +754,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bar Stool"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0002442896366119385
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -569,6 +848,37 @@
         {
             "Metadata": {
                 "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
             "Components": [
@@ -618,6 +928,37 @@
                             3.5762786865234377e-7,
                             0.0,
                             -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.0,
+                            0.0,
+                            -6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7074013352394104,
+                            0.0,
+                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -702,6 +1043,37 @@
                     },
                     "Component": {
                         "Position": [
+                            5.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             3.5,
                             0.0,
                             -3.5
@@ -736,6 +1108,37 @@
                             0.5,
                             0.0,
                             -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -10.5
                         ],
                         "Rotation": [
                             0.0,
@@ -866,6 +1269,37 @@
                             -0.7074013352394104,
                             0.0,
                             0.7068120837211609
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
                         ],
                         "Scale": [
                             1.0,
@@ -950,6 +1384,37 @@
                     },
                     "Component": {
                         "Position": [
+                            3.0,
+                            0.0,
+                            -17.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7074013352394104,
+                            0.0,
+                            0.7068120837211609
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             -3.0,
                             0.0,
                             -3.0
@@ -984,6 +1449,37 @@
                             1.5,
                             0.0,
                             -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -8.5
                         ],
                         "Rotation": [
                             0.0,
@@ -1064,6 +1560,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Obstacle",
                 "Proto": "Bar Crate"
             },
@@ -1114,6 +1641,37 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7074013352394104,
+                            0.0,
+                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -1188,6 +1746,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Sofa"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7069846391677856,
+                            0.0,
+                            0.7072288990020752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -1232,6 +1821,37 @@
                             -2.5,
                             0.0,
                             -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -10.5
                         ],
                         "Rotation": [
                             0.0,
@@ -1312,6 +1932,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -1356,6 +2007,37 @@
                             2.5,
                             0.0,
                             -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -14.5
                         ],
                         "Rotation": [
                             0.0,
@@ -1424,6 +2106,37 @@
                             -0.7074013352394104,
                             0.0,
                             0.7068120837211609
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
                         ],
                         "Scale": [
                             1.0,
@@ -1508,6 +2221,37 @@
                     },
                     "Component": {
                         "Position": [
+                            4.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             -3.0,
                             0.0,
                             -6.0
@@ -1548,6 +2292,37 @@
                             -0.9999998807907105,
                             0.0,
                             -0.0004166066646575928
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7074013352394104,
+                            0.0,
+                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -1622,6 +2397,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bar Stool"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -1666,6 +2472,37 @@
                             1.5,
                             0.0,
                             -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -16.5
                         ],
                         "Rotation": [
                             0.0,
@@ -1746,6 +2583,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7074013352394104,
+                            0.0,
+                            0.7068120837211609
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -1790,6 +2658,37 @@
                             5.5,
                             0.0,
                             -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -15.5
                         ],
                         "Rotation": [
                             0.0,
@@ -1870,6 +2769,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.0,
+                            0.0,
+                            -12.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -1920,6 +2850,37 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bar Crate"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
                         ],
                         "Scale": [
                             1.0,
@@ -2004,6 +2965,37 @@
                     },
                     "Component": {
                         "Position": [
+                            -1.0,
+                            0.0,
+                            -12.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Bar Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             2.0,
                             0.0,
                             -2.0
@@ -2038,6 +3030,37 @@
                             1.5,
                             0.0,
                             -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.0,
+                            0.0,
+                            -2.0
                         ],
                         "Rotation": [
                             0.0,
@@ -2181,6 +3204,37 @@
         {
             "Metadata": {
                 "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
                 "Proto": "Checkered"
             },
             "Components": [
@@ -2292,6 +3346,37 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.0,
+                            0.0,
+                            -17.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
                         ],
                         "Scale": [
                             1.0,
@@ -2429,6 +3514,37 @@
         {
             "Metadata": {
                 "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
                 "Proto": "Checkered"
             },
             "Components": [
@@ -2552,6 +3668,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Obstacle",
                 "Proto": "Bar Stool"
             },
@@ -2602,6 +3749,37 @@
                             -0.9999998807907105,
                             0.0,
                             -0.0004166066646575928
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7074013352394104,
+                            0.0,
+                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -2686,6 +3864,37 @@
                     },
                     "Component": {
                         "Position": [
+                            5.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             3.5,
                             0.0,
                             -15.5
@@ -2726,6 +3935,37 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.0,
+                            0.0,
+                            -17.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
                         ],
                         "Scale": [
                             1.0,
@@ -2810,6 +4050,37 @@
                     },
                     "Component": {
                         "Position": [
+                            4.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
                             2.5,
                             0.0,
                             -9.5
@@ -2850,6 +4121,37 @@
                             0.9999999403953552,
                             0.0,
                             1.4901161193847657e-7
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
                         ],
                         "Scale": [
                             1.0,
@@ -2924,6 +4226,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bar Crate"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -2968,6 +4301,37 @@
                             -2.5,
                             0.0,
                             -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -6.5
                         ],
                         "Rotation": [
                             0.0,
@@ -3048,6 +4412,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -3098,6 +4493,37 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
                         ],
                         "Scale": [
                             1.0,
@@ -3172,6 +4598,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Checkered"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -3216,6 +4673,37 @@
                             1.0,
                             0.0,
                             -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            -0.0004166066646575928
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -12.0
                         ],
                         "Rotation": [
                             0.0,
@@ -3297,6 +4785,37 @@
         {
             "Metadata": {
                 "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
                 "Proto": "Checkered"
             },
             "Components": [
@@ -3346,6 +4865,37 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bar Stool"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
                         ],
                         "Scale": [
                             1.0,
@@ -3420,6 +4970,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Bar Tile"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -3482,6 +5063,37 @@
         },
         {
             "Metadata": {
+                "Cat": "Decoration",
+                "Proto": "Metal Door Frame"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -3532,6 +5144,37 @@
                             0.0,
                             0.0,
                             1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Bar Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -16.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7074013352394104,
+                            0.0,
+                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -3637,37 +5280,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.0,
-                            0.0,
-                            -15.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7074013352394104,
-                            0.0,
-                            0.7068120837211609
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Tile"
             },
@@ -3699,37 +5311,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.0,
-                            0.0,
-                            -10.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -3743,37 +5324,6 @@
                             4.5,
                             0.0,
                             -9.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.5,
-                            0.0,
-                            -10.5
                         ],
                         "Rotation": [
                             0.0,
@@ -3885,37 +5435,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -14.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -3957,37 +5476,6 @@
                     },
                     "Component": {
                         "Position": [
-                            4.5,
-                            0.0,
-                            -2.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
                             -2.5,
                             0.0,
                             -3.5
@@ -3997,37 +5485,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            4.0,
-                            0.0,
-                            -10.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
                         ],
                         "Scale": [
                             1.0,
@@ -4205,37 +5662,6 @@
                     },
                     "Component": {
                         "Position": [
-                            2.5,
-                            0.0,
-                            -10.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
                             -2.5,
                             0.0,
                             -14.5
@@ -4301,37 +5727,6 @@
                             6.5,
                             0.0,
                             -15.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -4.5
                         ],
                         "Rotation": [
                             0.0,
@@ -4443,37 +5838,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            4.5,
-                            0.0,
-                            -6.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Obstacle",
                 "Proto": "Bar Chair"
             },
@@ -4505,37 +5869,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.0,
-                            0.0,
-                            -10.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Checkered"
             },
@@ -4549,37 +5882,6 @@
                             -2.5,
                             0.0,
                             -11.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -13.5
                         ],
                         "Rotation": [
                             0.0,
@@ -4692,37 +5994,6 @@
         {
             "Metadata": {
                 "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -10.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
             "Components": [
@@ -4797,37 +6068,6 @@
                             -2.5,
                             0.0,
                             -5.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.5,
-                            0.0,
-                            -6.5
                         ],
                         "Rotation": [
                             0.0,
@@ -4949,37 +6189,6 @@
                     },
                     "Component": {
                         "Position": [
-                            -2.5,
-                            0.0,
-                            -6.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
                             4.5,
                             0.0,
                             -4.5
@@ -5075,37 +6284,6 @@
                         "Position": [
                             3.0,
                             0.0,
-                            -17.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7074013352394104,
-                            0.0,
-                            0.7068120837211609
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.0,
-                            0.0,
                             -2.0
                         ],
                         "Rotation": [
@@ -5113,37 +6291,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            7.0,
-                            0.0,
-                            -6.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7074013352394104,
-                            0.0,
-                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -5187,37 +6334,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.0,
-                            0.0,
-                            -13.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7074013352394104,
-                            0.0,
-                            0.7068120837211609
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -5231,37 +6347,6 @@
                             -2.5,
                             0.0,
                             -7.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -0.5,
-                            0.0,
-                            -10.5
                         ],
                         "Rotation": [
                             0.0,
@@ -5311,37 +6396,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Sofa"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -8.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7069846391677856,
-                            0.0,
-                            0.7072288990020752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Tile"
             },
@@ -5355,37 +6409,6 @@
                             3.5,
                             0.0,
                             -14.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.5,
-                            0.0,
-                            -4.5
                         ],
                         "Rotation": [
                             0.0,
@@ -5497,37 +6520,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -8.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Wall",
                 "Proto": "Bar Wall"
             },
@@ -5547,37 +6539,6 @@
                             -0.9999998807907105,
                             0.0,
                             -0.0004166066646575928
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -0.5,
-                            0.0,
-                            -16.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
                         ],
                         "Scale": [
                             1.0,
@@ -5621,37 +6582,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -1.0,
-                            0.0,
-                            -10.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -5665,37 +6595,6 @@
                             6.5,
                             0.0,
                             -6.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.0,
-                            0.0,
-                            -2.0
                         ],
                         "Rotation": [
                             0.0,
@@ -5745,37 +6644,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            6.0,
-                            0.0,
-                            -12.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -5789,37 +6657,6 @@
                             -2.5,
                             0.0,
                             -9.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -1.5,
-                            0.0,
-                            -16.5
                         ],
                         "Rotation": [
                             0.0,
@@ -5869,37 +6706,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bar Stool"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.5,
-                            0.0,
-                            -14.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -5931,37 +6737,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            0.0,
-                            0.0,
-                            -17.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Obstacle",
                 "Proto": "Bar Crate"
             },
@@ -5981,37 +6756,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Decoration",
-                "Proto": "Metal Door Frame"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            7.0,
-                            0.0,
-                            -10.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
                         ],
                         "Scale": [
                             1.0,
@@ -6055,37 +6799,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bar Crate"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -10.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7071067094802856,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -6105,37 +6818,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bar Stool"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.5,
-                            0.0,
-                            -12.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            1.4901161193847657e-7
                         ],
                         "Scale": [
                             1.0,
@@ -6180,37 +6862,6 @@
         {
             "Metadata": {
                 "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -1.5,
-                            0.0,
-                            -14.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
             "Components": [
@@ -6229,37 +6880,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.0,
-                            0.0,
-                            -14.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7074013352394104,
-                            0.0,
-                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -6315,37 +6935,6 @@
                         "Position": [
                             -1.5,
                             0.0,
-                            -6.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -1.5,
-                            0.0,
                             -5.5
                         ],
                         "Rotation": [
@@ -6353,37 +6942,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.0,
-                            0.0,
-                            -12.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
                         ],
                         "Scale": [
                             1.0,
@@ -6471,37 +7029,6 @@
                             -1.5,
                             0.0,
                             -4.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Door",
-                "Proto": "Bar Door"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -1.0,
-                            0.0,
-                            -12.0
                         ],
                         "Rotation": [
                             0.0,
@@ -6561,71 +7088,9 @@
                     },
                     "Component": {
                         "Position": [
-                            -1.5,
-                            0.0,
-                            -3.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
                             5.5,
                             0.0,
                             -9.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bar Table"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            2.5,
-                            0.0,
-                            -4.5
                         ],
                         "Rotation": [
                             0.0,
@@ -6685,69 +7150,7 @@
                     },
                     "Component": {
                         "Position": [
-                            -0.5,
-                            0.0,
-                            -2.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
                             5.5,
-                            0.0,
-                            -3.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -0.5,
                             0.0,
                             -3.5
                         ],
@@ -6800,37 +7203,6 @@
         {
             "Metadata": {
                 "Cat": "Tile",
-                "Proto": "Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            5.5,
-                            0.0,
-                            -16.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
             "Components": [
@@ -6843,37 +7215,6 @@
                             -0.5,
                             0.0,
                             -5.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.5,
-                            0.0,
-                            -13.5
                         ],
                         "Rotation": [
                             0.0,
@@ -6935,37 +7276,6 @@
                         "Position": [
                             -0.5,
                             0.0,
-                            -7.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -0.5,
-                            0.0,
                             -8.5
                         ],
                         "Rotation": [
@@ -6973,37 +7283,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bar Stool"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            2.5,
-                            0.0,
-                            -12.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.9999999403953552,
-                            0.0,
-                            0.0002442896366119385
                         ],
                         "Scale": [
                             1.0,
@@ -7047,37 +7326,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Obstacle",
-                "Proto": "Bar Crate"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -2.5,
-                            0.0,
-                            -16.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Checkered"
             },
@@ -7097,37 +7345,6 @@
                             0.0,
                             0.0,
                             1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            -3.0,
-                            0.0,
-                            -15.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7074013352394104,
-                            0.0,
-                            0.7068120837211609
                         ],
                         "Scale": [
                             1.0,
@@ -7171,37 +7388,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            3.0,
-                            0.0,
-                            -16.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.7074013352394104,
-                            0.0,
-                            0.7068120837211609
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -7233,37 +7419,6 @@
         },
         {
             "Metadata": {
-                "Cat": "Wall",
-                "Proto": "Bar Wall"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            2.0,
-                            0.0,
-                            -17.0
-                        ],
-                        "Rotation": [
-                            0.0,
-                            -0.9999998807907105,
-                            0.0,
-                            -0.0004166066646575928
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
                 "Cat": "Tile",
                 "Proto": "Bar Tile"
             },
@@ -7277,37 +7432,6 @@
                             0.5,
                             0.0,
                             -4.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            4.5,
-                            0.0,
-                            -11.5
                         ],
                         "Rotation": [
                             0.0,
@@ -7358,37 +7482,6 @@
         {
             "Metadata": {
                 "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            0.5,
-                            0.0,
-                            -2.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
                 "Proto": "Tile"
             },
             "Components": [
@@ -7401,37 +7494,6 @@
                             5.5,
                             0.0,
                             -14.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Checkered"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.5,
-                            0.0,
-                            -15.5
                         ],
                         "Rotation": [
                             0.0,
@@ -7493,69 +7555,7 @@
                         "Position": [
                             1.5,
                             0.0,
-                            -6.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            1.5,
-                            0.0,
                             -9.5
-                        ],
-                        "Rotation": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "Metadata": {
-                "Cat": "Tile",
-                "Proto": "Bar Tile"
-            },
-            "Components": [
-                {
-                    "Metadata": {
-                        "Type": "Transform"
-                    },
-                    "Component": {
-                        "Position": [
-                            2.5,
-                            0.0,
-                            -7.5
                         ],
                         "Rotation": [
                             0.0,

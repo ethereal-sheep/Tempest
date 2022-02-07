@@ -371,10 +371,10 @@ namespace Tempest
 							{
 								instance.ecs.emplace<tc::ActionGraph>(new_graph);
 								auto g = instance.ecs.emplace<tc::Graph>(new_graph, "ACTION", graph_type::action);
-								
-								if (fs::exists(instance.get_path() / "conflict_resolutions" / "ACTION.json"))
+								auto p = tpath("Graphs") / "ACTION.json";
+								if (fs::exists(p))
 								{
-									g->g = graph(instance.get_path() / "conflict_resolutions" / "ACTION.json");
+									g->g = graph(p);
 									LOG_INFO("Loaded Default Action");
 								}
 							}
@@ -382,10 +382,10 @@ namespace Tempest
 							{
 								instance.ecs.emplace<tc::ConflictGraph>(new_graph);
 								auto g = instance.ecs.emplace<tc::Graph>(new_graph, "SEQUENCE", graph_type::conflict);
-
-								if (fs::exists(instance.get_path() / "conflict_resolutions" / "SEQUENCE.json"))
+								auto p = tpath("Graphs") / "SEQUENCE.json";
+								if (fs::exists(p))
 								{
-									g->g = graph(instance.get_path() / "conflict_resolutions" / "SEQUENCE.json");
+									g->g = graph(p);
 									LOG_INFO("Loaded Default Sequence");
 								}
 

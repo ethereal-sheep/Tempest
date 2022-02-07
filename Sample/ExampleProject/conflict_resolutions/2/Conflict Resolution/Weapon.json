@@ -6,7 +6,7 @@
         {
             "Entity": 3,
             "Component": {
-                "Weapon_Name": "Weapon3",
+                "Weapon_Name": "Weapon 1",
                 "Main_Stat": 1,
                 "Weapon_Stats": [
                     0,
