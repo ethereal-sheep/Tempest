@@ -1,0 +1,248 @@
+{
+    "Metadata": {
+        "Name": "SEQUENCE",
+        "Type": "Graph",
+        "Inner": 1
+    },
+    "var_set": {
+        "Metadata": {
+            "Type": "Variables"
+        },
+        "Variables": [
+            {
+                "Key": "AttackAction",
+                "Data": {
+                    "VarType": 4,
+                    "VarData": 0
+                }
+            },
+            {
+                "Key": "AttackRollOutput",
+                "Data": {
+                    "VarType": 3,
+                    "VarData": 0
+                }
+            },
+            {
+                "Key": "Attacker",
+                "Data": {
+                    "VarType": 4,
+                    "VarData": 0
+                }
+            },
+            {
+                "Key": "DefendAction",
+                "Data": {
+                    "VarType": 4,
+                    "VarData": 0
+                }
+            },
+            {
+                "Key": "DefendRollOutput",
+                "Data": {
+                    "VarType": 3,
+                    "VarData": 0
+                }
+            },
+            {
+                "Key": "Defender",
+                "Data": {
+                    "VarType": 4,
+                    "VarData": 0
+                }
+            },
+            {
+                "Key": "Win",
+                "Data": {
+                    "VarType": 3,
+                    "VarData": 0
+                }
+            }
+        ]
+    },
+    "Nodes": [
+        {
+            "Metadata": {
+                "Category": "Group",
+                "Type": "Atk Roll > Def Roll; if succeed: resolve attack; if fail: nothing happens"
+            },
+            "Node": {
+                "Id": 73,
+                "Size": [
+                    1263.0,
+                    304.0
+                ],
+                "Position": [
+                    -256.0,
+                    -64.0
+                ],
+                "PinInfo": []
+            }
+        },
+        {
+            "Metadata": {
+                "Category": "Conflict",
+                "Type": "Start"
+            },
+            "Node": {
+                "Id": 65,
+                "Size": [
+                    95.0,
+                    72.0
+                ],
+                "Position": [
+                    -232.0,
+                    1.0
+                ],
+                "PinInfo": []
+            }
+        },
+        {
+            "Metadata": {
+                "Category": "Conflict",
+                "Type": "Win"
+            },
+            "Node": {
+                "Id": 66,
+                "Size": [
+                    154.0,
+                    72.0
+                ],
+                "Position": [
+                    808.0,
+                    1.0
+                ],
+                "PinInfo": []
+            }
+        },
+        {
+            "Metadata": {
+                "Category": "Conflict",
+                "Type": "Lose"
+            },
+            "Node": {
+                "Id": 67,
+                "Size": [
+                    154.0,
+                    72.0
+                ],
+                "Position": [
+                    808.0,
+                    100.0
+                ],
+                "PinInfo": []
+            }
+        },
+        {
+            "Metadata": {
+                "Category": "Compare",
+                "Type": "CompareFlow"
+            },
+            "Node": {
+                "Id": 68,
+                "Size": [
+                    268.0,
+                    227.0
+                ],
+                "Position": [
+                    268.0,
+                    1.0
+                ],
+                "PinInfo": [
+                    {
+                        "Index": 1,
+                        "Var": {
+                            "VarType": 3,
+                            "VarData": 0
+                        }
+                    },
+                    {
+                        "Index": 2,
+                        "Var": {
+                            "VarType": 3,
+                            "VarData": 0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Category": "Conflict",
+                "Type": "AttackRoll"
+            },
+            "Node": {
+                "Id": 71,
+                "Size": [
+                    195.0,
+                    104.0
+                ],
+                "Position": [
+                    -113.0,
+                    1.0
+                ],
+                "PinInfo": [
+                    {
+                        "Index": 1,
+                        "Var": {
+                            "VarType": 3,
+                            "VarData": 0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Category": "Conflict",
+                "Type": "AttackResolve"
+            },
+            "Node": {
+                "Id": 72,
+                "Size": [
+                    195.0,
+                    104.0
+                ],
+                "Position": [
+                    573.0,
+                    0.0
+                ],
+                "PinInfo": [
+                    {
+                        "Index": 1,
+                        "Var": {
+                            "VarType": 3,
+                            "VarData": 0
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "Links": [
+        {
+            "Start": 50331716,
+            "End": 2164260931
+        },
+        {
+            "Start": 16777287,
+            "End": 2164260932
+        },
+        {
+            "Start": 16777288,
+            "End": 2164260930
+        },
+        {
+            "Start": 16777281,
+            "End": 2164260935
+        },
+        {
+            "Start": 16777284,
+            "End": 2164260936
+        },
+        {
+            "Start": 33554500,
+            "End": 2164260936
+        }
+    ]
+}

@@ -369,13 +369,25 @@ namespace Tempest
 							if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 							{
 								instance.ecs.emplace<tc::ActionGraph>(new_graph);
-								instance.ecs.emplace<tc::Graph>(new_graph, "ACTION", graph_type::action);
+								auto g = instance.ecs.emplace<tc::Graph>(new_graph, "ACTION", graph_type::action);
 								
+								if (fs::exists(instance.get_path() / "conflict_resolutions" / "ACTION.json"))
+								{
+									g->g = graph(instance.get_path() / "conflict_resolutions" / "ACTION.json");
+									LOG_INFO("Loaded Default Action");
+								}
 							}
 							else
 							{
 								instance.ecs.emplace<tc::ConflictGraph>(new_graph);
-								instance.ecs.emplace<tc::Graph>(new_graph, "SEQUENCE", graph_type::conflict);
+								auto g = instance.ecs.emplace<tc::Graph>(new_graph, "SEQUENCE", graph_type::conflict);
+
+								if (fs::exists(instance.get_path() / "conflict_resolutions" / "SEQUENCE.json"))
+								{
+									g->g = graph(instance.get_path() / "conflict_resolutions" / "SEQUENCE.json");
+									LOG_INFO("Loaded Default Sequence");
+								}
+
 							}
 
 							//Tutorial progression
@@ -1957,7 +1969,22 @@ namespace Tempest
 					}
 				}
 			}
-			
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Save Current as Default"))
+			{
+				try
+				{
+					g.serialize(instance.get_path() / "conflict_resolutions");
+				}
+				catch (const std::exception& a)
+				{
+					LOG_ERROR(a.what());
+				}
+			}
+
+
 			
 			ImGui::EndChild();
 

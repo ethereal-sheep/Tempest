@@ -377,6 +377,17 @@ namespace Tempest
 
 
         mutable string name;
+
+        /**
+         * @brief Serialize to new path with current name
+         */
+        void serialize(const tpath& new_folder) const;
+
+        /**
+         * @brief Serialize to current path with new name
+         */
+        void serialize(const tpath& new_folder, const string& new_name) const;
+
     private:
 
         /**
@@ -389,15 +400,6 @@ namespace Tempest
          */
         void serialize(const string& new_name) const;
 
-        /**
-         * @brief Serialize to new path with current name
-         */
-        void serialize(const tpath& new_folder) const;
-
-        /**
-         * @brief Serialize to current path with new name
-         */
-        void serialize(const tpath& new_folder, const string& new_name) const;
 
 
 
