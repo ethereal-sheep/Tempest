@@ -599,13 +599,28 @@ namespace Tempest
 								UI::TutArea({ 0,0 }, { 0,0 }, false);
 
 								// render the complete level here
+								ImGui::PushFont(FONT_CONTAX_144);
+								string str = "Level 1";
+								drawlist->AddText({viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ viewport->Size.x * 0.2f,viewport->Size.y * 0.42f }, { viewport->Size.x * 0.8f,viewport->Size.y * 0.42f }, ImGui::GetColorU32({ 1,1,1,1 }));
+								str = "COMPLETE!";
+								drawlist->AddText({viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								ImGui::PopFont();
 
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
 								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+								//Text Above Next button
+								ImGui::PushFont(FONT_BTN);
+								str = "Next up - ";
+								drawlist->AddText({ tut_min.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								auto strLen = ImGui::CalcTextSize(str.c_str());
+								str = "Level 2";
+								drawlist->AddText({ tut_min.x + strLen.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								ImGui::PopFont();
 
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);

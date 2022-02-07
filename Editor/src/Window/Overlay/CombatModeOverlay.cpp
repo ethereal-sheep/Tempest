@@ -21,6 +21,7 @@
 namespace Tempest
 {
 
+
 	auto collide_first_edited(
 		int x0, int y0, int x1, int y1,
 		tmap<int, tmap<int, id_t>>& collision_map,
@@ -409,6 +410,11 @@ namespace Tempest
 
 			}
 	}
+	void CombatModeOverlay::reset_menu()
+	{
+		menu1.start(-1.f, 0.f, 0.6f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+		menu2.start(-1.f, 0.f, 0.6f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+	}
 
 	glm::ivec2 CombatModeOverlay::calculate_world_mouse(const Camera& cam)
 	{
@@ -568,10 +574,14 @@ namespace Tempest
 					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA))
 					{
 						curr_entity = increase_turn();
+						if (auto t = instance.ecs.get_if<tc::Transform>(curr_entity))
+						{
+							cam_ctrl.move_look_at(cam, t->position);
+						}
 					}
 
-					UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f - inter_nest[3].get() * 300.f , viewport->Size.y - action_background_size.y * 0.7f });
+					UI::ActionUI(ImVec2{ viewport->Size.x - menu1.get() * 700.f, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f - menu1.get() * 1000.f , viewport->Size.y - action_background_size.y * 0.7f });
 
 					ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 
@@ -587,7 +597,7 @@ namespace Tempest
 
 							// action
 							const ImVec2 imgSize{ (float)combat_button_tex[0]->GetWidth(), (float)combat_button_tex[0]->GetHeight() };
-							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f - inter_nest[3].get() * 100.f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
+							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f - menu1.get() * 100.f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
@@ -603,7 +613,7 @@ namespace Tempest
 							const ImVec2 imgSize2{ (float)combat_button_tex[1]->GetWidth(), (float)combat_button_tex[1]->GetHeight() };
 
 							// item
-							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f, cursor.y + avail_region.y * 0.22f - imgSize2.y * 0.5f });
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.22f - imgSize2.y * 0.5f });
 
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[1]->GetID()), imgSize2))
 							{
@@ -615,7 +625,7 @@ namespace Tempest
 								combat_button_tex[1] = tex_map["Assets/CItemUnselected.dds"];
 
 							// move
-							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f, cursor.y + avail_region.y * 0.68f - imgSize2.y * 0.5f });
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.68f - imgSize2.y * 0.5f });
 
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[2]->GetID()), imgSize2))
 							{
@@ -1496,14 +1506,24 @@ namespace Tempest
 		if (inter1.is_in_progress())
 		{
 			roll = std::to_string(els::random::uniform_rand(0, 999));
-			
 		}
-
 
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(attacker.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(attacker.name.c_str());
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
+
+		if (inter1.is_finished())
+		{
+			if(win)
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
+			else
+				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
+		}
+
 		ImGui::Text(roll.c_str());
+
+		if (inter1.is_finished())
+			ImGui::PopStyleColor();
 
 		roll = def_rolled ? std::to_string(def_output) : "";
 		if (inter2.is_in_progress())
@@ -1514,7 +1534,20 @@ namespace Tempest
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(defender.name.c_str());
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
+		
+		if (inter2.is_finished())
+		{
+			if(!win)
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
+			else
+				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
+		}
+
 		ImGui::Text(roll.c_str());
+
+		if (inter2.is_finished())
+			ImGui::PopStyleColor();
+
 		ImGui::PopFont();
 
 		// only trigger this if no more rolls
@@ -1707,6 +1740,9 @@ namespace Tempest
 				//  TODO: change to the next entity turn
 				selected_action = UNDEFINED;
 				selected_weapon = UNDEFINED;
+
+				// reset menu
+				reset_menu();
 			};
 
 		// use battle state for internal state
@@ -1728,6 +1764,10 @@ namespace Tempest
 			auto new_cam_pos = xform.position + dir;
 			new_cam_pos.y = dist_from_ground;
 			cam.SetPosition(new_cam_pos);
+
+
+			auto yaw = glm::angleAxis(3 * glm::pi<float>()/2.f, glm::vec3{ 0, 1, 0 });
+			cam.SetRotation(xform.rotation * yaw);
 			/*auto right = vec3{ 1,0,0 } * new_cam_rot;
 			auto down = glm::angleAxis(glm::radians(90.f), right);
 			cam.SetRotation(down);*/
@@ -1873,11 +1913,11 @@ namespace Tempest
 
 				AudioEngine ae;
 
-				ae.Play("Sounds2D/SFX_Hit.wav", "SFX", 0.7f);
+				ae.Play("Sounds2D/SFX_Hit.wav", "SFX", 1.0f);
 
 				// dead voice
 				if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
-					ae.Play("Sounds2D/SFX_UnitDeathVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX");
+					ae.Play("Sounds2D/SFX_UnitDeathVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
 			}
 
 			if (triggered)
@@ -2151,9 +2191,9 @@ namespace Tempest
 			const ImGuiViewport* viewport = ImGui::GetMainViewport();
 			if (!display_curr_stat)
 			{
-				UI::CharacterTurnData(instance, character, { 0.f, viewport->Size.y - placeholder_height });
+				UI::CharacterTurnData(instance, character, { 0.f + menu1.get() * 500.f, viewport->Size.y - placeholder_height });
 
-				if (UI::UIButton_2("More Information >", "More Information >", ImVec2{ action_background_size.x * 0.72f, viewport->Size.y - action_background_size.y * 1.2f }, { 0.f, 8.0f }, FONT_BODY))
+				if (UI::UIButton_2("More Information >", "More Information >", ImVec2{ action_background_size.x * 0.72f + menu1.get() * 1000.f, viewport->Size.y - action_background_size.y * 1.2f }, { 0.f, 8.0f }, FONT_BODY))
 				{
 					display_curr_stat = true;
 				}
@@ -2440,8 +2480,7 @@ namespace Tempest
 		curr_turn = 0;
 		curr_entity = units[curr_turn];
 
-		inter_nest[3].start(-1.f, 0.f, .6f, 0.f, [](float x) { return glm::cubicEaseOut(x); });
-
+		reset_menu();
 	};
 
 	void CombatModeOverlay::visibility(const Event& e)
@@ -2471,6 +2510,8 @@ namespace Tempest
 			inter4.update(dt);
 			inter5.update(dt);
 			inter6.update(dt);
+			menu1.update(dt);
+			menu2.update(dt);
 
 			for (auto& i : inter_nest)
 				i.update(dt);
@@ -2531,7 +2572,7 @@ namespace Tempest
 				for (auto id : units)
 				{
 					// check if turn is over
-					UI::CharacterTurn(instance, id, { 0.f, ImGui::GetCursorPosY() + padding }, curr_entity == id);
+					UI::CharacterTurn(instance, id, { 0.f + menu1.get() * (padding + 400.f) * 2.f, ImGui::GetCursorPosY() + padding }, curr_entity == id);
 					padding += 85.0f;
 					first = false;
 				}
@@ -2771,7 +2812,6 @@ namespace Tempest
 	{
 		if (++curr_turn >= units.size())
 			curr_turn = 0;
-		
 		// use inter_nest[0] and inter_nest[1]
 		
 

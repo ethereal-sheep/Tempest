@@ -36,7 +36,7 @@ uniform float cameraAperture;
 uniform float cameraShutterSpeed;
 uniform float cameraISO;
 uniform vec2 screenTextureSize;
-
+uniform float gammaValue;
 
 vec3 colorLinear(vec3 colorVector);
 vec3 colorSRGB(vec3 colorVector);
@@ -100,6 +100,7 @@ void main()
         else if(tonemappingMode == 2)
         {
             color = FilmicTM(color);
+			color = colorSRGB(color);
             colorOutput = vec4(color, 1.0f);
         }
         else if(tonemappingMode == 3)
@@ -116,6 +117,7 @@ void main()
     else    // No tonemapping or linear/sRGB conversion if we want to visualize the different buffers
     {
         color = texture(screenTexture, TexCoords).rgb;
+		color = colorSRGB(color);
         colorOutput = vec4(color, 1.0f);
     }
 }
@@ -167,7 +169,7 @@ vec3 computeFxaa()
 
 vec3 colorLinear(vec3 colorVector)
 {
-  vec3 linearColor = pow(colorVector.rgb, vec3(2.2f));
+  vec3 linearColor = pow(colorVector.rgb, vec3(gammaValue));
 
   return linearColor;
 }
@@ -175,7 +177,7 @@ vec3 colorLinear(vec3 colorVector)
 
 vec3 colorSRGB(vec3 colorVector)
 {
-  vec3 srgbColor = pow(colorVector.rgb, vec3(1.0f / 2.2f));
+  vec3 srgbColor = pow(colorVector.rgb, vec3(1.0f / gammaValue));
 
   return srgbColor;
 }

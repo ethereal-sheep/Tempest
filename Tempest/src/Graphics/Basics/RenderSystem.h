@@ -107,6 +107,7 @@ namespace Tempest
         float ambientStrength = 0.5f;
         float specularStrength = 0.5f;
         const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+        float gammaValue = 2.2f; // 1.0f to 4.0f
 
         //Testing
         GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects;

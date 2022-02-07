@@ -684,6 +684,7 @@ namespace Tempest
 
 		void show_debug(Camera& cam)
 		{
+			ImGui::SetNextWindowFocus();
 			if(ImGui::Begin("Camera Control Debug"))
 			{
 				ImGui::Text("Transform");
@@ -774,18 +775,21 @@ namespace Tempest
 
 		void look_at(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
+
 			auto pos = point - cam.GetPosition();
 			auto front = cam.GetFront();
+
+			end_rotation = cam.GetQuatRotation();
 
 			glm::vec2 v1{ pos.x, pos.z };
 			glm::vec2 v2{ front.x, front.z };
 
 			auto angle = glm::orientedAngle(glm::normalize(v2), glm::normalize(v1));
 			auto yaw = glm::angleAxis(angle, glm::vec3{ 0, 1, 0 });
-			auto rot = yaw;
+			auto rot = end_rotation * yaw;
 
 
-			front = glm::conjugate(rot)* glm::vec3{ 0.f, 0.f, -1.f };
+			front = glm::conjugate(rot) * glm::vec3{ 0.f, 0.f, -1.f };
 			auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
 
 			angle = glm::orientedAngle(glm::normalize(pos), glm::normalize(front), left);
@@ -802,13 +806,65 @@ namespace Tempest
 			easing = EasingMode::INOUTSINE;
 		}
 
+		void force_look_at(Camera& cam, glm::vec3 point)
+		{
+			auto pos = point - cam.GetPosition();
+			auto front = cam.GetFront();
+
+			glm::vec2 v1{ pos.x, pos.z };
+			glm::vec2 v2{ front.x, front.z };
+
+			auto angle = glm::orientedAngle(glm::normalize(v2), glm::normalize(v1));
+			auto yaw = glm::angleAxis(angle, glm::vec3{ 0, 1, 0 });
+			auto rot = yaw;
+
+
+			front = glm::conjugate(rot) * glm::vec3{ 0.f, 0.f, -1.f };
+			auto left = glm::conjugate(rot) * glm::vec3{ -1.f, 0.f, 0.f };
+
+			angle = glm::orientedAngle(glm::normalize(pos), glm::normalize(front), left);
+
+			auto pitch = glm::angleAxis(angle, left);
+			rot = rot * pitch;
+
+			cam.SetRotation(rot);
+
+			force_reset_pos(cam);
+			force_reset_rot(cam);
+		}
+
 		void move(Camera& cam, glm::vec3 point, float time = 1.f)
 		{
 			start_position = cam.GetPosition();
-			end_rotation = point;
+			end_position = point;
 
 			current_pos_time = 0.f;
 			total_pos_time = time;
+		}
+
+		void move_look_at(Camera& cam, glm::vec3 point, float time = 1.f)
+		{
+			start_position = cam.GetPosition();
+
+			auto currentPos = cam.GetPosition();
+			auto now = cam.GetFrontRay();
+
+			float now_dist = 0.f;
+			bool now_intersect = glm::intersectRayPlane(currentPos, now, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
+
+			if (now_intersect)
+			{
+				auto now_pos = currentPos + now * now_dist;
+				auto v = point - now_pos;
+
+				current_pos_time = 0.f;
+				total_pos_time = time;
+
+				start_position = currentPos;
+				end_position = currentPos + v;
+
+				easing = EasingMode::INOUTSINE;
+			}
 		}
 
 		void set_orbit_camera(Camera& cam, glm::vec3 axis)
@@ -817,7 +873,7 @@ namespace Tempest
 			{
 				mode = CameraControlMode::ORBIT;
 				orbit_axis = axis;
-				look_at(cam, axis, 0.5);
+				//look_at(cam, axis, 0.5);
 			}
 		}
 		void set_fixed_orbit_camera(Camera& cam, glm::vec3 axis)
@@ -826,7 +882,7 @@ namespace Tempest
 			{
 				mode = CameraControlMode::FIXED_ORBIT;
 				orbit_axis = axis;
-				look_at(cam, axis, 0.5);
+				//look_at(cam, axis, 0.5);
 			}
 		}
 

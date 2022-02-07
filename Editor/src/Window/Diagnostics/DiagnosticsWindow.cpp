@@ -141,6 +141,7 @@ namespace Tempest
 	void DiagnosticsWindow::ECSUsage(Instance& instance)
 	{
 		ImGui::Text("Total entities created:       %u", instance.ecs.size());
+		ImGui::DragFloat3("Map Pos", glm::value_ptr(instance.scene.get_map().map_pos), 1.f);
 	}
 
 
@@ -255,6 +256,8 @@ namespace Tempest
 			if (UI::DragFloat3ColorBox("up", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(up), 0.f, 1.f).first) {}
 			if (UI::DragFloat3ColorBox("front", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(front), 0.f, 1.f).first) {}
 			if (UI::DragFloat3ColorBox("left", "##CameraRotDrag", ImVec2{ padding , 0.f }, value_ptr(left), 0.f, 1.f).first) {}
+
+
 
 		}
 	}
@@ -421,6 +424,9 @@ namespace Tempest
 			auto& clearColor = Service<RenderSystem>::Get().clearColor;
 			UI::DragFloat3ColorBox("Clear Color", "##ClearColor", ImVec2{ padding , 0.f }, value_ptr(clearColor), 0.f, 0.1f).first;
 
+			auto& gammaValue = Service<RenderSystem>::Get().gammaValue;
+			//UI::DragFloat3ColorBox("Gamme Value", "##GammeValue", ImVec2{ padding , 0.f }, &gammaValue, 0.f, 0.1f,0.0f,4.0f).first;
+			ImGui::SliderFloat("Gamme Value", &gammaValue, 0.0f, 4.0f);
 			//auto& thumbnail = Service<RenderSystem>::Get().thumbnailName;
 			static std::string thumbnailName{ "test.jpg" };
 			ImGui::InputText("thumbnail name", &thumbnailName);

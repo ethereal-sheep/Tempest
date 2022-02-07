@@ -52,6 +52,10 @@ namespace Tempest
 		for (auto& [id, pf] : scene.get_map())
 		{
 			[[maybe_unused]]auto entity = ecs.create(pf);
+			if (auto xform = ecs.get_if<tc::Transform>(entity))
+			{
+				xform->position += scene.get_map().map_pos;
+			}
 		}
 
 	}

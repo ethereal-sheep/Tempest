@@ -49,6 +49,7 @@ static const float header_text_size = 48.f;
 static const float subheader_text_size = 36.f;
 static const float button_text_size = 24.f;
 static const float subbutton_text_size = 18.f;
+static const float contaxPro_size144 = 144.f;
 
 static const float body_text_size = 24.f;
 static const float para_text_size = 18.f;
@@ -66,6 +67,7 @@ inline auto font_subbutton() { return ImGui::GetIO().Fonts->Fonts[5]; } // subbu
 inline auto font_open() { return ImGui::GetIO().Fonts->Fonts[6]; } // opensans
 inline auto font_open_turn() { return ImGui::GetIO().Fonts->Fonts[7]; } // opensans for turn order
 inline auto font_open_30() { return ImGui::GetIO().Fonts->Fonts[8]; } // opensans for size 30
+inline auto font_contax_144() { return ImGui::GetIO().Fonts->Fonts[9]; } // ContaxPro for size 144
 
 
 
@@ -78,6 +80,7 @@ inline auto font_open_30() { return ImGui::GetIO().Fonts->Fonts[8]; } // opensan
 #define FONT_OPEN		font_open()
 #define FONT_TURN		font_open_turn()
 #define FONT_OPEN_30	font_open_30()
+#define FONT_CONTAX_144	font_contax_144()
 
 #define FONT_DEFAULT	FONT_PARA
 #define FONT_BOLD		FONT_BODY

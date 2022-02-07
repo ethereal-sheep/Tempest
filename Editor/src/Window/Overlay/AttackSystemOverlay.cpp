@@ -466,7 +466,7 @@ namespace Tempest
 					{
 						if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 						{
-							switch (tutorial_index)
+							switch (tutorial_index) // Action 
 							{
 							case 0:
 							{
@@ -669,7 +669,7 @@ namespace Tempest
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
 
 						}
-						else
+						else // Sequence 
 						{
 							switch (tutorial_index)
 							{
@@ -710,15 +710,16 @@ namespace Tempest
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
 								ImGui::PushFont(FONT_HEAD);
-								drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								float xPos = viewport->Size.x * 0.7f;
+								drawlist->AddText({ xPos, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
 								str = " Tasks";
-								drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-								drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								drawlist->AddText({ xPos + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ xPos, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								ImGui::PopFont();
 
 
 								ImGui::PushFont(FONT_BODY);
-								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+								ImVec2 min = { xPos, viewport->Size.y * 0.45f };
 								str = "Rename the sequence";
 								if (temp_graph.name != "SEQUENCE")
 								{
@@ -730,7 +731,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Create a 'Defend Roll' Node";
@@ -752,7 +753,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Attack Roll' node to the 'Defend Roll' node";
@@ -784,7 +785,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Defend Roll' node to the 'Compare Flow' node";
@@ -816,10 +817,10 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-								str = "Connect the output of the 'Defend Roll' to the input of the 'Compare Flow' node";
+								str = "Connect the output of the 'Defend Roll' to the input of";
 								auto action_lambda4 = [&]() {
 									std::pair<pin_id_t, pin_id_t> pins;
 									for (auto const& this_node : temp_graph.get_nodes())
@@ -848,7 +849,10 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								min = { min.x, min.y + 17.f };
+								str = "'Compare Flow' node";
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								ImGui::PopFont();
 

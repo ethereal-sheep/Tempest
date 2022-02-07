@@ -18,7 +18,7 @@
 namespace Tempest
 {
 	// Shadow map buffer size width x height
-	const uint32_t SHADOW_MAP_SIZE = 2048;
+	const uint32_t SHADOW_MAP_SIZE = 2048*2;
 
 	enum struct LIGHTS
 	{
