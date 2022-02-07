@@ -480,7 +480,9 @@ namespace Tempest
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
-
+								ImVec2 pos = { viewport->Size.x * 0.3f, 0 };
+								ImVec2 size = { viewport->Size.x, viewport->Size.y };
+								UI::TutArea(pos, size);
 								//Task List
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
