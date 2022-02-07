@@ -1,0 +1,13 @@
+{
+    "Metadata": {
+        "Type": "ActionGraph"
+    },
+    "Components": [
+        {
+            "Entity": 4,
+            "Component": {
+                "Action_Category": 3
+            }
+        }
+    ]
+}

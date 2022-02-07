@@ -1,0 +1,495 @@
+{
+    "Metadata": {
+        "Type": "Graph"
+    },
+    "Components": [
+        {
+            "Entity": 4,
+            "Component": {
+                "Metadata": {
+                    "Name": "ACTIONNEW",
+                    "Type": "Graph",
+                    "Inner": 2
+                },
+                "var_set": {
+                    "Metadata": {
+                        "Type": "Variables"
+                    },
+                    "Variables": [
+                        {
+                            "Key": "Enemy",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "Output",
+                            "Data": {
+                                "VarType": 3,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "Owner",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        }
+                    ]
+                },
+                "Nodes": [
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Roll"
+                        },
+                        "Node": {
+                            "Id": 1682,
+                            "Size": [
+                                89.0,
+                                103.0
+                            ],
+                            "Position": [
+                                123.0,
+                                -39.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Resolve"
+                        },
+                        "Node": {
+                            "Id": 1683,
+                            "Size": [
+                                113.0,
+                                103.0
+                            ],
+                            "Position": [
+                                99.0,
+                                309.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Output"
+                        },
+                        "Node": {
+                            "Id": 1684,
+                            "Size": [
+                                154.0,
+                                104.0
+                            ],
+                            "Position": [
+                                364.0,
+                                -41.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Output"
+                        },
+                        "Node": {
+                            "Id": 1685,
+                            "Size": [
+                                154.0,
+                                104.0
+                            ],
+                            "Position": [
+                                364.0,
+                                308.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Dice",
+                            "Type": "D6"
+                        },
+                        "Node": {
+                            "Id": 1686,
+                            "Size": [
+                                195.0,
+                                72.0
+                            ],
+                            "Position": [
+                                19.0,
+                                76.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Group",
+                            "Type": "Roll for D6 + Owner's Attack"
+                        },
+                        "Node": {
+                            "Id": 1687,
+                            "Size": [
+                                656.0,
+                                279.0
+                            ],
+                            "Position": [
+                                -80.0,
+                                -80.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Group",
+                            "Type": "Resolve Attack"
+                        },
+                        "Node": {
+                            "Id": 1688,
+                            "Size": [
+                                656.0,
+                                263.0
+                            ],
+                            "Position": [
+                                -80.0,
+                                224.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Stat",
+                            "Type": "GetStat:1"
+                        },
+                        "Node": {
+                            "Id": 1689,
+                            "Size": [
+                                195.0,
+                                72.0
+                            ],
+                            "Position": [
+                                -180.0,
+                                68.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 0,
+                                    "Var": {
+                                        "VarType": 2,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Links": [
+                    {
+                        "Start": 16778898,
+                        "End": 2164262548
+                    },
+                    {
+                        "Start": 16778899,
+                        "End": 2164262549
+                    },
+                    {
+                        "Start": 33556115,
+                        "End": 2181039765
+                    },
+                    {
+                        "Start": 16778905,
+                        "End": 2164262550
+                    },
+                    {
+                        "Start": 16778902,
+                        "End": 2181039764
+                    }
+                ]
+            }
+        },
+        {
+            "Entity": 5,
+            "Component": {
+                "Metadata": {
+                    "Name": "New SEQUENCE",
+                    "Type": "Graph",
+                    "Inner": 1
+                },
+                "var_set": {
+                    "Metadata": {
+                        "Type": "Variables"
+                    },
+                    "Variables": [
+                        {
+                            "Key": "AttackAction",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "AttackRollOutput",
+                            "Data": {
+                                "VarType": 3,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "Attacker",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "DefendAction",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "DefendRollOutput",
+                            "Data": {
+                                "VarType": 3,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "Defender",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "Win",
+                            "Data": {
+                                "VarType": 3,
+                                "VarData": 0
+                            }
+                        }
+                    ]
+                },
+                "Nodes": [
+                    {
+                        "Metadata": {
+                            "Category": "Group",
+                            "Type": "Atk Roll > Def Roll; if succeed: resolve attack; if fail: nothing happens"
+                        },
+                        "Node": {
+                            "Id": 1696,
+                            "Size": [
+                                1279.0,
+                                343.0
+                            ],
+                            "Position": [
+                                -256.0,
+                                -64.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
+                            "Type": "Start"
+                        },
+                        "Node": {
+                            "Id": 1697,
+                            "Size": [
+                                95.0,
+                                72.0
+                            ],
+                            "Position": [
+                                -232.0,
+                                1.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
+                            "Type": "Win"
+                        },
+                        "Node": {
+                            "Id": 1698,
+                            "Size": [
+                                154.0,
+                                72.0
+                            ],
+                            "Position": [
+                                808.0,
+                                1.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
+                            "Type": "Lose"
+                        },
+                        "Node": {
+                            "Id": 1699,
+                            "Size": [
+                                154.0,
+                                72.0
+                            ],
+                            "Position": [
+                                808.0,
+                                100.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Compare",
+                            "Type": "CompareFlow"
+                        },
+                        "Node": {
+                            "Id": 1700,
+                            "Size": [
+                                268.0,
+                                227.0
+                            ],
+                            "Position": [
+                                268.0,
+                                1.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
+                            "Type": "AttackRoll"
+                        },
+                        "Node": {
+                            "Id": 1701,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                -84.0,
+                                -11.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
+                            "Type": "AttackResolve"
+                        },
+                        "Node": {
+                            "Id": 1702,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                573.0,
+                                0.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
+                            "Type": "DefendRoll"
+                        },
+                        "Node": {
+                            "Id": 1703,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                -100.0,
+                                132.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Links": [
+                    {
+                        "Start": 33556133,
+                        "End": 2181039780
+                    },
+                    {
+                        "Start": 50333348,
+                        "End": 2164262563
+                    },
+                    {
+                        "Start": 16778918,
+                        "End": 2164262562
+                    },
+                    {
+                        "Start": 16778917,
+                        "End": 2164262567
+                    },
+                    {
+                        "Start": 16778916,
+                        "End": 2164262566
+                    },
+                    {
+                        "Start": 16778919,
+                        "End": 2164262564
+                    },
+                    {
+                        "Start": 33556132,
+                        "End": 2164262566
+                    },
+                    {
+                        "Start": 33556135,
+                        "End": 2197816996
+                    },
+                    {
+                        "Start": 16778913,
+                        "End": 2164262565
+                    }
+                ]
+            }
+        }
+    ]
+}

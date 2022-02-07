@@ -4,15 +4,15 @@
     },
     "Components": [
         {
-            "Entity": 10,
+            "Entity": 9,
             "Component": {
-                "Weapon_Name": "Weapon 1",
+                "Weapon_Name": "Wooden Shield",
                 "Main_Stat": 1,
                 "Weapon_Stats": [
                     0,
+                    0,
                     3,
-                    1,
-                    3,
+                    0,
                     0,
                     0,
                     0,
@@ -23,17 +23,36 @@
             }
         },
         {
-            "Entity": 9,
+            "Entity": 56,
             "Component": {
-                "Weapon_Name": "Weapon 2",
+                "Weapon_Name": "Steel Pipe",
+                "Main_Stat": 1,
+                "Weapon_Stats": [
+                    0,
+                    3,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "Entity": 10,
+            "Component": {
+                "Weapon_Name": "Slingshot",
                 "Main_Stat": 1,
                 "Weapon_Stats": [
                     0,
                     1,
-                    3,
-                    3,
                     0,
+                    5,
                     0,
+                    3,
                     0,
                     0,
                     0,
@@ -44,12 +63,50 @@
         {
             "Entity": 58,
             "Component": {
-                "Weapon_Name": "Weapon",
+                "Weapon_Name": "Gun",
+                "Main_Stat": 1,
+                "Weapon_Stats": [
+                    0,
+                    2,
+                    0,
+                    5,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "Entity": 61,
+            "Component": {
+                "Weapon_Name": "Rifle",
+                "Main_Stat": 1,
+                "Weapon_Stats": [
+                    0,
+                    4,
+                    0,
+                    7,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "Entity": 11,
+            "Component": {
+                "Weapon_Name": "Riot Shield",
                 "Main_Stat": 1,
                 "Weapon_Stats": [
                     0,
                     0,
-                    0,
+                    5,
                     0,
                     0,
                     0,

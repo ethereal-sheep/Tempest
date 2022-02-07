@@ -7,7 +7,7 @@
             "Entity": 2,
             "Component": {
                 "Metadata": {
-                    "Name": "Simple Attack",
+                    "Name": "Attack",
                     "Type": "Graph",
                     "Inner": 2
                 },
@@ -46,14 +46,14 @@
                             "Type": "Roll"
                         },
                         "Node": {
-                            "Id": 4,
+                            "Id": 1105,
                             "Size": [
                                 89.0,
-                                96.0
+                                103.0
                             ],
                             "Position": [
-                                475.0,
-                                40.0
+                                603.0,
+                                229.0
                             ],
                             "PinInfo": []
                         }
@@ -64,14 +64,14 @@
                             "Type": "Resolve"
                         },
                         "Node": {
-                            "Id": 5,
+                            "Id": 1106,
                             "Size": [
                                 113.0,
-                                96.0
+                                103.0
                             ],
                             "Position": [
-                                126.0,
-                                501.0
+                                142.0,
+                                581.0
                             ],
                             "PinInfo": []
                         }
@@ -82,14 +82,14 @@
                             "Type": "Output"
                         },
                         "Node": {
-                            "Id": 6,
+                            "Id": 1107,
                             "Size": [
                                 154.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                604.0,
-                                39.0
+                                828.0,
+                                228.0
                             ],
                             "PinInfo": []
                         }
@@ -100,14 +100,14 @@
                             "Type": "Output"
                         },
                         "Node": {
-                            "Id": 7,
+                            "Id": 1108,
                             "Size": [
                                 154.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                599.0,
-                                500.0
+                                828.0,
+                                580.0
                             ],
                             "PinInfo": [
                                 {
@@ -126,14 +126,14 @@
                             "Type": "D6"
                         },
                         "Node": {
-                            "Id": 8,
+                            "Id": 1109,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 369.0,
-                                164.0
+                                356.0
                             ],
                             "PinInfo": []
                         }
@@ -144,14 +144,14 @@
                             "Type": "GetStat:1"
                         },
                         "Node": {
-                            "Id": 9,
+                            "Id": 1110,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 134.0,
-                                164.0
+                                356.0
                             ],
                             "PinInfo": [
                                 {
@@ -170,14 +170,14 @@
                             "Type": "ReduceStat:0"
                         },
                         "Node": {
-                            "Id": 10,
+                            "Id": 1111,
                             "Size": [
                                 222.0,
-                                127.0
+                                136.0
                             ],
                             "Position": [
-                                305.0,
-                                500.0
+                                534.0,
+                                580.0
                             ],
                             "PinInfo": [
                                 {
@@ -196,14 +196,14 @@
                             "Type": "D6"
                         },
                         "Node": {
-                            "Id": 11,
+                            "Id": 1112,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
-                                44.0,
-                                609.0
+                                60.0,
+                                708.0
                             ],
                             "PinInfo": [
                                 {
@@ -222,14 +222,14 @@
                             "Type": "Roll for D6 + Owner's attack"
                         },
                         "Node": {
-                            "Id": 12,
+                            "Id": 1113,
                             "Size": [
-                                865.0,
-                                343.0
+                                1040.0,
+                                382.0
                             ],
                             "Position": [
                                 32.0,
-                                0.0
+                                192.0
                             ],
                             "PinInfo": []
                         }
@@ -237,46 +237,106 @@
                     {
                         "Metadata": {
                             "Category": "Group",
-                            "Type": "Roll D6 for damage against the enemy"
+                            "Type": "Roll D6 + 2 for damage against the enemy"
                         },
                         "Node": {
-                            "Id": 13,
+                            "Id": 1114,
                             "Size": [
-                                844.0,
-                                468.0
+                                1088.0,
+                                430.0
                             ],
                             "Position": [
-                                16.0,
-                                432.0
+                                32.0,
+                                512.0
                             ],
                             "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Arithmetic",
+                            "Type": "Plus"
+                        },
+                        "Node": {
+                            "Id": 1115,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                593.0,
+                                356.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 2
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Arithmetic",
+                            "Type": "Plus"
+                        },
+                        "Node": {
+                            "Id": 1116,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                268.0,
+                                708.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 2
+                                    }
+                                }
+                            ]
                         }
                     }
                 ],
                 "Links": [
                     {
-                        "Start": 16777225,
-                        "End": 2164260872
+                        "Start": 16778331,
+                        "End": 2181039187
                     },
                     {
-                        "Start": 16777224,
-                        "End": 2181038086
+                        "Start": 16778322,
+                        "End": 2164261975
                     },
                     {
-                        "Start": 16777221,
-                        "End": 2164260874
+                        "Start": 16778327,
+                        "End": 2164261972
                     },
                     {
-                        "Start": 16777226,
-                        "End": 2164260871
+                        "Start": 16778326,
+                        "End": 2164261973
                     },
                     {
-                        "Start": 16777220,
-                        "End": 2164260870
+                        "Start": 16778321,
+                        "End": 2164261971
                     },
                     {
-                        "Start": 16777227,
-                        "End": 2181038090
+                        "Start": 16778332,
+                        "End": 2181039191
+                    },
+                    {
+                        "Start": 16778328,
+                        "End": 2164261980
+                    },
+                    {
+                        "Start": 16778325,
+                        "End": 2164261979
                     }
                 ]
             }
@@ -285,7 +345,7 @@
             "Entity": 3,
             "Component": {
                 "Metadata": {
-                    "Name": "Simple Defense",
+                    "Name": "Defense",
                     "Type": "Graph",
                     "Inner": 2
                 },
@@ -324,14 +384,14 @@
                             "Type": "Roll"
                         },
                         "Node": {
-                            "Id": 14,
+                            "Id": 1117,
                             "Size": [
                                 89.0,
-                                96.0
+                                103.0
                             ],
                             "Position": [
-                                155.0,
-                                4.0
+                                331.0,
+                                5.0
                             ],
                             "PinInfo": []
                         }
@@ -342,10 +402,10 @@
                             "Type": "Roll D6 + Owner's defense"
                         },
                         "Node": {
-                            "Id": 15,
+                            "Id": 1118,
                             "Size": [
-                                721.0,
-                                334.0
+                                1040.0,
+                                398.0
                             ],
                             "Position": [
                                 -208.0,
@@ -360,14 +420,14 @@
                             "Type": "Resolve"
                         },
                         "Node": {
-                            "Id": 16,
+                            "Id": 1119,
                             "Size": [
                                 113.0,
-                                96.0
+                                103.0
                             ],
                             "Position": [
-                                -77.0,
-                                312.0
+                                -93.0,
+                                420.0
                             ],
                             "PinInfo": []
                         }
@@ -378,16 +438,42 @@
                             "Type": "Output"
                         },
                         "Node": {
-                            "Id": 17,
+                            "Id": 1120,
                             "Size": [
                                 154.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                300.0,
-                                0.0
+                                540.0,
+                                4.0
                             ],
                             "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Arithmetic",
+                            "Type": "Plus"
+                        },
+                        "Node": {
+                            "Id": 1121,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                289.0,
+                                132.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 2
+                                    }
+                                }
+                            ]
                         }
                     },
                     {
@@ -396,14 +482,14 @@
                             "Type": "Output"
                         },
                         "Node": {
-                            "Id": 18,
+                            "Id": 1122,
                             "Size": [
                                 154.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                223.0,
-                                312.0
+                                207.0,
+                                420.0
                             ],
                             "PinInfo": []
                         }
@@ -414,10 +500,10 @@
                             "Type": "D6"
                         },
                         "Node": {
-                            "Id": 19,
+                            "Id": 1123,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 60.0,
@@ -432,10 +518,10 @@
                             "Type": "GetStat:2"
                         },
                         "Node": {
-                            "Id": 20,
+                            "Id": 1124,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 -164.0,
@@ -455,24 +541,28 @@
                 ],
                 "Links": [
                     {
-                        "Start": 16777230,
-                        "End": 2164260881
+                        "Start": 16778340,
+                        "End": 2164261987
                     },
                     {
-                        "Start": 16777235,
-                        "End": 2181038097
+                        "Start": 16778333,
+                        "End": 2164261984
                     },
                     {
-                        "Start": 16777236,
-                        "End": 2164260883
+                        "Start": 33555551,
+                        "End": 2181039202
                     },
                     {
-                        "Start": 33554448,
-                        "End": 2181038098
+                        "Start": 16778335,
+                        "End": 2164261986
                     },
                     {
-                        "Start": 16777232,
-                        "End": 2164260882
+                        "Start": 16778339,
+                        "End": 2164261985
+                    },
+                    {
+                        "Start": 16778337,
+                        "End": 2181039200
                     }
                 ]
             }
@@ -548,13 +638,13 @@
                             "Type": "Start"
                         },
                         "Node": {
-                            "Id": 21,
+                            "Id": 1125,
                             "Size": [
                                 95.0,
-                                68.0
+                                72.0
                             ],
                             "Position": [
-                                -379.0,
+                                -384.0,
                                 4.0
                             ],
                             "PinInfo": []
@@ -563,17 +653,105 @@
                     {
                         "Metadata": {
                             "Category": "Conflict",
+                            "Type": "DefendRoll"
+                        },
+                        "Node": {
+                            "Id": 1126,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                -20.0,
+                                -59.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Group",
+                            "Type": "Atk Roll > Def Roll, if succeed, resolve attack, if fail, nothing happens"
+                        },
+                        "Node": {
+                            "Id": 1127,
+                            "Size": [
+                                1456.0,
+                                471.0
+                            ],
+                            "Position": [
+                                -416.0,
+                                -112.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
+                            "Type": "AttackRoll"
+                        },
+                        "Node": {
+                            "Id": 1128,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                -276.0,
+                                4.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Conflict",
                             "Type": "Win"
                         },
                         "Node": {
-                            "Id": 22,
+                            "Id": 1129,
                             "Size": [
                                 154.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
-                                828.0,
-                                4.0
+                                844.0,
+                                -12.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Compare",
+                            "Type": "CompareFlow"
+                        },
+                        "Node": {
+                            "Id": 1130,
+                            "Size": [
+                                268.0,
+                                227.0
+                            ],
+                            "Position": [
+                                270.0,
+                                0.0
                             ],
                             "PinInfo": []
                         }
@@ -584,14 +762,14 @@
                             "Type": "AttackResolve"
                         },
                         "Node": {
-                            "Id": 23,
+                            "Id": 1131,
                             "Size": [
                                 195.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                588.0,
-                                4.0
+                                577.0,
+                                -8.0
                             ],
                             "PinInfo": [
                                 {
@@ -610,125 +788,55 @@
                             "Type": "Lose"
                         },
                         "Node": {
-                            "Id": 24,
+                            "Id": 1132,
                             "Size": [
                                 154.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
-                                588.0,
-                                116.0
+                                620.0,
+                                148.0
                             ],
                             "PinInfo": []
-                        }
-                    },
-                    {
-                        "Metadata": {
-                            "Category": "Compare",
-                            "Type": "CompareFlow"
-                        },
-                        "Node": {
-                            "Id": 25,
-                            "Size": [
-                                268.0,
-                                208.0
-                            ],
-                            "Position": [
-                                270.0,
-                                0.0
-                            ],
-                            "PinInfo": []
-                        }
-                    },
-                    {
-                        "Metadata": {
-                            "Category": "Conflict",
-                            "Type": "AttackRoll"
-                        },
-                        "Node": {
-                            "Id": 26,
-                            "Size": [
-                                195.0,
-                                98.0
-                            ],
-                            "Position": [
-                                -244.0,
-                                4.0
-                            ],
-                            "PinInfo": [
-                                {
-                                    "Index": 1,
-                                    "Var": {
-                                        "VarType": 3,
-                                        "VarData": 0
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "Metadata": {
-                            "Category": "Conflict",
-                            "Type": "DefendRoll"
-                        },
-                        "Node": {
-                            "Id": 27,
-                            "Size": [
-                                195.0,
-                                98.0
-                            ],
-                            "Position": [
-                                -4.0,
-                                -44.0
-                            ],
-                            "PinInfo": [
-                                {
-                                    "Index": 1,
-                                    "Var": {
-                                        "VarType": 3,
-                                        "VarData": 0
-                                    }
-                                }
-                            ]
                         }
                     }
                 ],
                 "Links": [
                     {
-                        "Start": 16777242,
-                        "End": 2164260891
+                        "Start": 33555562,
+                        "End": 2164261995
                     },
                     {
-                        "Start": 33554459,
-                        "End": 2197815321
+                        "Start": 16778347,
+                        "End": 2164261993
                     },
                     {
-                        "Start": 50331673,
-                        "End": 2164260888
+                        "Start": 33555560,
+                        "End": 2181039210
                     },
                     {
-                        "Start": 33554458,
-                        "End": 2181038105
+                        "Start": 16778344,
+                        "End": 2164261990
                     },
                     {
-                        "Start": 16777237,
-                        "End": 2164260890
+                        "Start": 16778342,
+                        "End": 2164261994
                     },
                     {
-                        "Start": 16777239,
-                        "End": 2164260886
+                        "Start": 50332778,
+                        "End": 2164261996
                     },
                     {
-                        "Start": 33554457,
-                        "End": 2164260887
+                        "Start": 16778341,
+                        "End": 2164261992
                     },
                     {
-                        "Start": 16777241,
-                        "End": 2164260887
+                        "Start": 16778346,
+                        "End": 2164261995
                     },
                     {
-                        "Start": 16777243,
-                        "End": 2164260889
+                        "Start": 33555558,
+                        "End": 2197816426
                     }
                 ]
             }
@@ -776,14 +884,14 @@
                             "Type": "Roll"
                         },
                         "Node": {
-                            "Id": 28,
+                            "Id": 1133,
                             "Size": [
                                 89.0,
-                                96.0
+                                103.0
                             ],
                             "Position": [
-                                -1109.0,
-                                104.0
+                                -786.0,
+                                306.0
                             ],
                             "PinInfo": []
                         }
@@ -794,14 +902,14 @@
                             "Type": "Resolve"
                         },
                         "Node": {
-                            "Id": 29,
+                            "Id": 1134,
                             "Size": [
                                 113.0,
-                                96.0
+                                103.0
                             ],
                             "Position": [
-                                -1104.0,
-                                202.0
+                                -781.0,
+                                404.0
                             ],
                             "PinInfo": []
                         }
@@ -812,13 +920,13 @@
                             "Type": "Plus"
                         },
                         "Node": {
-                            "Id": 30,
+                            "Id": 1135,
                             "Size": [
                                 195.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                -36.0,
+                                -116.0,
                                 356.0
                             ],
                             "PinInfo": [
@@ -845,13 +953,13 @@
                             "Type": "Minus"
                         },
                         "Node": {
-                            "Id": 31,
+                            "Id": 1136,
                             "Size": [
                                 195.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                -36.0,
+                                -116.0,
                                 452.0
                             ],
                             "PinInfo": [
@@ -878,13 +986,13 @@
                             "Type": "Multiply"
                         },
                         "Node": {
-                            "Id": 32,
+                            "Id": 1137,
                             "Size": [
                                 195.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                -36.0,
+                                -116.0,
                                 548.0
                             ],
                             "PinInfo": [
@@ -911,13 +1019,13 @@
                             "Type": "Divide"
                         },
                         "Node": {
-                            "Id": 33,
+                            "Id": 1138,
                             "Size": [
                                 195.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
-                                -36.0,
+                                -116.0,
                                 644.0
                             ],
                             "PinInfo": [
@@ -944,13 +1052,13 @@
                             "Type": "Operators"
                         },
                         "Node": {
-                            "Id": 34,
+                            "Id": 1139,
                             "Size": [
-                                337.0,
-                                597.0
+                                401.0,
+                                753.0
                             ],
                             "Position": [
-                                -96.0,
+                                -176.0,
                                 304.0
                             ],
                             "PinInfo": []
@@ -962,10 +1070,10 @@
                             "Type": "D4"
                         },
                         "Node": {
-                            "Id": 35,
+                            "Id": 1140,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 257.0,
@@ -988,10 +1096,10 @@
                             "Type": "D6"
                         },
                         "Node": {
-                            "Id": 36,
+                            "Id": 1141,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 257.0,
@@ -1014,10 +1122,10 @@
                             "Type": "D8"
                         },
                         "Node": {
-                            "Id": 37,
+                            "Id": 1142,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 257.0,
@@ -1040,10 +1148,10 @@
                             "Type": "D10"
                         },
                         "Node": {
-                            "Id": 38,
+                            "Id": 1143,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 257.0,
@@ -1066,10 +1174,10 @@
                             "Type": "D12"
                         },
                         "Node": {
-                            "Id": 39,
+                            "Id": 1144,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 257.0,
@@ -1092,10 +1200,10 @@
                             "Type": "D20"
                         },
                         "Node": {
-                            "Id": 40,
+                            "Id": 1145,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 257.0,
@@ -1118,10 +1226,10 @@
                             "Type": "Dice Rolls"
                         },
                         "Node": {
-                            "Id": 41,
+                            "Id": 1146,
                             "Size": [
-                                337.0,
-                                597.0
+                                401.0,
+                                753.0
                             ],
                             "Position": [
                                 208.0,
@@ -1136,10 +1244,10 @@
                             "Type": "TwoSwitch"
                         },
                         "Node": {
-                            "Id": 42,
+                            "Id": 1147,
                             "Size": [
                                 280.0,
-                                180.0
+                                196.0
                             ],
                             "Position": [
                                 562.0,
@@ -1162,10 +1270,10 @@
                             "Type": "ThreeSwitch"
                         },
                         "Node": {
-                            "Id": 43,
+                            "Id": 1148,
                             "Size": [
                                 280.0,
-                                208.0
+                                227.0
                             ],
                             "Position": [
                                 556.0,
@@ -1188,10 +1296,10 @@
                             "Type": "FiveSwitch"
                         },
                         "Node": {
-                            "Id": 44,
+                            "Id": 1149,
                             "Size": [
                                 280.0,
-                                264.0
+                                289.0
                             ],
                             "Position": [
                                 556.0,
@@ -1214,10 +1322,10 @@
                             "Type": "TenSwitch"
                         },
                         "Node": {
-                            "Id": 45,
+                            "Id": 1150,
                             "Size": [
                                 280.0,
-                                404.0
+                                444.0
                             ],
                             "Position": [
                                 556.0,
@@ -1240,10 +1348,10 @@
                             "Type": "TwentySwitch"
                         },
                         "Node": {
-                            "Id": 46,
+                            "Id": 1151,
                             "Size": [
                                 282.0,
-                                684.0
+                                754.0
                             ],
                             "Position": [
                                 842.0,
@@ -1266,10 +1374,10 @@
                             "Type": "ThirtySwitch"
                         },
                         "Node": {
-                            "Id": 47,
+                            "Id": 1152,
                             "Size": [
                                 282.0,
-                                964.0
+                                1064.0
                             ],
                             "Position": [
                                 1132.0,
@@ -1292,10 +1400,10 @@
                             "Type": "Switches"
                         },
                         "Node": {
-                            "Id": 48,
+                            "Id": 1153,
                             "Size": [
-                                976.0,
-                                1285.0
+                                1040.0,
+                                1441.0
                             ],
                             "Position": [
                                 528.0,
@@ -1306,18 +1414,36 @@
                     },
                     {
                         "Metadata": {
+                            "Category": "Group",
+                            "Type": "Stats"
+                        },
+                        "Node": {
+                            "Id": 1154,
+                            "Size": [
+                                412.0,
+                                948.0
+                            ],
+                            "Position": [
+                                1488.0,
+                                192.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
                             "Category": "Compare",
                             "Type": "CompareFlow"
                         },
                         "Node": {
-                            "Id": 49,
+                            "Id": 1155,
                             "Size": [
                                 268.0,
-                                208.0
+                                227.0
                             ],
                             "Position": [
-                                -392.0,
-                                300.0
+                                -513.0,
+                                350.0
                             ],
                             "PinInfo": [
                                 {
@@ -1343,10 +1469,10 @@
                             "Type": "GetMain:0"
                         },
                         "Node": {
-                            "Id": 50,
+                            "Id": 1156,
                             "Size": [
                                 195.0,
-                                69.0
+                                72.0
                             ],
                             "Position": [
                                 1537.0,
@@ -1369,10 +1495,10 @@
                             "Type": "SetStat:0"
                         },
                         "Node": {
-                            "Id": 51,
+                            "Id": 1157,
                             "Size": [
                                 222.0,
-                                127.0
+                                136.0
                             ],
                             "Position": [
                                 1532.0,
@@ -1402,10 +1528,10 @@
                             "Type": "ReduceStat:0"
                         },
                         "Node": {
-                            "Id": 52,
+                            "Id": 1158,
                             "Size": [
                                 222.0,
-                                127.0
+                                136.0
                             ],
                             "Position": [
                                 1532.0,
@@ -1435,10 +1561,10 @@
                             "Type": "RestoreStat:0"
                         },
                         "Node": {
-                            "Id": 53,
+                            "Id": 1159,
                             "Size": [
                                 222.0,
-                                127.0
+                                136.0
                             ],
                             "Position": [
                                 1532.0,
@@ -1468,10 +1594,10 @@
                             "Type": "ResetStat:0"
                         },
                         "Node": {
-                            "Id": 54,
+                            "Id": 1160,
                             "Size": [
                                 222.0,
-                                98.0
+                                104.0
                             ],
                             "Position": [
                                 1532.0,
@@ -1491,23 +1617,349 @@
                     {
                         "Metadata": {
                             "Category": "Group",
-                            "Type": "Stats"
+                            "Type": "Compare the results between two integers"
                         },
                         "Node": {
-                            "Id": 55,
+                            "Id": 1161,
                             "Size": [
-                                348.0,
-                                792.0
+                                404.0,
+                                439.0
                             ],
                             "Position": [
-                                1488.0,
-                                192.0
+                                -560.0,
+                                304.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Group",
+                            "Type": "Your nodes here"
+                        },
+                        "Node": {
+                            "Id": 1162,
+                            "Size": [
+                                688.0,
+                                277.0
+                            ],
+                            "Position": [
+                                -352.0,
+                                64.0
                             ],
                             "PinInfo": []
                         }
                     }
                 ],
                 "Links": []
+            }
+        },
+        {
+            "Entity": 7,
+            "Component": {
+                "Metadata": {
+                    "Name": "Ranged Attack",
+                    "Type": "Graph",
+                    "Inner": 2
+                },
+                "var_set": {
+                    "Metadata": {
+                        "Type": "Variables"
+                    },
+                    "Variables": [
+                        {
+                            "Key": "Enemy",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "Output",
+                            "Data": {
+                                "VarType": 3,
+                                "VarData": 0
+                            }
+                        },
+                        {
+                            "Key": "Owner",
+                            "Data": {
+                                "VarType": 4,
+                                "VarData": 0
+                            }
+                        }
+                    ]
+                },
+                "Nodes": [
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Roll"
+                        },
+                        "Node": {
+                            "Id": 1163,
+                            "Size": [
+                                89.0,
+                                103.0
+                            ],
+                            "Position": [
+                                216.0,
+                                -28.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Resolve"
+                        },
+                        "Node": {
+                            "Id": 1164,
+                            "Size": [
+                                113.0,
+                                103.0
+                            ],
+                            "Position": [
+                                -109.0,
+                                341.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Output"
+                        },
+                        "Node": {
+                            "Id": 1165,
+                            "Size": [
+                                154.0,
+                                104.0
+                            ],
+                            "Position": [
+                                556.0,
+                                -28.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Group",
+                            "Type": "Roll D6 + Owner's Attack"
+                        },
+                        "Node": {
+                            "Id": 1166,
+                            "Size": [
+                                960.0,
+                                327.0
+                            ],
+                            "Position": [
+                                -176.0,
+                                -64.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Action",
+                            "Type": "Output"
+                        },
+                        "Node": {
+                            "Id": 1167,
+                            "Size": [
+                                154.0,
+                                104.0
+                            ],
+                            "Position": [
+                                380.0,
+                                340.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Dice",
+                            "Type": "D6"
+                        },
+                        "Node": {
+                            "Id": 1168,
+                            "Size": [
+                                195.0,
+                                72.0
+                            ],
+                            "Position": [
+                                94.0,
+                                100.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Group",
+                            "Type": "Roll D6 + 2 for damage against the enemy"
+                        },
+                        "Node": {
+                            "Id": 1169,
+                            "Size": [
+                                816.0,
+                                394.0
+                            ],
+                            "Position": [
+                                -176.0,
+                                288.0
+                            ],
+                            "PinInfo": []
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Stat",
+                            "Type": "ReduceStat:0"
+                        },
+                        "Node": {
+                            "Id": 1170,
+                            "Size": [
+                                222.0,
+                                136.0
+                            ],
+                            "Position": [
+                                70.0,
+                                340.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 2,
+                                    "Var": {
+                                        "VarType": 2,
+                                        "VarData": 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Dice",
+                            "Type": "D6"
+                        },
+                        "Node": {
+                            "Id": 1171,
+                            "Size": [
+                                195.0,
+                                72.0
+                            ],
+                            "Position": [
+                                -132.0,
+                                500.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 0,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Stat",
+                            "Type": "GetStat:5"
+                        },
+                        "Node": {
+                            "Id": 1172,
+                            "Size": [
+                                195.0,
+                                72.0
+                            ],
+                            "Position": [
+                                -151.0,
+                                100.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 0,
+                                    "Var": {
+                                        "VarType": 2,
+                                        "VarData": 0
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "Metadata": {
+                            "Category": "Arithmetic",
+                            "Type": "Plus"
+                        },
+                        "Node": {
+                            "Id": 1173,
+                            "Size": [
+                                195.0,
+                                104.0
+                            ],
+                            "Position": [
+                                332.0,
+                                100.0
+                            ],
+                            "PinInfo": [
+                                {
+                                    "Index": 1,
+                                    "Var": {
+                                        "VarType": 3,
+                                        "VarData": 2
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Links": [
+                    {
+                        "Start": 16778388,
+                        "End": 2164262032
+                    },
+                    {
+                        "Start": 16778387,
+                        "End": 2181039250
+                    },
+                    {
+                        "Start": 16778380,
+                        "End": 2164262034
+                    },
+                    {
+                        "Start": 16778379,
+                        "End": 2164262029
+                    },
+                    {
+                        "Start": 16778386,
+                        "End": 2164262031
+                    },
+                    {
+                        "Start": 16778389,
+                        "End": 2181039245
+                    },
+                    {
+                        "Start": 16778384,
+                        "End": 2164262037
+                    }
+                ]
             }
         }
     ]

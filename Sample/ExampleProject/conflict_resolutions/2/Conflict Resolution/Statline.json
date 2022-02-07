@@ -28,8 +28,8 @@
                         "second": "Move"
                     },
                     {
-                        "first": true,
-                        "second": "Dexterity"
+                        "first": false,
+                        "second": "Stat1"
                     },
                     {
                         "first": false,

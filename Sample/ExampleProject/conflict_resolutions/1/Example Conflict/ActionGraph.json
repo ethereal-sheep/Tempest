@@ -20,6 +20,12 @@
             "Component": {
                 "Action_Category": 0
             }
+        },
+        {
+            "Entity": 7,
+            "Component": {
+                "Action_Category": 1
+            }
         }
     ]
 }
