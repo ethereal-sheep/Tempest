@@ -29,15 +29,15 @@ void ParticleSystem_2D::Update()
 			// Update active emitter
 			if (emitter.m_GM.m_active)
 				emitter.Update();
-			else
-			{
-				// Store the unused slots to be reused later
-				if (!m_UniqueEmitterSlots.contains(i))
-				{  
-					m_UniqueEmitterSlots.insert(i);
-					m_availableEmitterSlots.push(i);
-				}
-			}
+			//else
+			//{
+			//	// Store the unused slots to be reused later
+			//	if (!m_UniqueEmitterSlots.contains(i))
+			//	{  
+			//		m_UniqueEmitterSlots.insert(i);
+			//		m_availableEmitterSlots.push(i);
+			//	}
+			//}
 		}
 	}
 }

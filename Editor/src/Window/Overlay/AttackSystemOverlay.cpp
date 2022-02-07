@@ -73,6 +73,7 @@ namespace Tempest
 		particle_0 = false;
 		particle_2 = false;
 		particle_3 = false;
+		particle_4 = false;
 
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
@@ -477,7 +478,7 @@ namespace Tempest
 					{
 						if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 						{
-							switch (tutorial_index)
+							switch (tutorial_index) // Action 
 							{
 							case 0:
 							{
@@ -509,7 +510,7 @@ namespace Tempest
 							case 1:
 							{
 								if (m_waypointEmitter)
-								m_waypointEmitter->m_GM.m_active = false;
+									m_waypointEmitter->m_GM.m_active = false;
 
 								// Task List
 								string str = "";
@@ -637,7 +638,10 @@ namespace Tempest
 									real_mousePosition.x = pos.x;
 									real_mousePosition.y = pos.y;
 
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
 									particle_2 = true;
 								}
@@ -662,7 +666,10 @@ namespace Tempest
 									real_mousePosition.x = pos.x;
 									real_mousePosition.y = pos.y;
 
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
 									particle_3 = true;
 								}
@@ -674,7 +681,7 @@ namespace Tempest
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
 
 						}
-						else
+						else // Sequence 
 						{
 							switch (tutorial_index)
 							{
@@ -685,95 +692,179 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								if (particle_4 == false)
+								{
+									glm::vec2 real_buttonSize;
+									real_buttonSize.x = size.x;
+									real_buttonSize.y = size.y;
+
+									glm::vec2 real_mousePosition;
+									real_mousePosition.x = pos.x;
+									real_mousePosition.y = pos.y;
+
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+									particle_4 = true;
+								}
 							}
 							break;
 
 							case 1:
 							{
 								//Task List
+								m_waypointEmitter->m_GM.m_active = false;
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
 								ImGui::PushFont(FONT_HEAD);
-								drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								float xPos = viewport->Size.x * 0.7f;
+								drawlist->AddText({ xPos, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
 								str = " Tasks";
-								drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-								drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								drawlist->AddText({ xPos + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ xPos, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								ImGui::PopFont();
 
 
 								ImGui::PushFont(FONT_BODY);
-								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+								ImVec2 min = { xPos, viewport->Size.y * 0.45f };
 								str = "Rename the sequence";
-								/*	if (cs->name != "Combatant")
-									{
-										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-										taskCompleted &= true;
-									}
-									else*/
+								if (temp_graph.name != "SEQUENCE")
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+									else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Create a 'Defend Roll' Node";
-								/*	if (cs->get_stat(1) == 5)
+								auto action_lambda1 = [&]() {
+									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-										taskCompleted &= true;
+										if (this_node.second->get_name() == "Defend Roll")
+											return true;
 									}
-									else*/
+									return false;
+								};
+								if (action_lambda1())
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Attack Roll' node to the 'Defend Roll' node";
-								/*if (cs->get_stat(0) == 5)
+								auto action_lambda2 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.second = this_node.second->get_input_pin(0)->get_id();
+										if (this_node.second->get_name() == "Attack Roll")
+											pins.first = this_node.second->get_output_pin(0)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda2())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Defend Roll' node to the 'Compare Flow' node";
-								/*if (cs->get_stat(0) == 5)
+								auto action_lambda3 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Compare Flow")
+											pins.second = this_node.second->get_input_pin(0)->get_id();
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.first = this_node.second->get_output_pin(0)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda3())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-								str = "Connect the output of the 'Defend Roll' to the input of the 'Compare Flow' node";
-								/*if (cs->get_stat(0) == 5)
+								str = "Connect the output of the 'Defend Roll' to the input of";
+								auto action_lambda4 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Compare Flow")
+											pins.second = this_node.second->get_input_pin(2)->get_id();
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.first = this_node.second->get_output_pin(1)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda4())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								min = { min.x, min.y + 17.f };
+								str = "'Compare Flow' node";
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								ImGui::PopFont();
 

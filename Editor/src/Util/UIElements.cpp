@@ -3827,7 +3827,7 @@ namespace Tempest::UI
 	bool MouseIsWithin(const ImVec2 min, const ImVec2 max)
 	{
 		auto mousePos = ImGui::GetMousePos();
-		if (mousePos.x > min.x && mousePos.y < max.x
+		if (mousePos.x > min.x && mousePos.x < max.x
 			&& mousePos.y > min.y && mousePos.y < max.y)
 			return true;
 
