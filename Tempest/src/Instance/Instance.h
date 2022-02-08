@@ -221,8 +221,10 @@ namespace Tempest
 		ActionHistory action_history;
 		WindowManager window_manager;
 
-		bool tutorial_enable = true;
+		bool tutorial_enable = false;
 		bool tutorial_slide = false;
+		bool tutorial_temp_enable = true;
+		bool tutorial_temp_exit = false;
 		short tutorial_level = 1;
 		Entity selected = INVALID;
 	};

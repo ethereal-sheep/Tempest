@@ -146,7 +146,15 @@ namespace Tempest
 				else
 					ImGui::GetIO().MouseClicked[0] = true;*/
 
-				if (instance.tutorial_enable)
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false;}))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+				}
+
+				// tutorial progrss
+				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
 					if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
@@ -794,7 +802,10 @@ namespace Tempest
 						{
 							ImGui::SetMouseCursor(7);
 							if (ImGui::IsMouseClicked(0))
-								instance.tutorial_enable = false;
+							{
+								instance.tutorial_temp_exit = true;
+								ImGui::OpenPopup("TutorialExitPopupConfirm");
+							}
 						}
 					}
 					
@@ -1030,8 +1041,21 @@ namespace Tempest
 					ImGui::PopStyleColor(3);
 				}
 
+				if (instance.tutorial_temp_enable && instance.ecs.view<tc::Graph>(exclude_t<tc::Destroyed>()).size_hint() <= 0 && 
+					instance.ecs.view<tc::Unit>(exclude_t<tc::Destroyed>()).size_hint() <= 0 &&
+					instance.ecs.view<tc::Weapon>(exclude_t<tc::Destroyed>()).size_hint() <= 0)
+					ImGui::OpenPopup("TutorialPopupConfirm");
 
-				
+				if (UI::ConfirmTutorialPopup("TutorialPopupConfirm", "Do you want a tutorial?", false, []() {}))
+				{
+					instance.tutorial_enable = true;
+					instance.tutorial_level = 1;
+					tutorial_p2 = false;
+				}
+				else
+				{
+					instance.tutorial_temp_enable = false;
+				}
 			}
 
 			ImGui::PopStyleVar();
