@@ -50,6 +50,7 @@ namespace Tempest
 
         bool OverlayOpen = false;
         bool tutorial_p2 = false;
+        bool tut_openSlide = true;
         unsigned Tab = 0;
 
         int tutorial_index = 0;

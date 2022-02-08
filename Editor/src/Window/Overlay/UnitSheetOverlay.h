@@ -104,6 +104,7 @@ namespace Tempest
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
         int tutorial_index = 0;
+        bool tut_openSlide = true;
 
         CameraControls cam_ctrl;
 

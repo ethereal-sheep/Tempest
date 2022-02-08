@@ -74,7 +74,7 @@ namespace Tempest
 		particle_2 = false;
 		particle_3 = false;
 		particle_4 = false;
-
+		tut_openSlide = true;
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // graphs 
@@ -124,37 +124,6 @@ namespace Tempest
 				const float title_bottom_padding = 10.f;
 				const float graph_context_height = viewport->Size.y * 0.95f;
 
-				//auto& g = instance.ecs.get<tc::Graph>(id);
-				
-				//if (ImGui::BeginTable("graph header table", 3))
-				//{
-				//	ImGui::TableNextRow();
-
-				//	ImGui::TableSetColumnIndex(1);
-				//	UI::Header_1("Attack System");
-
-				//	ImGui::PushFont(FONT_HEAD);
-
-				//	ImGui::TableSetColumnIndex(0);
-				//	ImGui::Dummy({ 0.1f, title_top_padding });
-				//	ImGui::Dummy({ title_left_padding, 0.1f });
-				//	ImGui::SameLine();
-				//	static string test = "Testing";
-				//	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
-				//	ImGui::InputText("##testing", &temp_graph.name);
-				//	ImGui::PopStyleColor();
-				//	//ImGui::Text(g.g.get_name().c_str());
-				//	ImGui::PopFont();
-
-
-				//	ImGui::TableNextRow();
-				//	ImGui::TableSetColumnIndex(0);
-				//	ImGui::Dummy({ 0.1f, title_bottom_padding });
-
-				//	ImGui::EndTable();
-				//}
-				//ImGui::Separator();
-
 				auto tex = tex_map["Assets/GraphBG.dds"];
 				{
 
@@ -169,34 +138,6 @@ namespace Tempest
 				draw_context(instance, graph_context_height);
 				ImGui::PopStyleColor();
 				//ImGui::Separator();
-
-
-				//float button_y = ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f;
-				//// first button pos
-				//ImVec2 pos1 = {ImGui::GetContentRegionAvailWidth() - 480.f, button_y};
-
-				//// second button pos
-				//ImVec2 pos2 = { ImGui::GetContentRegionAvailWidth() - 300.f, button_y };
-
-				//// third button pos
-				//ImVec2 pos3 = { ImGui::GetContentRegionAvailWidth() - 120.f, button_y };
-
-				//if (UI::UIButton_2("Navigate to Content", "Navigate to Content", pos1, { 0.f, 10.f }, FONT_PARA))
-				//{
-				//	ax::NodeEditor::NavigateToContent();
-				//}
-				//if (UI::UIButton_2("Save & Close", "Save & Close", pos2, { 0.f, 10.f }, FONT_PARA))
-				//{
-				//	OverlayOpen = false;
-				//	instance.ecs.get<tc::Graph>(id).g = temp_graph;
-				//	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				//}
-
-				//if (UI::UIButton_2("Close", "Close", pos3, { 0.f, 10.f }, FONT_PARA))
-				//{
-				//	OverlayOpen = false;
-				////	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				//}
 
 				// title
 				ImGui::SetCursorPos(ImVec2{ 0,0 });
@@ -473,10 +414,17 @@ namespace Tempest
 				if (instance.tutorial_enable)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
+					if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
+						instance.tutorial_slide = false;
 
 					if (instance.tutorial_level == 1)
 					{
-						if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+						if (instance.tutorial_slide && type == OPEN_GRAPH_TYPE::GRAPH_ACTION && tut_openSlide)
+						{
+							tut_openSlide = false;
+							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::GRAPH_ACTION_TUT);
+						}		
+						else if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION && instance.tutorial_slide == false)
 						{
 							switch (tutorial_index) // Action 
 							{
@@ -517,16 +465,17 @@ namespace Tempest
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
+								float xPos = viewport->Size.x * 0.75f;
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
 								ImGui::PushFont(FONT_HEAD);
-								drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								drawlist->AddText({ xPos, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
 								str = " Tasks";
-								drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-								drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								drawlist->AddText({ xPos + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ xPos, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								ImGui::PopFont();
 
 								ImGui::PushFont(FONT_BODY);
-								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+								ImVec2 min = { xPos, viewport->Size.y * 0.45f };
 								str = "Rename the action";
 								if (temp_graph.name != "ACTION")
 								{
@@ -538,7 +487,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Create a 'Get Attack' Node (Attacker)";
@@ -561,7 +510,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Get Attack' node to the D6 node";
@@ -597,7 +546,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PopFont();
 
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
@@ -681,7 +630,14 @@ namespace Tempest
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
 
 						}
-						else // Sequence 
+						else if (instance.tutorial_slide && type == OPEN_GRAPH_TYPE::GRAPH_SEQUENCE && tut_openSlide)
+						{
+							tut_openSlide = false;
+							if(m_waypointEmitter)
+								m_waypointEmitter->m_GM.m_active = false;
+							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::GRAPH_SEQUENCE_TUT);
+						}
+						else if(instance.tutorial_slide == false)// Sequence 
 						{
 							switch (tutorial_index)
 							{
@@ -882,6 +838,7 @@ namespace Tempest
 										if (ImGui::IsMouseClicked(0))
 										{
 											OverlayOpen = false;
+											instance.tutorial_slide = true; // Open tutorial Slide show for simulate Screen part2
 											Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 											Service<EventManager>::Get().instant_dispatch<SimulateTutorialP2Trigger>();
 										}
@@ -909,16 +866,19 @@ namespace Tempest
 					}
 
 					//Tutorial Exit Button
-					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
-					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
-					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
-
-					if (UI::MouseIsWithin(tut_min, tut_max))
+					if (instance.tutorial_slide == false) //Dont show tutorial exit button during slide show
 					{
-						ImGui::SetMouseCursor(7);
-						if (ImGui::IsMouseClicked(0))
-							instance.tutorial_enable = false;
+						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+						if (UI::MouseIsWithin(tut_min, tut_max))
+						{
+							ImGui::SetMouseCursor(7);
+							if (ImGui::IsMouseClicked(0))
+								instance.tutorial_enable = false;
+						}
 					}
 				}
 			}

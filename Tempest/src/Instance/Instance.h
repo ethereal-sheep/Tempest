@@ -222,6 +222,7 @@ namespace Tempest
 		WindowManager window_manager;
 
 		bool tutorial_enable = true;
+		bool tutorial_slide = false;
 		short tutorial_level = 1;
 		Entity selected = INVALID;
 	};

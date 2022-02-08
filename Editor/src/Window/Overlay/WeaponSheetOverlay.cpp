@@ -288,6 +288,8 @@ namespace Tempest
 				if (instance.tutorial_enable)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
+					if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
+						instance.tutorial_slide = false;
 
 					if (instance.tutorial_level == 1)
 					{

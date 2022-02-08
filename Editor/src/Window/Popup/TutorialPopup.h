@@ -78,6 +78,7 @@ namespace Tempest
                 tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_05.dds"]);
             }
             enable_popup = true;
+            
         }
 
         void show(Instance& instance) override
@@ -131,6 +132,7 @@ namespace Tempest
                     ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.85f,viewport->Size.y * 0.1f });
                     if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
                     {
+                        instance.tutorial_slide = false;
                         enable_popup = false;
                     }
                     ImGui::PopStyleColor(3);

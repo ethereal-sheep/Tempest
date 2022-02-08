@@ -122,5 +122,7 @@ namespace Tempest
         bool particle_2 = false;
         bool particle_3 = false;
         bool particle_4 = false;
+
+        bool tut_openSlide = true;
     };
 }
