@@ -557,6 +557,7 @@ namespace Tempest
 						auto fn = [&, path = path, str]()
 						{
 							OverlayOpen = false;
+							instance.tutorial_temp_enable = true;
 							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening " + str);
 							instance.load_new_conflict_resolution_by_path(path);

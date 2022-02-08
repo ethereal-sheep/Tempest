@@ -469,8 +469,15 @@ namespace Tempest
 					ImGui::EndChild();
 				}
 			
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false;}))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+				}
 
-				if (instance.tutorial_enable)
+				// tutorial progrss
+				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
 
@@ -545,7 +552,7 @@ namespace Tempest
 								auto action_lambda1 = [&]() {
 									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										if (this_node.second->get_category() == category_type::Stat)
+										if (this_node.second->get_type_string() == "GetStat:1")
 											return true;
 									}
 									return false;
@@ -570,7 +577,7 @@ namespace Tempest
 									std::pair<pin_id_t, pin_id_t> pins;
 									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										if (this_node.second->get_category() == category_type::Stat)
+										if (this_node.second->get_type_string() == "GetStat:1")
 										{
 											pins.first = this_node.second->get_output_pin(0)->get_id();
 										}
@@ -918,7 +925,10 @@ namespace Tempest
 					{
 						ImGui::SetMouseCursor(7);
 						if (ImGui::IsMouseClicked(0))
-							instance.tutorial_enable = false;
+						{
+							instance.tutorial_temp_exit = true;
+							ImGui::OpenPopup("TutorialExitPopupConfirm");
+						}
 					}
 				}
 			}

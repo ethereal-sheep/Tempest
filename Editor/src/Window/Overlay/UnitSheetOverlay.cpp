@@ -204,7 +204,7 @@ namespace Tempest
 							tutorial_index = 1;
 
 					}
-					if (instance.tutorial_enable && tutorial_index == 0)
+					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0)
 					{
 						if (particle_0 == false)
 						{
@@ -318,7 +318,7 @@ namespace Tempest
 						if (tutorial_index == 2 && instance.tutorial_enable)
 							tutorial_index = 3;
 					}
-					if (instance.tutorial_enable && tutorial_index == 2 && inter.is_finished())
+					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 2 && inter.is_finished())
 					{
 						if (particle_2 == false)
 						{
@@ -364,8 +364,15 @@ namespace Tempest
 					Service<EventManager>::Get().instant_dispatch<DefineStatsTrigger>();
 				}
 
-				//Tutorial
-				if (instance.tutorial_enable)
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false;}))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+				}
+
+				// tutorial progrss
+				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
 
@@ -538,7 +545,10 @@ namespace Tempest
 					{
 						ImGui::SetMouseCursor(7);
 						if (ImGui::IsMouseClicked(0))
-							instance.tutorial_enable = false;
+						{
+							instance.tutorial_temp_exit = true;
+							ImGui::OpenPopup("TutorialExitPopupConfirm");
+						}
 					}
 					
 				}

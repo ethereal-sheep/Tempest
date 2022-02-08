@@ -316,6 +316,77 @@ namespace Tempest::UI
 		ImGui::PopStyleColor();
 		return false;
 	}
+
+	bool ConfirmTutorialPopup(const char* popupName, string str, bool isExit, std::function<void(void)> cancel_function)
+	{
+		ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		ImGui::SetNextWindowSize(ImVec2(600, 300));
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
+		ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+		ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
+		if (ImGui::BeginPopupModal(popupName, nullptr, flags))
+		{
+			ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+			ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 2.5f };
+			ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.25f, winMin.y + ImGui::GetWindowHeight() * 0.075f };
+			ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+			ImVec4 textcol = { 0,0,0,1 };
+
+			if (ImGui::IsWindowFocused() == false)
+			{
+				col = { 0.980f, 0.768f, 0.509f, 0.7f };
+				textcol = { 0,0,0,0.7f };
+			}
+			auto bgImg = tex_map["Assets/Popup_Backdrop.dds"];
+			string te = "CONFIRMATION";
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
+			ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+
+			ImGui::PushFont(FONT_OPEN);
+			ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }
+			, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
+			ImGui::PopFont();
+
+			ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.4f });
+			ImGui::PushFont(FONT_BODY);
+			auto strSize = ImGui::CalcTextSize(str.c_str()).x;
+			ImGui::SetCursorPosX((ImGui::GetWindowSize().x - strSize) * 0.5f);
+			ImGui::Text(str.c_str());
+			ImGui::PopFont();
+
+			ImGui::SetCursorPosX(0);
+			ImGui::SetCursorPosY(0);
+			if (UI::UIButton_2(isExit ? "Confirm" : "Yes", isExit ? "Confirm" : "Yes", {ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.355f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f}, {-30.f, 0.f}, FONT_PARA))
+			{
+				ImGui::PopStyleVar(3);
+				ImGui::PopStyleColor();
+				ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+				return true;
+			}
+			ImGui::SetCursorPosX(0);
+			ImGui::SetCursorPosY(0);
+			if (UI::UIButton_2(isExit ? "Cancel" : "No", isExit ? "Cancel" : "No", {ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.645f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f}, {-30.f, 0.f}, FONT_PARA))
+			{
+				ImGui::PopStyleVar(3);
+				ImGui::PopStyleColor();
+				ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+				cancel_function();
+				return false;
+			}
+			ImGui::EndPopup();
+		}
+
+		ImGui::PopStyleVar(3);
+		ImGui::PopStyleColor();
+		return false;
+	}
+
 	void ShowLabel(const char* label, ImColor color)
 	{
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - ImGui::GetTextLineHeight());
