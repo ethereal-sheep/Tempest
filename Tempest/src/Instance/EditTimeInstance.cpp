@@ -39,7 +39,7 @@ namespace Tempest
 				auto transform = pf.get_if<tc::Transform>();
 				auto local = pf.get_if<tc::Local>();
 
-				auto test = glm::translate(transform->position + scene.get_map().map_pos)
+				auto test = glm::translate(transform->position)
 					* glm::mat4(transform->rotation)
 					* glm::translate(local->local_position)
 					* glm::mat4(local->local_rotation)
