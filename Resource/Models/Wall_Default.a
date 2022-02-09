@@ -238,7 +238,9 @@ f 28 29 30
 f 30 31 28
 f 0 1 2
 f 2 3 0
+p Models\Wall_Default.fbm\Prison_Default_Wall_Skirting_BaseColor.dds
 p NULL
+p Models\Wall_Default.fbm\BrickWall_Prison.dds
 p NULL
 m 28
 m 4
@@ -253,15 +255,27 @@ g 1
 g 2
 g 3
 Ambient 0.9 0.9 0.9
+Ambient 0.9 0.9 0.9
+Ambient 1 1 1
 Ambient 0 0 0
 Diffuse 0.9 0.9 0.9
+Diffuse 0.9 0.9 0.9
+Diffuse 1 1 1
 Diffuse 0 0 0
+Specular 1 1 1
+Specular 1 1 1
 Specular 1 1 1
 Specular 0 0 0
 Emissive 0 0 0
 Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
 Transparent 0 0 0
 Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
 Reflective 0 0 0
 Reflective 0 0 0
 Refraction 0

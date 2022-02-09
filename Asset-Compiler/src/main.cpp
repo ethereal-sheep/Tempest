@@ -347,18 +347,30 @@ bool LoadModel(const std::string& path)
 
 		if (atex.length)
 		{
-			std::string full_path{ atex.data };
-			std::string lower_path{ atex.data };
-			std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
-				[](char c) { return (char)std::tolower((int)c); });
-
-			auto check = lower_path.find("models");
-			if (check == std::string::npos) continue;
-
-			std::string tex_path = full_path.substr(check, full_path.length());
-			std::filesystem::path es{ tex_path };
-			es.replace_extension(".dds");
-			mMesh.textures.push_back(es.string());
+			std::filesystem::path tex_path{ atex.data };
+			auto stem = tex_path.stem();
+			std::filesystem::path folder_path{ path };
+			auto file_stem = folder_path.stem();
+			//folder_path.replace_extension("fbm");
+			std::string full_path = "Models\\";
+			full_path.append(file_stem.string());
+			full_path.append(".fbm");
+			full_path.append("\\");
+			full_path.append(stem.string());
+			full_path.append(".dds");
+			mMesh.textures.push_back(full_path);
+			//std::string full_path{ atex.data };
+			//std::string lower_path{ atex.data };
+			//std::transform(lower_path.begin(), lower_path.end(), lower_path.begin(),
+			//	[](char c) { return (char)std::tolower((int)c); });
+			//
+			//auto check = lower_path.find("models");
+			////if (check == std::string::npos) continue;
+			//
+			//std::string tex_path = full_path.substr(check, full_path.length());
+			//std::filesystem::path es{ tex_path };
+			//es.replace_extension(".dds");
+			//mMesh.textures.push_back(es.string());
 		}
 		else
 			mMesh.textures.push_back("NULL");
