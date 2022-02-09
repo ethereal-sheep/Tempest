@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Security_Chair.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Security_Chair.jpg"
             }
         },
         {

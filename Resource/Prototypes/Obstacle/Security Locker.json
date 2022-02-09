@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Security_Locker.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Security_Locker.jpg"
             }
         },
         {

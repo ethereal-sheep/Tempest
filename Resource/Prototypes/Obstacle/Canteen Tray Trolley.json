@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Canteen_Tray_Trolley.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Canteen_Tray_Trolley.jpg"
             }
         },
         {

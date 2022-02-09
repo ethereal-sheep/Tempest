@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Canteen_Table.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Canteen_Table.jpg"
             }
         },
         {

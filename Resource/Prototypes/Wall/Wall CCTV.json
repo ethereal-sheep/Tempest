@@ -64,7 +64,7 @@
             },
             "Component": {
                 "Path": "Models\\Wall_CCTV.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Wall_CCTV.jpg"
             }
         },
         {

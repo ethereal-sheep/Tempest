@@ -70,7 +70,7 @@
             },
             "Component": {
                 "Path": "Models\\Floor_Concrete.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Concrete_Floor.jpg"
             }
         },
         {

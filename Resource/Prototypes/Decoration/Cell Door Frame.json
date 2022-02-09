@@ -64,7 +64,7 @@
             },
             "Component": {
                 "Path": "Models\\Cell_Door_Frame.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Door_Frame.jpg"
             }
         },
         {

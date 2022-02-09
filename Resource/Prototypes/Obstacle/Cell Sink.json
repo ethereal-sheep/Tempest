@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Cell_Sink.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Cell_Sink.jpg"
             }
         },
         {

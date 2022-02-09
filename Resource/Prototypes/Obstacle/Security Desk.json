@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Security_Desk.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Security_Desk.jpg"
             }
         },
         {

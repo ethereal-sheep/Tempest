@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Prison_Pillar.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Prison_Pillar.jpg"
             }
         },
         {

@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Cell_Toilet.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Cell_Toilet.jpg"
             }
         },
         {

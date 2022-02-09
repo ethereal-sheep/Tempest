@@ -64,7 +64,7 @@
             },
             "Component": {
                 "Path": "Models\\Cell_Bench.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\ThumbNail_Cell_Bench.jpg"
             }
         },
         {
