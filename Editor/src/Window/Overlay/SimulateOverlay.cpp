@@ -138,22 +138,18 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-				//	tutorial_p2 = true;
+					//tutorial_p2 = true;
 				//	tutorial_index = 9;
-					tutorial_index = 0;
-					instance.tutorial_level = 2;
+					//tutorial_index = 1;
+					//instance.tutorial_level = 2;
+
 				}
 				/*if(instance.tutorial_enable)
 					ImGui::GetIO().MouseClicked[0] = false;
 				else
 					ImGui::GetIO().MouseClicked[0] = true;*/
 
-				// exit tutorial
-				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false;}))
-				{
-					instance.tutorial_temp_exit = false;
-					instance.tutorial_enable = false;
-				}
+				
 
 				// tutorial progrss
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
@@ -611,9 +607,9 @@ namespace Tempest
 
 									if (!m_circularMotionEmitter)
 									{
-										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 400.0f);
-										m_circularMotionEmitter->m_PAM.m_sizeBegin = 20.0f;
-										m_circularMotionEmitter->m_PAM.m_sizeEnd = 20.0f;
+										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+										m_circularMotionEmitter->m_PAM.m_sizeBegin = 30.0f;
+										m_circularMotionEmitter->m_PAM.m_sizeEnd = 30.0f;
 									}
 									else
 									{
@@ -658,6 +654,14 @@ namespace Tempest
 								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
+								ImGui::PushFont(FONT_BTN);
+								str = "Next up - ";
+								drawlist->AddText({ tut_min.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								auto strLen = ImGui::CalcTextSize(str.c_str());
+								str = "Level 3";
+								drawlist->AddText({ tut_min.x + strLen.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								ImGui::PopFont();
+
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
 								if (UI::MouseIsWithin(tut_min, tut_max))
@@ -667,6 +671,23 @@ namespace Tempest
 									{
 										tutorial_index = 0;
 										instance.tutorial_level = 3;
+										m_circularMotionEmitter->m_GM.m_active = false;
+									}
+								}
+
+								if (emitter_C_0 == false)
+								{
+									emitter_C_0 = true;
+
+									if (!m_circularMotionEmitter)
+									{
+										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+										m_circularMotionEmitter->m_PAM.m_sizeBegin = 30.0f;
+										m_circularMotionEmitter->m_PAM.m_sizeEnd = 30.0f;
+									}
+									else
+									{
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
 									}
 								}
 							}
@@ -724,6 +745,23 @@ namespace Tempest
 									tutorial_index = 0;
 									instance.tutorial_level = 1;
 									instance.tutorial_enable = false;
+									m_circularMotionEmitter->m_GM.m_active = false;
+								}
+							}
+
+							if (emitter_C_0 == false)
+							{
+								emitter_C_0 = true;
+
+								if (!m_circularMotionEmitter)
+								{
+									m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+									m_circularMotionEmitter->m_PAM.m_sizeBegin = 30.0f;
+									m_circularMotionEmitter->m_PAM.m_sizeEnd = 30.0f;
+								}
+								else
+								{
+									ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
 								}
 							}
 						}
@@ -755,7 +793,16 @@ namespace Tempest
 					
 				}
 
-
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+					if(m_circularMotionEmitter)
+						m_circularMotionEmitter->m_GM.m_active = false;
+					if(m_waypointEmitter)
+						m_waypointEmitter->m_GM.m_active = false;
+				}
 				auto tex = tex_map["Assets/SimulationBG.dds"];
 				{
 
