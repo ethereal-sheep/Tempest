@@ -141,10 +141,10 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-					//tutorial_p2 = true;
-				//	tutorial_index = 9;
-					//tutorial_index = 1;
-					//instance.tutorial_level = 2;
+					tutorial_p2 = true;
+				    //tutorial_index = 9;
+					tutorial_index = 11;
+					instance.tutorial_level = 1;
 
 				}
 				/*if(instance.tutorial_enable)
@@ -616,7 +616,7 @@ namespace Tempest
 									}
 									else
 									{
-										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.f);
 									}
 								}
 							}
@@ -690,7 +690,7 @@ namespace Tempest
 									}
 									else
 									{
-										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.f);
 									}
 								}
 							}
@@ -764,7 +764,7 @@ namespace Tempest
 								}
 								else
 								{
-									ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
+									ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.0f);
 								}
 							}
 						}

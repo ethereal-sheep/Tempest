@@ -205,7 +205,7 @@ namespace Tempest
 							tutorial_index = 1;
 
 					}
-					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0 && instance.tutorial_slide == false)
+					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0 && instance.tutorial_slide == false && instance.tutorial_level == 1)
 					{
 						if (emitter_0 == false)
 						{
