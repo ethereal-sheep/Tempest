@@ -89,7 +89,7 @@ namespace Tempest
 		}
 	}
 
-	void UnitSheetOverlay::force_close(const Event& e)
+	void UnitSheetOverlay::force_close(const Event&)
 	{
 		OverlayOpen = false;
 		cs = nullptr;

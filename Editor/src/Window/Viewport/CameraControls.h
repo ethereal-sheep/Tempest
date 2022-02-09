@@ -867,7 +867,7 @@ namespace Tempest
 			}
 		}
 
-		void set_orbit_camera(Camera& cam, glm::vec3 axis)
+		void set_orbit_camera(Camera& , glm::vec3 axis)
 		{
 			if (mode != CameraControlMode::ORBIT)
 			{
@@ -876,7 +876,7 @@ namespace Tempest
 				//look_at(cam, axis, 0.5);
 			}
 		}
-		void set_fixed_orbit_camera(Camera& cam, glm::vec3 axis)
+		void set_fixed_orbit_camera(Camera& , glm::vec3 axis)
 		{
 			if (mode != CameraControlMode::FIXED_ORBIT)
 			{

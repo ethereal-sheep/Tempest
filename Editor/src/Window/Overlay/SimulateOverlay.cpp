@@ -73,7 +73,7 @@ namespace Tempest
 			OverlayOpen = false;
 	}
 
-	void SimulateOverlay::force_close(const Event& e)
+	void SimulateOverlay::force_close(const Event&)
 	{
 		OverlayOpen = false;
 

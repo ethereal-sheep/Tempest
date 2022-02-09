@@ -3853,13 +3853,11 @@ namespace Tempest::UI
 		ImVec2 min = pos;
 		ImVec2 max = { min.x + size.x, min.y + size.y };
 		auto tex = tex_map["Assets/MIBG.dds"];
-		auto& io = ImGui::GetIO();
 		ImRect TopBox = { {0.f,0.f}, {viewport->Size.x , min.y} };
 		ImRect RightBox = { {max.x ,min.y}, {viewport->Size.x , viewport->Size.y} };
 		ImRect BtmBox = { {0.f , max.y}, {viewport->Size.x - RightBox.GetWidth() , viewport->Size.y} };
 		ImRect LeftBox = { {0.f ,min.y}, {min.x , max.y} };
 		ImVec4 col = { 0,0,0,0.7f };
-		int window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
 
 		/*ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });

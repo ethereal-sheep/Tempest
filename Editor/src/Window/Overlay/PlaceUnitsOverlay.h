@@ -37,7 +37,5 @@ namespace Tempest
 
         void show(Instance&) override;
         void DrawSideBar(Instance& instance, ImVec2 size);
-
-        interpolater<float> inter;
     };
 }
