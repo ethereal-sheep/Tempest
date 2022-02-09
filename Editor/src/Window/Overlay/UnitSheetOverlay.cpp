@@ -252,7 +252,6 @@ namespace Tempest
 						Service<RenderSystem>::Get().USOcolor.y = cs->color.y;
 						Service<RenderSystem>::Get().USOcolor.z = cs->color.z;
 						//ImGui::Image((void*)static_cast<size_t>(UnitImg->GetID()), ImVec2{ UnitImg->GetWidth() * 1.0f,UnitImg->GetHeight() * 1.0f }, ImVec2{ 0,0 }, ImVec2{ 1,1 }, color);
-						ImGuiViewport* viewport = ImGui::GetMainViewport();
 						vec2 size = vec2(viewport->Size.x, viewport->Size.y);
 						ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().postprocessBuffer), ImVec2(viewport->Size.x, viewport->Size.y), ImVec2(0, 1), ImVec2(1, 0));
 						//ImGui::Image((ImTextureID)(Service<RenderSystem>::Get().USObuffer), ImVec2(Service<RenderSystem>::Get().getWidth(), Service<RenderSystem>::Get().getHeight()), ImVec2(0, .2), ImVec2(.2, 0));

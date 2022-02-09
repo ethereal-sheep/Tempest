@@ -18,6 +18,7 @@
 #include "Window/Viewport/CameraControls.h"
 #include "Graphics/Basics/RenderSystem.h"
 #include "Util/interpolater.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -58,5 +59,7 @@ namespace Tempest
         float max_swidth = 500.f;
 
         interpolater<float> banner;
+
+        ChannelID MapBuilderBGM = 0;
     };
 }

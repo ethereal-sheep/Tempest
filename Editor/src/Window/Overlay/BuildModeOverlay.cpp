@@ -17,7 +17,6 @@
 #include "Util/shape_manip.h"
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
-#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -25,9 +24,9 @@ namespace Tempest
 	{
 		OverlayOpen = true;
 		cam_ctrl.update(Service<RenderSystem>::Get().GetCamera());
+		AudioEngine ae;
+		MapBuilderBGM = ae.Play("Sounds2D/CoReSyS_BGM_BuildingMode.wav", "BGM", 0.7f, true);
 	}
-
-	
 
 	void BuildModeOverlay::show(Instance& instance)
 	{
@@ -106,6 +105,8 @@ namespace Tempest
 					edit.save_current_scene();
 					edit.unload_current_scene();
 					OverlayOpen = false;
+					AudioEngine ae;
+					ae.StopChannel(MapBuilderBGM);
 					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
 				};
 				// fade in, fade out, visible
