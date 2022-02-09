@@ -133,8 +133,7 @@ namespace Tempest
 						saoMode = !saoMode;
 						for (auto& window : instance.window_manager.get_windows())
 						{
-							if(strcmp(window->window_name(), " Diagnostics") == 0);
-								window->visible = !window->visible;
+							window->visible = !window->visible;
 						}
 					}
 					break;
