@@ -16,6 +16,7 @@
 #include "Util/interpolater.h"
 
 #include "Particles/WaypointEmitter.h"
+#include "Particles/CircularMotionEmitter.h"
 
 namespace Tempest
 {
@@ -89,20 +90,26 @@ namespace Tempest
         interpolater<float> inter;
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        // For tutorial particle
+        // For tutorial emitter
         std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+        std::shared_ptr<CircularMotionEmitter> m_circularMotionEmitter;
 
-        bool particle_0 = false;
-        bool particle_1 = false;
-        bool particle_2 = false;
+        // Tutorial part 1 emitter
+        bool emitter_1_0 = false;
+        bool emitter_1_1 = false;
+        bool emitter_1_2 = false;
 
-        bool particle_00 = false;
-        bool particle_01 = false;
-        bool particle_02 = false;
-        bool particle_03 = false;
-        bool particle_04 = false;
-        bool particle_05 = false;
-        bool particle_06 = false;
-        bool particle_07 = false;
+        // Tutorial part 2 emitter
+        bool emitter_2_0 = false;
+        bool emitter_2_1 = false;
+        bool emitter_2_2 = false;
+        bool emitter_2_3 = false;
+        bool emitter_2_4 = false;
+        bool emitter_2_5 = false;
+        bool emitter_2_6 = false;
+        bool emitter_2_7 = false;
+
+        // Tutorial Complete
+        bool emitter_C_0 = false;
     };
 }

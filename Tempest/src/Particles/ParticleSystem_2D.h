@@ -7,10 +7,11 @@
 #include "Core.h"
 #include "Emitter.h"
 
-//#include "../../Editor/src/Extern/imgui/imgui.h"
-
+// Forward Declarations
 struct WaypointEmitter;
 struct ExplosionEmitter;
+struct CircularMotionEmitter;
+struct ImVec2;
 
 struct ParticleSystem_2D
 {
@@ -59,10 +60,20 @@ struct ParticleSystem_2D
 	}
 
 	// Not supposed to be here - NOT TO BE SHARED POINTER
-	const std::shared_ptr<WaypointEmitter>& ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	const std::shared_ptr<WaypointEmitter> ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	const std::shared_ptr<WaypointEmitter> ButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize);
+
 	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
-	const std::shared_ptr<ExplosionEmitter>& ExplosionEmitter_2(glm::vec2 spawnPos);
+	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);
+
+	const std::shared_ptr<ExplosionEmitter> ExplosionEmitter_2(glm::vec2 spawnPos);
+	const std::shared_ptr<ExplosionEmitter> ExplosionEmitter_2(ImVec2 spawnPos);
+
 	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, glm::vec2 spawnPos);
+	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, ImVec2 spawnPos);
+
+	const std::shared_ptr<CircularMotionEmitter> CircularMotionEmitter_2(glm::vec2 centrePos, float radius);
+	const std::shared_ptr<CircularMotionEmitter> CircularMotionEmitter_2(ImVec2 centrePos, float radius);
 
 private:
 	ParticleSystem_2D();

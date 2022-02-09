@@ -47,18 +47,20 @@ namespace Tempest
 		tutorial_p2 = false;
 		tut_openSlide = true;
 
-		particle_0 = false;
-		particle_1 = false;
-		particle_2 = false;
+		emitter_1_0 = false;
+		emitter_1_1 = false;
+		emitter_1_2 = false;
 
-		particle_00 = false;
-		particle_01 = false;
-		particle_02 = false;
-		particle_03 = false;
-		particle_04 = false;
-		particle_05 = false;
-		particle_06 = false;
-		particle_07 = false;
+		emitter_2_0 = false;
+		emitter_2_1 = false;
+		emitter_2_2 = false;
+		emitter_2_3 = false;
+		emitter_2_4 = false;
+		emitter_2_5 = false;
+		emitter_2_6 = false;
+		emitter_2_7 = false;
+
+		emitter_C_0 = false;
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -216,22 +218,14 @@ namespace Tempest
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
 									ImGui::GetIO().MouseClicked[0] = true;*/
 
-								if (particle_1 == false)
+								if (emitter_1_1 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_1 = true;
+									emitter_1_1 = true;
 								}
 							}
 							break;
@@ -258,25 +252,15 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (particle_00 == false)
+								if (emitter_2_0 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_00 = true;
-								}
-								
-								
+									emitter_2_0 = true;
+								}	
 							}
 							break;
 
@@ -291,22 +275,14 @@ namespace Tempest
 								if (sequence != UNDEFINED)
 									tutorial_index = 2;
 
-								if (particle_01 == false)
+								if (emitter_2_1 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_01 = true;
+									emitter_2_1 = true;
 								}
 							}
 							break;
@@ -319,22 +295,14 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (particle_02 == false)
+								if (emitter_2_2 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_02 = true;
+									emitter_2_2 = true;
 								}
 							}
 							break;
@@ -350,22 +318,14 @@ namespace Tempest
 								if (attacker.unit_id != UNDEFINED)
 									tutorial_index = 4;
 
-								if (particle_03 == false)
+								if (emitter_2_3 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_03 = true;
+									emitter_2_3 = true;
 								}
 							}
 							break;
@@ -378,22 +338,14 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (particle_04 == false)
+								if (emitter_2_4 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_04 = true;
+									emitter_2_4 = true;
 								}
 							}
 							break;
@@ -409,22 +361,14 @@ namespace Tempest
 								if (attacker.weapon != UNDEFINED)
 									tutorial_index = 6;
 
-								if (particle_05 == false)
+								if (emitter_2_5 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_05 = true;
+									emitter_2_5 = true;
 								}
 							}
 							break;
@@ -437,22 +381,14 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (particle_06 == false)
+								if (emitter_2_6 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_06 = true;
+									emitter_2_6 = true;
 								}
 							}
 							break;
@@ -468,22 +404,14 @@ namespace Tempest
 								if (attacker.action != UNDEFINED)
 									tutorial_index = 8;
 
-								if (particle_07 == false)
+								if (emitter_2_7 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									particle_07 = true;
+									emitter_2_7 = true;
 								}
 							}
 							break;
@@ -673,7 +601,24 @@ namespace Tempest
 										tutorial_index = 0;
 										tutorial_p2 = false;
 										instance.tutorial_level = 2;
-										
+										m_circularMotionEmitter->m_GM.m_active = false;
+									}
+								}
+
+								if (emitter_C_0 == false)
+								{
+									emitter_C_0 = true;
+
+									if (!m_circularMotionEmitter)
+									{
+										LOG_INFO("No spawn circular emitter");
+										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 400.0f);
+										m_circularMotionEmitter->m_PAM.m_sizeBegin = 20.0f;
+										m_circularMotionEmitter->m_PAM.m_sizeEnd = 20.0f;
+									}
+									else
+									{
+										LOG_INFO("No spawn circular emitter");
 									}
 								}
 							}
@@ -1009,9 +954,9 @@ namespace Tempest
 					}
 					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished() && !tutorial_p2 && instance.tutorial_level == 1)
 					{ 
-						if (particle_0 == false)
+						if (emitter_1_0 == false)
 						{
-							particle_0 = true;
+							emitter_1_0 = true;
 
 							glm::vec2 real_buttonSize;
 							real_buttonSize.x = tex->GetWidth() * 0.7f;
@@ -1021,10 +966,16 @@ namespace Tempest
 							real_mousePosition.x = quickMenuPos.x;
 							real_mousePosition.y = quickMenuPos.y;
 
+							//real_mousePosition.x = 500.0f;
+							//real_mousePosition.y = 600.0f;
+
 							if (!m_waypointEmitter)
 								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
 							else
 								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+							/*if (!m_circularMotionEmitter)
+								m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(real_mousePosition, 100.0f);*/
 						}
 					}
 					

@@ -51,10 +51,10 @@ namespace Tempest
 		}
 
 		tutorial_index = 0;
-		particle_0 = false;
-		particle_1 = false;
-		particle_2 = false;
-		particle_3 = false;
+		emitter_0 = false;
+		emitter_1 = false;
+		emitter_2 = false;
+		emitter_3 = false;
 
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // weapons 
@@ -172,9 +172,9 @@ namespace Tempest
 					}
 					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0)
 					{
-						if (particle_0 == false)
+						if (emitter_0 == false)
 						{
-							particle_0 = true;
+							emitter_0 = true;
 
 							glm::vec2 real_buttonSize;
 							real_buttonSize.x = pSize.x + 140 + 8;
@@ -263,9 +263,9 @@ namespace Tempest
 					}
 					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 2 && inter.is_finished())
 					{
-						if (particle_2 == false)
+						if (emitter_2 == false)
 						{
-							particle_2 = true;
+							emitter_2 = true;
 
 							glm::vec2 real_buttonSize;
 							real_buttonSize.x = tex->GetWidth() * 0.7f;
@@ -411,22 +411,14 @@ namespace Tempest
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the actions page.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-							if (particle_3 == false)
+							if (emitter_3 == false)
 							{
-								glm::vec2 real_buttonSize;
-								real_buttonSize.x = size.x;
-								real_buttonSize.y = size.y;
-
-								glm::vec2 real_mousePosition;
-								real_mousePosition.x = pos.x;
-								real_mousePosition.y = pos.y;
-
 								if (!m_waypointEmitter)
-									m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 								else
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-								particle_3 = true;
+								emitter_3 = true;
 							}
 						}
 						break;

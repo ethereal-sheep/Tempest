@@ -25,7 +25,6 @@ struct Emitter
 	RendererModule m_RM;
 
 	std::vector<glm::vec2> m_wayPoints;
-
 	short m_wayPointIndex;
 	bool m_recalculateVelocity;
 
