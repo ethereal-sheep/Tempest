@@ -70,7 +70,7 @@ namespace Tempest
 		}
 	}
 
-	void WeaponSheetOverlay::force_close(const Event& e)
+	void WeaponSheetOverlay::force_close(const Event&)
 	{
 		OverlayOpen = false;
 		weap = nullptr;

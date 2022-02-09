@@ -71,7 +71,11 @@ namespace Tempest
 			// Check if file was opened properly, else return false
 			if (!in_file)
 			{
-				LOG_WARN("File Not Found");
+				std::string aa{ "File Not Found: " };
+				std::stringstream ss;
+				ss << aa;
+				ss << file;
+				LOG_WARN(ss.str());
 			}
 
 			in_file.seekg(0, std::ios::beg);

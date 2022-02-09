@@ -17,6 +17,7 @@
 
 #include "Particles/WaypointEmitter.h"
 #include "Particles/CircularMotionEmitter.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -89,6 +90,8 @@ namespace Tempest
 
         interpolater<float> inter;
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
+
+        ChannelID CombatBGM = 0;
 
         // For tutorial emitter
         std::shared_ptr<WaypointEmitter> m_waypointEmitter;

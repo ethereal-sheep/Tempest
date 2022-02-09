@@ -133,8 +133,7 @@ namespace Tempest
 						saoMode = !saoMode;
 						for (auto& window : instance.window_manager.get_windows())
 						{
-							if(strcmp(window->window_name(), " Diagnostics") == 0);
-								window->visible = !window->visible;
+							window->visible = !window->visible;
 						}
 					}
 					break;
@@ -142,11 +141,11 @@ namespace Tempest
 					{						
 						vec2 size = vec2(viewport->Size.x, viewport->Size.y);
 						//auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
-						unsigned char* buffer = new unsigned char[size.x * size.y * 3];
-						glReadPixels(0, 0, size.x, size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+						unsigned char* buffer = new unsigned char[static_cast<size_t>(size.x * size.y * 3)];
+						glReadPixels(0, 0, (GLsizei)size.x, (GLsizei)size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 						stbi_flip_vertically_on_write(1);
 						//stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
-						stbi_write_jpg("testtests.jpg", size.x, size.y, 3, buffer, size.x * 3);
+						stbi_write_jpg("testtests.jpg", (int)size.x, (int)size.y, 3, buffer, (int)size.x * 3);
 					}
 					break;
 					default:

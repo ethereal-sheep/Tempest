@@ -15,7 +15,6 @@
 #include "Triggers/Triggers.h"
 #include "Instance/EditTimeInstance.h"
 #include "InstanceManager/InstanceConfig.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
 #include "../../Tempest/src/Particles/ParticleSystem_2D.h"
 
@@ -42,6 +41,10 @@ namespace Tempest
 			inter_nest[i].start(-.18f * ImGui::GetMainViewport()->Size.x, .0f, .4f, i * .05f, [](float x) { return glm::cubicEaseOut(x); });
 		}
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
+
+		AudioEngine ae;
+		if (!ae.IsPlaying(CombatBGM))
+			CombatBGM = ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
 
 		tutorial_index = 0;
 		tutorial_p2 = false;
@@ -70,7 +73,7 @@ namespace Tempest
 			OverlayOpen = false;
 	}
 
-	void SimulateOverlay::force_close(const Event& e)
+	void SimulateOverlay::force_close(const Event&)
 	{
 		OverlayOpen = false;
 
@@ -976,6 +979,8 @@ namespace Tempest
 
 						auto fn = [&]()
 						{
+							AudioEngine ae;
+							ae.StopChannel(CombatBGM);
 							OverlayOpen = false;
 							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
 							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();

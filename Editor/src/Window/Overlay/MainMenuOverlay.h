@@ -16,6 +16,7 @@
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -73,5 +74,7 @@ namespace Tempest
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
+
+        ChannelID MenuBGM = 0;
     };
 }
