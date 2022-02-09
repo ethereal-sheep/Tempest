@@ -170,7 +170,7 @@ namespace Tempest
 						if (instance.tutorial_enable && tutorial_index == 0)
 							tutorial_index = 1;
 					}
-					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0)
+					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0 && instance.tutorial_level == 1)
 					{
 						if (emitter_0 == false)
 						{
