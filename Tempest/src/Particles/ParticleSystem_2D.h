@@ -75,6 +75,9 @@ struct ParticleSystem_2D
 	const std::shared_ptr<CircularMotionEmitter> CircularMotionEmitter_2(glm::vec2 centrePos, float radius);
 	const std::shared_ptr<CircularMotionEmitter> CircularMotionEmitter_2(ImVec2 centrePos, float radius);
 
+	void ReuseCircularMotionEmitter_2(const std::shared_ptr<CircularMotionEmitter>& emitter, ImVec2 centrePos, float radius);
+	void ReuseCircularMotionEmitter_2(const std::shared_ptr<CircularMotionEmitter>& emitter, glm::vec2 centrePos, float radius);
+
 private:
 	ParticleSystem_2D();
 	std::vector <std::shared_ptr<Emitter>> m_emitters;

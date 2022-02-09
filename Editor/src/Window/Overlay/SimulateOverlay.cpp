@@ -611,14 +611,13 @@ namespace Tempest
 
 									if (!m_circularMotionEmitter)
 									{
-										LOG_INFO("No spawn circular emitter");
 										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 400.0f);
 										m_circularMotionEmitter->m_PAM.m_sizeBegin = 20.0f;
 										m_circularMotionEmitter->m_PAM.m_sizeEnd = 20.0f;
 									}
 									else
 									{
-										LOG_INFO("No spawn circular emitter");
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
 									}
 								}
 							}
