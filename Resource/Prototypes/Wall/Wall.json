@@ -63,7 +63,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Wall.a",
+                "Path": "Models\\Wall_Default.a",
                 "TexturePath": "Assets\\Wall.jpg"
             }
         },
