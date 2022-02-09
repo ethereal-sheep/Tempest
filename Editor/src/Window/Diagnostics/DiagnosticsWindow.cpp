@@ -435,11 +435,11 @@ namespace Tempest
 				ImGuiViewport* viewport = ImGui::GetMainViewport();
 				vec2 size = vec2(viewport->Size.x, viewport->Size.y);
 				//auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
-				unsigned char* buffer = new unsigned char[size.x * size.y * 3 / 2];
-				glReadPixels(size.x / 4, 0, size.x / 2, size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+				unsigned char* buffer = new unsigned char[static_cast<size_t>(size.x * size.y * 3 / 2)];
+				glReadPixels((GLint)size.x / 4, 0, (GLsizei)size.x / 2, (GLsizei)size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 				stbi_flip_vertically_on_write(1);
 				//stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
-				stbi_write_jpg(thumbnailName.data(), size.x / 2, size.y, 3, buffer, size.x * 3);
+				stbi_write_jpg(thumbnailName.data(), (int)size.x / 2, (int)size.y, 3, buffer, (int)size.x * 3);
 			}
 
 			if(ImGui::TreeNode("Gbuffer Mode"))
