@@ -41,9 +41,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    0.5,
+                    0.4252290427684784,
                     0.0,
-                    0.0
+                    0.8104400634765625
                 ],
                 "LocalRotation": [
                     0.0,
@@ -54,7 +54,7 @@
                 "LocalScale": [
                     1.0,
                     1.0,
-                    0.33500000834465029
+                    1.0
                 ]
             }
         },
@@ -63,7 +63,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Entrance.a",
+                "Path": "Models\\Wall_Door_Frame.a",
                 "TexturePath": "Assets\\ThumbNail_Door_Frame.jpg"
             }
         },
