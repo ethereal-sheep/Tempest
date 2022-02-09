@@ -104,16 +104,17 @@ namespace Tempest
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
         int tutorial_index = 0;
+        bool tut_openSlide = true;
 
         CameraControls cam_ctrl;
 
-        // For tutorial particle
+        // For tutorial emitter
         std::shared_ptr<WaypointEmitter> m_waypointEmitter;
 
-        bool particle_0 = false;
-        bool particle_1 = false;
-        bool particle_2 = false;
-        bool particle_3 = false;
+        bool emitter_0 = false;
+        bool emitter_1 = false;
+        bool emitter_2 = false;
+        bool emitter_3 = false;
 
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;

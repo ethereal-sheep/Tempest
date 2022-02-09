@@ -70,10 +70,11 @@ namespace Tempest
 			sidebar_title = "SEQUENCES";
 		}
 		tutorial_index = 0;
-		particle_0 = false;
-		particle_2 = false;
-		particle_3 = false;
-
+		emitter_0 = false;
+		emitter_2 = false;
+		emitter_3 = false;
+		emitter_4 = false;
+		tut_openSlide = true;
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // graphs 
@@ -123,37 +124,6 @@ namespace Tempest
 				const float title_bottom_padding = 10.f;
 				const float graph_context_height = viewport->Size.y * 0.95f;
 
-				//auto& g = instance.ecs.get<tc::Graph>(id);
-				
-				//if (ImGui::BeginTable("graph header table", 3))
-				//{
-				//	ImGui::TableNextRow();
-
-				//	ImGui::TableSetColumnIndex(1);
-				//	UI::Header_1("Attack System");
-
-				//	ImGui::PushFont(FONT_HEAD);
-
-				//	ImGui::TableSetColumnIndex(0);
-				//	ImGui::Dummy({ 0.1f, title_top_padding });
-				//	ImGui::Dummy({ title_left_padding, 0.1f });
-				//	ImGui::SameLine();
-				//	static string test = "Testing";
-				//	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
-				//	ImGui::InputText("##testing", &temp_graph.name);
-				//	ImGui::PopStyleColor();
-				//	//ImGui::Text(g.g.get_name().c_str());
-				//	ImGui::PopFont();
-
-
-				//	ImGui::TableNextRow();
-				//	ImGui::TableSetColumnIndex(0);
-				//	ImGui::Dummy({ 0.1f, title_bottom_padding });
-
-				//	ImGui::EndTable();
-				//}
-				//ImGui::Separator();
-
 				auto tex = tex_map["Assets/GraphBG.dds"];
 				{
 
@@ -168,34 +138,6 @@ namespace Tempest
 				draw_context(instance, graph_context_height);
 				ImGui::PopStyleColor();
 				//ImGui::Separator();
-
-
-				//float button_y = ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.3f;
-				//// first button pos
-				//ImVec2 pos1 = {ImGui::GetContentRegionAvailWidth() - 480.f, button_y};
-
-				//// second button pos
-				//ImVec2 pos2 = { ImGui::GetContentRegionAvailWidth() - 300.f, button_y };
-
-				//// third button pos
-				//ImVec2 pos3 = { ImGui::GetContentRegionAvailWidth() - 120.f, button_y };
-
-				//if (UI::UIButton_2("Navigate to Content", "Navigate to Content", pos1, { 0.f, 10.f }, FONT_PARA))
-				//{
-				//	ax::NodeEditor::NavigateToContent();
-				//}
-				//if (UI::UIButton_2("Save & Close", "Save & Close", pos2, { 0.f, 10.f }, FONT_PARA))
-				//{
-				//	OverlayOpen = false;
-				//	instance.ecs.get<tc::Graph>(id).g = temp_graph;
-				//	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				//}
-
-				//if (UI::UIButton_2("Close", "Close", pos3, { 0.f, 10.f }, FONT_PARA))
-				//{
-				//	OverlayOpen = false;
-				////	Service<EventManager>::Get().instant_dispatch<OpenConflictResTrigger>();
-				//}
 
 				// title
 				ImGui::SetCursorPos(ImVec2{ 0,0 });
@@ -369,13 +311,25 @@ namespace Tempest
 							if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
 							{
 								instance.ecs.emplace<tc::ActionGraph>(new_graph);
-								instance.ecs.emplace<tc::Graph>(new_graph, "ACTION", graph_type::action);
-								
+								auto g = instance.ecs.emplace<tc::Graph>(new_graph, "ACTION", graph_type::action);
+								auto p = tpath("Graphs") / "ACTION.json";
+								if (fs::exists(p))
+								{
+									g->g = graph(p);
+									LOG_INFO("Loaded Default Action");
+								}
 							}
 							else
 							{
 								instance.ecs.emplace<tc::ConflictGraph>(new_graph);
-								instance.ecs.emplace<tc::Graph>(new_graph, "SEQUENCE", graph_type::conflict);
+								auto g = instance.ecs.emplace<tc::Graph>(new_graph, "SEQUENCE", graph_type::conflict);
+								auto p = tpath("Graphs") / "SEQUENCE.json";
+								if (fs::exists(p))
+								{
+									g->g = graph(p);
+									LOG_INFO("Loaded Default Sequence");
+								}
+
 							}
 
 							//Tutorial progression
@@ -456,16 +410,30 @@ namespace Tempest
 					ImGui::EndChild();
 				}
 			
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false;}))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+				}
 
-				if (instance.tutorial_enable)
+				// tutorial progrss
+				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
+					if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
+						instance.tutorial_slide = false;
 
 					if (instance.tutorial_level == 1)
 					{
-						if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+						if (instance.tutorial_slide && type == OPEN_GRAPH_TYPE::GRAPH_ACTION && tut_openSlide)
 						{
-							switch (tutorial_index)
+							tut_openSlide = false;
+							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::GRAPH_ACTION_TUT);
+						}		
+						else if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION && instance.tutorial_slide == false)
+						{
+							switch (tutorial_index) // Action 
 							{
 							case 0:
 							{
@@ -475,21 +443,13 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (particle_0 == false)
+								if (emitter_0 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
-
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
-									particle_0 = true;
+									emitter_0 = true;
 									if (!m_waypointEmitter)
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
 									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 								}
 							}
 							break;
@@ -497,23 +457,24 @@ namespace Tempest
 							case 1:
 							{
 								if (m_waypointEmitter)
-								m_waypointEmitter->m_GM.m_active = false;
+									m_waypointEmitter->m_GM.m_active = false;
 
 								// Task List
 								string str = "";
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
+								float xPos = viewport->Size.x * 0.75f;
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
 								ImGui::PushFont(FONT_HEAD);
-								drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								drawlist->AddText({ xPos, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
 								str = " Tasks";
-								drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-								drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								drawlist->AddText({ xPos + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ xPos, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								ImGui::PopFont();
 
 								ImGui::PushFont(FONT_BODY);
-								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+								ImVec2 min = { xPos, viewport->Size.y * 0.45f };
 								str = "Rename the action";
 								if (temp_graph.name != "ACTION")
 								{
@@ -525,14 +486,14 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Create a 'Get Attack' Node (Attacker)";
 								auto action_lambda1 = [&]() {
 									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										if (this_node.second->get_category() == category_type::Stat)
+										if (this_node.second->get_type_string() == "GetStat:1")
 											return true;
 									}
 									return false;
@@ -548,7 +509,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Get Attack' node to the D6 node";
@@ -557,7 +518,7 @@ namespace Tempest
 									std::pair<pin_id_t, pin_id_t> pins;
 									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										if (this_node.second->get_category() == category_type::Stat)
+										if (this_node.second->get_type_string() == "GetStat:1")
 										{
 											pins.first = this_node.second->get_output_pin(0)->get_id();
 										}
@@ -584,7 +545,7 @@ namespace Tempest
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PopFont();
 
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
@@ -615,19 +576,14 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (particle_2 == false)
+								if (emitter_2 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
-
-									particle_2 = true;
+									emitter_2 = true;
 								}
 							}
 							break;
@@ -640,7 +596,7 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the sequence page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (particle_3 == false)
+								if (emitter_3 == false)
 								{
 									glm::vec2 real_buttonSize;
 									real_buttonSize.x = size.x;
@@ -650,9 +606,12 @@ namespace Tempest
 									real_mousePosition.x = pos.x;
 									real_mousePosition.y = pos.y;
 
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 
-									particle_3 = true;
+									emitter_3 = true;
 								}
 							}
 							break;
@@ -662,7 +621,14 @@ namespace Tempest
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 3);
 
 						}
-						else
+						else if (instance.tutorial_slide && type == OPEN_GRAPH_TYPE::GRAPH_SEQUENCE && tut_openSlide)
+						{
+							tut_openSlide = false;
+							if(m_waypointEmitter)
+								m_waypointEmitter->m_GM.m_active = false;
+							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::GRAPH_SEQUENCE_TUT);
+						}
+						else if(instance.tutorial_slide == false)// Sequence 
 						{
 							switch (tutorial_index)
 							{
@@ -673,95 +639,171 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								if (emitter_4 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_4 = true;
+								}
 							}
 							break;
 
 							case 1:
 							{
 								//Task List
+								m_waypointEmitter->m_GM.m_active = false;
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
 								ImGui::PushFont(FONT_HEAD);
-								drawlist->AddText({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
+								float xPos = viewport->Size.x * 0.7f;
+								drawlist->AddText({ xPos, viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 1.f,1.f,1.f,1 }), str.c_str());
 								str = " Tasks";
-								drawlist->AddText({ viewport->Size.x * 0.8f + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-								drawlist->AddLine({ viewport->Size.x * 0.8f, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								drawlist->AddText({ xPos + ImGui::GetFontSize(), viewport->Size.y * 0.4f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ xPos, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, { viewport->Size.x, viewport->Size.y * 0.4f + ImGui::GetFontSize() }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								ImGui::PopFont();
 
 
 								ImGui::PushFont(FONT_BODY);
-								ImVec2 min = { viewport->Size.x * 0.8f, viewport->Size.y * 0.45f };
+								ImVec2 min = { xPos, viewport->Size.y * 0.45f };
 								str = "Rename the sequence";
-								/*	if (cs->name != "Combatant")
-									{
-										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-										taskCompleted &= true;
-									}
-									else*/
+								if (temp_graph.name != "SEQUENCE")
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+									else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Create a 'Defend Roll' Node";
-								/*	if (cs->get_stat(1) == 5)
+								auto action_lambda1 = [&]() {
+									for (auto const& this_node : temp_graph.get_nodes())
 									{
-										drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
-										taskCompleted &= true;
+										if (this_node.second->get_name() == "Defend Roll")
+											return true;
 									}
-									else*/
+									return false;
+								};
+								if (action_lambda1())
+								{
+									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
+									taskCompleted &= true;
+								}
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Attack Roll' node to the 'Defend Roll' node";
-								/*if (cs->get_stat(0) == 5)
+								auto action_lambda2 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.second = this_node.second->get_input_pin(0)->get_id();
+										if (this_node.second->get_name() == "Attack Roll")
+											pins.first = this_node.second->get_output_pin(0)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda2())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Connect the 'Defend Roll' node to the 'Compare Flow' node";
-								/*if (cs->get_stat(0) == 5)
+								auto action_lambda3 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Compare Flow")
+											pins.second = this_node.second->get_input_pin(0)->get_id();
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.first = this_node.second->get_output_pin(0)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda3())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
-								str = "Connect the output of the 'Defend Roll' to the input of the 'Compare Flow' node";
-								/*if (cs->get_stat(0) == 5)
+								str = "Connect the output of the 'Defend Roll' to the input of";
+								auto action_lambda4 = [&]() {
+									std::pair<pin_id_t, pin_id_t> pins;
+									for (auto const& this_node : temp_graph.get_nodes())
+									{
+										if (this_node.second->get_name() == "Compare Flow")
+											pins.second = this_node.second->get_input_pin(2)->get_id();
+										if (this_node.second->get_name() == "Defend Roll")
+											pins.first = this_node.second->get_output_pin(1)->get_id();
+									}
+
+									for (auto const& this_link : temp_graph.get_links())
+									{
+										if (this_link == pins)
+											return true;
+									}
+
+									return false;
+								};
+								if (action_lambda4())
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
 								}
-								else*/
+								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
-									//	taskCompleted &= false;
+									taskCompleted &= false;
 								}
-								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								min = { min.x, min.y + 17.f };
+								str = "'Compare Flow' node";
+								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								ImGui::PopFont();
 
@@ -779,6 +821,7 @@ namespace Tempest
 										if (ImGui::IsMouseClicked(0))
 										{
 											OverlayOpen = false;
+											instance.tutorial_slide = true; // Open tutorial Slide show for simulate Screen part2
 											Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 											Service<EventManager>::Get().instant_dispatch<SimulateTutorialP2Trigger>();
 										}
@@ -806,16 +849,23 @@ namespace Tempest
 					}
 
 					//Tutorial Exit Button
-					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
-					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
-					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
-
-					if (UI::MouseIsWithin(tut_min, tut_max))
+					if (instance.tutorial_slide == false) //Dont show tutorial exit button during slide show
 					{
-						ImGui::SetMouseCursor(7);
-						if (ImGui::IsMouseClicked(0))
-							instance.tutorial_enable = false;
+						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+						if (UI::MouseIsWithin(tut_min, tut_max))
+						{
+							ImGui::SetMouseCursor(7);
+							if (ImGui::IsMouseClicked(0))
+							{
+								instance.tutorial_temp_exit = true;
+								ImGui::OpenPopup("TutorialExitPopupConfirm");
+							}
+								
+						}
 					}
 				}
 			}
@@ -1957,7 +2007,22 @@ namespace Tempest
 					}
 				}
 			}
-			
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Save Current as Default"))
+			{
+				try
+				{
+					g.serialize(instance.get_path() / "conflict_resolutions");
+				}
+				catch (const std::exception& a)
+				{
+					LOG_ERROR(a.what());
+				}
+			}
+
+
 			
 			ImGui::EndChild();
 

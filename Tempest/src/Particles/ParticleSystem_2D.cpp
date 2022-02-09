@@ -2,10 +2,24 @@
 #include "ParticleSystem_2D.h"
 
 #include "WaypointEmitter.h"
+#include "CircularMotionEmitter.h"
 #include "ExplosionEmitter.h"
 
 // Debugging purpose
 #include "Logger/Log.h"
+
+// Convert Imvec 2
+#include "../../Editor/src/Extern/imgui/imgui.h"
+
+// Convert Imvec2 -> glm::vec2
+auto Imvec2_To_GlmVec2_Converter = [](ImVec2 imvec)
+{
+	glm::vec2 tempVec;
+	tempVec.x = imvec.x;
+	tempVec.y = imvec.y;
+
+	return tempVec;
+};
 
 ParticleSystem_2D::ParticleSystem_2D()
 {}
@@ -29,15 +43,15 @@ void ParticleSystem_2D::Update()
 			// Update active emitter
 			if (emitter.m_GM.m_active)
 				emitter.Update();
-			else
-			{
-				// Store the unused slots to be reused later
-				if (!m_UniqueEmitterSlots.contains(i))
-				{  
-					m_UniqueEmitterSlots.insert(i);
-					m_availableEmitterSlots.push(i);
-				}
-			}
+			//else
+			//{
+			//	// Store the unused slots to be reused later
+			//	if (!m_UniqueEmitterSlots.contains(i))
+			//	{  
+			//		m_UniqueEmitterSlots.insert(i);
+			//		m_availableEmitterSlots.push(i);
+			//	}
+			//}
 		}
 	}
 }
@@ -61,7 +75,12 @@ void ParticleSystem_2D::AddEmitter(const std::shared_ptr<Emitter> emitter)
 		m_emitters.push_back(emitter);
 }
 
-const std::shared_ptr<WaypointEmitter>& ParticleSystem_2D::ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
+const std::shared_ptr<WaypointEmitter> ParticleSystem_2D::ButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize)
+{
+	return ButtonEmitter(Imvec2_To_GlmVec2_Converter(topLeftPos), Imvec2_To_GlmVec2_Converter(buttonSize));
+}
+
+const std::shared_ptr<WaypointEmitter> ParticleSystem_2D::ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
 	auto tempEmitter = std::make_shared<WaypointEmitter>();
 	Emitter& emitter = *tempEmitter.get();
@@ -130,6 +149,11 @@ const std::shared_ptr<WaypointEmitter>& ParticleSystem_2D::ButtonEmitter(glm::ve
 	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 
 	return tempEmitter;
+}
+
+void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize)
+{
+	return ReuseButtonEmitter(emitter, Imvec2_To_GlmVec2_Converter(topLeftPos), Imvec2_To_GlmVec2_Converter(buttonSize));
 }
 
 void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
@@ -205,7 +229,12 @@ void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter
 	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 }
 
-const std::shared_ptr<ExplosionEmitter>& ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
+const std::shared_ptr<ExplosionEmitter> ParticleSystem_2D::ExplosionEmitter_2(ImVec2 spawnPos)
+{
+	return ExplosionEmitter_2(Imvec2_To_GlmVec2_Converter(spawnPos));
+}
+
+const std::shared_ptr<ExplosionEmitter> ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
 {
 	auto tempEmitter = std::make_shared<ExplosionEmitter>();
 	Emitter& explosionEmitter = *tempEmitter.get();
@@ -244,6 +273,11 @@ const std::shared_ptr<ExplosionEmitter>& ParticleSystem_2D::ExplosionEmitter_2(g
 	return tempEmitter;
 }
 
+void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, ImVec2 spawnPos)
+{
+	return ReuseExplosionEmitter(emitter, Imvec2_To_GlmVec2_Converter(spawnPos));
+}
+
 void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, glm::vec2 spawnPos)
 {
 	Emitter& explosionEmitter = *emitter.get();
@@ -280,4 +314,91 @@ void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmi
 
 	explosionEmitter.m_PAM.m_lifeTime = 0.3f;
 	explosionEmitter.m_RM.m_type = ParticleType::Circle;
+}
+
+const std::shared_ptr<CircularMotionEmitter> ParticleSystem_2D::CircularMotionEmitter_2(ImVec2 centrePos, float radius)
+{
+	return CircularMotionEmitter_2(Imvec2_To_GlmVec2_Converter(centrePos), radius);
+}
+
+const std::shared_ptr<CircularMotionEmitter> ParticleSystem_2D::CircularMotionEmitter_2(glm::vec2 centrePos, float radius)
+{
+	auto tempEmitter = std::make_shared<CircularMotionEmitter>();
+	Emitter& emitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
+
+	// Center position of the circle
+	tempEmitter->m_centrePoint = centrePos;
+	//tempEmitter->m_GM.m_position = centrePos;
+	tempEmitter->m_radius = radius;
+
+	// Emitter values - Without consideration for default ctor values
+	emitter.m_GM.m_velocity.x = 0.0f;
+	emitter.m_MM.m_duration = 1000.0f;
+	emitter.m_GM.m_active = true;
+	emitter.m_MM.m_preWarm = true;
+	emitter.m_MM.m_simulationSpeed = 0.016f;
+
+	emitter.m_EM.m_spawnTimeInterval = 0.016f;
+	emitter.m_EM.m_spawnCountTimer = emitter.m_EM.m_spawnTimeInterval;
+	emitter.m_EM.m_rateOverTime = 1;
+	emitter.m_MM.m_maxParticles = 1000;
+
+	// Particle Architype values - without consideration for default ctor
+	emitter.m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.m_PAM.m_velocityVariation = glm::vec2{ 0.0f, 0.0f };
+
+	emitter.m_PAM.m_sizeBegin = 8.0f;
+	emitter.m_PAM.m_sizeEnd = 8.0f;
+	emitter.m_PAM.m_sizeVariation = 0.0f;
+
+	emitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	emitter.m_PAM.m_lifeTime = 1.0f;
+	emitter.m_RM.m_type = ParticleType::Square;
+
+	return tempEmitter;
+}
+
+
+void ParticleSystem_2D::ReuseCircularMotionEmitter_2(const std::shared_ptr<CircularMotionEmitter>& emitter, ImVec2 centrePos, float radius)
+{
+	ReuseCircularMotionEmitter_2(emitter, Imvec2_To_GlmVec2_Converter(centrePos), radius);
+}
+
+void ParticleSystem_2D::ReuseCircularMotionEmitter_2(const std::shared_ptr<CircularMotionEmitter>& emitter, glm::vec2 centrePos, float radius)
+{
+	// Center position of the circle
+	emitter->m_centrePoint = centrePos;
+	//tempEmitter->m_GM.m_position = centrePos;
+	emitter->m_radius = radius;
+
+	// Emitter values - Without consideration for default ctor values
+	emitter->m_GM.m_velocity.x = 0.0f;
+	emitter->m_MM.m_duration = 1000.0f;
+	emitter->m_GM.m_active = true;
+	emitter->m_MM.m_preWarm = true;
+	emitter->m_MM.m_simulationSpeed = 0.016f;
+
+	emitter->m_EM.m_spawnTimeInterval = 0.016f;
+	emitter->m_EM.m_spawnCountTimer = emitter->m_EM.m_spawnTimeInterval;
+	emitter->m_EM.m_rateOverTime = 1;
+	emitter->m_MM.m_maxParticles = 1000;
+
+	// Particle Architype values - without consideration for default ctor
+	emitter->m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
+	emitter->m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
+	emitter->m_PAM.m_velocityVariation = glm::vec2{ 0.0f, 0.0f };
+
+	emitter->m_PAM.m_sizeBegin = 8.0f;
+	emitter->m_PAM.m_sizeEnd = 8.0f;
+	emitter->m_PAM.m_sizeVariation = 0.0f;
+
+	emitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	emitter->m_PAM.m_lifeTime = 1.0f;
+	emitter->m_RM.m_type = ParticleType::Square;
 }

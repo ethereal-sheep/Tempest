@@ -7,6 +7,7 @@
 
 struct WaypointEmitter final : public Emitter
 {
+	WaypointEmitter();
 	void SelfUpdate() override;
 
 

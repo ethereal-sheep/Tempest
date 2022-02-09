@@ -15,7 +15,6 @@
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 #include "Util/quitter.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -56,6 +55,8 @@ namespace Tempest
 	{
 		auto a = event_cast<OpenMainMenuTrigger>(e);
 		OverlayOpen = true;
+		AudioEngine ae;
+		MenuBGM = ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 		MapTitle = "";
 		SelectedConflictRes = 0;
 		SelectedSequences.clear();
@@ -556,7 +557,10 @@ namespace Tempest
 
 						auto fn = [&, path = path, str]()
 						{
+							AudioEngine ae;
+							ae.StopAllChannels();
 							OverlayOpen = false;
+							instance.tutorial_temp_enable = true;
 							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening " + str);
 							instance.load_new_conflict_resolution_by_path(path);
@@ -712,6 +716,8 @@ namespace Tempest
 						auto name = edit->create_new_scene(NewMapName);
 						if (name != "" && edit->load_new_scene_by_name(name))
 						{
+							AudioEngine ae;
+							ae.StopAllChannels();
 							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
 							OverlayOpen = false;
 						}
@@ -801,6 +807,8 @@ namespace Tempest
 						inter_nest[0].start(.5f, -.5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
 						auto fn = [&, p = path]()
 						{
+							AudioEngine ae;
+							ae.StopAllChannels();
 							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
 							instance.load_new_scene_by_path(p);
 							OverlayOpen = false;
@@ -946,6 +954,9 @@ namespace Tempest
 
 			if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 			{
+				AudioEngine ae;
+				ae.StopAllChannels();
+				ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
 				OverlayOpen = false;
 				dynamic_cast<EditTimeInstance&>(instance).save();
 				Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(

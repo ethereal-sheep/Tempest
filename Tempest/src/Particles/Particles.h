@@ -20,7 +20,7 @@ struct Particle
 	glm::vec2 m_position;
 	glm::vec2 m_velocity;
 
-	//float m_rotation;
+	float m_rotation;
 
 	glm::vec4 m_colour;
 	float m_size;

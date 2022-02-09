@@ -96,7 +96,7 @@ namespace Tempest
 			init_ui_textures();
 
 			AudioEngine ae;
-			ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
+			ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 			ae.SetMasterVolume(1.f);
 			//testing_scene();
 
@@ -339,6 +339,10 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", open_text_size30 * global_font_scale * global_icon_scale, &config, fa_range);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", open_text_size30 * global_font_scale * global_icon_scale, &config, fa_range);
 
+		// 9 Contax Pro Font 144
+		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), contaxPro_size144 * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
 		//// 6 fk 
 		//static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 		//io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), font_text_size);

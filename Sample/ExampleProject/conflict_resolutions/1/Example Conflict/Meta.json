@@ -16,15 +16,39 @@
             }
         },
         {
-            "Entity": 6,
+            "Entity": 51,
             "Component": {
-                "Name": "Char"
+                "Name": "Combatant"
             }
         },
         {
-            "Entity": 10,
+            "Entity": 53,
             "Component": {
-                "Name": "Weapon"
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 57,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 62,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 6,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 60,
+            "Component": {
+                "Name": "Combatant"
             }
         },
         {
@@ -34,7 +58,31 @@
             }
         },
         {
+            "Entity": 56,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 10,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
             "Entity": 58,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 61,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 11,
             "Component": {
                 "Name": "Weapon"
             }

@@ -16,6 +16,8 @@
 #include "Util/interpolater.h"
 
 #include "Particles/WaypointEmitter.h"
+#include "Particles/CircularMotionEmitter.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -50,6 +52,7 @@ namespace Tempest
 
         bool OverlayOpen = false;
         bool tutorial_p2 = false;
+        bool tut_openSlide = true;
         unsigned Tab = 0;
 
         int tutorial_index = 0;
@@ -88,11 +91,28 @@ namespace Tempest
         interpolater<float> inter;
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        // For tutorial particle
-        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+        ChannelID CombatBGM = 0;
 
-        bool particle_0 = false;
-        bool particle_1 = false;
-        bool particle_2 = false;
+        // For tutorial emitter
+        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+        std::shared_ptr<CircularMotionEmitter> m_circularMotionEmitter;
+
+        // Tutorial part 1 emitter
+        bool emitter_1_0 = false;
+        bool emitter_1_1 = false;
+        bool emitter_1_2 = false;
+
+        // Tutorial part 2 emitter
+        bool emitter_2_0 = false;
+        bool emitter_2_1 = false;
+        bool emitter_2_2 = false;
+        bool emitter_2_3 = false;
+        bool emitter_2_4 = false;
+        bool emitter_2_5 = false;
+        bool emitter_2_6 = false;
+        bool emitter_2_7 = false;
+
+        // Tutorial Complete
+        bool emitter_C_0 = false;
     };
 }

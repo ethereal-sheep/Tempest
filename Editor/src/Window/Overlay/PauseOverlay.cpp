@@ -76,12 +76,16 @@ namespace Tempest
 					// where does this go to?
 					if (UI::UIButton_2("Quit", "Quit", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.6f }, { 50,20 }, FONT_BTN))
 					{
+						AudioEngine ae;
+						ae.StopAllChannels();
 						OverlayOpen = false;
 						EscDuringPause = false;
 						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
 							instance.get_full_path(),
 							MemoryStrategy{},
 							InstanceType::EDIT_TIME);
+
+						ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
 					}
 				}

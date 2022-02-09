@@ -124,6 +124,8 @@ namespace Tempest
                         ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, instance, UNDEFINED);
+                        if (instance.tutorial_enable)
+                            instance.tutorial_slide = true;
                     }
                     return_v = true;
                 }
@@ -143,6 +145,8 @@ namespace Tempest
                         ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
+                        if (instance.tutorial_enable)
+                            instance.tutorial_slide = true;
                     }
                     return_v = true;
                 }
@@ -162,6 +166,8 @@ namespace Tempest
                         ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
+                        if (instance.tutorial_enable)
+                            instance.tutorial_slide = true;
                     }
                     return_v = true;
                 }
@@ -181,6 +187,8 @@ namespace Tempest
                         ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
                         Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(current);
                         Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
+                        /*if (instance.tutorial_enable)
+                            instance.tutorial_slide = true;*/
                     }
                     return_v = true;
                 }

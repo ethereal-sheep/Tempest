@@ -42,7 +42,7 @@ namespace Tempest
 		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> wall_map;
 
 	public:
-		glm::vec3 map_pos;
+		vec3 map_pos = vec3{ 0.f, 0.f, 0.f };
 
 		Map() = default; // empty map
 

@@ -15,7 +15,6 @@
 #include "Triggers/Triggers.h"
 #include "Instance/EditTimeInstance.h"
 #include "InstanceManager/InstanceConfig.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
 #include "../../Tempest/src/Particles/ParticleSystem_2D.h"
 
@@ -43,11 +42,28 @@ namespace Tempest
 		}
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
+		AudioEngine ae;
+		if (!ae.IsPlaying(CombatBGM))
+			CombatBGM = ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
+
 		tutorial_index = 0;
 		tutorial_p2 = false;
-		particle_0 = false;
-		particle_1 = false;
-		particle_2 = false;
+		tut_openSlide = true;
+
+		emitter_1_0 = false;
+		emitter_1_1 = false;
+		emitter_1_2 = false;
+
+		emitter_2_0 = false;
+		emitter_2_1 = false;
+		emitter_2_2 = false;
+		emitter_2_3 = false;
+		emitter_2_4 = false;
+		emitter_2_5 = false;
+		emitter_2_6 = false;
+		emitter_2_7 = false;
+
+		emitter_C_0 = false;
 	}
 
 	void SimulateOverlay::close_popup(const Event& e)
@@ -57,7 +73,7 @@ namespace Tempest
 			OverlayOpen = false;
 	}
 
-	void SimulateOverlay::force_close(const Event& e)
+	void SimulateOverlay::force_close(const Event&)
 	{
 		OverlayOpen = false;
 
@@ -125,20 +141,25 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-				//	tutorial_p2 = true;
+					//tutorial_p2 = true;
 				//	tutorial_index = 9;
-					tutorial_index = 0;
-					instance.tutorial_level = 2;
+					//tutorial_index = 1;
+					//instance.tutorial_level = 2;
+
 				}
 				/*if(instance.tutorial_enable)
 					ImGui::GetIO().MouseClicked[0] = false;
 				else
 					ImGui::GetIO().MouseClicked[0] = true;*/
 
-				if (instance.tutorial_enable)
+				
+
+				// tutorial progrss
+				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
-
+					if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
+						instance.tutorial_slide = false;
 					if (instance.tutorial_level == 1)
 					{
 						if (!tutorial_p2)
@@ -196,19 +217,14 @@ namespace Tempest
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
 									ImGui::GetIO().MouseClicked[0] = true;*/
 
-								if (particle_2 == false)
+								if (emitter_1_1 == false)
 								{
-									glm::vec2 real_buttonSize;
-									real_buttonSize.x = size.x;
-									real_buttonSize.y = size.y;
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
 
-									glm::vec2 real_mousePosition;
-									real_mousePosition.x = pos.x;
-									real_mousePosition.y = pos.y;
-
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
-
-									particle_2 = true;
+									emitter_1_1 = true;
 								}
 							}
 							break;
@@ -216,17 +232,34 @@ namespace Tempest
 
 							UI::TutProgressBar(drawlist, ImVec2{ viewport->Size }, 1);
 						}
-						else
+						else if (instance.tutorial_slide && tut_openSlide)
 						{
+							tut_openSlide = false;
+							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::SIMULATE_TUT);
+						}					
+						else if(instance.tutorial_slide == false)// Tutorial 1 Part 2
+						{
+							
 							switch (tutorial_index)
 							{
 							case 0:
 							{
+								
 								ImVec2 pos = { viewport->Size.x * 0.446f, viewport->Size.y * 0.18f };
 								ImVec2 size = { 200.f, 150.f };
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (emitter_2_0 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_0 = true;
+								}	
 							}
 							break;
 
@@ -240,6 +273,16 @@ namespace Tempest
 
 								if (sequence != UNDEFINED)
 									tutorial_index = 2;
+
+								if (emitter_2_1 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_1 = true;
+								}
 							}
 							break;
 
@@ -250,6 +293,16 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (emitter_2_2 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_2 = true;
+								}
 							}
 							break;
 
@@ -263,6 +316,16 @@ namespace Tempest
 
 								if (attacker.unit_id != UNDEFINED)
 									tutorial_index = 4;
+
+								if (emitter_2_3 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_3 = true;
+								}
 							}
 							break;
 
@@ -274,6 +337,15 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
+								if (emitter_2_4 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_4 = true;
+								}
 							}
 							break;
 
@@ -287,6 +359,16 @@ namespace Tempest
 
 								if (attacker.weapon != UNDEFINED)
 									tutorial_index = 6;
+
+								if (emitter_2_5 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_5 = true;
+								}
 							}
 							break;
 
@@ -297,6 +379,16 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+								if (emitter_2_6 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_6 = true;
+								}
 							}
 							break;
 
@@ -310,16 +402,31 @@ namespace Tempest
 
 								if (attacker.action != UNDEFINED)
 									tutorial_index = 8;
+
+								if (emitter_2_7 == false)
+								{
+									if (!m_waypointEmitter)
+										m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(pos, size);
+									else
+										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, pos, size);
+
+									emitter_2_7 = true;
+								}
 							}
 							break;
 
 							// moar tasks
 							case 8:
 							{
+								if(m_waypointEmitter)
+									m_waypointEmitter->m_GM.m_active = false;
+
 								auto selected = tex_map["Assets/Selected.dds"];
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
-
+								ImVec2 pos = { viewport->Size.x * 0.3f, 0 };
+								ImVec2 size = { viewport->Size.x, viewport->Size.y };
+								UI::TutArea(pos, size);
 								//Task List
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
@@ -334,7 +441,7 @@ namespace Tempest
 								ImVec2 min = { viewport->Size.x * 0.17f, viewport->Size.y * 0.45f };
 								str = "Select a unit for Defender";
 
-								drawlist->AddText({ viewport->Size.x * 0.05f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ viewport->Size.x * 0.04f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								if (defender.unit_id != UNDEFINED)
 								{
@@ -349,7 +456,7 @@ namespace Tempest
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Select a weapon for Defender";
-								drawlist->AddText({ viewport->Size.x * 0.05f,  min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ viewport->Size.x * 0.04f,  min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								if (defender.weapon != UNDEFINED)
 								{
@@ -364,7 +471,7 @@ namespace Tempest
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
 								str = "Select an action for Defender";
-								drawlist->AddText({ viewport->Size.x * 0.05f,  min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ viewport->Size.x * 0.04f,  min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 								if (defender.action != UNDEFINED)
 								{
@@ -405,6 +512,18 @@ namespace Tempest
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to simulate the results.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								ImGui::PushFont(FONT_BTN);
+								str = "Set Frequency";
+								drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, pos.y + size.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								ImGui::PopFont();
+								drawlist->AddLine({ pos.x + size.x, pos.y + size.y * 0.3f }, {viewport->Size.x * 0.8f, pos.y + size.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								str = "Set the frequency of the simulations here.";
+								ImVec2 strPos = { viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, pos.y + size.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f};
+								drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								str = "A higher number will give a more accurate result.";
+								strPos.x = viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x;
+								strPos.y += ImGui::CalcTextSize(str.c_str()).y;
+								drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 							}
 							break;
 
@@ -414,8 +533,21 @@ namespace Tempest
 								ImVec2 size = { 500.f, 280.f };
 								UI::TutArea(pos, size);
 
+								drawlist->AddLine({ pos.x + size.x, pos.y + size.y * 0.4f }, { viewport->Size.x * 0.8f, pos.y + size.y * 0.4f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								ImGui::PushFont(FONT_BTN);
+								string str = "Chance of Success";
+								drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, pos.y + size.y * 0.4f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								ImGui::PopFont();
+								drawlist->AddLine({ pos.x + size.x, pos.y + size.y * 0.4f }, { viewport->Size.x * 0.8f, pos.y + size.y * 0.4f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								str = "Success rate of the simulation resuls will";
+								ImVec2 strPos = { viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, pos.y + size.y * 0.4f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
+								drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								str = "be shown here.";
+								strPos.y += ImGui::CalcTextSize(str.c_str()).y;
+								drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
-								ImVec2 tut_min = { viewport->Size.x * 0.75f,viewport->Size.y * 0.6f };
+								ImVec2 tut_min = { viewport->Size.x * 0.7f,viewport->Size.y * 0.55f };
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
@@ -438,13 +570,28 @@ namespace Tempest
 								UI::TutArea({ 0,0 }, { 0,0 }, false);
 
 								// render the complete level here
+								ImGui::PushFont(FONT_CONTAX_144);
+								string str = "Level 1";
+								drawlist->AddText({viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ viewport->Size.x * 0.2f,viewport->Size.y * 0.42f }, { viewport->Size.x * 0.8f,viewport->Size.y * 0.42f }, ImGui::GetColorU32({ 1,1,1,1 }));
+								str = "COMPLETE!";
+								drawlist->AddText({viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								ImGui::PopFont();
 
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
 								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+								//Text Above Next button
+								ImGui::PushFont(FONT_BTN);
+								str = "Next up - ";
+								drawlist->AddText({ tut_min.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								auto strLen = ImGui::CalcTextSize(str.c_str());
+								str = "Level 2";
+								drawlist->AddText({ tut_min.x + strLen.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								ImGui::PopFont();
 
+								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
@@ -453,6 +600,23 @@ namespace Tempest
 										tutorial_index = 0;
 										tutorial_p2 = false;
 										instance.tutorial_level = 2;
+										m_circularMotionEmitter->m_GM.m_active = false;
+									}
+								}
+
+								if (emitter_C_0 == false)
+								{
+									emitter_C_0 = true;
+
+									if (!m_circularMotionEmitter)
+									{
+										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+										m_circularMotionEmitter->m_PAM.m_sizeBegin = 30.0f;
+										m_circularMotionEmitter->m_PAM.m_sizeEnd = 30.0f;
+									}
+									else
+									{
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
 									}
 								}
 							}
@@ -481,10 +645,25 @@ namespace Tempest
 								UI::TutArea({ 0,0 }, { 0,0 }, false);
 
 								// render the complete level here
+								ImGui::PushFont(FONT_CONTAX_144);
+								string str = "Level 2";
+								drawlist->AddText({ viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddLine({ viewport->Size.x * 0.2f,viewport->Size.y * 0.42f }, { viewport->Size.x * 0.8f,viewport->Size.y * 0.42f }, ImGui::GetColorU32({ 1,1,1,1 }));
+								str = "COMPLETE!";
+								drawlist->AddText({ viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								ImGui::PopFont();
 
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
 								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+								ImGui::PushFont(FONT_BTN);
+								str = "Next up - ";
+								drawlist->AddText({ tut_min.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								auto strLen = ImGui::CalcTextSize(str.c_str());
+								str = "Level 3";
+								drawlist->AddText({ tut_min.x + strLen.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								ImGui::PopFont();
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
@@ -495,6 +674,23 @@ namespace Tempest
 									{
 										tutorial_index = 0;
 										instance.tutorial_level = 3;
+										m_circularMotionEmitter->m_GM.m_active = false;
+									}
+								}
+
+								if (emitter_C_0 == false)
+								{
+									emitter_C_0 = true;
+
+									if (!m_circularMotionEmitter)
+									{
+										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+										m_circularMotionEmitter->m_PAM.m_sizeBegin = 30.0f;
+										m_circularMotionEmitter->m_PAM.m_sizeEnd = 30.0f;
+									}
+									else
+									{
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
 									}
 								}
 							}
@@ -530,6 +726,13 @@ namespace Tempest
 							UI::TutArea({ 0,0 }, { 0,0 }, false);
 
 							// render the complete level here
+							ImGui::PushFont(FONT_CONTAX_144);
+							string str = "Level 3";
+							drawlist->AddText({ viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							drawlist->AddLine({ viewport->Size.x * 0.2f,viewport->Size.y * 0.42f }, { viewport->Size.x * 0.8f,viewport->Size.y * 0.42f }, ImGui::GetColorU32({ 1,1,1,1 }));
+							str = "COMPLETE!";
+							drawlist->AddText({ viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							ImGui::PopFont();
 
 							auto nextBtn = tex_map["Assets/NextBtn.dds"];
 							ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
@@ -545,6 +748,23 @@ namespace Tempest
 									tutorial_index = 0;
 									instance.tutorial_level = 1;
 									instance.tutorial_enable = false;
+									m_circularMotionEmitter->m_GM.m_active = false;
+								}
+							}
+
+							if (emitter_C_0 == false)
+							{
+								emitter_C_0 = true;
+
+								if (!m_circularMotionEmitter)
+								{
+									m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+									m_circularMotionEmitter->m_PAM.m_sizeBegin = 30.0f;
+									m_circularMotionEmitter->m_PAM.m_sizeEnd = 30.0f;
+								}
+								else
+								{
+									ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 400.0f);
 								}
 							}
 						}
@@ -556,20 +776,36 @@ namespace Tempest
 					}
 
 					//Tutorial Exit Button
-					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
-					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
-					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
-
-					if (UI::MouseIsWithin(tut_min, tut_max))
+					if (instance.tutorial_slide == false)
 					{
-						ImGui::SetMouseCursor(7);
-						if (ImGui::IsMouseClicked(0))
-							instance.tutorial_enable = false;
+						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+						if (UI::MouseIsWithin(tut_min, tut_max))
+						{
+							ImGui::SetMouseCursor(7);
+							if (ImGui::IsMouseClicked(0))
+							{
+								instance.tutorial_temp_exit = true;
+								ImGui::OpenPopup("TutorialExitPopupConfirm");
+							}
+						}
 					}
+					
 				}
 
-
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+					if(m_circularMotionEmitter)
+						m_circularMotionEmitter->m_GM.m_active = false;
+					if(m_waypointEmitter)
+						m_waypointEmitter->m_GM.m_active = false;
+				}
 				auto tex = tex_map["Assets/SimulationBG.dds"];
 				{
 
@@ -679,6 +915,11 @@ namespace Tempest
 
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
 					
+					if (instance.tutorial_enable && instance.tutorial_level == 2 &&
+						sequence != UNDEFINED && attacker.unit_id != UNDEFINED && defender.unit_id != UNDEFINED)
+					{
+						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(3.0f, [&]() {tutorial_index = 1; });
+					}
 				}
 
 
@@ -738,6 +979,8 @@ namespace Tempest
 
 						auto fn = [&]()
 						{
+							AudioEngine ae;
+							ae.StopChannel(CombatBGM);
 							OverlayOpen = false;
 							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
 							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();
@@ -760,11 +1003,11 @@ namespace Tempest
 						if (instance.tutorial_enable && instance.tutorial_level == 1 && !tutorial_p2 && tutorial_index == 0)
 							tutorial_index = 1;
 					}
-					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished())
+					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished() && !tutorial_p2 && instance.tutorial_level == 1)
 					{ 
-						if (particle_0 == false)
+						if (emitter_1_0 == false)
 						{
-							particle_0 = true;
+							emitter_1_0 = true;
 
 							glm::vec2 real_buttonSize;
 							real_buttonSize.x = tex->GetWidth() * 0.7f;
@@ -774,10 +1017,16 @@ namespace Tempest
 							real_mousePosition.x = quickMenuPos.x;
 							real_mousePosition.y = quickMenuPos.y;
 
+							//real_mousePosition.x = 500.0f;
+							//real_mousePosition.y = 600.0f;
+
 							if (!m_waypointEmitter)
 								m_waypointEmitter = ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
 							else
 								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
+
+							/*if (!m_circularMotionEmitter)
+								m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CircularMotionEmitter_2(real_mousePosition, 100.0f);*/
 						}
 					}
 					
@@ -794,8 +1043,21 @@ namespace Tempest
 					ImGui::PopStyleColor(3);
 				}
 
+				if (instance.tutorial_temp_enable && instance.ecs.view<tc::Graph>(exclude_t<tc::Destroyed>()).size_hint() <= 0 && 
+					instance.ecs.view<tc::Unit>(exclude_t<tc::Destroyed>()).size_hint() <= 0 &&
+					instance.ecs.view<tc::Weapon>(exclude_t<tc::Destroyed>()).size_hint() <= 0)
+					ImGui::OpenPopup("TutorialPopupConfirm");
 
-				
+				if (UI::ConfirmTutorialPopup("TutorialPopupConfirm", "Do you want a tutorial?", false, []() {}))
+				{
+					instance.tutorial_enable = true;
+					instance.tutorial_level = 1;
+					tutorial_p2 = false;
+				}
+				else
+				{
+					instance.tutorial_temp_enable = false;
+				}
 			}
 
 			ImGui::PopStyleVar();
@@ -812,8 +1074,10 @@ namespace Tempest
 			}
 		}
 		
-		if(m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+		if (m_waypointEmitter && (!OverlayOpen || !instance.tutorial_enable))
+		{
 			m_waypointEmitter->m_GM.m_active = false;
+		}
 	}
 	void SimulateOverlay::display_unit_section(Instance& instance, const ImVec2 start_pos, bool is_attacker)
 	{

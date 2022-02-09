@@ -143,6 +143,7 @@ namespace Tempest
                                 ImVec2{ 0,0 }, ImVec2{ 1,1 }, 2, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 }))
                             {
                                 data = data != id ? id : UNDEFINED;
+                                send_data();
                             }
 
                             // display in rows of 3
@@ -173,6 +174,7 @@ namespace Tempest
                             if (UI::UIButton_2(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             {
                                 data = data != id ? id : UNDEFINED;
+                                send_data();
                             }
 
                             // display in rows of 2
@@ -201,6 +203,7 @@ namespace Tempest
                             if (UI::UIButton_2(action.g.name, action.g.name, { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             {
                                 data = data != id ? id : UNDEFINED;
+                                send_data();
                             }
 
                             // display in rows of 2
@@ -230,6 +233,7 @@ namespace Tempest
                             if (UI::UIButton_2(action.g.name, action.g.name, { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             {
                                 data = data != id ? id : UNDEFINED;
+                                send_data();
                             }
 
                             // display in rows of 2
@@ -403,14 +407,13 @@ namespace Tempest
 
                     ImGui::EndChild();
 
-                    if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionAvailWidth() * 0.75f, ImGui::GetCursorPosY() }, { 0.f, 0.f }, FONT_PARA))
+                    if (type == EDIT_WEAPON || type == EDIT_UNIT)
                     {
-                        ImGui::CloseCurrentPopup();
-                        enable_popup = false;
-
-                        Service<EventManager>::Get().instant_dispatch<SimulateSelectionConfirm>(type, is_attacker, data, for_unitpage);
+                        if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionAvailWidth() * 0.75f, ImGui::GetCursorPosY() }, { 0.f, 0.f }, FONT_PARA))
+                        {
+                            send_data();
+                        }
                     }
-                   
                 }
 
                 ImGui::EndPopup();
@@ -418,6 +421,14 @@ namespace Tempest
                 ImGui::PopStyleVar(3);
                 ImGui::PopStyleColor(2);
             }
+        }
+
+        void send_data()
+        {
+            ImGui::CloseCurrentPopup();
+            enable_popup = false;
+
+            Service<EventManager>::Get().instant_dispatch<SimulateSelectionConfirm>(type, is_attacker, data, for_unitpage);
         }
 
         Entity data;

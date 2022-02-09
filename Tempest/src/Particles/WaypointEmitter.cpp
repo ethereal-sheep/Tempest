@@ -4,6 +4,13 @@
 
 #include "Logger/Log.h"
 
+WaypointEmitter::WaypointEmitter()
+	: Emitter()
+	, m_initialDistanceSquared {0.0f}
+	, m_startVelocity { glm::vec2{0.0f, 0.0f}}
+	, m_endVelocity{ glm::vec2{0.0f, 0.0f}}
+{}
+
 void WaypointEmitter::SelfUpdate()
 {
 	if (m_MM.m_preWarm)

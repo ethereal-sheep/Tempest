@@ -14,6 +14,7 @@
 #include "Triggers/Triggers.h"
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
+#include <Tempest/src/Audio/AudioEngine.h>
 namespace Tempest
 {
 	float easyInBack(float x)
@@ -612,6 +613,9 @@ namespace Tempest
 							instance.get_full_path(),
 							MemoryStrategy{},
 							InstanceType::EDIT_TIME);
+						AudioEngine ae;
+						ae.StopAllChannels();
+						ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
 					}
 						
