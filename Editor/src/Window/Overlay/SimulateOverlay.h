@@ -94,8 +94,8 @@ namespace Tempest
         ChannelID CombatBGM = 0;
 
         // For tutorial emitter
-        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
-        std::shared_ptr<CircularMotionEmitter> m_circularMotionEmitter;
+        std::weak_ptr<WaypointEmitter> m_waypointEmitter;
+        std::weak_ptr<CircularMotionEmitter> m_circularMotionEmitter;
 
         // Tutorial part 1 emitter
         bool emitter_1_0 = false;

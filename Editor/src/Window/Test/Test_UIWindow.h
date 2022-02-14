@@ -168,7 +168,7 @@ namespace Tempest
 				//if (ImGui::IsMouseClicked(0))
 				//{
 				//	// Test prepared functions for XR
-				//	ParticleSystem_2D::GetInstance().ButtonEmitter(real_mousePosition, real_buttonSize);
+				//	ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
 				//}
 				////if (ImGui::IsMouseDown(1))
 				//if (ImGui::IsMouseClicked(1))
@@ -179,7 +179,7 @@ namespace Tempest
 
 				//	//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
 				//	//auto& reg = particleSys.Register(tempVec);
-				//	ParticleSystem_2D::GetInstance().ExplosionEmitter_2(tempVec);
+				//	ParticleSystem_2D::GetInstance().CreateExplosionEmitter(tempVec);
 				//	//reg->m_RM.m_type = ParticleType::Circle;
 				//	//reg->m_GM.m_velocity.x = -500.0f;
 

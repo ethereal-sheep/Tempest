@@ -75,12 +75,12 @@ void ParticleSystem_2D::AddEmitter(const std::shared_ptr<Emitter> emitter)
 		m_emitters.push_back(emitter);
 }
 
-const std::shared_ptr<WaypointEmitter> ParticleSystem_2D::ButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize)
+const std::weak_ptr<WaypointEmitter> ParticleSystem_2D::CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize)
 {
-	return ButtonEmitter(Imvec2_To_GlmVec2_Converter(topLeftPos), Imvec2_To_GlmVec2_Converter(buttonSize));
+	return CreateButtonEmitter(Imvec2_To_GlmVec2_Converter(topLeftPos), Imvec2_To_GlmVec2_Converter(buttonSize));
 }
 
-const std::shared_ptr<WaypointEmitter> ParticleSystem_2D::ButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
+const std::weak_ptr<WaypointEmitter> ParticleSystem_2D::CreateButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
 	auto tempEmitter = std::make_shared<WaypointEmitter>();
 	Emitter& emitter = *tempEmitter.get();
@@ -229,12 +229,12 @@ void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter
 	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 }
 
-const std::shared_ptr<ExplosionEmitter> ParticleSystem_2D::ExplosionEmitter_2(ImVec2 spawnPos)
+const std::weak_ptr<ExplosionEmitter> ParticleSystem_2D::CreateExplosionEmitter(ImVec2 spawnPos)
 {
-	return ExplosionEmitter_2(Imvec2_To_GlmVec2_Converter(spawnPos));
+	return CreateExplosionEmitter(Imvec2_To_GlmVec2_Converter(spawnPos));
 }
 
-const std::shared_ptr<ExplosionEmitter> ParticleSystem_2D::ExplosionEmitter_2(glm::vec2 spawnPos)
+const std::weak_ptr<ExplosionEmitter> ParticleSystem_2D::CreateExplosionEmitter(glm::vec2 spawnPos)
 {
 	auto tempEmitter = std::make_shared<ExplosionEmitter>();
 	Emitter& explosionEmitter = *tempEmitter.get();
@@ -316,12 +316,12 @@ void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmi
 	explosionEmitter.m_RM.m_type = ParticleType::Circle;
 }
 
-const std::shared_ptr<CircularMotionEmitter> ParticleSystem_2D::CircularMotionEmitter_2(ImVec2 centrePos, float radius)
+const std::weak_ptr<CircularMotionEmitter> ParticleSystem_2D::CreateCircularMotionEmitter(ImVec2 centrePos, float radius)
 {
-	return CircularMotionEmitter_2(Imvec2_To_GlmVec2_Converter(centrePos), radius);
+	return CreateCircularMotionEmitter(Imvec2_To_GlmVec2_Converter(centrePos), radius);
 }
 
-const std::shared_ptr<CircularMotionEmitter> ParticleSystem_2D::CircularMotionEmitter_2(glm::vec2 centrePos, float radius)
+const std::weak_ptr<CircularMotionEmitter> ParticleSystem_2D::CreateCircularMotionEmitter(glm::vec2 centrePos, float radius)
 {
 	auto tempEmitter = std::make_shared<CircularMotionEmitter>();
 	Emitter& emitter = *tempEmitter.get();
@@ -362,13 +362,12 @@ const std::shared_ptr<CircularMotionEmitter> ParticleSystem_2D::CircularMotionEm
 	return tempEmitter;
 }
 
-
-void ParticleSystem_2D::ReuseCircularMotionEmitter_2(const std::shared_ptr<CircularMotionEmitter>& emitter, ImVec2 centrePos, float radius)
+void ParticleSystem_2D::ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, ImVec2 centrePos, float radius)
 {
-	ReuseCircularMotionEmitter_2(emitter, Imvec2_To_GlmVec2_Converter(centrePos), radius);
+	ReuseCircularMotionEmitter(emitter, Imvec2_To_GlmVec2_Converter(centrePos), radius);
 }
 
-void ParticleSystem_2D::ReuseCircularMotionEmitter_2(const std::shared_ptr<CircularMotionEmitter>& emitter, glm::vec2 centrePos, float radius)
+void ParticleSystem_2D::ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, glm::vec2 centrePos, float radius)
 {
 	// Center position of the circle
 	emitter->m_centrePoint = centrePos;

@@ -89,7 +89,7 @@ namespace Tempest
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
         // For tutorial emitter
-        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+        std::weak_ptr<WaypointEmitter> m_waypointEmitter;
 
         bool emitter_0 = false;
         bool emitter_1 = false;
