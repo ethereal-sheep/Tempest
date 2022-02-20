@@ -1,5 +1,18 @@
+/**********************************************************************************
+* \author		Chue Jun Hao(c.junhao@digipen.edu)
+* \version		1.0
+* \date			2022
+* \note			Course: GAM350
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 
-
+/*
+* References:
+* http://www.cplusplus.com/forum/general/129187/
+* https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
+*/
 
 #include "CircularMotionEmitter.h"
 
