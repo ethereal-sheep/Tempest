@@ -343,6 +343,7 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), contaxPro_size144 * global_font_scale);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
+
 		//// 6 fk 
 		//static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 		//io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), font_text_size);
