@@ -11,7 +11,7 @@
 #include "Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
 
-#include "Particles/ParticleSystem_2D.h"
+#include "Particles/ParticleSystem_3D.h"
 
 namespace Tempest
 {
@@ -33,7 +33,7 @@ namespace Tempest
 			door.update(dt);
 		}
 		
-		ParticleSystem_2D::GetInstance().Update();
+		ParticleSystem_3D::GetInstance().Update();
 	}
 	void Instance::internal_render()
 	{

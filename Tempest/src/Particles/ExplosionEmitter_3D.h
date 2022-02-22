@@ -8,21 +8,21 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#ifndef CIRCULAR_MOTION_EMITTER_H
-#define CIRCULAR_MOTION_EMITTER_H
+#ifndef EXPLOSION_EMITTER_3D_H
+#define EXPLOSION_EMITTER_3D_H
 
 #include "Emitter.h"
 
-struct CircularMotionEmitter final : public Emitter
-{
-	CircularMotionEmitter();
+#include <gtx/transform.hpp>
 
-	void SelfUpdate() override;
+
+struct ExplosionEmitter_3D final : public Emitter
+{
+	ExplosionEmitter_3D();
 	void Emit(const int particleAmount) override;
 
-	glm::vec2 m_centrePoint;
-	float m_radius; // The radius to rotate around
-	float m_angle; // The angle it is rotating at
+	glm::vec3 m_RandomSpawnDirection;
 };
 
-#endif
+#endif // ! EXPLOSION_EMITTER_H
+

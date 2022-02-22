@@ -16,7 +16,7 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/WaypointEmitter.h"
+#include "Particles/Trail_WaypointEmitter_3D.h"
 
 namespace Tempest
 {
@@ -89,7 +89,7 @@ namespace Tempest
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
         // For tutorial emitter
-        std::weak_ptr<WaypointEmitter> m_waypointEmitter;
+        std::weak_ptr<Trail_WaypointEmitter_3D> m_waypointEmitter;
 
         bool emitter_0 = false;
         bool emitter_1 = false;

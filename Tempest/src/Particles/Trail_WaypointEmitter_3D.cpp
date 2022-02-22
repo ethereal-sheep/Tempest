@@ -8,18 +8,20 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#include "WaypointEmitter.h"
+#include "Trail_WaypointEmitter_3D.h"
 
 #include "Logger/Log.h"
 
-WaypointEmitter::WaypointEmitter()
+Trail_WaypointEmitter_3D::Trail_WaypointEmitter_3D()
 	: Emitter()
-	, m_initialDistanceSquared {0.0f}
-	, m_startVelocity { glm::vec2{0.0f, 0.0f}}
-	, m_endVelocity{ glm::vec2{0.0f, 0.0f}}
+	//, m_initialDistanceSquared	{ 0.0f }
+	//, m_startVelocity				{ glm::vec2{0.0f, 0.0f}}
+	//, m_endVelocity				{ glm::vec2{0.0f, 0.0f}}
+	, m_wayPointIndex{ 0 }
+	, m_recalculateVelocity{ true }
 {}
 
-void WaypointEmitter::SelfUpdate()
+void Trail_WaypointEmitter_3D::SelfUpdate()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -31,12 +33,11 @@ void WaypointEmitter::SelfUpdate()
 	if (m_wayPoints.size())
 	{
 		// Move in way point position
-		if (m_GM.m_position != m_wayPoints[m_wayPointIndex])
+		if (m_GM.m_position != glm::vec3{ m_wayPoints[m_wayPointIndex].x, m_wayPoints[m_wayPointIndex].y, 0.0f })
 		{
-
-			auto DistanceCalculation = [](glm::vec2 endPos, glm::vec2 startPos)
+			auto DistanceCalculation = [](glm::vec3 endPos, glm::vec3 startPos)
 			{
-				glm::vec2 distanceVec = endPos - startPos;
+				glm::vec3 distanceVec = endPos - startPos;
 				float distanceSquared = (distanceVec.x * distanceVec.x) + (distanceVec.y * distanceVec.y);
 
 				return distanceSquared;

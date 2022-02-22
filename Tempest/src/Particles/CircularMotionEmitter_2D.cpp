@@ -14,18 +14,18 @@
 * https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
 */
 
-#include "CircularMotionEmitter.h"
+#include "CircularMotionEmitter_2D.h"
 
 #include "Logger/Log.h"
 
-CircularMotionEmitter::CircularMotionEmitter()
+CircularMotionEmitter_2D::CircularMotionEmitter_2D()
 	: Emitter()
 	, m_centrePoint { glm::vec2(0.0f, 0.0f)}
 	, m_radius { 0.0f }
 	, m_angle {0.0f }
 {}
 
-void CircularMotionEmitter::SelfUpdate()
+void CircularMotionEmitter_2D::SelfUpdate()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -71,7 +71,7 @@ void CircularMotionEmitter::SelfUpdate()
 }
 
 
-void CircularMotionEmitter::Emit(const int particleAmount)
+void CircularMotionEmitter_2D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)

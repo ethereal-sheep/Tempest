@@ -19,15 +19,15 @@ MainModule::MainModule()
 {}
 
 GameObjectModule::GameObjectModule()
-	: m_position{ 0.0f, 0.0f }
-	, m_velocity{ 0.0f, 0.0f }
+	: m_position{ 0.0f, 0.0f, 0.0f }
+	, m_velocity{ 0.0f, 0.0f, 0.0f }
 	, m_active{ true }
 {}
 
 ParticleArchetypeModule::ParticleArchetypeModule()
-	: m_startVelocity{ 0.0f, 0.0f }
-	, m_endVelocity{ 0.0f, 0.0f }
-	, m_velocityVariation{ 3.0f, 1.0f }
+	: m_startVelocity{ 0.0f, 0.0f, 0.0f }
+	, m_endVelocity{ 0.0f, 0.0f, 0.0f }
+	, m_velocityVariation{ 3.0f, 1.0f, 0.0f }
 
 	, m_sizeBegin{ 20.0f }
 	, m_sizeEnd{ 0.0f }

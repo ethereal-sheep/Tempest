@@ -22,10 +22,10 @@ enum class ParticleType
 struct Particle
 {
 	Particle();
-	Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType);
+	Particle(glm::vec3 pos, glm::vec3 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType);
 
-	glm::vec2 m_position;
-	glm::vec2 m_velocity;
+	glm::vec3 m_position;
+	glm::vec3 m_velocity;
 
 	float m_rotation;
 

@@ -8,12 +8,17 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#include "ExplosionEmitter.h"
+#include "ExplosionEmitter_3D.h"
 
 // Additional Includes
 #include "Random.h"
 
-void ExplosionEmitter::Emit(const int particleAmount)
+ExplosionEmitter_3D::ExplosionEmitter_3D()
+	: Emitter()
+	, m_RandomSpawnDirection{ 0.0f, 0.0f, 0.0f }
+{}
+
+void ExplosionEmitter_3D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
@@ -30,35 +35,73 @@ void ExplosionEmitter::Emit(const int particleAmount)
 			// Velocity - RNG
 			particle.m_velocity = m_PAM.m_startVelocity;
 
-			short spawnSector = std::rand() % 5;
-			short directionX = (std::rand() % 500);
-			short directionY = (std::rand() % 500);
+			// 3D randomised spawn direction
+			short randSpawnDir = std::rand() % 13;
+			m_RandomSpawnDirection = glm::vec3{ 500.0f, 500.0f, 500.0f };
+			short directionX = (std::rand() % static_cast<short>(m_RandomSpawnDirection.x));
+			short directionY = (std::rand() % static_cast<short>(m_RandomSpawnDirection.y));
+			short directionZ = (std::rand() % static_cast<short>(m_RandomSpawnDirection.z));
 
-			switch (spawnSector)
+			switch (randSpawnDir)
 			{
+			// Case 0 & 1 - Three Positive & Negative
+			case 0:
+				directionX = directionX;
+				directionY = directionY;
+				directionZ = directionZ;
+				break;
+
 			case 1:
 				directionX = -directionX;
-				directionY = directionY;
-				break;
-			case 2:
-				directionX = directionX;
-				directionY = directionY;
-				break;
-			case 3:
-				directionX = -directionX;
 				directionY = -directionY;
-				break;
-			case 4:
-				directionX = directionX;
-				directionY = -directionY;
+				directionZ = -directionZ;
 				break;
 
+			// Case 2,3,4  - One Negative Direction & Two Positive Direction
+			case 2:
+				directionX = -directionX;
+				directionY = directionY;
+				directionZ = directionZ;
+				break;
+
+			case 3:
+				directionX = directionX;
+				directionY = -directionY;
+				directionZ = directionZ;
+				break;
+
+			case 4:
+				directionX = directionX;
+				directionY = directionY;
+				directionZ = -directionZ;
+				break;
+
+			// Case 5,6,7 - Two Negative Direction & One Positive Direction
+			case 5:
+				directionX = -directionX;
+				directionY = -directionY;
+				directionZ = directionZ;
+				break;
+
+			case 6:
+				directionX = -directionX;
+				directionY = directionY;
+				directionZ = -directionZ;
+				break;
+
+			case 7:
+				directionX = directionX;
+				directionY = -directionY;
+				directionZ = -directionZ;
+				break;
+			
 			default:
 				break;
 			}
 
 			particle.m_velocity.x += m_PAM.m_velocityVariation.x + directionX;
 			particle.m_velocity.y += m_PAM.m_velocityVariation.y + directionY;
+			particle.m_velocity.z += m_PAM.m_velocityVariation.z + directionZ;
 
 			//particle.m_velocity.x += m_PAM.m_velocityVariation.x - (Random::Float() - 50.f);
 			//particle.m_velocity.y += m_PAM.m_velocityVariation.y - (Random::Float() - 50.f);

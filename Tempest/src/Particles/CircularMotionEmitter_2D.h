@@ -8,22 +8,21 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#ifndef WAYPOINT_EMITTER_H
-#define WAYPOINT_EMITTER_H
+#ifndef CIRCULAR_MOTION_EMITTER_2D_H
+#define CIRCULAR_MOTION_EMITTER_2D_H
 
 #include "Emitter.h"
 
-struct WaypointEmitter final : public Emitter
+struct CircularMotionEmitter_2D final : public Emitter
 {
-	WaypointEmitter();
+	CircularMotionEmitter_2D();
+
 	void SelfUpdate() override;
+	void Emit(const int particleAmount) override;
 
-
-	// Travel Progression
-	float m_initialDistanceSquared;
-
-	// Velocity controls
-	glm::vec2 m_startVelocity, m_endVelocity;
+	glm::vec2 m_centrePoint;
+	float m_radius; // The radius to rotate around
+	float m_angle; // The angle it is rotating at
 };
 
-#endif // !WAYPOINT_EMITTER_H
+#endif
