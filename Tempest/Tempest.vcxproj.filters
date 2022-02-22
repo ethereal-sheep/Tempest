@@ -79,14 +79,14 @@
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Scripting\Nodes\GroupNode.cpp" />
     <ClCompile Include="src\Scripting\Test\test_compare_node.cpp" />
-    <ClCompile Include="src\Particles\ParticleSystem_3D.cpp" />
+    <ClCompile Include="src\Particles\ParticleSystem_2D.cpp" />
     <ClCompile Include="src\Particles\Random.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
     <ClCompile Include="src\Particles\Emitter.cpp" />
     <ClCompile Include="src\Particles\EmissionModules.cpp" />
-    <ClCompile Include="src\Particles\Trail_WaypointEmitter_3D.cpp" />
-    <ClCompile Include="src\Particles\ExplosionEmitter_3D.cpp" />
-    <ClCompile Include="src\Particles\CircularMotionEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\WaypointEmitter.cpp" />
+    <ClCompile Include="src\Particles\ExplosionEmitter.cpp" />
+    <ClCompile Include="src\Particles\CircularMotionEmitter.cpp" />
     <ClCompile Include="src\PMG\ProceduralMapGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -242,15 +242,15 @@
     <ClInclude Include="src\Util\pathfinding.h" />
     <ClInclude Include="src\Util\quitter.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Particles\ParticleSystem_3D.h" />
+    <ClInclude Include="src\Particles\ParticleSystem_2D.h" />
     <ClInclude Include="src\Particles\Random.h" />
     <ClInclude Include="src\Util\interpolater.h" />
     <ClInclude Include="src\Particles\Particles.h" />
     <ClInclude Include="src\Particles\Emitter.h" />
     <ClInclude Include="src\Particles\EmissionModules.h" />
-    <ClInclude Include="src\Particles\Trail_WaypointEmitter_3D.h" />
-    <ClInclude Include="src\Particles\ExplosionEmitter_3D.h" />
-    <ClInclude Include="src\Particles\CircularMotionEmitter_2D.h" />
+    <ClInclude Include="src\Particles\WaypointEmitter.h" />
+    <ClInclude Include="src\Particles\ExplosionEmitter.h" />
+    <ClInclude Include="src\Particles\CircularMotionEmitter.h" />
     <ClInclude Include="src\PMG\ProceduralMapGeneration.h" />
   </ItemGroup>
   <ItemGroup>

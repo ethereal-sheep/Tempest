@@ -33,8 +33,8 @@ struct GameObjectModule
 {
 	GameObjectModule();
 
-	glm::vec3 m_position;
-	glm::vec3 m_velocity;
+	glm::vec2 m_position;
+	glm::vec2 m_velocity;
 
 	bool m_active;
 };
@@ -43,8 +43,8 @@ struct ParticleArchetypeModule
 {
 	ParticleArchetypeModule();
 
-	glm::vec3 m_startVelocity, m_endVelocity;
-	glm::vec3 m_velocityVariation;
+	glm::vec2 m_startVelocity, m_endVelocity;
+	glm::vec2 m_velocityVariation;
 
 	float m_sizeBegin, m_sizeEnd;
 	float m_sizeVariation;

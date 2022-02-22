@@ -11,8 +11,8 @@
 #include "Particles.h"
 
 Particle::Particle()
-	: m_position{ 0.0f, 0.0f, 0.0f }
-	, m_velocity{ 0.0f, 0.0f, 0.0f }
+	: m_position{ 0.0f, 0.0f }
+	, m_velocity{ 0.0f, 0.0f }
 	, m_rotation{ 0.0f }
 	, m_colour{ 0.0f, 0.0f, 0.0f, 0.0f }
 	, m_size{ 1.0f }
@@ -23,7 +23,7 @@ Particle::Particle()
 {
 }
 
-Particle::Particle(glm::vec3 pos, glm::vec3 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType)
+Particle::Particle(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType)
 	: m_position{ pos }
 	, m_velocity{ vec }
 	, m_rotation{ 0.0f }

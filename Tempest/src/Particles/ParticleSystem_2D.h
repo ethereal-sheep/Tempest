@@ -15,14 +15,14 @@
 #include "Emitter.h"
 
 // Forward Declarations
-struct Trail_WaypointEmitter_3D;
-struct ExplosionEmitter_3D;
-struct CircularMotionEmitter_2D;
+struct WaypointEmitter;
+struct ExplosionEmitter;
+struct CircularMotionEmitter;
 struct ImVec2;
 
-struct ParticleSystem_3D
+struct ParticleSystem_2D
 {
-	static ParticleSystem_3D& GetInstance();
+	static ParticleSystem_2D& GetInstance();
 
 	//struct Handler
 	//{
@@ -42,7 +42,7 @@ struct ParticleSystem_3D
 	//	}
 	//};
 
-	//Handler Register(glm::vec3 pos)
+	//Handler Register(glm::vec2 pos)
 	//{
 	//	auto emitter = std::make_shared<Emitter>();
 	//	emitter->m_GM.m_position = pos;
@@ -51,7 +51,7 @@ struct ParticleSystem_3D
 	//	return Handler(emitter); // Weak ptr, refer to Handler
 	//}
 
-	//Emitter& Register(glm::vec3 pos)
+	//Emitter& Register(glm::vec2 pos)
 	//{
 	//	auto emitter = std::make_shared<Emitter>();
 	//	emitter->m_GM.m_position = pos;
@@ -66,26 +66,26 @@ struct ParticleSystem_3D
 		return m_emitters;
 	}
 
-	const std::weak_ptr<Trail_WaypointEmitter_3D> CreateButtonEmitter(glm::vec3 topLeftPos, glm::vec3 buttonSize);
-	const std::weak_ptr<Trail_WaypointEmitter_3D> CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize);
+	const std::weak_ptr<WaypointEmitter> CreateButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	const std::weak_ptr<WaypointEmitter> CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize);
 
-	void ReuseButtonEmitter(const std::shared_ptr<Trail_WaypointEmitter_3D>& emitter, glm::vec3 topLeftPos, glm::vec3 buttonSize);
-	void ReuseButtonEmitter(const std::shared_ptr<Trail_WaypointEmitter_3D>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);
+	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);
 
-	const std::weak_ptr<ExplosionEmitter_3D> CreateExplosionEmitter_3D(glm::vec3 spawnPos);
-	const std::weak_ptr<ExplosionEmitter_3D> CreateExplosionEmitter_3D(ImVec2 spawnPos);
+	const std::weak_ptr<ExplosionEmitter> CreateExplosionEmitter(glm::vec2 spawnPos);
+	const std::weak_ptr<ExplosionEmitter> CreateExplosionEmitter(ImVec2 spawnPos);
 
-	void ReuseExplosionEmitter_3D(const std::shared_ptr<ExplosionEmitter_3D>& emitter, glm::vec3 spawnPos);
-	void ReuseExplosionEmitter_3D(const std::shared_ptr<ExplosionEmitter_3D>& emitter, ImVec2 spawnPos);
+	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, glm::vec2 spawnPos);
+	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, ImVec2 spawnPos);
 
-	const std::weak_ptr<CircularMotionEmitter_2D> CreateCircularMotionEmitter_2D(glm::vec3 centrePos, float radius);
-	const std::weak_ptr<CircularMotionEmitter_2D> CreateCircularMotionEmitter_2D(ImVec2 centrePos, float radius);
+	const std::weak_ptr<CircularMotionEmitter> CreateCircularMotionEmitter(glm::vec2 centrePos, float radius);
+	const std::weak_ptr<CircularMotionEmitter> CreateCircularMotionEmitter(ImVec2 centrePos, float radius);
 
-	void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
-	void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, glm::vec3 centrePos, float radius);
+	void ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, ImVec2 centrePos, float radius);
+	void ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, glm::vec2 centrePos, float radius);
 
 private:
-	ParticleSystem_3D();
+	ParticleSystem_2D();
 	std::vector <std::shared_ptr<Emitter>> m_emitters;
 
 	// Emitter Management

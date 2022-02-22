@@ -17,6 +17,8 @@
 #include <numbers>
 
 Emitter::Emitter()
+	: m_wayPointIndex {0}
+	, m_recalculateVelocity {true}
 {
 	m_particles.resize(m_MM.m_maxParticles);
 
