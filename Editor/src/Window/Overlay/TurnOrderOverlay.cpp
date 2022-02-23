@@ -148,7 +148,7 @@ namespace Tempest
 						ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f });
 
 						tex = tex_map["Assets/CustomizeTurnOrderUnlit.dds"];
-						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.3f - tex->GetWidth() * 0.9f - 10.0f,viewport->Size.y * 0.35f - tex->GetHeight() * 1.0f});
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.3f - tex->GetWidth() * 0.9f - 10.0f,viewport->Size.y * 0.35f - tex->GetHeight() * 1.0f - 5.0f});
 
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
@@ -166,6 +166,8 @@ namespace Tempest
 						}
 
 						ImGui::PopStyleColor(3);
+
+
 						ImGui::SetCursorPos(ImVec2{0, ImGui::GetContentRegionMax().y * 0.75f});
 						ImGui::Dummy(ImVec2{ 5.f, 0.0f });
 						if (ImGui::BeginChild("TurnOrderTextInside", ImVec2{ ImGui::GetContentRegionMax().x * 0.65f, 40.0f }, true))
@@ -183,37 +185,96 @@ namespace Tempest
 					
 				}
 					break;
-				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE:
+
+				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_DICE: // change to sub
 				{
-					auto tex = tex_map["Assets/DiceRollLogo.dds"];
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					auto tex = tex_map["Assets/TurnOrderLogo.dds"];
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.30f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
-					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.4f });
-					ImGui::Dummy(ImVec2{ 20.f, 0.f });
+					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.43f });
+					ImGui::Dummy(ImVec2{ 50.f, 0.f });
 					ImGui::SameLine();
-					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.31f, viewport->Size.y * 0.38f }, true))
 					{
 						ImGui::PushFont(FONT_BODY);
-						std::string text = "Roll to randomly arrange the turn order of the units.";
-						ImGui::TextWrapped(text.c_str());
+						std::string text = "Select from stats, randomized order or both for your unit's turn order.";
+						ImGui::Text(text.c_str());
 						ImGui::PopFont();
-
-						/*ImGui::Dummy(ImVec2{ 20.f, 100.0f });
-						for (int i = 1; i < 6; ++i)
-						{
-							tex = tex_map["Assets/Dice_" + std::to_string(i) + ".dds"];
-							ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
-							ImGui::SameLine();
-							ImGui::Dummy(ImVec2{ 10.f, 0.f });
-							ImGui::SameLine();
-						}*/
 						
+						ImGui::Dummy(ImVec2{ 0.0f, 10.0f });
+						auto StatsView = instance.ecs.view<Components::Statline>(exclude_t<tc::Destroyed>());
+						Entity StateLineId = UNDEFINED;
+						for (auto id : StatsView)
+							StateLineId = id;
+						auto sl = instance.ecs.get_if<tc::Statline>(StateLineId);
 
-						if (UI::UIButton_2("Roll", "Roll", ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.4f }, { 0,0 }, FONT_PARA))
+						ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 55.f , ImGui::GetCursorPosY() + 35.f });
+						const ImVec2 cursor{ ImGui::GetCursorPos() };
+						int col = 0; int row = 0;
+
+						// sort by stats
+						for (int i = 0; i < sl->size(); i++)
+						{
+							if ((*sl)(i))
+							{
+							//	bool is_selected = (current_stat == sl->operator[](i));
+								if (UI::UIButton_2(sl->operator[](i).c_str(), sl->operator[](i).c_str(), 
+									{ cursor.x + col++ * 120, cursor.y + row * 80 }, { -70, 5 }, FONT_PARA, current_stat == sl->operator[](i)))
+								{
+									if (current_stat == sl->operator[](i))
+										current_stat = -1;
+
+									else
+									{
+										current_stat = sl->operator[](i);
+
+										// sort based on stat
+										std::sort(added_entities.begin(), added_entities.end(), [i, &instance](const auto id1, const auto id2)
+										{
+											int first = 0, second = 0;
+											if (tc::Character* cs = instance.ecs.get_if<tc::Character>(id1))
+											{
+												first = cs->get_stat(i);
+											}
+											if (tc::Character* cs = instance.ecs.get_if<tc::Character>(id2))
+											{
+												second = cs->get_stat(i);
+											}
+
+											return first > second;
+
+										});
+									}
+								}
+
+								// display in cols of 5
+								if (col / 5)
+								{
+									col = 0;
+									row++;
+								}
+							}
+						}
+
+						// randomize
+						tex = tex_map["Assets/RandomButtonUnlit.dds"];
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.155f - tex->GetWidth() * 0.9f * 0.5f, viewport->Size.y * 0.38f - tex->GetHeight() * 1.0f - 10.0f});
+
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 						{
 							std::shuffle(added_entities.begin(), added_entities.end(), els::random::prng);
 						}
+
+						ImGui::PopStyleColor(3);
+						/*if (UI::UIButton_2("Roll", "Roll", ImVec2{ viewport->Size.x * 0.2f, viewport->Size.y * 0.4f }, { 0,0 }, FONT_PARA))
+						{
+							std::shuffle(added_entities.begin(), added_entities.end(), els::random::prng);
+						}*/
 					}
 					ImGui::EndChild();
 				}
