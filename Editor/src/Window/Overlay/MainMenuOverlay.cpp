@@ -206,7 +206,8 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				get_quitter().quit = true;
+				//get_quitter().quit = true;
+				OverlayOpen = false;
 			}
 			if (ImGui::IsItemHovered())
 			{

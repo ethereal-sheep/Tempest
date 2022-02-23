@@ -3845,6 +3845,103 @@ namespace Tempest::UI
 		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
 		ImGui::PopFont();
 	}
+
+	bool UISliderFloat(const char* label, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	{
+		return UISliderScalar(label, ImGuiDataType_Float, v, &v_min, &v_max, format, flags);
+	}
+
+	bool UISliderScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
+	{
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		if (window->SkipItems)
+			return false;
+
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+		const ImGuiID id = window->GetID(label);
+		const float w = ImGui::CalcItemWidth();
+
+		const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+		const ImRect frame_bb(window->DC.CursorPos, window->DC.CursorPos + ImVec2(w, label_size.y + style.FramePadding.y * 2.0f));
+		const ImRect total_bb(frame_bb.Min, frame_bb.Max + ImVec2(label_size.x > 0.0f ? style.ItemInnerSpacing.x + label_size.x : 0.0f, 0.0f));
+
+		const bool temp_input_allowed = (flags & ImGuiSliderFlags_NoInput) == 0;
+		ImGui::ItemSize(total_bb, style.FramePadding.y);
+		if (!ImGui::ItemAdd(total_bb, id, &frame_bb, temp_input_allowed ? ImGuiItemAddFlags_Focusable : 0))
+			return false;
+
+		// Default format string when passing NULL
+		if (format == NULL)
+			format = ImGui::DataTypeGetInfo(data_type)->PrintFmt;
+		//else if (data_type == ImGuiDataType_S32 && strcmp(format, "%d") != 0) // (FIXME-LEGACY: Patch old "%.0f" format string to use "%d", read function more details.)
+		//	format = PatchFormatStringFloatToInt(format);
+		
+		// Tabbing or CTRL-clicking on Slider turns it into an input box
+		const bool hovered = ImGui::ItemHoverable(frame_bb, id);
+		bool temp_input_is_active = temp_input_allowed && ImGui::TempInputIsActive(id);
+		if (!temp_input_is_active)
+		{
+			const bool focus_requested = temp_input_allowed && (window->DC.LastItemStatusFlags & ImGuiItemStatusFlags_Focused) != 0;
+			const bool clicked = (hovered && g.IO.MouseClicked[0]);
+			if (focus_requested || clicked || g.NavActivateId == id || g.NavInputId == id)
+			{
+				ImGui::SetActiveID(id, window);
+				ImGui::SetFocusID(id, window);
+				ImGui::FocusWindow(window);
+				g.ActiveIdUsingNavDirMask |= (1 << ImGuiDir_Left) | (1 << ImGuiDir_Right);
+				if (temp_input_allowed && (focus_requested || (clicked && g.IO.KeyCtrl) || g.NavInputId == id))
+					temp_input_is_active = true;
+			}
+		}
+
+		if (temp_input_is_active)
+		{
+			// Only clamp CTRL+Click input when ImGuiSliderFlags_AlwaysClamp is set
+			const bool is_clamp_input = (flags & ImGuiSliderFlags_AlwaysClamp) != 0;
+			return ImGui::TempInputScalar(frame_bb, id, label, data_type, p_data, format, is_clamp_input ? p_min : NULL, is_clamp_input ? p_max : NULL);
+		}
+
+		// Draw frame
+		const ImU32 frame_col = ImGui::GetColorU32(g.ActiveId == id ? ImGuiCol_FrameBgActive : g.HoveredId == id ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+		//ImGui::RenderNavHighlight(frame_bb, id);
+		//ImGui::RenderFrame(frame_bb.Min, frame_bb.Max, frame_col, true, g.Style.FrameRounding);
+		ImVec2 lineMin = { frame_bb.Min.x, (frame_bb.Min.y + frame_bb.Max.y) * 0.5f };
+		ImVec2 lineMax = { frame_bb.Max.x, lineMin.y };
+		window->DrawList->AddLine(lineMin, lineMax, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+		// Slider behavior
+		ImRect grab_bb;
+		const bool value_changed = ImGui::SliderBehavior(frame_bb, id, data_type, p_data, p_min, p_max, format, flags, &grab_bb);
+		if (value_changed)
+			ImGui::MarkItemEdited(id);
+
+
+		ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
+		ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
+		// Render grab
+		grab_bb.Min = { grab_bb.Min.x - 10.f, grab_bb.Min.y - 2.f };
+		grab_bb.Max = { grab_bb.Max.x + 20.f, grab_bb.Max.y + 4.f };
+		
+		if (grab_bb.Max.x > grab_bb.Min.x)
+			window->DrawList->AddRectFilled(grab_bb.Min, grab_bb.Max, ImGui::GetColorU32(g.ActiveId == id ? tintPressed : tintHover),0.f);
+
+		// Display value using user-provided display format so user can add prefix/suffix/decorations to the value.
+		char value_buf[64];
+		const char* value_buf_end = value_buf + ImGui::DataTypeFormatString(value_buf, IM_ARRAYSIZE(value_buf), data_type, p_data, format);
+		if (g.LogEnabled)
+			ImGui::LogSetNextTextDecoration("{", "}");
+		ImGui::PushFont(FONT_BODY);
+		ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1 });
+		ImGui::RenderTextClipped(grab_bb.Min, grab_bb.Max, value_buf, value_buf_end, NULL, ImVec2(0.5f, 0.5f));
+		ImGui::PopStyleColor();
+		ImGui::PopFont();
+		if (label_size.x > 0.0f)
+			ImGui::RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
+
+		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags);
+		return value_changed;
+	}
+
 	void TutArea(ImVec2 pos, ImVec2 size, bool border)
 	{
 		
@@ -3858,32 +3955,6 @@ namespace Tempest::UI
 		ImRect BtmBox = { {0.f , max.y}, {viewport->Size.x - RightBox.GetWidth() , viewport->Size.y} };
 		ImRect LeftBox = { {0.f ,min.y}, {min.x , max.y} };
 		ImVec4 col = { 0,0,0,0.7f };
-
-		/*ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-		ImGui::SetNextWindowPos(TopBox.Min);
-		ImGui::SetNextWindowSize({ TopBox.GetWidth(), TopBox.GetHeight() });
-		if (ImGui::Begin("top", nullptr, window_flags)){} ImGui::End();
-		
-		ImGui::SetNextWindowPos(RightBox.Min);
-		ImGui::SetNextWindowSize({ RightBox.GetWidth(), RightBox.GetHeight() });
-		if (ImGui::Begin("right", nullptr, window_flags)) {} ImGui::End();
-
-		ImGui::SetNextWindowPos(BtmBox.Min);
-		ImGui::SetNextWindowSize({ BtmBox.GetWidth(), BtmBox.GetHeight() });
-		if (ImGui::Begin("btm", nullptr, window_flags)) {} ImGui::End();
-
-		ImGui::SetNextWindowPos(LeftBox.Min);
-		ImGui::SetNextWindowSize({ LeftBox.GetWidth(), LeftBox.GetHeight() });
-		if (ImGui::Begin("left", nullptr, window_flags)) {} ImGui::End();
-		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor();
-
-		ImGui::SetWindowFocus("top");
-		ImGui::SetWindowFocus("right");
-		ImGui::SetWindowFocus("btm");
-		ImGui::SetWindowFocus("left");*/
 		
 		drawlist->AddRectFilled(TopBox.Min, TopBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(RightBox.Min, RightBox.Max, ImGui::GetColorU32(col));

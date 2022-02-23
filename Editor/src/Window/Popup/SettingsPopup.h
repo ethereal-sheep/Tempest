@@ -17,6 +17,7 @@
 #include "Audio/AudioEngine.h"
 
 
+
 namespace Tempest
 {
     class SettingsPopup : public Window
@@ -188,30 +189,43 @@ namespace Tempest
                 ImGui::Dummy({ 0,ImGui::GetWindowHeight() * 0.1f });
                 ImGui::Dummy({ (ImGui::GetWindowWidth() - (float)img->GetWidth()) * 0.5f ,0 });
                 ImGui::SameLine();
-                ImGui::BeginChild("SettingsID", ImVec2((float)img->GetWidth(), 456.f), true);
 
-                // ============== SOUND SETTINGS ============== 
+                ImGui::BeginChild("SettingsID", ImVec2((float)img->GetWidth(), 456.f), false);
+
+                // ============== SOUND SETTINGS ============== //
                 ImGui::Image((void*)static_cast<size_t>(img->GetID()), { (float)img->GetWidth(), (float)img->GetHeight() });
-               
                 ImGui::PushFont(FONT_BODY);
+
                 //Volume
-                
                 ImGui::Dummy({ 0, paddingBetween });
                 ImGui::Text("Volume");
                 ImGui::SameLine();
                 ImGui::Dummy({paddingX - ImGui::GetItemRectSize().x, 0.f });
                 ImGui::SameLine();
-                UI::UICheckBox_1("", &isVolMute);
+                UI::UICheckBox_1("##isVolMute", &isVolMute);
+                ImGui::SameLine();
+                ImGui::Dummy({ 10.f, 0.f });
                 ImGui::SameLine();
                 auto SliderPosX = ImGui::GetCursorPosX();
-                sliderWidth = (float)img->GetWidth() - SliderPosX;
+                sliderWidth = (float)img->GetWidth() - SliderPosX - 20.f;
                 ImGui::PushItemWidth(sliderWidth);
                 {
-                    float vol = ae.GetMasterVolume();
-                    
-                    if (ImGui::SliderFloat("##MasterVolume", &vol, 0.f, 1.f))
+                    float vol = ae.GetMasterVolume() * 100;
+                    if (isVolMute)
                     {
+                        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+                        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+                        ae.SetMasterVolume(0.f);
+                    }
+                    if(UI::UISliderFloat("##MasterVolume", &vol, 0.f, 100.f))
+                    {
+                        vol *= 0.01;
                         ae.SetMasterVolume(std::clamp(vol, 0.f, 1.f));
+                    }
+                    if(isVolMute)
+                    {
+                        ImGui::PopItemFlag();
+                        ImGui::PopStyleVar();
                     }
                 } 
                 ImGui::PopItemWidth();
@@ -222,14 +236,28 @@ namespace Tempest
                 ImGui::SameLine();
                 ImGui::Dummy({ paddingX - ImGui::GetItemRectSize().x, 0.f });
                 ImGui::SameLine();
-                UI::UICheckBox_1("", &isVolMute);
+                UI::UICheckBox_1("##isSFXMute", &isSFXMute);
+                ImGui::SameLine();
+                ImGui::Dummy({ 10.f, 0.f });
                 ImGui::SameLine();
                 ImGui::PushItemWidth(sliderWidth);
                 {
-                    float vol = ae.GetBusVolume("SFX");
-                    if (ImGui::SliderFloat("##SFX", &vol, 0.f, 1.f))
+                    float vol = ae.GetBusVolume("SFX") * 100;
+                    if (isSFXMute)
                     {
+                        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+                        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+                        ae.SetBusVolume("SFX", 0.f);
+                    }
+                    if (UI::UISliderFloat("##SFX", &vol, 0.f, 100.f))
+                    {
+                        vol *= 0.01;
                         ae.SetBusVolume("SFX", std::clamp(vol, 0.f, 1.f));
+                    }
+                    if (isSFXMute)
+                    {
+                        ImGui::PopItemFlag();
+                        ImGui::PopStyleVar();
                     }
                 }
                 ImGui::PopItemWidth();
@@ -240,20 +268,35 @@ namespace Tempest
                 ImGui::SameLine();
                 ImGui::Dummy({ paddingX - ImGui::GetItemRectSize().x, 0.f });
                 ImGui::SameLine();
-                UI::UICheckBox_1("", &isVolMute);
+                UI::UICheckBox_1("##isBGMMute", &isBGMMute);
+                ImGui::SameLine();
+                ImGui::Dummy({ 10.f, 0.f });
                 ImGui::SameLine();
                 ImGui::PushItemWidth(sliderWidth);
                 {
-                    float vol = ae.GetBusVolume("BGM");
-                    if (ImGui::SliderFloat("##BGM", &vol, 0.f, 1.f))
+                    float vol = ae.GetBusVolume("BGM") * 100;
+                    if (isBGMMute)
                     {
+                        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+                        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+                        ae.SetBusVolume("BGM", 0.f);
+                    }
+                    if (UI::UISliderFloat("##BGM", &vol, 0.f, 100.f))
+                    {
+                        vol *= 0.01;
                         ae.SetBusVolume("BGM", std::clamp(vol, 0.f, 1.f));
                     }
+                    if (isBGMMute)
+                    {
+                        ImGui::PopItemFlag();
+                        ImGui::PopStyleVar();
+                    }
+
                 }
                 ImGui::PopItemWidth();
 
 
-                // ============== VISUAL SETTINGS ============== 
+                // ============== VISUAL SETTINGS ============== //
                 img = tex_map["Assets/VisualSetting.dds"];
                 ImGui::Dummy({ 0,paddingBetween });
                 ImGui::Image((void*)static_cast<size_t>(img->GetID()), { (float)img->GetWidth(), (float)img->GetHeight() });
@@ -265,83 +308,28 @@ namespace Tempest
                 ImGui::PushItemWidth(sliderWidth);
                 {
                     auto& gv = Service<RenderSystem>::Get().gammaValue;
-                    if (ImGui::SliderFloat("##Gamma", &gv, 1.f, 4.f))
+                    if (UI::UISliderFloat("##Gamma", &gv, 1.f, 4.f))
                     {
                         gv = std::clamp(gv, 1.f, 4.f);
                     }
                 }
                 ImGui::PopItemWidth();
-                ImGui::PopFont();
-
-                
+                ImGui::PopFont(); 
                 ImGui::EndChild();
+
                 if (UI::UIButton_2("Confirm", "Confirm", {ImGui::GetWindowWidth() * 0.84f, ImGui::GetWindowHeight() * 0.9f }, { -20.f,10.f }, FONT_BODY))
                 {
                     ImGui::CloseCurrentPopup();
                     enable_popup = false;
                 }
-                //ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(img->GetID()), imgMin, imgMax);
-
-                /*if (ImGui::BeginTabBar("SettingsTabBar", ImGuiTabBarFlags_None))
-                {
-                    if (ImGui::BeginTabItem("Sound"))
-                    {
-                        AudioEngine ae;
-
-                        // master
-                        {
-                            float vol = ae.GetMasterVolume();
-                            if (ImGui::SliderFloat("Master", &vol, 0.f, 1.f))
-                            {
-                                ae.SetMasterVolume(std::clamp(vol, 0.f, 1.f));
-                            }
-                        }
-
-                        // bgm
-                        {
-                            float vol = ae.GetBusVolume("BGM");
-                            if (ImGui::SliderFloat("BGM", &vol, 0.f, 1.f))
-                            {
-                                ae.SetBusVolume("BGM", std::clamp(vol, 0.f, 1.f));
-                            }
-                        }
-                        // sfx
-                        {
-                            float vol = ae.GetBusVolume("SFX");
-                            if (ImGui::SliderFloat("SFX", &vol, 0.f, 1.f))
-                            {
-                                ae.SetBusVolume("SFX", std::clamp(vol, 0.f, 1.f));
-                            }
-                        }
-
-                        ImGui::EndTabItem();
-                    }
-                    if (ImGui::BeginTabItem("Graphics"))
-                    {
-                        // gamma
-                        {
-                            auto& gv = Service<RenderSystem>::Get().gammaValue;
-                            if (ImGui::SliderFloat("Gamma", &gv, 1.f, 4.f))
-                            {
-                                gv = std::clamp(gv, 1.f, 4.f);
-                            }
-                        }
-                        ImGui::EndTabItem();
-                    }
-                    ImGui::EndTabBar();
-                }
-                ImGui::Text("\n");
-
-                if (ImGui::Button("Close")) {
-                    ImGui::CloseCurrentPopup();
-                }
-                */
                 ImGui::EndPopup();
             }
             ImGui::PopStyleVar(3);
             ImGui::PopStyleColor(2);
         }
         bool isVolMute = false;
+        bool isSFXMute = false;
+        bool isBGMMute = false;
         bool enable_popup = false;
 
 

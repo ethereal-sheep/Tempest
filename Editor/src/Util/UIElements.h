@@ -16,6 +16,7 @@
 #include <Tempest/src/ECS/Entity.h>
 #include "Instance/Instance.h"
 
+
 namespace Tempest::UI
 {
 	template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
@@ -212,6 +213,9 @@ namespace Tempest::UI
 
 	// Pos is from Middle of arrow 
 	void AttackSuccessUI(string name, const ImVec2 pos, int successVal);
+
+	bool UISliderFloat(const char* label, float* v, float v_min, float v_max, const char* format = "%0.f", ImGuiSliderFlags flags = 0);
+	bool UISliderScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags);
 
 	void TutArea(ImVec2 pos, ImVec2 size, bool border = true);
 	bool MouseIsWithin(const ImVec2 min, const ImVec2 max);
