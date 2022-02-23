@@ -54,8 +54,6 @@ namespace Tempest
 
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
-
-
 		{
 			float dt = ImGui::GetIO().DeltaTime;
 			for (auto& i : inter_nest)
@@ -69,7 +67,14 @@ namespace Tempest
 
 			if (ImGui::Begin("Turn Order Overlay", nullptr, window_flags))
 			{
-				
+				// background
+				auto texBG = tex_map["Assets/TurnOrderBG.dds"];
+				{
+
+					ImVec2 Min{ 0,0 };
+					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(texBG->GetID()), Min, Max);
+				}
 
 				// title
 				ImGui::SetCursorPos(ImVec2{ 0,inter_nest[0].get() * 200.f });
@@ -125,87 +130,54 @@ namespace Tempest
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 				{
 					auto tex = tex_map["Assets/TurnOrderLogo.dds"];
-					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.25f - tex->GetHeight() * 0.5f });
+					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.30f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
 
-					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.4f });
-					ImGui::Dummy(ImVec2{ 20.f, 0.f });
+					ImGui::SetCursorPos(ImVec2{ 0 + (inter_nest[0].get() + inter_nest[1].get()) * 600.f, viewport->Size.y * 0.45f });
+					ImGui::Dummy(ImVec2{ 50.f, 0.f });
 					ImGui::SameLine();
-					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.4f, viewport->Size.y * 0.5f }))
+					if (ImGui::BeginChild("TurnOrderText", ImVec2{ viewport->Size.x * 0.3f, viewport->Size.y * 0.35f}, true))
 					{
 						std::string text = "Turn order decides the order in which each entity is able to act in the game. This order can be decided in several ways depending on the mechanics of the tabletop RPG.\n\nEntities with the fastest turn order may have a significant advantage over others.";
+						ImGui::PushFont(FONT_BODY);
 						ImGui::TextWrapped(text.c_str());
+						ImGui::PopFont();
 
-						ImGui::Dummy(ImVec2{ 0.f, 100.0f });
-						if (ImGui::ImageButton((void*)static_cast<size_t>(buttons[0]->GetID()), ImVec2{ buttons[0]->GetWidth() * 1.0f,buttons[0]->GetHeight() * 1.0f }))
+						tex = tex_map["Assets/CustomizeTurnOrderLeft.dds"];
+						ImGui::SetCursorPos(ImVec2{0,viewport->Size.y * 0.35f - tex->GetHeight() * 1.0f});
+						ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f });
+
+						tex = tex_map["Assets/CustomizeTurnOrderUnlit.dds"];
+						ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.3f - tex->GetWidth() * 0.9f - 10.0f,viewport->Size.y * 0.35f - tex->GetHeight() * 1.0f});
+
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
+						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 						{
-
 							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
 							auto fn = [&]() {
 								turn_order_state = TURN_ORDER_STATE::ORDER_DICE;
 								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
 							};
+
 							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
 						}
-						if (ImGui::IsItemHovered())
-							buttons[0] = tex_map["Assets/DiceRollButtonLit.dds"];
-						else
-							buttons[0] = tex_map["Assets/DiceRollButtonUnlit.dds"];
 
-						ImVec2 cursor = ImGui::GetCursorPos();
-
-						ImGui::SameLine();
-						ImGui::Dummy(ImVec2{ 20.f, 0.f });
-						ImGui::SameLine();
-
-						if (ImGui::ImageButton((void*)static_cast<size_t>(buttons[2]->GetID()), ImVec2{ buttons[2]->GetWidth() * 1.0f,buttons[2]->GetHeight() * 1.0f }))
+						ImGui::PopStyleColor(3);
+						ImGui::SetCursorPos(ImVec2{0, ImGui::GetContentRegionMax().y * 0.75f});
+						ImGui::Dummy(ImVec2{ 5.f, 0.0f });
+						if (ImGui::BeginChild("TurnOrderTextInside", ImVec2{ ImGui::GetContentRegionMax().x * 0.65f, 40.0f }, true))
 						{
-							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
-
-							auto fn = [&]() {
-								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
-								turn_order_state = TURN_ORDER_STATE::ORDER_STAT;
-							};
-							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+							std::string text = "Select from stats, randomized order or both for your unit's turn order.";
+							ImGui::PushFont(FONT_BODY);
+							ImGui::TextWrapped(text.c_str());
+							ImGui::PopFont();
 						}
-						if (ImGui::IsItemHovered())
-							buttons[2] = tex_map["Assets/StatsButtonLit.dds"];
-						else
-							buttons[2] = tex_map["Assets/StatsButtonUnlit.dds"];
-
-						/*ImGui::SetCursorPos(cursor);
-						ImGui::Dummy(ImVec2{ 0.f, 10.0f });
-						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[1]->GetID()), ImVec2{ buttons[1]->GetWidth() * 1.0f,buttons[1]->GetHeight() * 1.0f }))
-						{
-							turn_order_state = TURN_ORDER_STATE::ORDER_DICE_STAT;
-						}
-						if (ImGui::IsItemHovered())
-							buttons[1] = tex_map["Assets/DiceRollStatsButtonLit.dds"];
-						else
-							buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.dds"];
-
-						ImGui::SameLine();
-						ImGui::Dummy(ImVec2{ 20.f, 0.f });
-						ImGui::SameLine();*/
-
-						if(ImGui::ImageButton((void*)static_cast<size_t>(buttons[3]->GetID()), ImVec2{ buttons[3]->GetWidth() * 1.0f , buttons[3]->GetHeight() * 1.0f }))
-						{
-
-							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
-
-							auto fn = [&]() {
-								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
-								turn_order_state = TURN_ORDER_STATE::ORDER_CUSTOM;
-							};
-							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+						ImGui::EndChild();
 
 
-
-						}
-						if (ImGui::IsItemHovered())
-							buttons[3] = tex_map["Assets/CustomButtonLit.dds"];
-						else
-							buttons[3] = tex_map["Assets/CustomButtonUnlit.dds"];
 					}
 					ImGui::EndChild();
 					
@@ -371,9 +343,8 @@ namespace Tempest
 				}
 				
 
-
 				// character added section
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f - inter_nest[0].get() * 1000.f, viewport->Size.y * 0.3f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.47f - inter_nest[0].get() * 1000.f, viewport->Size.y * 0.25f });
 				const ImVec2 ChildSize{ viewport->Size.x * 0.45f, viewport->Size.y * 0.5f };
 				tvector<unsigned> remove;
 				if (ImGui::BeginChild("Character added", ChildSize))
@@ -445,7 +416,7 @@ namespace Tempest
 						if (i / 5)
 						{
 							i = 0;
-							ypos += character_icon->GetHeight() + (ChildSize.y - (character_icon->GetHeight() - 35.0f) * 3) / 3.0f;
+							ypos += character_icon->GetHeight() + (ChildSize.y - character_icon->GetHeight()  * 3) / 3.0f;
 						}
 					}
 				}
