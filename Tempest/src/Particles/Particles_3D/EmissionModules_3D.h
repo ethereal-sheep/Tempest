@@ -8,43 +8,39 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#ifndef EMISSION_MODULES_2D_H
-#define EMISSION_MODULES_2D_H
+#ifndef EMISSION_MODULE_3D_H
+#define EMISSION_MODULE_3D_H
 
-#include "Particle_2D.h"
+#include <glm.hpp>
 
-#include <glm.hpp> // glm::vec2, glm::vec4
-//#include <queue>
-//#include <vector>
-
-struct MainModule_2D
+struct MainModule_3D
 {
-	MainModule_2D();
+	MainModule_3D();
 
-	float m_duration;		// Duration of emitter
-	bool  m_looping;		// Resets on the emitter death
-	short m_maxParticles;	// Max amount of particles 
+	float m_duration;		 // Duration of emitter
+	bool  m_looping;		 // Resets on the emitter death
+	short m_maxParticles;	 // Max amount of particles 
 
-	float m_simulationSpeed;	// What DT to run in
+	float m_simulationSpeed; // What DT to run in
 	bool m_preWarm;
 };
 
-struct GameObjectModule_2D
+struct GameObjectModule_3D
 {
-	GameObjectModule_2D();
+	GameObjectModule_3D();
 
-	glm::vec2 m_position;
-	glm::vec2 m_velocity;
+	glm::vec3 m_position;
+	glm::vec3 m_velocity;
 
 	bool m_active;
 };
 
-struct ParticleArchetypeModule_2D
+struct ParticleArchetypeModule_3D
 {
-	ParticleArchetypeModule_2D();
+	ParticleArchetypeModule_3D();
 
-	glm::vec2 m_startVelocity, m_endVelocity;
-	glm::vec2 m_velocityVariation;
+	glm::vec3 m_startVelocity, m_endVelocity;
+	glm::vec3 m_velocityVariation;
 
 	float m_sizeBegin, m_sizeEnd;
 	float m_sizeVariation;
@@ -55,9 +51,9 @@ struct ParticleArchetypeModule_2D
 	float m_lifeTime;		// Particle life duration
 };
 
-struct EmissionModule_2D
+struct EmissionModule_3D
 {
-	EmissionModule_2D();
+	EmissionModule_3D();
 
 	float m_burstTime;		// What time to spawn particle
 	float m_burstInterval;	// Interval before the next burst cycle
@@ -65,16 +61,15 @@ struct EmissionModule_2D
 	short m_burstCount;		// How many particle to spawn each burst
 
 	short m_rateOverTime;	// Particle to spawn per unit time
-	
+
 	// Hidden - For internal use
-	float m_spawnTimeInterval;	
+	float m_spawnTimeInterval;
 	float m_spawnCountTimer;	// Time the interval
 };
 
-struct RendererModule_2D
-{
-	RendererModule_2D();
-	ParticleType m_type;
-};
+//struct RendererModule_3D
+//{
+//	RendererModule_3D();
+//};
 
-#endif
+#endif // !EMISSION_MODULE_3D_H

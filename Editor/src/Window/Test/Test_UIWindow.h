@@ -15,7 +15,7 @@
 #include "rttr/type.h"
 #include "rttr/registration.h"
 #include "ECS/Rttr_Register.h"
-#include "Particles/ParticleSystem_2D.h"
+#include "Particles/Particles_2D/ParticleSystem_2D.h"
 
 namespace Tempest
 {

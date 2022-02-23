@@ -15,8 +15,8 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/WaypointEmitter_2D.h"
-#include "Particles/CircularMotionEmitter_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/CircularMotionEmitter_2D.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest

@@ -17,7 +17,7 @@
 #include "Util/interpolater.h"
 #include "Window/Viewport/CameraControls.h"
 
-#include "Particles/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
 
 namespace Tempest
 {

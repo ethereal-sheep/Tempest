@@ -13,7 +13,7 @@
 #include "Tempest/src/Graphics/Basics/RenderSystem.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
-#include "../../Tempest/src/Particles/ParticleSystem_2D.h"
+#include "../../Tempest/src/Particles/Particles_2D/ParticleSystem_2D.h"
 
 namespace Tempest
 {

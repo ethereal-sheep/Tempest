@@ -8,15 +8,9 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-// Main Include
-#include "Emitter_2D.h"
+#include "Emitter_3D.h"
 
-// Additional Includes
-#include "Random.h"
-#include "Util.h"
-#include <numbers>
-
-Emitter_2D::Emitter_2D()
+Emitter_3D::Emitter_3D()
 {
 	m_particles.resize(m_MM.m_maxParticles);
 
@@ -28,7 +22,7 @@ Emitter_2D::Emitter_2D()
 		Emit(m_EM.m_rateOverTime);
 }
 
-void Emitter_2D::SelfUpdate()
+void Emitter_3D::SelfUpdate()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -36,17 +30,17 @@ void Emitter_2D::SelfUpdate()
 		m_MM.m_preWarm = false;
 	}
 
-	// Update Emittor position
+	// Update Emitter Position
 	m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
 
-	// Emitter_2D emittion
-	if (m_EM.m_spawnCountTimer <= 0.f)
+	// Emitter_3D emission
+	if (m_EM.m_spawnCountTimer <= 0.0f)
 	{
-		while (m_EM.m_spawnCountTimer <= 0.f)
+		while (m_EM.m_spawnCountTimer <= 0.0f)
 		{
-			// Emit particle
+			// Emit Particle
 			Emit(m_EM.m_rateOverTime);
-			
+
 			// Ensure if simulation speed is different from the spawnTimeInterval, still spawn right amount
 			m_EM.m_spawnCountTimer += m_EM.m_spawnTimeInterval;
 		}
@@ -64,7 +58,7 @@ void Emitter_2D::SelfUpdate()
 		m_MM.m_duration -= m_MM.m_simulationSpeed;
 }
 
-void Emitter_2D::Update()
+void Emitter_3D::Update()
 {
 	SelfUpdate();
 
@@ -97,7 +91,7 @@ void Emitter_2D::Update()
 	}
 }
 
-void Emitter_2D::Emit(const int particleAmount)
+void Emitter_3D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
@@ -105,7 +99,7 @@ void Emitter_2D::Emit(const int particleAmount)
 		for (short i = 0; i < particleAmount; ++i)
 		{
 			// Initailisation of the particle
-			Particle_2D particle;
+			Particle_3D particle;
 
 			particle.m_position = m_GM.m_position;
 			particle.m_isActive = true;
@@ -120,8 +114,6 @@ void Emitter_2D::Emit(const int particleAmount)
 			particle.m_colour.r = m_PAM.m_colourBegin.r; //(Random::Float() - 0.5f);
 			particle.m_colour.g = m_PAM.m_colourBegin.g; //(Random::Float() - 0.5f);
 			particle.m_colour.b = m_PAM.m_colourBegin.b; //(Random::Float() - 0.5f);
-			
-			particle.m_type = m_RM.m_type;
 
 			// Lifetime
 			particle.m_lifeTime = m_PAM.m_lifeTime;
@@ -138,7 +130,7 @@ void Emitter_2D::Emit(const int particleAmount)
 	}
 }
 
-void Emitter_2D::ClearAllParticles()
+void Emitter_3D::ClearAllParticles()
 {
 	// Particle_2D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)

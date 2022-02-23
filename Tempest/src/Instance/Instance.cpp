@@ -11,7 +11,7 @@
 #include "Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
 
-#include "Particles/ParticleSystem_2D.h"
+#include "Particles/Particles_2D/ParticleSystem_2D.h"
 
 namespace Tempest
 {

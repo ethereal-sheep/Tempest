@@ -16,8 +16,8 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/WaypointEmitter_2D.h"
-#include "Particles/ExplosionEmitter_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
 
 namespace Tempest
 {

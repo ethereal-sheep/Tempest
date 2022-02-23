@@ -11,7 +11,7 @@
 #include "ExplosionEmitter_2D.h"
 
 // Additional Includes
-#include "Random.h"
+#include "../Random.h"
 
 void ExplosionEmitter_2D::Emit(const int particleAmount)
 {

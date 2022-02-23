@@ -11,7 +11,6 @@
 #ifndef EMITTER_H
 #define EMITTER_H
 
-#include <glm.hpp>
 #include <vector>
 #include <queue>
 
