@@ -22,10 +22,7 @@ namespace Tempest
         {
             ORDER_ADD_UNITS,
             ORDER_TURN_MAIN,
-            ORDER_DICE,
-            ORDER_STAT,
-            ORDER_DICE_STAT,
-            ORDER_CUSTOM
+            ORDER_TURN_SUB
         };
 
         const char* window_name() override
@@ -44,10 +41,6 @@ namespace Tempest
             change_state(TURN_ORDER_STATE::ORDER_ADD_UNITS);
             character_icon = tex_map["Assets/CharacterIcon.dds"];
             unit_black = tex_map["Assets/Unit_Black.dds"];
-            buttons[0] = tex_map["Assets/DiceRollButtonUnlit.dds"];
-            buttons[1] = tex_map["Assets/DiceRollStatsButtonUnlit.dds"];
-            buttons[2] = tex_map["Assets/StatsButtonUnlit.dds"];
-            buttons[3] = tex_map["Assets/CustomButtonUnlit.dds"];
             current_stat = "";
         }
 
@@ -62,10 +55,10 @@ namespace Tempest
         bool new_instance{ true };
         std::string overlay_title{ "" };
         std::string current_stat{ "" };
+        std::string next_button_name{ "" };
         TURN_ORDER_STATE turn_order_state{ TURN_ORDER_STATE::ORDER_ADD_UNITS };
         tsptr<Texture> unit_black;
         tsptr<Texture> character_icon;
-        std::array<tsptr<Texture>, 4> buttons;
         tvector<Entity> added_entities; // temp
 
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(10);
