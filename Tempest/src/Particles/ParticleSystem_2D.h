@@ -12,12 +12,12 @@
 #define PARTICLE_SYSTEM_2D_H
 
 #include "Core.h"
-#include "Emitter.h"
+#include "Emitter_2D.h"
 
 // Forward Declarations
-struct WaypointEmitter;
-struct ExplosionEmitter;
-struct CircularMotionEmitter;
+struct WaypointEmitter_2D;
+struct ExplosionEmitter_2D;
+struct CircularMotionEmitter_2D;
 struct ImVec2;
 
 struct ParticleSystem_2D
@@ -26,11 +26,11 @@ struct ParticleSystem_2D
 
 	//struct Handler
 	//{
-	//	Handler(std::shared_ptr<Emitter> emitter)
+	//	Handler(std::shared_ptr<Emitter_2D> emitter)
 	//		: m_weakEmmitters{ emitter }
 	//	{}
 
-	//	std::weak_ptr<Emitter> m_weakEmmitters;
+	//	std::weak_ptr<Emitter_2D> m_weakEmmitters;
 
 	//	void reset()
 	//	{
@@ -44,16 +44,16 @@ struct ParticleSystem_2D
 
 	//Handler Register(glm::vec2 pos)
 	//{
-	//	auto emitter = std::make_shared<Emitter>();
+	//	auto emitter = std::make_shared<Emitter_2D>();
 	//	emitter->m_GM.m_position = pos;
 	//	m_emitters.push_back(emitter);
 
 	//	return Handler(emitter); // Weak ptr, refer to Handler
 	//}
 
-	//Emitter& Register(glm::vec2 pos)
+	//Emitter_2D& Register(glm::vec2 pos)
 	//{
-	//	auto emitter = std::make_shared<Emitter>();
+	//	auto emitter = std::make_shared<Emitter_2D>();
 	//	emitter->m_GM.m_position = pos;
 	//	m_emitters.push_back(emitter);
 
@@ -66,34 +66,39 @@ struct ParticleSystem_2D
 		return m_emitters;
 	}
 
-	const std::weak_ptr<WaypointEmitter> CreateButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
-	const std::weak_ptr<WaypointEmitter> CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize);
+	// ----------------------- Screenspace Particle_2D -------------
 
-	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
-	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);
+	const std::weak_ptr<WaypointEmitter_2D> CreateButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	const std::weak_ptr<WaypointEmitter_2D> CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize);
 
-	const std::weak_ptr<ExplosionEmitter> CreateExplosionEmitter(glm::vec2 spawnPos);
-	const std::weak_ptr<ExplosionEmitter> CreateExplosionEmitter(ImVec2 spawnPos);
+	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter_2D>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
+	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter_2D>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);
 
-	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, glm::vec2 spawnPos);
-	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, ImVec2 spawnPos);
+	const std::weak_ptr<ExplosionEmitter_2D> CreateExplosionEmitter(glm::vec2 spawnPos);
+	const std::weak_ptr<ExplosionEmitter_2D> CreateExplosionEmitter(ImVec2 spawnPos);
 
-	const std::weak_ptr<CircularMotionEmitter> CreateCircularMotionEmitter(glm::vec2 centrePos, float radius);
-	const std::weak_ptr<CircularMotionEmitter> CreateCircularMotionEmitter(ImVec2 centrePos, float radius);
+	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, glm::vec2 spawnPos);
+	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, ImVec2 spawnPos);
 
-	void ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, ImVec2 centrePos, float radius);
-	void ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, glm::vec2 centrePos, float radius);
+	const std::weak_ptr<CircularMotionEmitter_2D> CreateCircularMotionEmitter_2D(glm::vec2 centrePos, float radius);
+	const std::weak_ptr<CircularMotionEmitter_2D> CreateCircularMotionEmitter_2D(ImVec2 centrePos, float radius);
+
+	void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
+	void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
+
+	//--------------------------------------------------------------
 
 private:
 	ParticleSystem_2D();
-	std::vector <std::shared_ptr<Emitter>> m_emitters;
 
-	// Emitter Management
+	std::vector <std::shared_ptr<Emitter_2D>> m_emitters;
+
+	// Emitter_2D Management
 	std::set<short> m_UniqueEmitterSlots;
 	std::queue<short> m_availableEmitterSlots;
 
 	// Helper functions
-	void AddEmitter(const std::shared_ptr<Emitter> emitter);
+	void AddEmitter(const std::shared_ptr<Emitter_2D> emitter);
 };
 
 #endif // !PARTICLE_SYSTEM_2D_H

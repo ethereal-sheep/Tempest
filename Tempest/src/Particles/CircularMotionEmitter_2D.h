@@ -11,11 +11,11 @@
 #ifndef CIRCULAR_MOTION_EMITTER_H
 #define CIRCULAR_MOTION_EMITTER_H
 
-#include "Emitter.h"
+#include "Emitter_2D.h"
 
-struct CircularMotionEmitter final : public Emitter
+struct CircularMotionEmitter_2D final : public Emitter_2D
 {
-	CircularMotionEmitter();
+	CircularMotionEmitter_2D();
 
 	void SelfUpdate() override;
 	void Emit(const int particleAmount) override;

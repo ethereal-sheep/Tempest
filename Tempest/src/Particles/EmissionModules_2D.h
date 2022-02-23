@@ -8,18 +8,18 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#ifndef EMISSION_MODULES_H
-#define EMISSION_MODULES_H
+#ifndef EMISSION_MODULES_2D_H
+#define EMISSION_MODULES_2D_H
 
-#include "Particles.h"
+#include "Particle_2D.h"
 
 #include <glm.hpp> // glm::vec2, glm::vec4
 //#include <queue>
 //#include <vector>
 
-struct MainModule
+struct MainModule_2D
 {
-	MainModule();
+	MainModule_2D();
 
 	float m_duration;		// Duration of emitter
 	bool  m_looping;		// Resets on the emitter death
@@ -29,9 +29,9 @@ struct MainModule
 	bool m_preWarm;
 };
 
-struct GameObjectModule
+struct GameObjectModule_2D
 {
-	GameObjectModule();
+	GameObjectModule_2D();
 
 	glm::vec2 m_position;
 	glm::vec2 m_velocity;
@@ -39,9 +39,9 @@ struct GameObjectModule
 	bool m_active;
 };
 
-struct ParticleArchetypeModule
+struct ParticleArchetypeModule_2D
 {
-	ParticleArchetypeModule();
+	ParticleArchetypeModule_2D();
 
 	glm::vec2 m_startVelocity, m_endVelocity;
 	glm::vec2 m_velocityVariation;
@@ -55,9 +55,9 @@ struct ParticleArchetypeModule
 	float m_lifeTime;		// Particle life duration
 };
 
-struct EmissionModule
+struct EmissionModule_2D
 {
-	EmissionModule();
+	EmissionModule_2D();
 
 	float m_burstTime;		// What time to spawn particle
 	float m_burstInterval;	// Interval before the next burst cycle
@@ -71,10 +71,9 @@ struct EmissionModule
 	float m_spawnCountTimer;	// Time the interval
 };
 
-struct RendererModule
+struct RendererModule_2D
 {
-	RendererModule();
-
+	RendererModule_2D();
 	ParticleType m_type;
 };
 

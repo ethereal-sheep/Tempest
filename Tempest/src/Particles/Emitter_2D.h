@@ -15,26 +15,23 @@
 #include <vector>
 #include <queue>
 
-#include "EmissionModules.h"
+#include "EmissionModules_2D.h"
 
 // Note, glm::vectors are used to utilise the mix function
-struct Emitter
+struct Emitter_2D
 {
-	// Particles Management
-	std::vector<Particle> m_particles;
+	// Particle_2D Management
+	std::vector<Particle_2D> m_particles;
 	std::queue<short> m_available_ParticleSlots;
 
-	MainModule m_MM;
-	GameObjectModule m_GM;
-	ParticleArchetypeModule m_PAM;
-	EmissionModule m_EM;
-	RendererModule m_RM;
+	MainModule_2D m_MM;
+	GameObjectModule_2D m_GM;
+	ParticleArchetypeModule_2D m_PAM;
+	EmissionModule_2D m_EM;
+	RendererModule_2D m_RM;
 
-	std::vector<glm::vec2> m_wayPoints;
-	short m_wayPointIndex;
-	bool m_recalculateVelocity;
 
-	Emitter();
+	Emitter_2D();
 	void Update();
 	void ClearAllParticles();
 
@@ -42,6 +39,5 @@ protected:
 	virtual void SelfUpdate();
 	virtual void Emit(const int particleAmount);
 };
-
 
 #endif // !EMITTER_H

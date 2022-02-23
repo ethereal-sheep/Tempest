@@ -8,29 +8,24 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-// Main Include
-#include "Emitter.h"
+/*
+* References:
+* http://www.cplusplus.com/forum/general/129187/
+* https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
+*/
 
-// Additional Includes
-#include "Random.h"
-#include "Util.h"
-#include <numbers>
+#include "CircularMotionEmitter_2D.h"
 
-Emitter::Emitter()
-	: m_wayPointIndex {0}
-	, m_recalculateVelocity {true}
-{
-	m_particles.resize(m_MM.m_maxParticles);
+#include "Logger/Log.h"
 
-	// Store all available slots
-	for (short i = 0; i < m_MM.m_maxParticles; ++i)
-		m_available_ParticleSlots.push(i);
+CircularMotionEmitter_2D::CircularMotionEmitter_2D()
+	: Emitter_2D()
+	, m_centrePoint { glm::vec2(0.0f, 0.0f)}
+	, m_radius { 0.0f }
+	, m_angle {0.0f }
+{}
 
-	if (m_MM.m_preWarm)
-		Emit(m_EM.m_rateOverTime);
-}
-
-void Emitter::SelfUpdate()
+void CircularMotionEmitter_2D::SelfUpdate()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -38,17 +33,26 @@ void Emitter::SelfUpdate()
 		m_MM.m_preWarm = false;
 	}
 
-	// Update Emittor position
-	m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
+	m_angle += 0.1f;  // or some other value.  Higher numbers = circles faster
 
-	// Emitter emittion
+	float x = cos(m_angle) * m_radius;
+	float y = sin(m_angle) * m_radius;
+
+	x += m_centrePoint.x;
+	y += m_centrePoint.y;
+
+	// Update Emittor position
+	m_GM.m_position.x = x;
+	m_GM.m_position.y = y;
+
+	// Emitter_2D emittion
 	if (m_EM.m_spawnCountTimer <= 0.f)
 	{
 		while (m_EM.m_spawnCountTimer <= 0.f)
 		{
 			// Emit particle
 			Emit(m_EM.m_rateOverTime);
-			
+
 			// Ensure if simulation speed is different from the spawnTimeInterval, still spawn right amount
 			m_EM.m_spawnCountTimer += m_EM.m_spawnTimeInterval;
 		}
@@ -59,47 +63,14 @@ void Emitter::SelfUpdate()
 	else
 		m_EM.m_spawnCountTimer -= m_MM.m_simulationSpeed;
 
-	// Emitter Lifetime update
+	// Emitter_2D Lifetime update
 	if (m_MM.m_duration <= 0.f)
 		m_GM.m_active = false;
 	else
 		m_MM.m_duration -= m_MM.m_simulationSpeed;
 }
 
-void Emitter::Update()
-{
-	SelfUpdate();
-
-	// Particles Behaviour
-	for (short i = 0; i < m_particles.size(); ++i)
-	{
-		auto& particle = m_particles[i];
-
-		if (!particle.m_isActive)
-			continue;
-		else if (particle.m_lifeRemaining <= 0)
-		{
-			particle.m_isActive = false;
-
-			// To be reused
-			m_available_ParticleSlots.push(i);
-		}
-		else
-		{
-			particle.m_position += particle.m_velocity * m_MM.m_simulationSpeed;
-			//particle.m_rotation += 0.01f * m_MM.m_simulationSpeed;
-
-			// Calculate the lifeTime remaining
-			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
-
-			particle.m_size = glm::mix(m_PAM.m_sizeEnd, m_PAM.m_sizeBegin, lifePercent);
-			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);
-			particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
-		}
-	}
-}
-
-void Emitter::Emit(const int particleAmount)
+void CircularMotionEmitter_2D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
@@ -107,11 +78,15 @@ void Emitter::Emit(const int particleAmount)
 		for (short i = 0; i < particleAmount; ++i)
 		{
 			// Initailisation of the particle
-			Particle particle;
+			Particle_2D particle;
 
+			// Position
 			particle.m_position = m_GM.m_position;
 			particle.m_isActive = true;
+
+			// Rotation
 			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
+			particle.m_rotation = m_angle;
 
 			// Velocity
 			particle.m_velocity = m_PAM.m_startVelocity;
@@ -122,7 +97,8 @@ void Emitter::Emit(const int particleAmount)
 			particle.m_colour.r = m_PAM.m_colourBegin.r; //(Random::Float() - 0.5f);
 			particle.m_colour.g = m_PAM.m_colourBegin.g; //(Random::Float() - 0.5f);
 			particle.m_colour.b = m_PAM.m_colourBegin.b; //(Random::Float() - 0.5f);
-			
+
+			// Rendering Type
 			particle.m_type = m_RM.m_type;
 
 			// Lifetime
@@ -136,24 +112,6 @@ void Emitter::Emit(const int particleAmount)
 
 			if (m_available_ParticleSlots.size() <= 0)
 				break;
-		}
-	}
-}
-
-void Emitter::ClearAllParticles()
-{
-	// Particles Behaviour
-	for (short i = 0; i < m_particles.size(); ++i)
-	{
-		auto& particle = m_particles[i];
-
-		if (particle.m_isActive)
-		{
-			particle.m_lifeRemaining = 0;
-			particle.m_isActive = false;
-
-			// To be reused
-			m_available_ParticleSlots.push(i);
 		}
 	}
 }

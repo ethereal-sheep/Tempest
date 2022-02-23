@@ -16,14 +16,13 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/WaypointEmitter.h"
-#include "Particles/ExplosionEmitter.h"
+#include "Particles/WaypointEmitter_2D.h"
+#include "Particles/ExplosionEmitter_2D.h"
 
 namespace Tempest
 {
     class AttackSystemOverlay : public Window
     {
-
         const char* window_name() override
         {
             return "";
@@ -79,7 +78,6 @@ namespace Tempest
         void draw_link_context(graph& g, Instance& instance, ax::NodeEditor::LinkId contextLinkId);
         void draw_background_context(graph& g, Instance& instance);
 
-
         void copy_selected();
         void paste_selected(graph& g, Instance& instance);
 
@@ -87,7 +85,6 @@ namespace Tempest
 		void update_delete(graph& g);
 		ImColor get_pin_color(pin_type type);
 		ax::Drawing::IconType get_pin_icon(pin_type type);
-
 
         ImGuiID HoveredID{ 0 };
 		graph temp_graph;
@@ -114,8 +111,8 @@ namespace Tempest
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
         // For tutorial emitter
-        std::weak_ptr<WaypointEmitter> m_waypointEmitter;
-        std::weak_ptr<ExplosionEmitter> m_explosionEmitter;
+        std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
+        std::weak_ptr<ExplosionEmitter_2D> m_explosionEmitter;
 
         bool emitter_0 = false;
         //bool emitter_1 = false;

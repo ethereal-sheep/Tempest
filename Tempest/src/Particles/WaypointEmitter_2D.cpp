@@ -8,18 +8,20 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#include "WaypointEmitter.h"
+#include "WaypointEmitter_2D.h"
 
 #include "Logger/Log.h"
 
-WaypointEmitter::WaypointEmitter()
-	: Emitter()
-	, m_initialDistanceSquared {0.0f}
-	, m_startVelocity { glm::vec2{0.0f, 0.0f}}
-	, m_endVelocity{ glm::vec2{0.0f, 0.0f}}
+WaypointEmitter_2D::WaypointEmitter_2D()
+	: Emitter_2D()
+	, m_wayPointIndex{ 0 }
+	, m_recalculateVelocity{ true }
+	// , m_initialDistanceSquared {0.0f}
+	// , m_startVelocity { glm::vec2{0.0f, 0.0f}}
+	// , m_endVelocity{ glm::vec2{0.0f, 0.0f}}
 {}
 
-void WaypointEmitter::SelfUpdate()
+void WaypointEmitter_2D::SelfUpdate()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -106,7 +108,7 @@ void WaypointEmitter::SelfUpdate()
 	else
 		m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
 
-	// Emitter emittion
+	// Emitter_2D emittion
 	if (m_EM.m_spawnCountTimer <= 0.f)
 	{
 		/*while (m_EM.m_spawnCountTimer <= 0.f)

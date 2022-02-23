@@ -8,18 +8,26 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#ifndef EXPLOSION_EMITTER_H
-#define EXPLOSION_EMITTER_H
+#ifndef WAYPOINT_EMITTER_H
+#define WAYPOINT_EMITTER_H
 
-#include "Emitter.h"
+#include "Emitter_2D.h"
 
-#include <gtx/transform.hpp>
-
-
-struct ExplosionEmitter final : public Emitter
+struct WaypointEmitter_2D final : public Emitter_2D
 {
-	void Emit(const int particleAmount) override;
+	WaypointEmitter_2D();
+	void SelfUpdate() override;
+
+	std::vector<glm::vec2> m_wayPoints;
+	short m_wayPointIndex;
+	bool m_recalculateVelocity;
+
+
+	// Travel Progression
+	// float m_initialDistanceSquared;
+
+	// Velocity controls
+	// glm::vec2 m_startVelocity, m_endVelocity;
 };
 
-#endif // ! EXPLOSION_EMITTER_H
-
+#endif // !WAYPOINT_EMITTER_H

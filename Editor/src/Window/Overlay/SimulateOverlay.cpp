@@ -612,14 +612,14 @@ namespace Tempest
 
 									if (m_circularMotionEmitter.expired())
 									{
-										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(glm::vec2{ 980.0f, 450.0f }, 300.0f);
 										
 										auto sm = m_circularMotionEmitter.lock();
 										sm->m_PAM.m_sizeBegin = 30.0f;
 										sm->m_PAM.m_sizeEnd = 30.0f;
 									}
 									else
-										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2D(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
 								}
 							}
 							break;
@@ -687,14 +687,14 @@ namespace Tempest
 
 									if (m_circularMotionEmitter.expired())
 									{
-										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(glm::vec2{ 980.0f, 450.0f }, 300.0f);
 
 										auto sm = m_circularMotionEmitter.lock();
 										sm->m_PAM.m_sizeBegin = 30.0f;
 										sm->m_PAM.m_sizeEnd = 30.0f;
 									}
 									else
-										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
+										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2D(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
 								}
 							}
 								break;
@@ -762,14 +762,14 @@ namespace Tempest
 
 								if (m_circularMotionEmitter.expired())
 								{
-									m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter(glm::vec2{ 980.0f, 450.0f }, 300.0f);
+									m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(glm::vec2{ 980.0f, 450.0f }, 300.0f);
 
 									auto sm = m_circularMotionEmitter.lock();
 									sm->m_PAM.m_sizeBegin = 30.0f;
 									sm->m_PAM.m_sizeEnd = 30.0f;
 								}
 								else
-									ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
+									ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2D(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
 							}
 						}
 						break;
@@ -814,7 +814,6 @@ namespace Tempest
 				}
 				auto tex = tex_map["Assets/SimulationBG.dds"];
 				{
-
 					ImVec2 Min{ 0,0 };
 					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y};
 					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
@@ -897,7 +896,6 @@ namespace Tempest
 				display_unit_section(instance, { viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
 				display_unit_section(instance, { viewport->Size.x * (1.f - 0.18f),viewport->Size.y * 0.5f }, false);
 
-				
 				if (UI::UIButton_Simulate("Simulate", "Simulate", { viewport->Size.x * 0.5f, viewport->Size.y * 0.72f }, { -15.f, 6.f }, FONT_BODY, true))
 				{
 					if (instance.tutorial_enable && tutorial_p2 && tutorial_index == 9)
@@ -1032,7 +1030,7 @@ namespace Tempest
 								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), real_mousePosition, real_buttonSize);
 
 							/*if (!m_circularMotionEmitter)
-								m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter(real_mousePosition, 100.0f);*/
+								m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(real_mousePosition, 100.0f);*/
 						}
 					}
 					

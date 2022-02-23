@@ -8,9 +8,9 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#include "EmissionModules.h"
+#include "EmissionModules_2D.h"
 
-MainModule::MainModule()
+MainModule_2D::MainModule_2D()
 	: m_duration{ 10.0f }
 	, m_looping {false }
 	, m_maxParticles{ 1000 }
@@ -18,13 +18,13 @@ MainModule::MainModule()
 	, m_preWarm{ false }
 {}
 
-GameObjectModule::GameObjectModule()
+GameObjectModule_2D::GameObjectModule_2D()
 	: m_position{ 0.0f, 0.0f }
 	, m_velocity{ 0.0f, 0.0f }
 	, m_active{ true }
 {}
 
-ParticleArchetypeModule::ParticleArchetypeModule()
+ParticleArchetypeModule_2D::ParticleArchetypeModule_2D()
 	: m_startVelocity{ 0.0f, 0.0f }
 	, m_endVelocity{ 0.0f, 0.0f }
 	, m_velocityVariation{ 3.0f, 1.0f }
@@ -41,7 +41,7 @@ ParticleArchetypeModule::ParticleArchetypeModule()
 	//, m_lifeVariation{ 5.0f }
 {}
 
-EmissionModule::EmissionModule()
+EmissionModule_2D::EmissionModule_2D()
 	: m_burstTime {0.f}
 	, m_burstInterval{ 0.f }
 	, m_burstCycle {0}
@@ -53,6 +53,6 @@ EmissionModule::EmissionModule()
 
 {}
 
-RendererModule::RendererModule()
+RendererModule_2D::RendererModule_2D()
 	:m_type{ ParticleType::Circle }
 {}

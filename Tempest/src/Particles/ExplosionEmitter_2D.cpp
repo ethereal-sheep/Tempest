@@ -8,12 +8,12 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#include "ExplosionEmitter.h"
+#include "ExplosionEmitter_2D.h"
 
 // Additional Includes
 #include "Random.h"
 
-void ExplosionEmitter::Emit(const int particleAmount)
+void ExplosionEmitter_2D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
@@ -21,7 +21,7 @@ void ExplosionEmitter::Emit(const int particleAmount)
 		for (short i = 0; i < particleAmount; ++i)
 		{
 			// Initailisation of the particle
-			Particle particle;
+			Particle_2D particle;
 
 			particle.m_position = m_GM.m_position;
 			particle.m_isActive = true;

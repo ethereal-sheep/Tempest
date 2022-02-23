@@ -9,9 +9,9 @@
 **********************************************************************************/
 #include "ParticleSystem_2D.h"
 
-#include "WaypointEmitter.h"
-#include "CircularMotionEmitter.h"
-#include "ExplosionEmitter.h"
+#include "WaypointEmitter_2D.h"
+#include "CircularMotionEmitter_2D.h"
+#include "ExplosionEmitter_2D.h"
 
 // Debugging purpose
 #include "Logger/Log.h"
@@ -46,7 +46,7 @@ void ParticleSystem_2D::Update()
 		// Check for null pointer - shouldn't happen
 		if (m_emitters[i])
 		{
-			Emitter& emitter = *m_emitters[i];
+			Emitter_2D& emitter = *m_emitters[i];
 
 			// Update active emitter
 			if (emitter.m_GM.m_active)
@@ -64,7 +64,7 @@ void ParticleSystem_2D::Update()
 	}
 }
 
-void ParticleSystem_2D::AddEmitter(const std::shared_ptr<Emitter> emitter)
+void ParticleSystem_2D::AddEmitter(const std::shared_ptr<Emitter_2D> emitter)
 {
 	// There is an available slot
 	if (m_availableEmitterSlots.size())
@@ -83,18 +83,18 @@ void ParticleSystem_2D::AddEmitter(const std::shared_ptr<Emitter> emitter)
 		m_emitters.push_back(emitter);
 }
 
-const std::weak_ptr<WaypointEmitter> ParticleSystem_2D::CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize)
+const std::weak_ptr<WaypointEmitter_2D> ParticleSystem_2D::CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize)
 {
 	return CreateButtonEmitter(Imvec2_To_GlmVec2_Converter(topLeftPos), Imvec2_To_GlmVec2_Converter(buttonSize));
 }
 
-const std::weak_ptr<WaypointEmitter> ParticleSystem_2D::CreateButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
+const std::weak_ptr<WaypointEmitter_2D> ParticleSystem_2D::CreateButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
-	auto tempEmitter = std::make_shared<WaypointEmitter>();
-	Emitter& emitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<WaypointEmitter_2D>();
+	WaypointEmitter_2D& emitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
-	// Emitter values - Without consideration for default ctor values
+	// Emitter_2D values - Without consideration for default ctor values
 	emitter.m_GM.m_velocity.x = 0.0f;
 	emitter.m_MM.m_duration = 1000.0f;
 	emitter.m_GM.m_active = true;
@@ -159,19 +159,19 @@ const std::weak_ptr<WaypointEmitter> ParticleSystem_2D::CreateButtonEmitter(glm:
 	return tempEmitter;
 }
 
-void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize)
+void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter_2D>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize)
 {
 	return ReuseButtonEmitter(emitter, Imvec2_To_GlmVec2_Converter(topLeftPos), Imvec2_To_GlmVec2_Converter(buttonSize));
 }
 
-void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
+void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter_2D>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize)
 {
-	Emitter& waypointEmitter = *emitter.get();
+	WaypointEmitter_2D& waypointEmitter = *emitter.get();
 
 	// Clear all previous particle of the emitter
 	waypointEmitter.ClearAllParticles();
 
-	// Emitter values - Without consideration for default ctor values
+	// Emitter_2D values - Without consideration for default ctor values
 	waypointEmitter.m_GM.m_velocity.x = 0.0f;
 	waypointEmitter.m_MM.m_duration = 1000.0f;
 	waypointEmitter.m_GM.m_active = true;
@@ -237,18 +237,18 @@ void ParticleSystem_2D::ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter
 	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 }
 
-const std::weak_ptr<ExplosionEmitter> ParticleSystem_2D::CreateExplosionEmitter(ImVec2 spawnPos)
+const std::weak_ptr<ExplosionEmitter_2D> ParticleSystem_2D::CreateExplosionEmitter(ImVec2 spawnPos)
 {
 	return CreateExplosionEmitter(Imvec2_To_GlmVec2_Converter(spawnPos));
 }
 
-const std::weak_ptr<ExplosionEmitter> ParticleSystem_2D::CreateExplosionEmitter(glm::vec2 spawnPos)
+const std::weak_ptr<ExplosionEmitter_2D> ParticleSystem_2D::CreateExplosionEmitter(glm::vec2 spawnPos)
 {
-	auto tempEmitter = std::make_shared<ExplosionEmitter>();
-	Emitter& explosionEmitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<ExplosionEmitter_2D>();
+	Emitter_2D& explosionEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
-	// Emitter values - Without consideration for default ctor values
+	// Emitter_2D values - Without consideration for default ctor values
 	explosionEmitter.m_GM.m_position = spawnPos;
 	//explosionEmitter.m_GM.m_velocity.x = -500.0f;
 	explosionEmitter.m_MM.m_duration = 2.f;
@@ -259,9 +259,6 @@ const std::weak_ptr<ExplosionEmitter> ParticleSystem_2D::CreateExplosionEmitter(
 	explosionEmitter.m_EM.m_spawnCountTimer = explosionEmitter.m_EM.m_spawnTimeInterval;
 	explosionEmitter.m_EM.m_rateOverTime = 20;
 	explosionEmitter.m_MM.m_maxParticles = 1000;
-
-	explosionEmitter.m_wayPointIndex = 0;
-	explosionEmitter.m_recalculateVelocity = true;
 
 	// Particle Architype values - without consideration for default ctor
 	explosionEmitter.m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
@@ -281,19 +278,19 @@ const std::weak_ptr<ExplosionEmitter> ParticleSystem_2D::CreateExplosionEmitter(
 	return tempEmitter;
 }
 
-void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, ImVec2 spawnPos)
+void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, ImVec2 spawnPos)
 {
 	return ReuseExplosionEmitter(emitter, Imvec2_To_GlmVec2_Converter(spawnPos));
 }
 
-void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter>& emitter, glm::vec2 spawnPos)
+void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, glm::vec2 spawnPos)
 {
-	Emitter& explosionEmitter = *emitter.get();
+	Emitter_2D& explosionEmitter = *emitter.get();
 
 	// Clear all previous particle of the emitter
 	explosionEmitter.ClearAllParticles();
 
-	// Emitter values - Without consideration for default ctor values
+	// Emitter_2D values - Without consideration for default ctor values
 	explosionEmitter.m_GM.m_position = spawnPos;
 	//explosionEmitter.m_GM.m_velocity.x = -500.0f;
 	explosionEmitter.m_MM.m_duration = 2.f;
@@ -304,9 +301,6 @@ void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmi
 	explosionEmitter.m_EM.m_spawnCountTimer = explosionEmitter.m_EM.m_spawnTimeInterval;
 	explosionEmitter.m_EM.m_rateOverTime = 20;
 	explosionEmitter.m_MM.m_maxParticles = 1000;
-
-	explosionEmitter.m_wayPointIndex = 0;
-	explosionEmitter.m_recalculateVelocity = true;
 
 	// Particle Architype values - without consideration for default ctor
 	explosionEmitter.m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
@@ -324,15 +318,15 @@ void ParticleSystem_2D::ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmi
 	explosionEmitter.m_RM.m_type = ParticleType::Circle;
 }
 
-const std::weak_ptr<CircularMotionEmitter> ParticleSystem_2D::CreateCircularMotionEmitter(ImVec2 centrePos, float radius)
+const std::weak_ptr<CircularMotionEmitter_2D> ParticleSystem_2D::CreateCircularMotionEmitter_2D(ImVec2 centrePos, float radius)
 {
-	return CreateCircularMotionEmitter(Imvec2_To_GlmVec2_Converter(centrePos), radius);
+	return CreateCircularMotionEmitter_2D(Imvec2_To_GlmVec2_Converter(centrePos), radius);
 }
 
-const std::weak_ptr<CircularMotionEmitter> ParticleSystem_2D::CreateCircularMotionEmitter(glm::vec2 centrePos, float radius)
+const std::weak_ptr<CircularMotionEmitter_2D> ParticleSystem_2D::CreateCircularMotionEmitter_2D(glm::vec2 centrePos, float radius)
 {
-	auto tempEmitter = std::make_shared<CircularMotionEmitter>();
-	Emitter& emitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<CircularMotionEmitter_2D>();
+	Emitter_2D& emitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Center position of the circle
@@ -340,7 +334,7 @@ const std::weak_ptr<CircularMotionEmitter> ParticleSystem_2D::CreateCircularMoti
 	//tempEmitter->m_GM.m_position = centrePos;
 	tempEmitter->m_radius = radius;
 
-	// Emitter values - Without consideration for default ctor values
+	// Emitter_2D values - Without consideration for default ctor values
 	emitter.m_GM.m_velocity.x = 0.0f;
 	emitter.m_MM.m_duration = 1000.0f;
 	emitter.m_GM.m_active = true;
@@ -370,19 +364,19 @@ const std::weak_ptr<CircularMotionEmitter> ParticleSystem_2D::CreateCircularMoti
 	return tempEmitter;
 }
 
-void ParticleSystem_2D::ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, ImVec2 centrePos, float radius)
+void ParticleSystem_2D::ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius)
 {
-	ReuseCircularMotionEmitter(emitter, Imvec2_To_GlmVec2_Converter(centrePos), radius);
+	ReuseCircularMotionEmitter_2D(emitter, Imvec2_To_GlmVec2_Converter(centrePos), radius);
 }
 
-void ParticleSystem_2D::ReuseCircularMotionEmitter(const std::shared_ptr<CircularMotionEmitter>& emitter, glm::vec2 centrePos, float radius)
+void ParticleSystem_2D::ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius)
 {
 	// Center position of the circle
 	emitter->m_centrePoint = centrePos;
 	//tempEmitter->m_GM.m_position = centrePos;
 	emitter->m_radius = radius;
 
-	// Emitter values - Without consideration for default ctor values
+	// Emitter_2D values - Without consideration for default ctor values
 	emitter->m_GM.m_velocity.x = 0.0f;
 	emitter->m_MM.m_duration = 1000.0f;
 	emitter->m_GM.m_active = true;

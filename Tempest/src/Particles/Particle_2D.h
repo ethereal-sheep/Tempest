@@ -8,22 +8,34 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#ifndef WAYPOINT_EMITTER_H
-#define WAYPOINT_EMITTER_H
+#ifndef PARTICLES_H
+#define PARTICLES_H
 
-#include "Emitter.h"
+#include <glm.hpp>
 
-struct WaypointEmitter final : public Emitter
+enum class ParticleType
 {
-	WaypointEmitter();
-	void SelfUpdate() override;
-
-
-	// Travel Progression
-	float m_initialDistanceSquared;
-
-	// Velocity controls
-	glm::vec2 m_startVelocity, m_endVelocity;
+	Circle = 0
+	, Square = 1
 };
 
-#endif // !WAYPOINT_EMITTER_H
+struct Particle_2D
+{
+	Particle_2D();
+	Particle_2D(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType);
+
+	glm::vec2 m_position;
+	glm::vec2 m_velocity;
+
+	float m_rotation;
+
+	glm::vec4 m_colour;
+	float m_size;
+	float m_lifeTime;
+	float m_lifeRemaining;
+	bool  m_isActive;
+
+	ParticleType m_type;
+};
+
+#endif // !PARTICLES_H
