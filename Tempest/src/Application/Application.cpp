@@ -26,6 +26,9 @@
 
 #include "Graphics/Basics/RenderSystem.h"
 
+// Testing 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
+
 namespace Tempest
 {
 
@@ -64,6 +67,7 @@ namespace Tempest
 	void Application::OnEngineUpdate()
 	{
 		// Update Engine stuff first
+		ParticleSystem_3D::GetInstance().Update();
 		AudioEngine::Update();
 		Service<RenderSystem>::Get().GetCamera().Update();
 		OnUpdate();
