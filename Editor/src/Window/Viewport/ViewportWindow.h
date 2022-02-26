@@ -20,6 +20,8 @@
 //#define STB_IMAGE_WRITE_IMPLEMENTATION
 //#include "stb_image_write.h"
 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
+
 namespace Tempest
 {
 	class ViewportWindow : public Window
@@ -123,6 +125,11 @@ namespace Tempest
 					{
 						// deselect
 						current = INVALID;
+					}
+					break;
+					case 'l':
+					{
+						ParticleSystem_3D::GetInstance().CreateTestEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
 					}
 					break;
 					case 'o':
