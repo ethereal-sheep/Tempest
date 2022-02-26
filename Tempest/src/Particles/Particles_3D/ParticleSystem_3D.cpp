@@ -72,7 +72,7 @@ const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestEmitter(glm::vec3 s
 	// Emitter_2D values - Without consideration for default ctor values
 	explosionEmitter.m_GM.m_position = spawnPos;
 	//explosionEmitter.m_GM.m_velocity.x = -500.0f;
-	explosionEmitter.m_MM.m_duration = 2.f;
+	explosionEmitter.m_MM.m_duration = 200.f;
 	explosionEmitter.m_GM.m_active = true;
 	explosionEmitter.m_MM.m_preWarm = true;
 
@@ -93,7 +93,7 @@ const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestEmitter(glm::vec3 s
 	explosionEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	explosionEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
-	explosionEmitter.m_PAM.m_lifeTime = 0.3f;
+	explosionEmitter.m_PAM.m_lifeTime = 10.0f;
 
 	return tempEmitter;
 }
