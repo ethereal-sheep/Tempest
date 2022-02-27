@@ -2,7 +2,9 @@
 
 // Main Header
 #include "ParticleSystem_3D.h"
+
 #include "ExplosionEmitter_3D.h"
+#include "MultipleExplosionEmitter_3D.h"
 
 ParticleSystem_3D::ParticleSystem_3D()
 {}
@@ -63,7 +65,6 @@ void ParticleSystem_3D::AddEmitter(const std::shared_ptr<Emitter_3D> emitter)
 		m_Emitters.push_back(emitter);
 }
 
-
 const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateTestEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
@@ -73,7 +74,7 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateTestEmitter(gl
 	// Emitter_2D values - Without consideration for default ctor values
 	explosionEmitter.m_GM.m_position = spawnPos;
 	//explosionEmitter.m_GM.m_velocity.x = -500.0f;
-	explosionEmitter.m_MM.m_duration = 200.f;
+	explosionEmitter.m_MM.m_duration = 0.6f;
 	explosionEmitter.m_GM.m_active = true;
 	explosionEmitter.m_MM.m_preWarm = true;
 
@@ -95,6 +96,16 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateTestEmitter(gl
 	explosionEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
 	explosionEmitter.m_PAM.m_lifeTime = 0.08f;
+
+	return tempEmitter;
+}
+
+const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultipleExplosionEmitter(glm::vec3 spawnPos, int explosionEmitterAmount)
+{
+	auto tempEmitter = std::make_shared<MultipleExplosionEmitter_3D>();
+	tempEmitter->m_explosionEmitterAmount = explosionEmitterAmount;
+	//MultipleExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
 
 	return tempEmitter;
 }

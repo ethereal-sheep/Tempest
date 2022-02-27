@@ -52,7 +52,7 @@ void Emitter_3D::SelfUpdate()
 	else
 		m_EM.m_spawnCountTimer -= m_MM.m_simulationSpeed;
 
-	// Emitter_2D Lifetime update
+	// Emitter_3D Lifetime update
 	if (m_MM.m_duration <= 0.f)
 		m_GM.m_active = false;
 	else
@@ -63,7 +63,7 @@ void Emitter_3D::Update()
 {
 	SelfUpdate();
 
-	// Particle_2D Behaviour
+	// Particle_3D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
 	{
 		auto& particle = m_particles[i];
