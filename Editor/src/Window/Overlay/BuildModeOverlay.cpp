@@ -329,9 +329,7 @@ namespace Tempest
 							{
 								tc::Transform t;
 
-								const int& x = shape->x;
-								const int& y = shape->y;
-								auto [a_x, a_y, e_x, e_y, o_x, o_y, p_x, p_y] = shape_data_from_position(x, y, inter.x, inter.z);
+								[[maybe_unused]]auto [_1, _2, _3, _4, o_x, o_y, p_x, p_y] = shape_data_from_position(x, y, inter.x, inter.z);
 
 								t.position.x = o_x;
 								t.position.y = 0;
