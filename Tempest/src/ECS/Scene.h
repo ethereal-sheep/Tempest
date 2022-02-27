@@ -38,8 +38,11 @@ namespace Tempest
 		tmap<id_t, prefab> prefabs;
 
 		tmap<int, tmap<int, id_t>> collision_map;
+		tmap<int, tmap<int, id_t>> deco_map;
 		tmap<int, tmap<int, id_t>> tile_map;
 		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> wall_map;
+		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> door_map;
+		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> deco_edge_map;
 
 	public:
 		vec3 map_pos = vec3{ 0.f, 0.f, 0.f };
@@ -50,19 +53,9 @@ namespace Tempest
 		
 		void verify();
 
-		id_t find(int x, int y)
-		{
-			if (collision_map.count(x) && collision_map[x].count(y))
-				return collision_map[x][y];
-			return INVALID;
-		}
+		id_t find(int x, int y);
 
-		id_t find_edge(int a_x, int a_y, int b_x, int b_y)
-		{
-			if (wall_map.count(a_x) && wall_map[a_x].count(a_y) && wall_map[a_x][a_y].count(b_x) && wall_map[a_x][a_y][b_x].count(b_y))
-				return wall_map[a_x][a_y][b_x][b_y];
-			return INVALID;
-		}
+		id_t find_edge(int a_x, int a_y, int b_x, int b_y);
 
 
 		auto create(const prototype& proto)
