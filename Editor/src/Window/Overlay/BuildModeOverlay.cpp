@@ -324,7 +324,42 @@ namespace Tempest
 							box.max.y = 0;
 
 							Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+
+							if (model)
+							{
+								tc::Transform t;
+
+								const int& x = shape->x;
+								const int& y = shape->y;
+								auto [a_x, a_y, e_x, e_y, o_x, o_y, p_x, p_y] = shape_data_from_position(x, y, inter.x, inter.z);
+
+								t.position.x = o_x;
+								t.position.y = 0;
+								t.position.z = o_y;
+
+								auto transform = &t;
+
+								auto local = proto.get_if<tc::Local>();
+
+								auto test = glm::translate(transform->position)
+									* glm::mat4(transform->rotation)
+									* glm::translate(local->local_position)
+									* glm::mat4(local->local_rotation)
+									* glm::scale(local->local_scale)
+									* glm::scale(transform->scale);
+
+								std::filesystem::path p{ model->path };
+								if (strcmp(p.extension().string().c_str(), ".a"))
+								{
+									p.replace_extension(".a");
+								}
+								Service<RenderSystem>::Get().SubmitModel(p.string(), test);
+
+
+								Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), t);
+							}
 						}
+
 					}
 				}
 
