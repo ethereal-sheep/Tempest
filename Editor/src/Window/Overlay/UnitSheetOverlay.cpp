@@ -497,7 +497,7 @@ namespace Tempest
 							break;
 							case 3:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.67f, viewport->Size.y * 0.1f };
+								ImVec2 pos = { viewport->Size.x * 0.775f, viewport->Size.y * 0.085f };
 								ImVec2 size = { 300.f, 130.f };
 								UI::TutArea(pos, size, false);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access Weapon page.";
