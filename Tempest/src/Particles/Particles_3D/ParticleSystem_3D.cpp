@@ -2,6 +2,7 @@
 
 // Main Header
 #include "ParticleSystem_3D.h"
+#include "ExplosionEmitter_3D.h"
 
 ParticleSystem_3D::ParticleSystem_3D()
 {}
@@ -63,10 +64,10 @@ void ParticleSystem_3D::AddEmitter(const std::shared_ptr<Emitter_3D> emitter)
 }
 
 
-const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateTestEmitter(glm::vec3 spawnPos)
 {
-	auto tempEmitter = std::make_shared<Emitter_3D>();
-	Emitter_3D& explosionEmitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
+	ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Emitter_2D values - Without consideration for default ctor values
@@ -76,7 +77,7 @@ const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestEmitter(glm::vec3 s
 	explosionEmitter.m_GM.m_active = true;
 	explosionEmitter.m_MM.m_preWarm = true;
 
-	explosionEmitter.m_EM.m_spawnTimeInterval = 2.f; // 5x slower of dt
+	explosionEmitter.m_EM.m_spawnTimeInterval = 0.3f; // 5x slower of dt
 	explosionEmitter.m_EM.m_spawnCountTimer = explosionEmitter.m_EM.m_spawnTimeInterval;
 	explosionEmitter.m_EM.m_rateOverTime = 20;
 	explosionEmitter.m_MM.m_maxParticles = 1000;
@@ -86,14 +87,14 @@ const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestEmitter(glm::vec3 s
 	explosionEmitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	explosionEmitter.m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f};
 
-	explosionEmitter.m_PAM.m_sizeBegin = 10.0f;
+	explosionEmitter.m_PAM.m_sizeBegin = 0.5f;
 	explosionEmitter.m_PAM.m_sizeEnd = 0.0f;
 	explosionEmitter.m_PAM.m_sizeVariation = 0.3f;
 
 	explosionEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	explosionEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
-	explosionEmitter.m_PAM.m_lifeTime = 10.0f;
+	explosionEmitter.m_PAM.m_lifeTime = 0.08f;
 
 	return tempEmitter;
 }

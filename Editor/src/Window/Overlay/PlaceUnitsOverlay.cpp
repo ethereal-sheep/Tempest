@@ -17,9 +17,6 @@
 #include "ECS/Prototypes/Prototype_Category.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
-// Test only
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
-
 namespace Tempest
 {
 	void PlaceUnitsOverlay::open_popup(const Event& e)
@@ -300,9 +297,6 @@ namespace Tempest
 									LOG_ASSERT(instance.ecs.has<tc::Character>(entity));
 									LOG_ASSERT(instance.ecs.has<tc::Transform>(entity));
 									LOG_ASSERT(instance.ecs.has<tc::Model>(entity));
-
-									// TEST PARTICLE STUFF
-									ParticleSystem_3D::GetInstance().CreateTestEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
 
 									/*auto& model = instance.ecs.get<tc::Model>(entity);
 									auto& pipeline = Service<RenderSystem>::Get().m_Pipeline;

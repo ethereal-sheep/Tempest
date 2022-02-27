@@ -92,6 +92,7 @@
     <ClCompile Include="src\Particles\Particles_3D\EmissionModules_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Emitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\ParticleSystem_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\ExplosionEmitter_3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -260,6 +261,7 @@
     <ClInclude Include="src\Particles\Particles_3D\Emitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\EmissionModules_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\ParticleSystem_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\ExplosionEmitter_3D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

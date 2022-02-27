@@ -91,7 +91,7 @@ void Emitter_3D::Update()
 
 			auto s = glm::scale(glm::vec3(particle.m_size));
 			auto t = glm::translate(particle.m_position);
-			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel("Models/Chair.a", (t * s));
+			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel("Models/Cube.a", (t * s));
 		}
 	}
 }
