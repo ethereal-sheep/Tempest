@@ -32,7 +32,6 @@ namespace Tempest
             Tabs[QUICKMENU_POPUP_TYPE::ACTIONS] = tex_map["Assets/ActionsMainUnlit.dds"];
             Tabs[QUICKMENU_POPUP_TYPE::SEQUENCES] = tex_map["Assets/SequenceMainUnlit.dds"];
             Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.dds"];
-            Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.dds"];
             button_size = ImVec2{ 1.f, 1.f * Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() / Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() };
         }
 
@@ -53,13 +52,14 @@ namespace Tempest
             const auto viewport = ImGui::GetMainViewport();
             button_size = ImVec2{ 1.f, 1.f * Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetHeight() / Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetWidth() };
 
-            button_size.x *= viewport->Size.x / 6 * 0.95f;
-            button_size.y *= viewport->Size.x / 6 * 0.95f;
+            button_size.x *= viewport->Size.x / 5 * 0.9f;
+            button_size.y *= viewport->Size.x / 5 * 0.9f;
 
             bool return_v = false;
 
             ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, y }, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
             ImGui::SetNextWindowFocus();
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
             if (ImGui::BeginPopupModal("Quick Menu", NULL, flags))
             {
                /* if (instance.tutorial_enable)
@@ -71,11 +71,11 @@ namespace Tempest
                 ImVec2 point{ 0,0 };
                 {
                     ImVec2 Min{ point.x, y };
-                    ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y * 0.4f + y };
+                    ImVec2 Max{ Min.x + viewport->Size.x , Min.y + viewport->Size.y * 0.225f + y };
                     ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
                 }
 
-                ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.25f + y });
+                ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.03f,viewport->Size.y * 0.25f + y });
 
                 ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
                 ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
@@ -94,7 +94,7 @@ namespace Tempest
                 ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 
                 // render the buttons yo
-                ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.33f + y });
+                ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.04f,viewport->Size.y * 0.32f + y });
 
                 if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::SIMULATE]->GetID()), button_size) && still_working)
                 {
@@ -198,25 +198,13 @@ namespace Tempest
                 else
                     Tabs[QUICKMENU_POPUP_TYPE::WEAPONS] = tex_map["Assets/WeaponsMainUnlit.dds"];
 
-                ImGui::SameLine();
-
-                if (UI::UIImageButton((void*)static_cast<size_t>(Tabs[QUICKMENU_POPUP_TYPE::ITEMS]->GetID()), button_size) && still_working)
-                {
-                    /*AudioEngine ae;
-                    ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);*/
-                }
-
-                /*if (ImGui::IsItemHovered() || current == QUICKMENU_POPUP_TYPE::ITEMS)
-                    Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainLit.dds"];
-                else*/
-                    Tabs[QUICKMENU_POPUP_TYPE::ITEMS] = tex_map["Assets/ItemsMainUnlit.dds"];
-
                 ImGui::PopStyleVar();
                 ImGui::PopStyleColor(3);
 
                 ImGui::EndPopup();
             }
 
+            ImGui::PopStyleVar();
             return return_v;
         }
 
@@ -232,7 +220,7 @@ namespace Tempest
             {
                 ImGui::OpenPopup("Quick Menu");
                 ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, viewport->Size.y * 0.45f));
-                inter.start(-(viewport->Size.y * .22f), 0, .2f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+                inter.start(-(viewport->Size.y * .225f), 0, .2f, 0.f, [](float x) { return glm::sineEaseOut(x); });
 
                 state = State::OPENING;
             }
@@ -246,7 +234,7 @@ namespace Tempest
             case Tempest::QuickMenuPopup::State::OPEN:
                 if (draw_menu(instance, 0))
                 {
-                    inter.start(0, -(viewport->Size.y * .22f), .2f, 0.f, [](float x) { return glm::sineEaseIn(x); });
+                    inter.start(0, -(viewport->Size.y * .225f), .2f, 0.f, [](float x) { return glm::sineEaseIn(x); });
                     state = State::CLOSING;
                 }
                 break;
@@ -267,7 +255,7 @@ namespace Tempest
         }
 
         ImVec2 button_size{ 0.f,0.f };
-        std::array<tsptr<Texture>, 6> Tabs;
+        std::array<tsptr<Texture>, 5> Tabs;
         QUICKMENU_POPUP_TYPE current{ QUICKMENU_POPUP_TYPE::SIMULATE};
         QUICKMENU_POPUP_TYPE previous{ QUICKMENU_POPUP_TYPE::SIMULATE };
         ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |

@@ -2229,11 +2229,6 @@ namespace Tempest
 						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
 					});
 
-					render_tabs(TABS_TYPE::ITEM, [&]() {
-						ImGui::SetCursorPos(content_region_offset);
-						CombatModeOverlay::display_items(*viewport, instance, &charac);
-					});
-
 					render_tabs(TABS_TYPE::ACTION, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_actions(*viewport, instance, &charac);
@@ -2360,11 +2355,6 @@ namespace Tempest
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
-					});
-
-					render_tabs(TABS_TYPE::ITEM, [&]() {
-						ImGui::SetCursorPos(content_region_offset);
-						CombatModeOverlay::display_items(*viewport, instance, &charac);
 					});
 
 					render_tabs(TABS_TYPE::ACTION, [&]() {
@@ -2865,11 +2855,6 @@ namespace Tempest
 		tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetWidth() * 0.9f),
 											   static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetHeight() * 0.9f) };
 
-		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsUnselected.dds"]->GetID());
-		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsSelected.dds"]->GetID());
-		tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetWidth() * 0.9f),
-											 static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetHeight() * 0.9f) };
-
 		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsUnselected.dds"]->GetID());
 		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsSelected.dds"]->GetID());
 		tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/MIActionsUnselected.dds"]->GetWidth() * 0.9f),
@@ -2995,13 +2980,6 @@ namespace Tempest
 		}
 
 		ImGui::EndChild();
-	}
-
-	void CombatModeOverlay::display_items(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)
-	{
-		(void)viewport;
-		(void)instance;
-		(void)cs;
 	}
 
 	void CombatModeOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)

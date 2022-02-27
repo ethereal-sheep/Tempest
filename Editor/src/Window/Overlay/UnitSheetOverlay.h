@@ -27,7 +27,6 @@ namespace Tempest
         {
             UNIT,
             WEAPON,
-            ITEM,
             ACTION,
             TOTAL
         };
@@ -83,7 +82,6 @@ namespace Tempest
         void initialise_tabs();
         void display_unit_stats(const ImGuiViewport& viewport, Instance& instance);
         void display_weapon_stats(const ImGuiViewport& viewport, Instance& instance);
-        void display_items(const ImGuiViewport& viewport, Instance& instance);
         void display_actions(const ImGuiViewport& viewport, Instance& instance);
        
 

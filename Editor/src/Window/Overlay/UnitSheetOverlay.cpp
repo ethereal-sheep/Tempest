@@ -26,7 +26,6 @@ namespace Tempest
 
 		Tabs[TABS_TYPE::UNIT].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::WEAPON].current_state = TabImageData::STATE::UNHOVER;
-		Tabs[TABS_TYPE::ITEM].current_state = TabImageData::STATE::UNHOVER;
 		Tabs[TABS_TYPE::ACTION].current_state = TabImageData::STATE::UNHOVER;
 
 		auto a = event_cast<OpenUnitSheetTrigger>(e);
@@ -51,7 +50,6 @@ namespace Tempest
 			CurrentTab = TABS_TYPE::UNIT;
 			Tabs[TABS_TYPE::UNIT].is_active = true;
 			Tabs[TABS_TYPE::WEAPON].is_active = false;
-			Tabs[TABS_TYPE::ITEM].is_active = false;
 			Tabs[TABS_TYPE::ACTION].is_active = false;
 		}
 
@@ -274,11 +272,6 @@ namespace Tempest
 
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
 						UnitSheetOverlay::display_weapon_stats(*viewport, instance);
-					});
-
-					render_tabs(TABS_TYPE::ITEM, [&]() {
-						// not using, i no on-hover item picture :(
-						UnitSheetOverlay::display_items(*viewport, instance);
 					});
 
 					render_tabs(TABS_TYPE::ACTION, [&]() {
@@ -663,11 +656,6 @@ namespace Tempest
 		Tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/WeaponTabUnlit.dds"]->GetWidth()), 
 											   static_cast<float>(tex_map["Assets/WeaponTabUnlit.dds"]->GetHeight()) };
 
-		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabUnlit.dds"]->GetID());
-		Tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ItemTabLit.dds"]->GetID());
-		Tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/ItemTabUnlit.dds"]->GetWidth()),
-											 static_cast<float>(tex_map["Assets/ItemTabUnlit.dds"]->GetHeight()) };
-
 		Tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/ActionTabUnlit.dds"]->GetID());
 		Tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/ActionTabLit.dds"]->GetID());
 		Tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/ActionTabUnlit.dds"]->GetWidth()),
@@ -850,15 +838,6 @@ namespace Tempest
 
 		ImGui::EndChild();
 		ImGui::PopStyleColor();
-	}
-
-	void UnitSheetOverlay::display_items(const ImGuiViewport& viewport, Instance& instance)
-	{
-		if (!cs)
-			return;
-
-		(void)viewport;
-		(void)instance;
 	}
 
 	void UnitSheetOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance)
