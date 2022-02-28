@@ -82,12 +82,18 @@ void Emitter_3D::Update()
 			particle.m_position += particle.m_velocity * m_MM.m_simulationSpeed;
 			//particle.m_rotation += 0.01f * m_MM.m_simulationSpeed;
 
-			// Calculate the lifeTime remaining
+			// lifeTime and percentage of lifeTime remaining
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
-
-			particle.m_size = glm::mix(m_PAM.m_sizeEnd, m_PAM.m_sizeBegin, lifePercent);
-			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);
 			particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
+
+			// Scale
+			particle.m_scale.x = glm::mix(m_PAM.m_scaleEnd.x, m_PAM.m_scaleBegin.x, lifePercent);
+			particle.m_scale.y = glm::mix(m_PAM.m_scaleEnd.y, m_PAM.m_scaleBegin.y, lifePercent);
+			particle.m_scale.z = glm::mix(m_PAM.m_scaleEnd.z, m_PAM.m_scaleBegin.z, lifePercent);
+
+			// Colour
+			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);
+			
 			
 			// Change the string in this function
 			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle);
@@ -122,7 +128,11 @@ void Emitter_3D::Emit(const int particleAmount)
 			// Lifetime
 			particle.m_lifeTime = m_PAM.m_lifeTime;
 			particle.m_lifeRemaining = m_PAM.m_lifeTime;
-			particle.m_size = m_PAM.m_sizeBegin + m_PAM.m_sizeVariation;// *(Random::Float() - 0.5f);
+
+			// Scale
+			particle.m_scale.x = m_PAM.m_scaleBegin.x + m_PAM.m_scaleVariation.x;// *(Random::Float() - 0.5f);
+			particle.m_scale.y = m_PAM.m_scaleBegin.y + m_PAM.m_scaleVariation.y;// *(Random::Float() - 0.5f);
+			particle.m_scale.z = m_PAM.m_scaleBegin.z + m_PAM.m_scaleVariation.z;// *(Random::Float() - 0.5f);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

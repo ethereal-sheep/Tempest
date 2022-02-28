@@ -96,7 +96,9 @@ void ExplosionEmitter_3D::Emit(const int particleAmount)
 			particle.m_lifeRemaining = m_PAM.m_lifeTime;
 
 			// Size Variation
-			particle.m_size = m_PAM.m_sizeBegin + m_PAM.m_sizeVariation * (Random::Float() - 0.5f);
+			particle.m_scale.x = m_PAM.m_scaleBegin.x + m_PAM.m_scaleVariation.x *(Random::Float() - 0.5f);
+			particle.m_scale.y = m_PAM.m_scaleBegin.y + m_PAM.m_scaleVariation.y *(Random::Float() - 0.5f);
+			particle.m_scale.z = m_PAM.m_scaleBegin.z + m_PAM.m_scaleVariation.z *(Random::Float() - 0.5f);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

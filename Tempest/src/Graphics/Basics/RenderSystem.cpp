@@ -501,7 +501,7 @@ namespace Tempest
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
         ModelObj model;
-        auto s = glm::scale(glm::vec3(particle.m_size));
+        auto s = glm::scale(particle.m_scale);
         auto t = glm::translate(particle.m_position);
         model.m_Transform = (t * s);
         model.m_Model = m_Pipeline.m_ModelLibrary[path];

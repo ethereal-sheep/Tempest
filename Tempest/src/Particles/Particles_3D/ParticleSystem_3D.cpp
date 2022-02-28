@@ -89,9 +89,9 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateTestEmitter(gl
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f};
 
-	tempEmitter->m_PAM.m_sizeBegin = 0.5f;
-	tempEmitter->m_PAM.m_sizeEnd = 0.0f;
-	tempEmitter->m_PAM.m_sizeVariation = 0.3f;
+	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
+	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
 	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
@@ -123,9 +123,9 @@ const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultip
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f };
 
-	tempEmitter->m_PAM.m_sizeBegin = 0.5f;
-	tempEmitter->m_PAM.m_sizeEnd = 0.0f;
-	tempEmitter->m_PAM.m_sizeVariation = 0.3f;
+	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
+	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
 	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
@@ -153,7 +153,7 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	interactiveEmitter.m_GM.m_active = true;
 	interactiveEmitter.m_MM.m_preWarm = true;
 
-	interactiveEmitter.m_EM.m_spawnTimeInterval = 0.1f;; // 5x slower of dt
+	interactiveEmitter.m_EM.m_spawnTimeInterval = 0.05f;; // 5x slower of dt
 	interactiveEmitter.m_EM.m_spawnCountTimer = interactiveEmitter.m_EM.m_spawnTimeInterval;
 	interactiveEmitter.m_EM.m_rateOverTime = 1;
 	interactiveEmitter.m_MM.m_maxParticles = 30;
@@ -163,9 +163,9 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	interactiveEmitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	interactiveEmitter.m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f };
 
-	interactiveEmitter.m_PAM.m_sizeBegin = 0.5f;
-	interactiveEmitter.m_PAM.m_sizeEnd = 0.0f;
-	interactiveEmitter.m_PAM.m_sizeVariation = 10.0f;
+	interactiveEmitter.m_PAM.m_scaleBegin = glm::vec3{ 0.2f, 0.2f, 0.2f };
+	interactiveEmitter.m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	interactiveEmitter.m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
 	interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };

@@ -29,9 +29,9 @@ ParticleArchetypeModule_3D::ParticleArchetypeModule_3D()
 	, m_endVelocity       { 0.0f, 0.0f, 0.0f }
 	, m_velocityVariation { 3.0f, 1.0f, 0.0f }
 
-	, m_sizeBegin{ 20.0f }
-	, m_sizeEnd{ 0.0f }
-	, m_sizeVariation{ 0.3f }
+	, m_scaleBegin{ 20.0f, 20.0f, 20.0f }
+	, m_scaleEnd{ 0.0f, 0.0f, 0.0f }
+	, m_scaleVariation{ 0.3f, 0.3f, 0.3f }
 
 	, m_colourBegin{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f }
 	, m_colourEnd{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f }

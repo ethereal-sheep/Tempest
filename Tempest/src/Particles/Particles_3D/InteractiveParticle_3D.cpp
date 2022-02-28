@@ -51,12 +51,18 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 			particle.m_lifeRemaining = m_PAM.m_lifeTime;
 
 			// Size Variation
-			int sizeVariation = 0;
+			glm::vec3 sizeVariation{ 0.0f, 0.0f, 0.0f };
 
-			if(m_PAM.m_sizeVariation > 0)
-				sizeVariation = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_sizeVariation));
+			if(m_PAM.m_scaleVariation.x > 0)
+				sizeVariation.x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_scaleVariation.x));
 
-			particle.m_size = m_PAM.m_sizeBegin + sizeVariation;// * (Random::Float() - 0.5f);
+			if (m_PAM.m_scaleVariation.y > 0)
+				sizeVariation.x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_scaleVariation.y));
+
+			if (m_PAM.m_scaleVariation.z > 0)
+				sizeVariation.x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_scaleVariation.z));
+
+			particle.m_scale = m_PAM.m_scaleBegin + sizeVariation;// * (Random::Float() - 0.5f);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

@@ -42,8 +42,8 @@ struct ParticleArchetypeModule_3D
 	glm::vec3 m_startVelocity, m_endVelocity;
 	glm::vec3 m_velocityVariation;
 
-	float m_sizeBegin, m_sizeEnd;
-	float m_sizeVariation;
+	glm::vec3 m_scaleBegin, m_scaleEnd;
+	glm::vec3 m_scaleVariation;
 
 	glm::vec4 m_colourBegin, m_colourEnd;
 	//glm::vec4 m_colourVariation
