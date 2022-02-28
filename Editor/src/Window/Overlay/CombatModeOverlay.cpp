@@ -597,7 +597,10 @@ namespace Tempest
 
 							// action
 							const ImVec2 imgSize{ (float)combat_button_tex[0]->GetWidth(), (float)combat_button_tex[0]->GetHeight() };
-							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f - menu1.get() * 100.f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
+							const ImVec2 cursor{ ImGui::GetCursorPos() };
+							const ImVec2 avail_region{ ImGui::GetContentRegionAvail() };
+
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.2f - imgSize.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.45f - imgSize.y * 0.5f });
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
@@ -608,26 +611,12 @@ namespace Tempest
 								combat_button_tex[0] = tex_map["Assets/CActionUnselected.dds"];
 
 							ImGui::SameLine();
-							const ImVec2 cursor{ ImGui::GetCursorPos() };
-							const ImVec2 avail_region{ ImGui::GetContentRegionAvail() };
-							const ImVec2 imgSize2{ (float)combat_button_tex[1]->GetWidth(), (float)combat_button_tex[1]->GetHeight() };
-
-							// item
-							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.22f - imgSize2.y * 0.5f });
-
-							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[1]->GetID()), imgSize2))
-							{
-							}
-
-							if (ImGui::IsItemHovered())
-								combat_button_tex[1] = tex_map["Assets/CItemSelected.dds"];
-							else
-								combat_button_tex[1] = tex_map["Assets/CItemUnselected.dds"];
+							
 
 							// move
-							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.68f - imgSize2.y * 0.5f });
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.7f - imgSize.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.45f - imgSize.y * 0.5f });
 
-							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[2]->GetID()), imgSize2))
+							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[2]->GetID()), imgSize))
 							{
 								state = State::MOVING;
 							}
@@ -2229,11 +2218,6 @@ namespace Tempest
 						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
 					});
 
-					render_tabs(TABS_TYPE::ITEM, [&]() {
-						ImGui::SetCursorPos(content_region_offset);
-						CombatModeOverlay::display_items(*viewport, instance, &charac);
-					});
-
 					render_tabs(TABS_TYPE::ACTION, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_actions(*viewport, instance, &charac);
@@ -2360,11 +2344,6 @@ namespace Tempest
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
-					});
-
-					render_tabs(TABS_TYPE::ITEM, [&]() {
-						ImGui::SetCursorPos(content_region_offset);
-						CombatModeOverlay::display_items(*viewport, instance, &charac);
 					});
 
 					render_tabs(TABS_TYPE::ACTION, [&]() {
@@ -2865,11 +2844,6 @@ namespace Tempest
 		tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetWidth() * 0.9f),
 											   static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetHeight() * 0.9f) };
 
-		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsUnselected.dds"]->GetID());
-		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsSelected.dds"]->GetID());
-		tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetWidth() * 0.9f),
-											 static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetHeight() * 0.9f) };
-
 		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsUnselected.dds"]->GetID());
 		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsSelected.dds"]->GetID());
 		tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/MIActionsUnselected.dds"]->GetWidth() * 0.9f),
@@ -2995,13 +2969,6 @@ namespace Tempest
 		}
 
 		ImGui::EndChild();
-	}
-
-	void CombatModeOverlay::display_items(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)
-	{
-		(void)viewport;
-		(void)instance;
-		(void)cs;
 	}
 
 	void CombatModeOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)

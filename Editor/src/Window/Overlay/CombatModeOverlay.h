@@ -33,7 +33,6 @@ namespace Tempest
         {
             STAT,
             WEAPON,
-            ITEM,
             ACTION,
             TOTAL
         };
