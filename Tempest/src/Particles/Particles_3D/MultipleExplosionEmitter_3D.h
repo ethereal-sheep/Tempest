@@ -13,7 +13,7 @@ struct MultipleExplosionEmitter_3D : public Emitter_3D
 	// Additional amount of explosion emitter to create
 	int m_explosionEmitterAmount;
 
-	void Emit(const int explosionEmitterAmount) override;
+	void Emit(const int particleAmount) override;
 };
 
 
