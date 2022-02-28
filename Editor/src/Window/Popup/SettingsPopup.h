@@ -152,7 +152,7 @@ namespace Tempest
 
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-            ImGui::SetNextWindowSize(ImVec2(930.f, 658.f), ImGuiCond_Appearing);
+            ImGui::SetNextWindowSize(ImVec2(623.f, 441.f), ImGuiCond_Appearing);
             ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
             ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
@@ -182,18 +182,19 @@ namespace Tempest
 
                 //Setting Child Window Pos & Size
                 auto img = tex_map["Assets/SoundSetting.dds"];
+                ImVec2 imgSize = { (float)img->GetWidth() * 0.67f, (float)img->GetHeight() * 0.67f };
                 float paddingX = (float)img->GetWidth() * 0.075f;
                 float sliderWidth = 0.f;
                 float paddingBetween = 20.f;
                 AudioEngine ae;
                 ImGui::Dummy({ 0,ImGui::GetWindowHeight() * 0.1f });
-                ImGui::Dummy({ (ImGui::GetWindowWidth() - (float)img->GetWidth()) * 0.5f ,0 });
+                ImGui::Dummy({ (ImGui::GetWindowWidth() - imgSize.x) * 0.5f ,0 });
                 ImGui::SameLine();
 
-                ImGui::BeginChild("SettingsID", ImVec2((float)img->GetWidth(), 456.f), false);
+                ImGui::BeginChild("SettingsID", ImVec2(imgSize.x, 306.f), false);
 
                 // ============== SOUND SETTINGS ============== //
-                ImGui::Image((void*)static_cast<size_t>(img->GetID()), { (float)img->GetWidth(), (float)img->GetHeight() });
+                ImGui::Image((void*)static_cast<size_t>(img->GetID()), imgSize);
                 ImGui::PushFont(FONT_BODY);
 
                 //Volume
@@ -207,7 +208,7 @@ namespace Tempest
                 ImGui::Dummy({ 10.f, 0.f });
                 ImGui::SameLine();
                 auto SliderPosX = ImGui::GetCursorPosX();
-                sliderWidth = (float)img->GetWidth() - SliderPosX - 20.f;
+                sliderWidth = imgSize.x - SliderPosX - 20.f;
                 ImGui::PushItemWidth(sliderWidth);
                 {
                     float vol = ae.GetMasterVolume() * 100;
@@ -219,7 +220,7 @@ namespace Tempest
                     }
                     if(UI::UISliderFloat("##MasterVolume", &vol, 0.f, 100.f))
                     {
-                        vol *= 0.01;
+                        vol *= 0.01f;
                         ae.SetMasterVolume(std::clamp(vol, 0.f, 1.f));
                     }
                     if(isVolMute)
@@ -251,7 +252,7 @@ namespace Tempest
                     }
                     if (UI::UISliderFloat("##SFX", &vol, 0.f, 100.f))
                     {
-                        vol *= 0.01;
+                        vol *= 0.01f;
                         ae.SetBusVolume("SFX", std::clamp(vol, 0.f, 1.f));
                     }
                     if (isSFXMute)
@@ -283,7 +284,7 @@ namespace Tempest
                     }
                     if (UI::UISliderFloat("##BGM", &vol, 0.f, 100.f))
                     {
-                        vol *= 0.01;
+                        vol *= 0.01f;
                         ae.SetBusVolume("BGM", std::clamp(vol, 0.f, 1.f));
                     }
                     if (isBGMMute)
@@ -299,7 +300,7 @@ namespace Tempest
                 // ============== VISUAL SETTINGS ============== //
                 img = tex_map["Assets/VisualSetting.dds"];
                 ImGui::Dummy({ 0,paddingBetween });
-                ImGui::Image((void*)static_cast<size_t>(img->GetID()), { (float)img->GetWidth(), (float)img->GetHeight() });
+                ImGui::Image((void*)static_cast<size_t>(img->GetID()), imgSize);
                 //Gamma
                 ImGui::Dummy({ 0, paddingBetween });
                 ImGui::Text("Gamma");
@@ -317,7 +318,7 @@ namespace Tempest
                 ImGui::PopFont(); 
                 ImGui::EndChild();
 
-                if (UI::UIButton_2("Confirm", "Confirm", {ImGui::GetWindowWidth() * 0.84f, ImGui::GetWindowHeight() * 0.9f }, { -20.f,10.f }, FONT_BODY))
+                if (UI::UIButton_1("Confirm", "Confirm", {ImGui::GetWindowWidth() * 0.84f, ImGui::GetWindowHeight() * 0.9f }, { 40.f,10.f }, FONT_BODY))
                 {
                     ImGui::CloseCurrentPopup();
                     enable_popup = false;
