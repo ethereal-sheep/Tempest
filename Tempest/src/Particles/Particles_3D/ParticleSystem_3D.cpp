@@ -170,7 +170,7 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
-	interactiveEmitter.m_PAM.m_lifeTime = 0.3ff;
+	interactiveEmitter.m_PAM.m_lifeTime = 0.3f;
 
 	return tempEmitter;
 }
