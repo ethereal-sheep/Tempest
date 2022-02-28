@@ -490,6 +490,25 @@ namespace Tempest
         m_Pipeline.m_Models.push_back(model);
     }
  
+    void RenderSystem::SubmitModel(const Particle_3D& particle)
+    {
+        // Change path to particle.m_path or however u named the path string
+        std::string path = "Models/Cube.a";
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        ModelObj model;
+        auto s = glm::scale(glm::vec3(particle.m_size));
+        auto t = glm::translate(particle.m_position);
+        model.m_Transform = (t * s);
+        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        model.m_Model->colours[0] = particle.m_colour;
+        m_Pipeline.m_Models.push_back(model);
+    }
+ 
     void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)
     {
         m_LineRenderer.Submit(line, color);

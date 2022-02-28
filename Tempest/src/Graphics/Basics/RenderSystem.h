@@ -33,6 +33,7 @@
 
 #include "Graphics/PBR/ModelPBR.h"
 
+#include "Particles/Particles_3D/Particles_3D.h"
 /**
  * @brief 
  * @param RenderSystem Umbrella interface  
@@ -71,6 +72,7 @@ namespace Tempest
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
         void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
+        void SubmitModel(const Particle_3D& particle);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight);                                       // Submitting Point Light {Transform to be used for pos}

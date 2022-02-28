@@ -88,10 +88,9 @@ void Emitter_3D::Update()
 			particle.m_size = glm::mix(m_PAM.m_sizeEnd, m_PAM.m_sizeBegin, lifePercent);
 			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);
 			particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
-
-			auto s = glm::scale(glm::vec3(particle.m_size));
-			auto t = glm::translate(particle.m_position);
-			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel("Models/Cube.a", (t * s));
+			
+			// Change the string in this function
+			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle);
 		}
 	}
 }
