@@ -95,7 +95,7 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateTestEmitter(gl
 	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
-	tempEmitter->m_PAM.m_lifeTime = 0.08f;
+	tempEmitter->m_PAM.m_lifeTime = 0.3f;
 
 	return tempEmitter;
 }
@@ -129,7 +129,7 @@ const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultip
 	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
-	tempEmitter->m_PAM.m_lifeTime = 0.08f;
+	tempEmitter->m_PAM.m_lifeTime = 0.3f;
 
 	// Amount of Followup Explosion
 	tempEmitter->m_explosionEmitterAmount = explosionEmitterAmount;

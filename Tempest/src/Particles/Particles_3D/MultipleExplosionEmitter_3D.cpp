@@ -110,9 +110,9 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 	for (short i = 0; i < m_explosionEmitterAmount; ++i)
 	{
 		short spawnSector = std::rand() % 7;
-		short directionX = (std::rand() % 40);
-		short directionY = (std::rand() % 40);
-		short directionZ = (std::rand() % 40);
+		short directionX = (std::rand() % 10);
+		short directionY = (std::rand() % 10);
+		short directionZ = (std::rand() % 10);
 
 		// Spawn Velocity Direction
 		switch (spawnSector)

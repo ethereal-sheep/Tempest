@@ -20,7 +20,7 @@ void ExplosionEmitter_3D::Emit(const int particleAmount)
 	{
 		for (short i = 0; i < particleAmount; ++i)
 		{
-			// Initailisation of the particle
+			// Initialisation of the particle
 			Particle_3D particle;
 
 			particle.m_position = m_GM.m_position;
@@ -31,9 +31,9 @@ void ExplosionEmitter_3D::Emit(const int particleAmount)
 			particle.m_velocity = m_PAM.m_startVelocity;
 
 			short spawnSector = std::rand() % 7;
-			short directionX = (std::rand() % 40);
-			short directionY = (std::rand() % 40);
-			short directionZ = (std::rand() % 40);
+			short directionX = (std::rand() % 10);
+			short directionY = (std::rand() % 10);
+			short directionZ = (std::rand() % 10);
 
 			switch (spawnSector)
 			{

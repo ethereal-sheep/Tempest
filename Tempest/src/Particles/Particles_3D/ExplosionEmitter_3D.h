@@ -5,7 +5,7 @@
 
 #include "Emitter_3D.h"
 
-#include <gtx/transform.hpp>
+
 
 struct ExplosionEmitter_3D : public Emitter_3D
 {
