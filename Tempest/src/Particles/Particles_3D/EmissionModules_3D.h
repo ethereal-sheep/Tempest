@@ -67,9 +67,12 @@ struct EmissionModule_3D
 	float m_spawnCountTimer;	// Time the interval
 };
 
-//struct RendererModule_3D
-//{
-//	RendererModule_3D();
-//};
+struct RendererModule_3D
+{
+	RendererModule_3D();
+ 
+	// Path Name for rendering modle
+	std::string m_renderingPath;
+};
 
 #endif // !EMISSION_MODULE_3D_H

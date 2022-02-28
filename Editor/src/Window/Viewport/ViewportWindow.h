@@ -129,7 +129,8 @@ namespace Tempest
 					break;
 					case 'l':
 					{
-						ParticleSystem_3D::GetInstance().CreateMultipleExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, 3);
+						//ParticleSystem_3D::GetInstance().CreateMultipleExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, 3);
+						ParticleSystem_3D::GetInstance().CreateInteractiveParticle(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 5.0f, 5.0f, 0.0f });
 					}
 					break;
 					case 'o':

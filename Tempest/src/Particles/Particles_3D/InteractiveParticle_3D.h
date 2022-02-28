@@ -10,11 +10,9 @@
 
 struct InteractiveParticle_3D : public Emitter_3D
 {
-	//InteractiveParticle_3D(glm::vec3 minPos, glm::vec3);
-
 	void Emit(const int partcielAmount) override;
 
-	// Min and Max range of the spawn pos
+	// Min and Max range of the spawn pos - Assume values given are correct to work
 	glm::vec3 minPos;
 	glm::vec3 maxPos;
 };
