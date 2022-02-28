@@ -31,7 +31,7 @@ struct Particle_3D
 	bool m_isActive;
 
 	// Eg: Models/Cube.a
-	std::string m_modelPath;
+	//std::string m_modelPath;
 };
 
 #endif // !PARTICLES_3D_H

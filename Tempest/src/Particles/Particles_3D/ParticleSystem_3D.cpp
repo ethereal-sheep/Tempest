@@ -149,7 +149,7 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	interactiveEmitter.m_GM.m_position = spawnPos;
 	interactiveEmitter.minPos = minSpawnPos;
 	interactiveEmitter.maxPos = maxSpawnPos;
-	interactiveEmitter.m_MM.m_duration = 100.f;
+	interactiveEmitter.m_MM.m_duration = 1000000.f;
 	interactiveEmitter.m_GM.m_active = true;
 	interactiveEmitter.m_MM.m_preWarm = true;
 
@@ -165,12 +165,12 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 
 	interactiveEmitter.m_PAM.m_sizeBegin = 0.5f;
 	interactiveEmitter.m_PAM.m_sizeEnd = 0.0f;
-	interactiveEmitter.m_PAM.m_sizeVariation = 0.3f;
+	interactiveEmitter.m_PAM.m_sizeVariation = 10.0f;
 
 	interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
-	interactiveEmitter.m_PAM.m_lifeTime = 0.3f;
+	interactiveEmitter.m_PAM.m_lifeTime = 0.3ff;
 
 	return tempEmitter;
 }

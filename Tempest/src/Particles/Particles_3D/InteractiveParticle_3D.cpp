@@ -7,9 +7,14 @@
 
 #include <algorithm> //std::clamp
 
+#include <stdio.h>      /* printf, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 void InteractiveParticle_3D::Emit(const int particleAmount)
 {
+	//srand(time(NULL));
+
 	// Emit only if there is enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 	{
@@ -46,7 +51,12 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 			particle.m_lifeRemaining = m_PAM.m_lifeTime;
 
 			// Size Variation
-			particle.m_size = m_PAM.m_sizeBegin + m_PAM.m_sizeVariation * (Random::Float() - 0.5f);
+			int sizeVariation = 0;
+
+			if(m_PAM.m_sizeVariation > 0)
+				sizeVariation = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_sizeVariation));
+
+			particle.m_size = m_PAM.m_sizeBegin + sizeVariation;// * (Random::Float() - 0.5f);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;
