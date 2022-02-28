@@ -9,6 +9,10 @@
 
 #include <glm.hpp>
 
+// Forward Declarations
+struct ExplosionEmitter_3D;
+struct MultipleExplosionEmitter_3D;
+
 struct ParticleSystem_3D
 {
 	static ParticleSystem_3D& GetInstance();
@@ -16,7 +20,8 @@ struct ParticleSystem_3D
 	void Update();
 	std::vector<std::shared_ptr<Emitter_3D>> GetEmitter();
 
-	const std::weak_ptr<Emitter_3D> CreateTestEmitter(glm::vec3 spawnPos);
+	const std::weak_ptr<ExplosionEmitter_3D> CreateTestEmitter(glm::vec3 spawnPos);
+	const std::weak_ptr<MultipleExplosionEmitter_3D> CreateMultipleExplosionEmitter(glm::vec3 spawnPos, int explosionEmitterAmount);
 
 private:
 	ParticleSystem_3D();

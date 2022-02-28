@@ -239,6 +239,9 @@
     <ClCompile Include="src\Particles\Particles_2D\Emitter_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Emitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\ExplosionEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\ExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\InteractiveParticle_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\ParticleSystem_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Particles_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\Particle_2D.cpp" />
@@ -353,6 +356,9 @@
     <ClInclude Include="src\Particles\Particles_2D\Emitter_2D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Emitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_2D\ExplosionEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\ExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\InteractiveParticle_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\ParticleSystem_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Particles_3D.h" />
     <ClInclude Include="src\Particles\Particles_2D\Particle_2D.h" />
