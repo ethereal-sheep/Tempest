@@ -53,6 +53,7 @@ namespace Tempest
         bool OverlayOpen = true;
 
         bool new_instance{ true };
+        int tutorial_index{ 0 };
         std::string overlay_title{ "" };
         std::string current_stat{ "" };
         std::string next_button_name{ "" };

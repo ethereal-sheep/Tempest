@@ -39,7 +39,7 @@ namespace Tempest
 		if (!new_instance)
 			added_entities = a.entities;
 
-		//
+		tutorial_index = 0;
 	}
 
 	void TurnOrderOverlay::change_state(TURN_ORDER_STATE state)
@@ -67,6 +67,138 @@ namespace Tempest
 
 			if (ImGui::Begin("Turn Order Overlay", nullptr, window_flags))
 			{
+				// just for testing
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
+				{
+					instance.tutorial_enable = true;
+					instance.tutorial_level = 1;
+					tutorial_index = 0;
+
+				}
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
+				{
+					instance.tutorial_enable = true;
+					tutorial_index++;
+				}
+
+				// tutorial progress
+				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
+				{
+					auto drawlist = ImGui::GetForegroundDrawList();
+					//if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
+					//	instance.tutorial_slide = false;
+					if (instance.tutorial_level == 1)
+					{
+						switch (tutorial_index)
+						{
+						case 0:
+						{
+							ImVec2 pos = { 0, viewport->Size.y * 0.275f };
+							ImVec2 size = { 640.f, 290.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to add your units into the turn order";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y * 0.5f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+							break;
+
+						case 1:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f};
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to go to the next page";
+							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 2:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.221f, viewport->Size.y * 0.673f };
+							ImVec2 size = { 220.f, 140.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to customize your turn order";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 3:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.28f, viewport->Size.y * 0.475f };
+							ImVec2 size = { 105.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Move";
+							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+
+						case 4:
+						{
+							// draw the other section 
+
+							ImVec2 pos = { viewport->Size.x * 0.12f , viewport->Size.y * 0.7f };
+							ImVec2 size = { 270.f, 110.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Randomize + Move";
+							drawlist->AddText({ pos.x + 140.f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, pos.y - 20.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 5:
+						{
+							// draw the other section
+
+							ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save and return to the previous page";
+							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 6:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
+							ImVec2 size = { 180.f, 50.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save the turn order and start the game";
+							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						default:
+							break;
+						}
+					}
+
+					//Tutorial Exit Button
+					if (instance.tutorial_slide == false)
+					{
+						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+						if (UI::MouseIsWithin(tut_min, tut_max))
+						{
+							ImGui::SetMouseCursor(7);
+							if (ImGui::IsMouseClicked(0))
+							{
+								instance.tutorial_temp_exit = true;
+								ImGui::OpenPopup("TutorialExitPopupConfirm");
+							}
+						}
+					}
+				}
+
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+				}
+
 				// background
 				auto texBG = tex_map["Assets/TurnOrderBG.dds"];
 				{
