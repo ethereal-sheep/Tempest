@@ -39,6 +39,7 @@ namespace Tempest
 		void Mouse(Instance& instance);
 		void Light(Instance& instance);
 		void Textures(Instance& instance);
+		void Particles(Instance& instance);
 
 		std::vector<float> fps_values;
 		std::vector<float> alloc_values;

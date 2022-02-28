@@ -19,6 +19,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
+
 namespace Tempest
 {
 	void DiagnosticsWindow::init(Instance&)
@@ -69,6 +71,11 @@ namespace Tempest
 				if (ImGui::BeginTabItem("Light"))
 				{
 					Light(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Particles"))
+				{
+					Particles(instance);
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
@@ -828,4 +835,34 @@ namespace Tempest
 
 	}
 
+	void DiagnosticsWindow::Particles(Instance&)
+	{
+		if (ImGui::CollapsingHeader("Emitters"))
+		{
+			auto m = ParticleSystem_3D::GetInstance().GetEmitter();
+			for (auto& x : m)
+			{
+				ImGui::Text("Duration: %.2f", x->m_MM.m_duration);
+				if (ImGui::TreeNode("Particles"))
+				{
+					for (auto& y : x->m_particles)
+					{
+						if (y.m_isActive)
+							ImGui::Text("Active: Yes");
+						else
+							continue;
+						glm::vec3 pos = y.m_position;
+						ImGui::Text("Position: %.2f, %.2f, %.2f ", pos.x, pos.y, pos.z);
+						ImGui::Text("Life Remaining: %.2f", y.m_lifeRemaining);
+
+						UI::PaddedSeparator(0.5f);
+					}
+					ImGui::TreePop();
+				}
+
+			UI::PaddedSeparator(0.5f);
+			UI::PaddedSeparator(0.5f);
+			}
+		}
+	}
 }

@@ -14,15 +14,15 @@ struct ParticleSystem_3D
 	static ParticleSystem_3D& GetInstance();
 
 	void Update();
-	auto GetEmitter() const;
+	std::vector<std::shared_ptr<Emitter_3D>> GetEmitter();
 
 	const std::weak_ptr<Emitter_3D> CreateTestEmitter(glm::vec3 spawnPos);
 
 private:
 	ParticleSystem_3D();
 
-	std::vector<std::shared_ptr<Emitter_3D>> m_Emitters;
 
+	std::vector<std::shared_ptr<Emitter_3D>> m_Emitters;
 	// Emitter 3D Management
 	std::set<short> m_UniqueEmitterSlots;
 	std::queue<short> m_AvailableEmitterSlots;
