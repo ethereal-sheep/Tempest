@@ -12,6 +12,7 @@
 // Forward Declarations
 struct ExplosionEmitter_3D;
 struct MultipleExplosionEmitter_3D;
+struct InteractiveParticle_3D;
 
 struct ParticleSystem_3D
 {
@@ -22,6 +23,7 @@ struct ParticleSystem_3D
 
 	const std::weak_ptr<ExplosionEmitter_3D> CreateTestEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<MultipleExplosionEmitter_3D> CreateMultipleExplosionEmitter(glm::vec3 spawnPos, int explosionEmitterAmount);
+	const std::weak_ptr<InteractiveParticle_3D> CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos);
 
 private:
 	ParticleSystem_3D();

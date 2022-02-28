@@ -12,6 +12,7 @@
 #define PARTICLES_3D_H
 
 #include <glm.hpp>
+#include <string>
 
 struct Particle_3D
 {
@@ -28,6 +29,9 @@ struct Particle_3D
 	float m_lifeTime;
 	float m_lifeRemaining;
 	bool m_isActive;
+
+	// Eg: Models/Cube.a
+	std::string m_modelPath;
 };
 
 #endif // !PARTICLES_3D_H

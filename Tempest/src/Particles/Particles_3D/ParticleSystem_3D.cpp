@@ -5,6 +5,7 @@
 
 #include "ExplosionEmitter_3D.h"
 #include "MultipleExplosionEmitter_3D.h"
+#include "InteractiveParticle_3D.h"
 
 ParticleSystem_3D::ParticleSystem_3D()
 {}
@@ -134,6 +135,42 @@ const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultip
 	// Amount of Followup Explosion
 	tempEmitter->m_explosionEmitterAmount = explosionEmitterAmount;
 	AddEmitter(tempEmitter);
+
+	return tempEmitter;
+}
+
+const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos)
+{
+	auto tempEmitter = std::make_shared<InteractiveParticle_3D>();
+	InteractiveParticle_3D& interactiveEmitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
+
+	// Emitter_3D values - Without consideration for default ctor values
+	interactiveEmitter.m_GM.m_position = spawnPos;
+	interactiveEmitter.minPos = minSpawnPos;
+	interactiveEmitter.maxPos = maxSpawnPos;
+	interactiveEmitter.m_MM.m_duration = 100.f;
+	interactiveEmitter.m_GM.m_active = true;
+	interactiveEmitter.m_MM.m_preWarm = true;
+
+	interactiveEmitter.m_EM.m_spawnTimeInterval = 0.1f;; // 5x slower of dt
+	interactiveEmitter.m_EM.m_spawnCountTimer = interactiveEmitter.m_EM.m_spawnTimeInterval;
+	interactiveEmitter.m_EM.m_rateOverTime = 1;
+	interactiveEmitter.m_MM.m_maxParticles = 30;
+
+	// Particle Architype values - without consideration for default ctor
+	interactiveEmitter.m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	interactiveEmitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	interactiveEmitter.m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f };
+
+	interactiveEmitter.m_PAM.m_sizeBegin = 0.5f;
+	interactiveEmitter.m_PAM.m_sizeEnd = 0.0f;
+	interactiveEmitter.m_PAM.m_sizeVariation = 0.3f;
+
+	interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	interactiveEmitter.m_PAM.m_lifeTime = 0.3f;
 
 	return tempEmitter;
 }
