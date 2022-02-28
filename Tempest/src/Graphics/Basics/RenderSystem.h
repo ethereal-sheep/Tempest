@@ -32,7 +32,7 @@
 #include "Graphics/PBR/MaterialPBR.h"
 
 #include "Graphics/PBR/ModelPBR.h"
-
+#include "Animation/AnimationManager.h"
 /**
  * @brief 
  * @param RenderSystem Umbrella interface  
@@ -54,6 +54,7 @@ namespace Tempest
         //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
         FBO m_FrameBuffer{ 1600, 900 };
+        AnimationManager m_Animation;
 
         int  GammaCorrection = 1;
         bool GridActive = false;

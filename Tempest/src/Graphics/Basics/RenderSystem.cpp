@@ -587,6 +587,28 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "projViewModel");
+            
+
+            // Animation Stuff
+            if (m_Pipeline.m_Models[i].m_Model->HasAnimation)
+            {
+                // Submit Final Bone Matrix Uniform
+                if (!m_Pipeline.m_Models[i].m_Bones.empty())
+                {
+                    for (auto z = 0; z < m_Pipeline.m_Models[i].m_Bones.size(); ++z)
+                    {
+                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Bones[z], "finalBonesMatrices");
+                    }
+                }
+
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Model->HasAnimation, "HasAnimation");             
+            }
+
+            else
+            {
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "HasAnimation");
+            }
+
 
             // to be fixed for blur 
             m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;

@@ -6,7 +6,7 @@
 #include "assimp/scene.h"
 #include "assimp/Importer.hpp"
 #include "Bone.h"
-#include "AnimationModel.h"
+#include "Graphics/PBR/ModelPBR.h"
 
 namespace Tempest
 {
@@ -28,7 +28,7 @@ namespace Tempest
 
 	public:
 		Animation() = default;
-		Animation(const std::string& animationPath, AnimationModel* model);
+		Animation(const std::string& animationPath, ModelPBR* model);
 		~Animation();
 
 		Bone* FindBone(const std::string& name);
@@ -40,7 +40,7 @@ namespace Tempest
 
 	private:
 
-		void ReadMissingBones(const aiAnimation* animation, AnimationModel& model);
+		void ReadMissingBones(const aiAnimation* animation, ModelPBR& model);
 		void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
 	};
 }

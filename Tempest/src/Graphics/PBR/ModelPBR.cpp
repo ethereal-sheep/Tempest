@@ -254,7 +254,7 @@ namespace Tempest
         for (GLuint i = 0; i < node->mNumMeshes; i++)
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            this->meshes.push_back(this->processMesh(mesh));
+            this->meshes.push_back(this->processMesh(mesh, scene));
         }
 
         for (GLuint i = 0; i < node->mNumChildren; i++)
@@ -264,7 +264,7 @@ namespace Tempest
     }
 
 
-    MeshPBR ModelPBR::processMesh(aiMesh* mesh)
+    MeshPBR ModelPBR::processMesh(aiMesh* mesh, const aiScene* scene)
     {
         std::vector<Vertex> vertices;
         std::vector<GLuint> indices;
@@ -304,9 +304,70 @@ namespace Tempest
             for (GLuint j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);
         }
-
+		
+		HasAnimation = ExtractBoneWeightForVertices(vertices, mesh, scene);
         return MeshPBR(vertices, indices);
     }
 
+	void ModelPBR::SetVertexBoneDataToDefault(Vertex& vertex)
+	{
+		for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+		{
+			vertex.BoneIds[i] = -1;
+			vertex.Weights[i] = 0.0f;
+		}
+	}
 
+	void ModelPBR::SetVertexBoneData(Vertex& vertex, int boneID, float weight)
+	{
+		for (int i = 0; i < MAX_BONE_INFLUENCE; ++i)
+		{
+			if (vertex.BoneIds[i] < 0)
+			{
+				vertex.Weights[i] = weight;
+				vertex.BoneIds[i] = boneID;
+				break;
+			}
+		}
+	}
+
+	bool ModelPBR::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene)
+	{
+		auto& boneInfoMap = m_BoneInfoMap;
+		int& boneCount = m_BoneCounter;
+
+		if (mesh->mNumBones == 0)
+			return false;
+
+		for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+		{
+			int boneID = -1;
+			std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+			if (boneInfoMap.find(boneName) == boneInfoMap.end())
+			{
+				BoneInfo newBoneInfo;
+				newBoneInfo.m_ID = boneCount;
+				newBoneInfo.m_Offset = AssimpHelper::ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix);
+				boneInfoMap[boneName] = newBoneInfo;
+				boneID = boneCount;
+				boneCount++;
+			}
+			else
+			{
+				boneID = boneInfoMap[boneName].m_ID;
+			}
+
+			auto weights = mesh->mBones[boneIndex]->mWeights;
+			int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+
+			for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+			{
+				int vertexId = weights[weightIndex].mVertexId;
+				float weight = weights[weightIndex].mWeight;
+				SetVertexBoneData(vertices[vertexId], boneID, weight);
+			}
+		}
+
+		return true;
+	}
 }

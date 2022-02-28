@@ -3,13 +3,13 @@
 
 namespace Tempest
 {
-	Animation::Animation(const std::string& animationPath, AnimationModel* model)
+	Animation::Animation(const std::string& animationPath, ModelPBR* model)
 	{
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
 		assert(scene && scene->mRootNode);
 		auto animation = scene->mAnimations[0];
-		m_Duration = animation->mDuration;
+		m_Duration = static_cast<float>(animation->mDuration);
 		m_Ticks = static_cast<float>(animation->mTicksPerSecond);
 		aiMatrix4x4 globalTransformation = scene->mRootNode->mTransformation;
 		globalTransformation = globalTransformation.Inverse();
@@ -32,28 +32,28 @@ namespace Tempest
 		else return &(*iter);
 	}
 
-	void Animation::ReadMissingBones(const aiAnimation* animation, AnimationModel& model)
+	void Animation::ReadMissingBones(const aiAnimation* animation, ModelPBR& model)
 	{
 		int size = animation->mNumChannels;
 
-		//auto& boneInfoMap = model.GetBoneInfoMap();
-		//int& boneCount = model.GetBoneCount(); 
-		//
-		//for (int i = 0; i < size; i++)
-		//{
-		//	auto channel = animation->mChannels[i];
-		//	std::string boneName = channel->mNodeName.data;
-		//
-		//	if (boneInfoMap.find(boneName) == boneInfoMap.end())
-		//	{
-		//		boneInfoMap[boneName].id = boneCount;
-		//		boneCount++;
-		//	}
-		//	m_Bones.push_back(Bone(channel->mNodeName.data,
-		//		boneInfoMap[channel->mNodeName.data].id, channel));
-		//}
-		//
-		//m_BoneInfoMap = boneInfoMap;
+		auto& boneInfoMap = model.GetBoneInfoMap();
+		int& boneCount = model.GetBoneCount(); 
+		
+		for (int i = 0; i < size; i++)
+		{
+			auto channel = animation->mChannels[i];
+			std::string boneName = channel->mNodeName.data;
+		
+			if (boneInfoMap.find(boneName) == boneInfoMap.end())
+			{
+				boneInfoMap[boneName].m_ID = boneCount;
+				boneCount++;
+			}
+			m_Bones.push_back(Bone(channel->mNodeName.data,
+				boneInfoMap[channel->mNodeName.data].m_ID, channel));
+		}
+		
+		m_BoneInfoMap = boneInfoMap;
 	}
 
 	void Animation::ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src)
@@ -62,7 +62,7 @@ namespace Tempest
 		dest.m_Transform = AssimpHelper::ConvertMatrixToGLMFormat(src->mTransformation);
 		dest.m_NumOfChildren = src->mNumChildren;
 
-		for (int i = 0; i < src->mNumChildren; i++)
+		for (unsigned int i = 0; i < static_cast<unsigned int>(src->mNumChildren); i++)
 		{
 			AssimpNodeData newData;
 			ReadHeirarchyData(newData, src->mChildren[i]);
