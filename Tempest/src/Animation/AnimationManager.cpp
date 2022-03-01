@@ -1,5 +1,6 @@
 #include "AnimationManager.h"
 #include "Logger/Log.h"
+#include <cstring>
 
 namespace Tempest
 {
@@ -27,5 +28,16 @@ namespace Tempest
 		{
 			m_Animators[id]->ChangeAnimation(animation);
 		}
+	}
+
+	bool AnimationManager::CheckAnimation(uint32_t id, std::string name)
+	{
+		auto& animator = m_Animators[id];
+		return !strcmp(animator->GetName().c_str(), name.c_str());
+	}
+
+	bool AnimationManager::CheckAnimator(uint32_t id)
+	{
+		return m_Animators.contains(id);
 	}
 }

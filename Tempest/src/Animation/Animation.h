@@ -6,7 +6,6 @@
 #include "assimp/scene.h"
 #include "assimp/Importer.hpp"
 #include "Bone.h"
-#include "Graphics/PBR/ModelPBR.h"
 
 namespace Tempest
 {
@@ -20,6 +19,7 @@ namespace Tempest
 
 	class Animation
 	{
+		std::string m_Name;
 		float m_Duration;
 		float m_Ticks;
 		tvector<Bone> m_Bones;
@@ -28,19 +28,20 @@ namespace Tempest
 
 	public:
 		Animation() = default;
-		Animation(const std::string& animationPath, ModelPBR* model);
+		Animation(tomap<std::string, BoneInfo>& boneInfoMap, int& boneCount, const aiScene* scene, int index);
 		~Animation();
 
 		Bone* FindBone(const std::string& name);
 
+		inline std::string GetName() { return m_Name; }
 		inline float GetTicksPerSecond() { return m_Ticks; }
 		inline float GetDuration() { return m_Duration; }
 		inline const AssimpNodeData& GetRootNode() { return m_Root; }
-		inline const tomap<std::string, BoneInfo>& GetBoneMap(){ return m_BoneInfoMap; }
+		inline const tomap<std::string, BoneInfo>& GetBoneMap() { return m_BoneInfoMap; }
 
 	private:
 
-		void ReadMissingBones(const aiAnimation* animation, ModelPBR& model);
+		void ReadMissingBones(const aiAnimation* animation, tomap<std::string, BoneInfo>& boneInfoMap, int& boneCount);
 		void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
 	};
 }

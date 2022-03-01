@@ -72,6 +72,8 @@ namespace Tempest
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
         void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
+        void SubmitModel(const string& path, const Transform& transform, std::string anim, uint32_t id);
+        void SubmitModel(const string& path, const glm::mat4& model_matrix, std::string anim, uint32_t id);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight);                                       // Submitting Point Light {Transform to be used for pos}
@@ -86,6 +88,8 @@ namespace Tempest
         void BeginFrame();
         void Render();
         void EndFrame();
+
+        void UpdateAnimation(float dt);
 
         void Resize(uint32_t width, uint32_t height);
         void RenderGrid(bool state);

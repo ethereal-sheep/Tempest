@@ -109,6 +109,7 @@ namespace Tempest
 			// fps controller can be done in instance manager
 			auto& io = ImGui::GetIO();
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			Service<RenderSystem>::Get().UpdateAnimation(io.DeltaTime);
 			cam.SetMousePosition((int)io.MousePos.x, (int)io.MousePos.y);
 			instance_manager.update(io.DeltaTime);
 		}

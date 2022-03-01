@@ -3,18 +3,16 @@
 
 namespace Tempest
 {
-	Animation::Animation(const std::string& animationPath, ModelPBR* model)
+	Animation::Animation(tomap<std::string, BoneInfo>& boneInfoMap, int& boneCount, const aiScene* scene, int index)
 	{
-		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
-		assert(scene && scene->mRootNode);
-		auto animation = scene->mAnimations[0];
+		auto animation = scene->mAnimations[index];
+		m_Name = std::string{ animation->mName.C_Str() };
 		m_Duration = static_cast<float>(animation->mDuration);
 		m_Ticks = static_cast<float>(animation->mTicksPerSecond);
 		aiMatrix4x4 globalTransformation = scene->mRootNode->mTransformation;
 		globalTransformation = globalTransformation.Inverse();
 		ReadHeirarchyData(m_Root, scene->mRootNode);
-		ReadMissingBones(animation, *model);
+		ReadMissingBones(animation, boneInfoMap, boneCount);
 	}
 
 	Animation::~Animation()
@@ -32,12 +30,9 @@ namespace Tempest
 		else return &(*iter);
 	}
 
-	void Animation::ReadMissingBones(const aiAnimation* animation, ModelPBR& model)
+	void Animation::ReadMissingBones(const aiAnimation* animation, tomap<std::string, BoneInfo>& boneInfoMap, int& boneCount)
 	{
 		int size = animation->mNumChannels;
-
-		auto& boneInfoMap = model.GetBoneInfoMap();
-		int& boneCount = model.GetBoneCount(); 
 		
 		for (int i = 0; i < size; i++)
 		{

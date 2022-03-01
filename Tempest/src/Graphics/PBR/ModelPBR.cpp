@@ -50,6 +50,13 @@ namespace Tempest
 
 			this->directory = file.substr(0, file.find_last_of('/'));
 			this->processNode(scene->mRootNode, scene);
+
+			for (unsigned int i = 0; i < static_cast<unsigned int>(scene->mNumAnimations); ++i)
+			{
+				std::string name{ scene->mAnimations[i]->mName.C_Str() };
+				Animation anim(m_BoneInfoMap, m_BoneCounter, scene, i);
+				animations.insert(std::make_pair(name, anim));
+			}
 		}
 
 		else
@@ -254,7 +261,7 @@ namespace Tempest
         for (GLuint i = 0; i < node->mNumMeshes; i++)
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            this->meshes.push_back(this->processMesh(mesh, scene));
+            this->meshes.push_back(this->processMesh(mesh));
         }
 
         for (GLuint i = 0; i < node->mNumChildren; i++)
@@ -264,7 +271,7 @@ namespace Tempest
     }
 
 
-    MeshPBR ModelPBR::processMesh(aiMesh* mesh, const aiScene* scene)
+    MeshPBR ModelPBR::processMesh(aiMesh* mesh)
     {
         std::vector<Vertex> vertices;
         std::vector<GLuint> indices;
@@ -305,7 +312,7 @@ namespace Tempest
                 indices.push_back(face.mIndices[j]);
         }
 		
-		HasAnimation = ExtractBoneWeightForVertices(vertices, mesh, scene);
+		HasAnimation = ExtractBoneWeightForVertices(vertices, mesh);
         return MeshPBR(vertices, indices);
     }
 
@@ -331,7 +338,7 @@ namespace Tempest
 		}
 	}
 
-	bool ModelPBR::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene)
+	bool ModelPBR::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh)
 	{
 		auto& boneInfoMap = m_BoneInfoMap;
 		int& boneCount = m_BoneCounter;
@@ -339,7 +346,7 @@ namespace Tempest
 		if (mesh->mNumBones == 0)
 			return false;
 
-		for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+		for (unsigned int boneIndex = 0; boneIndex < static_cast<unsigned int>(mesh->mNumBones); ++boneIndex)
 		{
 			int boneID = -1;
 			std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();

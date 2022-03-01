@@ -16,6 +16,7 @@ namespace Tempest
 		void PlayAnimation(Animation* pAnimation);
 		void CalculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform);
 		tvector<glm::mat4> GetFinalBoneMatrix() { return m_BoneMatrices; }
+		std::string GetName() { return m_Animation->GetName(); }
 
 	private:
 

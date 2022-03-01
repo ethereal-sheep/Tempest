@@ -113,7 +113,7 @@ namespace Tempest
 	{
 		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
 		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, 
-		Tile, Wall, Shape, Door, Obstacle, Unit, Collision, PointLight
+		Tile, Wall, Shape, Door, Obstacle, Unit, Collision, PointLight, Animation
 		,END
 	};
 
@@ -854,6 +854,25 @@ namespace Tempest
 			glm::vec3 pos;
 			glm::vec4 color;
 		};
+
+		struct Animation
+		{
+			static const char* get_type() { return "Animation"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Animation& component)
+			{
+				ar.StartObject();
+				ar.Member("id", component.id);
+				ar.Member("animation", component.animation);
+				return ar.EndObject();
+			}
+
+			Animation(uint32_t _id = 0, std::string _animation = std::string{}) : id{ _id }, animation{ _animation } {}
+
+			uint32_t id;
+			std::string animation;
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -911,6 +930,7 @@ namespace Tempest
 			COMPONENT_CASE(ResolutionGraph);
 			COMPONENT_CASE(Graph);
 			COMPONENT_CASE(PointLight);
+			COMPONENT_CASE(Animation);
 
 		/* ABOVE THIS PLEASE */
 

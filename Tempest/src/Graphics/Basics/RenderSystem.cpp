@@ -13,6 +13,7 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "ECS/Components/Components.h"
 #include "Logger/Log.h"
+#include "Animation/AnimationManager.h"
 
 namespace Tempest
 {
@@ -457,6 +458,7 @@ namespace Tempest
         ModelObj model;
         model.m_Transform = to_Model_Matrix(transform);
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
+
         m_Pipeline.m_Models.push_back(model);
     }
 
@@ -471,6 +473,60 @@ namespace Tempest
         ModelObj model;
         model.m_Transform = model_matrix;
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
+
+        m_Pipeline.m_Models.push_back(model);
+    }
+
+    // anim - Animation Name,   index - entity id
+    void RenderSystem::SubmitModel(const string& path, const Transform& transform, std::string anim, uint32_t id)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+
+        Animator animator{ &m_Pipeline.m_ModelLibrary[path]->animations[anim] };
+
+        if (!m_Animation.CheckAnimator(id))
+            m_Animation.AddAnimator(id, &animator);
+        else if (!m_Animation.CheckAnimation(id, anim))
+            m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
+
+        ModelObj model;
+        model.m_Transform = to_Model_Matrix(transform);
+        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+
+        auto transforms = animator.GetFinalBoneMatrix();
+        for (auto& i : transforms)
+            model.m_Bones.push_back(i);
+        m_Pipeline.m_Models.push_back(model);
+    }
+
+    void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, std::string anim, uint32_t id)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        
+        Animator animator{ &m_Pipeline.m_ModelLibrary[path]->animations[anim] };
+
+        if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
+            m_Animation.AddAnimator(id, &animator);
+        else if (!m_Animation.CheckAnimation(id, anim))     // Check if Different Animation
+            m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
+
+        ModelObj model;
+        model.m_Transform = model_matrix;
+        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        
+        auto transforms = animator.GetFinalBoneMatrix();
+        for (auto& i : transforms)
+            model.m_Bones.push_back(i);
         m_Pipeline.m_Models.push_back(model);
     }
     
@@ -554,6 +610,8 @@ namespace Tempest
 
     void RenderSystem::Render()
     {
+        //ModelPBR model;
+        //model.loadModel("../../../Resource/Models/gura.fbx");
         if (USO)
         {
             //glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );              // background color
@@ -1131,5 +1189,10 @@ namespace Tempest
     void RenderSystem::SubmitLights([[maybe_unused]]const Point_Light& plight)
     {
        // pt_lights.emplace_back(plight);
+    }
+
+    void RenderSystem::UpdateAnimation(float dt)
+    {
+        m_Animation.UpdateAnimations(dt);
     }
 }

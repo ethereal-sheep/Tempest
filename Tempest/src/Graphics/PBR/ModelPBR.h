@@ -21,7 +21,7 @@
 
 #include "Graphics/PBR/MeshPBR.h"
 #include "Graphics/PBR/MaterialPBR.h"
-#include "Animation/Bone.h"
+#include "Animation/Animation.h"
 
 #include <map>
 
@@ -47,15 +47,17 @@ namespace Tempest
         int m_BoneCounter = 0;
         bool HasAnimation = false;
 
+        std::unordered_map<std::string, Animation> animations;
+
     private:
         
         std::string directory;
 
         void processNode(aiNode* node, [[maybe_unused]] const aiScene* scene);
-        MeshPBR processMesh(aiMesh* mesh, const aiScene* scene);
+        MeshPBR processMesh(aiMesh* mesh);
         void SetVertexBoneDataToDefault(Vertex& vertex);
         void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
-        bool ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene);
+        bool ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh);
 
         const int MAX_BONE_INFLUENCE = 4;
     };
