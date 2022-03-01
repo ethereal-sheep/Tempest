@@ -10,6 +10,7 @@
 #include <stdio.h>      /* printf, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include <numbers>		/* numbers */
 
 void InteractiveParticle_3D::Emit(const int particleAmount)
 {
@@ -46,6 +47,9 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 			particle.m_colour.g = (Random::Float() - 0.5f);
 			particle.m_colour.b = (Random::Float() - 0.5f);
 
+			particle.m_colourBegin = m_PAM.m_colourBegin;
+			particle.m_colourEnd = m_PAM.m_colourEnd;
+
 			// Lifetime
 			particle.m_lifeTime = m_PAM.m_lifeTime;
 			particle.m_lifeRemaining = m_PAM.m_lifeTime;
@@ -53,16 +57,17 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 			// Size Variation
 			glm::vec3 sizeVariation{ 0.0f, 0.0f, 0.0f };
 
-			if(m_PAM.m_scaleVariation.x > 0)
-				sizeVariation.x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_scaleVariation.x));
+			if(m_PAM.m_scaleVariation.x >= 1)
+				sizeVariation.x = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.x);
 
-			if (m_PAM.m_scaleVariation.y > 0)
-				sizeVariation.x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_scaleVariation.y));
+			if (m_PAM.m_scaleVariation.y >= 1)
+				sizeVariation.y = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.y);
 
-			if (m_PAM.m_scaleVariation.z > 0)
-				sizeVariation.x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / m_PAM.m_scaleVariation.z));
+			if (m_PAM.m_scaleVariation.z >= 1)
+				sizeVariation.z = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.z);
 
-			particle.m_scale = m_PAM.m_scaleBegin + sizeVariation;// * (Random::Float() - 0.5f);
+			particle.m_scaleBegin = m_PAM.m_scaleBegin + sizeVariation;// * (Random::Float() - 0.5f);
+			particle.m_scaleEnd = m_PAM.m_scaleEnd;
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

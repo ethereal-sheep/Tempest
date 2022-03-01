@@ -165,10 +165,14 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 
 	interactiveEmitter.m_PAM.m_scaleBegin = glm::vec3{ 0.2f, 0.2f, 0.2f };
 	interactiveEmitter.m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	interactiveEmitter.m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
+	interactiveEmitter.m_PAM.m_scaleVariation = glm::vec3{ 1.0f, 1.0f, 1.0f };
 
-	interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	//interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	//interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 0.0f, 0.0f, 0.0f, 0.0f };
+	
+	// Note - Values to be divided by 255.0f - Forgot the reason
+	interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 0.996f, 0.831f, 0.482f, 1.0f };
+	interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 0.0f, 0.0f, 0.0f, 0.0f };
 
 	interactiveEmitter.m_PAM.m_lifeTime = 0.3f;
 

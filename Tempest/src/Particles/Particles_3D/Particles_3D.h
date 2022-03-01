@@ -17,15 +17,19 @@
 struct Particle_3D
 {
 	Particle_3D();
-	Particle_3D(glm::vec3 pos, glm::vec3 vec, glm::vec3 scale, glm::vec4 colour, float lifeTime, bool isActive);
+	//Particle_3D(glm::vec3 pos, glm::vec3 vec, glm::vec3 scale, glm::vec4 colour, float lifeTime, bool isActive);
 
 	glm::vec3 m_position;
 	glm::vec3 m_velocity;
 
 	float m_rotation;
 
+	glm::vec4 m_colourBegin, m_colourEnd;
 	glm::vec4 m_colour;
+
+	glm::vec3 m_scaleBegin, m_scaleEnd;
 	glm::vec3 m_scale;
+
 	float m_lifeTime;
 	float m_lifeRemaining;
 	bool m_isActive;

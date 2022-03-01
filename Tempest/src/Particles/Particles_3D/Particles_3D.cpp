@@ -21,13 +21,13 @@ Particle_3D::Particle_3D()
 	, m_isActive { false }
 {}
 
-Particle_3D::Particle_3D(glm::vec3 pos, glm::vec3 vec, glm::vec3 scale, glm::vec4 colour, float lifeTime, bool isActive)
-	: m_position { pos }
-	, m_velocity { vec }
-	, m_rotation { 0.0f }
-	, m_colour { colour }
-	, m_scale { scale }
-	, m_lifeTime { lifeTime }
-	, m_lifeRemaining{ lifeTime }
-	, m_isActive { isActive }
-{}
+//Particle_3D::Particle_3D(glm::vec3 pos, glm::vec3 vec, glm::vec3 scale, glm::vec4 colour, float lifeTime, bool isActive)
+//	: m_position { pos }
+//	, m_velocity { vec }
+//	, m_rotation { 0.0f }
+//	, m_colour { colour }
+//	, m_scale { scale }
+//	, m_lifeTime { lifeTime }
+//	, m_lifeRemaining{ lifeTime }
+//	, m_isActive { isActive }
+//{}

@@ -87,12 +87,12 @@ void Emitter_3D::Update()
 			particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
 
 			// Scale
-			particle.m_scale.x = glm::mix(m_PAM.m_scaleEnd.x, m_PAM.m_scaleBegin.x, lifePercent);
-			particle.m_scale.y = glm::mix(m_PAM.m_scaleEnd.y, m_PAM.m_scaleBegin.y, lifePercent);
-			particle.m_scale.z = glm::mix(m_PAM.m_scaleEnd.z, m_PAM.m_scaleBegin.z, lifePercent);
+			particle.m_scale.x = glm::mix(particle.m_scaleEnd.x, particle.m_scaleBegin.x, lifePercent);
+			particle.m_scale.y = glm::mix(particle.m_scaleEnd.y, particle.m_scaleBegin.y, lifePercent);
+			particle.m_scale.z = glm::mix(particle.m_scaleEnd.z, particle.m_scaleBegin.z, lifePercent);
 
 			// Colour
-			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);
+			particle.m_colour = glm::mix(particle.m_colourEnd, particle.m_colourBegin, lifePercent);
 			
 			
 			// Change the string in this function
