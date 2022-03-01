@@ -87,9 +87,8 @@ void ExplosionEmitter_3D::Emit(const int particleAmount)
 			//particle.m_velocity.y += m_PAM.m_velocityVariation.y - (Random::Float() - 50.f);
 
 			// Color
-			particle.m_colour.r = (Random::Float() - 0.5f);
-			particle.m_colour.g = (Random::Float() - 0.5f);
-			particle.m_colour.b = (Random::Float() - 0.5f);
+			particle.m_colourBegin = m_PAM.m_colourBegin;
+			particle.m_colourEnd = m_PAM.m_colourEnd;
 
 			// Lifetime
 			particle.m_lifeTime = m_PAM.m_lifeTime;
@@ -99,6 +98,8 @@ void ExplosionEmitter_3D::Emit(const int particleAmount)
 			particle.m_scale.x = m_PAM.m_scaleBegin.x + m_PAM.m_scaleVariation.x *(Random::Float() - 0.5f);
 			particle.m_scale.y = m_PAM.m_scaleBegin.y + m_PAM.m_scaleVariation.y *(Random::Float() - 0.5f);
 			particle.m_scale.z = m_PAM.m_scaleBegin.z + m_PAM.m_scaleVariation.z *(Random::Float() - 0.5f);
+
+			particle.m_renderingPath = m_RM.m_renderingPath;
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

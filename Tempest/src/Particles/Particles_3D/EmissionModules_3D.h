@@ -12,6 +12,7 @@
 #define EMISSION_MODULE_3D_H
 
 #include <glm.hpp>
+#include <string>
 
 struct MainModule_3D
 {
@@ -67,12 +68,12 @@ struct EmissionModule_3D
 	float m_spawnCountTimer;	// Time the interval
 };
 
-//struct RendererModule_3D
-//{
-//	RendererModule_3D();
-// 
-//	// Path Name for rendering modle
-//	std::string m_renderingPath;
-//};
+struct RendererModule_3D
+{
+	RendererModule_3D();
+ 
+	// Path Name for rendering modle
+	std::string m_renderingPath;
+};
 
 #endif // !EMISSION_MODULE_3D_H

@@ -119,20 +119,32 @@ void Emitter_3D::Emit(const int particleAmount)
 			particle.m_velocity = m_PAM.m_startVelocity;
 			particle.m_velocity.x += m_PAM.m_velocityVariation.x; //* (Random::Float() - 0.5f);
 			particle.m_velocity.y += m_PAM.m_velocityVariation.y; //* (Random::Float() - 0.5f);
+			particle.m_velocity.z += m_PAM.m_velocityVariation.z; //* (Random::Float() - 0.5f);
 
 			// Color
-			particle.m_colour.r = m_PAM.m_colourBegin.r; //(Random::Float() - 0.5f);
-			particle.m_colour.g = m_PAM.m_colourBegin.g; //(Random::Float() - 0.5f);
-			particle.m_colour.b = m_PAM.m_colourBegin.b; //(Random::Float() - 0.5f);
+			particle.m_colourBegin = m_PAM.m_colourBegin;
+			particle.m_colourEnd = m_PAM.m_colourEnd;
 
 			// Lifetime
 			particle.m_lifeTime = m_PAM.m_lifeTime;
 			particle.m_lifeRemaining = m_PAM.m_lifeTime;
 
 			// Scale
-			particle.m_scale.x = m_PAM.m_scaleBegin.x + m_PAM.m_scaleVariation.x;// *(Random::Float() - 0.5f);
-			particle.m_scale.y = m_PAM.m_scaleBegin.y + m_PAM.m_scaleVariation.y;// *(Random::Float() - 0.5f);
-			particle.m_scale.z = m_PAM.m_scaleBegin.z + m_PAM.m_scaleVariation.z;// *(Random::Float() - 0.5f);
+			glm::vec3 scaleVariation{ 0.0f, 0.0f, 0.0f };
+
+			if (m_PAM.m_scaleVariation.x >= 1)
+				scaleVariation.x = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.x);
+
+			if (m_PAM.m_scaleVariation.y >= 1)
+				scaleVariation.y = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.y);
+
+			if (m_PAM.m_scaleVariation.z >= 1)
+				scaleVariation.z = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.z);
+
+			particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;// * (Random::Float() - 0.5f);
+			particle.m_scaleEnd = m_PAM.m_scaleEnd;
+
+			particle.m_renderingPath = m_RM.m_renderingPath;
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

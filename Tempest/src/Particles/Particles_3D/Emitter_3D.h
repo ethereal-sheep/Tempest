@@ -26,6 +26,7 @@ struct Emitter_3D
 	GameObjectModule_3D			m_GM;
 	ParticleArchetypeModule_3D	m_PAM;
 	EmissionModule_3D			m_EM;
+	RendererModule_3D			m_RM;
 	
 	Emitter_3D();
 	void Update();

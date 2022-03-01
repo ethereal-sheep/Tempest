@@ -15,8 +15,12 @@ Particle_3D::Particle_3D()
 	, m_velocity { 0.0f, 0.0f, 0.0f }
 	, m_rotation { 0.0f }
 	, m_colour { 0.0f, 0.0f, 0.0f, 0.0f }
+	, m_colourBegin{ 0.0f, 0.0f, 0.0f, 0.0f }
+	, m_colourEnd{ 0.0f, 0.0f, 0.0f, 0.0f }
 	, m_scale { 1.0f, 1.0f, 1.0f }
-	, m_lifeTime{ 1.0f }
+	, m_scaleBegin { 1.0f, 1.0f, 1.0f }
+	, m_scaleEnd { 0.0f, 0.0f, 0.0f }
+	, m_lifeTime { 1.0f }
 	, m_lifeRemaining{ 1.0f }
 	, m_isActive { false }
 {}

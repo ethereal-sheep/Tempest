@@ -52,3 +52,7 @@ EmissionModule_3D::EmissionModule_3D()
 	, m_spawnCountTimer{ m_spawnTimeInterval }
 
 {}
+
+RendererModule_3D::RendererModule_3D()
+	: m_renderingPath{ "Models/Cube.a" }
+{}

@@ -86,9 +86,8 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 			//particle.m_velocity.y += m_PAM.m_velocityVariation.y - (Random::Float() - 50.f);
 
 			// Color
-			particle.m_colour.r = (Random::Float() - 0.5f);
-			particle.m_colour.g = (Random::Float() - 0.5f);
-			particle.m_colour.b = (Random::Float() - 0.5f);
+			particle.m_colourBegin = m_PAM.m_colourBegin;
+			particle.m_colourEnd = m_PAM.m_colourEnd;
 
 			// Lifetime
 			particle.m_lifeTime = m_PAM.m_lifeTime;
@@ -99,6 +98,7 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 			particle.m_scale.y = m_PAM.m_scaleBegin.y + m_PAM.m_scaleVariation.y * (Random::Float() - 0.5f);
 			particle.m_scale.z = m_PAM.m_scaleBegin.z + m_PAM.m_scaleVariation.z * (Random::Float() - 0.5f);
 
+			particle.m_renderingPath = m_RM.m_renderingPath;
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;
@@ -162,7 +162,7 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 		}
 
 		// Creation of explosion emitter
-		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = ParticleSystem_3D::GetInstance().CreateTestEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }).lock();
+		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = ParticleSystem_3D::GetInstance().CreateExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }).lock();
 
 		// Emitter's velocity
 		tempEmitter->m_GM.m_velocity = glm::vec3{ directionX, directionY, directionZ };

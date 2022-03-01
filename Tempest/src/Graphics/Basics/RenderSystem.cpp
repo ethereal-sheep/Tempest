@@ -493,7 +493,7 @@ namespace Tempest
     void RenderSystem::SubmitModel(const Particle_3D& particle)
     {
         // Change path to particle.m_path or however u named the path string
-        std::string path = "Models/Cube.a";
+        std::string path = particle.m_renderingPath; //"Models/SquareHole.a";
         if (!m_Pipeline.m_ModelLibrary.count(path))
         {
             std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();

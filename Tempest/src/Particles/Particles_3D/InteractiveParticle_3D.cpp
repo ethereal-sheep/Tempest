@@ -43,10 +43,6 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 			particle.m_isActive = true;
 
 			// Color
-			particle.m_colour.r = (Random::Float() - 0.5f);
-			particle.m_colour.g = (Random::Float() - 0.5f);
-			particle.m_colour.b = (Random::Float() - 0.5f);
-
 			particle.m_colourBegin = m_PAM.m_colourBegin;
 			particle.m_colourEnd = m_PAM.m_colourEnd;
 
@@ -68,6 +64,8 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 
 			particle.m_scaleBegin = m_PAM.m_scaleBegin + sizeVariation;// * (Random::Float() - 0.5f);
 			particle.m_scaleEnd = m_PAM.m_scaleEnd;
+
+			particle.m_renderingPath = m_RM.m_renderingPath;
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;
