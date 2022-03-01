@@ -88,11 +88,11 @@ namespace Tempest
 			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
 			{
 				auto direction = els::to_vec2(io.MouseDelta);
-				auto yaw_speed = 1.f / 4;
-				auto pitch_speed = 1.f / 4;
-				auto pan_speed = 1.f / 4.f;
-				auto forward_speed = 1.f / 4.f;
-				auto scroll_speed = forward_speed * 4.f;
+				auto yaw_speed = 1.f / 6;
+				auto pitch_speed = 1.f / 6;
+				auto pan_speed = 1.f / 3;
+				auto forward_speed = 1.f / 6;
+				auto scroll_speed = forward_speed * 6;
 
 				auto pan_time = .05f;
 				auto rotate_time = .05f;
@@ -188,13 +188,13 @@ namespace Tempest
 
 
 						current_pos_time = 0.f;
-						total_pos_time = pan_time;
+						total_pos_time = 0.01f;
 
 						start_position = currentPos;
 						end_position = newPos;
 
 						easing = EasingMode::LINEAR;
-						//cam.SetPosition(newPos);
+						cam.SetPosition(newPos);
 					}
 				}
 
