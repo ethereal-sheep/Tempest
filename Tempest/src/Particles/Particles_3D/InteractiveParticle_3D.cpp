@@ -14,8 +14,6 @@
 
 void InteractiveParticle_3D::Emit(const int particleAmount)
 {
-	//srand(time(NULL));
-
 	// Emit only if there is enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 	{
@@ -23,6 +21,19 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 		{
 			// Initialisation of the particle
 			Particle_3D particle;
+
+			// Initial Velocity 
+			particle.m_velocity = m_PAM.m_startVelocity;
+
+			// Velocity Variations
+			if (m_PAM.m_velocityVariation.x >= 1)
+				particle.m_velocity.x += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.x);
+
+			if (m_PAM.m_velocityVariation.y >= 1)
+				particle.m_velocity.y += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.y);
+
+			if (m_PAM.m_velocityVariation.z >= 1)
+				particle.m_velocity.z += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.z);
 
 			// Spawn Position of the particle - To be between min and max of range
 			int rangeX = static_cast<int>(maxPos.x - minPos.x) > 0 ? static_cast<int>(maxPos.x - minPos.x) : 1;

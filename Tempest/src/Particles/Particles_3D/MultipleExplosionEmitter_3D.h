@@ -13,10 +13,13 @@ struct MultipleExplosionEmitter_3D : public Emitter_3D
 	// Additional amount of explosion emitter to create
 	int m_explosionEmitterAmount;
 
+	// Min and Max range of the spawn pos - Assume values given are correct to work
+	glm::vec3 minPos;
+	glm::vec3 maxPos;
+
 	void Emit(const int particleAmount) override;
+	void OnDeath() override;
 };
-
-
 
 #endif // !MULTIPLE_EXPLOSION_EMITTER_3D_H
 

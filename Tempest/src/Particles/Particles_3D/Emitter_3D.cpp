@@ -54,7 +54,10 @@ void Emitter_3D::SelfUpdate()
 
 	// Emitter_3D Lifetime update
 	if (m_MM.m_duration <= 0.f)
+	{
+		OnDeath();
 		m_GM.m_active = false;
+	}
 	else
 		m_MM.m_duration -= m_MM.m_simulationSpeed;
 }
@@ -173,3 +176,6 @@ void Emitter_3D::ClearAllParticles()
 		}
 	}
 }
+
+void Emitter_3D::OnDeath()
+{}

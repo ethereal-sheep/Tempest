@@ -23,6 +23,7 @@ public:
 
 	static float Float()
 	{
+		// Returns between 0 - 1
 		return (float)s_Distribution(s_RandomEngine) / (float)std::numeric_limits<uint32_t>::max();
 	}
 

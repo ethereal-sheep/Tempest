@@ -35,6 +35,7 @@ struct Emitter_3D
 protected:
 	virtual void SelfUpdate();
 	virtual void Emit(const int particleAmount);
+	virtual void OnDeath();
 };
 
 #endif // !EMITTER_3D_H

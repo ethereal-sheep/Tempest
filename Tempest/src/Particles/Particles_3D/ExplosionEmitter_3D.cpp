@@ -27,13 +27,23 @@ void ExplosionEmitter_3D::Emit(const int particleAmount)
 			particle.m_isActive = true;
 			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
 
-			// Velocity - RNG
+					// Initial Velocity 
 			particle.m_velocity = m_PAM.m_startVelocity;
 
+			// Velocity Variations
+			if (m_PAM.m_velocityVariation.x >= 1)
+				particle.m_velocity.x += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.x);
+
+			if (m_PAM.m_velocityVariation.y >= 1)
+				particle.m_velocity.y += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.y);
+
+			if (m_PAM.m_velocityVariation.z >= 1)
+				particle.m_velocity.z += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.z);
+
 			short spawnSector = std::rand() % 7;
-			short directionX = (std::rand() % 10);
-			short directionY = (std::rand() % 10);
-			short directionZ = (std::rand() % 10);
+			short directionX = 1;
+			short directionY = 1;
+			short directionZ = 1;
 
 			switch (spawnSector)
 			{
@@ -78,13 +88,10 @@ void ExplosionEmitter_3D::Emit(const int particleAmount)
 				break;
 			}
 
-			// Velocities
-			particle.m_velocity.x += m_PAM.m_velocityVariation.x + directionX;
-			particle.m_velocity.y += m_PAM.m_velocityVariation.y + directionY;
-			particle.m_velocity.z += m_PAM.m_velocityVariation.z + directionZ;
-
-			//particle.m_velocity.x += m_PAM.m_velocityVariation.x - (Random::Float() - 50.f);
-			//particle.m_velocity.y += m_PAM.m_velocityVariation.y - (Random::Float() - 50.f);
+			// Velocities Direction
+			particle.m_velocity.x *= directionX;
+			particle.m_velocity.y *= directionY;
+			particle.m_velocity.z *= directionZ;
 
 			// Color
 			particle.m_colourBegin = m_PAM.m_colourBegin;

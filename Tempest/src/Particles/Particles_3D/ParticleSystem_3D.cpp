@@ -123,14 +123,14 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitt
 	// Particle Architype values - without consideration for default ctor
 	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f};
+	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
 	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
 	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
-	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f }; 
+	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 
 	tempEmitter->m_PAM.m_lifeTime = 0.3f;
 	tempEmitter->m_RM.m_renderingPath = "Models/Cube.a";
@@ -138,19 +138,57 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitt
 	return tempEmitter;
 }
 
-const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultipleExplosionEmitter(glm::vec3 spawnPos, int explosionEmitterAmount)
+const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateBigExplosionEmitter(glm::vec3 spawnPos)
+{
+		auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
+		ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
+		AddEmitter(tempEmitter);
+
+		// Emitter_3D values - Without consideration for default ctor values
+		tempEmitter->m_GM.m_position = spawnPos;
+		//tempEmitter->m_GM.m_velocity.x = -500.0f;
+		tempEmitter->m_MM.m_duration = 0.6f;
+		tempEmitter->m_GM.m_active = true;
+		tempEmitter->m_MM.m_preWarm = true;
+
+		tempEmitter->m_EM.m_spawnTimeInterval = 0.3f; // 5x slower of dt
+		tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
+		tempEmitter->m_EM.m_rateOverTime = 20;
+		tempEmitter->m_MM.m_maxParticles = 1000;
+
+		// Particle Architype values - without consideration for default ctor
+		tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 40.f, 40.f, 40.0f };
+		tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+		tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
+
+		tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
+		tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+		tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
+
+		tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+		tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+
+		tempEmitter->m_PAM.m_lifeTime = 0.3f;
+		tempEmitter->m_RM.m_renderingPath = "Models/Cube.a";
+
+		return tempEmitter;
+}
+
+const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultipleExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
 {
 	auto tempEmitter = std::make_shared<MultipleExplosionEmitter_3D>();
 
 	// MultipleExplosionEmitter - Own Explosion
 	// Emitter_3D values - Without consideration for default ctor values
 	tempEmitter->m_GM.m_position = spawnPos;
-	//tempEmitter->m_GM.m_velocity.x = -500.0f;
-	tempEmitter->m_MM.m_duration = 0.6f;
+	tempEmitter->minPos = minSpawnPos;
+	tempEmitter->maxPos = maxSpawnPos;
+	tempEmitter->m_MM.m_duration = 0.3f;
+	tempEmitter->m_MM.m_simulationSpeed = 0.016f;
 	tempEmitter->m_GM.m_active = true;
 	tempEmitter->m_MM.m_preWarm = true;
 
-	tempEmitter->m_EM.m_spawnTimeInterval = 0.3f; // 5x slower of dt
+	tempEmitter->m_EM.m_spawnTimeInterval = 10.0f;
 	tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
 	tempEmitter->m_EM.m_rateOverTime = 20;
 	tempEmitter->m_MM.m_maxParticles = 1000;
@@ -158,14 +196,17 @@ const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultip
 	// Particle Architype values - without consideration for default ctor
 	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f };
+	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
 	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
 	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
-	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	//tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	//tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 
 	tempEmitter->m_PAM.m_lifeTime = 0.3f;
 	tempEmitter->m_RM.m_renderingPath = "Models/Cube.a";

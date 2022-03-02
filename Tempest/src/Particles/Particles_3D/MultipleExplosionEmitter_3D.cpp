@@ -26,13 +26,23 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 			particle.m_isActive = true;
 			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
 
-			// Velocity - RNG
+			// Initial Velocity 
 			particle.m_velocity = m_PAM.m_startVelocity;
 
+			// Velocity Variations
+			if (m_PAM.m_velocityVariation.x >= 1)
+				particle.m_velocity.x += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.x);
+
+			if (m_PAM.m_velocityVariation.y >= 1)
+				particle.m_velocity.y += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.y);
+
+			if (m_PAM.m_velocityVariation.z >= 1)
+				particle.m_velocity.z += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.z);
+
 			short spawnSector = std::rand() % 7;
-			short directionX = (std::rand() % 40);
-			short directionY = (std::rand() % 40);
-			short directionZ = (std::rand() % 40);
+			short directionX = 1;
+			short directionY = 1;
+			short directionZ = 1;
 
 			switch (spawnSector)
 			{
@@ -77,13 +87,10 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 				break;
 			}
 
-			// Velocities
-			particle.m_velocity.x += m_PAM.m_velocityVariation.x + directionX;
-			particle.m_velocity.y += m_PAM.m_velocityVariation.y + directionY;
-			particle.m_velocity.z += m_PAM.m_velocityVariation.z + directionZ;
-
-			//particle.m_velocity.x += m_PAM.m_velocityVariation.x - (Random::Float() - 50.f);
-			//particle.m_velocity.y += m_PAM.m_velocityVariation.y - (Random::Float() - 50.f);
+			// Velocities Direction
+			particle.m_velocity.x *= directionX;
+			particle.m_velocity.y *= directionY;
+			particle.m_velocity.z *= directionZ;
 
 			// Color
 			particle.m_colourBegin = m_PAM.m_colourBegin;
@@ -108,14 +115,17 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 				break;
 		}
 	}
+}
 
-	// Emit for explosion emitter
+void MultipleExplosionEmitter_3D::OnDeath()
+{
+	 // Emit for explosion emitter
 	for (short i = 0; i < m_explosionEmitterAmount; ++i)
 	{
 		short spawnSector = std::rand() % 7;
-		short directionX = (std::rand() % 10);
-		short directionY = (std::rand() % 10);
-		short directionZ = (std::rand() % 10);
+		short directionX = 1;
+		short directionY = 1;
+		short directionZ = 1;
 
 		// Spawn Velocity Direction
 		switch (spawnSector)
@@ -161,14 +171,24 @@ void MultipleExplosionEmitter_3D::Emit(const int particleAmount)
 			break;
 		}
 
+		// Spawn Position of the particle - To be between min and max of range
+		int rangeX = static_cast<int>(maxPos.x - minPos.x) > 0 ? static_cast<int>(maxPos.x - minPos.x) : 1;
+		int rangeY = static_cast<int>(maxPos.y - minPos.y) > 0 ? static_cast<int>(maxPos.y - minPos.y) : 1;
+		int rangeZ = static_cast<int>(maxPos.z - minPos.z) > 0 ? static_cast<int>(maxPos.z - minPos.z) : 1;
+
+		glm::vec3 spawnPos;
+
+		spawnPos.x = Random::Float() * rangeX + minPos.x;
+		spawnPos.y = Random::Float() * rangeY + minPos.y;
+		spawnPos.z = Random::Float() * rangeZ + minPos.z;
+
 		// Creation of explosion emitter
-		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = ParticleSystem_3D::GetInstance().CreateExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }).lock();
+		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = ParticleSystem_3D::GetInstance().CreateExplosionEmitter(spawnPos).lock();
 
 		// Emitter's velocity
-		tempEmitter->m_GM.m_velocity = glm::vec3{ directionX, directionY, directionZ };
-		tempEmitter->m_MM.m_preWarm = false;
+		//tempEmitter->m_GM.m_velocity = glm::vec3{ directionX, directionY, directionZ };
+		tempEmitter->m_MM.m_duration = 0.6f;
+		tempEmitter->m_EM.m_spawnTimeInterval = 1.0f;
+		tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
 	}
-
-	// Performs emit only once
-	m_explosionEmitterAmount = 0;
 }
