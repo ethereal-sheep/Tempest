@@ -217,6 +217,9 @@ namespace Tempest
 
         bool PREFABMODE = false;
 
+        // ANIMATION TESTING
+        ModelPBR model;
+
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);

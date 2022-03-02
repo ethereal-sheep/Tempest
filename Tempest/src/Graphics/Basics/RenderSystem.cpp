@@ -431,6 +431,9 @@ namespace Tempest
         //----------
         iblSetup();
         //AAgridShow = true;
+
+        // Animation Testing
+        model.loadModel("../../../Resource/Models/gura.fbx");
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -612,6 +615,8 @@ namespace Tempest
     {
         //ModelPBR model;
         //model.loadModel("../../../Resource/Models/gura.fbx");
+        SubmitModel("../../../Resource/Models/gura.fbx", glm::mat4{ 1.f }, "ParadeWalk", 1900);
+
         if (USO)
         {
             //glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );              // background color
