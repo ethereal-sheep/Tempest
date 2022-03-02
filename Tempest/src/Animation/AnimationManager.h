@@ -17,6 +17,8 @@ namespace Tempest
 		void ChangeAnimation(uint32_t id, Animation* animation);		// Changes 
 		bool CheckAnimation(uint32_t id, std::string name);
 		bool CheckAnimator(uint32_t id);
+
+		tvector<glm::mat4> GetBoneMatrix(uint32_t id) { return m_Animators[id]->GetFinalBoneMatrix(); }
 	};
 }
 
