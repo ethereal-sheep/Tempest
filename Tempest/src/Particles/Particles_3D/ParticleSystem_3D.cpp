@@ -3,9 +3,11 @@
 // Main Header
 #include "ParticleSystem_3D.h"
 
+// Types of Emitters
 #include "ExplosionEmitter_3D.h"
 #include "MultipleExplosionEmitter_3D.h"
 #include "InteractiveParticle_3D.h"
+#include "TileWaypointEmitter_3D.h"
 
 ParticleSystem_3D::ParticleSystem_3D()
 {}
@@ -140,38 +142,38 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitt
 
 const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateBigExplosionEmitter(glm::vec3 spawnPos)
 {
-		auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
-		ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
-		AddEmitter(tempEmitter);
+	auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
+	ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
 
-		// Emitter_3D values - Without consideration for default ctor values
-		tempEmitter->m_GM.m_position = spawnPos;
-		//tempEmitter->m_GM.m_velocity.x = -500.0f;
-		tempEmitter->m_MM.m_duration = 0.6f;
-		tempEmitter->m_GM.m_active = true;
-		tempEmitter->m_MM.m_preWarm = true;
+	// Emitter_3D values - Without consideration for default ctor values
+	tempEmitter->m_GM.m_position = spawnPos;
+	//tempEmitter->m_GM.m_velocity.x = -500.0f;
+	tempEmitter->m_MM.m_duration = 0.6f;
+	tempEmitter->m_GM.m_active = true;
+	tempEmitter->m_MM.m_preWarm = true;
 
-		tempEmitter->m_EM.m_spawnTimeInterval = 0.3f; // 5x slower of dt
-		tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
-		tempEmitter->m_EM.m_rateOverTime = 20;
-		tempEmitter->m_MM.m_maxParticles = 1000;
+	tempEmitter->m_EM.m_spawnTimeInterval = 0.3f; // 5x slower of dt
+	tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
+	tempEmitter->m_EM.m_rateOverTime = 50;
+	tempEmitter->m_MM.m_maxParticles = 1000;
 
-		// Particle Architype values - without consideration for default ctor
-		tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 40.f, 40.f, 40.0f };
-		tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-		tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
+	// Particle Architype values - without consideration for default ctor
+	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
-		tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
-		tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-		tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
+	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
+	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
-		tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
-		tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 
-		tempEmitter->m_PAM.m_lifeTime = 0.3f;
-		tempEmitter->m_RM.m_renderingPath = "Models/Cube.a";
+	tempEmitter->m_PAM.m_lifeTime = 0.3f;
+	tempEmitter->m_RM.m_renderingPath = "Models/Cube.a";
 
-		return tempEmitter;
+	return tempEmitter;
 }
 
 const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultipleExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
@@ -255,6 +257,78 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 
 	interactiveEmitter.m_PAM.m_lifeTime = 0.3f;
 	interactiveEmitter.m_RM.m_renderingPath = "Models/Cube.a";
+
+	return tempEmitter;
+}
+
+const std::weak_ptr<TileWaypointEmitter_3D> ParticleSystem_3D::CreateTileWaypointEmitter(glm::vec3 spawnPos)
+{
+	auto tempEmitter = std::make_shared<TileWaypointEmitter_3D>();
+	TileWaypointEmitter_3D& emitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
+
+	// Emitter_3D values - Without consideration for default ctor values
+	emitter.m_GM.m_velocity.x = 0.0f;
+	emitter.m_MM.m_duration = 1000.0f;
+	emitter.m_GM.m_active = true;
+	emitter.m_MM.m_preWarm = true;
+	emitter.m_MM.m_simulationSpeed = 0.016f;
+
+	emitter.m_EM.m_spawnTimeInterval = 0.016f;
+	emitter.m_EM.m_spawnCountTimer = emitter.m_EM.m_spawnTimeInterval;
+	emitter.m_EM.m_rateOverTime = 1;
+	emitter.m_MM.m_maxParticles = 1000;
+
+	emitter.m_wayPointIndex = 0;
+	emitter.m_recalculateVelocity = true;
+
+	// Particle Architype values - without consideration for default ctor
+	emitter.m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	emitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	emitter.m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+
+	emitter.m_PAM.m_scaleBegin = glm::vec3{ 0.2f, 0.2f, 0.2f };
+	emitter.m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	emitter.m_PAM.m_scaleVariation = glm::vec3{ 1.0f, 1.0f, 1.0f };
+
+	emitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	emitter.m_PAM.m_lifeTime = 0.3f;
+	emitter.m_RM.m_renderingPath = "Models/Cube.a";
+
+	// Center position of the tile
+	emitter.m_GM.m_position = spawnPos;
+
+	// Shift to one corner of the button - Left Bottom
+	//emitter.m_GM.m_position.x -= buttonSize.x * 0.5f;
+	//emitter.m_GM.m_position.y -= buttonSize.y * 0.5f;
+
+	// Assume its a unit tile
+	glm::vec3 wp_LeftBtm = spawnPos;
+	//glm::vec3 wp_LeftBtm = glm::vec3{ spawnPos.x - 0.5f, spawnPos.y, spawnPos.z - 0.5f };
+
+	glm::vec3 wp_RightBtm = wp_LeftBtm;
+	wp_RightBtm.x += 5.0f;
+
+	glm::vec3 wp_RightTop = wp_RightBtm;
+	wp_RightTop.z += 5.0f;
+
+	glm::vec3 wp_LeftTop = wp_RightTop;
+	wp_LeftTop.x -= 5.0f;
+
+	// Add the waypoints
+	emitter.m_wayPoints.push_back(wp_RightBtm);
+	emitter.m_wayPoints.push_back(wp_RightTop);
+	emitter.m_wayPoints.push_back(wp_LeftTop);
+	emitter.m_wayPoints.push_back(wp_LeftBtm);
+
+	//LOG_INFO("Given Value x: {0}, y: {1}", topLeftPos.x, topLeftPos.y);
+	//LOG_INFO("Button Size x: {0}, y: {1}", buttonSize.x, buttonSize.y);
+	//LOG_INFO("Btm Left  x: {0}, y: {1}", wp_LeftBottom.x, wp_LeftBottom.y);
+	//LOG_INFO("Btm Right x: {0}, y: {1}", wp_RightBottom.x, wp_RightBottom.y);
+	//LOG_INFO("Top Right x: {0}, y: {1}", wp_RightTop.x, wp_RightTop.y);
+	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 
 	return tempEmitter;
 }

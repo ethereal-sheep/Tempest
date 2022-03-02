@@ -1,13 +1,13 @@
 
-#include "WaypointEmitter_3D.h"
+#include "TileWaypointEmitter_3D.h"
 
-WaypointEmitter_3D::WaypointEmitter_3D()
+TileWaypointEmitter_3D::TileWaypointEmitter_3D()
 	: Emitter_3D()
 	, m_wayPointIndex{ 0 }
 	, m_recalculateVelocity{ true }
 {}
 
-void WaypointEmitter_3D::SelfUpdate()
+void TileWaypointEmitter_3D::SelfUpdate()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -30,6 +30,7 @@ void WaypointEmitter_3D::SelfUpdate()
 				return distanceSquared;
 			};
 
+			// AssumeTileBased
 			if (m_recalculateVelocity)
 			{
 				m_GM.m_velocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
@@ -37,13 +38,13 @@ void WaypointEmitter_3D::SelfUpdate()
 				if (m_GM.m_velocity.x != 0.f)
 				{
 					m_GM.m_velocity.x /= std::abs(m_GM.m_velocity.x);
-					m_GM.m_velocity.x *= 200.0f;
+					m_GM.m_velocity.x *= 20.0f;
 				}
 
 				if (m_GM.m_velocity.z != 0.f)
 				{
 					m_GM.m_velocity.z /= std::abs(m_GM.m_velocity.z);
-					m_GM.m_velocity.z *= 200.0f;
+					m_GM.m_velocity.z *= 20.0f;
 				}
 
 				m_recalculateVelocity = false;
@@ -55,7 +56,7 @@ void WaypointEmitter_3D::SelfUpdate()
 			m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
 
 			// 10 pixels difference
-			if (distanceSquared <= 20.0f)
+			if (distanceSquared <= 1.0f)
 			{
 				m_GM.m_position = m_wayPoints[m_wayPointIndex];
 				++m_wayPointIndex;
