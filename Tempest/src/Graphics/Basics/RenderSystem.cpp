@@ -490,10 +490,10 @@ namespace Tempest
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
 
-        Animator animator{ &m_Pipeline.m_ModelLibrary[path]->animations[anim] };
+        tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);
 
         if (!m_Animation.CheckAnimator(id))
-            m_Animation.AddAnimator(id, &animator);
+            m_Animation.AddAnimator(id, animator);
         else if (!m_Animation.CheckAnimation(id, anim))
             m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
 
@@ -501,7 +501,7 @@ namespace Tempest
         model.m_Transform = to_Model_Matrix(transform);
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
 
-        auto transforms = animator.GetFinalBoneMatrix();
+        auto transforms = animator->GetFinalBoneMatrix();
         for (auto& i : transforms)
             model.m_Bones.push_back(i);
         m_Pipeline.m_Models.push_back(model);
@@ -516,10 +516,10 @@ namespace Tempest
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
         
-        Animator animator{ &m_Pipeline.m_ModelLibrary[path]->animations[anim] };
+        tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);
 
         if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
-            m_Animation.AddAnimator(id, &animator);
+            m_Animation.AddAnimator(id, animator);
         else if (!m_Animation.CheckAnimation(id, anim))     // Check if Different Animation
             m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
 
@@ -527,7 +527,7 @@ namespace Tempest
         model.m_Transform = model_matrix;
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
         
-        auto transforms = animator.GetFinalBoneMatrix();
+        auto transforms = animator->GetFinalBoneMatrix();
         for (auto& i : transforms)
             model.m_Bones.push_back(i);
         m_Pipeline.m_Models.push_back(model);

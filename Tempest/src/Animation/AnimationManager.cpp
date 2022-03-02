@@ -4,7 +4,7 @@
 
 namespace Tempest
 {
-	void AnimationManager::AddAnimator(uint32_t id, Animator* anim)
+	void AnimationManager::AddAnimator(uint32_t id, tsptr<Animator> anim)
 	{
 		m_Animators.insert(std::make_pair(id, anim));
 	}
