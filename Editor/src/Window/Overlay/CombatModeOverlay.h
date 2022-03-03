@@ -223,6 +223,8 @@ namespace Tempest
         std::array<TabImageData, TOTAL> tabs;
         TABS_TYPE current_tab{ TABS_TYPE::STAT };
 
+        int tutorial_index{ 0 };
+
         interpolater<int> inter1;
         interpolater<int> inter2;
         interpolater<float> inter3;
