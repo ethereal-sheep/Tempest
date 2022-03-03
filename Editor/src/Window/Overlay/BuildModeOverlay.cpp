@@ -282,7 +282,7 @@ namespace Tempest
 
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.980f, 0.768f, 0.509f, 1.f });
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.980f, 0.768f, 0.509f, 0.6f });
-						ImGui::BeginChild("Save_button_child", child4_box, false);
+						ImGui::BeginChild("some_child", child4_box, false);
 
 						{
 							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
