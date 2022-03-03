@@ -502,8 +502,9 @@ namespace Tempest
         }
         ModelObj model;
         auto s = glm::scale(particle.m_scale);
+        auto r = glm::rotate(particle.m_rotation, vec3(1.f, 0.f, 0.f));
         auto t = glm::translate(particle.m_position);
-        model.m_Transform = (t * s);
+        model.m_Transform = (t * r * s);
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
         model.m_Model->colours[0] = particle.m_colour;
         m_Pipeline.m_Models.push_back(model);
