@@ -31,9 +31,17 @@ namespace Tempest
 		
 		scene.get_map().update();
 
+
+		// destroy all deleted stuff in ecs
+		auto view = ecs.view<Components::Destroyed>();
+		tvector<Entity> entities{ view.begin(), view.end() };
+		std::for_each(entities.begin(), entities.end(), std::bind(&ECS::destroy, &ecs, std::placeholders::_1));
+	}
+	void EditTimeInstance::_render()
+	{
 		for (auto& [id, pf] : scene.get_map())
 		{
-			
+
 			if (auto model = pf.get_if<tc::Model>())
 			{
 				auto transform = pf.get_if<tc::Transform>();
@@ -53,16 +61,30 @@ namespace Tempest
 				}
 				Service<RenderSystem>::Get().SubmitModel(p.string(), test);
 			}
+
+			if (auto door = pf.get_if<tc::Door>())
+			{
+
+				auto transform = pf.get_if<tc::Transform>();
+
+				const tc::Local* local = &door->frame_local;
+
+				auto test = glm::translate(transform->position)
+					* glm::mat4(transform->rotation)
+					* glm::translate(local->local_position)
+					* glm::mat4(local->local_rotation)
+					* glm::scale(local->local_scale)
+					* glm::scale(transform->scale);
+
+
+				std::filesystem::path p{ door->frame.path };
+				if (strcmp(p.extension().string().c_str(), ".a"))
+				{
+					p.replace_extension(".a");
+				}
+				Service<RenderSystem>::Get().SubmitModel(p.string(), test);
+			}
 		}
-
-		// destroy all deleted stuff in ecs
-		auto view = ecs.view<Components::Destroyed>();
-		tvector<Entity> entities{ view.begin(), view.end() };
-		std::for_each(entities.begin(), entities.end(), std::bind(&ECS::destroy, &ecs, std::placeholders::_1));
-	}
-	void EditTimeInstance::_render()
-	{
-
 	}
 	void EditTimeInstance::_exit()
 	{

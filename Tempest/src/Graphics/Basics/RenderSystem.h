@@ -68,6 +68,7 @@ namespace Tempest
         ~RenderSystem() = default;
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
+        void LoadModel(const string& path);
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
         void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);

@@ -126,7 +126,29 @@
                             1.0
                         ]
                     }
-                ]
+                ],
+                "Frame": {
+                    "Path": "Models\\Wall_Door_Frame.a",
+                    "TexturePath": ""
+                },
+                "Frame_Local": {
+                    "LocalPosition": [
+                        0.4252290427684784,
+                        0.0,
+                        0.8104400634765625
+                    ],
+                    "LocalRotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
             }
         }
     ]

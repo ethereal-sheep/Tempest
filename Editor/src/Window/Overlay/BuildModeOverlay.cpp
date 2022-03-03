@@ -38,6 +38,9 @@ namespace Tempest
 		if(banner.is_finished())
 			banner.start(1, 0, 10);
 
+		for (auto& i : inter_nest)
+			i.update(ImGui::GetIO().DeltaTime);
+
 		if (OverlayOpen)
 		{
 			//renderTop();
@@ -70,9 +73,10 @@ namespace Tempest
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0,0.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-		ImGui::SetNextWindowPos({ viewport->WorkPos.x,viewport->WorkPos.y });
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
+		ImGui::SetNextWindowPos({ viewport->WorkPos.x, viewport->WorkPos.y });
+		auto size = viewport->WorkSize - viewport->WorkSize;
 		ImGui::SetNextWindowSize(viewport->WorkSize);
 
 		if (ImGui::Begin("Btm Build Mode Screen", nullptr, window_flags))
@@ -90,13 +94,36 @@ namespace Tempest
 			}
 			//camEnable(instance);
 
-			ImGui::SetCursorPos({cPos.x + ImGui::GetWindowWidth() * 0.85f, cPos.y + ImGui::GetWindowHeight() * 0.05f });
+			auto childx = 300.f;
 
-			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.f));
-			ImGui::BeginChild("Child", ImVec2{}, false);
+
+
+			// if there is transform
+			if (current != instance.selected)
+			{
+				if (instance.scene.get_map().exist(instance.selected) && instance.scene.get_map().get(instance.selected).has<tc::Transform>())
+				{
+					auto& pf = instance.scene.get_map().get(instance.selected);
+					temp_xform = pf.get<tc::Transform>();
+					inter_nest[0].start(inter_nest[0].get(), 1, .5f, 0, [](float x) { return glm::backEaseIn(x); });
+				}
+				else
+				{
+					inter_nest[0].start(inter_nest[0].get(), 0, .5f, 0, [](float x) { return glm::backEaseOut(x); });
+				}
+				current = instance.selected;
+			}
+
+			bool something_selected = (instance.scene.get_map().exist(current) && instance.scene.get_map().get(current).has<tc::Transform>());
+
+			
+			ImGui::SetCursorPos({ ImGui::GetWindowWidth() - childx, cPos.y + ImGui::GetWindowHeight() * 0.05f });
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); // ***change opacity to 0 after done testing
+			ImGui::BeginChild("Save_button_child", ImVec2{ childx, 50}, false);
 			
 			//if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
-			if (UI::UIButton_2("Save & Return", "Save & Return", ImVec2{ cPos.x + ImGui::GetWindowWidth() * 0.45f,cPos.y + ImGui::GetWindowHeight() * 0.05f }, { 0,0 }, FONT_BODY))
+			if (UI::UIButton_2("Save & Return", "Save & Return", ImVec2{ childx/2.f, 25 }, { 0,0 }, FONT_BODY))
 			{
 				// go ahead
 				auto fn = [&]()
@@ -114,39 +141,242 @@ namespace Tempest
 
 			}
 			ImGui::EndChild();
+			ImGui::PopStyleColor();
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
+
+
+			auto child2x = 500.f;
+			auto child2y = 600.f;
+			place_box_size = { child2x, child2y };
+			place_box = { ImGui::GetWindowWidth() - child2x - 100.f - inter_nest[0].get() * (-700.f), ImGui::GetWindowHeight() * 0.5f - child2y / 2.f };
+
+			//
+			static int selected_cat = 0;
+
+			{
+
+				ImGui::SetCursorPos(place_box);
+				ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.5f); // ***change opacity to 0 after done testing
+				ImGui::PushStyleColor(ImGuiCol_Border, { 0.980f, 0.768f, 0.509f, 1.f });
+				ImGui::BeginChild("menu_main_modal_child", ImVec2{ child2x, child2y }, true);
+
+
+				int i = 0;
+				for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
+				{
+					if (cat_name == "Unit")
+						continue;
+					if (i == selected_cat)
+					{
+						// each folder is a category
+						draw_category(instance, cat_name, proto_cat);
+						//ImGui::EndTabBar();
+					}
+					++i;
+				}
+				ImGui::EndChild();
+				ImGui::PopStyleVar();
+				ImGui::PopStyleColor(1);
+			}
+
 			ImGui::PopStyleColor(1);
+
+
+			{
+
+				float child3x = 50.f;
+				ImGui::SetCursorPos(
+					{ ImGui::GetWindowWidth() - child2x - 100.f - child3x - inter_nest[0].get() * (-700.f), ImGui::GetWindowHeight() * 0.5f - child2y / 2.f });
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.980f, 0.768f, 0.509f, 1.f });
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.980f, 0.768f, 0.509f, 0.6f });
+				ImGui::BeginChild("menu_side_modal_child", ImVec2{ child3x, child2y }, false); 
+
+
+
+				tsptr<Texture> cat_btns[] = { tex_map["Assets/Dice_1.dds"], tex_map["Assets/Dice_2.dds"], tex_map["Assets/Dice_3.dds"], tex_map["Assets/Dice_4.dds"], tex_map["Assets/Dice_5.dds"] };
+
+				int i = 0;
+				for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
+				{
+					// skip units
+					if (cat_name == "Unit")
+						continue;
+
+					if (i == selected_cat)
+						ImGui::PushStyleColor(ImGuiCol_Button, { 0.980f, 0.768f, 0.509f, 1.f });
+					else
+						ImGui::PushStyleColor(ImGuiCol_Button, { 1, 1, 1, 0.f });
+					
+					
+					//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
+					ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+					
+					if(ImGui::IsItemClicked())
+					{
+						selected_cat = i;
+					}
+
+					if (ImGui::IsItemHovered())
+					{
+						ImGui::BeginTooltip();
+						ImGui::Text("%s", cat_name.c_str());
+						ImGui::EndTooltip();
+					}
+
+
+					ImGui::PopStyleColor(1);
+
+					++i;
+				}
+
+
+				ImGui::EndChild();
+				ImGui::PopStyleColor(2);
+			}
+
+
+
+
+
 
 			ImVec2 min_pos = viewport->WorkPos;
 			ImVec2 max_pos = { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + bannerTex->GetHeight() };
 
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), min_pos, max_pos, {banner.get(), 0}, {1 + banner.get(), 1});
 			
-			float posY = (viewport->WorkPos.y + viewport->Size.y - swidth);
-			float endY = (viewport->WorkPos.y + viewport->Size.y);
-			ImGui::SetCursorPos({ viewport->WorkPos.x,posY });
+			
 
-			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
-			ImGui::BeginChild("ChildTest");
-			draw_splitter(posY);
 
-			ImGui::SetNextWindowSize({ ImGui::GetWindowWidth(), endY - posY },ImGuiCond_Appearing);
-			ImGui::BeginChild("PrototypeDisplay");
-			for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
+			if (something_selected)
 			{
-				if (ImGui::BeginTabBar("##categorytab"))
+				auto& cam = Service<RenderSystem>::Get().GetCamera();
+				// draw transform UI
+				auto vp = cam.GetViewport();
+				auto& transform = instance.scene.get_map().get(current).force<tc::Transform>();
+				auto t_position = transform.position;
+				//t_position.y += 2;
+				/*
+				auto dir = cam.GetPosition() - t_position;
+				dir.y = 0.f;
+				dir = glm::normalize(dir);
+				t_position += dir * 1.f;*/
+
+				auto t_ss = cam.WorldspaceToScreenspace(t_position);
+				t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+				t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+				auto temp_cursor = ImGui::GetCursorPos();
+
+				auto child4_box = ImVec2{ 150, 50 };
+				// Draw whatever thing on their head
 				{
-					// each folder is a category
-					draw_category(instance, cat_name, proto_cat);
-					ImGui::EndTabBar();
+
+					ImGui::PushFont(FONT_BOLD);
+					//auto t_text_size = ImGui::CalcTextSize(ICON_FA_ARROW_ALT_CIRCLE_DOWN);
+					auto t_cursor_pos = ImVec2{ t_ss.x - child4_box.x / 2.f, t_ss.y - child4_box.y / 2 };
+					t_cursor_pos.y += 70.f;
+					if (t_cursor_pos.x < viewport->WorkSize.x && t_ss.y + child4_box.y / 2 < viewport->WorkSize.y)
+					{
+						ImGui::SetCursorPos(t_cursor_pos);
+
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.980f, 0.768f, 0.509f, 1.f });
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.980f, 0.768f, 0.509f, 0.6f });
+						ImGui::BeginChild("Save_button_child", child4_box, false);
+
+						{
+							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
+							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+
+							if (ImGui::IsItemClicked())
+							{
+
+								instance.selected = INVALID;
+							}
+
+							if (ImGui::IsItemHovered())
+							{
+								ImGui::BeginTooltip();
+								ImGui::Text("%s", ICON_FA_TRASH);
+								ImGui::EndTooltip();
+							}
+						}
+
+						ImGui::SameLine();
+
+						{
+
+							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
+							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+
+							if (ImGui::IsItemClicked())
+							{
+								instance.selected = INVALID;
+							}
+
+							if (ImGui::IsItemHovered())
+							{
+								ImGui::BeginTooltip();
+								ImGui::Text("%s", ICON_FA_CHECK);
+								ImGui::EndTooltip();
+							}
+						}
+
+						ImGui::SameLine();
+
+						{
+
+							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
+							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+
+							if (ImGui::IsItemClicked())
+							{
+								transform.rotation *= glm::angleAxis(glm::radians(90.f), glm::vec3{ 0, 1, 0 });
+							}
+
+							if (ImGui::IsItemHovered())
+							{
+								ImGui::BeginTooltip();
+								ImGui::Text("%s", ICON_FA_SYNC_ALT);
+								ImGui::EndTooltip();
+							}
+						}
+
+
+						ImGui::EndChild();
+					}
+					
+					ImGui::PopFont();
 				}
+				ImGui::SetCursorPos(temp_cursor);
 			}
-			ImGui::EndChild();
-			ImGui::EndChild();
-			ImGui::PopStyleColor(1);
+
+
+			/*float posY = (viewport->WorkPos.y + viewport->Size.y - swidth);
+			float endY = (viewport->WorkPos.y + viewport->Size.y);
+			ImGui::SetCursorPos({ viewport->WorkPos.x,posY });*/
+			//ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
+			//ImGui::BeginChild("ChildTest");
+			//draw_splitter(posY);
+
+			//ImGui::SetNextWindowSize({ ImGui::GetWindowWidth(), endY - posY },ImGuiCond_Appearing);
+			//ImGui::BeginChild("PrototypeDisplay");
+			//for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
+			//{
+			//	if (ImGui::BeginTabBar("##categorytab"))
+			//	{
+			//		// each folder is a category
+			//		draw_category(instance, cat_name, proto_cat);
+			//		ImGui::EndTabBar();
+			//	}
+			//}
+			//ImGui::EndChild();
+			//ImGui::EndChild();
+			//ImGui::PopStyleColor(1);
 		}
 		ImGui::End();
 
-		ImGui::PopStyleVar(2);
+		//ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(1);
 	}
 
@@ -190,16 +420,61 @@ namespace Tempest
 
 		//ImGui::SetCursorPos(backup_pos);
 	}
+	
 	void BuildModeOverlay::draw_category(Instance& instance, const string& cat_name, prototype_container& proto_cat)
 	{
 		// skip units
 		if (cat_name == "Unit")
 			return;
 
-		if (ImGui::BeginTabItem(cat_name.c_str()))
+		//if (ImGui::BeginTabItem(cat_name.c_str()))
 		{
+			const auto xpadding = 12.f;
+			const auto ypadding = 12.f;
+			const auto full_space = 500.f;
+			auto spacing = 24.f;
+			unsigned cols = 4u;
+
+			//assume spacing between items is 15
+
+			spacing = std::max(15.f, spacing);
+			cols = std::max(1u, cols);
+			const auto space = full_space - xpadding - xpadding - cols * spacing - 30.f;
+			int i = 0;
+
+
+			// filter
+			ImGui::Dummy({ 0.01f, 45.f });
+			{
+				ImGui::Dummy({ 50.f, 0.01f });
+				ImGui::SameLine();
+
+				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);
+				ImGui::PushStyleColor(ImGuiCol_Border, { 0.980f, 0.768f, 0.509f, 1.f });
+				ImGui::PushStyleColor(ImGuiCol_FrameBg, { 0, 0, 0, 1.f });
+				filter.Draw("##prefab_filter");
+				ImGui::PopStyleColor(2);
+				ImGui::PopStyleVar();
+
+				ImGui::SameLine();
+				UI::Tooltip(ICON_FA_QUESTION_CIRCLE, "Filter usage:\n"
+					"  \"\"         display all lines\n"
+					"  \"xxx\"      display lines containing \"xxx\"\n"
+					"  \"xxx,yyy\"  display lines containing \"xxx\" or \"yyy\"\n"
+					"  \"-xxx\"     hide lines containing \"xxx\"", false);
+
+			}
+			ImGui::Dummy({ 0.01f, 5.f });
+
+			ImGui::Dummy({ 0.01f, ypadding });
 			for (auto& pair : proto_cat)
 			{
+
+				if (i % cols == 0)
+				{
+					ImGui::Dummy({ xpadding, 0.01f });
+					ImGui::SameLine();
+				}
 
 				auto& proto_name = pair.first;
 				auto& proto = pair.second;
@@ -221,112 +496,161 @@ namespace Tempest
 				//	}
 				//}
 
-				// display
-				ImGui::PushID(proto_name.c_str());
-				ImGui::BeginGroup();
-				auto model = proto.get_if<tc::Model>();
-				tsptr<Texture> modelTex;
-				ImTextureID texID = reinterpret_cast<ImTextureID>(static_cast<uint64_t>(0));
-				if (model->texPath != "")
-				{
-					modelTex = tex_map[model->texPath];
-					texID = (void*)static_cast<size_t>(modelTex->GetID());
-				}
-					
-				if (ImGui::ImageButton(
-					texID,
-					{ icon_size, icon_size },
-					ImVec2(0, 0), ImVec2(1, 1), 2
-				))
-					/*if(ImGui::Button(name.c_str()))*/
-				{
-					//inspector.select(entry.path(), cat);
-				}
-				ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + icon_size);
-				ImGui::Text(proto_name.c_str());
-				ImGui::PopTextWrapPos();
-				ImGui::EndGroup();
-				ImGui::PopID();
 
-				//UI::DrawLine();
-				if (line.draw(cat_name + proto_name,
-					[]() {}, [&]()
+
+				// display
+				if (filter.PassFilter(proto_name.c_str()))
+				{
+
+					ImGui::PushID(proto_name.c_str());
+					ImGui::BeginGroup();
+					auto model = proto.get_if<tc::Model>();
+					tsptr<Texture> modelTex;
+					ImTextureID texID = reinterpret_cast<ImTextureID>(static_cast<uint64_t>(0));
+					if (model->texPath != "")
+					{
+						modelTex = tex_map[model->texPath];
+						texID = (void*)static_cast<size_t>(modelTex->GetID());
+					}
+					
+					if (ImGui::ImageButton(
+						texID,
+						{ space / cols, space / cols },
+						ImVec2(0, 0), ImVec2(1, 1), 0
+					))
+						/*if(ImGui::Button(name.c_str()))*/
+					{
+						//inspector.select(entry.path(), cat);
+					}
+
+
+					//ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + icon_size);
+					//ImGui::Text(proto_name.c_str());
+					//ImGui::PopTextWrapPos();
+					ImGui::EndGroup();
+					ImGui::PopID();
+
+					if (ImGui::IsItemHovered())
+					{
+						ImGui::BeginTooltip();
+						ImGui::Text("%s", proto_name.c_str());
+						ImGui::EndTooltip();
+					}
+
+					//UI::DrawLine();
+					if (line.draw(cat_name + proto_name,
+						[]() {}, [&]()
+						{
+							auto& cam = Service<RenderSystem>::Get().GetCamera();
+
+							auto& io = ImGui::GetIO();
+							//Checking for mouse
+							//if (io.WantCaptureMouse)
+							//	return;
+							const ImGuiViewport* viewport = ImGui::GetMainViewport();
+							auto bbY = viewport->Size.y - swidth;
+							if (ImGui::IsMouseHoveringRect(place_box, place_box + place_box_size))
+								return;
+
+
+							auto ray = cam.GetMouseRay();
+							auto start = cam.GetPosition();
+							float dist = 0;
+							if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+							{
+								auto [it, b] = instance.scene.get_map().create(proto);
+								AudioEngine ae;
+								ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
+								instance.selected = it->first;
+								if (auto transform = it->second.force_if<tc::Transform>())
+								{
+									auto inter = cam.GetPosition() + ray * dist;
+
+									if (auto shape = it->second.get_if<tc::Shape>())
+									{
+										const int& x = shape->x;
+										const int& y = shape->y;
+
+										auto [a_x, a_y, e_x, e_y, o_x, o_y, p_x, p_y] = shape_data_from_position(x, y, inter.x, inter.z);
+
+										inter.x = o_x;
+										inter.y = 0;
+										inter.z = o_y;
+									}
+
+									transform->position = inter;
+								}
+								instance.action_history.Commit<CreatePrefab>(it->first);
+
+
+							}
+						}
+					))
 					{
 						auto& cam = Service<RenderSystem>::Get().GetCamera();
 
-						auto& io = ImGui::GetIO();
-						//Checking for mouse
-						//if (io.WantCaptureMouse)
-						//	return;
-						const ImGuiViewport* viewport = ImGui::GetMainViewport();
-						auto bbY = viewport->Size.y - swidth;
-						if (io.MousePos.y >= bbY)
-							return;
 						auto ray = cam.GetMouseRay();
 						auto start = cam.GetPosition();
 						float dist = 0;
 						if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 						{
-							auto [it, b] = instance.scene.get_map().create(proto);
-							AudioEngine ae;
-							ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
-							instance.selected = it->first;
-							if (auto transform = it->second.force_if<tc::Transform>())
+
+							auto inter = cam.GetPosition() + ray * dist;
+
+							if (auto shape = proto.get_if<tc::Shape>())
 							{
-								auto inter = cam.GetPosition() + ray * dist;
+								const int& x = shape->x;
+								const int& y = shape->y;
 
-								if (auto shape = it->second.get_if<tc::Shape>())
+								AABB box;
+
+								auto [a_x, a_y, b_x, b_y] = shape_bounding_with_position(x, y, inter.x, inter.z);
+
+								box.min.x = a_x;
+								box.min.z = a_y;
+								box.min.y = 0;
+
+								box.max.x = b_x;
+								box.max.z = b_y;
+								box.max.y = 0;
+
+								Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+
+								if (model)
 								{
-									const int& x = shape->x;
-									const int& y = shape->y;
+									tc::Transform t;
 
-									auto [a_x, a_y, e_x, e_y, o_x, o_y, p_x, p_y] = shape_data_from_position(x, y, inter.x, inter.z);
+									[[maybe_unused]]auto [_1, _2, _3, _4, o_x, o_y, p_x, p_y] = shape_data_from_position(x, y, inter.x, inter.z);
 
-									inter.x = o_x;
-									inter.y = 0;
-									inter.z = o_y;
+									t.position.x = o_x;
+									t.position.y = 0;
+									t.position.z = o_y;
+
+									auto transform = &t;
+
+									auto local = proto.get_if<tc::Local>();
+
+									auto test = glm::translate(transform->position)
+										* glm::mat4(transform->rotation)
+										* glm::translate(local->local_position)
+										* glm::mat4(local->local_rotation)
+										* glm::scale(local->local_scale)
+										* glm::scale(transform->scale);
+
+									std::filesystem::path p{ model->path };
+									if (strcmp(p.extension().string().c_str(), ".a"))
+									{
+										p.replace_extension(".a");
+									}
+									Service<RenderSystem>::Get().SubmitModel(p.string(), test);
+
+
+									Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), t);
 								}
-
-								transform->position = inter;
 							}
-							instance.action_history.Commit<CreatePrefab>(it->first);
-
 
 						}
 					}
-				))
-				{
-					auto& cam = Service<RenderSystem>::Get().GetCamera();
-
-					auto ray = cam.GetMouseRay();
-					auto start = cam.GetPosition();
-					float dist = 0;
-					if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
-					{
-
-						auto inter = cam.GetPosition() + ray * dist;
-
-						if (auto shape = proto.get_if<tc::Shape>())
-						{
-							const int& x = shape->x;
-							const int& y = shape->y;
-
-							AABB box;
-
-							auto [a_x, a_y, b_x, b_y] = shape_bounding_with_position(x, y, inter.x, inter.z);
-
-							box.min.x = a_x;
-							box.min.z = a_y;
-							box.min.y = 0;
-
-							box.max.x = b_x;
-							box.max.z = b_y;
-							box.max.y = 0;
-
-							Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
-						}
-					}
-				}
 
 					if (ImGui::BeginPopupContextItem(proto_name.c_str()))
 					{
@@ -346,13 +670,22 @@ namespace Tempest
 
 					}
 
-
-					ImGui::SameLine();
-
+					++i;
+					if (i % cols)
+					{
+						ImGui::SameLine();
+						ImGui::Dummy({ spacing - 15.f, 0.01f });
+						ImGui::SameLine();
+					}
+					else
+					{
+						ImGui::Dummy({ 0.01f, spacing - 10.f });
+					}
+				}
 			}
 
 
-			ImGui::EndTabItem();
+			//ImGui::EndTabItem();
 		}
 
 
@@ -415,12 +748,12 @@ namespace Tempest
 			{
 				auto& pf = instance.scene.get_map().get(instance.selected);
 				auto& transform = pf.force<tc::Transform>();
-				cam_ctrl.set_world_camera();
+				cam_ctrl.set_world_camera(cam);
 				cam_ctrl.set_orbit_camera(cam, transform.position);
 			}
 			else
 			{
-				cam_ctrl.set_world_camera();
+				cam_ctrl.set_world_camera(cam);
 			}
 			current = instance.selected;
 		}
