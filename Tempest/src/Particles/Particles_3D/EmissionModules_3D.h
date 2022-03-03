@@ -50,6 +50,7 @@ struct ParticleArchetypeModule_3D
 	//glm::vec4 m_colourVariation
 
 	float m_lifeTime;		// Particle life duration
+	bool m_rebirth;
 };
 
 struct EmissionModule_3D

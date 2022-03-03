@@ -23,6 +23,7 @@ Particle_3D::Particle_3D()
 	, m_lifeTime { 1.0f }
 	, m_lifeRemaining{ 1.0f }
 	, m_isActive { false }
+	, m_rebirth { false }
 {}
 
 //Particle_3D::Particle_3D(glm::vec3 pos, glm::vec3 vec, glm::vec3 scale, glm::vec4 colour, float lifeTime, bool isActive)

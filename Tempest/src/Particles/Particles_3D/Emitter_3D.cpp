@@ -75,10 +75,15 @@ void Emitter_3D::Update()
 			continue;
 		else if (particle.m_lifeRemaining <= 0)
 		{
-			particle.m_isActive = false;
+			if (particle.m_rebirth)
+				ParticleSetUp(particle);
+			else
+			{
+				particle.m_isActive = false;
 
-			// To be reused
-			m_available_ParticleSlots.push(i);
+				// To be reused
+				m_available_ParticleSlots.push(i);
+			}
 		}
 		else
 		{
@@ -97,11 +102,56 @@ void Emitter_3D::Update()
 			// Colour
 			particle.m_colour = glm::mix(particle.m_colourEnd, particle.m_colourBegin, lifePercent);
 			
-			
 			// Change the string in this function
 			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle);
 		}
 	}
+}
+
+void Emitter_3D::ParticleSetUp(Particle_3D& particle)
+{
+	particle.m_position = m_GM.m_position;
+	particle.m_isActive = true;
+	//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
+
+	// Velocity
+	particle.m_velocity = m_PAM.m_startVelocity;
+
+	// Velocity Variations
+	if (m_PAM.m_velocityVariation.x >= 1)
+		particle.m_velocity.x += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.x);
+
+	if (m_PAM.m_velocityVariation.y >= 1)
+		particle.m_velocity.y += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.y);
+
+	if (m_PAM.m_velocityVariation.z >= 1)
+		particle.m_velocity.z += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.z);
+
+	// Color
+	particle.m_colourBegin = m_PAM.m_colourBegin;
+	particle.m_colourEnd = m_PAM.m_colourEnd;
+
+	// Lifetime
+	particle.m_lifeTime = m_PAM.m_lifeTime;
+	particle.m_lifeRemaining = m_PAM.m_lifeTime;
+
+	// Scale Variation
+	glm::vec3 scaleVariation{ 0.0f, 0.0f, 0.0f };
+
+	if (m_PAM.m_scaleVariation.x >= 1)
+		scaleVariation.x = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.x);
+
+	if (m_PAM.m_scaleVariation.y >= 1)
+		scaleVariation.y = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.y);
+
+	if (m_PAM.m_scaleVariation.z >= 1)
+		scaleVariation.z = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.z);
+
+	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;// * (Random::Float() - 0.5f);
+	particle.m_scaleEnd = m_PAM.m_scaleEnd;
+	particle.m_rebirth = m_PAM.m_rebirth;
+
+	particle.m_renderingPath = m_RM.m_renderingPath;
 }
 
 void Emitter_3D::Emit(const int particleAmount)
@@ -113,42 +163,8 @@ void Emitter_3D::Emit(const int particleAmount)
 		{
 			// Initailisation of the particle
 			Particle_3D particle;
-
-			particle.m_position = m_GM.m_position;
-			particle.m_isActive = true;
-			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
-
-			// Velocity
-			particle.m_velocity = m_PAM.m_startVelocity;
-			particle.m_velocity.x += m_PAM.m_velocityVariation.x; //* (Random::Float() - 0.5f);
-			particle.m_velocity.y += m_PAM.m_velocityVariation.y; //* (Random::Float() - 0.5f);
-			particle.m_velocity.z += m_PAM.m_velocityVariation.z; //* (Random::Float() - 0.5f);
-
-			// Color
-			particle.m_colourBegin = m_PAM.m_colourBegin;
-			particle.m_colourEnd = m_PAM.m_colourEnd;
-
-			// Lifetime
-			particle.m_lifeTime = m_PAM.m_lifeTime;
-			particle.m_lifeRemaining = m_PAM.m_lifeTime;
-
-			// Scale
-			glm::vec3 scaleVariation{ 0.0f, 0.0f, 0.0f };
-
-			if (m_PAM.m_scaleVariation.x >= 1)
-				scaleVariation.x = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.x);
-
-			if (m_PAM.m_scaleVariation.y >= 1)
-				scaleVariation.y = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.y);
-
-			if (m_PAM.m_scaleVariation.z >= 1)
-				scaleVariation.z = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.z);
-
-			particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;// * (Random::Float() - 0.5f);
-			particle.m_scaleEnd = m_PAM.m_scaleEnd;
-
-			particle.m_renderingPath = m_RM.m_renderingPath;
-
+			ParticleSetUp(particle);
+		
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;
 			m_available_ParticleSlots.pop();

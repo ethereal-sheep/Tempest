@@ -39,6 +39,7 @@ ParticleArchetypeModule_3D::ParticleArchetypeModule_3D()
 
 	, m_lifeTime{ 2.0f }
 	//, m_lifeVariation{ 5.0f }
+	, m_rebirth { false }
 {}
 
 EmissionModule_3D::EmissionModule_3D()

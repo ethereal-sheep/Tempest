@@ -37,7 +37,6 @@ struct ParticleSystem_3D
 private:
 	ParticleSystem_3D();
 
-
 	std::vector<std::shared_ptr<Emitter_3D>> m_Emitters;
 	// Emitter 3D Management
 	std::set<short> m_UniqueEmitterSlots;

@@ -365,6 +365,7 @@
     <ClInclude Include="src\Particles\Particles_2D\Particle_2D.h" />
     <ClInclude Include="src\Particles\Particles_2D\ParticleSystem_2D.h" />
     <ClInclude Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.h" />
     <ClInclude Include="src\Particles\Random.h" />
     <ClInclude Include="src\Particles\Particles_2D\WaypointEmitter_2D.h" />
     <ClInclude Include="src\Physics\Filters\Filters.h" />
