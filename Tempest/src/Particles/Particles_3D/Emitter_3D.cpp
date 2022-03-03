@@ -10,6 +10,7 @@
 
 #include "Emitter_3D.h"
 #include "Graphics/Basics/RenderSystem.h"
+#include "../Random.h"
 
 Emitter_3D::Emitter_3D()
 {
@@ -75,9 +76,9 @@ void Emitter_3D::Update()
 			continue;
 		else if (particle.m_lifeRemaining <= 0)
 		{
-			if (particle.m_rebirth)
-				ParticleSetUp(particle);
-			else
+	/*		if (particle.m_rebirth)
+				particle.Reborn();
+			else*/
 			{
 				particle.m_isActive = false;
 
@@ -111,21 +112,23 @@ void Emitter_3D::Update()
 void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 {
 	particle.m_position = m_GM.m_position;
+	particle.m_originalPosition = m_GM.m_position;
 	particle.m_isActive = true;
 	//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
 
 	// Velocity
 	particle.m_velocity = m_PAM.m_startVelocity;
+	particle.m_originalVelocity = m_PAM.m_startVelocity;
 
 	// Velocity Variations
 	if (m_PAM.m_velocityVariation.x >= 1)
-		particle.m_velocity.x += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.x);
+		particle.m_velocity.x += Random::Float() * m_PAM.m_velocityVariation.x;
 
 	if (m_PAM.m_velocityVariation.y >= 1)
-		particle.m_velocity.y += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.y);
+		particle.m_velocity.y += Random::Float() * m_PAM.m_velocityVariation.y;
 
 	if (m_PAM.m_velocityVariation.z >= 1)
-		particle.m_velocity.z += std::rand() % static_cast<int>(m_PAM.m_velocityVariation.z);
+		particle.m_velocity.z += Random::Float() * m_PAM.m_velocityVariation.z;
 
 	// Color
 	particle.m_colourBegin = m_PAM.m_colourBegin;
@@ -139,15 +142,15 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 	glm::vec3 scaleVariation{ 0.0f, 0.0f, 0.0f };
 
 	if (m_PAM.m_scaleVariation.x >= 1)
-		scaleVariation.x = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.x);
+		scaleVariation.x = Random::Float() * m_PAM.m_scaleVariation.x;
 
 	if (m_PAM.m_scaleVariation.y >= 1)
-		scaleVariation.y = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.y);
+		scaleVariation.y = Random::Float() * m_PAM.m_scaleVariation.y;
 
 	if (m_PAM.m_scaleVariation.z >= 1)
-		scaleVariation.z = std::rand() % static_cast<int>(m_PAM.m_scaleVariation.z);
+		scaleVariation.z = Random::Float() * m_PAM.m_scaleVariation.z;
 
-	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;// * (Random::Float() - 0.5f);
+	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;
 	particle.m_scaleEnd = m_PAM.m_scaleEnd;
 	particle.m_rebirth = m_PAM.m_rebirth;
 

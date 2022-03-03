@@ -12,8 +12,10 @@
 // Forward Declarations
 struct ExplosionEmitter_3D;
 struct MultipleExplosionEmitter_3D;
+
 struct InteractiveParticle_3D;
 struct TileWaypointEmitter_3D;
+struct UnitTrailEmitter_3D;
 
 struct ParticleSystem_3D
 {
@@ -33,6 +35,7 @@ struct ParticleSystem_3D
 	// Other Emitters
 	const std::weak_ptr<InteractiveParticle_3D> CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos);
 	const std::weak_ptr<TileWaypointEmitter_3D> CreateTileWaypointEmitter(glm::vec3 spawnPos);
+	const std::weak_ptr<UnitTrailEmitter_3D> CreateUnitTrailEmitter(glm::vec3 spawnPos);
 
 private:
 	ParticleSystem_3D();

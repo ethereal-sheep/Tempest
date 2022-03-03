@@ -6,8 +6,10 @@
 // Types of Emitters
 #include "ExplosionEmitter_3D.h"
 #include "MultipleExplosionEmitter_3D.h"
+
 #include "InteractiveParticle_3D.h"
 #include "TileWaypointEmitter_3D.h"
+#include "UnitTrailEmitter_3D.h"
 
 ParticleSystem_3D::ParticleSystem_3D()
 {}
@@ -333,5 +335,51 @@ const std::weak_ptr<TileWaypointEmitter_3D> ParticleSystem_3D::CreateTileWaypoin
 	//LOG_INFO("Top Right x: {0}, y: {1}", wp_RightTop.x, wp_RightTop.y);
 	//LOG_INFO("Top Left  x: {0}, y: {1}", wp_LeftTop.x, wp_LeftTop.y);
 
+	return tempEmitter;
+}
+
+const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitter(glm::vec3 spawnPos)
+{
+	auto tempEmitter = std::make_shared<UnitTrailEmitter_3D>();
+	UnitTrailEmitter_3D& emitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
+
+	emitter.m_recalculateVelocity = true;
+
+	// Emitter_3D values - Without consideration for default ctor values
+	emitter.m_GM.m_position = spawnPos;
+	emitter.m_GM.m_active = true;
+
+	emitter.m_MM.m_duration = 1000.0f;
+	emitter.m_MM.m_preWarm = true;
+	emitter.m_MM.m_simulationSpeed = 0.016f;
+
+	emitter.m_EM.m_spawnTimeInterval = 0.08f;
+	emitter.m_EM.m_spawnCountTimer = emitter.m_EM.m_spawnTimeInterval;
+	emitter.m_EM.m_rateOverTime = 1;
+	emitter.m_MM.m_maxParticles = 1;
+
+	// Particle Architype values - without consideration for default ctor
+	emitter.m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	emitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	emitter.m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+
+	emitter.m_PAM.m_scaleBegin = glm::vec3{ 0.1f, 0.1f, 0.1f };
+	emitter.m_PAM.m_scaleEnd = glm::vec3{ 0.1f, 0.1f, 0.1f };
+	emitter.m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+
+	emitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	// Note - Values to be divided by 255.0f - Forgot the reason
+	//emitter.m_PAM.m_colourBegin = glm::vec4{ 0.996f, 0.831f, 0.482f, 1.0f };
+	//emitter.m_PAM.m_colourEnd = glm::vec4{ 0.0f, 0.0f, 0.0f, 0.0f };
+
+	emitter.m_PAM.m_lifeTime = 1.0f;
+	emitter.m_RM.m_renderingPath = "Models/Cube.a";
+
+	emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 0.0f });
+	emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 20.0f });
+	
 	return tempEmitter;
 }

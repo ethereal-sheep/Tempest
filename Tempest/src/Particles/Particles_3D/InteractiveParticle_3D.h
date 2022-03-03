@@ -10,7 +10,7 @@
 
 struct InteractiveParticle_3D : public Emitter_3D
 {
-	void Emit(const int partcielAmount) override;
+	void Emit(const int particleAmount) override;
 	void ParticleSetUp(Particle_3D& particle) override;
 
 	// Min and Max range of the spawn pos - Assume values given are correct to work

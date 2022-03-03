@@ -19,6 +19,9 @@ struct Particle_3D
 	Particle_3D();
 	//Particle_3D(glm::vec3 pos, glm::vec3 vec, glm::vec3 scale, glm::vec4 colour, float lifeTime, bool isActive);
 
+	glm::vec3 m_originalPosition;
+	glm::vec3 m_originalVelocity;
+
 	glm::vec3 m_position;
 	glm::vec3 m_velocity;
 
@@ -38,6 +41,8 @@ struct Particle_3D
 
 	// Eg: Models/Cube.a
 	std::string m_renderingPath;
+
+	void Reborn();
 };
 
 #endif // !PARTICLES_3D_H
