@@ -11,6 +11,7 @@
 
 // Forward Declarations
 struct ExplosionEmitter_3D;
+struct SphereExplosionEmitter_3D;
 struct MultipleExplosionEmitter_3D;
 
 struct InteractiveParticle_3D;
@@ -27,9 +28,9 @@ struct ParticleSystem_3D
 	// Test Model Emitter
 	const std::weak_ptr<Emitter_3D> CreateTestModelShapeEmitter(glm::vec3 spawnPos);
 
-	// Explosion Emitters
-	const std::weak_ptr<ExplosionEmitter_3D> CreateBigExplosionEmitter(glm::vec3 spawnPos);
+	// Explosion 
 	const std::weak_ptr<ExplosionEmitter_3D> CreateExplosionEmitter(glm::vec3 spawnPos);
+	const std::weak_ptr<SphereExplosionEmitter_3D> CreateBigExplosionEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<MultipleExplosionEmitter_3D> CreateMultipleExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount);
 
 	// Other Emitters

@@ -5,6 +5,7 @@
 
 // Types of Emitters
 #include "ExplosionEmitter_3D.h"
+#include "SphereExplosionEmitter_3D.h"
 #include "MultipleExplosionEmitter_3D.h"
 
 #include "InteractiveParticle_3D.h"
@@ -142,10 +143,10 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitt
 	return tempEmitter;
 }
 
-const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateBigExplosionEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<SphereExplosionEmitter_3D> ParticleSystem_3D::CreateBigExplosionEmitter(glm::vec3 spawnPos)
 {
-	auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
-	ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<SphereExplosionEmitter_3D>();
+	SphereExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Emitter_3D values - Without consideration for default ctor values
