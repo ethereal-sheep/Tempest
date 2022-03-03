@@ -604,6 +604,9 @@ namespace Tempest
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
+
+								if (instance.tutorial_enable && tutorial_index == 2)
+									tutorial_index = 3;
 							}
 							if (ImGui::IsItemHovered())
 								combat_button_tex[0] = tex_map["Assets/CActionSelected.dds"];
@@ -2577,6 +2580,28 @@ namespace Tempest
 						case 1:
 						{
 							// user is moving the unit
+							 if (!instance.ecs.get<tc::Unit>(curr_entity).is_moving() && state != State::MOVING)
+							 {
+								tutorial_index = 0;
+
+								auto cs = instance.ecs.get<tc::Character>(curr_entity);
+								auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
+
+								int p_x = (int)std::floor(position.x);
+								int p_y = (int)std::floor(position.z);
+								calculate_range(runtime, p_x, p_y, cs.get_stat(3) + cs.get_statDelta(3), range_map, visited);
+
+								for (auto& [x, m] : range_map)
+									for (auto [y, i] : m)
+									{
+										if (i >= 3) // player nearby
+										{
+											tutorial_index = 2;
+											break;
+										}
+
+									}
+							 }
 						}
 						break;
 
