@@ -141,6 +141,9 @@ namespace Tempest
 
 			}
 			ImGui::EndChild();
+			ImGui::PopStyleColor();
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
 
 
 			auto child2x = 500.f;
