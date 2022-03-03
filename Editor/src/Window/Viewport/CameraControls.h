@@ -88,10 +88,10 @@ namespace Tempest
 			if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
 			{
 				auto direction = els::to_vec2(io.MouseDelta);
-				auto yaw_speed = 1.f / 6;
-				auto pitch_speed = 1.f / 6;
-				auto pan_speed = 1.f / 3;
-				auto forward_speed = 1.f / 6;
+				auto yaw_speed = 1.f / 7;
+				auto pitch_speed = 1.f / 7;
+				auto pan_speed = 1.f / 4;
+				auto forward_speed = 1.f / 7;
 				auto scroll_speed = forward_speed * 6;
 
 				auto pan_time = .05f;
@@ -194,7 +194,7 @@ namespace Tempest
 						end_position = newPos;
 
 						easing = EasingMode::LINEAR;
-						cam.SetPosition(newPos);
+						//cam.SetPosition(newPos);
 					}
 				}
 
@@ -722,7 +722,7 @@ namespace Tempest
 					{
 						if (ImGui::Button("Use World Camera"))
 						{
-							set_world_camera();
+							set_world_camera(cam);
 						}
 					}
 				}
@@ -867,13 +867,13 @@ namespace Tempest
 			}
 		}
 
-		void set_orbit_camera(Camera& , glm::vec3 axis)
+		void set_orbit_camera(Camera& cam, glm::vec3 axis)
 		{
 			if (mode != CameraControlMode::ORBIT)
 			{
 				mode = CameraControlMode::ORBIT;
 				orbit_axis = axis;
-				//look_at(cam, axis, 0.5);
+				look_at(cam, axis, 0.5);
 			}
 		}
 		void set_fixed_orbit_camera(Camera& , glm::vec3 axis)
@@ -941,9 +941,15 @@ namespace Tempest
 		}
 
 
-		void set_world_camera()
+		void set_world_camera(Camera& cam)
 		{
 			mode = CameraControlMode::WORLD;
+
+			start_rotation = cam.GetQuatRotation();
+			end_rotation = cam.GetQuatRotation();
+
+			start_position = cam.GetPosition();
+			end_position = cam.GetPosition();
 		}
 
 		CameraControlMode get_mode() const
@@ -963,7 +969,7 @@ namespace Tempest
 
 		void reset(Camera& cam, vec3 pos, vec3 look)
 		{
-			set_world_camera();
+			set_world_camera(cam);
 
 			auto ideal_pos = pos;
 			auto ideal_look_at = look - ideal_pos;
