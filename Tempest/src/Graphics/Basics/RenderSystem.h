@@ -218,7 +218,7 @@ namespace Tempest
         bool PREFABMODE = false;
 
         // ANIMATION TESTING
-        ModelPBR model;
+        //ModelPBR model;
 
     private:        
        

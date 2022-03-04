@@ -433,7 +433,7 @@ namespace Tempest
         //AAgridShow = true;
 
         // Animation Testing
-        model.loadModel("../../../Resource/Models/gura.fbx");
+        //model.loadModel("../../../Resource/Models/gura.fbx");
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -458,11 +458,11 @@ namespace Tempest
             temp->loadModel(path);
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
-        ModelObj model;
-        model.m_Transform = to_Model_Matrix(transform);
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        ModelObj m;
+        m.m_Transform = to_Model_Matrix(transform);
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
 
-        m_Pipeline.m_Models.push_back(model);
+        m_Pipeline.m_Models.push_back(m);
     }
 
     void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix)
@@ -473,11 +473,11 @@ namespace Tempest
             temp->loadModel(path);
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
-        ModelObj model;
-        model.m_Transform = model_matrix;
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        ModelObj m;
+        m.m_Transform = model_matrix;
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
 
-        m_Pipeline.m_Models.push_back(model);
+        m_Pipeline.m_Models.push_back(m);
     }
 
     // anim - Animation Name,   index - entity id
@@ -498,14 +498,14 @@ namespace Tempest
         else if (!m_Animation.CheckAnimation(id, anim))
             m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
 
-        ModelObj model;
-        model.m_Transform = to_Model_Matrix(transform);
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        ModelObj m;
+        m.m_Transform = to_Model_Matrix(transform);
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
 
         auto transforms = m_Animation.GetBoneMatrix(id);
         for (auto& i : transforms)
-            model.m_Bones.push_back(i);
-        m_Pipeline.m_Models.push_back(model);
+            m.m_Bones.push_back(i);
+        m_Pipeline.m_Models.push_back(m);
     }
 
     void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, std::string anim, uint32_t id)
@@ -526,14 +526,14 @@ namespace Tempest
         else if (!m_Animation.CheckAnimation(id, anim))     // Check if Different Animation
             m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
 
-        ModelObj model;
-        model.m_Transform = model_matrix;
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        ModelObj m;
+        m.m_Transform = model_matrix;
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
         
         auto transforms = m_Animation.GetBoneMatrix(id);
         for (auto& i : transforms)
-            model.m_Bones.push_back(i);
-        m_Pipeline.m_Models.push_back(model);
+            m.m_Bones.push_back(i);
+        m_Pipeline.m_Models.push_back(m);
     }
     
     void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color)
@@ -544,12 +544,12 @@ namespace Tempest
             temp->loadModel(path);
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
-        ModelObj model;
-        model.m_Transform = model_matrix;
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
-        model.hasColor = true;
-        model.color = color;
-        m_Pipeline.m_Models.push_back(model);
+        ModelObj m;
+        m.m_Transform = model_matrix;
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
+        m.hasColor = true;
+        m.color = color;
+        m_Pipeline.m_Models.push_back(m);
     }
  
     void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)
@@ -618,7 +618,7 @@ namespace Tempest
     {
         //ModelPBR model;
         //model.loadModel("../../../Resource/Models/gura.fbx");
-        SubmitModel("../../../Resource/Models/gura.fbx", glm::mat4{ 1.f }, "ParadeWalk", 1900);
+        SubmitModel("../../../Resource/Models/gura.fbx", glm::mat4{ 1.f }, "idle", 1900);
 
         if (USO)
         {
@@ -663,7 +663,8 @@ namespace Tempest
                 {
                     for (auto z = 0; z < m_Pipeline.m_Models[i].m_Bones.size(); ++z)
                     {
-                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Bones[z], "finalBonesMatrices");
+                        std::string bones = "finalBonesMatrices[" + std::to_string(z) + "]";
+                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Bones[z], bones.c_str());
                     }
                 }
 
@@ -804,6 +805,28 @@ namespace Tempest
                 m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(9, "shadowMap"); // Set Shadow map for directional light to be slot 6 
                 m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
                 m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[j].m_Transform, "ModelMatrix");
+
+                // Animation Stuff
+                if (m_Pipeline.m_Models[j].m_Model->HasAnimation)
+                {
+                    // Submit Final Bone Matrix Uniform
+                    if (!m_Pipeline.m_Models[j].m_Bones.empty())
+                    {
+                        for (auto z = 0; z < m_Pipeline.m_Models[j].m_Bones.size(); ++z)
+                        {
+                            std::string bones = "finalBonesMatrices[" + std::to_string(z) + "]";
+                            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[j].m_Bones[z], bones.c_str());
+                        }
+                    }
+
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(m_Pipeline.m_Models[j].m_Model->HasAnimation, "HasAnimation");
+                }
+
+                else
+                {
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(0, "HasAnimation");
+                }
+
                 m_Pipeline.m_Models[j].m_Model->Draw();
             }          
 
