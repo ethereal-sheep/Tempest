@@ -13,6 +13,9 @@ struct TileWaypointEmitter_3D final : public Emitter_3D
 	std::vector<glm::vec3> m_wayPoints;
 	short m_wayPointIndex;
 	bool m_recalculateVelocity;
+
+	// Own Functions
+	void UpdateWaypoints(glm::vec3 tileOriginPosition);
 };
 
 #endif 

@@ -18,6 +18,8 @@
 #include "Instance/RuntimeInstance.h"
 #include "Util/interpolater.h"
 
+#include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
+
 namespace Tempest
 {
     class CombatModeOverlay : public Window
@@ -235,5 +237,9 @@ namespace Tempest
         interpolater<float> menu2;
 
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
+
+        std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
+        bool nextUnit = false;
+        bool stopMoving = true;
     };
 }

@@ -12,6 +12,8 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "../Random.h"
 
+#include "Logger/Logger.h"
+
 Emitter_3D::Emitter_3D()
 {
 	m_particles.resize(m_MM.m_maxParticles);

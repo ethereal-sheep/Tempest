@@ -1,5 +1,4 @@
 
-
 // Main Header
 #include "ParticleSystem_3D.h"
 
@@ -289,13 +288,13 @@ const std::weak_ptr<TileWaypointEmitter_3D> ParticleSystem_3D::CreateTileWaypoin
 	emitter.m_recalculateVelocity = true;
 
 	// Particle Architype values - without consideration for default ctor
-	emitter.m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	emitter.m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.1f, 0.0f };
 	emitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	emitter.m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
-	emitter.m_PAM.m_scaleBegin = glm::vec3{ 0.2f, 0.2f, 0.2f };
+	emitter.m_PAM.m_scaleBegin = glm::vec3{ 0.05f, 0.05f, 0.05f };
 	emitter.m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	emitter.m_PAM.m_scaleVariation = glm::vec3{ 1.0f, 1.0f, 1.0f };
+	emitter.m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 	emitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	emitter.m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
@@ -312,16 +311,16 @@ const std::weak_ptr<TileWaypointEmitter_3D> ParticleSystem_3D::CreateTileWaypoin
 
 	// Assume its a unit tile
 	glm::vec3 wp_LeftBtm = spawnPos;
-	//glm::vec3 wp_LeftBtm = glm::vec3{ spawnPos.x - 0.5f, spawnPos.y, spawnPos.z - 0.5f };
+	wp_LeftBtm = glm::vec3{ spawnPos.x - 0.5f, spawnPos.y + 0.1f, spawnPos.z - 0.5f };
 
 	glm::vec3 wp_RightBtm = wp_LeftBtm;
-	wp_RightBtm.x += 5.0f;
+	wp_RightBtm.x += 1.0f;
 
 	glm::vec3 wp_RightTop = wp_RightBtm;
-	wp_RightTop.z += 5.0f;
+	wp_RightTop.z += 1.0f;
 
 	glm::vec3 wp_LeftTop = wp_RightTop;
-	wp_LeftTop.x -= 5.0f;
+	wp_LeftTop.x -= 1.0f;
 
 	// Add the waypoints
 	emitter.m_wayPoints.push_back(wp_RightBtm);

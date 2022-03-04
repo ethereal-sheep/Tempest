@@ -305,8 +305,6 @@ namespace Tempest
 					break;
 				}
 
-
-
 				if (auto shape = pf.get_if<tc::Shape>())
 				{
 					const int& x = shape->x;

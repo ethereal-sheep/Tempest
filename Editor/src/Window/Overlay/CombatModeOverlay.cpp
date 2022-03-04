@@ -18,6 +18,8 @@
 #include "Audio/AudioEngine.h"
 #include "Util/pathfinding.h"
 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
+
 namespace Tempest
 {
 
@@ -545,6 +547,19 @@ namespace Tempest
 
 				LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
 
+				// Turn on particle
+				if (!m_unitTileEmitter.expired() && !instance.ecs.get<tc::Unit>(curr_entity).is_moving() && !stopMoving)
+				{
+					auto tempUnitEmitter = m_unitTileEmitter.lock();
+					auto tempPosition = position;
+					tempPosition.y -= 2;
+					tempUnitEmitter->UpdateWaypoints(tempPosition);
+
+					stopMoving = true;
+					m_unitTileEmitter.lock()->m_GM.m_active = true;
+
+				}
+
 				// Draw whatever thing on their head
 				{
 					ImGui::PushFont(FONT_BOLD);
@@ -577,6 +592,7 @@ namespace Tempest
 						if (auto t = instance.ecs.get_if<tc::Transform>(curr_entity))
 						{
 							cam_ctrl.move_look_at(cam, t->position);
+							nextUnit = true;
 						}
 					}
 
@@ -1334,6 +1350,10 @@ namespace Tempest
 					{
 						// cancel
 						state = State::MENU;
+
+						// Turn off particle
+						if (!m_unitTileEmitter.expired())
+							m_unitTileEmitter.lock()->m_GM.m_active = true;
 					}
 				}
 				else
@@ -1366,6 +1386,7 @@ namespace Tempest
 					}
 
 
+					// Move
 					if (io.MouseClicked[0])
 					{
 						auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
@@ -1386,6 +1407,13 @@ namespace Tempest
 						transform.position.z = w_y + .5f;*/
 						instance.selected = INVALID;
 						state = State::MENU;
+
+						// Turn off particle
+						if (!m_unitTileEmitter.expired())
+						{
+							m_unitTileEmitter.lock()->m_GM.m_active = false;
+							stopMoving = false;
+						}
 					}
 				}
 
@@ -1395,7 +1423,6 @@ namespace Tempest
 		}
 		else
 			state = State::MENU;
-
 	}
 
 	void CombatModeOverlay::glimpse(RuntimeInstance& instance)
@@ -2310,6 +2337,20 @@ namespace Tempest
 					color = { 0.1,0.1,0.1,1 };
 
 				Service<RenderSystem>::Get().DrawLine(box, color);
+
+				if (m_unitTileEmitter.expired())
+					m_unitTileEmitter = ParticleSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+				else if (nextUnit)
+				{
+					nextUnit = false;
+
+					// TEST CODE @JUN HAO
+					if (!m_unitTileEmitter.expired())
+					{
+						auto tempUnitEmitter = m_unitTileEmitter.lock();
+						tempUnitEmitter->UpdateWaypoints(transform.position);
+					}
+				}
 			}
 		}
 	}
