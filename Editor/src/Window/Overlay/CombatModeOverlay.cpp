@@ -19,6 +19,7 @@
 #include "Util/pathfinding.h"
 
 #include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
 
 namespace Tempest
 {

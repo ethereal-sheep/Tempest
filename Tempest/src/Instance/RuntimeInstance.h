@@ -14,6 +14,7 @@
 #include "Scripting/GMS.h"
 #include "Physics/Physics.h"
 
+struct UnitTrailEmitter_3D;
 
 namespace Tempest
 {
@@ -44,6 +45,8 @@ namespace Tempest
 
 		
 	private:
+		// Not suppose to be here.... @Jun Hao
+		std::weak_ptr<UnitTrailEmitter_3D> m_unitTrailEmitter_3D;
 
 	public:
 		std::vector<Entity> sequences;

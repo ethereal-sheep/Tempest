@@ -12,6 +12,9 @@
 #include "ECS/Components/Components.h"
 #include "Audio/AudioEngine.h"
 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/UnitTrailEmitter_3D.h"
+
 namespace Tempest
 {
 	void RuntimeInstance::_init()
@@ -146,12 +149,26 @@ namespace Tempest
 
 			unit.update(dt);
 			if (unit.is_moving())
+			{
 				transform = unit.get_current_transform();
+			}
 
 			if (unit.is_end_frame())
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/PlayerMovement.wav", "SFX");
+				// Shift emitter and calls it to emit particle
+
+				if (!m_unitTrailEmitter_3D.expired())
+				{
+					m_unitTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
+					m_unitTrailEmitter_3D.lock()->Emit(1);
+				}
+				else
+				{
+					m_unitTrailEmitter_3D = ParticleSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
+				}
+
 			}
 		}
 

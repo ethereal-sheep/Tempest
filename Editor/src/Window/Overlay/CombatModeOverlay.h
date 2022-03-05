@@ -18,7 +18,7 @@
 #include "Instance/RuntimeInstance.h"
 #include "Util/interpolater.h"
 
-#include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
+struct TileWaypointEmitter_3D;
 
 namespace Tempest
 {
