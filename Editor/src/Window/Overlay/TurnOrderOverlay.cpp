@@ -138,10 +138,27 @@ namespace Tempest
 							// draw the other section 
 
 							ImVec2 pos = { viewport->Size.x * 0.12f , viewport->Size.y * 0.7f };
+							ImVec2 pos2 = { viewport->Size.x * 0.42f , viewport->Size.y * 0.15f };
 							ImVec2 size = { 270.f, 110.f };
-							UI::TutArea(pos, size);
+							ImVec2 size2 = { viewport->Size.x * 0.55f, viewport->Size.y * 0.7f };
+							UI::TutArea2(pos, pos2, size, size2);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Randomize + Move";
 							drawlist->AddText({ pos.x + 140.f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, pos.y - 20.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							//Add Line
+							ImGui::PushFont(FONT_BTN);
+							str = "Sort according to stats";
+							drawlist->AddText({ viewport->Size.x * 0.1f , pos2.y + size2.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							ImGui::PopFont();
+							drawlist->AddLine({ viewport->Size.x * 0.1f, pos2.y + size2.y * 0.3f }, { pos2.x, pos2.y + size2.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+							str = "The units are sorted according to the stat you";
+							ImVec2 strPos = { viewport->Size.x * 0.1f, pos2.y + size2.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
+							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							str = "selected.";
+							strPos.x = viewport->Size.x * 0.1f;
+							strPos.y += ImGui::CalcTextSize(str.c_str()).y;
+							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 						}
 						break;
 
@@ -149,11 +166,29 @@ namespace Tempest
 						{
 							// draw the other section
 
-							ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
-							ImVec2 size = { 180.f, 50.f };
-							UI::TutArea(pos, size);
+							
+							ImVec2 pos = { viewport->Size.x * 0.42f , viewport->Size.y * 0.15f };
+							ImVec2 pos2 = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
+							ImVec2 size = { viewport->Size.x * 0.55f, viewport->Size.y * 0.7f };
+							ImVec2 size2 = { 180.f, 50.f };
+							UI::TutArea3(pos, pos2, size, size2);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save and return to the previous page";
-							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							drawlist->AddText({ pos2.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos2.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							//Add Line
+							ImGui::PushFont(FONT_BTN);
+							str = "Sort manually";
+							drawlist->AddText({ viewport->Size.x * 0.1f , pos.y + size.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							ImGui::PopFont();
+							drawlist->AddLine({ viewport->Size.x * 0.1f, pos.y + size.y * 0.3f }, { pos.x, pos.y + size.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+							str = "You can also drag the units around to sort turn";
+							ImVec2 strPos = { viewport->Size.x * 0.1f, pos.y + size.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
+							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							str = "order manually.";
+							strPos.x = viewport->Size.x * 0.1f;
+							strPos.y += ImGui::CalcTextSize(str.c_str()).y;
+							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 						}
 						break;
 
@@ -248,7 +283,7 @@ namespace Tempest
 							if (charac.isInCombat)
 								continue;
 							if (UI::UICharTurnButton((void*)static_cast<size_t>(unit_black->GetID()), ImVec2{ unit_black->GetWidth() * 1.0f, unit_black->GetHeight() * 1.0f },
-								charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, true, ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 }))
+								charac.name.c_str(), "##turnordercharc" + std::to_string(i++), false, false, true, ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 }))
 							{
 								added_entities.emplace_back(id);
 							}
@@ -292,7 +327,7 @@ namespace Tempest
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
-						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
+						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 						{
 							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
 							auto fn = [&]() {
@@ -408,7 +443,7 @@ namespace Tempest
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
-						if (ImGui::ImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
+						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 						{
 							std::shuffle(added_entities.begin(), added_entities.end(), els::random::prng);
 						}
@@ -469,7 +504,7 @@ namespace Tempest
 							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
-							ImGui::ImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
+							UI::UIImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
 								ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 });
 
 							if (cs)
@@ -628,6 +663,15 @@ namespace Tempest
 					default:
 						break;
 					}
+				}
+				ImGui::SameLine();
+				ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
+				ImGui::SameLine();
+				image = tex_map["Assets/TutorialBtn.dds"];
+
+				if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+				{
+					Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::TURN_TUT);
 				}
 
 				if (UI::ConfirmDeletePopup("TurnOrderGoBackConfirmation##", new_instance ? "Go back to select conflict resolution?": "Go back to combat mode?"))
