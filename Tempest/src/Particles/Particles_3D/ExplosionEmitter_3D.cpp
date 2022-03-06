@@ -100,5 +100,4 @@ void ExplosionEmitter_3D::ParticleSetUp(Particle_3D& particle)
 	particle.m_velocity.x *= directionX;
 	particle.m_velocity.y *= directionY;
 	particle.m_velocity.z *= directionZ;
-
 }

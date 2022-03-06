@@ -20,6 +20,7 @@
 
 #include "Particles/Particles_3D/ParticleSystem_3D.h"
 #include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
+#include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
 
 namespace Tempest
 {
@@ -1971,6 +1972,18 @@ namespace Tempest
 						text = std::to_string(-damage);
 						col = vec3(0, 1, 0);
 					}
+
+					if (m_characterDamageEmitter.expired())
+						m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(position);
+					else
+					{
+						m_characterDamageEmitter.lock()->m_GM.m_position = position;
+						m_characterDamageEmitter.lock()->Emit(1);
+						m_characterDamageEmitter.lock()->m_MM.m_duration = 0.6f;
+						m_characterDamageEmitter.lock()->m_GM.m_active = true;
+						m_characterDamageEmitter.lock()->m_MM.m_preWarm = true;
+					}
+
 
 					ImGui::PushFont(FONT_HEAD);
 					auto text_size = ImGui::CalcTextSize(text.c_str());

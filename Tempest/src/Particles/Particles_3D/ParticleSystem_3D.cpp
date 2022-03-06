@@ -10,6 +10,7 @@
 #include "InteractiveParticle_3D.h"
 #include "TileWaypointEmitter_3D.h"
 #include "UnitTrailEmitter_3D.h"
+#include "CharacterDamageEmitter_3D.h"
 
 ParticleSystem_3D::ParticleSystem_3D()
 {}
@@ -134,42 +135,6 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitt
 	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
 	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f }; 
-	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-
-	tempEmitter->m_PAM.m_lifeTime = 0.3f;
-	tempEmitter->m_RM.m_renderingPath = "Models/Cube.a";
-
-	return tempEmitter;
-}
-
-const std::weak_ptr<SphereExplosionEmitter_3D> ParticleSystem_3D::CreateBigExplosionEmitter(glm::vec3 spawnPos)
-{
-	auto tempEmitter = std::make_shared<SphereExplosionEmitter_3D>();
-	SphereExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
-	AddEmitter(tempEmitter);
-
-	// Emitter_3D values - Without consideration for default ctor values
-	tempEmitter->m_GM.m_position = spawnPos;
-	//tempEmitter->m_GM.m_velocity.x = -500.0f;
-	tempEmitter->m_MM.m_duration = 0.6f;
-	tempEmitter->m_GM.m_active = true;
-	tempEmitter->m_MM.m_preWarm = true;
-
-	tempEmitter->m_EM.m_spawnTimeInterval = 1.0f; // 5x slower of dt
-	tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
-	tempEmitter->m_EM.m_rateOverTime = 50;
-	tempEmitter->m_MM.m_maxParticles = 1000;
-
-	// Particle Architype values - without consideration for default ctor
-	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 40.0f, 40.0f, 40.0f };
-
-	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 1.0f, 0.5f };
-	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.5f, 1.0f, 0.5f };
-
-	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 
 	tempEmitter->m_PAM.m_lifeTime = 0.3f;
@@ -381,5 +346,42 @@ const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitt
 	emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 0.0f });
 	emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 20.0f });
 	
+	return tempEmitter;
+}
+
+
+const std::weak_ptr<CharacterDamageEmitter_3D> ParticleSystem_3D::CreateChracterDamageEmitter(glm::vec3 spawnPos)
+{
+	auto tempEmitter = std::make_shared<CharacterDamageEmitter_3D>();
+	CharacterDamageEmitter_3D& explosionEmitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
+
+	// Emitter_3D values - Without consideration for default ctor values
+	tempEmitter->m_GM.m_position = spawnPos;
+	//tempEmitter->m_GM.m_velocity.x = -500.0f;
+	tempEmitter->m_MM.m_duration = 0.6f;
+	tempEmitter->m_GM.m_active = true;
+	tempEmitter->m_MM.m_preWarm = true;
+
+	tempEmitter->m_EM.m_spawnTimeInterval = 1.0f; // 5x slower of dt
+	tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
+	tempEmitter->m_EM.m_rateOverTime = 1;
+	tempEmitter->m_MM.m_maxParticles = 1000;
+
+	// Particle Architype values - without consideration for default ctor
+	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 40.0f, 40.0f, 40.0f };
+
+	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.1f, 0.1f, 0.1f };
+	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+
+	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+
+	tempEmitter->m_PAM.m_lifeTime = 0.3f;
+	tempEmitter->m_RM.m_renderingPath = "Models/Cube.a";
+
 	return tempEmitter;
 }

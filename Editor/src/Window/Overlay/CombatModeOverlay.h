@@ -19,6 +19,7 @@
 #include "Util/interpolater.h"
 
 struct TileWaypointEmitter_3D;
+struct CharacterDamageEmitter_3D;
 
 namespace Tempest
 {
@@ -239,6 +240,7 @@ namespace Tempest
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
 
         std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
+        std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
         bool nextUnit = false;
         bool stopMoving = true;
     };
