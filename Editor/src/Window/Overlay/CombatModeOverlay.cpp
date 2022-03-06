@@ -21,6 +21,7 @@
 #include "Particles/Particles_3D/ParticleSystem_3D.h"
 #include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
 #include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
+#include "Particles/Particles_3D/CharacterDeathEmitter_3D.h"
 
 namespace Tempest
 {
@@ -1946,7 +1947,31 @@ namespace Tempest
 
 				// dead voice
 				if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
+				{
 					ae.Play("Sounds2D/SFX_UnitDeathVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
+
+					// Character Death Emitter Data
+					glm::vec3 minRangeSpawnPos = oxform.position;
+					glm::vec3 maxRangeSpawnPos = oxform.position;
+
+					minRangeSpawnPos.x -= 1.0f;
+					minRangeSpawnPos.z -= 1.0f;
+
+					maxRangeSpawnPos.x += 1.0f;
+					maxRangeSpawnPos.z += 1.0f;
+
+					if (m_characterDeathEmitter.expired())
+						m_characterDeathEmitter = ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3);
+					else
+					{
+						m_characterDeathEmitter.lock()->m_GM.m_position = oxform.position;
+						m_characterDeathEmitter.lock()->m_minPos = minRangeSpawnPos;
+						m_characterDeathEmitter.lock()->m_maxPos = maxRangeSpawnPos;
+						m_characterDeathEmitter.lock()->m_MM.m_duration = 0.3f;
+						m_characterDeathEmitter.lock()->m_GM.m_active = true;
+						m_characterDeathEmitter.lock()->m_MM.m_preWarm = true;
+					}
+				}
 			}
 
 			if (triggered)

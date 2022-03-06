@@ -18,6 +18,7 @@ struct InteractiveParticle_3D;
 struct TileWaypointEmitter_3D;
 struct UnitTrailEmitter_3D;
 struct CharacterDamageEmitter_3D;
+struct CharacterDeathEmitter_3D;
 
 struct ParticleSystem_3D
 {
@@ -39,6 +40,7 @@ struct ParticleSystem_3D
 	const std::weak_ptr<UnitTrailEmitter_3D> CreateUnitTrailEmitter(glm::vec3 spawnPos);
 
 	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos);
+	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount);
 
 private:
 	ParticleSystem_3D();

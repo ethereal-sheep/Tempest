@@ -20,6 +20,7 @@
 
 struct TileWaypointEmitter_3D;
 struct CharacterDamageEmitter_3D;
+struct CharacterDeathEmitter_3D;
 
 namespace Tempest
 {
@@ -241,6 +242,7 @@ namespace Tempest
 
         std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
         std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
+        std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
         bool nextUnit = false;
         bool stopMoving = true;
     };
