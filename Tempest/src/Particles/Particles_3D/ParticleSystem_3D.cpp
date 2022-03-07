@@ -22,7 +22,7 @@ ParticleSystem_3D& ParticleSystem_3D::GetInstance()
 	return instance;
 }
 
-void ParticleSystem_3D::Update()
+void ParticleSystem_3D::Update(const float dt)
 {
 	// Update all the emitters here
 	for (short i = 0; i < m_Emitters.size(); ++i)
@@ -34,7 +34,7 @@ void ParticleSystem_3D::Update()
 
 			// Update active emitter
 			if (emitter.m_GM.m_active)
-				emitter.Update();
+				emitter.Update(dt);
 			//else
 			//{
 			//	// Store the unused slots to be reused later
@@ -111,7 +111,7 @@ const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestModelShapeEmitter(g
 const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
-	ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
+	//ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Emitter_3D values - Without consideration for default ctor values
@@ -121,7 +121,7 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitt
 	tempEmitter->m_GM.m_active = true;
 	tempEmitter->m_MM.m_preWarm = true;
 
-	tempEmitter->m_EM.m_spawnTimeInterval = 1.0f; // 5x slower of dt
+	tempEmitter->m_EM.m_spawnTimeInterval = 1.0f;
 	tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
 	tempEmitter->m_EM.m_rateOverTime = 20;
 	tempEmitter->m_MM.m_maxParticles = 1000;
@@ -331,7 +331,7 @@ const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitt
 	emitter.m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 	emitter.m_PAM.m_scaleBegin = glm::vec3{ 0.1f, 0.1f, 0.1f };
-	emitter.m_PAM.m_scaleEnd = glm::vec3{ 0.1f, 0.1f, 0.1f };
+	emitter.m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	emitter.m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 	emitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -371,9 +371,9 @@ const std::weak_ptr<CharacterDamageEmitter_3D> ParticleSystem_3D::CreateChracter
 	// Particle Architype values - without consideration for default ctor
 	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 40.0f, 40.0f, 40.0f };
+	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
-	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.1f, 0.1f, 0.1f };
+	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.05f, 0.05f, 0.05f };
 	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 

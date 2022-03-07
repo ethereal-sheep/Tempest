@@ -8,7 +8,7 @@
 struct TileWaypointEmitter_3D final : public Emitter_3D
 {
 	TileWaypointEmitter_3D();
-	void SelfUpdate() override;
+	void SelfUpdate(const float dt) override;
 
 	std::vector<glm::vec3> m_wayPoints;
 	short m_wayPointIndex;

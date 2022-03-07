@@ -9,7 +9,7 @@ UnitTrailEmitter_3D::UnitTrailEmitter_3D()
 {}
 
 
-void UnitTrailEmitter_3D::SelfUpdate()
+void UnitTrailEmitter_3D::SelfUpdate(const float dt)
 {
 	//if (m_MM.m_preWarm)
 	//{

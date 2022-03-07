@@ -28,6 +28,9 @@
 
 // Testing 
 #include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "FrameRate/FrameRateManager.h"
+
+
 
 namespace Tempest
 {
@@ -66,13 +69,18 @@ namespace Tempest
 
 	void Application::OnEngineUpdate()
 	{
+		T_FrameRateManager.FrameStart();
 		// Update Engine stuff first
-		ParticleSystem_3D::GetInstance().Update();
+		ParticleSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
 		AudioEngine::Update();
 		Service<RenderSystem>::Get().GetCamera().Update();
 		OnUpdate();
 		
 		//testing_physics_7_2();
+
+		T_FrameRateManager.FrameEnd();
+
+		LOG_INFO("DT: {0}", T_FrameRateManager.GetDT());
 	}
 
 	void Application::OnEngineRender()

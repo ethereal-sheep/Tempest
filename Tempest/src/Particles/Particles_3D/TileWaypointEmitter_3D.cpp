@@ -8,7 +8,7 @@ TileWaypointEmitter_3D::TileWaypointEmitter_3D()
 	, m_recalculateVelocity{ true }
 {}
 
-void TileWaypointEmitter_3D::SelfUpdate()
+void TileWaypointEmitter_3D::SelfUpdate(const float dt)
 {
 	if (m_MM.m_preWarm)
 	{
@@ -59,7 +59,8 @@ void TileWaypointEmitter_3D::SelfUpdate()
 			float distanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
 
 			//Move towards waypoint
-			m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
+			//m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
+			m_GM.m_position += m_GM.m_velocity * dt;
 
 			// 0.01 pixels difference
 			if (distanceSquared <= 0.01f)
@@ -75,7 +76,8 @@ void TileWaypointEmitter_3D::SelfUpdate()
 		//	m_wayPointIndex = 0;
 	}
 	else
-		m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
+		//m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
+		m_GM.m_position += m_GM.m_velocity * dt;
 
 	// Emitter_3D emittion
 	if (m_EM.m_spawnCountTimer <= 0.f)
@@ -94,12 +96,14 @@ void TileWaypointEmitter_3D::SelfUpdate()
 		m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	}
 	else
-		m_EM.m_spawnCountTimer -= m_MM.m_simulationSpeed;
+		//m_EM.m_spawnCountTimer -= m_MM.m_simulationSpeed;
+		m_EM.m_spawnCountTimer -= dt;
 
 	if (m_MM.m_duration <= 0.f)
 		m_GM.m_active = false;
 	else
-		m_MM.m_duration -= m_MM.m_simulationSpeed;
+		//m_MM.m_duration -= m_MM.m_simulationSpeed;
+		m_MM.m_duration -= dt;
 }
 
 void TileWaypointEmitter_3D::UpdateWaypoints(glm::vec3 tileOriginPosition)

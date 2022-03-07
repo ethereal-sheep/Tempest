@@ -24,7 +24,7 @@ struct ParticleSystem_3D
 {
 	static ParticleSystem_3D& GetInstance();
 
-	void Update();
+	void Update(const float dt);
 	std::vector<std::shared_ptr<Emitter_3D>> GetEmitter();
 
 	// Test Model Emitter

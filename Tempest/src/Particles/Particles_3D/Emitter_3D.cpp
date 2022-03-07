@@ -26,16 +26,13 @@ Emitter_3D::Emitter_3D()
 		Emit(m_EM.m_rateOverTime);
 }
 
-void Emitter_3D::SelfUpdate()
+void Emitter_3D::SelfUpdate(const float dt)
 {
 	if (m_MM.m_preWarm)
 	{
 		Emit(m_EM.m_rateOverTime);
 		m_MM.m_preWarm = false;
 	}
-
-	// Update Emitter Position
-	m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
 
 	// Emitter_3D emission
 	if (m_EM.m_spawnCountTimer <= 0.0f)
@@ -53,7 +50,12 @@ void Emitter_3D::SelfUpdate()
 		m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	}
 	else
-		m_EM.m_spawnCountTimer -= m_MM.m_simulationSpeed;
+		//m_EM.m_spawnCountTimer -= m_MM.m_simulationSpeed;
+		m_EM.m_spawnCountTimer -= dt;
+
+	// Update Emitter Position
+	//m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
+	m_GM.m_position += m_GM.m_velocity * dt;
 
 	// Emitter_3D Lifetime update
 	if (m_MM.m_duration <= 0.f)
@@ -62,12 +64,13 @@ void Emitter_3D::SelfUpdate()
 		m_GM.m_active = false;
 	}
 	else
-		m_MM.m_duration -= m_MM.m_simulationSpeed;
+		//m_MM.m_duration -= m_MM.m_simulationSpeed;
+		m_MM.m_duration -= dt;
 }
 
-void Emitter_3D::Update()
+void Emitter_3D::Update(const float dt)
 {
-	SelfUpdate();
+	SelfUpdate(dt);
 
 	// Particle_3D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
@@ -90,12 +93,14 @@ void Emitter_3D::Update()
 		}
 		else
 		{
-			particle.m_position += particle.m_velocity * m_MM.m_simulationSpeed;
+			//particle.m_position += particle.m_velocity * m_MM.m_simulationSpeed;
+			particle.m_position += particle.m_velocity * dt;
 			//particle.m_rotation += 0.01f * m_MM.m_simulationSpeed;
 
 			// lifeTime and percentage of lifeTime remaining
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
-			particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
+			//particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
+			particle.m_lifeRemaining -= dt;
 
 			// Scale
 			particle.m_scale.x = glm::mix(particle.m_scaleEnd.x, particle.m_scaleBegin.x, lifePercent);

@@ -9,7 +9,7 @@ struct UnitTrailEmitter_3D : public Emitter_3D
 {
 	UnitTrailEmitter_3D();
 
-	void SelfUpdate() override;
+	void SelfUpdate(const float dt) override;
 	void Emit(const int particleAmount) override;
 	void ParticleSetUp(Particle_3D& particle) override;
 

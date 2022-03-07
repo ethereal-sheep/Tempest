@@ -89,17 +89,20 @@ void FrameRateManager::FrameEnd()
 		m_perSecond = 0.0f;
 	}
 
+	if (m_dt < m_fixedDeltaTime)
+		m_dt = m_fixedDeltaTime;
+
 	// Processor completes frame faster than required
-	while (m_dt < static_cast<float>(m_fixedDeltaTime))
-	{
-		m_endTime = clock();
+	//while (m_dt < m_fixedDeltaTime)
+	//{
+	//	m_endTime = clock();
 
-		//_dt = static_cast<float>(_startTime - _endTime) / CLOCKS_PER_SEC;
-		m_dt = static_cast<float>(m_endTime - m_startTime) / CLOCKS_PER_SEC;
+	//	//_dt = static_cast<float>(_startTime - _endTime) / CLOCKS_PER_SEC;
+	//	m_dt = static_cast<float>(m_endTime - m_startTime) / CLOCKS_PER_SEC;
 
-		m_displayFPS = 60;
-	}
-
+	//	LOG_INFO("DT: {0}", m_dt);
+	//	m_displayFPS = 60;
+	//}
 	//LOG_INFO("DT: {0}", m_dt);
 }
 

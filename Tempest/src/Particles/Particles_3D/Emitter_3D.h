@@ -29,11 +29,11 @@ struct Emitter_3D
 	RendererModule_3D			m_RM;
 	
 	Emitter_3D();
-	void Update();
+	void Update(const float dt);
 	void ClearAllParticles();
 
 protected:
-	virtual void SelfUpdate();
+	virtual void SelfUpdate(const float dt);
 	virtual void Emit(const int particleAmount);
 	virtual void ParticleSetUp(Particle_3D& particle);
 	virtual void OnDeath();
