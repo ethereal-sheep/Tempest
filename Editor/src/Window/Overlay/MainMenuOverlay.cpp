@@ -122,7 +122,7 @@ namespace Tempest
 		{
 			auto title_img = tex_map["Assets/MainMenuTitle.dds"];
 			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
-			button_pos.x = viewport.Size.x * 0.35f - title_size.x * 0.5f;
+			button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
 			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.35f - title_size.y * 0.5f });
 			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
 		}
@@ -131,92 +131,105 @@ namespace Tempest
 		{
 		case Tempest::MainMenuOverlay::UI_SHOW::INITIAL:
 		{
-			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
-			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
-			// render the selectables
-			std::string selectable = "";
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get()});
-			ImGui::PushFont(FONT_BTN);
-			selectable = "Projects";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			
-			if (ImGui::Selectable(selectable.c_str(), false))
+			//ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			//ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+			//// render the selectables
+			//std::string selectable = "";
+			//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get()});
+			//ImGui::PushFont(FONT_BTN);
+			//selectable = "Projects";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	auto fn = [&]()
+			//	{
+			//		change_state(UI_SHOW::PROJECTS);
+			//	};
+			//	inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+			//	Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
+			//}
+			//	
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Settings";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
+
+			//}
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Credits";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//}
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Quit";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	//get_quitter().quit = true;
+			//	OverlayOpen = false;
+			//}
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//ImGui::PopFont();
+			//ImGui::PopStyleColor(3);
+
+			if (UI::UIButton_1("START", "START", { viewport.Size.x * 0.5f, viewport.Size.y * 0.6f }, { 50.f, 10.f }, FONT_BTN))
+			{
+				change_state(UI_SHOW::PROJECTS);
+			}
+
+			if (UI::UIButton_1("QUIT", "QUIT", { viewport.Size.x * 0.5f, viewport.Size.y * 0.65f }, { 50.f, 10.f }, FONT_BTN))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				auto fn = [&]()
-				{
-					change_state(UI_SHOW::PROJECTS);
-				};
-				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
-				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
+				get_quitter().quit = true;
+				//OverlayOpen = false;
 			}
-				
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-			selectable = "Settings";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
-
-			}
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-			selectable = "Credits";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-			}
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-			selectable = "Quit";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				//get_quitter().quit = true;
-				OverlayOpen = false;
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			ImGui::PopFont();
-			ImGui::PopStyleColor(3);
 		}
 			
 			break;
