@@ -653,6 +653,7 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "projViewModel");
+
             
 
             // Animation Stuff

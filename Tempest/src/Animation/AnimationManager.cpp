@@ -11,6 +11,9 @@ namespace Tempest
 
 	void AnimationManager::UpdateAnimations(float dt)
 	{
+		if (m_Animators.empty())
+			return;
+
 		for (auto& i : m_Animators)
 			i.second->UpdateAnimation(dt);
 	}

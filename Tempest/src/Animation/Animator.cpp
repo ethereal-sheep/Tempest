@@ -4,7 +4,7 @@ namespace Tempest
 {
 	Animator::Animator(Animation* animation)
 	{
-		m_CurrentTime = 0.0;
+		m_CurrentTime = 0.0f;
 		m_Animation = animation;
 
 		m_BoneMatrices.reserve(100);
@@ -18,7 +18,7 @@ namespace Tempest
 		m_DeltaTime = dt;
 		if (m_Animation)
 		{
-			m_CurrentTime += m_Animation->GetTicksPerSecond() * dt;
+			m_CurrentTime += m_Animation->GetTicksPerSecond() * dt * 25.f;
 			m_CurrentTime = fmod(m_CurrentTime, m_Animation->GetDuration());
 			CalculateBoneTransform(&m_Animation->GetRootNode(), glm::mat4(1.0f));
 		}
