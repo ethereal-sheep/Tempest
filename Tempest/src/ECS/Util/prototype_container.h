@@ -159,6 +159,8 @@ namespace Tempest
 		auto begin() { return prototypes.begin(); }
 		auto end() { return prototypes.end(); }
 
+		auto size() const { return prototypes.size(); }
+
 	private:
 	};
 }

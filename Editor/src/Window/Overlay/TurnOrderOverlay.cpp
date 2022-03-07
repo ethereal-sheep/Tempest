@@ -290,6 +290,13 @@ namespace Tempest
 
 							ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.0f);
 						}
+
+						if (instance.tutorial_enable && tutorial_index == 0)
+						{
+							// check if there are two diff units here
+							if (added_entities.size() >= 2 && added_entities[0] != added_entities[1])
+								tutorial_index = 1;
+						}
 					}
 					ImGui::EndChild();
 
@@ -335,6 +342,8 @@ namespace Tempest
 								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
 							};
 
+
+
 							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
 						}
 
@@ -362,6 +371,9 @@ namespace Tempest
 
 				case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_SUB: // change to sub
 				{
+					if (instance.tutorial_enable && tutorial_index == 2 && inter_nest[1].get() >= 0.0f)
+						tutorial_index = 3;
+
 					auto tex = tex_map["Assets/TurnOrderLogo.dds"];
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.2f - tex->GetWidth() * 0.5f + (inter_nest[0].get() + inter_nest[1].get()) * 1000.f, viewport->Size.y * 0.30f - tex->GetHeight() * 0.5f });
 					ImGui::Image((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f,tex->GetHeight() * 1.0f });
@@ -407,6 +419,9 @@ namespace Tempest
 									{
 										current_stat = sl->operator[](i);
 
+										if (instance.tutorial_enable && tutorial_index == 3 && current_stat == "Move")
+											tutorial_index = 4;
+
 										// sort based on stat
 										std::sort(added_entities.begin(), added_entities.end(), [i, &instance](const auto id1, const auto id2)
 										{
@@ -446,6 +461,9 @@ namespace Tempest
 						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 						{
 							std::shuffle(added_entities.begin(), added_entities.end(), els::random::prng);
+
+							if (instance.tutorial_enable && tutorial_index == 4 )
+								tutorial_index = 5;
 						}
 
 						ImGui::PopStyleColor(3);
@@ -623,7 +641,20 @@ namespace Tempest
 					default:
 						break;
 					}
-					
+
+					if (instance.tutorial_enable)
+					{
+						switch (tutorial_index)
+						{
+						case 1:
+						case 5:
+						case 6:
+							tutorial_index++;
+							break;
+						default:
+							break;
+						}
+					}
 				}
 				
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.025f });

@@ -414,6 +414,16 @@ namespace Tempest
 										instance.ecs.get<tc::Character>(entity) = entities[selected] ? instance.ecs.get<tc::Character>(entities[selected]) : instance.ecs.get<tc::Character>(random_char_id);
 									instance.ecs.get<tc::Character>(entity).isInCombat = true;
 									transform.position = inter;
+
+									// tutorial stuff oh dears
+									if (instance.tutorial_enable)
+									{
+										if (selected == 0 && tutorial_index == 0)
+											tutorial_index = 1;
+
+										else if (selected == 1 && tutorial_index == 1)
+											tutorial_index = 2;
+									}
 								}
 							}
 						}
