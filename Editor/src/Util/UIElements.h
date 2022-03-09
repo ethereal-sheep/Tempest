@@ -180,8 +180,12 @@ namespace Tempest::UI
 	std::pair<bool,bool> UIConflictSelectable(const char* label, bool* p_selected, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool selected = false, bool withDelete = true, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool* p_selected, bool withDelete, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
+	bool UILoadProject(string str = "");
+	bool UILoadProjectEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col, const ImVec4& tint_pressed);
+
 	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_hover = ImVec4(1, 1, 1, 1), const ImVec4& tint_pressed = ImVec4(1,1,1,1));
 	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col, const ImVec4& tint_pressed);
+	
 	bool UICheckBox_1(const char* label, bool* v);
 
 	std::pair<bool, bool> UICharButton_WithDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);

@@ -3173,7 +3173,68 @@ namespace Tempest::UI
 		// Render
 		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
 		ImGui::RenderNavHighlight(bb, id);
-		ImGui::RenderFrame(bb.Min, bb.Max, col, true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+		//ImGui::RenderFrame(bb.Min, bb.Max, col, true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+		if (bg_col.w > 0.0f)
+			window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, ImGui::GetColorU32(bg_col));
+
+		if (pressed || held)
+		{
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_pressed));
+			ImGui::SetMouseCursor(7);
+		}
+		else if (hovered)
+		{
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_hover));
+			ImGui::SetMouseCursor(7);
+		}
+		else
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+
+
+
+		return pressed;
+	}
+
+	bool UILoadProject(string str)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = g.CurrentWindow;
+		if (window->SkipItems)
+			return false;
+		auto tex = tex_map["Assets/RecentProjectBtn.dds"];
+		// Default to using texture ID as ID. User can still push string/integer prefixes.
+		ImGui::PushID((void*)(intptr_t)(void*)static_cast<size_t>(tex->GetID()));
+		string idstr = "#Loadimage" + str;
+		const ImGuiID id = window->GetID(idstr.c_str());
+		ImGui::PopID();
+
+		
+		ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
+		ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
+		ImVec2 size = { (float)tex->GetWidth(), (float)tex->GetHeight() };
+		int frame_padding = 0;
+		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
+		return UILoadProjectEx(id, (void*)static_cast<size_t>(tex->GetID()), size ,str, { 0,0 }, { 1,1 }, padding, { 0,0,0,0 }, tintHover, tintPressed);
+	}
+	bool UILoadProjectEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		if (window->SkipItems)
+			return false;
+
+		const ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size + padding * 2);
+		ImGui::ItemSize(bb);
+		if (!ImGui::ItemAdd(bb, id))
+			return false;
+
+		bool hovered, held;
+		bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+
+		// Render
+		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+		ImGui::RenderNavHighlight(bb, id);
+		//ImGui::RenderFrame(bb.Min, bb.Max, col, true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
 		if (bg_col.w > 0.0f)
 			window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, ImGui::GetColorU32(bg_col));
 
@@ -3189,7 +3250,14 @@ namespace Tempest::UI
 		}
 		else
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+		
+		ImGui::PushFont(FONT_BTN);
 
+		string addstr = str;
+		ImVec2 strPos = {bb.Min.x + size.x * 0.15f, bb.Min.y + size.y * 0.5f - ImGui::CalcTextSize(str.c_str()).y * 0.5f};
+		window->DrawList->AddText(strPos, ImGui::GetColorU32({ 0,0,0,1 }), addstr.c_str());
+		ImGui::PopFont();
+		
 		
 
 		return pressed;
