@@ -6,7 +6,7 @@
 
 struct CharacterDeathEmitter_3D : public MultipleExplosionEmitter_3D
 {
-
+	void OnDeath() override;
 };
 
 #endif // !CHARACTER_DEATH_EMITTER_H

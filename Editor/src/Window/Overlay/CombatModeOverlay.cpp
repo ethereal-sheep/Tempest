@@ -1956,9 +1956,11 @@ namespace Tempest
 					glm::vec3 maxRangeSpawnPos = oxform.position;
 
 					minRangeSpawnPos.x -= 1.0f;
+					minRangeSpawnPos.y += 0.7f;
 					minRangeSpawnPos.z -= 1.0f;
 
 					maxRangeSpawnPos.x += 1.0f;
+					minRangeSpawnPos.y += 0.3f;
 					maxRangeSpawnPos.z += 1.0f;
 
 					if (m_characterDeathEmitter.expired())

@@ -373,11 +373,11 @@ const std::weak_ptr<CharacterDamageEmitter_3D> ParticleSystem_3D::CreateChracter
 	tempEmitter->m_PAM.m_gravity = true;
 	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 1.0f, -10.0f, 1.0f };
+	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 1.0f, -20.0f, 1.0f };
 
-	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.05f, 0.05f, 0.05f };
+	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
 	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
 
 	tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 	tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -414,14 +414,13 @@ const std::weak_ptr<CharacterDeathEmitter_3D> ParticleSystem_3D::CreateChracterD
 	tempEmitter->m_MM.m_maxParticles = 1000;
 
 	// Particle Architype values - without consideration for default ctor
-	tempEmitter->m_PAM.m_gravity = true;
 	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
-	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
+	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
 	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
+	tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
 
 	//tempEmitter->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	//tempEmitter->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
