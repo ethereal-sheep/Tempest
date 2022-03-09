@@ -864,14 +864,12 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("id", component.id);
-				ar.Member("animation", component.animation);
 				return ar.EndObject();
 			}
 
-			Animation(uint32_t _id = 0, std::string _animation = std::string{}) : id{ _id }, animation{ _animation } {}
+			Animation(uint32_t _id = 0) : id{ _id }{}
 
 			uint32_t id;
-			std::string animation;
 		};
 	}
 	namespace tc = Tempest::Components;

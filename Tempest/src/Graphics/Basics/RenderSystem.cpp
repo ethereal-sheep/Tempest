@@ -622,7 +622,7 @@ namespace Tempest
     {
         //ModelPBR model;
         //model.loadModel("../../../Resource/Models/test14.fbx");
-        SubmitModel("../../../Resource/Models/Unit_Block.fbx", glm::mat4{ 1.f }, 1900);
+        //SubmitModel("../../../Resource/Models/Unit_Punch.fbx", glm::mat4{ 1.f }, 1900);
 
         if (USO)
         {
@@ -1249,5 +1249,10 @@ namespace Tempest
     void RenderSystem::UpdateAnimation(float dt)
     {
         m_Animation.UpdateAnimations(dt);
+    }
+
+    void RenderSystem::ChangeAnimationDuration(uint32_t id, float duration)
+    {
+        m_Animation.ChangeDuration(id, duration);
     }
 }

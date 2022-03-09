@@ -223,7 +223,7 @@ namespace Tempest
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);
-
+        void ChangeAnimationDuration(uint32_t id, float duration);
         void Clear();                                                                                        // Clear Pipeline
         void DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num = -1);                                        // Render Sprites of different meshes
         void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType, int pt_light_num = -1);     // Render Sprites of different meshes
