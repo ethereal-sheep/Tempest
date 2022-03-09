@@ -90,6 +90,8 @@ namespace Tempest
 			return glm::translate(glm::mat4(1.0f), m_Positions[0].m_Position);
 
 		int p0Index = GetPositionIndex(animationTime);
+		if (p0Index == m_Positions.size() - 1)
+			p0Index = 0;
 		int p1Index = p0Index + 1;
 		float scaleFactor = GetScaleFactor(m_Positions[p0Index].m_TimeStamp, m_Positions[p1Index].m_TimeStamp, animationTime);
 		glm::vec3 finalPosition = glm::mix(m_Positions[p0Index].m_Position, m_Positions[p1Index].m_Position, scaleFactor);
@@ -105,6 +107,8 @@ namespace Tempest
 		}
 
 		int p0Index = GetRotationIndex(animationTime);
+		if (p0Index == m_Rotations.size() - 1)
+			p0Index = 0;
 		int p1Index = p0Index + 1;
 		float scaleFactor = GetScaleFactor(m_Rotations[p0Index].m_TimeStamp, m_Rotations[p1Index].m_TimeStamp, animationTime);
 		glm::quat finalRotation = glm::slerp(m_Rotations[p0Index].m_Orientation, m_Rotations[p1Index].m_Orientation, scaleFactor);
@@ -118,6 +122,8 @@ namespace Tempest
 			return glm::scale(glm::mat4(1.0f), m_Scales[0].m_Scale);
 
 		int p0Index = GetScaleIndex(animationTime);
+		if (p0Index == m_Scales.size() - 1)
+			p0Index = 0;
 		int p1Index = p0Index + 1;
 		float scaleFactor = GetScaleFactor(m_Scales[p0Index].m_TimeStamp, m_Scales[p1Index].m_TimeStamp, animationTime);
 		glm::vec3 finalScale = glm::mix(m_Scales[p0Index].m_Scale, m_Scales[p1Index].m_Scale, scaleFactor);

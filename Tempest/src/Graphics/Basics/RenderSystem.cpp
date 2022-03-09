@@ -617,8 +617,8 @@ namespace Tempest
     void RenderSystem::Render()
     {
         //ModelPBR model;
-        //model.loadModel("../../../Resource/Models/gura.fbx");
-        SubmitModel("../../../Resource/Models/gura.fbx", glm::mat4{ 1.f }, "idle", 1900);
+        //model.loadModel("../../../Resource/Models/test14.fbx");
+        SubmitModel("../../../Resource/Models/Unit_Block.fbx", glm::mat4{ 1.f }, "Take 001", 1900);
 
         if (USO)
         {
@@ -866,6 +866,25 @@ namespace Tempest
                 for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
                 {
                     m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+                    if (m_Pipeline.m_Models[i].m_Model->HasAnimation)
+                    {
+                        // Submit Final Bone Matrix Uniform
+                        if (!m_Pipeline.m_Models[i].m_Bones.empty())
+                        {
+                            for (auto z = 0; z < m_Pipeline.m_Models[i].m_Bones.size(); ++z)
+                            {
+                                std::string bones = "finalBonesMatrices[" + std::to_string(z) + "]";
+                                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[i].m_Bones[z], bones.c_str());
+                            }
+                        }
+
+                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(m_Pipeline.m_Models[i].m_Model->HasAnimation, "HasAnimation");
+                    }
+
+                    else
+                    {
+                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(0, "HasAnimation");
+                    }
                     m_Pipeline.m_Models[i].m_Model->Draw();
                 }
 

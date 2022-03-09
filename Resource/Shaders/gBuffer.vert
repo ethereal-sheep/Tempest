@@ -39,10 +39,10 @@ uniform int HasAnimation;
 void main()
 {
     ivec4 boneids;
-    boneids[0] = int(boneIds.x);
-    boneids[1] = int(boneIds.y);
-    boneids[2] = int(boneIds.z);
-    boneids[3] = int(boneIds.w);
+    boneids[0] = int(boneIds[0]);
+    boneids[1] = int(boneIds[1]);
+    boneids[2] = int(boneIds[2]);
+    boneids[3] = int(boneIds[3]);
 
 
     if(HasAnimation == 1)
