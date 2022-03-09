@@ -43,4 +43,9 @@ namespace Tempest
 	{
 		return m_Animators.contains(id);
 	}
+
+	void AnimationManager::ChangeDuration(uint32_t id, float duration)
+	{
+		m_Animators[id]->ChangeDuration(duration);
+	}
 }

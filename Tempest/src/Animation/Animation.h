@@ -39,6 +39,8 @@ namespace Tempest
 		inline const AssimpNodeData& GetRootNode() { return m_Root; }
 		inline const tomap<std::string, BoneInfo>& GetBoneMap() { return m_BoneInfoMap; }
 
+		void ChangeDuration(float duration) { m_Duration = duration; }
+
 	private:
 
 		void ReadMissingBones(const aiAnimation* animation, tomap<std::string, BoneInfo>& boneInfoMap, int& boneCount);

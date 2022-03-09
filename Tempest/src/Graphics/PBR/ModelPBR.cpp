@@ -51,12 +51,15 @@ namespace Tempest
 			this->directory = file.substr(0, file.find_last_of('/'));
 			this->processNode(scene->mRootNode, scene);
 
-			for (unsigned int i = 0; i < static_cast<unsigned int>(scene->mNumAnimations); ++i)
-			{
-				std::string name{ scene->mAnimations[i]->mName.C_Str() };
-				Animation anim(m_BoneInfoMap, m_BoneCounter, scene, i);
-				animations.insert(std::make_pair(name, anim));
-			}
+			// Multiple Animations embedded in 1 fbx
+			//for (unsigned int i = 0; i < static_cast<unsigned int>(scene->mNumAnimations); ++i)
+			//{
+			//	std::string name{ scene->mAnimations[i]->mName.C_Str() };
+			//	Animation anim(m_BoneInfoMap, m_BoneCounter, scene, i);
+			//	animations.insert(std::make_pair(name, anim));
+			//}
+
+			m_Animation = Animation(m_BoneInfoMap, m_BoneCounter, scene, 0);	// Single Animation embedded in 1 file
 		}
 
 		else
@@ -333,7 +336,7 @@ namespace Tempest
 			if (vertex.BoneIds[i] < 0)
 			{
 				vertex.Weights[i] = weight;
-				vertex.BoneIds[i] = boneID;
+				vertex.BoneIds[i] = static_cast<float>(boneID);
 				break;
 			}
 		}

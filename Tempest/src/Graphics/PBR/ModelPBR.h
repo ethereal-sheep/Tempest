@@ -38,6 +38,7 @@ namespace Tempest
 
         tomap<std::string, BoneInfo>& GetBoneInfoMap() { return m_BoneInfoMap; }
         int& GetBoneCount() { return m_BoneCounter; }
+        Animation& GetAnimation() { return m_Animation; }
 
         std::vector<MeshPBR> meshes;
         std::vector<glm::vec3> colours;
@@ -47,8 +48,9 @@ namespace Tempest
         int m_BoneCounter = 0;
         bool HasAnimation = false;
 
-        std::unordered_map<std::string, Animation> animations;
-
+        //std::unordered_map<std::string, Animation> animations;        //Multiple animations embedded in 1 fbx
+        Animation m_Animation;
+            
     private:
         
         std::string directory;

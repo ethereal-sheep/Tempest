@@ -481,7 +481,7 @@ namespace Tempest
     }
 
     // anim - Animation Name,   index - entity id
-    void RenderSystem::SubmitModel(const string& path, const Transform& transform, std::string anim, uint32_t id)
+    void RenderSystem::SubmitModel(const string& path, const Transform& transform, uint32_t id)
     {
         if (!m_Pipeline.m_ModelLibrary.count(path))
         {
@@ -492,11 +492,13 @@ namespace Tempest
 
         if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
         {
-            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);
+            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);  // Multiple Animations
+            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
             m_Animation.AddAnimator(id, animator);
         }
-        else if (!m_Animation.CheckAnimation(id, anim))
-            m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
+        // Multiple Animations
+        //else if (!m_Animation.CheckAnimation(id, anim))
+        //    m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);    //
 
         ModelObj m;
         m.m_Transform = to_Model_Matrix(transform);
@@ -508,7 +510,7 @@ namespace Tempest
         m_Pipeline.m_Models.push_back(m);
     }
 
-    void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, std::string anim, uint32_t id)
+    void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id)
     {
         if (!m_Pipeline.m_ModelLibrary.count(path))
         {
@@ -519,12 +521,14 @@ namespace Tempest
         
         if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
         {
-            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);
+            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);        // Multiple Animations
+            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
             m_Animation.AddAnimator(id, animator);
         }
-            
-        else if (!m_Animation.CheckAnimation(id, anim))     // Check if Different Animation
-            m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
+          
+        // Multiple Animations
+        //else if (!m_Animation.CheckAnimation(id, anim))     // Check if Different Animation
+        //    m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
 
         ModelObj m;
         m.m_Transform = model_matrix;
@@ -618,7 +622,7 @@ namespace Tempest
     {
         //ModelPBR model;
         //model.loadModel("../../../Resource/Models/test14.fbx");
-        SubmitModel("../../../Resource/Models/Unit_Block.fbx", glm::mat4{ 1.f }, "Take 001", 1900);
+        SubmitModel("../../../Resource/Models/Unit_Block.fbx", glm::mat4{ 1.f }, 1900);
 
         if (USO)
         {
