@@ -38,6 +38,7 @@ struct Particle_3D
 	bool m_isActive;
 
 	bool m_rebirth; // Allows particle to restart its effect agin once death
+	bool m_gravity;
 
 	// Eg: Models/Cube.a
 	std::string m_renderingPath;

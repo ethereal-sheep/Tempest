@@ -51,6 +51,7 @@ struct ParticleArchetypeModule_3D
 
 	float m_lifeTime;		// Particle life duration
 	bool m_rebirth;
+	bool m_gravity;
 };
 
 struct EmissionModule_3D
@@ -67,6 +68,9 @@ struct EmissionModule_3D
 	// Hidden - For internal use
 	float m_spawnTimeInterval;
 	float m_spawnCountTimer;	// Time the interval
+
+	float m_burstCountTimer;
+	bool m_startBurstCycle;
 };
 
 struct RendererModule_3D

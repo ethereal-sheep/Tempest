@@ -14,6 +14,9 @@
 
 #include "Logger/Logger.h"
 
+#define GRAVITY -9.8f
+
+
 Emitter_3D::Emitter_3D()
 {
 	m_particles.resize(m_MM.m_maxParticles);
@@ -52,6 +55,37 @@ void Emitter_3D::SelfUpdate(const float dt)
 	else
 		//m_EM.m_spawnCountTimer -= m_MM.m_simulationSpeed;
 		m_EM.m_spawnCountTimer -= dt;
+
+	// Initial Burst Emission
+	if (m_EM.m_burstTime <= 0.0f && m_EM.m_startBurstCycle == false)
+	{
+		// Emit Initial Burst Particle
+		Emit(m_EM.m_burstCount);
+
+		// Reduce cycle
+		m_EM.m_startBurstCycle = true;
+	}
+	else
+	{	
+		// There is burst cycle to continue
+		if (m_EM.m_burstCycle >= 1)
+		{
+			m_EM.m_burstCountTimer -= dt;
+
+			if (m_EM.m_burstCountTimer <= 0.0f)
+			{
+				// Reset Timer
+				m_EM.m_burstCountTimer = m_EM.m_burstInterval;
+
+				// Emit Burst Particle
+				Emit(m_EM.m_burstCount);
+
+				// Reduce cycle
+				--m_EM.m_burstCycle;
+			}
+		}
+	}
+
 
 	// Update Emitter Position
 	//m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
@@ -95,6 +129,11 @@ void Emitter_3D::Update(const float dt)
 		{
 			//particle.m_position += particle.m_velocity * m_MM.m_simulationSpeed;
 			particle.m_position += particle.m_velocity * dt;
+
+			// Update Velocity
+			if (particle.m_gravity)
+				particle.m_velocity.y += GRAVITY * dt;
+
 			//particle.m_rotation += 0.01f * m_MM.m_simulationSpeed;
 
 			// lifeTime and percentage of lifeTime remaining
@@ -125,6 +164,7 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 
 	// Velocity
 	particle.m_velocity = m_PAM.m_startVelocity;
+	particle.m_gravity = m_PAM.m_gravity;
 	particle.m_originalVelocity = m_PAM.m_startVelocity;
 
 	// Velocity Variations

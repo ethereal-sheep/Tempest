@@ -129,8 +129,8 @@ namespace Tempest
 					{
 						//ParticleSystem_3D::GetInstance().CreateTestModelShapeEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
 						
-						//ParticleSystem_3D::GetInstance().CreateExplosionEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
-						ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+						ParticleSystem_3D::GetInstance().CreateExplosionEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+						//ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//ParticleSystem_3D::GetInstance().CreateMultipleExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
 						
 						//auto emitter = ParticleSystem_3D::GetInstance().CreateUnitTrailEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });

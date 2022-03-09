@@ -80,7 +80,7 @@ namespace Tempest
 
 		T_FrameRateManager.FrameEnd();
 
-		LOG_INFO("DT: {0}", T_FrameRateManager.GetDT());
+		//LOG_INFO("DT: {0}", T_FrameRateManager.GetDT());
 	}
 
 	void Application::OnEngineRender()

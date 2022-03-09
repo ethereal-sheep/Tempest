@@ -40,6 +40,7 @@ ParticleArchetypeModule_3D::ParticleArchetypeModule_3D()
 	, m_lifeTime{ 2.0f }
 	//, m_lifeVariation{ 5.0f }
 	, m_rebirth { false }
+	, m_gravity { false }
 {}
 
 EmissionModule_3D::EmissionModule_3D()
@@ -51,6 +52,9 @@ EmissionModule_3D::EmissionModule_3D()
 	, m_rateOverTime{ 1 }
 	, m_spawnTimeInterval{ 0.080f }
 	, m_spawnCountTimer{ m_spawnTimeInterval }
+
+	, m_burstCountTimer {0.0f}
+	, m_startBurstCycle { false }
 
 {}
 

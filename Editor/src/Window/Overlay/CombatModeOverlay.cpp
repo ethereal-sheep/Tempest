@@ -1872,6 +1872,7 @@ namespace Tempest
 				unit.set_path(v, xform);
 
 				triggered = false;
+				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
 			}
@@ -1998,17 +1999,21 @@ namespace Tempest
 						col = vec3(0, 1, 0);
 					}
 
+					auto emitterPosition = instance.ecs.get<tc::Transform>(other_entity).position;
+					emitterPosition.y += 0.8f;
+
 					if (m_characterDamageEmitter.expired())
-						m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(position);
-					else
+						m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition);
+					else if(damageOnce == false)
 					{
-						m_characterDamageEmitter.lock()->m_GM.m_position = position;
-						m_characterDamageEmitter.lock()->Emit(1);
+						m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
+						//m_characterDamageEmitter.lock()->Emit(1);
+						m_characterDamageEmitter.lock()->m_EM.m_burstCycle = 1;
 						m_characterDamageEmitter.lock()->m_MM.m_duration = 0.6f;
 						m_characterDamageEmitter.lock()->m_GM.m_active = true;
 						m_characterDamageEmitter.lock()->m_MM.m_preWarm = true;
+						damageOnce = true;
 					}
-
 
 					ImGui::PushFont(FONT_HEAD);
 					auto text_size = ImGui::CalcTextSize(text.c_str());
@@ -2382,7 +2387,6 @@ namespace Tempest
 				else if (nextUnit)
 				{
 					nextUnit = false;
-
 					// TEST CODE @JUN HAO
 					if (!m_unitTileEmitter.expired())
 					{

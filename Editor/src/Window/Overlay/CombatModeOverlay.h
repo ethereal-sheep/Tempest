@@ -243,6 +243,7 @@ namespace Tempest
         std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
         std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
         std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
+        bool damageOnce = false;
         bool nextUnit = false;
         bool stopMoving = true;
     };
