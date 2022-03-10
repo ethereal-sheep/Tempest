@@ -316,7 +316,7 @@ const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitt
 	UnitTrailEmitter_3D& emitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
-	emitter.m_recalculateVelocity = true;
+	//emitter.m_recalculateVelocity = true;
 
 	// Emitter_3D values - Without consideration for default ctor values
 	emitter.m_GM.m_position = spawnPos;
@@ -336,7 +336,7 @@ const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitt
 	emitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	emitter.m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
-	emitter.m_PAM.m_scaleBegin = glm::vec3{ 0.1f, 0.1f, 0.1f };
+	emitter.m_PAM.m_scaleBegin = glm::vec3{ 0.05f, 0.05f, 0.05f };
 	emitter.m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	emitter.m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
@@ -350,8 +350,8 @@ const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitt
 	emitter.m_PAM.m_lifeTime = 1.0f;
 	emitter.m_RM.m_renderingPath = "Models/Cube.a";
 
-	emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 0.0f });
-	emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 20.0f });
+	//emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 0.0f });
+	//emitter.m_wayPoints.push_back(glm::vec3{ -20.0f, 0.0f, 20.0f });
 	
 	return tempEmitter;
 }

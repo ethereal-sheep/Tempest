@@ -151,13 +151,7 @@ namespace Tempest
 			if (unit.is_moving())
 			{
 				transform = unit.get_current_transform();
-			}
 
-			if (unit.is_end_frame())
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/PlayerMovement.wav", "SFX");
-				
 				// Shift emitter and calls it to emit particle
 				if (!m_unitTrailEmitter_3D.expired())
 				{
@@ -168,7 +162,12 @@ namespace Tempest
 				{
 					m_unitTrailEmitter_3D = ParticleSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
 				}
+			}
 
+			if (unit.is_end_frame())
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/PlayerMovement.wav", "SFX");
 			}
 		}
 
