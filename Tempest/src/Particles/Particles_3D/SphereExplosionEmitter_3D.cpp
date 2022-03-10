@@ -51,5 +51,5 @@ void SphereExplosionEmitter_3D::ParticleSetUp(Particle_3D& particle)
 	//	break;
 	//}
 
-	particle.m_rotation = 60;
+	//particle.m_rotation = 60;
 }

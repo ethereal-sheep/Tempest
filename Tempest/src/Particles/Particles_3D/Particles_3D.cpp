@@ -13,7 +13,7 @@
 Particle_3D::Particle_3D()
 	: m_position { 0.0f, 0.0f, 0.0f }
 	, m_velocity { 0.0f, 0.0f, 0.0f }
-	, m_rotation { 0.0f }
+	, m_rotation{ 0.0f, 0.0f, 0.0f }
 	, m_colour { 0.0f, 0.0f, 0.0f, 0.0f }
 	, m_colourBegin{ 0.0f, 0.0f, 0.0f, 0.0f }
 	, m_colourEnd{ 0.0f, 0.0f, 0.0f, 0.0f }

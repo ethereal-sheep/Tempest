@@ -25,7 +25,7 @@ struct Particle_3D
 	glm::vec3 m_position;
 	glm::vec3 m_velocity;
 
-	float m_rotation;
+	glm::vec3 m_rotation;
 
 	glm::vec4 m_colourBegin, m_colourEnd;
 	glm::vec4 m_colour;
