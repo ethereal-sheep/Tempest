@@ -204,6 +204,12 @@ namespace Tempest
         TexturePBR envMapLUT;
         glm::mat4 envMapProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
         
+        // Particle Debugging
+        bool p_testing = false;
+        vec3 p_angles = vec3(0.f);
+        vec3 p_scalings = vec3(1.f);
+        //
+
         void iblSetup();
 
         uint32_t getHeight();

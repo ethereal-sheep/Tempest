@@ -591,6 +591,23 @@ namespace Tempest
             SubmitModel("Models/UnitBlack_Idle.a", (t * s));
         }
 
+        if (p_testing)
+        {
+            auto s = glm::scale(p_scalings);
+            auto r = glm::rotate(p_angles.x, vec3(1.f, 0.f, 0.f))
+                * glm::rotate(p_angles.y, vec3(0.f, 1.f, 0.f))
+                * glm::rotate(p_angles.z, vec3(0.f, 0.f, 1.f));
+
+            //auto proto_p = instance.scene.get_prototype_if("Decoration", "[your deco name here]");
+            // check if proto p is valid
+            //if (proto_p)
+            //{
+                //auto local = proto_p->get_if<Local>();
+                //auto model = proto_p->get_if<Model>();
+            //}
+            SubmitModel("Models/SquareHole.a", (r * s));
+        }
+
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
 
