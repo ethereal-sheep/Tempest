@@ -22,6 +22,11 @@ ParticleSystem_3D& ParticleSystem_3D::GetInstance()
 	return instance;
 }
 
+void ParticleSystem_3D::ClearEmitters()
+{
+	m_Emitters.clear();
+}
+
 void ParticleSystem_3D::Update(const float dt)
 {
 	// Update all the emitters here
@@ -56,19 +61,19 @@ std::vector<std::shared_ptr<Emitter_3D>> ParticleSystem_3D::GetEmitter()
 void ParticleSystem_3D::AddEmitter(const std::shared_ptr<Emitter_3D> emitter)
 {
 	// There is available slot
-	if (m_AvailableEmitterSlots.size())
-	{
-		// The index of the free slot
-		short freeSlot = m_AvailableEmitterSlots.front();
+	//if (m_AvailableEmitterSlots.size())
+	//{
+	//	// The index of the free slot
+	//	short freeSlot = m_AvailableEmitterSlots.front();
 
-		// Update the emitter memory management
-		m_AvailableEmitterSlots.pop();
-		m_UniqueEmitterSlots.erase(freeSlot);
+	//	// Update the emitter memory management
+	//	m_AvailableEmitterSlots.pop();
+	//	m_UniqueEmitterSlots.erase(freeSlot);
 
-		// Allocate the emitter, destructor is handled s_ptr
-		m_Emitters[freeSlot] = emitter;
-	}
-	else
+	//	// Allocate the emitter, destructor is handled s_ptr
+	//	m_Emitters[freeSlot] = emitter;
+	//}
+	//else
 		m_Emitters.push_back(emitter);
 }
 

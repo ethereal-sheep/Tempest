@@ -298,6 +298,8 @@ namespace Tempest
 	}
 	void RuntimeInstance::_exit()
 	{
+		ParticleSystem_3D::GetInstance().ClearEmitters();
+		m_map_interactiveEmitter_3D.clear();
 	}
 
 }

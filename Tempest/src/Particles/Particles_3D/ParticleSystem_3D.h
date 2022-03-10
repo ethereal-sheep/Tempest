@@ -24,6 +24,7 @@ struct ParticleSystem_3D
 {
 	static ParticleSystem_3D& GetInstance();
 
+	void ClearEmitters();
 	void Update(const float dt);
 	std::vector<std::shared_ptr<Emitter_3D>> GetEmitter();
 
