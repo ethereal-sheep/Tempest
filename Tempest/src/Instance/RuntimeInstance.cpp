@@ -157,8 +157,8 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/PlayerMovement.wav", "SFX");
+				
 				// Shift emitter and calls it to emit particle
-
 				if (!m_unitTrailEmitter_3D.expired())
 				{
 					m_unitTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
@@ -252,6 +252,49 @@ namespace Tempest
 	}
 	void RuntimeInstance::_render()
 	{
+		// Update the emitter
+		for (auto id : ecs.view<tc::Door, tc::Transform>())
+		{
+			auto& transform = ecs.get<tc::Transform>(id);
+			auto& door = ecs.get<tc::Door>(id);
+
+
+			/* Assume door default
+			*    x = 0
+			*    y += 3
+			*    z = 0
+			* 
+			*  Based on no rotation
+			*    x 
+			*    y += 3
+			*    z 
+			*/
+
+			// Create the emitters if they do not exist
+			if (m_map_interactiveEmitter_3D[id].expired())
+			{
+				auto maxSpawnRangePosition = transform.position;
+				maxSpawnRangePosition.x += 0.9f;
+				//maxSpawnRangePosition.y += 3.0f;
+				maxSpawnRangePosition.z += 0.2f;
+
+				auto minSpawnRangePosition = transform.position;
+				minSpawnRangePosition.x -= 0.1f;
+				//minSpawnRangePosition.y -= 1.0f;
+				minSpawnRangePosition.z -= 0.2f;
+
+				m_map_interactiveEmitter_3D[id] = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, minSpawnRangePosition, maxSpawnRangePosition);
+			}
+
+			//if (door.get_current_state() == tc::Door::State::CLOSE)
+			//{
+			//	
+			//}
+			//else
+			//{
+
+			//}
+		}
 	}
 	void RuntimeInstance::_exit()
 	{

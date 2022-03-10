@@ -204,7 +204,7 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	interactiveEmitter.m_MM.m_duration = 1000000.f;
 	interactiveEmitter.m_MM.m_preWarm = true;
 
-	interactiveEmitter.m_EM.m_spawnTimeInterval = 0.05f;; // 5x slower of dt
+	interactiveEmitter.m_EM.m_spawnTimeInterval = 0.1f;
 	interactiveEmitter.m_EM.m_spawnCountTimer = interactiveEmitter.m_EM.m_spawnTimeInterval;
 	interactiveEmitter.m_EM.m_rateOverTime = 1;
 	interactiveEmitter.m_MM.m_maxParticles = 30;
@@ -212,11 +212,11 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	// Particle Architype values - without consideration for default ctor
 	interactiveEmitter.m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	interactiveEmitter.m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	interactiveEmitter.m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	interactiveEmitter.m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 3.0f, 0.0f };
 
-	interactiveEmitter.m_PAM.m_scaleBegin = glm::vec3{ 0.2f, 0.2f, 0.2f };
+	interactiveEmitter.m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
 	interactiveEmitter.m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	interactiveEmitter.m_PAM.m_scaleVariation = glm::vec3{ 1.0f, 1.0f, 1.0f };
+	interactiveEmitter.m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
 
 	//interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	//interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 0.0f, 0.0f, 0.0f, 0.0f };
@@ -225,7 +225,7 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	interactiveEmitter.m_PAM.m_colourBegin = glm::vec4{ 0.996f, 0.831f, 0.482f, 1.0f };
 	interactiveEmitter.m_PAM.m_colourEnd = glm::vec4{ 0.0f, 0.0f, 0.0f, 0.0f };
 
-	interactiveEmitter.m_PAM.m_lifeTime = 0.3f;
+	interactiveEmitter.m_PAM.m_lifeTime = 1.0f;
 	interactiveEmitter.m_PAM.m_rebirth = false;
 
 	interactiveEmitter.m_RM.m_renderingPath = "Models/Cube.a";

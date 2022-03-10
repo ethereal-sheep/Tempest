@@ -38,11 +38,16 @@ void InteractiveParticle_3D::ParticleSetUp(Particle_3D& particle)
 	Emitter_3D::ParticleSetUp(particle);
 
 	// Spawn Position of the particle - To be between min and max of range
-	int rangeX = static_cast<int>(maxPos.x - minPos.x) > 0 ? static_cast<int>(maxPos.x - minPos.x) : 1;
-	int rangeY = static_cast<int>(maxPos.y - minPos.y) > 0 ? static_cast<int>(maxPos.y - minPos.y) : 1;
-	int rangeZ = static_cast<int>(maxPos.z - minPos.z) > 0 ? static_cast<int>(maxPos.z - minPos.z) : 1;
+	float rangeX = static_cast<float>(maxPos.x - minPos.x) > 0 ? static_cast<float>(maxPos.x - minPos.x) : 0;
+	float rangeY = static_cast<float>(maxPos.y - minPos.y) > 0 ? static_cast<float>(maxPos.y - minPos.y) : 0;
+	float rangeZ = static_cast<float>(maxPos.z - minPos.z) > 0 ? static_cast<float>(maxPos.z - minPos.z) : 0;
 
-	particle.m_position.x = std::rand() % rangeX + minPos.x;
-	particle.m_position.y = std::rand() % rangeY + minPos.y;
-	particle.m_position.z = std::rand() % rangeZ + minPos.z;
+	if(rangeX)
+		particle.m_position.x = Random::Float() * rangeX + minPos.x;
+
+	if(rangeY)
+		particle.m_position.y = Random::Float() * rangeY + minPos.y;
+
+	if(rangeZ)
+		particle.m_position.z = Random::Float() * rangeZ + minPos.z;
 }
