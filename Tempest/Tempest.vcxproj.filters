@@ -94,7 +94,7 @@
     <ClCompile Include="src\Particles\Particles_3D\ParticleSystem_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\ExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\InteractiveParticle_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\SphereExplosionEmitter_3D.cpp" />
@@ -271,7 +271,7 @@
     <ClInclude Include="src\Particles\Particles_3D\ParticleSystem_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\ExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\InteractiveParticle_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\SphereExplosionEmitter_3D.h" />

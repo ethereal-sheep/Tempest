@@ -1,7 +1,7 @@
 
 
 
-#include "InteractiveParticle_3D.h"
+#include "Interactive_DoorParticle_3D.h"
 
 #include "../Random.h"
 

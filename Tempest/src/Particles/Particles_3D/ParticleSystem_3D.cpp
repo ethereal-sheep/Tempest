@@ -7,7 +7,7 @@
 #include "SphereExplosionEmitter_3D.h"
 #include "MultipleExplosionEmitter_3D.h"
 
-#include "InteractiveParticle_3D.h"
+#include "Interactive_DoorParticle_3D.h"
 #include "TileWaypointEmitter_3D.h"
 #include "UnitTrailEmitter_3D.h"
 #include "CharacterDamageEmitter_3D.h"
