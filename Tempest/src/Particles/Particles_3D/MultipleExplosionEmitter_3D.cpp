@@ -149,15 +149,21 @@ void MultipleExplosionEmitter_3D::OnDeath()
 		}
 
 		// Spawn Position of the particle - To be between min and max of range
-		int rangeX = static_cast<int>(m_maxPos.x - m_minPos.x) > 0 ? static_cast<int>(m_maxPos.x - m_minPos.x) : 1;
-		int rangeY = static_cast<int>(m_maxPos.y - m_minPos.y) > 0 ? static_cast<int>(m_maxPos.y - m_minPos.y) : 1;
-		int rangeZ = static_cast<int>(m_maxPos.z - m_minPos.z) > 0 ? static_cast<int>(m_maxPos.z - m_minPos.z) : 1;
+		float rangeX = static_cast<float>(m_maxPos.x - m_minPos.x) > 0 ? static_cast<float>(m_maxPos.x - m_minPos.x) : 0;
+		float rangeY = static_cast<float>(m_maxPos.y - m_minPos.y) > 0 ? static_cast<float>(m_maxPos.y - m_minPos.y) : 0;
+		float rangeZ = static_cast<float>(m_maxPos.z - m_minPos.z) > 0 ? static_cast<float>(m_maxPos.z - m_minPos.z) : 0;
 
 		glm::vec3 spawnPos;
 
-		spawnPos.x = Random::Float() * rangeX + m_minPos.x;
-		spawnPos.y = Random::Float() * rangeY + m_minPos.y;
-		spawnPos.z = Random::Float() * rangeZ + m_minPos.z;
+
+		if (rangeX)
+			spawnPos.x = Random::Float() * rangeX + m_minPos.x;
+
+		if (rangeY)
+			spawnPos.y = Random::Float() * rangeY + m_minPos.y;
+
+		if (rangeZ)
+			spawnPos.z = Random::Float() * rangeZ + m_minPos.z;
 
 		// Creation of explosion emitter
 		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = ParticleSystem_3D::GetInstance().CreateExplosionEmitter(spawnPos).lock();

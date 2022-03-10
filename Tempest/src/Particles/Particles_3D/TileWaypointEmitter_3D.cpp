@@ -2,6 +2,7 @@
 #include "TileWaypointEmitter_3D.h"
 #include "Logger/Log.h"
 
+
 TileWaypointEmitter_3D::TileWaypointEmitter_3D()
 	: Emitter_3D()
 	, m_wayPointIndex{ 0 }
@@ -70,6 +71,12 @@ void TileWaypointEmitter_3D::SelfUpdate(const float dt)
 				m_recalculateVelocity = true;
 			}
 		}
+		else
+		{
+			m_GM.m_position = m_wayPoints[m_wayPointIndex];
+			m_wayPointIndex = (m_wayPointIndex + 1) % static_cast<int>(m_wayPoints.size());
+			m_recalculateVelocity = true;
+		}
 
 		// Reset waypoint
 		//if (m_wayPointIndex >= m_wayPoints.size())
@@ -130,6 +137,13 @@ void TileWaypointEmitter_3D::UpdateWaypoints(glm::vec3 tileOriginPosition)
 	m_wayPoints.push_back(wp_RightTop);
 	m_wayPoints.push_back(wp_LeftTop);
 	m_wayPoints.push_back(wp_LeftBtm);
+
+	// Log Waypoints
+	LOG_INFO("Right BTM:  x: {0}, y:{1}, z{2}", wp_RightBtm.x, wp_RightBtm.y, wp_RightBtm.z);
+	LOG_INFO("Right TOP:  x: {0}, y:{1}, z{2}", wp_RightTop.x, wp_RightTop.y, wp_RightTop.z);
+
+	LOG_INFO("Left TOP:  x: {0}, y:{1}, z{2}", wp_LeftTop.x, wp_LeftTop.y, wp_LeftTop.z);
+	LOG_INFO("Left BTM:  x: {0}, y:{1}, z{2}", wp_LeftBtm.x, wp_LeftBtm.y, wp_LeftBtm.z);
 
 	// Clear all alive particles
 	ClearAllParticles();
