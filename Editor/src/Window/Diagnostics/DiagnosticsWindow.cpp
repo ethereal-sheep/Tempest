@@ -864,5 +864,21 @@ namespace Tempest
 			UI::PaddedSeparator(0.5f);
 			}
 		}
+		if (ImGui::CollapsingHeader("Particle Debugging"))
+		{
+			auto& p_test = Service<RenderSystem>::Get().p_testing;
+			ImGui::Checkbox("Enable Testing", &p_test);
+
+			const auto padding = 80.f;
+			auto& p_scale = Service<RenderSystem>::Get().p_scalings;
+			std::string pScaling = "Particle Scalings";
+			std::string pScalingID = "##Pscale";
+			UI::DragFloat3ColorBox(pScaling.data(), pScalingID.data(), ImVec2{ padding , 0.f }, value_ptr(p_scale), 0.f, 0.1f, -10.f, 10.f);
+
+			auto& p_angle = Service<RenderSystem>::Get().p_angles;
+			std::string pAngles = "Particle Angles";
+			std::string pAnglesID = "##Pangle";
+			UI::DragFloat3ColorBox(pAngles.data(), pAnglesID.data(), ImVec2{ padding , 0.f }, value_ptr(p_angle), 0.f, 0.1f, -10.f, 10.f);
+		}
 	}
 }
