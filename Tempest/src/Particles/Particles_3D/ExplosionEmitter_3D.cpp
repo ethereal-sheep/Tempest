@@ -40,13 +40,13 @@ void ExplosionEmitter_3D::ParticleSetUp(Particle_3D& particle)
 
 	// Velocity Variations
 	if (m_PAM.m_velocityVariation.x >= 1)
-		particle.m_velocity.x += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.x);
+		particle.m_velocity.x += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.x) + m_PAM.m_startVelocity.x;
 
 	if (m_PAM.m_velocityVariation.y >= 1)
-		particle.m_velocity.y += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.y);
+		particle.m_velocity.y += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.y) + m_PAM.m_startVelocity.y;
 
 	if (m_PAM.m_velocityVariation.z >= 1)
-		particle.m_velocity.z += Random::Float() * static_cast<int>(m_PAM.m_velocityVariation.z);
+		particle.m_velocity.z += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.z) + m_PAM.m_startVelocity.z;
 
 	short spawnSector = std::rand() % 7;
 	short directionX = 1;

@@ -359,12 +359,10 @@ const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitt
 const std::weak_ptr<CharacterDamageEmitter_3D> ParticleSystem_3D::CreateChracterDamageEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<CharacterDamageEmitter_3D>();
-	CharacterDamageEmitter_3D& explosionEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Emitter_3D values - Without consideration for default ctor values
 	tempEmitter->m_GM.m_position = spawnPos;
-	//tempEmitter->m_GM.m_velocity.x = -500.0f;
 	tempEmitter->m_MM.m_duration = 0.6f;
 	tempEmitter->m_GM.m_active = true;
 	tempEmitter->m_MM.m_preWarm = true;
@@ -378,7 +376,7 @@ const std::weak_ptr<CharacterDamageEmitter_3D> ParticleSystem_3D::CreateChracter
 	tempEmitter->m_PAM.m_gravity = true;
 	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 2.0f, -20.0f, 2.0f };
+	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 1.0f, 2.0f, 1.0f };
 
 	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
 	tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
