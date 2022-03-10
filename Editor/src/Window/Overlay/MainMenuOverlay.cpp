@@ -370,7 +370,62 @@ namespace Tempest
 			ImVec2 ProjectBGMax = { ProjectBGMin.x + tex->GetWidth() ,ProjectBGMin.y + tex->GetHeight() };
 
 			ImGui::GetBackgroundDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), ProjectBGMin, ProjectBGMax);
+			
+			//New Project Area
+			{
+				auto img = tex_map["Assets/TemplateBtn.dds"];
+				ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
+				ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
+				ImGui::PushFont(FONT_BTN);
 
+				//Blank Template
+				string str = "Blank";
+				ImVec2 Pos = { ProjectBGMin.x + 70.f, ProjectBGMax.y * 0.25f };
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight()}, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				ImVec2 strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight()};
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				
+				//Gurps Template
+				str = "Gurps";
+				Pos.x += 150.f;
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+				//D&D Template
+				str = "D&D";
+				Pos.x += 150.f;
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+				//Tutorial Template
+				str = "Tutorial";
+				Pos.x += 150.f;
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+				ImGui::PopFont();
+			}
+
+			//Load Recent Project Area
 			ImGui::SetCursorPos({ ProjectBGMin.x + 60.f, ProjectBGMax.y * 0.55f + 20.f});
 			ImGui::BeginChild("##LoadRecentProj", { tex->GetWidth() * 0.85f, tex->GetHeight() * 0.35f }, false);
 			
@@ -383,9 +438,8 @@ namespace Tempest
 				}
 				ImGui::Dummy({ 0, 5.f });
 			}
-			
-			ImGui::EndChild();
 
+			ImGui::EndChild();
 
 		}
 			break;
