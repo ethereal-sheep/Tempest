@@ -25,8 +25,6 @@
 
 namespace Tempest
 {
-
-
 	auto collide_first_edited(
 		int x0, int y0, int x1, int y1,
 		tmap<int, tmap<int, id_t>>& collision_map,
@@ -2002,7 +2000,7 @@ namespace Tempest
 					}
 
 					auto emitterPosition = instance.ecs.get<tc::Transform>(other_entity).position;
-					emitterPosition.y += 0.8f;
+					emitterPosition.y += 1.0f;
 
 					if (m_characterDamageEmitter.expired())
 						m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition);
