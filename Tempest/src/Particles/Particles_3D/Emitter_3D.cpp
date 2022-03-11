@@ -150,7 +150,13 @@ void Emitter_3D::Update(const float dt)
 			particle.m_colour = glm::mix(particle.m_colourEnd, particle.m_colourBegin, lifePercent);
 			
 			// Change the string in this function
-			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle);
+			auto t = glm::translate(particle.m_position);
+			auto s = glm::scale(particle.m_scale);
+			auto r = glm::rotate(particle.m_rotation.x, glm::vec3(1.f, 0.f, 0.f))
+				* glm::rotate(particle.m_rotation.y, glm::vec3(0.f, 1.f, 0.f))
+				* glm::rotate(particle.m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
+
+			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle, (t * r * s));
 		}
 	}
 }

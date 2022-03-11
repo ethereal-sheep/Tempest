@@ -490,7 +490,7 @@ namespace Tempest
         m_Pipeline.m_Models.push_back(model);
     }
  
-    void RenderSystem::SubmitModel(const Particle_3D& particle)
+    void RenderSystem::SubmitModel(const Particle_3D& particle, const glm::mat4& model_matrix)
     {
         // Change path to particle.m_path or however u named the path string
         std::string path = particle.m_renderingPath; //"Models/SquareHole.a";
@@ -500,12 +500,8 @@ namespace Tempest
             temp->loadModel(path);
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
-        ModelObj model;
-        auto s = glm::scale(particle.m_scale);
-        //auto r = glm::rotate(particle.m_rotation, vec3(1.f, 0.f, 0.f));
-        auto t = glm::translate(particle.m_position);
-        //model.m_Transform = (t * r * s);
-        model.m_Transform = (t * s);
+        ModelObj model;        
+        model.m_Transform = model_matrix;
         model.m_Model = m_Pipeline.m_ModelLibrary[path];
         model.m_Model->colours[0] = particle.m_colour;
         m_Pipeline.m_Models.push_back(model);
