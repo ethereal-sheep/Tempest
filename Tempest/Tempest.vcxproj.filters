@@ -88,6 +88,7 @@
     <ClCompile Include="src\Particles\ExplosionEmitter.cpp" />
     <ClCompile Include="src\Particles\CircularMotionEmitter.cpp" />
     <ClCompile Include="src\PMG\ProceduralMapGeneration.cpp" />
+    <ClCompile Include="src\Profiler\Profiler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -252,6 +253,8 @@
     <ClInclude Include="src\Particles\ExplosionEmitter.h" />
     <ClInclude Include="src\Particles\CircularMotionEmitter.h" />
     <ClInclude Include="src\PMG\ProceduralMapGeneration.h" />
+    <ClInclude Include="src\Profiler\Profiler.h" />
+    <ClInclude Include="src\Profiler\ProfilerColor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
