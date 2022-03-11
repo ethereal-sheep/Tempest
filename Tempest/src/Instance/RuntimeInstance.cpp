@@ -255,8 +255,7 @@ namespace Tempest
 		for (auto id : ecs.view<tc::Door, tc::Transform>())
 		{
 			auto& transform = ecs.get<tc::Transform>(id);
-			auto& door = ecs.get<tc::Door>(id);
-
+			//auto& door = ecs.get<tc::Door>(id);
 
 			/* Assume door default
 			*    x = 0
@@ -273,14 +272,50 @@ namespace Tempest
 			if (m_map_interactiveEmitter_3D[id].expired())
 			{
 				auto maxSpawnRangePosition = transform.position;
-				maxSpawnRangePosition.x += 0.9f;
-				//maxSpawnRangePosition.y += 3.0f;
-				maxSpawnRangePosition.z += 0.2f;
-
 				auto minSpawnRangePosition = transform.position;
-				minSpawnRangePosition.x -= 0.1f;
-				//minSpawnRangePosition.y -= 1.0f;
-				minSpawnRangePosition.z -= 0.2f;
+
+				// Convert to Yaw, Roll, Pitch (Degree)
+				glm::vec3 euler = glm::eulerAngles(transform.rotation) * 180.0f / 3.14159f;
+
+			/*	LOG_INFO("Euler X: {0}", euler.x);
+				LOG_INFO("Euler Y: {0}", euler.y);
+				LOG_INFO("Euler Z: {0}", euler.z);
+				LOG_INFO("Next Set");*/
+
+				// Assume door rotation is 0 DEGREES or 180 DEGREES
+				if (std::abs(std::floor(euler.z)) == 0)
+				{
+					maxSpawnRangePosition.x += 0.9f;
+					maxSpawnRangePosition.z += 0.2f;
+
+					minSpawnRangePosition.x -= 0.1f;
+					minSpawnRangePosition.z -= 0.2f;
+				}
+				//else if (std::abs(std::floor(euler.y)) == 90)
+				else if (std::abs(std::floor(euler.z)) == 90)
+				{
+					maxSpawnRangePosition.x += 0.2f;
+					maxSpawnRangePosition.z += 0.9f;
+					
+					minSpawnRangePosition.x -= 0.2f;
+					minSpawnRangePosition.z -= 0.1f;
+				}
+				else if (std::abs(std::floor(euler.z)) == 180)
+				{
+					maxSpawnRangePosition.x -= 0.1f;
+					maxSpawnRangePosition.z -= 0.2f;
+
+					minSpawnRangePosition.x += 0.9f;
+					minSpawnRangePosition.z += 0.2f;				
+				}
+				else if (std::abs(std::floor(euler.z)) == 270)
+				{
+					minSpawnRangePosition.x += 0.2f;
+					minSpawnRangePosition.z += 0.9f;
+
+					maxSpawnRangePosition.x -= 0.2f;
+					maxSpawnRangePosition.z -= 0.1f;
+				}
 
 				m_map_interactiveEmitter_3D[id] = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, minSpawnRangePosition, maxSpawnRangePosition);
 			}
