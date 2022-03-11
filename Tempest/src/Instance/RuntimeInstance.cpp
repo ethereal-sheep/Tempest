@@ -12,8 +12,12 @@
 #include "ECS/Components/Components.h"
 #include "Audio/AudioEngine.h"
 
+// Not supposed to be here
 #include "Particles/Particles_3D/ParticleSystem_3D.h"
 #include "Particles/Particles_3D/UnitTrailEmitter_3D.h"
+
+#include "../Graphics/Basics/LineRenderer.h"
+#include <Util/shape_manip.h>
 
 namespace Tempest
 {
@@ -252,82 +256,69 @@ namespace Tempest
 	void RuntimeInstance::_render()
 	{
 		// Update the emitter
-		for (auto id : ecs.view<tc::Door, tc::Transform>())
+		for (auto id : ecs.view<tc::Door, tc::Transform, tc::Shape>())
 		{
-			auto& transform = ecs.get<tc::Transform>(id);
-			//auto& door = ecs.get<tc::Door>(id);
-
-			/* Assume door default
-			*    x = 0
-			*    y += 3
-			*    z = 0
-			* 
-			*  Based on no rotation
-			*    x 
-			*    y += 3
-			*    z 
-			*/
-
 			// Create the emitters if they do not exist
 			if (m_map_interactiveEmitter_3D[id].expired())
 			{
-				auto maxSpawnRangePosition = transform.position;
-				auto minSpawnRangePosition = transform.position;
+				auto& transform = ecs.get<tc::Transform>(id);
+				auto& door = ecs.get<tc::Door>(id);
+				auto& shape = ecs.get<tc::Shape>(id);
+
+				const int& x = shape.x;
+				const int& y = shape.y;
+
+				AABB box;
+
+				auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
+
+				box.min.x = a_x;
+				box.min.z = a_y;
+
+				box.max.x = b_x;
+				box.max.z = b_y;
+
+				auto rot = transform.rotation;
+				box.min = rot * box.min;
+				box.max = rot * box.max;
+
+				box.min.x += transform.position.x;
+				box.min.z += transform.position.z;
+				box.min.y = 0;
+
+				box.max.x += transform.position.x;
+				box.max.z += transform.position.z;
+				box.max.y = 0;
 
 				// Convert to Yaw, Roll, Pitch (Degree)
 				glm::vec3 euler = glm::eulerAngles(transform.rotation) * 180.0f / 3.14159f;
 
-			/*	LOG_INFO("Euler X: {0}", euler.x);
+				LOG_INFO("Euler X: {0}", euler.x);
 				LOG_INFO("Euler Y: {0}", euler.y);
 				LOG_INFO("Euler Z: {0}", euler.z);
-				LOG_INFO("Next Set");*/
 
-				// Assume door rotation is 0 DEGREES or 180 DEGREES
-				if (std::abs(std::floor(euler.z)) == 0)
-				{
-					maxSpawnRangePosition.x += 0.9f;
-					maxSpawnRangePosition.z += 0.2f;
+				LOG_INFO("Min X: {0}", box.min.x);
+				LOG_INFO("Min Y: {0}", box.min.y);
+				LOG_INFO("Min Z: {0}", box.min.z);
 
-					minSpawnRangePosition.x -= 0.1f;
-					minSpawnRangePosition.z -= 0.2f;
-				}
-				//else if (std::abs(std::floor(euler.y)) == 90)
-				else if (std::abs(std::floor(euler.z)) == 90)
-				{
-					maxSpawnRangePosition.x += 0.2f;
-					maxSpawnRangePosition.z += 0.9f;
-					
-					minSpawnRangePosition.x -= 0.2f;
-					minSpawnRangePosition.z -= 0.1f;
-				}
-				else if (std::abs(std::floor(euler.z)) == 180)
-				{
-					maxSpawnRangePosition.x -= 0.1f;
-					maxSpawnRangePosition.z -= 0.2f;
+				LOG_INFO("Max X: {0}", box.max.x);
+				LOG_INFO("Max Y: {0}", box.max.y);
+				LOG_INFO("Max Z: {0}", box.max.z);
 
-					minSpawnRangePosition.x += 0.9f;
-					minSpawnRangePosition.z += 0.2f;				
-				}
-				else if (std::abs(std::floor(euler.z)) == 270)
-				{
-					minSpawnRangePosition.x += 0.2f;
-					minSpawnRangePosition.z += 0.9f;
+				LOG_INFO("Next DOOR");
 
-					maxSpawnRangePosition.x -= 0.2f;
-					maxSpawnRangePosition.z -= 0.1f;
-				}
+				if (box.min.x > box.max.x)
+					std::swap(box.min.x, box.max.x);
 
-				m_map_interactiveEmitter_3D[id] = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, minSpawnRangePosition, maxSpawnRangePosition);
+				if (box.min.y > box.max.y)
+					std::swap(box.min.x, box.max.y);
+
+				if (box.min.z > box.max.z)
+					std::swap(box.min.z, box.max.z);
+
+				m_map_interactiveEmitter_3D[id] = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, box.min, box.max);
+
 			}
-
-			//if (door.get_current_state() == tc::Door::State::CLOSE)
-			//{
-			//	
-			//}
-			//else
-			//{
-
-			//}
 		}
 	}
 	void RuntimeInstance::_exit()
