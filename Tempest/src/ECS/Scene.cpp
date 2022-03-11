@@ -11,13 +11,38 @@
 
 namespace Tempest
 {
+	id_t Map::find(int x, int y)
+	{
+		if (collision_map.count(x) && collision_map[x].count(y) && collision_map[x][y])
+			return collision_map[x][y];
+		if (deco_map.count(x) && deco_map[x].count(y) && deco_map[x][y])
+			return deco_map[x][y];
+		if (tile_map.count(x) && tile_map[x].count(y) && tile_map[x][y])
+			return tile_map[x][y];
+		return INVALID;
+	}
+
+	id_t Map::find_edge(int a_x, int a_y, int b_x, int b_y)
+	{
+		if (wall_map.count(a_x) && wall_map[a_x].count(a_y) && wall_map[a_x][a_y].count(b_x) && wall_map[a_x][a_y][b_x].count(b_y) && wall_map[a_x][a_y][b_x][b_y])
+			return wall_map[a_x][a_y][b_x][b_y];
+		if (deco_edge_map.count(a_x) && deco_edge_map[a_x].count(a_y) && deco_edge_map[a_x][a_y].count(b_x) && deco_edge_map[a_x][a_y][b_x].count(b_y) && deco_edge_map[a_x][a_y][b_x][b_y])
+			return deco_edge_map[a_x][a_y][b_x][b_y];
+		if (door_map.count(a_x) && door_map[a_x].count(a_y) && door_map[a_x][a_y].count(b_x) && door_map[a_x][a_y][b_x].count(b_y) && door_map[a_x][a_y][b_x][b_y])
+			return door_map[a_x][a_y][b_x][b_y];
+		return INVALID;
+	}
+
 	void Map::update()
 	{
 		// just to clean up
 		// might be sufficient
 		collision_map.clear();
+		deco_map.clear();
 		tile_map.clear();
 		wall_map.clear();
+		door_map.clear();
+		deco_edge_map.clear();
 		for (auto& [id, pf] : prefabs)
 		{
 			if (pf.has<tc::Transform>() && pf.has<tc::Shape>())
@@ -26,7 +51,7 @@ namespace Tempest
 				auto transform = pf.get_if<tc::Transform>();
 				const int& x = shape->x;
 				const int& y = shape->y;
-				if (pf.has<tc::Tile>() || pf.has<tc::Collision>())
+				if (x + y >= 2)
 				{
 					int a_x = x, a_y = y, e_x = 0, e_y = 0;
 
@@ -64,9 +89,11 @@ namespace Tempest
 								tile_map[i][j] = id;
 							else if (pf.has<tc::Collision>())
 								collision_map[i][j] = id;
+							else
+								deco_map[i][j] = id;
 						}
 				}
-				else if (pf.has<tc::Wall>())
+				else if (x + y == 1)
 				{
 					vec3 s, e;
 
@@ -85,8 +112,23 @@ namespace Tempest
 					int b_x = (int)std::floor(transform->position.x + e.x);
 					int b_y = (int)std::floor(transform->position.z + e.z);
 
-					wall_map[a_x][a_y][b_x][b_y] = id;
-					wall_map[b_x][b_y][a_x][a_y] = id;
+					if (pf.has<tc::Wall>())
+					{
+						wall_map[a_x][a_y][b_x][b_y] = id;
+						wall_map[b_x][b_y][a_x][a_y] = id;
+					}
+					else if (pf.has<tc::Door>())
+					{
+						door_map[a_x][a_y][b_x][b_y] = id;
+						door_map[b_x][b_y][a_x][a_y] = id;
+					}
+					else
+					{
+						deco_edge_map[a_x][a_y][b_x][b_y] = id;
+						deco_edge_map[b_x][b_y][a_x][a_y] = id;
+					}
+
+
 				}
 			}
 		}

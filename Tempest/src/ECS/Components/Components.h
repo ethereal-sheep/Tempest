@@ -184,6 +184,38 @@ namespace Tempest
 			vec3 local_scale = { 1.f, 1.f, 1.f };
 		};
 
+		struct Mesh
+		{
+			static const char* get_type() { return "Mesh"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Mesh& component)
+			{
+				ar.StartObject();
+				ar.Member("Code", component.code);
+				return ar.EndObject();
+			}
+
+			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
+
+			MeshCode code;
+		};
+		struct Model
+		{
+			static const char* get_type() { return "Model"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Model& component)
+			{
+				ar.StartObject();
+				ar.Member("Path", component.path);
+				ar.Member("TexturePath", component.texPath);
+				return ar.EndObject();
+			}
+			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
+			string path;
+			string texPath;
+		};
 
 		struct Door
 		{
@@ -194,6 +226,8 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Vector("States", component.states);
+				ar.Member("Frame", component.frame);
+				ar.Member("Frame_Local", component.frame_local);
 				component.states.resize((int)State::End);
 				return ar.EndObject(); 
 			}
@@ -211,7 +245,8 @@ namespace Tempest
 
 			bool change_state(State new_state);
 
-
+			Components::Model frame;
+			Components::Local frame_local;
 			tvector<Local> states = tvector<Local>((int)State::End);
 			State curr = State::CLOSE;
 		private:
@@ -393,38 +428,6 @@ namespace Tempest
 			}
 		};
 
-		struct Mesh
-		{
-			static const char* get_type() { return "Mesh"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Mesh& component)
-			{
-				ar.StartObject();
-				ar.Member("Code", component.code);
-				return ar.EndObject();
-			}
-
-			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
-
-			MeshCode code;
-		};
-		struct Model
-		{
-			static const char* get_type() { return "Model"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Model& component)
-			{
-				ar.StartObject();
-				ar.Member("Path", component.path);
-				ar.Member("TexturePath", component.texPath);
-				return ar.EndObject();
-			}
-			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
-			string path;
-			string texPath;
-		};
 
 
 		struct Destroyed 

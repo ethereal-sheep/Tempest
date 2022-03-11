@@ -25,6 +25,7 @@
 #include "Audio/AudioEngine.h"
 
 #include "Graphics/Basics/RenderSystem.h"
+#include "Profiler/Profiler.h"
 
 namespace Tempest
 {
@@ -41,20 +42,20 @@ namespace Tempest
 	{
 		// init Engine stuff first
 		Logger::Init();
+		Profile::Profiler::Init();
+
 		Service<RenderSystem>::Register(m_width, m_height);
 		LOG("Initializing Tempest Engine");
 		Service<thread_pool>::Register(std::thread::hardware_concurrency());
 		Service<EventManager>::Register();
 
-		Service<RenderSystem>::Get().SubmitModel("Models\\UnitBlack_CombatStance.a", tc::Transform());
-		Service<RenderSystem>::Get().SubmitModel("Models\\UnitBlack_Death.a", tc::Transform());
-		Service<RenderSystem>::Get().SubmitModel("Models\\UnitBlack_Idle.a", tc::Transform());
 
 		auto v = glm::vec3{ .33f, -1.f, -.33f };
 		v = glm::normalize(v);
 		Service<RenderSystem>::Get().dir_lights[0].Direction = v;
 		Service<RenderSystem>::Get().gammaValue = 1.0f;
 
+		// Profiler
 
 		AudioEngine::Init();
 
@@ -63,9 +64,17 @@ namespace Tempest
 
 	void Application::OnEngineUpdate()
 	{
+
+		Profile::Profiler::FrameStart();
+		PROFILER_MARKER(UPDATE);
+
 		// Update Engine stuff first
+		NAMED_PROFILER_MARKER(Audio, AUDIO);
 		AudioEngine::Update();
+		END_NAMED_MARKER(Audio);
+
 		Service<RenderSystem>::Get().GetCamera().Update();
+
 		OnUpdate();
 		
 		//testing_physics_7_2();
@@ -73,6 +82,7 @@ namespace Tempest
 
 	void Application::OnEngineRender()
 	{
+		PROFILER_MARKER(RENDER);
 
 		Service<RenderSystem>::Get().Draw();
 		//Service<RenderSystem>::Get().EndFrame();
@@ -87,6 +97,7 @@ namespace Tempest
 		// then exit engine stuff
 
 		AudioEngine::Shutdown();
+		Profile::Profiler::Shutdown();
 	}
 
 	void Application::OnKeyPress([[maybe_unused]] uint8_t key, [[maybe_unused]] uint8_t repeat)

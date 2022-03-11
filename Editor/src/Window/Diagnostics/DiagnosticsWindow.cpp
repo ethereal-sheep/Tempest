@@ -19,6 +19,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include "Profiler/Profiler.h"
+
 namespace Tempest
 {
 	void DiagnosticsWindow::init(Instance&)
@@ -36,6 +38,14 @@ namespace Tempest
 					Runtime(instance);
 					ImGui::EndTabItem();
 				}
+
+				if (ImGui::BeginTabItem("Profiler"))
+				{
+					Profiler();
+					ImGui::EndTabItem();
+				}
+
+
 				if (ImGui::BeginTabItem("ECS Usage"))
 				{
 					ECSUsage(instance);
@@ -826,6 +836,312 @@ namespace Tempest
 			ImGui::Image((void*)static_cast<size_t>(curr_tex->GetID()), ImVec2((float)curr_tex->GetWidth(), (float)curr_tex->GetHeight()));
 
 
+	}
+
+
+	ImVec4 ConvertUint32TOVec4(uint32_t color)
+	{
+		float s = 1.0f / 255.0f;
+		return ImVec4(
+			((color >> IM_COL32_A_SHIFT) & 0xFF) * s,
+			((color >> IM_COL32_B_SHIFT) & 0xFF) * s,
+			((color >> IM_COL32_G_SHIFT) & 0xFF) * s,
+			((color >> IM_COL32_R_SHIFT) & 0xFF) * s);
+	}
+
+
+	void DiagnosticsWindow::Profiler()
+	{
+		Profile::Profiler profile;
+		size_t frameCount = profile.GetTotalFrameCount();
+		//float dt = profile.GetDeltaTime().count() / 1000000.f;
+		float elapsed = profile.GetTimeElapsed().count() / 1000000000.f;
+
+		float barHeight = 25.f;
+
+
+		ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_TextDisabled, ImGui::GetColorU32(ImGuiCol_Text));
+
+		if (!profile.IsRecording())
+		{
+			ImGui::Selectable("STOPPED", false, ImGuiSelectableFlags_Disabled, ImVec2(100, barHeight));
+		}
+		else
+		{
+			ImGui::Selectable("RECORDING", false, ImGuiSelectableFlags_Disabled, ImVec2(100, barHeight));
+		}
+
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
+
+		ImGui::SameLine();
+
+		if (!profile.IsRecording())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.1f));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.f, 0.f, 0.f, 0.3f));
+			if (ImGui::Button(ICON_FA_PLAY, ImVec2(barHeight, barHeight)))
+			{
+				profile.StartRecording();
+			}
+			ImGui::PopStyleColor(2);
+			ImGui::PopStyleVar(2);
+		}
+		else
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.1f));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetColorU32(ImGuiCol_PlotLinesHovered));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.f, 0.f, 0.f, 0.3f));
+			if (ImGui::Button(ICON_FA_STOP, ImVec2(barHeight, barHeight)))
+			{
+				profile.StopRecording();
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::PopStyleVar(2);
+
+			m_CurrentFrame = frameCount;
+		}
+		ImGui::SameLine(0, 25);
+		ImGui::Text("Time: %6.2fs", elapsed);
+		ImGui::SameLine(0, 25);
+
+
+		ImGui::Text("Frame: ");
+		ImGui::SameLine();
+
+		if (!profile.IsRecording())
+		{
+			if (frameCount)
+			{
+				int temp = static_cast<int>(m_CurrentFrame);
+				ImGui::PushItemWidth(40);
+				if (ImGui::DragInt("##frameCounterCurrentFrame", &temp, 1.f, 1, static_cast<int>(frameCount), "%d", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_ClampOnInput))
+				{
+					m_CurrentFrame = static_cast<size_t>(temp);
+				}
+				ImGui::PopItemWidth();
+
+			}
+			else
+			{
+				ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+				ImGui::PushStyleColor(ImGuiCol_TextDisabled, ImGui::GetColorU32(ImGuiCol_Text));
+				ImGui::Selectable(std::to_string(0).c_str(), false, ImGuiSelectableFlags_Disabled, ImVec2(40, 0));
+				ImGui::PopStyleColor();
+				ImGui::PopStyleVar();
+			}
+		}
+		else
+		{
+
+			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+			ImGui::PushStyleColor(ImGuiCol_TextDisabled, ImGui::GetColorU32(ImGuiCol_Text));
+			ImGui::Selectable(std::to_string(m_CurrentFrame).c_str(), false, ImGuiSelectableFlags_Disabled, ImVec2(40, 0));
+			ImGui::PopStyleColor();
+			ImGui::PopStyleVar();
+
+		}
+
+
+		ImGui::SameLine();
+		ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_TextDisabled, ImGui::GetColorU32(ImGuiCol_Text));
+		ImGui::Text("/");
+		ImGui::SameLine();
+		ImGui::Selectable(std::to_string(frameCount).c_str(), false, ImGuiSelectableFlags_Disabled, ImVec2(40, 0));
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
+
+		ImGui::SameLine(0, 10);
+
+		bool temp = profile.IsStartOnPlay();
+		if (ImGui::Checkbox("Record on Play", &temp)) profile.SetStartOnPlay(!profile.IsStartOnPlay());
+
+		ImGui::SameLine(0, 10);
+
+		if (!profile.IsRecording())
+		{
+			temp = profile.IsHistoryDisabled();
+			if (ImGui::Checkbox("Disable History (WIP)", &temp)) profile.SetHistoryCapture(!profile.IsHistoryDisabled());
+		}
+		else
+		{
+			const char* str = profile.IsHistoryDisabled() ? ICON_FA_CHECK_SQUARE " History Disabled" : ICON_FA_SQUARE " History Enabled";
+			ImGui::TextDisabled(str);
+		}
+
+		ImGui::Separator();
+		// profiling chart
+
+		ShowProfilingChart();
+
+		ImGui::Separator();
+		ImGui::Columns(7, "profileFunctions", true);
+		ImGui::Text("Zone"); ImGui::NextColumn();
+		ImGui::Text("Name"); ImGui::NextColumn();
+		ImGui::Text("Location"); ImGui::NextColumn();
+		ImGui::Text("Calls"); ImGui::NextColumn();
+		ImGui::Text("Time (ms)"); ImGui::NextColumn();
+		ImGui::Text("Call Time (ms)"); ImGui::NextColumn();
+		ImGui::Text("%%"); ImGui::NextColumn();
+		ImGui::Separator();
+
+		for (auto fn : profile.GetFunctionList())
+		{
+			auto& data = profile.GetFunctionData(fn);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, ConvertUint32TOVec4(profile.GetZoneColor(fn->m_Zone)));
+			ImGui::Selectable(ICON_FA_MARKER, false, ImGuiSelectableFlags_SpanAllColumns);
+			ImGui::PopStyleColor();
+			ImGui::SameLine();
+			ImGui::Text(fn->m_Zone.c_str());
+			ImGui::NextColumn();
+
+			ImGui::Text(fn->m_FunctionName.c_str()); ImGui::NextColumn();
+			ImGui::Text("%s:%u", fn->m_Filename.c_str(), fn->m_LineNumber); ImGui::NextColumn();
+
+			float avgCalls = 1.f * data.m_Calls / frameCount;
+			float avgRuntime = data.m_Duration.count() / (1000000.f * frameCount);
+			float avgCalltime = avgRuntime / avgCalls;
+			float percent = 100.f * data.m_Duration.count() / profile.GetTotalTime().count();
+
+			ImGui::Text("%.3f", avgCalls); ImGui::NextColumn();
+			ImGui::Text("%f", avgRuntime); ImGui::NextColumn();
+			ImGui::Text("%f", avgCalltime); ImGui::NextColumn();
+			ImGui::Text("%.3f%%", percent); ImGui::NextColumn();
+		}
+		ImGui::Columns(1);
+	}
+
+
+	void DiagnosticsWindow::ShowProfilingChart()
+	{
+		Profile::Profiler profile;
+
+		float defaultDivisor = 1000000.f;
+
+		struct Bar
+		{
+			Profile::Function key;
+			long long start = 0;
+			long long duration = 0;
+			size_t row = 0;
+		};
+
+		if (m_CurrentFrame)
+		{
+			const auto& [frameStart, dt, sequence] = profile.GetFrameSnapshot(m_CurrentFrame);
+
+			std::vector<Profile::SequenceData> sequenceStack;
+			std::vector<Bar> chartData;
+
+			size_t maxRow = 1;
+			size_t row = 1;
+
+			for (auto& sd : sequence)
+			{
+				if (sd.m_Open)
+				{
+					sequenceStack.push_back(sd);
+					++row;
+				}
+				else
+				{
+					auto& front = sequenceStack.back();
+					LOG_ASSERT(front.m_Key == sd.m_Key, "Function Keys not the same!");
+
+					Bar newBar{
+						front.m_Key,
+						(front.m_TimePoint - frameStart).count(),
+						(sd.m_TimePoint - frameStart).count(),
+						--row
+					};
+					sequenceStack.pop_back();
+					chartData.push_back(std::move(newBar));
+				}
+
+				if (row > maxRow)
+					maxRow = row;
+
+			}
+			LOG_ASSERT(sequenceStack.size() == 0, "Seq Stack Corrupted!");
+
+			if(profile.IsRecording())
+				ImPlot::SetNextPlotLimits(0, dt.count() / defaultDivisor, 0, 1.0 * maxRow, ImGuiCond_Always);
+			else
+				ImPlot::SetNextPlotLimits(0, dt.count() / defaultDivisor, 0, 1.0 * maxRow);
+
+			if (ImPlot::BeginPlot("##ProfilerChart", "microseconds", "stack", ImVec2{ -1, maxRow * m_BarHeight + 50.f },
+				ImPlotFlags_NoLegend | ImPlotFlags_NoMousePos, ImPlotAxisFlags_None, 
+				ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_NoGridLines | ImPlotAxisFlags_LockMax | 
+				ImPlotAxisFlags_LockMin | ImPlotAxisFlags_NoDecorations))
+			{
+				const int BUFFER_SIZE = 64;
+				char buffer[BUFFER_SIZE] = { 0 };
+
+				auto printToChart = [&](
+					const Bar& bar) {
+						float r1[2] = { static_cast<float>(bar.row), static_cast<float>(bar.row) };
+						float r2[2] = { static_cast<float>(bar.row) + 1.f, static_cast<float>(bar.row) + 1.f };
+
+						float v[2] = { static_cast<float>(bar.start / defaultDivisor), static_cast<float>(bar.duration / defaultDivisor) };
+
+						sprintf_s(buffer, BUFFER_SIZE, "%p", bar.key);
+
+						ImPlot::PushStyleColor(ImPlotCol_Fill, ConvertUint32TOVec4(profile.GetZoneColor(bar.key->m_Zone)));
+						ImPlot::PlotShaded(buffer, v, r1, r2, 2);
+						ImPlot::PopStyleColor();
+
+						auto [x,y] = ImPlot::GetPlotMousePos();
+						if (ImPlot::IsPlotHovered())
+						{
+							if (x > v[0] && x < v[1] && y > r1[0] && y < r2[0])
+							{
+								ImGui::BeginTooltip();
+								ImGui::Text("%s", bar.key->m_FunctionName.c_str());
+								ImGui::PushStyleColor(ImGuiCol_Text, ConvertUint32TOVec4(profile.GetZoneColor(bar.key->m_Zone)));
+								ImGui::Text(ICON_FA_MARKER);
+								ImGui::PopStyleColor();
+								ImGui::SameLine();
+								ImGui::Text("%s", bar.key->m_Zone.c_str());
+
+								ImGui::Text("Call time: %f%s", (bar.duration - bar.start) / 1000000000.f, "ms");
+
+								ImGui::EndTooltip();
+
+								return true;
+							}
+						}
+						return false;
+				};
+
+				ImPlot::PushStyleVar(ImPlotStyleVar_FillAlpha, .99f);
+				Profile::FunctionKey temp{ "NONE", "Root", "", 0 };
+				printToChart(Bar{ &temp, 0, dt.count(), 0 });
+
+				for (auto& bar : chartData)
+				{
+					printToChart(bar);
+				}
+				ImPlot::PopStyleVar();
+
+				ImPlot::EndPlot();
+			}
+		}
+		else
+		{
+			ImPlot::SetNextPlotLimits(0, 17000000 / defaultDivisor, 0, 5);
+			if (ImPlot::BeginPlot("##ProfilerChart", "microseconds", "stack", ImVec2{ -1, 200 }, ImPlotFlags_CanvasOnly, ImPlotAxisFlags_None, 
+				ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_NoGridLines | ImPlotAxisFlags_LockMax | ImPlotAxisFlags_LockMin))
+			{
+				ImPlot::EndPlot();
+			}
+		}
 	}
 
 }
