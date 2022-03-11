@@ -51,6 +51,7 @@ static const float button_text_size = 24.f;
 static const float subbutton_text_size = 18.f;
 static const float contaxPro_size144 = 144.f;
 
+
 static const float body_text_size = 24.f;
 static const float para_text_size = 18.f;
 

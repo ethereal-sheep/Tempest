@@ -33,7 +33,6 @@ namespace Tempest
         {
             STAT,
             WEAPON,
-            ITEM,
             ACTION,
             TOTAL
         };
@@ -223,6 +222,8 @@ namespace Tempest
         tmap<int, tmap<int, bool>> visited;
         std::array<TabImageData, TOTAL> tabs;
         TABS_TYPE current_tab{ TABS_TYPE::STAT };
+
+        int tutorial_index{ 0 };
 
         interpolater<int> inter1;
         interpolater<int> inter2;

@@ -405,7 +405,7 @@ namespace Tempest
 
 						case 3:
 						{
-							ImVec2 pos = { viewport->Size.x * 0.345f, viewport->Size.y * 0.1f };
+							ImVec2 pos = { viewport->Size.x * 0.405f, viewport->Size.y * 0.085f };
 							ImVec2 size = { 310.f, 140.f };
 							UI::TutArea(pos, size, false);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the actions page.";

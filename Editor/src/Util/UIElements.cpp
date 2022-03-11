@@ -1208,6 +1208,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		ImGui::SetCursorPos(new_pos);
 		bool hovered = ImGui::IsItemHovered();
@@ -1325,6 +1327,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 		ImGui::SetCursorPos(new_pos);
@@ -1441,6 +1445,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool res = false;
@@ -1587,6 +1593,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool res = false;
@@ -1738,6 +1746,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool res = false;
@@ -1893,6 +1903,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool res = false;
@@ -2029,6 +2041,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool res = false;
@@ -2174,6 +2188,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		//bool hovered = ImGui::IsItemHovered();
 		bool res = false;
@@ -2294,6 +2310,8 @@ namespace Tempest::UI
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 
@@ -3155,7 +3173,68 @@ namespace Tempest::UI
 		// Render
 		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
 		ImGui::RenderNavHighlight(bb, id);
-		ImGui::RenderFrame(bb.Min, bb.Max, col, true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+		//ImGui::RenderFrame(bb.Min, bb.Max, col, true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+		if (bg_col.w > 0.0f)
+			window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, ImGui::GetColorU32(bg_col));
+
+		if (pressed || held)
+		{
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_pressed));
+			ImGui::SetMouseCursor(7);
+		}
+		else if (hovered)
+		{
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_hover));
+			ImGui::SetMouseCursor(7);
+		}
+		else
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+
+
+
+		return pressed;
+	}
+
+	bool UILoadProject(string str)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = g.CurrentWindow;
+		if (window->SkipItems)
+			return false;
+		auto tex = tex_map["Assets/RecentProjectBtn.dds"];
+		// Default to using texture ID as ID. User can still push string/integer prefixes.
+		ImGui::PushID((void*)(intptr_t)(void*)static_cast<size_t>(tex->GetID()));
+		string idstr = "#Loadimage" + str;
+		const ImGuiID id = window->GetID(idstr.c_str());
+		ImGui::PopID();
+
+		
+		ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
+		ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
+		ImVec2 size = { (float)tex->GetWidth(), (float)tex->GetHeight() };
+		int frame_padding = 0;
+		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
+		return UILoadProjectEx(id, (void*)static_cast<size_t>(tex->GetID()), size ,str, { 0,0 }, { 1,1 }, padding, { 0,0,0,0 }, tintHover, tintPressed);
+	}
+	bool UILoadProjectEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
+	{
+		ImGuiContext& g = *GImGui;
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		if (window->SkipItems)
+			return false;
+
+		const ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size + padding * 2);
+		ImGui::ItemSize(bb);
+		if (!ImGui::ItemAdd(bb, id))
+			return false;
+
+		bool hovered, held;
+		bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+
+		// Render
+		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+		ImGui::RenderNavHighlight(bb, id);
+		//ImGui::RenderFrame(bb.Min, bb.Max, col, true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
 		if (bg_col.w > 0.0f)
 			window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, ImGui::GetColorU32(bg_col));
 
@@ -3171,7 +3250,14 @@ namespace Tempest::UI
 		}
 		else
 			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+		
+		ImGui::PushFont(FONT_BTN);
 
+		string addstr = str;
+		ImVec2 strPos = {bb.Min.x + size.x * 0.15f, bb.Min.y + size.y * 0.5f - ImGui::CalcTextSize(str.c_str()).y * 0.5f};
+		window->DrawList->AddText(strPos, ImGui::GetColorU32({ 0,0,0,1 }), addstr.c_str());
+		ImGui::PopFont();
+		
 		
 
 		return pressed;
@@ -3202,6 +3288,7 @@ namespace Tempest::UI
 		//DELETE BTN
 		auto pos = ImGui::GetCursorPos();
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12.f);
+		ImGui::PushStyleColor(ImGuiCol_Text, { 1,1,1,1 });
 		bool remove = false;
 		ImGui::Dummy({ 0, newsize.y * 0.2f });
 		ImGui::Dummy({ newsize.x * 0.75f,0 });
@@ -3213,7 +3300,13 @@ namespace Tempest::UI
 			//ImGui::PopStyleVar();
 			remove = true;
 		}
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetMouseCursor(7);
+		}
+		ImGui::PopStyleColor();
 		ImGui::PopStyleVar();
+
 		ImGui::SetCursorPos(pos);
 
 		ImGui::ItemSize(bb);
@@ -3526,7 +3619,7 @@ namespace Tempest::UI
 		return UIActionButtonEx(id, actionName, selected, uv0, uv1, padding, bg_col, tint_col);
 	}
 
-	bool UICharTurnButtonEx(ImGuiID id, ImTextureID texture_id, string characterName, const ImVec2& size, bool selected, bool isBig, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	bool UICharTurnButtonEx(ImGuiID id, ImTextureID texture_id, string characterName, const ImVec2& size, bool selected, bool isPlaced, bool isBig, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
 		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -3539,7 +3632,10 @@ namespace Tempest::UI
 		ImVec2 newsize = { size.x, size.y + arrowSize.y };
 
 		auto unselectedImg = tex_map["Assets/TurnUnselectedBtn.dds"];
-		auto selectedImg = tex_map["Assets/TurnSelectedBtn.dds"];
+		auto HoveredImg = tex_map["Assets/TurnHoverBtn.dds"];
+		auto SelectedImg = tex_map["Assets/TurnSelectedBtn.dds"];
+		auto PlacedImg = tex_map["Assets/TurnPlacedBtn.dds"];
+		auto BGOverlay = tex_map["Assets/SelectedBGOverlay.dds"];
 		auto newSize = size;
 		auto font = FONT_TURN;
 		ImTextureID selectedID = 0;
@@ -3551,18 +3647,19 @@ namespace Tempest::UI
 		{	//selectedSize = { selectedSize.x / 1.68f, selectedSize.y / 1.68f };
 			font = FONT_OPEN;
 			unselectedImg = tex_map["Assets/SmallTurnUnselectedBtn.dds"];
-			selectedImg = tex_map["Assets/SmallTurnSelectedBtn.dds"];
+			HoveredImg = tex_map["Assets/SmallTurnHoverBtn.dds"];
 		}
-		if (selected)
+		selectedSize = { (float)HoveredImg->GetWidth(), (float)HoveredImg->GetHeight() };
+		/*if (selected)
 		{
-			selectedSize = { (float)selectedImg->GetWidth(), (float)selectedImg->GetHeight() };
-			selectedID = (void*)static_cast<size_t>(selectedImg->GetID());
+			selectedSize = { (float)HoveredImg->GetWidth(), (float)HoveredImg->GetHeight() };
+			selectedID = (void*)static_cast<size_t>(HoveredImg->GetID());
 		}
 		else
 		{
 			selectedSize = { (float)unselectedImg->GetWidth(), (float)unselectedImg->GetHeight() };
 			selectedID = (void*)static_cast<size_t>(unselectedImg->GetID());
-		}
+		}*/
 		
 			
 
@@ -3582,7 +3679,11 @@ namespace Tempest::UI
 
 		if (hovered || pressed)
 		{
-			selectedID = (void*)static_cast<size_t>(selectedImg->GetID());
+			selectedID = (void*)static_cast<size_t>(HoveredImg->GetID());
+		}
+		else
+		{
+			selectedID = (void*)static_cast<size_t>(unselectedImg->GetID());
 		}
 		// Render
 		const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
@@ -3602,7 +3703,22 @@ namespace Tempest::UI
 
 		window->DrawList->AddImage(selectedID, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(ImVec4{ 1,1,1,1 }));
 		
+		//Character Icon
 		window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { CharacterImgMax.x - padding.x, CharacterImgMax.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
+
+		if (selected)
+		{
+			window->DrawList->AddImage((void*)static_cast<size_t>(BGOverlay->GetID()), { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(ImVec4{ 1,1,1,0.5f }));
+			window->DrawList->AddImage((void*)static_cast<size_t>(SelectedImg->GetID()), { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(ImVec4{ 1,1,1,1 }));
+		}
+			
+
+		if (isPlaced && !selected)
+		{
+			window->DrawList->AddImage((void*)static_cast<size_t>(BGOverlay->GetID()), { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(ImVec4{ 1,1,1,0.5f }));
+			window->DrawList->AddImage((void*)static_cast<size_t>(PlacedImg->GetID()), { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(ImVec4{ 1,1,1,1 }));
+		}
+			
 
 		ImVec2 textPos = { bb.Min.x + selectedSize.x * 0.62f, bb.Min.y + selectedSize.y * 0.2f };
 		ImGui::PushFont(font);
@@ -3613,7 +3729,7 @@ namespace Tempest::UI
 
 
 
-	bool UICharTurnButton(ImTextureID user_texture_id, const ImVec2& size, string actionName, string labelID, bool selected, bool isBig, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
+	bool UICharTurnButton(ImTextureID user_texture_id, const ImVec2& size, string actionName, string labelID, bool selected, bool isPlaced, bool isBig, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = g.CurrentWindow;
@@ -3626,7 +3742,7 @@ namespace Tempest::UI
 		ImGui::PopID();
 
 		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
-		return UICharTurnButtonEx(id, user_texture_id, actionName, size, selected, isBig, uv0, uv1, padding, bg_col, tint_col);
+		return UICharTurnButtonEx(id, user_texture_id, actionName, size, selected, isPlaced, isBig, uv0, uv1, padding, bg_col, tint_col);
 	}
 
 	
@@ -3845,9 +3961,105 @@ namespace Tempest::UI
 		window->AddText(valTextPos, ImGui::GetColorU32({ 0.612f, 0.9f,0.271f,1.f }), val.c_str());
 		ImGui::PopFont();
 	}
+
+	bool UISliderFloat(const char* label, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+	{
+		return UISliderScalar(label, ImGuiDataType_Float, v, &v_min, &v_max, format, flags);
+	}
+
+	bool UISliderScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
+	{
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		if (window->SkipItems)
+			return false;
+
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+		const ImGuiID id = window->GetID(label);
+		const float w = ImGui::CalcItemWidth();
+
+		const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+		const ImRect frame_bb(window->DC.CursorPos, window->DC.CursorPos + ImVec2(w, label_size.y + style.FramePadding.y * 2.0f));
+		const ImRect total_bb(frame_bb.Min, frame_bb.Max + ImVec2(label_size.x > 0.0f ? style.ItemInnerSpacing.x + label_size.x : 0.0f, 0.0f));
+
+		const bool temp_input_allowed = (flags & ImGuiSliderFlags_NoInput) == 0;
+		ImGui::ItemSize(total_bb, style.FramePadding.y);
+		if (!ImGui::ItemAdd(total_bb, id, &frame_bb, temp_input_allowed ? ImGuiItemAddFlags_Focusable : 0))
+			return false;
+
+		// Default format string when passing NULL
+		if (format == NULL)
+			format = ImGui::DataTypeGetInfo(data_type)->PrintFmt;
+		//else if (data_type == ImGuiDataType_S32 && strcmp(format, "%d") != 0) // (FIXME-LEGACY: Patch old "%.0f" format string to use "%d", read function more details.)
+		//	format = PatchFormatStringFloatToInt(format);
+		
+		// Tabbing or CTRL-clicking on Slider turns it into an input box
+		const bool hovered = ImGui::ItemHoverable(frame_bb, id);
+		bool temp_input_is_active = temp_input_allowed && ImGui::TempInputIsActive(id);
+		if (!temp_input_is_active)
+		{
+			const bool focus_requested = temp_input_allowed && (window->DC.LastItemStatusFlags & ImGuiItemStatusFlags_Focused) != 0;
+			const bool clicked = (hovered && g.IO.MouseClicked[0]);
+			if (focus_requested || clicked || g.NavActivateId == id || g.NavInputId == id)
+			{
+				ImGui::SetActiveID(id, window);
+				ImGui::SetFocusID(id, window);
+				ImGui::FocusWindow(window);
+				g.ActiveIdUsingNavDirMask |= (1 << ImGuiDir_Left) | (1 << ImGuiDir_Right);
+				if (temp_input_allowed && (focus_requested || (clicked && g.IO.KeyCtrl) || g.NavInputId == id))
+					temp_input_is_active = true;
+			}
+		}
+
+		if (temp_input_is_active)
+		{
+			// Only clamp CTRL+Click input when ImGuiSliderFlags_AlwaysClamp is set
+			const bool is_clamp_input = (flags & ImGuiSliderFlags_AlwaysClamp) != 0;
+			return ImGui::TempInputScalar(frame_bb, id, label, data_type, p_data, format, is_clamp_input ? p_min : NULL, is_clamp_input ? p_max : NULL);
+		}
+
+		// Draw frame
+		const ImU32 frame_col = ImGui::GetColorU32(g.ActiveId == id ? ImGuiCol_FrameBgActive : g.HoveredId == id ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+		//ImGui::RenderNavHighlight(frame_bb, id);
+		//ImGui::RenderFrame(frame_bb.Min, frame_bb.Max, frame_col, true, g.Style.FrameRounding);
+		ImVec2 lineMin = { frame_bb.Min.x, (frame_bb.Min.y + frame_bb.Max.y) * 0.5f };
+		ImVec2 lineMax = { frame_bb.Max.x, lineMin.y };
+		window->DrawList->AddLine(lineMin, lineMax, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+		// Slider behavior
+		ImRect grab_bb;
+		const bool value_changed = ImGui::SliderBehavior(frame_bb, id, data_type, p_data, p_min, p_max, format, flags, &grab_bb);
+		if (value_changed)
+			ImGui::MarkItemEdited(id);
+
+
+		ImVec4 tintHover = { 0.980f, 0.768f, 0.509f, 1.f };
+		ImVec4 tintPressed = { 0.784f, 0.616f, 0.408f, 1.f };
+		// Render grab
+		grab_bb.Min = { grab_bb.Min.x - 10.f, grab_bb.Min.y - 2.f };
+		grab_bb.Max = { grab_bb.Max.x + 20.f, grab_bb.Max.y + 4.f };
+		
+		if (grab_bb.Max.x > grab_bb.Min.x)
+			window->DrawList->AddRectFilled(grab_bb.Min, grab_bb.Max, ImGui::GetColorU32(g.ActiveId == id ? tintPressed : tintHover),0.f);
+
+		// Display value using user-provided display format so user can add prefix/suffix/decorations to the value.
+		char value_buf[64];
+		const char* value_buf_end = value_buf + ImGui::DataTypeFormatString(value_buf, IM_ARRAYSIZE(value_buf), data_type, p_data, format);
+		if (g.LogEnabled)
+			ImGui::LogSetNextTextDecoration("{", "}");
+		ImGui::PushFont(FONT_BODY);
+		ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1 });
+		ImGui::RenderTextClipped(grab_bb.Min, grab_bb.Max, value_buf, value_buf_end, NULL, ImVec2(0.5f, 0.5f));
+		ImGui::PopStyleColor();
+		ImGui::PopFont();
+		if (label_size.x > 0.0f)
+			ImGui::RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
+
+		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.LastItemStatusFlags);
+		return value_changed;
+	}
+
 	void TutArea(ImVec2 pos, ImVec2 size, bool border)
 	{
-		
 		auto drawlist = ImGui::GetForegroundDrawList();
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImVec2 min = pos;
@@ -3858,32 +4070,6 @@ namespace Tempest::UI
 		ImRect BtmBox = { {0.f , max.y}, {viewport->Size.x - RightBox.GetWidth() , viewport->Size.y} };
 		ImRect LeftBox = { {0.f ,min.y}, {min.x , max.y} };
 		ImVec4 col = { 0,0,0,0.7f };
-
-		/*ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-		ImGui::SetNextWindowPos(TopBox.Min);
-		ImGui::SetNextWindowSize({ TopBox.GetWidth(), TopBox.GetHeight() });
-		if (ImGui::Begin("top", nullptr, window_flags)){} ImGui::End();
-		
-		ImGui::SetNextWindowPos(RightBox.Min);
-		ImGui::SetNextWindowSize({ RightBox.GetWidth(), RightBox.GetHeight() });
-		if (ImGui::Begin("right", nullptr, window_flags)) {} ImGui::End();
-
-		ImGui::SetNextWindowPos(BtmBox.Min);
-		ImGui::SetNextWindowSize({ BtmBox.GetWidth(), BtmBox.GetHeight() });
-		if (ImGui::Begin("btm", nullptr, window_flags)) {} ImGui::End();
-
-		ImGui::SetNextWindowPos(LeftBox.Min);
-		ImGui::SetNextWindowSize({ LeftBox.GetWidth(), LeftBox.GetHeight() });
-		if (ImGui::Begin("left", nullptr, window_flags)) {} ImGui::End();
-		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor();
-
-		ImGui::SetWindowFocus("top");
-		ImGui::SetWindowFocus("right");
-		ImGui::SetWindowFocus("btm");
-		ImGui::SetWindowFocus("left");*/
 		
 		drawlist->AddRectFilled(TopBox.Min, TopBox.Max, ImGui::GetColorU32(col));
 		drawlist->AddRectFilled(RightBox.Min, RightBox.Max, ImGui::GetColorU32(col));
@@ -3893,6 +4079,72 @@ namespace Tempest::UI
 			drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
 	}
 
+	void TutArea2(ImVec2 pos1, ImVec2 pos2, ImVec2 size1, ImVec2 size2, bool border)
+	{
+		auto drawlist = ImGui::GetForegroundDrawList();
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		auto tex = tex_map["Assets/MIBG.dds"];
+		ImVec4 col = { 0,0,0,0.7f };
+		ImVec2 min1 = pos1;
+		ImVec2 max1 = { min1.x + size1.x, min1.y + size1.y };
+		ImVec2 min2 = pos2;
+		ImVec2 max2 = { min2.x + size2.x, min2.y + size2.y };
+		
+		ImRect Box1 = { {0.f,0.f}, {viewport->Size.x , min2.y} };
+		ImRect Box2 = { {0.f, Box1.Max.y}, {min2.x , min1.y} };
+		ImRect Box3 = { {max2.x, min2.y}, {viewport->Size.x,viewport->Size.y} };
+		ImRect Box4 = { {0.f, min1.y}, {min1.x,max1.y} };
+		ImRect Box5 = { {max1.x, min1.y}, {min2.x, max1.y} };
+		ImRect Box6 = { {0.f, max1.y}, {min2.x, viewport->Size.y} };
+		ImRect Box7 = { {min2.x, max2.y}, {max2.x, viewport->Size.y}};
+
+		drawlist->AddRectFilled(Box1.Min, Box1.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box2.Min, Box2.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box3.Min, Box3.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box4.Min, Box4.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box5.Min, Box5.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box6.Min, Box6.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box7.Min, Box7.Max, ImGui::GetColorU32(col));
+		if (border)
+		{
+			drawlist->AddRect(min1, max1, ImGui::GetColorU32({ 1,1,1,1.f }));
+			drawlist->AddRect(min2, max2, ImGui::GetColorU32({ 1,1,1,1.f }));
+		}
+			
+	}
+	void TutArea3(ImVec2 pos1, ImVec2 pos2, ImVec2 size1, ImVec2 size2, bool border)
+	{
+		auto drawlist = ImGui::GetForegroundDrawList();
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		auto tex = tex_map["Assets/MIBG.dds"];
+		ImVec4 col = { 0,0,0,0.7f };
+		ImVec2 min1 = pos1;
+		ImVec2 max1 = { min1.x + size1.x, min1.y + size1.y };
+		ImVec2 min2 = pos2;
+		ImVec2 max2 = { min2.x + size2.x, min2.y + size2.y };
+
+		ImRect Box1 = { {0.f,0.f}, {viewport->Size.x , min1.y} };
+		ImRect Box2 = { {0.f, min1.y}, {min1.x , max2.y} };
+		ImRect Box3 = { {max1.x, min1.y}, {viewport->Size.x,max1.y} };
+		ImRect Box4 = { {0.f, max1.y}, {viewport->Size.x, min2.y} };
+		ImRect Box5 = { {0.f, min2.y}, {min2.x, max2.y} };
+		ImRect Box6 = { {max2.x, min2.y}, {viewport->Size.x, viewport->Size.y} };
+		ImRect Box7 = { {0.f, max2.y}, {max2.x, viewport->Size.y} };
+
+		drawlist->AddRectFilled(Box1.Min, Box1.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box2.Min, Box2.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box3.Min, Box3.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box4.Min, Box4.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box5.Min, Box5.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box6.Min, Box6.Max, ImGui::GetColorU32(col));
+		drawlist->AddRectFilled(Box7.Min, Box7.Max, ImGui::GetColorU32(col));
+		if (border)
+		{
+			drawlist->AddRect(min1, max1, ImGui::GetColorU32({ 1,1,1,1.f }));
+			drawlist->AddRect(min2, max2, ImGui::GetColorU32({ 1,1,1,1.f }));
+		}
+
+	}
 	bool MouseIsWithin(const ImVec2 min, const ImVec2 max)
 	{
 		auto mousePos = ImGui::GetMousePos();

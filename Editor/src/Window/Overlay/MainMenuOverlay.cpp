@@ -118,212 +118,329 @@ namespace Tempest
 		ImVec2 button_pos{ 0, viewport.Size.y * 0.42f };
 
 		// render the title image
-		if (MainMenuUI < UI_SHOW::CONFLICT_RES)
+		/*if (MainMenuUI < UI_SHOW::CONFLICT_RES)
 		{
 			auto title_img = tex_map["Assets/MainMenuTitle.dds"];
 			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
-			button_pos.x = viewport.Size.x * 0.35f - title_size.x * 0.5f;
+			button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
 			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.35f - title_size.y * 0.5f });
 			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
-		}
+		}*/
 
 		switch (MainMenuUI)
 		{
 		case Tempest::MainMenuOverlay::UI_SHOW::INITIAL:
 		{
-			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
-			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
-			// render the selectables
-			std::string selectable = "";
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get()});
-			ImGui::PushFont(FONT_BTN);
-			selectable = "Projects";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			//ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+			//// render the selectables
+			//std::string selectable = "";
+			//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get()});
+			//ImGui::PushFont(FONT_BTN);
+			//selectable = "Projects";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	auto fn = [&]()
+			//	{
+			//		change_state(UI_SHOW::PROJECTS);
+			//	};
+			//	inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+			//	Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
+			//}
+			//	
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Settings";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
+
+			//}
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Credits";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//}
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Quit";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	//get_quitter().quit = true;
+			//	OverlayOpen = false;
+			//}
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//ImGui::PopFont();
+			//ImGui::PopStyleColor(3);
 			
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				auto fn = [&]()
-				{
-					change_state(UI_SHOW::PROJECTS);
-				};
-				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
-				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
-			}
-				
+			auto title_img = tex_map["Assets/MainMenuTitle.dds"];
+			const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
+			button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
+			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.35f - title_size.y * 0.5f });
+			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
 
-			if (ImGui::IsItemHovered())
+			if (UI::UIButton_1("START", "START", { viewport.Size.x * 0.5f, viewport.Size.y * 0.6f }, { 50.f, 10.f }, FONT_BTN))
 			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
+				change_state(UI_SHOW::PROJECTS);
 			}
 
-			button_pos.y += 40.0f;
-
-			selectable = "Settings";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
-
-			}
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-			selectable = "Credits";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-			}
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-			selectable = "Quit";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
+			if (UI::UIButton_1("QUIT", "QUIT", { viewport.Size.x * 0.5f, viewport.Size.y * 0.65f }, { 50.f, 10.f }, FONT_BTN))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				get_quitter().quit = true;
+				//OverlayOpen = false;
 			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			ImGui::PopFont();
-			ImGui::PopStyleColor(3);
 		}
 			
 			break;
 
 		case Tempest::MainMenuOverlay::UI_SHOW::PROJECTS:
 		{
-			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
-			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+			//ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			//ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
-			// render the selectables
-			std::string selectable = "";
-			ImGui::PushFont(FONT_BTN);
-			if (dynamic_cast<EditTimeInstance*>(&instance))
-			{
-				selectable = "Current Project";
-				ImGui::SetCursorPos(button_pos);
-				ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
+			//// render the selectables
+			//std::string selectable = "";
+			//ImGui::PushFont(FONT_BTN);
+			//if (dynamic_cast<EditTimeInstance*>(&instance))
+			//{
+			//	selectable = "Current Project";
+			//	ImGui::SetCursorPos(button_pos);
+			//	ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 
-				if (ImGui::Selectable(selectable.c_str(), false))
-				{
-					AudioEngine ae;
-					ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-					auto fn = [&]()
-					{
-						change_state(UI_SHOW::NEW_PROJECT);
-					};
-					inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
-					Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
-				
-				}
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-					ImGui::Text(">");
-				}
+			//	if (ImGui::Selectable(selectable.c_str(), false))
+			//	{
+			//		AudioEngine ae;
+			//		ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//		auto fn = [&]()
+			//		{
+			//			change_state(UI_SHOW::NEW_PROJECT);
+			//		};
+			//		inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+			//		Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
+			//	
+			//	}
+			//	if (ImGui::IsItemHovered())
+			//	{
+			//		ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//		ImGui::Text(">");
+			//	}
 
-				button_pos.y += 40.0f;
-			}
-			selectable = "New Project";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//	button_pos.y += 40.0f;
+			//}
+			//selectable = "New Project";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
 
-			if (ImGui::Selectable(selectable.c_str(), false))
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Creating new project...");
+			//	Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
+			//	//change_state(UI_SHOW::NEW_PROJECT;
+			//	/*if (dynamic_cast<EditTimeInstance*>(&instance))
+			//	{
+			//		change_state(UI_SHOW::NEW_PROJECT;
+			//	}*/
+			//}
+			//	
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Load Project";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
+			//	Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
+			//}
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+
+
+			//selectable = "Back";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	auto fn = [&]()
+			//	{
+			//		change_state(UI_SHOW::INITIAL);
+			//	};
+			//	inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+			//	Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
+			//}
+			//	
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//ImGui::PopFont();
+			//ImGui::PopStyleColor(3);
+			
+			auto tex = tex_map["Assets/BackMenuBtn.dds"];
+			ImGui::Dummy({ 0, viewport.Size.y * 0.1f });
+			ImGui::Dummy({ viewport.Size.x * 0.1f, 0 });
+			ImGui::SameLine();
+
+			//Back button
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Creating new project...");
-				Service<EventManager>::Get().instant_dispatch<NewProjectTrigger>();
-				//change_state(UI_SHOW::NEW_PROJECT;
-				/*if (dynamic_cast<EditTimeInstance*>(&instance))
-				{
-					change_state(UI_SHOW::NEW_PROJECT;
-				}*/
-			}
-				
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-			selectable = "Load Project";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Opening...");
-				Service<EventManager>::Get().instant_dispatch<OpenProjectTrigger>();
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-
-
-			selectable = "Back";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				auto fn = [&]()
-				{
+				//auto fn = [&]()
+				//{
 					change_state(UI_SHOW::INITIAL);
-				};
-				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
-				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
-			}
-				
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
+				//};
+				//inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				//Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 
-			ImGui::PopFont();
-			ImGui::PopStyleColor(3);
+			//Project File area
+			tex = tex_map["Assets/ProjectBg.dds"];
+			auto center = viewport.GetCenter();
+			ImVec2 ProjectBGMin = { center.x - tex->GetWidth() * 0.5f ,center.y - tex->GetHeight() * 0.5f };
+			ImVec2 ProjectBGMax = { ProjectBGMin.x + tex->GetWidth() ,ProjectBGMin.y + tex->GetHeight() };
+
+			ImGui::GetBackgroundDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), ProjectBGMin, ProjectBGMax);
+			
+			//New Project Area
+			{
+				auto img = tex_map["Assets/TemplateBtn.dds"];
+				ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
+				ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
+				ImGui::PushFont(FONT_BTN);
+
+				//Blank Template
+				string str = "Blank";
+				ImVec2 Pos = { ProjectBGMin.x + 70.f, ProjectBGMax.y * 0.25f };
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight()}, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				ImVec2 strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight()};
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				
+				//Gurps Template
+				str = "Gurps";
+				Pos.x += 150.f;
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+				//D&D Template
+				str = "D&D";
+				Pos.x += 150.f;
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+				//Tutorial Template
+				str = "Tutorial";
+				Pos.x += 150.f;
+				ImGui::SetCursorPos(Pos);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					//TODO
+				}
+				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+				ImGui::PopFont();
+			}
+
+			//Load Recent Project Area
+			ImGui::SetCursorPos({ ProjectBGMin.x + 60.f, ProjectBGMax.y * 0.55f + 20.f});
+			ImGui::BeginChild("##LoadRecentProj", { tex->GetWidth() * 0.85f, tex->GetHeight() * 0.35f }, false);
+			
+			for (auto i = 0; i < 5; i++)
+			{
+				string str = "Project_" + std::to_string(i);
+				if (UI::UILoadProject(str.c_str()))
+				{
+					//TODO if clicked
+				}
+				ImGui::Dummy({ 0, 5.f });
+			}
+
+			ImGui::EndChild();
+
 		}
 			break;
 
@@ -524,7 +641,7 @@ namespace Tempest
 		{
 			auto image = tex_map["Assets/ConflictBG.dds"];
 			ImVec2 point = ImGui::GetCursorScreenPos();
-			ImVec2 Min{ point.x, point.y };
+			ImVec2 Min{ point.x, point.y - 1.f };
 			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
 
