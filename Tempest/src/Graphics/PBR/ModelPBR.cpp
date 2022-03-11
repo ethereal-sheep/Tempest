@@ -84,7 +84,7 @@ namespace Tempest
 
 			this->directory = file.substr(0, file.find_last_of('/'));
 			this->processNode(scene->mRootNode, scene);
-			LoadMaterial(scene);
+			//LoadMaterial(scene);
 
 			// Multiple Animations embedded in 1 fbx
 			//for (unsigned int i = 0; i < static_cast<unsigned int>(scene->mNumAnimations); ++i)

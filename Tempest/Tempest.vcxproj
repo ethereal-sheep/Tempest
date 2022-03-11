@@ -282,6 +282,7 @@
     <ClInclude Include="src\Animation\Animation.h" />
     <ClInclude Include="src\Animation\AnimationManager.h" />
     <ClInclude Include="src\Animation\Animator.h" />
+    <ClInclude Include="src\Animation\AnimMultithreadHelper.h" />
     <ClInclude Include="src\Animation\AssimpHelper.h" />
     <ClInclude Include="src\Animation\Bone.h" />
     <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />

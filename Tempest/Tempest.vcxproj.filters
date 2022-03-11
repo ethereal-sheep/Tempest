@@ -264,6 +264,7 @@
     <ClInclude Include="src\Animation\AssimpHelper.h" />
     <ClInclude Include="src\Profiler\Profiler.h" />
     <ClInclude Include="src\Profiler\ProfilerColor.h" />
+    <ClInclude Include="src\Animation\AnimMultithreadHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
