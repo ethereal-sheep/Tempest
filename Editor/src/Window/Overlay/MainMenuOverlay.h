@@ -74,7 +74,8 @@ namespace Tempest
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
-
+        ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
+        ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
         ChannelID MenuBGM = 0;
     };
 }

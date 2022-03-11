@@ -288,7 +288,7 @@ namespace Tempest
 			//	//change_state(UI_SHOW::NEW_PROJECT;
 			//	/*if (dynamic_cast<EditTimeInstance*>(&instance))
 			//	{
-			//		change_state(UI_SHOW::NEW_PROJECT;
+			//		change_state(UI_SHOW::NEW_PROJECT);
 			//	}*/
 			//}
 			//	
@@ -346,12 +346,12 @@ namespace Tempest
 			//ImGui::PopStyleColor(3);
 			
 			auto tex = tex_map["Assets/BackMenuBtn.dds"];
-			ImGui::Dummy({ 0, viewport.Size.y * 0.1f });
-			ImGui::Dummy({ viewport.Size.x * 0.1f, 0 });
+			ImGui::Dummy({ 0, viewport.Size.y * 0.12f });
+			ImGui::Dummy({ viewport.Size.x * 0.07f, 0 });
 			ImGui::SameLine();
 
 			//Back button
-			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -384,7 +384,7 @@ namespace Tempest
 				ImGui::SetCursorPos(Pos);
 				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight()}, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 				{
-					//TODO
+					change_state(UI_SHOW::NEW_PROJECT);
 				}
 				ImVec2 strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight()};
 				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
@@ -446,195 +446,273 @@ namespace Tempest
 
 		case Tempest::MainMenuOverlay::UI_SHOW::NEW_PROJECT:
 		{
-			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
-			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
+			//ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
+			//ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
 
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
-			// render the selectables
-			std::string selectable = "";
-			ImGui::PushFont(FONT_BTN);
-			selectable = "Conflict Resolutions";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
+			//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
+			//// render the selectables
+			//std::string selectable = "";
+			//ImGui::PushFont(FONT_BTN);
+			//selectable = "Conflict Resolutions";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+
+			//	auto fn = [&]()
+			//	{
+			//		change_state(UI_SHOW::CONFLICT_RES);
+			//	};
+			//	// fade in, fade out, visible
+			//	Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+
+
+			//}
+			//	
+
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "New Game";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+
+			//	if (instance.get_scene_paths().empty())
+			//	{
+			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Map found!");
+			//	}
+			//	else
+			//	{
+			//		// check every con res
+			//		bool empty = true;
+			//		for (auto [b, load_path] : instance.get_conflict_resolution_paths()) {
+			//			if(b) empty = false;
+			//		}
+
+			//		if (empty)
+			//		{
+			//			Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!"); // no conres
+			//		}
+			//		else
+			//		{
+			//			auto check_unit_and_seq = [](tpath& load_path, std::vector<std::pair<Entity, string>>& sequences) {
+			//				
+			//				ECS ecs;
+			//				string res_name = load_path.stem().string();
+			//				auto path = load_path.parent_path();
+			//				int a = std::atoi(path.stem().string().c_str());
+			//				if (a >= 1 && a <= 3)
+			//				{
+			//					ecs.load(path, res_name);
+
+			//					if(ecs.view_first<tc::Character>() && ecs.view_first<tc::ConflictGraph>())
+			//					{
+			//						for (auto id : ecs.view<tc::ConflictGraph>())
+			//						{
+			//							const auto& name = ecs.get<tc::Graph>(id).g.get_name();
+			//							sequences.push_back(std::make_pair(id, name));
+			//						}
+			//						return true;
+			//					}
+			//				}
+
+			//				return false;
+			//			};
+
+			//			bool allowed = false;
+			//			int i = 0;
+			//			for (auto [b, load_path] : instance.get_conflict_resolution_paths())
+			//			{
+			//				ConResSequences[i].clear();
+			//				if (check_unit_and_seq(load_path, ConResSequences[i]))
+			//				{
+			//					OkayConRes[i] = true;
+			//					allowed = true;
+			//				}
+			//				++i;
+			//			}
+
+			//			if (allowed)
+			//			{
+			//				// go ahead
+			//				auto fn = [&, selectable]()
+			//				{
+			//					MapTitle = selectable;
+			//					change_state(UI_SHOW::LOAD_MAP);
+			//				};
+			//				// fade in, fade out, visible
+			//				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+
+			//			}
+			//			else
+			//			{
+			//				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+			//			}
+			//		}
+
+
+			//	}
+			//	/*else if(!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+			//	{
+			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+			//	}
+			//	else if (!instance.ecs.view_first<tc::ConflictGraph>())
+			//	{
+			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
+			//	}
+			//	else
+			//	{
+			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
+			//	}*/
+
+			//}
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+			//	
+
+			//selectable = "Map Builder";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	// go ahead
+			//	auto fn = [&, selectable]()
+			//	{
+			//		MapTitle = selectable;
+			//		change_state(UI_SHOW::SELECT_MAP);
+			//	};
+			//	// fade in, fade out, visible
+			//	Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+
+			//}
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//button_pos.y += 40.0f;
+
+			//selectable = "Back";
+			//ImGui::SetCursorPos(button_pos);
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
+			//if (ImGui::Selectable(selectable.c_str(), false))
+			//{
+			//	AudioEngine ae;
+			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+			//	auto fn = [&]()
+			//	{
+			//		change_state(UI_SHOW::PROJECTS);
+			//	};
+			//	inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+			//	Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
+			//}
+			//	
+			//if (ImGui::IsItemHovered())
+			//{
+			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
+			//	ImGui::Text(">");
+			//}
+
+			//ImGui::PopFont();
+			//ImGui::PopStyleColor(3);
+
+			auto tex = tex_map["Assets/BackMenuBtn.dds"];
+			ImGui::Dummy({ 0, viewport.Size.y * 0.12f });
+			ImGui::Dummy({ viewport.Size.x * 0.07f, 0 });
+			ImGui::SameLine();
+
+			//Back button
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight()}, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-
-				auto fn = [&]()
-				{
-					change_state(UI_SHOW::CONFLICT_RES);
-				};
-				// fade in, fade out, visible
-				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-
-
-			}
-				
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
+				//auto fn = [&]()
+				//{
+				change_state(UI_SHOW::PROJECTS);
+				//};
+				//inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+				//Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
 			}
 
-			button_pos.y += 40.0f;
+			//MapBG
+			tex = tex_map["Assets/PrisonMapBG.dds"];
+			auto center = viewport.GetCenter();
+			ImVec2 ProjectBGMin = { center.x - tex->GetWidth() * 0.5f ,center.y - tex->GetHeight() * 0.5f };
+			ImVec2 ProjectBGMax = { ProjectBGMin.x + tex->GetWidth() ,ProjectBGMin.y + tex->GetHeight() };
 
-			selectable = "New Game";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
+			
+
+			//Select Map Area
+			ImGui::SetCursorPos({ ProjectBGMin.x + 60.f, ProjectBGMax.y * 0.2f });
+			ImGui::BeginChild("##LoadRecentProj", { tex->GetWidth() * 0.5f, tex->GetHeight() * 0.7f }, false);
+			
+			auto img = tex_map["Assets/TemplateBtn.dds"];
+			
+			tvector<string> mapList = { "Futuristic", "Modern", "Bar", "Prison", "Tutorial", "Etc."};
+			int selectedMap = -1;
+
+			//Button for User to select Map
+			for (int i = 0; i < mapList.size(); i++)
 			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-
-				if (instance.get_scene_paths().empty())
+				string str = mapList[i];
+				if (UI::UIImgBtnWithText((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, str))
 				{
-					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Map found!");
+					selectedMap = i;
+				}
+				if ((i+1) % 4 != 0)
+				{
+					ImGui::SameLine();
+					ImGui::Dummy({ 5.f, 0.f });
+					ImGui::SameLine();
 				}
 				else
 				{
-					// check every con res
-					bool empty = true;
-					for (auto [b, load_path] : instance.get_conflict_resolution_paths()) {
-						if(b) empty = false;
-					}
-
-					if (empty)
-					{
-						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!"); // no conres
-					}
-					else
-					{
-						auto check_unit_and_seq = [](tpath& load_path, std::vector<std::pair<Entity, string>>& sequences) {
-							
-							ECS ecs;
-							string res_name = load_path.stem().string();
-							auto path = load_path.parent_path();
-							int a = std::atoi(path.stem().string().c_str());
-							if (a >= 1 && a <= 3)
-							{
-								ecs.load(path, res_name);
-
-								if(ecs.view_first<tc::Character>() && ecs.view_first<tc::ConflictGraph>())
-								{
-									for (auto id : ecs.view<tc::ConflictGraph>())
-									{
-										const auto& name = ecs.get<tc::Graph>(id).g.get_name();
-										sequences.push_back(std::make_pair(id, name));
-									}
-									return true;
-								}
-							}
-
-							return false;
-						};
-
-						bool allowed = false;
-						int i = 0;
-						for (auto [b, load_path] : instance.get_conflict_resolution_paths())
-						{
-							ConResSequences[i].clear();
-							if (check_unit_and_seq(load_path, ConResSequences[i]))
-							{
-								OkayConRes[i] = true;
-								allowed = true;
-							}
-							++i;
-						}
-
-						if (allowed)
-						{
-							// go ahead
-							auto fn = [&, selectable]()
-							{
-								MapTitle = selectable;
-								change_state(UI_SHOW::LOAD_MAP);
-							};
-							// fade in, fade out, visible
-							Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-
-						}
-						else
-						{
-							Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
-						}
-					}
-
-
+					ImGui::Dummy({ 0.f, 20.f });
 				}
-				/*else if(!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
+
+			}
+			ImGui::EndChild();
+
+			auto nextBtn = tex_map["Assets/whiteNextBtn.dds"];
+			ImGui::Dummy({ 0, tex->GetHeight() * 0.15f });
+			ImGui::Dummy({ viewport.Size.x * 0.7f,0.f  });
+			ImGui::SameLine();
+			if (UI::UIImageButton((void*)static_cast<size_t>(nextBtn->GetID()), ImVec2{ (float)nextBtn->GetWidth(),  (float)nextBtn->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+				//Map Selected Do something
+				switch (selectedMap)
 				{
-					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
+				case 0: {/*TODO*/}break;
+				case 1: {/*TODO*/}break;
+				case 2: {/*TODO*/}break;
+				case 3: {/*TODO*/}break;
+				case 4: {/*TODO*/}break;
+				case 5: {/*TODO*/}break;
+				default: {}break;
 				}
-				else if (!instance.ecs.view_first<tc::ConflictGraph>())
-				{
-					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
-				}
-				else
-				{
-					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
-				}*/
-
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
 			}
 
-			button_pos.y += 40.0f;
-				
-
-			selectable = "Map Builder";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				// go ahead
-				auto fn = [&, selectable]()
-				{
-					MapTitle = selectable;
-					change_state(UI_SHOW::SELECT_MAP);
-				};
-				// fade in, fade out, visible
-				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			button_pos.y += 40.0f;
-
-			selectable = "Back";
-			ImGui::SetCursorPos(button_pos);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			if (ImGui::Selectable(selectable.c_str(), false))
-			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				auto fn = [&]()
-				{
-					change_state(UI_SHOW::PROJECTS);
-				};
-				inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
-				Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
-			}
-				
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-				ImGui::Text(">");
-			}
-
-			ImGui::PopFont();
-			ImGui::PopStyleColor(3);
+			ImGui::GetBackgroundDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), ProjectBGMin, ProjectBGMax);
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
