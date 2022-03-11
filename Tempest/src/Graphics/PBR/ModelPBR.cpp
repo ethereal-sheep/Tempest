@@ -26,6 +26,40 @@ namespace Tempest
 
     }
 
+	void ModelPBR::LoadTextures(const aiScene* scene)
+	{
+		for (auto i = 0; i < scene->mNumMaterials; ++i)
+		{
+			auto pMaterial = scene->mMaterials[i];
+			aiString texture;
+			TexturePBR tb;
+			pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), texture);
+
+			if (texture.length)
+			{
+				mm.push_back(tb);
+			}
+		}
+	}
+
+	void ModelPBR::LoadMaterial(const aiScene* scene)
+	{
+		for (auto i = 0; i < scene->mNumMaterials; ++i)
+		{
+			auto pMaterial = scene->mMaterials[i];
+			aiColor3D diffuse;
+			glm::vec3 dif;
+
+			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
+
+			dif.x = diffuse.r;
+			dif.y = diffuse.g;
+			dif.z = diffuse.b;
+
+			colours.push_back(dif);
+		}
+	}
+
 
     void ModelPBR::loadModel(std::string file)
     {
@@ -50,6 +84,7 @@ namespace Tempest
 
 			this->directory = file.substr(0, file.find_last_of('/'));
 			this->processNode(scene->mRootNode, scene);
+			LoadMaterial(scene);
 
 			// Multiple Animations embedded in 1 fbx
 			//for (unsigned int i = 0; i < static_cast<unsigned int>(scene->mNumAnimations); ++i)

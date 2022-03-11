@@ -55,6 +55,8 @@ namespace Tempest
         
         std::string directory;
 
+        void LoadMaterial(const aiScene* scene);
+        void LoadTextures(const aiScene* scene);
         void processNode(aiNode* node, [[maybe_unused]] const aiScene* scene);
         MeshPBR processMesh(aiMesh* mesh);
         void SetVertexBoneDataToDefault(Vertex& vertex);
