@@ -28,6 +28,7 @@ namespace Tempest
             INITIAL,
             PROJECTS,
             NEW_PROJECT,
+            MAIN_PAGE,
             CONFLICT_RES,
             SELECT_MAP,
             LOAD_MAP,

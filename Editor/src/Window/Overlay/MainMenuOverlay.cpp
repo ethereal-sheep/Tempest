@@ -710,9 +710,64 @@ namespace Tempest
 				case 5: {/*TODO*/}break;
 				default: {}break;
 				}
+				change_state(UI_SHOW::MAIN_PAGE);
 			}
 
 			ImGui::GetBackgroundDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), ProjectBGMin, ProjectBGMax);
+		}
+			break;
+		case Tempest::MainMenuOverlay::UI_SHOW::MAIN_PAGE:
+		{
+			//Conflict Resolution Button
+			auto tex = tex_map["Assets/ConflictResolutionButton.dds"];
+			ImGui::SetCursorPos({viewport.Size.x * 0.15f, viewport.Size.y * 0.25f});
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+				change_state(UI_SHOW::CONFLICT_RES);
+			}
+
+			//Start Game Button
+			tex = tex_map["Assets/StartGameButton.dds"];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.37f, viewport.Size.y * 0.2f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+				change_state(UI_SHOW::LOAD_MAP);
+			}
+
+			//Map Builder Button
+			tex = tex_map["Assets/MapBuilderButton.dds"];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.6f, viewport.Size.y * 0.3f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+				change_state(UI_SHOW::SELECT_MAP);
+			}
+
+			//Project Icon Btn
+			tex = tex_map["Assets/ProjectIconBtn.dds"];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.05f, viewport.Size.y * 0.75f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+				change_state(UI_SHOW::PROJECTS);
+			}
+
+			//Setting Icon Btn
+			tex = tex_map["Assets/SettingIconBtn.dds"];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.13f, viewport.Size.y * 0.8f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
+			}
+
+			//QuitIconBtn
+			tex = tex_map["Assets/QuitIconBtn.dds"];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.21f, viewport.Size.y * 0.8f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			{
+
+			}
+
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::CONFLICT_RES:
@@ -821,14 +876,14 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 
 				auto fn = [&]()
 				{
-					change_state(UI_SHOW::NEW_PROJECT);
+					change_state(UI_SHOW::MAIN_PAGE);
 				};
 
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
@@ -851,7 +906,7 @@ namespace Tempest
 			// render title
 			ImGui::SetCursorPos(ImVec2{ 0,0 });
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
-			UI::SubHeader(MapTitle.c_str());
+			UI::SubHeader("Map Builder");
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 
@@ -862,13 +917,13 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 				auto fn = [&]()
 				{
-					change_state(UI_SHOW::NEW_PROJECT);
+					change_state(UI_SHOW::MAIN_PAGE);
 				};
 				// fade in, fade out, visible
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
@@ -948,7 +1003,7 @@ namespace Tempest
 
 
 
-			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -957,7 +1012,7 @@ namespace Tempest
 				{
 					auto fn = [&]()
 					{
-						change_state(UI_SHOW::SELECT_MAP);
+						change_state(UI_SHOW::MAIN_PAGE);
 					};
 					// fade in, fade out, visible
 					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
@@ -966,7 +1021,7 @@ namespace Tempest
 				{
 					auto fn = [&]()
 					{
-						change_state(UI_SHOW::NEW_PROJECT);
+						change_state(UI_SHOW::MAIN_PAGE);
 					};
 					// fade in, fade out, visible
 					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
