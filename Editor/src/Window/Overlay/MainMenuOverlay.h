@@ -66,6 +66,7 @@ namespace Tempest
         std::string MapTitle{ "" };
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
+        std::pair<int, string> SelectedTemplate = std::pair( -1,"Assets/EmptyMapBG.dds" );
         string SelectedMap = "";
         string NewMapName = "Map";
         ImGuiID HoveredID{ 0 };
@@ -78,5 +79,6 @@ namespace Tempest
         ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
         ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
         ChannelID MenuBGM = 0;
+
     };
 }
