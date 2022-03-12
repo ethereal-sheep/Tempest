@@ -653,7 +653,7 @@ namespace Tempest
     {
         //ModelPBR model;
         //model.loadModel("../../../Resource/Models/test14.fbx");
-        SubmitModel("../../../Resource/Models/Unit_Idle.fbx", glm::mat4{ 1.f }, 1900);
+        //SubmitModel("../../../Resource/Models/Unit_Idle.fbx", glm::mat4{ 1.f }, 1900);
 
         if (USO)
         {
