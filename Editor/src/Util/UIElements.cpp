@@ -4056,7 +4056,7 @@ namespace Tempest::UI
 		ImVec2 max2 = { min2.x + size2.x, min2.y + size2.y };
 
 		ImRect Box1 = { {0.f,0.f}, {viewport->Size.x , min1.y} };
-		ImRect Box2 = { {0.f, min1.y}, {min1.x , max2.y} };
+		ImRect Box2 = { {0.f, min1.y}, {min1.x , max1.y} };
 		ImRect Box3 = { {max1.x, min1.y}, {viewport->Size.x,max1.y} };
 		ImRect Box4 = { {0.f, max1.y}, {viewport->Size.x, min2.y} };
 		ImRect Box5 = { {0.f, min2.y}, {min2.x, max2.y} };
