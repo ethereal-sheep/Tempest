@@ -145,8 +145,6 @@ namespace Tempest
                 throw bad_project_create(name + " project files could not be created!");
             out << "";
             out.close();
-
-
         }
 
         bool load_on_create = true;

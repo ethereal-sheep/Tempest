@@ -982,7 +982,7 @@ namespace Tempest
 							AudioEngine ae;
 							ae.StopChannel(CombatBGM);
 							OverlayOpen = false;
-							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(4);
 							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();
 						};
 

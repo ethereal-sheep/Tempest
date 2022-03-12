@@ -170,7 +170,7 @@ namespace Tempest
 		instance->register_always<SimulationStart>();
 		
 
-		instance->register_always<ShowRecent>();
+		//instance->register_always<ShowRecent>();
 		instance->register_always<WipePopup>();
 		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();

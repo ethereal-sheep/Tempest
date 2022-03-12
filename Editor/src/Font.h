@@ -87,8 +87,25 @@ inline auto font_contax_144() { return ImGui::GetIO().Fonts->Fonts[9]; } // Cont
 #define FONT_BOLD		FONT_BODY
 
 
-
 namespace Tempest
 {
 	inline tmap<tpath, tsptr<Texture>, fs_hash> tex_map;
+
+	inline fs::path get_user_path()
+	{
+		char* pValue;
+		size_t len;
+		[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
+		if (!pValue)
+		{
+			LOG_WARN("APPDATA environment variable could not be found!");
+			return fs::path{};
+		}
+
+		tpath path{ pValue };
+		free(pValue); // It's OK to call free with NULL
+		path /= "Documents";
+		path /= "CoReSys";
+		return path;
+	}
 }
