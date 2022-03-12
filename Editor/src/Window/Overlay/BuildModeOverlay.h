@@ -47,6 +47,7 @@ namespace Tempest
 
 
         bool OverlayOpen = false;
+        int tutorial_index = 0;
         id_t current = INVALID;
         CameraControls cam_ctrl;
         LineDrawing line;
