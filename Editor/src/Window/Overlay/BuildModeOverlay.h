@@ -64,6 +64,7 @@ namespace Tempest
         tc::Transform temp_xform;
         interpolater<float> banner;
         tvector<interpolater<float>> inter_nest = tvector<interpolater<float>>(5);
+        tsptr<Texture> option_btns[3];
 
         ChannelID MapBuilderBGM = 0;
         ImGuiTextFilter filter;

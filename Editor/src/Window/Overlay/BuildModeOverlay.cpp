@@ -26,6 +26,10 @@ namespace Tempest
 		cam_ctrl.update(Service<RenderSystem>::Get().GetCamera());
 		AudioEngine ae;
 		MapBuilderBGM = ae.Play("Sounds2D/CoReSyS_BGM_BuildingMode.wav", "BGM", 0.7f, true);
+
+		option_btns[0] = tex_map["Assets/MBOption_1_Unselected.dds"];
+		option_btns[1] = tex_map["Assets/MBOption_2_Unselected.dds"];
+		option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 	}
 
 	void BuildModeOverlay::show(Instance& instance)
@@ -387,7 +391,11 @@ namespace Tempest
 
 
 
-				tsptr<Texture> cat_btns[] = { tex_map["Assets/Dice_1.dds"], tex_map["Assets/Dice_2.dds"], tex_map["Assets/Dice_3.dds"], tex_map["Assets/Dice_4.dds"], tex_map["Assets/Dice_5.dds"] };
+				tsptr<Texture> cat_btns[5][2] = { {tex_map["Assets/MBTab_1_Unselected.dds"], tex_map["Assets/MBTab_1_Selected.dds"]}, 
+					{tex_map["Assets/MBTab_2_Unselected.dds"], tex_map["Assets/MBTab_2_Selected.dds"]},
+					{tex_map["Assets/MBTab_3_Unselected.dds"], tex_map["Assets/MBTab_3_Selected.dds"]},
+					{tex_map["Assets/MBTab_4_Unselected.dds"], tex_map["Assets/MBTab_4_Selected.dds"]},
+					{tex_map["Assets/MBTab_5_Unselected.dds"], tex_map["Assets/MBTab_5_Selected.dds"]} };
 
 				int i = 0;
 				for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
@@ -395,15 +403,9 @@ namespace Tempest
 					// skip units
 					if (cat_name == "Unit")
 						continue;
-
-					if (i == selected_cat)
-						ImGui::PushStyleColor(ImGuiCol_Button, { 0.980f, 0.768f, 0.509f, 1.f });
-					else
-						ImGui::PushStyleColor(ImGuiCol_Button, { 1, 1, 1, 0.f });
 					
-					
-					//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-					ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+					ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i][i == selected_cat]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);// use for images
+					//ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 					
 					if(ImGui::IsItemClicked())
 					{
@@ -416,9 +418,6 @@ namespace Tempest
 						ImGui::Text("%s", cat_name.c_str());
 						ImGui::EndTooltip();
 					}
-
-
-					ImGui::PopStyleColor(1);
 
 					++i;
 				}
@@ -473,13 +472,11 @@ namespace Tempest
 					{
 						ImGui::SetCursorPos(t_cursor_pos);
 
-						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.980f, 0.768f, 0.509f, 1.f });
-						ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.980f, 0.768f, 0.509f, 0.6f });
 						ImGui::BeginChild("some_child", child4_box, false);
 
 						{
-							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[0]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
 							{
@@ -489,18 +486,21 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								option_btns[0] = tex_map["Assets/MBOption_1_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_TRASH);
 								ImGui::EndTooltip();
 							}
+							else
+								option_btns[0] = tex_map["Assets/MBOption_1_Unselected.dds"];
 						}
 
 						ImGui::SameLine();
 
 						{
 
-							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[1]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
 							{
@@ -509,18 +509,21 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								option_btns[1] = tex_map["Assets/MBOption_2_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_CHECK);
 								ImGui::EndTooltip();
 							}
+							else
+								option_btns[1] = tex_map["Assets/MBOption_2_Unselected.dds"];
 						}
 
 						ImGui::SameLine();
 
 						{
 
-							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[2]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
 							{
@@ -529,16 +532,17 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								option_btns[2] = tex_map["Assets/MBOption_3_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_SYNC_ALT);
 								ImGui::EndTooltip();
 							}
+							else
+								option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 						}
 
 
 						ImGui::EndChild();
-
-						ImGui::PopStyleColor(2);
 					}
 					
 					ImGui::PopFont();
