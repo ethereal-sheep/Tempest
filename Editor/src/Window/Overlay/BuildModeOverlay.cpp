@@ -26,11 +26,15 @@ namespace Tempest
 		cam_ctrl.update(Service<RenderSystem>::Get().GetCamera());
 		AudioEngine ae;
 		MapBuilderBGM = ae.Play("Sounds2D/CoReSyS_BGM_BuildingMode.wav", "BGM", 0.7f, true);
+
+		option_btns[0] = tex_map["Assets/MBOption_1_Unselected.dds"];
+		option_btns[1] = tex_map["Assets/MBOption_2_Unselected.dds"];
+		option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 	}
 
 	void BuildModeOverlay::show(Instance& instance)
 	{
-		//const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		//ImGui::SetNextWindowPos(viewport->Pos);
 		//ImGui::SetNextWindowSize(viewport->Size);
 
@@ -44,6 +48,199 @@ namespace Tempest
 		if (OverlayOpen)
 		{
 			//renderTop();
+
+			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
+			{
+				instance.tutorial_enable = true;
+				instance.tutorial_level = 1;
+				tutorial_index = 0;
+
+			}
+
+			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
+			{
+				instance.tutorial_enable = true;
+				tutorial_index++;
+			}
+
+			// tutorial progress
+			if (instance.tutorial_enable && !instance.tutorial_temp_exit)
+			{
+				auto drawlist = ImGui::GetForegroundDrawList();
+				//if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
+				//	instance.tutorial_slide = false;
+				if (instance.tutorial_level == 1)
+				{
+					switch (tutorial_index)
+					{
+					case 0:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.18f };
+						ImVec2 size = { 600.f, 650.f };
+						UI::TutArea(pos, size);
+
+						const float posY = viewport->Size.y * 0.18f + size.y * 0.5f;
+
+						// drawing the tips
+						string str = "CoReSys Map Builder";
+						ImGui::PushFont(FONT_BTN);
+						drawlist->AddText({ viewport->Size.x * 0.3f, posY }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+						ImGui::PopFont();
+
+						drawlist->AddLine({ viewport->Size.x * 0.3f, posY + 20.f }, { viewport->Size.x * 0.65f, posY + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+						str = "Introducing the CoReSys Map Builder, a system made";
+						drawlist->AddText({ viewport->Size.x * 0.3f, posY + 25.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+						str = "for designers to create their own unique 3D maps.";
+						drawlist->AddText({ viewport->Size.x * 0.3f, posY + 35.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 1:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.195f };
+						ImVec2 size = { 55.f, 55.f };
+						UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a Furniture Category";
+						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+					}
+					break;
+
+					case 2:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.3f };
+						ImVec2 size = { 80.f, 80.f };
+
+						ImVec2 pos2 = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.52f - 75.f };
+						ImVec2 size2 = { 150.f, 150.f };
+
+						UI::TutArea2(pos, pos2, size, size2);
+					//	UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Drag and drop a Furniture into the scene";
+						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 3:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
+						ImVec2 size = { 100.f, 100.f };
+
+						ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 43.f};
+						ImVec2 size2 = { 50.f, 50.f };
+
+						UI::TutArea2(pos, pos2, size, size2);
+						//	UI::TutArea(pos, size);
+						
+						const float posY = pos2.y + size2.y * 0.5f;
+						// drawing the tips
+						string str = "Rotate Furniture";
+						ImGui::PushFont(FONT_BTN);
+						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+						ImGui::PopFont();
+
+						drawlist->AddLine({ pos2.x + size2.x , posY }, { viewport->Size.x * 0.8f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+						str = "Click this button to rotate the furniture 90 degrees clockwise.";
+						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+						str = "Try rotating the furniture 180 degrees to continue.";
+						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 15.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 4:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.5f - 75.f };
+						ImVec2 size = { 300.f, 150.f };
+
+						UI::TutArea(pos, size);
+
+						const float posY = pos.y + size.y * 0.5f;
+						// drawing the tips
+						string str = "Duplicate Furniture";
+						ImGui::PushFont(FONT_BTN);
+						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+						ImGui::PopFont();
+
+						drawlist->AddLine({ pos.x + size.x , posY }, { viewport->Size.x * 0.8f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+						str = "Hold the Alt key and drag the gizmo to duplicate the furniture";
+						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+					}
+					break;
+
+					case 5:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
+						ImVec2 size = { 100.f, 100.f };
+
+						ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 43.f };
+						ImVec2 size2 = { 50.f, 50.f };
+
+						UI::TutArea2(pos, pos2, size, size2);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to confirm furniture placement";
+						drawlist->AddText({ pos2.x + size2.x + 10.0f, pos2.y + 10.0f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 6:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
+						ImVec2 size = { 100.f, 100.f };
+
+						UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click the placed furniture";
+						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y * 0.5f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+					case 7:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
+						ImVec2 size = { 100.f, 100.f };
+
+						ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 43.f };
+						ImVec2 size2 = { 50.f, 50.f };
+
+						UI::TutArea2(pos, pos2, size, size2);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to delete the furniture.";
+						drawlist->AddText({ pos2.x + size2.x + 10.f, pos2.y + 10.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+					default:
+						break;
+					}
+				}
+
+				//Tutorial Exit Button
+				if (instance.tutorial_slide == false)
+				{
+					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+					if (UI::MouseIsWithin(tut_min, tut_max))
+					{
+						ImGui::SetMouseCursor(7);
+						if (ImGui::IsMouseClicked(0))
+						{
+							instance.tutorial_temp_exit = true;
+							ImGui::OpenPopup("TutorialExitPopupConfirm");
+						}
+					}
+				}
+			}
+
+			// exit tutorial
+			if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+			{
+				instance.tutorial_temp_exit = false;
+				instance.tutorial_enable = false;
+			}
 			
 			renderBtm(instance);
 		}
@@ -194,7 +391,11 @@ namespace Tempest
 
 
 
-				tsptr<Texture> cat_btns[] = { tex_map["Assets/Dice_1.dds"], tex_map["Assets/Dice_2.dds"], tex_map["Assets/Dice_3.dds"], tex_map["Assets/Dice_4.dds"], tex_map["Assets/Dice_5.dds"] };
+				tsptr<Texture> cat_btns[5][2] = { {tex_map["Assets/MBTab_1_Unselected.dds"], tex_map["Assets/MBTab_1_Selected.dds"]}, 
+					{tex_map["Assets/MBTab_2_Unselected.dds"], tex_map["Assets/MBTab_2_Selected.dds"]},
+					{tex_map["Assets/MBTab_3_Unselected.dds"], tex_map["Assets/MBTab_3_Selected.dds"]},
+					{tex_map["Assets/MBTab_4_Unselected.dds"], tex_map["Assets/MBTab_4_Selected.dds"]},
+					{tex_map["Assets/MBTab_5_Unselected.dds"], tex_map["Assets/MBTab_5_Selected.dds"]} };
 
 				int i = 0;
 				for (auto& [cat_name, proto_cat] : instance.scene.get_prototype_categories())
@@ -202,15 +403,9 @@ namespace Tempest
 					// skip units
 					if (cat_name == "Unit")
 						continue;
-
-					if (i == selected_cat)
-						ImGui::PushStyleColor(ImGuiCol_Button, { 0.980f, 0.768f, 0.509f, 1.f });
-					else
-						ImGui::PushStyleColor(ImGuiCol_Button, { 1, 1, 1, 0.f });
 					
-					
-					//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-					ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+					ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i][i == selected_cat]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);// use for images
+					//ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 					
 					if(ImGui::IsItemClicked())
 					{
@@ -223,9 +418,6 @@ namespace Tempest
 						ImGui::Text("%s", cat_name.c_str());
 						ImGui::EndTooltip();
 					}
-
-
-					ImGui::PopStyleColor(1);
 
 					++i;
 				}
@@ -280,13 +472,11 @@ namespace Tempest
 					{
 						ImGui::SetCursorPos(t_cursor_pos);
 
-						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.980f, 0.768f, 0.509f, 1.f });
-						ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.980f, 0.768f, 0.509f, 0.6f });
 						ImGui::BeginChild("some_child", child4_box, false);
 
 						{
-							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[0]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
 							{
@@ -296,18 +486,21 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								option_btns[0] = tex_map["Assets/MBOption_1_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_TRASH);
 								ImGui::EndTooltip();
 							}
+							else
+								option_btns[0] = tex_map["Assets/MBOption_1_Unselected.dds"];
 						}
 
 						ImGui::SameLine();
 
 						{
 
-							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[1]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
 							{
@@ -316,18 +509,21 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								option_btns[1] = tex_map["Assets/MBOption_2_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_CHECK);
 								ImGui::EndTooltip();
 							}
+							else
+								option_btns[1] = tex_map["Assets/MBOption_2_Unselected.dds"];
 						}
 
 						ImGui::SameLine();
 
 						{
 
-							//ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2); use for images
-							ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[2]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
 							{
@@ -336,10 +532,13 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								option_btns[2] = tex_map["Assets/MBOption_3_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_SYNC_ALT);
 								ImGui::EndTooltip();
 							}
+							else
+								option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 						}
 
 
