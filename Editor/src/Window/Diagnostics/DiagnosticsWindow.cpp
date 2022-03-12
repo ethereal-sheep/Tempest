@@ -852,8 +852,10 @@ namespace Tempest
 						else
 							continue;
 						glm::vec3 pos = y.m_position;
+						glm::vec3 clr = y.m_colour;
 						ImGui::Text("Position: %.2f, %.2f, %.2f ", pos.x, pos.y, pos.z);
 						ImGui::Text("Life Remaining: %.2f", y.m_lifeRemaining);
+						ImGui::Text("Color: %.2f, %.2f, %.2f ", clr.x, clr.y, clr.z);
 
 						UI::PaddedSeparator(0.5f);
 					}
