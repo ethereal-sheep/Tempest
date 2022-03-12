@@ -567,6 +567,26 @@ namespace Tempest
         m_Pipeline.m_Models.push_back(m);
     }
  
+    void RenderSystem::SubmitModel(const Particle_3D& particle, const glm::mat4& model_matrix)
+    {
+        // Change path to particle.m_path or however u named the path string
+        std::string path = particle.m_renderingPath; //"Models/SquareHole.a";
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        ModelObj model;        
+        model.m_Transform = model_matrix;
+        model.m_Model = m_Pipeline.m_ModelLibrary[path];
+        //model.m_Model->colours[0] = particle.m_colour;
+        model.color = particle.m_colour;
+        model.isParticle = true;
+        m_Pipeline.m_Models.push_back(model);
+
+    }
+ 
     void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)
     {
         m_LineRenderer.Submit(line, color);
@@ -650,6 +670,23 @@ namespace Tempest
             //auto r = 
             //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
             SubmitModel("Models/UnitBlack_Idle.a", (t * s));
+        }
+
+        if (p_testing)
+        {
+            auto s = glm::scale(p_scalings);
+            auto r = glm::rotate(p_angles.x, vec3(1.f, 0.f, 0.f))
+                * glm::rotate(p_angles.y, vec3(0.f, 1.f, 0.f))
+                * glm::rotate(p_angles.z, vec3(0.f, 0.f, 1.f));
+
+            //auto proto_p = instance.scene.get_prototype_if("Decoration", "[your deco name here]");
+            // check if proto p is valid
+            //if (proto_p)
+            //{
+                //auto local = proto_p->get_if<Local>();
+                //auto model = proto_p->get_if<Model>();
+            //}
+            SubmitModel("Models/SquareHole.a", (r * s));
         }
 
         LoadTextures();

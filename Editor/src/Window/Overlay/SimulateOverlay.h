@@ -15,8 +15,8 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/WaypointEmitter.h"
-#include "Particles/CircularMotionEmitter.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/CircularMotionEmitter_2D.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
@@ -94,8 +94,8 @@ namespace Tempest
         ChannelID CombatBGM = 0;
 
         // For tutorial emitter
-        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
-        std::shared_ptr<CircularMotionEmitter> m_circularMotionEmitter;
+        std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
+        std::weak_ptr<CircularMotionEmitter_2D> m_circularMotionEmitter;
 
         // Tutorial part 1 emitter
         bool emitter_1_0 = false;

@@ -18,10 +18,13 @@
 #include "Audio/AudioEngine.h"
 #include "Util/pathfinding.h"
 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
+#include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
+#include "Particles/Particles_3D/CharacterDeathEmitter_3D.h"
+
 namespace Tempest
 {
-
-
 	auto collide_first_edited(
 		int x0, int y0, int x1, int y1,
 		tmap<int, tmap<int, id_t>>& collision_map,
@@ -545,6 +548,19 @@ namespace Tempest
 
 				LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
 
+				// Turn on particle
+				if (!m_unitTileEmitter.expired() && !instance.ecs.get<tc::Unit>(curr_entity).is_moving() && !stopMoving)
+				{
+					auto tempUnitEmitter = m_unitTileEmitter.lock();
+					auto tempPosition = position;
+					tempPosition.y -= 2;
+					tempUnitEmitter->UpdateWaypoints(tempPosition);
+
+					stopMoving = true;
+					m_unitTileEmitter.lock()->m_GM.m_active = true;
+
+				}
+
 				// Draw whatever thing on their head
 				{
 					ImGui::PushFont(FONT_BOLD);
@@ -577,6 +593,7 @@ namespace Tempest
 						if (auto t = instance.ecs.get_if<tc::Transform>(curr_entity))
 						{
 							cam_ctrl.move_look_at(cam, t->position);
+							nextUnit = true;
 						}
 					}
 
@@ -1332,6 +1349,10 @@ namespace Tempest
 					{
 						// cancel
 						state = State::MENU;
+
+						// Turn off particle
+						if (!m_unitTileEmitter.expired())
+							m_unitTileEmitter.lock()->m_GM.m_active = true;
 					}
 				}
 				else
@@ -1364,6 +1385,7 @@ namespace Tempest
 					}
 
 
+					// Move
 					if (io.MouseClicked[0])
 					{
 						auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
@@ -1384,6 +1406,13 @@ namespace Tempest
 						transform.position.z = w_y + .5f;*/
 						instance.selected = INVALID;
 						state = State::MENU;
+
+						// Turn off particle
+						if (!m_unitTileEmitter.expired())
+						{
+							m_unitTileEmitter.lock()->m_GM.m_active = false;
+							stopMoving = false;
+						}
 					}
 				}
 
@@ -1393,7 +1422,6 @@ namespace Tempest
 		}
 		else
 			state = State::MENU;
-
 	}
 
 	void CombatModeOverlay::glimpse(RuntimeInstance& instance)
@@ -1840,6 +1868,7 @@ namespace Tempest
 				unit.set_path(v, xform);
 
 				triggered = false;
+				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
 			}
@@ -1915,7 +1944,33 @@ namespace Tempest
 
 				// dead voice
 				if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
+				{
 					ae.Play("Sounds2D/SFX_UnitDeathVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
+
+					// Character Death Emitter Data
+					glm::vec3 minRangeSpawnPos = oxform.position;
+					glm::vec3 maxRangeSpawnPos = oxform.position;
+
+					minRangeSpawnPos.x -= 1.0f;
+					minRangeSpawnPos.y += 0.7f;
+					minRangeSpawnPos.z -= 1.0f;
+
+					maxRangeSpawnPos.x += 1.0f;
+					minRangeSpawnPos.y += 0.3f;
+					maxRangeSpawnPos.z += 1.0f;
+
+					if (m_characterDeathEmitter.expired())
+						m_characterDeathEmitter = ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3);
+					else
+					{
+						m_characterDeathEmitter.lock()->m_GM.m_position = oxform.position;
+						m_characterDeathEmitter.lock()->m_minPos = minRangeSpawnPos;
+						m_characterDeathEmitter.lock()->m_maxPos = maxRangeSpawnPos;
+						m_characterDeathEmitter.lock()->m_MM.m_duration = 0.3f;
+						m_characterDeathEmitter.lock()->m_GM.m_active = true;
+						m_characterDeathEmitter.lock()->m_MM.m_preWarm = true;
+					}
+				}
 			}
 
 			if (triggered)
@@ -1940,6 +1995,22 @@ namespace Tempest
 					{
 						text = std::to_string(-damage);
 						col = vec3(0, 1, 0);
+					}
+
+					auto emitterPosition = instance.ecs.get<tc::Transform>(other_entity).position;
+					emitterPosition.y += 1.0f;
+
+					if (m_characterDamageEmitter.expired())
+						m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition);
+					else if(damageOnce == false)
+					{
+						m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
+						//m_characterDamageEmitter.lock()->Emit(1);
+						m_characterDamageEmitter.lock()->m_EM.m_burstCycle = 1;
+						m_characterDamageEmitter.lock()->m_MM.m_duration = 0.6f;
+						m_characterDamageEmitter.lock()->m_GM.m_active = true;
+						m_characterDamageEmitter.lock()->m_MM.m_preWarm = true;
+						damageOnce = true;
 					}
 
 					ImGui::PushFont(FONT_HEAD);
@@ -2303,6 +2374,19 @@ namespace Tempest
 					color = { 0.1,0.1,0.1,1 };
 
 				Service<RenderSystem>::Get().DrawLine(box, color);
+
+				if (m_unitTileEmitter.expired())
+					m_unitTileEmitter = ParticleSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+				else if (nextUnit)
+				{
+					nextUnit = false;
+					// TEST CODE @JUN HAO
+					if (!m_unitTileEmitter.expired())
+					{
+						auto tempUnitEmitter = m_unitTileEmitter.lock();
+						tempUnitEmitter->UpdateWaypoints(transform.position);
+					}
+				}
 			}
 		}
 	}

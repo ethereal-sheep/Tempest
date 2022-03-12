@@ -17,7 +17,7 @@
 #include "Util/interpolater.h"
 #include "Window/Viewport/CameraControls.h"
 
-#include "Particles/WaypointEmitter.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
 
 namespace Tempest
 {
@@ -107,7 +107,7 @@ namespace Tempest
         CameraControls cam_ctrl;
 
         // For tutorial emitter
-        std::shared_ptr<WaypointEmitter> m_waypointEmitter;
+        std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
 
         bool emitter_0 = false;
         bool emitter_1 = false;

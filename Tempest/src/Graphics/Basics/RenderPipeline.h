@@ -62,6 +62,7 @@ namespace Tempest
 		glm::mat4 m_TransformPrev{ 1.0f };
 		bool hasColor = false;
 		vec3 color = { 0.f, 0.f, 0.f };
+		bool isParticle = false;
 
 		tvector<glm::mat4> m_Bones;
 	};

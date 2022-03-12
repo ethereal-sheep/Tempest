@@ -32,6 +32,8 @@
 #include "Graphics/PBR/MaterialPBR.h"
 
 #include "Graphics/PBR/ModelPBR.h"
+
+#include "Particles/Particles_3D/Particles_3D.h"
 #include "Animation/AnimationManager.h"
 /**
  * @brief 
@@ -73,6 +75,7 @@ namespace Tempest
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
         void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
+        void SubmitModel(const Particle_3D& particle, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const Transform& transform, uint32_t id);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
@@ -208,6 +211,12 @@ namespace Tempest
         TexturePBR envMapLUT;
         glm::mat4 envMapProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
         
+        // Particle Debugging
+        bool p_testing = false;
+        vec3 p_angles = vec3(0.f);
+        vec3 p_scalings = vec3(1.f);
+        //
+
         void iblSetup();
 
         uint32_t getHeight();

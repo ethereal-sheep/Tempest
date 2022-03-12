@@ -19,6 +19,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
 #include "Profiler/Profiler.h"
 
 namespace Tempest
@@ -79,6 +80,11 @@ namespace Tempest
 				if (ImGui::BeginTabItem("Light"))
 				{
 					Light(instance);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Particles"))
+				{
+					Particles(instance);
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();
@@ -838,6 +844,54 @@ namespace Tempest
 
 	}
 
+	void DiagnosticsWindow::Particles(Instance&)
+	{
+		if (ImGui::CollapsingHeader("Emitters"))
+		{
+			auto m = ParticleSystem_3D::GetInstance().GetEmitter();
+			for (auto& x : m)
+			{
+				ImGui::Text("Duration: %.2f", x->m_MM.m_duration);
+				if (ImGui::TreeNode("Particles"))
+				{
+					for (auto& y : x->m_particles)
+					{
+						if (y.m_isActive)
+							ImGui::Text("Active: Yes");
+						else
+							continue;
+						glm::vec3 pos = y.m_position;
+						glm::vec3 clr = y.m_colour;
+						ImGui::Text("Position: %.2f, %.2f, %.2f ", pos.x, pos.y, pos.z);
+						ImGui::Text("Life Remaining: %.2f", y.m_lifeRemaining);
+						ImGui::Text("Color: %.2f, %.2f, %.2f ", clr.x, clr.y, clr.z);
+
+						UI::PaddedSeparator(0.5f);
+					}
+					ImGui::TreePop();
+				}
+
+			UI::PaddedSeparator(0.5f);
+			UI::PaddedSeparator(0.5f);
+			}
+		}
+		if (ImGui::CollapsingHeader("Particle Debugging"))
+		{
+			auto& p_test = Service<RenderSystem>::Get().p_testing;
+			ImGui::Checkbox("Enable Testing", &p_test);
+
+			const auto padding = 80.f;
+			auto& p_scale = Service<RenderSystem>::Get().p_scalings;
+			std::string pScaling = "Particle Scalings";
+			std::string pScalingID = "##Pscale";
+			UI::DragFloat3ColorBox(pScaling.data(), pScalingID.data(), ImVec2{ padding , 0.f }, value_ptr(p_scale), 0.f, 0.1f, -10.f, 10.f);
+
+			auto& p_angle = Service<RenderSystem>::Get().p_angles;
+			std::string pAngles = "Particle Angles";
+			std::string pAnglesID = "##Pangle";
+			UI::DragFloat3ColorBox(pAngles.data(), pAnglesID.data(), ImVec2{ padding , 0.f }, value_ptr(p_angle), 0.f, 0.1f, -10.f, 10.f);
+		}
+	}
 
 	ImVec4 ConvertUint32TOVec4(uint32_t color)
 	{

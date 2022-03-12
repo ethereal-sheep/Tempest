@@ -1,5 +1,12 @@
-
-
+/**********************************************************************************
+* \author		Chue Jun Hao(c.junhao@digipen.edu)
+* \version		1.0
+* \date			2022
+* \note			Course: GAM350
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 
 #ifndef RANDOM_H
 #define RANDOM_H
@@ -16,6 +23,7 @@ public:
 
 	static float Float()
 	{
+		// Returns between 0 - 1
 		return (float)s_Distribution(s_RandomEngine) / (float)std::numeric_limits<uint32_t>::max();
 	}
 

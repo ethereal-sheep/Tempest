@@ -39,6 +39,7 @@ namespace Tempest
 		void Mouse(Instance& instance);
 		void Light(Instance& instance);
 		void Textures(Instance& instance);
+		void Particles(Instance& instance);
 
 		void Profiler();
 		void ShowProfilingChart();
