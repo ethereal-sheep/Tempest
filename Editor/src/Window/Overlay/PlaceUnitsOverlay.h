@@ -37,5 +37,7 @@ namespace Tempest
 
         void show(Instance&) override;
         void DrawSideBar(Instance& instance, ImVec2 size);
+
+        int tutorial_index{ 0 };
     };
 }

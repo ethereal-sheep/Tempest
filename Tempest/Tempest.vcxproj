@@ -184,6 +184,10 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation\Animation.cpp" />
+    <ClCompile Include="src\Animation\AnimationManager.cpp" />
+    <ClCompile Include="src\Animation\Animator.cpp" />
+    <ClCompile Include="src\Animation\Bone.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\FrameRate\FrameRateManager.cpp" />
     <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
@@ -259,6 +263,7 @@
     <ClCompile Include="src\Physics\Util\px_malloc_allocator.cpp" />
     <ClCompile Include="src\Physics\Util\px_math.cpp" />
     <ClCompile Include="src\PMG\ProceduralMapGeneration.cpp" />
+    <ClCompile Include="src\Profiler\Profiler.cpp" />
     <ClCompile Include="src\Scripting\Graph\graph.cpp" />
     <ClCompile Include="src\Scripting\Nodes\ActionGraphNode.cpp" />
     <ClCompile Include="src\Scripting\Nodes\ArithmeticNode.cpp" />
@@ -288,6 +293,12 @@
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\FrameRate\FrameRateManager.h" />
+    <ClInclude Include="src\Animation\Animation.h" />
+    <ClInclude Include="src\Animation\AnimationManager.h" />
+    <ClInclude Include="src\Animation\Animator.h" />
+    <ClInclude Include="src\Animation\AnimMultithreadHelper.h" />
+    <ClInclude Include="src\Animation\AssimpHelper.h" />
+    <ClInclude Include="src\Animation\Bone.h" />
     <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
     <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
     <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />
@@ -391,6 +402,8 @@
     <ClInclude Include="src\Physics\Util\px_malloc_allocator.h" />
     <ClInclude Include="src\Physics\Util\px_math.h" />
     <ClInclude Include="src\PMG\ProceduralMapGeneration.h" />
+    <ClInclude Include="src\Profiler\Profiler.h" />
+    <ClInclude Include="src\Profiler\ProfilerColor.h" />
     <ClInclude Include="src\Scripting\GMS.h" />
     <ClInclude Include="src\Scripting\Graph\graph.h" />
     <ClInclude Include="src\Scripting\SRM.h" />

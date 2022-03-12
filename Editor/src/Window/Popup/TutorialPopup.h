@@ -77,6 +77,16 @@ namespace Tempest
                 tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_04.dds"]);
                 tutorial_Arr.emplace_back(tex_map["Assets/Sequence_Tut_05.dds"]);
             }
+            else if (a.type == TUTORIAL_POPUP_TYPES::TURN_TUT)
+            {
+                tutorial_Arr.clear();
+                tutorial_Arr.emplace_back(tex_map["Assets/TurnNUnit_Tut_01.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/TurnNUnit_Tut_02.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/TurnNUnit_Tut_03.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/TurnNUnit_Tut_04.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/TurnNUnit_Tut_05.dds"]);
+                tutorial_Arr.emplace_back(tex_map["Assets/TurnNUnit_Tut_06.dds"]);
+            }
             enable_popup = true;
             
         }

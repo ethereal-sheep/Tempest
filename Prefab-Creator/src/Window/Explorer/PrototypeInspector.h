@@ -82,6 +82,9 @@ namespace Tempest
 				// draw
 				const auto padding = 80.f;
 				bool p_open = true;
+				static bool show_frame = true;
+				static bool show_door = true;
+
 				if (ImGui::Begin("Inspector", &p_open))
 				{
 					UI::RenderText("Name:", padding);
@@ -201,6 +204,63 @@ namespace Tempest
 					}
 					if (auto door = _current->get_if<tc::Door>())
 					{
+						{
+							bool header = ImGui::CollapsingHeader("Frame##Frame", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+
+							if (header)
+							{
+								int index = 0;
+								std::vector<string> resources = { "None" };
+								for (auto entry : fs::directory_iterator(instance.get_full_path() / "Models"))
+								{
+									// only get .a file
+									if (entry.path().extension() != ".a")
+										continue;
+									auto rel = fs::relative(entry.path(), instance.get_full_path()).string();
+									if (door->frame.path == rel) {
+										index = (int)resources.size();
+									}
+									resources.emplace_back(rel);
+								}
+
+								if (ImGui::ComboWithFilter("Frame", &index, resources))
+								{
+									door->frame.path = resources[index];
+								}
+								ImGui::SameLine();
+								ImGui::Text("Frame");
+
+								ImGui::Checkbox("Show Frame" "##ShowFrame", &show_frame);
+								ImGui::Checkbox("Show Door" "##ShowDoor", &show_door);
+
+
+								auto transform = &door->frame_local;
+
+								{
+									UI::DragFloat3ColorBox("Position", "##FramePositionDrag", ImVec2{ padding , 0.f }, glm::value_ptr(transform->local_position), 0.f, 0.1f);
+								}
+								{
+									auto vec = glm::degrees(glm::eulerAngles(transform->local_rotation));
+									auto [x, y] = UI::DragFloat3ColorBox("Rotation", "##FrameRotationDrag", ImVec2{ padding , 0.f }, &vec.x, 0.f, 0.1f);
+									if (x)
+									{
+										transform->local_rotation = glm::quat(glm::radians(vec));
+									}
+								}
+								{
+									auto vec = transform->local_scale;
+									static bool uniform = false;
+									auto [x, y] = UI::UniformScaleFloat3("Scale", "##FrameScaleDrag", ImVec2{ padding , 0.f }, &uniform, glm::value_ptr(vec), 1.f, 0.001f, 0.001f, 5.f);
+									transform->local_scale.x = std::max(0.001f, vec.x);
+									transform->local_scale.y = std::max(0.001f, vec.y);
+									transform->local_scale.z = std::max(0.001f, vec.z);
+								}
+							}
+						}
+						UI::PaddedSeparator(1.f);
+
+
+
 						int index = static_cast<int>(door->curr);
 						std::vector<string> cover_types = { };
 						for (auto i = 0; i < static_cast<int>(tc::Door::State::End); ++i)
@@ -316,7 +376,7 @@ namespace Tempest
 							for (auto entry : fs::directory_iterator(instance.get_full_path() / "Models"))
 							{
 								// only get .a file
-								if (entry.path().extension() != ".a")
+								if (entry.path().extension() != ".a" && entry.path().extension() != ".fbx")
 									continue;
 								auto rel = fs::relative(entry.path(), instance.get_full_path()).string();
 								if (model->path == rel) {
@@ -356,32 +416,53 @@ namespace Tempest
 
 							if (auto door = _current->get_if<tc::Door>())
 							{
-
-								const auto& l = door->states[(int)door->curr];
-								tc::Transform t;
-
-								t.position = l.local_position;
-								t.rotation = l.local_rotation;
-								t.scale = l.local_scale;
-
-								auto transform = &t;
-
-								auto local = &_current->get<tc::Local>();
-
-
-								auto mat = glm::translate(transform->position)
-									* glm::mat4(transform->rotation)
-									* glm::translate(local->local_position)
-									* glm::mat4(local->local_rotation)
-									* glm::scale(local->local_scale)
-									* glm::scale(transform->scale);
-
-								std::filesystem::path p{ model->path };
-								if (strcmp(p.extension().string().c_str(), ".a"))
+								if (show_door)
 								{
-									p.replace_extension(".a");
+									const auto& l = door->states[(int)door->curr];
+									tc::Transform t;
+
+									t.position = l.local_position;
+									t.rotation = l.local_rotation;
+									t.scale = l.local_scale;
+
+									auto transform = &t;
+
+									auto local = &_current->get<tc::Local>();
+
+
+									auto mat = glm::translate(transform->position)
+										* glm::mat4(transform->rotation)
+										* glm::translate(local->local_position)
+										* glm::mat4(local->local_rotation)
+										* glm::scale(local->local_scale)
+										* glm::scale(transform->scale);
+
+									std::filesystem::path p{ model->path };
+									if (strcmp(p.extension().string().c_str(), ".a"))
+									{
+										p.replace_extension(".a");
+									}
+									Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), mat);
 								}
-								Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), mat);
+
+
+
+								if (show_frame)
+								{
+									std::filesystem::path p{ door->frame.path };
+									if (strcmp(p.extension().string().c_str(), ".a"))
+									{
+										p.replace_extension(".a");
+									}
+
+									tc::Transform t;
+									t.position = door->frame_local.local_position;
+									t.rotation = door->frame_local.local_rotation;
+									t.scale = door->frame_local.local_scale;
+
+
+									Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), t);
+								}
 							}
 							else
 							{

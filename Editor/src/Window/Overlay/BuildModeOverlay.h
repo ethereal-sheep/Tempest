@@ -57,9 +57,14 @@ namespace Tempest
         float swidth = 250.f;
         float min_swidth = 150.f;
         float max_swidth = 500.f;
+        ImVec2 place_box;
+        ImVec2 place_box_size;
 
+        tc::Transform temp_xform;
         interpolater<float> banner;
+        tvector<interpolater<float>> inter_nest = tvector<interpolater<float>>(5);
 
         ChannelID MapBuilderBGM = 0;
+        ImGuiTextFilter filter;
     };
 }

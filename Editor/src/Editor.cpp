@@ -32,8 +32,12 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 std::string persistent_ini_filepath;
 
+
+
 namespace Tempest
 {
+	future_bool test_future;
+
 	void init_font();
 	void init_style();
 	void init_file_dialog();
@@ -89,18 +93,36 @@ namespace Tempest
 			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
 			ImGui_ImplOpenGL3_Init("#version 460");
 
+
+			//testing_scene();
+
+			//TestCompareNode();
+
 			init_font();
 			init_style();
 			init_file_dialog();
 			init_sounds();
 			init_ui_textures();
 
-			AudioEngine ae;
-			ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
-			ae.SetMasterVolume(1.f);
-			//testing_scene();
+			// can be defered
 
-			TestCompareNode();
+
+			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_CombatStance.a");
+			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_Death.a");
+			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_Idle.a");
+
+			auto init = [&]() {
+
+
+
+			};
+
+			test_future = Service<thread_pool>::Get().submit_task(init);
+			
+			/*AudioEngine ae;
+			ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
+			ae.SetMasterVolume(1.f);*/
+
 		}
 
 		void OnUpdate() override
@@ -109,6 +131,7 @@ namespace Tempest
 			// fps controller can be done in instance manager
 			auto& io = ImGui::GetIO();
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			Service<RenderSystem>::Get().UpdateAnimation(io.DeltaTime);
 			cam.SetMousePosition((int)io.MousePos.x, (int)io.MousePos.y);
 			instance_manager.update(io.DeltaTime);
 		}
@@ -158,7 +181,10 @@ namespace Tempest
 			//}
 			//ImGui::End();
 
-			instance_manager.render();
+			if (test_future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+			{
+				instance_manager.render();
+			}
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();
@@ -343,6 +369,7 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), contaxPro_size144 * global_font_scale);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
+
 		//// 6 fk 
 		//static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 		//io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), font_text_size);

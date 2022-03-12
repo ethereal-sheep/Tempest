@@ -614,10 +614,16 @@ namespace Tempest
 
 							// action
 							const ImVec2 imgSize{ (float)combat_button_tex[0]->GetWidth(), (float)combat_button_tex[0]->GetHeight() };
-							ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.25f - imgSize.x * 0.5f - menu1.get() * 100.f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f - imgSize.y * 0.5f });
+							const ImVec2 cursor{ ImGui::GetCursorPos() };
+							const ImVec2 avail_region{ ImGui::GetContentRegionAvail() };
+
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.2f - imgSize.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.45f - imgSize.y * 0.5f });
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
+
+								if (instance.tutorial_enable && tutorial_index == 2)
+									tutorial_index = 3;
 							}
 							if (ImGui::IsItemHovered())
 								combat_button_tex[0] = tex_map["Assets/CActionSelected.dds"];
@@ -625,28 +631,17 @@ namespace Tempest
 								combat_button_tex[0] = tex_map["Assets/CActionUnselected.dds"];
 
 							ImGui::SameLine();
-							const ImVec2 cursor{ ImGui::GetCursorPos() };
-							const ImVec2 avail_region{ ImGui::GetContentRegionAvail() };
-							const ImVec2 imgSize2{ (float)combat_button_tex[1]->GetWidth(), (float)combat_button_tex[1]->GetHeight() };
-
-							// item
-							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.22f - imgSize2.y * 0.5f });
-
-							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[1]->GetID()), imgSize2))
-							{
-							}
-
-							if (ImGui::IsItemHovered())
-								combat_button_tex[1] = tex_map["Assets/CItemSelected.dds"];
-							else
-								combat_button_tex[1] = tex_map["Assets/CItemUnselected.dds"];
+							
 
 							// move
-							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.45f - imgSize2.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.68f - imgSize2.y * 0.5f });
+							ImGui::SetCursorPos(ImVec2{ cursor.x + avail_region.x * 0.7f - imgSize.x * 0.5f - menu1.get() * 100.f, cursor.y + avail_region.y * 0.45f - imgSize.y * 0.5f });
 
-							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[2]->GetID()), imgSize2))
+							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[2]->GetID()), imgSize))
 							{
 								state = State::MOVING;
+
+								if (instance.tutorial_enable && tutorial_index == 0)
+									tutorial_index = 1;
 							}
 
 							if (ImGui::IsItemHovered())
@@ -866,6 +861,9 @@ namespace Tempest
 							if (ImGui::ImageButton((void*)static_cast<size_t>(combat_button_tex[0]->GetID()), imgSize))
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
+
+								if (instance.tutorial_enable && tutorial_index == 1)
+									tutorial_index++;
 							}
 							if (ImGui::IsItemHovered())
 								combat_button_tex[0] = tex_map["Assets/CActionSelected.dds"];
@@ -2300,11 +2298,6 @@ namespace Tempest
 						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
 					});
 
-					render_tabs(TABS_TYPE::ITEM, [&]() {
-						ImGui::SetCursorPos(content_region_offset);
-						CombatModeOverlay::display_items(*viewport, instance, &charac);
-					});
-
 					render_tabs(TABS_TYPE::ACTION, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_actions(*viewport, instance, &charac);
@@ -2444,11 +2437,6 @@ namespace Tempest
 					render_tabs(TABS_TYPE::WEAPON, [&]() {
 						ImGui::SetCursorPos(content_region_offset);
 						CombatModeOverlay::display_weapon_stats(*viewport, instance, &charac);
-					});
-
-					render_tabs(TABS_TYPE::ITEM, [&]() {
-						ImGui::SetCursorPos(content_region_offset);
-						CombatModeOverlay::display_items(*viewport, instance, &charac);
 					});
 
 					render_tabs(TABS_TYPE::ACTION, [&]() {
@@ -2623,10 +2611,143 @@ namespace Tempest
 			if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 			{
 
+				// just for testing
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
+				{
+					instance.tutorial_enable = true;
+					instance.tutorial_level = 1;
+					tutorial_index = 0;
+
+				}
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
+				{
+					instance.tutorial_enable = true;
+					tutorial_index++;
+				}
+
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
 					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
 				}
+
+				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
+				{
+					auto drawlist = ImGui::GetForegroundDrawList();
+					//if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
+					//	instance.tutorial_slide = false;
+					if (instance.tutorial_level == 1)
+					{
+						switch (tutorial_index)
+						{
+						case 0:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.86f, viewport->Size.y * 0.86f };
+							ImVec2 size = { 240.f, 130.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to move your unit";
+							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							// drawing the tips
+							str = "Moving Units";
+							ImGui::PushFont(FONT_BTN);
+							drawlist->AddText({ viewport->Size.x * 0.65f,viewport->Size.y * 0.7f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							ImGui::PopFont();
+
+							drawlist->AddLine({viewport->Size.x * 0.65f, viewport->Size.y * 0.7f + 20.f }, {viewport->Size.x, viewport->Size.y * 0.7f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+							str = "Move this unit next to the other unit in order to get in range for an attack.";
+							drawlist->AddText({ viewport->Size.x * 0.65f, viewport->Size.y * 0.7f + 25.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 1:
+						{
+							// user is moving the unit
+							 if (!instance.ecs.get<tc::Unit>(curr_entity).is_moving() && state != State::MOVING)
+							 {
+								tutorial_index = 0;
+
+								auto cs = instance.ecs.get<tc::Character>(curr_entity);
+								auto position = instance.ecs.get<tc::Transform>(curr_entity).position;
+
+								int p_x = (int)std::floor(position.x);
+								int p_y = (int)std::floor(position.z);
+								calculate_range(runtime, p_x, p_y, cs.get_stat(3) + cs.get_statDelta(3), range_map, visited);
+
+								for (auto& [x, m] : range_map)
+									for (auto [y, i] : m)
+									{
+										if (i >= 3) // player nearby
+										{
+											tutorial_index = 2;
+											break;
+										}
+
+									}
+							 }
+						}
+						break;
+
+						case 2:
+						{
+							ImVec2 pos = { viewport->Size.x * 0.73f, viewport->Size.y * 0.86f };
+							ImVec2 size = { 240.f, 130.f };
+							UI::TutArea(pos, size);
+							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to perform an unit action";
+							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+							// drawing the tips
+							str = "Actions";
+							ImGui::PushFont(FONT_BTN);
+							drawlist->AddText({ viewport->Size.x * 0.65f,viewport->Size.y * 0.7f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							ImGui::PopFont();
+
+							drawlist->AddLine({ viewport->Size.x * 0.65f, viewport->Size.y * 0.7f + 20.f }, { viewport->Size.x, viewport->Size.y * 0.7f + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+							str = "Move this unit next to the other unit in order to get in range for an attack.";
+							drawlist->AddText({ viewport->Size.x * 0.65f, viewport->Size.y * 0.7f + 25.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						}
+						break;
+
+						case 3:
+						{
+							// user is making an action
+						}
+						break;
+
+						default:
+							break;
+						}
+					}
+
+					//Tutorial Exit Button
+					if (instance.tutorial_slide == false)
+					{
+						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
+						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
+						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
+
+						if (UI::MouseIsWithin(tut_min, tut_max))
+						{
+							ImGui::SetMouseCursor(7);
+							if (ImGui::IsMouseClicked(0))
+							{
+								instance.tutorial_temp_exit = true;
+								ImGui::OpenPopup("TutorialExitPopupConfirm");
+							}
+						}
+					}
+				}
+
+				// exit tutorial
+				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+				{
+					instance.tutorial_temp_exit = false;
+					instance.tutorial_enable = false;
+				}
+
 
 				//static int selected = -1;
 				//static tvector<Entity> chars(4, INVALID);
@@ -2949,11 +3070,6 @@ namespace Tempest
 		tabs[TABS_TYPE::WEAPON].size = ImVec2{ static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetWidth() * 0.9f),
 											   static_cast<float>(tex_map["Assets/MIWeaponsUnselected.dds"]->GetHeight() * 0.9f) };
 
-		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsUnselected.dds"]->GetID());
-		tabs[TABS_TYPE::ITEM].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIItemsSelected.dds"]->GetID());
-		tabs[TABS_TYPE::ITEM].size = ImVec2{ static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetWidth() * 0.9f),
-											 static_cast<float>(tex_map["Assets/MIItemsUnselected.dds"]->GetHeight() * 0.9f) };
-
 		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::UNHOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsUnselected.dds"]->GetID());
 		tabs[TABS_TYPE::ACTION].image_id[TabImageData::STATE::HOVER] = (void*)static_cast<size_t>(tex_map["Assets/MIActionsSelected.dds"]->GetID());
 		tabs[TABS_TYPE::ACTION].size = ImVec2{ static_cast<float>(tex_map["Assets/MIActionsUnselected.dds"]->GetWidth() * 0.9f),
@@ -3079,13 +3195,6 @@ namespace Tempest
 		}
 
 		ImGui::EndChild();
-	}
-
-	void CombatModeOverlay::display_items(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)
-	{
-		(void)viewport;
-		(void)instance;
-		(void)cs;
 	}
 
 	void CombatModeOverlay::display_actions(const ImGuiViewport& viewport, Instance& instance, Components::Character* cs)

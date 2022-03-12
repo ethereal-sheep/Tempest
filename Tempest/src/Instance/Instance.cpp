@@ -88,25 +88,40 @@ namespace Tempest
 		auto view4 = ecs.view<tc::Model, tc::Local, tc::Door, tc::Transform>(exclude_t<tc::Destroyed>());
 		for (auto id : view4)
 		{
-			auto model = ecs.get_if<tc::Model>(id);
-			auto transform = ecs.get_if<tc::Transform>(id);
-			auto local = ecs.get_if<tc::Local>(id);
 			auto door = ecs.get_if<tc::Door>(id);
+			auto transform = ecs.get_if<tc::Transform>(id);
 
-			auto door_t = door->get_current_local();
-			auto door_tf = &door_t;
+			{
+				auto model = ecs.get_if<tc::Model>(id);
+				auto local = ecs.get_if<tc::Local>(id);
+				auto door_t = door->get_current_local();
+				auto door_tf = &door_t;
 
-			auto test = glm::translate(transform->position)
-				* glm::mat4(transform->rotation)
-				* glm::translate(door_tf->local_position)
-				* glm::mat4(door_tf->local_rotation)
-				* glm::translate(local->local_position)
-				* glm::mat4(local->local_rotation)
-				* glm::scale(local->local_scale)
-				* glm::scale(door_tf->local_scale)
-				* glm::scale(transform->scale);
+				auto test = glm::translate(transform->position)
+					* glm::mat4(transform->rotation)
+					* glm::translate(door_tf->local_position)
+					* glm::mat4(door_tf->local_rotation)
+					* glm::translate(local->local_position)
+					* glm::mat4(local->local_rotation)
+					* glm::scale(local->local_scale)
+					* glm::scale(door_tf->local_scale)
+					* glm::scale(transform->scale);
 
-			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+				Service<RenderSystem>::Get().SubmitModel(model->path, test);
+			}
+
+			{
+				auto local = &door->frame_local;
+
+				auto test = glm::translate(transform->position)
+					* glm::mat4(transform->rotation)
+					* glm::translate(local->local_position)
+					* glm::mat4(local->local_rotation)
+					* glm::scale(local->local_scale)
+					* glm::scale(transform->scale);
+
+				Service<RenderSystem>::Get().SubmitModel(door->frame.path, test);
+			}
 
 			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
 		}
@@ -120,6 +135,23 @@ namespace Tempest
 			ptlight.Position = light.pos;
 			ptlight.Color = light.color;
 			Service<RenderSystem>::Get().NumPLight++;
+		}
+
+		auto view6 = ecs.view<tc::Animation, tc::Model, tc::Transform>(exclude_t<tc::Destroyed, tc::Local>());
+		for (auto id : view6)
+		{
+			auto transform = ecs.get_if<tc::Transform>(id);
+			auto model = ecs.get_if<tc::Model>(id);
+			auto animation = ecs.get_if<tc::Animation>(id);
+
+			glm::mat4 mdl(1.f);
+			glm::mat4 translate = glm::translate(glm::vec3(transform->position.x, transform->position.y, transform->position.z));
+			glm::mat4 rotate(transform->rotation);
+			glm::mat4 scale = glm::scale(glm::vec3(transform->scale.x, transform->scale.y, transform->scale.z));
+
+			mdl = translate * rotate * scale;
+			
+			Service<RenderSystem>::Get().SubmitModel(model->path, mdl, animation->id);
 		}
 	}
 	void Instance::internal_exit()

@@ -113,7 +113,7 @@ namespace Tempest
 	{
 		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
 		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, 
-		Tile, Wall, Shape, Door, Obstacle, Unit, Collision, PointLight
+		Tile, Wall, Shape, Door, Obstacle, Unit, Collision, PointLight, Animation
 		,END
 	};
 
@@ -184,6 +184,38 @@ namespace Tempest
 			vec3 local_scale = { 1.f, 1.f, 1.f };
 		};
 
+		struct Mesh
+		{
+			static const char* get_type() { return "Mesh"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Mesh& component)
+			{
+				ar.StartObject();
+				ar.Member("Code", component.code);
+				return ar.EndObject();
+			}
+
+			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
+
+			MeshCode code;
+		};
+		struct Model
+		{
+			static const char* get_type() { return "Model"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Model& component)
+			{
+				ar.StartObject();
+				ar.Member("Path", component.path);
+				ar.Member("TexturePath", component.texPath);
+				return ar.EndObject();
+			}
+			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
+			string path;
+			string texPath;
+		};
 
 		struct Door
 		{
@@ -194,6 +226,8 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Vector("States", component.states);
+				ar.Member("Frame", component.frame);
+				ar.Member("Frame_Local", component.frame_local);
 				component.states.resize((int)State::End);
 				return ar.EndObject(); 
 			}
@@ -211,7 +245,8 @@ namespace Tempest
 
 			bool change_state(State new_state);
 
-
+			Components::Model frame;
+			Components::Local frame_local;
 			tvector<Local> states = tvector<Local>((int)State::End);
 			State curr = State::CLOSE;
 		private:
@@ -393,38 +428,6 @@ namespace Tempest
 			}
 		};
 
-		struct Mesh
-		{
-			static const char* get_type() { return "Mesh"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Mesh& component)
-			{
-				ar.StartObject();
-				ar.Member("Code", component.code);
-				return ar.EndObject();
-			}
-
-			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
-
-			MeshCode code;
-		};
-		struct Model
-		{
-			static const char* get_type() { return "Model"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Model& component)
-			{
-				ar.StartObject();
-				ar.Member("Path", component.path);
-				ar.Member("TexturePath", component.texPath);
-				return ar.EndObject();
-			}
-			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
-			string path;
-			string texPath;
-		};
 
 
 		struct Destroyed 
@@ -854,6 +857,23 @@ namespace Tempest
 			glm::vec3 pos;
 			glm::vec4 color;
 		};
+
+		struct Animation
+		{
+			static const char* get_type() { return "Animation"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Animation& component)
+			{
+				ar.StartObject();
+				ar.Member("id", component.id);
+				return ar.EndObject();
+			}
+
+			Animation(uint32_t _id = 0) : id{ _id }{}
+
+			uint32_t id;
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -911,6 +931,7 @@ namespace Tempest
 			COMPONENT_CASE(ResolutionGraph);
 			COMPONENT_CASE(Graph);
 			COMPONENT_CASE(PointLight);
+			COMPONENT_CASE(Animation);
 
 		/* ABOVE THIS PLEASE */
 

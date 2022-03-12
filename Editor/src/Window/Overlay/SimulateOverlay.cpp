@@ -209,8 +209,8 @@ namespace Tempest
 							break;
 							case 2:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.18f, viewport->Size.y * 0.1f };
-								ImVec2 size = { 310.f, 140.f };
+								ImVec2 pos = { viewport->Size.x * 0.225f, viewport->Size.y * 0.085f };
+								ImVec2 size = { 340.f, 140.f };
 								UI::TutArea(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access units page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());

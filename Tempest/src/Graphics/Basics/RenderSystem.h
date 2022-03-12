@@ -34,6 +34,7 @@
 #include "Graphics/PBR/ModelPBR.h"
 
 #include "Particles/Particles_3D/Particles_3D.h"
+#include "Animation/AnimationManager.h"
 /**
  * @brief 
  * @param RenderSystem Umbrella interface  
@@ -55,6 +56,7 @@ namespace Tempest
         //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
         FBO m_FrameBuffer{ 1600, 900 };
+        AnimationManager m_Animation;
 
         int  GammaCorrection = 1;
         bool GridActive = false;
@@ -69,10 +71,13 @@ namespace Tempest
         ~RenderSystem() = default;
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
+        void LoadModel(const string& path);
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
         void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
         void SubmitModel(const Particle_3D& particle, const glm::mat4& model_matrix);
+        void SubmitModel(const string& path, const Transform& transform, uint32_t id);
+        void SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
         void SubmitLights(const Point_Light& plight);                                       // Submitting Point Light {Transform to be used for pos}
@@ -87,6 +92,8 @@ namespace Tempest
         void BeginFrame();
         void Render();
         void EndFrame();
+
+        void UpdateAnimation(float dt);
 
         void Resize(uint32_t width, uint32_t height);
         void RenderGrid(bool state);
@@ -220,10 +227,13 @@ namespace Tempest
 
         bool PREFABMODE = false;
 
+        // ANIMATION TESTING
+        //ModelPBR model;
+
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);
-
+        void ChangeAnimationDuration(uint32_t id, float duration);
         void Clear();                                                                                        // Clear Pipeline
         void DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num = -1);                                        // Render Sprites of different meshes
         void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType, int pt_light_num = -1);     // Render Sprites of different meshes

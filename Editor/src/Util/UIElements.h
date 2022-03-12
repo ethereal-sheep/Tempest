@@ -16,6 +16,7 @@
 #include <Tempest/src/ECS/Entity.h>
 #include "Instance/Instance.h"
 
+
 namespace Tempest::UI
 {
 	template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
@@ -179,8 +180,15 @@ namespace Tempest::UI
 	std::pair<bool,bool> UIConflictSelectable(const char* label, bool* p_selected, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool selected = false, bool withDelete = true, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 	std::pair<bool, bool> UIMapSelectable(const char* label, const char* date, bool* p_selected, bool withDelete, int type = 0, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
+	bool UILoadProject(string str = "");
+	bool UILoadProjectEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col, const ImVec4& tint_pressed);
+
+	bool UIImgBtnWithText(ImTextureID user_texture_id, const ImVec2& size, string str = "");
+	bool UIImgBtnWithTextEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col, const ImVec4& tint_pressed);
+
 	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_hover = ImVec4(1, 1, 1, 1), const ImVec4& tint_pressed = ImVec4(1,1,1,1));
 	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col, const ImVec4& tint_pressed);
+	
 	bool UICheckBox_1(const char* label, bool* v);
 
 	std::pair<bool, bool> UICharButton_WithDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
@@ -188,7 +196,7 @@ namespace Tempest::UI
 	bool UICharButton_NoDeleteEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
 	bool UICharButton_ToggleEx(ImGuiID id, ImTextureID texture_id, string label, const ImVec2& size, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
 	bool UIActionButtonEx (ImGuiID id, string actionName, bool selected, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
-	bool UICharTurnButtonEx (ImGuiID id, ImTextureID texture_id, string characterName, const ImVec2& size, bool selected, bool isBig, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
+	bool UICharTurnButtonEx (ImGuiID id, ImTextureID texture_id, string characterName, const ImVec2& size, bool selected,bool isPlaced, bool isBig, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_col);
 	/*
 	user_texture_id - Id of texture
 	size - Size of Img
@@ -200,7 +208,7 @@ namespace Tempest::UI
 	bool UICharButton_NoDelete(ImTextureID user_texture_id, const ImVec2& size, string charName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 	bool UICharButton_Toggle(ImTextureID user_texture_id, const ImVec2& size, string charName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = 2, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 	bool UIActionButton(string actionName, string labelID, bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
-	bool UICharTurnButton(ImTextureID user_texture_id, const ImVec2& size, string characterName, string labelID, bool selected = false, bool isBig = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+	bool UICharTurnButton(ImTextureID user_texture_id, const ImVec2& size, string characterName, string labelID, bool selected = false, bool isPlaced = false, bool isBig = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 
 	// Pos is from top left 
 	void CharacterTurn(Instance& instance, Entity id, const ImVec2 pos, bool selected = false);
@@ -213,7 +221,15 @@ namespace Tempest::UI
 	// Pos is from Middle of arrow 
 	void AttackSuccessUI(string name, const ImVec2 pos, int successVal);
 
+	bool UISliderFloat(const char* label, float* v, float v_min, float v_max, const char* format = "%0.f", ImGuiSliderFlags flags = 0);
+	bool UISliderScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags);
+
+	//Single Box
 	void TutArea(ImVec2 pos, ImVec2 size, bool border = true);
+	// Two box Left and Right
+	void TutArea2(ImVec2 pos1, ImVec2 Pos2, ImVec2 size1, ImVec2 size2, bool border = true);
+	// Two box Top and Down
+	void TutArea3(ImVec2 pos1, ImVec2 Pos2, ImVec2 size1, ImVec2 size2, bool border = true);
 	bool MouseIsWithin(const ImVec2 min, const ImVec2 max);
 	void TutProgressBar(ImDrawList* drawlist, const ImVec2 &viewport, int step);
 	void TutProgressBar2(ImDrawList* drawlist, const ImVec2& viewport, Instance& instance, bool isFullBar = false);
