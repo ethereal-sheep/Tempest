@@ -21,6 +21,7 @@
 //#include "stb_image_write.h"
 
 #include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/Interactive_DoorParticle_3D.h"
 
 namespace Tempest
 {
@@ -137,13 +138,23 @@ namespace Tempest
 						//auto emitter = ParticleSystem_3D::GetInstance().CreateUnitTrailEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
 
 						//ParticleSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
-						ParticleSystem_3D::GetInstance().CreateInteractiveParticle(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 5.0f, 5.0f, 0.0f });
+						auto& temp = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 5.0f, 5.0f, 0.0f });
+
 					}
+					break;
 					case 'e':
 					{
-						ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+						//ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(glm::vec3{ 2.0f, 0.0f, 2.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
+
+							// Note - Values to be divided by 255.0f - Forgot the reason
+
+						auto& temp = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 5.0f, 0.0f, 0.0f }, glm::vec3{ 5.0f, 5.0f, -5.0f });
+						temp.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+						temp.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
 					}
+					break;
 					break;
 					case 'o':
 					{

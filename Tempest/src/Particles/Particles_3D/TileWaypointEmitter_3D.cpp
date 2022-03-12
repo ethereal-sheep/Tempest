@@ -92,6 +92,8 @@ void TileWaypointEmitter_3D::SelfUpdate(const float dt)
 		// If can spawn even more
 		while (m_EM.m_spawnCountTimer <= 0.f)
 		{
+			//LOG_INFO("Tile Way Point Emit");
+
 			//Emit particle
 			Emit(m_EM.m_rateOverTime);
 
@@ -139,11 +141,11 @@ void TileWaypointEmitter_3D::UpdateWaypoints(glm::vec3 tileOriginPosition)
 	m_wayPoints.push_back(wp_LeftBtm);
 
 	// Log Waypoints
-	LOG_INFO("Right BTM:  x: {0}, y:{1}, z{2}", wp_RightBtm.x, wp_RightBtm.y, wp_RightBtm.z);
-	LOG_INFO("Right TOP:  x: {0}, y:{1}, z{2}", wp_RightTop.x, wp_RightTop.y, wp_RightTop.z);
+	//LOG_INFO("Right BTM:  x: {0}, y:{1}, z{2}", wp_RightBtm.x, wp_RightBtm.y, wp_RightBtm.z);
+	//LOG_INFO("Right TOP:  x: {0}, y:{1}, z{2}", wp_RightTop.x, wp_RightTop.y, wp_RightTop.z);
 
-	LOG_INFO("Left TOP:  x: {0}, y:{1}, z{2}", wp_LeftTop.x, wp_LeftTop.y, wp_LeftTop.z);
-	LOG_INFO("Left BTM:  x: {0}, y:{1}, z{2}", wp_LeftBtm.x, wp_LeftBtm.y, wp_LeftBtm.z);
+	//LOG_INFO("Left TOP:  x: {0}, y:{1}, z{2}", wp_LeftTop.x, wp_LeftTop.y, wp_LeftTop.z);
+	//LOG_INFO("Left BTM:  x: {0}, y:{1}, z{2}", wp_LeftBtm.x, wp_LeftBtm.y, wp_LeftBtm.z);
 
 	// Clear all alive particles
 	ClearAllParticles();
