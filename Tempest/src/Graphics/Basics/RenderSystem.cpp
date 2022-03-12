@@ -13,6 +13,8 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "ECS/Components/Components.h"
 #include "Logger/Log.h"
+#include "Animation/AnimationManager.h"
+#include "Profiler/Profiler.h"
 
 namespace Tempest
 {
@@ -430,6 +432,9 @@ namespace Tempest
         //----------
         iblSetup();
         //AAgridShow = true;
+
+        // Animation Testing
+        //model.loadModel("../../../Resource/Models/gura.fbx");
     }
 
     void RenderSystem::Submit(MeshCode code, const Transform& transform)
@@ -456,34 +461,110 @@ namespace Tempest
         }
     }
 
-    void RenderSystem::SubmitModel(const string& path, const Transform& transform)
-    {
-        LoadModel(path);
-
-        ModelObj model;
-        model.m_Transform = to_Model_Matrix(transform);
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
-        m_Pipeline.m_Models.push_back(model);
-    }
-
     void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix)
     {
-        LoadModel(path);
-        ModelObj model;
-        model.m_Transform = model_matrix;
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
-        m_Pipeline.m_Models.push_back(model);
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        ModelObj m;
+        m.m_Transform = model_matrix;
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
+
+        m_Pipeline.m_Models.push_back(m);
+    }
+
+    void RenderSystem::SubmitModel(const string& path, const Transform& transform)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        ModelObj m;
+        m.m_Transform = to_Model_Matrix(transform);
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
+
+        m_Pipeline.m_Models.push_back(m);
+    }
+
+    // anim - Animation Name,   index - entity id
+    void RenderSystem::SubmitModel(const string& path, const Transform& transform, uint32_t id)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+
+        if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
+        {
+            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);  // Multiple Animations
+            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
+            m_Animation.AddAnimator(id, animator);
+        }
+        // Multiple Animations
+        //else if (!m_Animation.CheckAnimation(id, anim))
+        //    m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);    //
+
+        ModelObj m;
+        m.m_Transform = to_Model_Matrix(transform);
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
+
+        auto transforms = m_Animation.GetBoneMatrix(id);
+        for (auto& i : transforms)
+            m.m_Bones.push_back(i);
+        m_Pipeline.m_Models.push_back(m);
+    }
+
+    void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        
+        if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
+        {
+            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);        // Multiple Animations
+            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
+            m_Animation.AddAnimator(id, animator);
+        }
+          
+        // Multiple Animations
+        //else if (!m_Animation.CheckAnimation(id, anim))     // Check if Different Animation
+        //    m_Animation.ChangeAnimation(id, &m_Pipeline.m_ModelLibrary[path]->animations[anim]);
+
+        ModelObj m;
+        m.m_Transform = model_matrix;
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
+        
+        auto transforms = m_Animation.GetBoneMatrix(id);
+        for (auto& i : transforms)
+            m.m_Bones.push_back(i);
+        m_Pipeline.m_Models.push_back(m);
     }
     
     void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color)
     {
-        LoadModel(path);
-        ModelObj model;
-        model.m_Transform = model_matrix;
-        model.m_Model = m_Pipeline.m_ModelLibrary[path];
-        model.hasColor = true;
-        model.color = color;
-        m_Pipeline.m_Models.push_back(model);
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+        ModelObj m;
+        m.m_Transform = model_matrix;
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
+        m.hasColor = true;
+        m.color = color;
+        m_Pipeline.m_Models.push_back(m);
     }
  
     void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)
@@ -550,6 +631,10 @@ namespace Tempest
 
     void RenderSystem::Render()
     {
+        //ModelPBR model;
+        //model.loadModel("../../../Resource/Models/test14.fbx");
+        SubmitModel("../../../Resource/Models/Unit_Idle.fbx", glm::mat4{ 1.f }, 1900);
+
         if (USO)
         {
             //glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );              // background color
@@ -569,341 +654,418 @@ namespace Tempest
 
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
-
-        glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        if(!USO && AAgridShow)
-            RenderAAGrid();
-
-        for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+ 
         {
-            projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * m_Pipeline.m_Models[i].m_Transform;
+            NAMED_PROFILER_MARKER(GBufferPass, DRAW);
 
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "projViewModel");
+            glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            if (!USO && AAgridShow)
+                RenderAAGrid();
+            for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+            {
+                projViewModel = GetCamera().GetProjectionMatrix() * GetCamera().GetViewMatrix() * m_Pipeline.m_Models[i].m_Transform;
 
-            // to be fixed for blur 
-            m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;
-            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_TransformPrev, "prevProjViewModel");
-            m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;
-           
-            for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
-            {                   
-                if (m_Pipeline.m_Models[i].m_Model->colours.size())
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "projection");
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "projViewModel");
+
+
+
+                // Animation Stuff
+                if (m_Pipeline.m_Models[i].m_Model->HasAnimation)
                 {
-                    if (USO && (j == 1))
+                    // Submit Final Bone Matrix Uniform
+                    if (!m_Pipeline.m_Models[i].m_Bones.empty())
                     {
-                       m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x,USOcolor.y,USOcolor.z), "colour");
+                        for (auto z = 0; z < m_Pipeline.m_Models[i].m_Bones.size(); ++z)
+                        {
+                            std::string bones = "finalBonesMatrices[" + std::to_string(z) + "]";
+                            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Bones[z], bones.c_str());
+                        }
                     }
-                    else if ((j == 4) && !USO )
-                    {
-                      
-                        if (m_Pipeline.m_Models[i].hasColor)
-                            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].color, "colour");
 
-                        //if(USO)
-                        //    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x,USOcolor.y,USOcolor.z), "colour");
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Model->HasAnimation, "HasAnimation");
+                }
+
+                else
+                {
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "HasAnimation");
+                }
+
+
+                // to be fixed for blur 
+                m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_TransformPrev, "prevProjViewModel");
+                m_Pipeline.m_Models[i].m_TransformPrev = m_Pipeline.m_Models[i].m_Transform;
+
+                for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); ++j)
+                {
+                    if (m_Pipeline.m_Models[i].m_Model->colours.size())
+                    {
+                        if (USO && (j == 1))
+                        {
+                            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x, USOcolor.y, USOcolor.z), "colour");
+                        }
+                        else if ((j == 4) && !USO)
+                        {
+
+                            if (m_Pipeline.m_Models[i].hasColor)
+                                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].color, "colour");
+
+                            //if(USO)
+                            //    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x,USOcolor.y,USOcolor.z), "colour");
+                        }
+                        else
+                            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
                     }
                     else
-                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
+                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
+
+
+
+                    glActiveTexture(GL_TEXTURE0);
+                    if (m_Pipeline.m_Models[i].m_Model->mm.size())
+                        if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
+                        {
+                            m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
+                        }
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
+
+                    glActiveTexture(GL_TEXTURE1);
+                    objectNormal.useTexture();
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
+
+                    glActiveTexture(GL_TEXTURE2);
+                    objectRoughness.useTexture();
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
+
+                    glActiveTexture(GL_TEXTURE3);
+                    objectMetalness.useTexture();
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
+
+                    glActiveTexture(GL_TEXTURE4);
+                    objectAO.useTexture();
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
+
+                    if (m_Pipeline.m_Models[i].m_Model->mm.size())
+                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i((int)m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].tPath.size(), "texID");
+                    else
+                        m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texID");
+
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(TestPBR, "TestPBR");
+
+                    m_Pipeline.m_Models[i].m_Model->meshes[j].Draw();
                 }
-                else
-                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
-
-                
-
-                glActiveTexture(GL_TEXTURE0);
-                if(m_Pipeline.m_Models[i].m_Model->mm.size())
-                    if (m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].getTexID())
-                    {                 
-                        m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].useTexture();
-                    }
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texAlbedo");
-
-                glActiveTexture(GL_TEXTURE1);
-                objectNormal.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(1, "texNormal");
-
-                glActiveTexture(GL_TEXTURE2);
-                objectRoughness.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(2, "texRoughness");
-
-                glActiveTexture(GL_TEXTURE3);
-                objectMetalness.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(3, "texMetalness");
-                
-                glActiveTexture(GL_TEXTURE4);
-                objectAO.useTexture();
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(4, "texAO");
-
-                if(m_Pipeline.m_Models[i].m_Model->mm.size())
-                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i((int)m_Pipeline.m_Models[i].m_Model->mm[m_Pipeline.m_Models[i].m_Model->mats[j]].tPath.size(), "texID");
-                else
-                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(0, "texID");
-
-                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(TestPBR, "TestPBR");
-
-                m_Pipeline.m_Models[i].m_Model->meshes[j].Draw();
-            } 
-        }        
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+            }
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
         //---------------
         // sao rendering
         //---------------
-        glBindFramebuffer(GL_FRAMEBUFFER, saoFBO);
-        glClear(GL_COLOR_BUFFER_BIT);
-  
-        if (saoMode)
+
         {
-            // SAO noisy texture
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Bind();
-
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, gPosition);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, gNormal);
-
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoSamples, "saoSamples");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoRadius, "saoRadius");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoTurns, "saoTurns");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoBias, "saoBias");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoScale, "saoScale");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoContrast, "saoContrast");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(WIDTH, "viewportWidth");
-            m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(HEIGHT, "viewportHeight");
-
-            quadRender.drawShape();
-
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-            // SAO blur pass
-            glBindFramebuffer(GL_FRAMEBUFFER, saoBlurFBO);
+            NAMED_PROFILER_MARKER(SSAOPass, DRAW);
+            glBindFramebuffer(GL_FRAMEBUFFER, saoFBO);
             glClear(GL_COLOR_BUFFER_BIT);
-
-            m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Bind();
-            m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Set1i(saoBlurSize, "saoBlurSize");
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, saoBuffer);
-
-            quadRender.drawShape();
-        }
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // Directional light depth map
-        if (!dir_lights[0].hide)
-        {
-            dir_lights[0].Bind();
-            //viewMatrix = LookAt(lighting.mCameraPosition, lighting.mCameraPosition + glm::normalize(directionalLight.mLightDirection), Vec3(0.0f, 1.0f, 0.0f));
-            lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
-            lightView = glm::lookAt(10.f * -dir_lights[0].Direction,
-                glm::vec3(0.0f, 0.0f, 0.0f),
-                glm::vec3(0.0f, 1.0f, 0.0f));
-            //lightView = glm::lookAt(GetCamera().GetPosition(), GetCamera().GetPosition() + glm::normalize(dir_lights[0].Direction), glm::vec3(0.0f,1.0f,0.0f));
-            lightSpaceMatrix = lightProjection * lightView;
-
-            for (uint32_t j = 0; j < m_Pipeline.m_Models.size(); ++j)
-            {         
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(9, "shadowMap"); // Set Shadow map for directional light to be slot 6 
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
-                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[j].m_Transform, "ModelMatrix");
-                m_Pipeline.m_Models[j].m_Model->Draw();
-            }          
-
-            glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-            glViewport(0, 0, WIDTH, HEIGHT);
-        }
-
-        // render all pt lights to depth buffer
-        if (GetActivePt_lightsNum())
-        {
-            for (int numPt = 0; numPt < pt_lights.size(); numPt++)
+            if (saoMode)
             {
-                if (pt_lights[numPt].hide)
-                    continue;
+                // SAO noisy texture
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Bind();
 
-                // Bind Point Light FBO
-                pt_lights[numPt].Bind();
-                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, gPosition);
+                glActiveTexture(GL_TEXTURE1);
+                glBindTexture(GL_TEXTURE_2D, gNormal);
 
-                // Send in uniform values
-                glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
-                std::vector<glm::mat4> shadowTransforms;
-                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
-                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-                for (unsigned int shadowxform = 0; shadowxform < 6; ++shadowxform)
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(shadowTransforms[shadowxform], ("shadowMatrices[" + std::to_string(shadowxform) + "]").c_str());
-                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1f(far_plane, "far_plane");
-                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetVec3f(pt_lights[numPt].Position, "lightPos");
-                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
-                m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoSamples, "saoSamples");
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoRadius, "saoRadius");
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(saoTurns, "saoTurns");
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoBias, "saoBias");
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoScale, "saoScale");
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1f(saoContrast, "saoContrast");
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(WIDTH, "viewportWidth");
+                m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(HEIGHT, "viewportHeight");
 
-                for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+                quadRender.drawShape();
+
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+                // SAO blur pass
+                glBindFramebuffer(GL_FRAMEBUFFER, saoBlurFBO);
+                glClear(GL_COLOR_BUFFER_BIT);
+
+                m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Bind();
+                m_Pipeline.m_Shaders[ShaderCode::saoBlurShader]->Set1i(saoBlurSize, "saoBlurSize");
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, saoBuffer);
+
+                quadRender.drawShape();
+            }
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+        {
+            NAMED_PROFILER_MARKER(DirLightPass, DRAW);
+            // Directional light depth map
+            if (!dir_lights[0].hide)
+            {
+                dir_lights[0].Bind();
+                //viewMatrix = LookAt(lighting.mCameraPosition, lighting.mCameraPosition + glm::normalize(directionalLight.mLightDirection), Vec3(0.0f, 1.0f, 0.0f));
+                lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
+                lightView = glm::lookAt(10.f * -dir_lights[0].Direction,
+                    glm::vec3(0.0f, 0.0f, 0.0f),
+                    glm::vec3(0.0f, 1.0f, 0.0f));
+                //lightView = glm::lookAt(GetCamera().GetPosition(), GetCamera().GetPosition() + glm::normalize(dir_lights[0].Direction), glm::vec3(0.0f,1.0f,0.0f));
+                lightSpaceMatrix = lightProjection * lightView;
+
+                for (uint32_t j = 0; j < m_Pipeline.m_Models.size(); ++j)
                 {
-                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
-                    m_Pipeline.m_Models[i].m_Model->Draw();
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Bind();
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(9, "shadowMap"); // Set Shadow map for directional light to be slot 6 
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[j].m_Transform, "ModelMatrix");
+
+                    // Animation Stuff
+                    if (m_Pipeline.m_Models[j].m_Model->HasAnimation)
+                    {
+                        // Submit Final Bone Matrix Uniform
+                        if (!m_Pipeline.m_Models[j].m_Bones.empty())
+                        {
+                            for (auto z = 0; z < m_Pipeline.m_Models[j].m_Bones.size(); ++z)
+                            {
+                                std::string bones = "finalBonesMatrices[" + std::to_string(z) + "]";
+                                m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[j].m_Bones[z], bones.c_str());
+                            }
+                        }
+
+                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(m_Pipeline.m_Models[j].m_Model->HasAnimation, "HasAnimation");
+                    }
+
+                    else
+                    {
+                        m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(0, "HasAnimation");
+                    }
+
+                    m_Pipeline.m_Models[j].m_Model->Draw();
                 }
 
+                glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+                glViewport(0, 0, WIDTH, HEIGHT);
             }
-            glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
-            glViewport(0, 0, WIDTH, HEIGHT);
         }
+        {
+            NAMED_PROFILER_MARKER(PtLightPass, DRAW);
+            // render all pt lights to depth buffer
+            if (GetActivePt_lightsNum())
+            {
+                for (int numPt = 0; numPt < pt_lights.size(); numPt++)
+                {
+                    if (pt_lights[numPt].hide)
+                        continue;
 
+                    // Bind Point Light FBO
+                    pt_lights[numPt].Bind();
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Bind();
+
+                    // Send in uniform values
+                    glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)m_ShadowBuffer.m_Width / (float)m_ShadowBuffer.m_Height, near_plane, far_plane);
+                    std::vector<glm::mat4> shadowTransforms;
+                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                    shadowTransforms.push_back(shadowProj * glm::lookAt(pt_lights[numPt].Position, pt_lights[numPt].Position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                    for (unsigned int shadowxform = 0; shadowxform < 6; ++shadowxform)
+                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(shadowTransforms[shadowxform], ("shadowMatrices[" + std::to_string(shadowxform) + "]").c_str());
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1f(far_plane, "far_plane");
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetVec3f(pt_lights[numPt].Position, "lightPos");
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(5, "depthMap"); // Set Shadow map for directional light to be slot 5
+                    m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->Set1i(1, "meshDrawing"); // 1 for meshdrawing
+
+                    for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+                    {
+                        m_Pipeline.m_Shaders[ShaderCode::POINT_LIGHT_DEPTH]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "ModelMatrix");
+                        if (m_Pipeline.m_Models[i].m_Model->HasAnimation)
+                        {
+                            // Submit Final Bone Matrix Uniform
+                            if (!m_Pipeline.m_Models[i].m_Bones.empty())
+                            {
+                                for (auto z = 0; z < m_Pipeline.m_Models[i].m_Bones.size(); ++z)
+                                {
+                                    std::string bones = "finalBonesMatrices[" + std::to_string(z) + "]";
+                                    m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->SetMat4fv(m_Pipeline.m_Models[i].m_Bones[z], bones.c_str());
+                                }
+                            }
+
+                            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(m_Pipeline.m_Models[i].m_Model->HasAnimation, "HasAnimation");
+                        }
+
+                        else
+                        {
+                            m_Pipeline.m_Shaders[ShaderCode::DIRECTIONAL_SHADOW_MAP]->Set1i(0, "HasAnimation");
+                        }
+                        m_Pipeline.m_Models[i].m_Model->Draw();
+                    }
+
+                }
+                glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind 
+                glViewport(0, 0, WIDTH, HEIGHT);
+            }
+        }
         //------------------------
         // Lighting Pass rendering
         //------------------------
 
-        glBindFramebuffer(GL_FRAMEBUFFER, postprocessFBO);
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, gPosition);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, gAlbedo);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, gNormal);
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_2D, gEffects);
-        glActiveTexture(GL_TEXTURE4);
-        glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
-        glActiveTexture(GL_TEXTURE5);
-        envMapHDR.useTexture();
-        glActiveTexture(GL_TEXTURE6);
-        envMapIrradiance.useTexture();
-        glActiveTexture(GL_TEXTURE7);
-        envMapPrefilter.useTexture();
-        glActiveTexture(GL_TEXTURE8);
-        envMapLUT.useTexture();
-
-        glActiveTexture(GL_TEXTURE9);
-        glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
-
-        //if (!pt_lights.empty())
-        //{
-        //    glActiveTexture(GL_TEXTURE10);
-        //    glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
-        //    m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
-        //}
-        
-
-        for (size_t pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
         {
-            glActiveTexture(GL_TEXTURE10 + (int)pt_light_);
-            glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[pt_light_].m_cubemap);
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10 + (int)pt_light_, ("shadowCube[" + std::to_string((int)pt_light_) + "]").c_str());
 
-            glm::vec3 lightPositionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(pt_lights[pt_light_].Position, 1.0f));
+            NAMED_PROFILER_MARKER(PBRPass, DRAW);
+            glBindFramebuffer(GL_FRAMEBUFFER, postprocessFBO);
 
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightPositionViewSpace, ("lightPointArray[" + std::to_string(pt_light_) + "].position").c_str());
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(pt_lights[pt_light_].Color, ("lightPointArray[" + std::to_string(pt_light_) + "].color").c_str());
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(pt_lights[pt_light_].radius, ("lightPointArray[" + std::to_string(pt_light_) + "].radius").c_str());
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Bind();
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, gPosition);
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, gAlbedo);
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, gNormal);
+            glActiveTexture(GL_TEXTURE3);
+            glBindTexture(GL_TEXTURE_2D, gEffects);
+            glActiveTexture(GL_TEXTURE4);
+            glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
+            glActiveTexture(GL_TEXTURE5);
+            envMapHDR.useTexture();
+            glActiveTexture(GL_TEXTURE6);
+            envMapIrradiance.useTexture();
+            glActiveTexture(GL_TEXTURE7);
+            envMapPrefilter.useTexture();
+            glActiveTexture(GL_TEXTURE8);
+            envMapLUT.useTexture();
 
-            std::string pointLightHide = "pointLightHide[" + std::to_string(pt_light_) + "]";
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pt_lights[pt_light_].hide, pointLightHide.data());
+            glActiveTexture(GL_TEXTURE9);
+            glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
+
+            //if (!pt_lights.empty())
+            //{
+            //    glActiveTexture(GL_TEXTURE10);
+            //    glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[0].m_cubemap);
+            //    m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "shadowCube");
+            //}
+
+            for (size_t pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
+            {
+                glActiveTexture(GL_TEXTURE10 + (int)pt_light_);
+                glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[pt_light_].m_cubemap);
+                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10 + (int)pt_light_, ("shadowCube[" + std::to_string((int)pt_light_) + "]").c_str());
+
+                glm::vec3 lightPositionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(pt_lights[pt_light_].Position, 1.0f));
+
+                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightPositionViewSpace, ("lightPointArray[" + std::to_string(pt_light_) + "].position").c_str());
+                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(pt_lights[pt_light_].Color, ("lightPointArray[" + std::to_string(pt_light_) + "].color").c_str());
+                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(pt_lights[pt_light_].radius, ("lightPointArray[" + std::to_string(pt_light_) + "].radius").c_str());
+
+                std::string pointLightHide = "pointLightHide[" + std::to_string(pt_light_) + "]";
+                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pt_lights[pt_light_].hide, pointLightHide.data());
+            }
+
+            for (size_t dLight = 0; dLight < dir_lights.size(); dLight++)
+            {
+                glm::vec3 lightDirectionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(dir_lights[dLight].Direction, 0.0f));
+
+                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightDirectionViewSpace, ("lightDirectionalArray[" + std::to_string(dLight) + "].direction").c_str());
+                m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(dir_lights[dLight].Color, ("lightDirectionalArray[" + std::to_string(dLight) + "].color").c_str());
+            }
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::transpose(GetCamera().GetViewMatrix()), "inverseView");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::inverse(GetCamera().GetProjectionMatrix()), "inverseProj");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialRoughness, "materialRoughness");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialMetallicity, "materialMetallicity");
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(materialF0, "materialF0");
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientIntensity, "ambientIntensity");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(gBufferView, "gBufferView");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointMode, "pointMode");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(directionalMode, "directionalMode");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(iblMode, "iblMode");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(attenuationMode, "attenuationMode");
+
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "proj");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(GetCamera().GetPosition(), "camPos");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(far_plane, "far_plane");
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(dirShadowBool, "dirShadowBool");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointShadowBool, "pointShadowBool");
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(clearColor, "clearColor");
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(envMapShow, "envMapShow");
+
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientStrength, "ambientAmount");
+            quadRender.drawShape();
+
+
+            m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
-
-        for (size_t dLight = 0; dLight < dir_lights.size(); dLight++)
-        {
-            glm::vec3 lightDirectionViewSpace = glm::vec3(GetCamera().GetViewMatrix() * glm::vec4(dir_lights[dLight].Direction, 0.0f));
-
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(lightDirectionViewSpace, ("lightDirectionalArray[" + std::to_string(dLight) + "].direction").c_str());
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(dir_lights[dLight].Color, ("lightDirectionalArray[" + std::to_string(dLight) + "].color").c_str());
-        }
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::transpose(GetCamera().GetViewMatrix()), "inverseView");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(glm::inverse(GetCamera().GetProjectionMatrix()), "inverseProj");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialRoughness, "materialRoughness");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(materialMetallicity, "materialMetallicity");
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(materialF0, "materialF0");
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientIntensity, "ambientIntensity");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(gBufferView, "gBufferView");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointMode, "pointMode");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(directionalMode, "directionalMode");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(iblMode, "iblMode");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(attenuationMode, "attenuationMode");
-
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetMat4fv(GetCamera().GetProjectionMatrix(), "proj");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec3f(GetCamera().GetPosition(), "camPos");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(far_plane, "far_plane");
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(dirShadowBool, "dirShadowBool");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(pointShadowBool, "pointShadowBool");
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(clearColor, "clearColor");
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(envMapShow, "envMapShow");
-
-        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientStrength, "ambientAmount");
-        quadRender.drawShape();
-
-
-        m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);    
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
         //-------------------------------
         // Post-processing Pass rendering
         //-------------------------------
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Bind();
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(gBufferView, "gBufferView");;
+        {
+            NAMED_PROFILER_MARKER(PostProcessing, DRAW);
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Bind();
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(gBufferView, "gBufferView");;
 
 
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->SetVec2f(glm::vec2{ 1.0f / (float)WIDTH , 1.0f / (float)HEIGHT }, "screenTextureSize");;
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->SetVec2f(glm::vec2{ 1.0f / (float)WIDTH , 1.0f / (float)HEIGHT }, "screenTextureSize");;
 
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraAperture, "cameraAperture");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraShutterSpeed, "cameraShutterSpeed");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraISO, "cameraISO");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tiltShiftMode, "tiltShiftMode");
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");
-        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(gammaValue, "gammaValue");
-        //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");;
-        //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(fps / 144.f, "motionBlurScale");;
-        //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMaxSamples, "motionBlurMaxSamples");;
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraAperture, "cameraAperture");;
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraShutterSpeed, "cameraShutterSpeed");;
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(cameraISO, "cameraISO");;
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(saoMode, "saoMode");;
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(fxaaMode, "fxaaMode");;
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tiltShiftMode, "tiltShiftMode");
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(tonemappingMode, "tonemappingMode");
+            m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(gammaValue, "gammaValue");
+            //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMode, "motionBlurMode");;
+            //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1f(fps / 144.f, "motionBlurScale");;
+            //m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(motionBlurMaxSamples, "motionBlurMaxSamples");;
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, postprocessBuffer);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, gEffects);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, postprocessBuffer);
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, gEffects);
 
-        quadRender.drawShape();
-/* 
-        glGetTexImage(postprocessBuffer, 0, GL_RGBA, GL_FLOAT, USObuffer); */
-/* 
-        glBlitNamedFramebuffer(gBuffer, gBuffer2, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST); */
-       
-        //-----------------------
-        // Forward Pass rendering
-        //-----------------------
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        
+            quadRender.drawShape();
+            /*
+                    glGetTexImage(postprocessBuffer, 0, GL_RGBA, GL_FLOAT, USObuffer); */
+                    /*
+                            glBlitNamedFramebuffer(gBuffer, gBuffer2, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST); */
 
-        // Copy the depth informations from the Geometry Pass into the default framebuffer
-        glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+                            //-----------------------
+                            // Forward Pass rendering
+                            //-----------------------
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-        
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-       
+
+            // Copy the depth informations from the Geometry Pass into the default framebuffer
+            glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
     }
 
     void RenderSystem::DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num)
@@ -1105,5 +1267,15 @@ namespace Tempest
     void RenderSystem::SubmitLights([[maybe_unused]]const Point_Light& plight)
     {
        // pt_lights.emplace_back(plight);
+    }
+
+    void RenderSystem::UpdateAnimation(float dt)
+    {
+        m_Animation.UpdateAnimations(dt);
+    }
+
+    void RenderSystem::ChangeAnimationDuration(uint32_t id, float duration)
+    {
+        m_Animation.ChangeDuration(id, duration);
     }
 }

@@ -344,6 +344,7 @@ namespace Tempest
 
 
 						ImGui::EndChild();
+						ImGui::PopStyleColor(2);
 					}
 					
 					ImGui::PopFont();

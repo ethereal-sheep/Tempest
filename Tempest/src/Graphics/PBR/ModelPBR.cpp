@@ -26,6 +26,40 @@ namespace Tempest
 
     }
 
+	void ModelPBR::LoadTextures(const aiScene* scene)
+	{
+		for (auto i = 0; i < scene->mNumMaterials; ++i)
+		{
+			auto pMaterial = scene->mMaterials[i];
+			aiString texture;
+			TexturePBR tb;
+			pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR, i), texture);
+
+			if (texture.length)
+			{
+				mm.push_back(tb);
+			}
+		}
+	}
+
+	void ModelPBR::LoadMaterial(const aiScene* scene)
+	{
+		for (auto i = 0; i < scene->mNumMaterials; ++i)
+		{
+			auto pMaterial = scene->mMaterials[i];
+			aiColor3D diffuse;
+			glm::vec3 dif;
+
+			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
+
+			dif.x = diffuse.r;
+			dif.y = diffuse.g;
+			dif.z = diffuse.b;
+
+			colours.push_back(dif);
+		}
+	}
+
 
     void ModelPBR::loadModel(std::string file)
     {
@@ -50,6 +84,17 @@ namespace Tempest
 
 			this->directory = file.substr(0, file.find_last_of('/'));
 			this->processNode(scene->mRootNode, scene);
+			//LoadMaterial(scene);
+
+			// Multiple Animations embedded in 1 fbx
+			//for (unsigned int i = 0; i < static_cast<unsigned int>(scene->mNumAnimations); ++i)
+			//{
+			//	std::string name{ scene->mAnimations[i]->mName.C_Str() };
+			//	Animation anim(m_BoneInfoMap, m_BoneCounter, scene, i);
+			//	animations.insert(std::make_pair(name, anim));
+			//}
+
+			m_Animation = Animation(m_BoneInfoMap, m_BoneCounter, scene, 0);	// Single Animation embedded in 1 file
 		}
 
 		else
@@ -272,6 +317,7 @@ namespace Tempest
         for (GLuint i = 0; i < mesh->mNumVertices; i++)
         {
             Vertex vertex;
+			SetVertexBoneDataToDefault(vertex);
             glm::vec3 vector;
 
             vector.x = mesh->mVertices[i].x;
@@ -304,9 +350,70 @@ namespace Tempest
             for (GLuint j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);
         }
-
+		
+		HasAnimation = ExtractBoneWeightForVertices(vertices, mesh);
         return MeshPBR(vertices, indices);
     }
 
+	void ModelPBR::SetVertexBoneDataToDefault(Vertex& vertex)
+	{
+		for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+		{
+			vertex.BoneIds[i] = -1;
+			vertex.Weights[i] = 0.0f;
+		}
+	}
 
+	void ModelPBR::SetVertexBoneData(Vertex& vertex, int boneID, float weight)
+	{
+		for (int i = 0; i < MAX_BONE_INFLUENCE; ++i)
+		{
+			if (vertex.BoneIds[i] < 0)
+			{
+				vertex.Weights[i] = weight;
+				vertex.BoneIds[i] = static_cast<float>(boneID);
+				break;
+			}
+		}
+	}
+
+	bool ModelPBR::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh)
+	{
+		auto& boneInfoMap = m_BoneInfoMap;
+		int& boneCount = m_BoneCounter;
+
+		if (mesh->mNumBones == 0)
+			return false;
+
+		for (unsigned int boneIndex = 0; boneIndex < static_cast<unsigned int>(mesh->mNumBones); ++boneIndex)
+		{
+			int boneID = -1;
+			std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+			if (boneInfoMap.find(boneName) == boneInfoMap.end())
+			{
+				BoneInfo newBoneInfo;
+				newBoneInfo.m_ID = boneCount;
+				newBoneInfo.m_Offset = AssimpHelper::ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix);
+				boneInfoMap[boneName] = newBoneInfo;
+				boneID = boneCount;
+				boneCount++;
+			}
+			else
+			{
+				boneID = boneInfoMap[boneName].m_ID;
+			}
+
+			auto weights = mesh->mBones[boneIndex]->mWeights;
+			int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+
+			for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+			{
+				int vertexId = weights[weightIndex].mVertexId;
+				float weight = weights[weightIndex].mWeight;
+				SetVertexBoneData(vertices[vertexId], boneID, weight);
+			}
+		}
+
+		return true;
+	}
 }

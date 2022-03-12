@@ -136,6 +136,23 @@ namespace Tempest
 			ptlight.Color = light.color;
 			Service<RenderSystem>::Get().NumPLight++;
 		}
+
+		auto view6 = ecs.view<tc::Animation, tc::Model, tc::Transform>(exclude_t<tc::Destroyed, tc::Local>());
+		for (auto id : view6)
+		{
+			auto transform = ecs.get_if<tc::Transform>(id);
+			auto model = ecs.get_if<tc::Model>(id);
+			auto animation = ecs.get_if<tc::Animation>(id);
+
+			glm::mat4 mdl(1.f);
+			glm::mat4 translate = glm::translate(glm::vec3(transform->position.x, transform->position.y, transform->position.z));
+			glm::mat4 rotate(transform->rotation);
+			glm::mat4 scale = glm::scale(glm::vec3(transform->scale.x, transform->scale.y, transform->scale.z));
+
+			mdl = translate * rotate * scale;
+			
+			Service<RenderSystem>::Get().SubmitModel(model->path, mdl, animation->id);
+		}
 	}
 	void Instance::internal_exit()
 	{
