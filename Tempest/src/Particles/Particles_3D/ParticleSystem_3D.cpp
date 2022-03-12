@@ -200,6 +200,16 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	InteractiveParticle_3D& interactiveEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
+	// Swap positions of max and min if wrong value
+	if (minSpawnPos.x > maxSpawnPos.x)
+		std::swap(minSpawnPos.x, maxSpawnPos.x);
+
+	if (minSpawnPos.y > maxSpawnPos.y)
+		std::swap(minSpawnPos.y, maxSpawnPos.y);
+
+	if (minSpawnPos.z > maxSpawnPos.z)
+		std::swap(minSpawnPos.z, maxSpawnPos.z);
+
 	// Emitter_3D values - Without consideration for default ctor values
 	interactiveEmitter.m_GM.m_position = spawnPos;
 	interactiveEmitter.minPos = minSpawnPos;
