@@ -754,6 +754,8 @@ namespace Tempest
                             //if(USO)
                             //    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x,USOcolor.y,USOcolor.z), "colour");
                         }
+                        else if (m_Pipeline.m_Models[i].isParticle)
+                            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].color, "colour");
                         else
                             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");
                     }
