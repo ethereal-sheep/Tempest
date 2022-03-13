@@ -291,21 +291,21 @@ namespace Tempest
 				box.max.y = 0;
 
 				// Convert to Yaw, Roll, Pitch (Degree)
-				glm::vec3 euler = glm::eulerAngles(transform.rotation) * 180.0f / 3.14159f;
+				//glm::vec3 euler = glm::eulerAngles(transform.rotation) * 180.0f / 3.14159f;
 
-				LOG_INFO("Euler X: {0}", euler.x);
-				LOG_INFO("Euler Y: {0}", euler.y);
-				LOG_INFO("Euler Z: {0}", euler.z);
+				//LOG_INFO("Euler X: {0}", euler.x);
+				//LOG_INFO("Euler Y: {0}", euler.y);
+				//LOG_INFO("Euler Z: {0}", euler.z);
 
-				LOG_INFO("Min X: {0}", box.min.x);
-				LOG_INFO("Min Y: {0}", box.min.y);
-				LOG_INFO("Min Z: {0}", box.min.z);
+				//LOG_INFO("Min X: {0}", box.min.x);
+				//LOG_INFO("Min Y: {0}", box.min.y);
+				//LOG_INFO("Min Z: {0}", box.min.z);
 
-				LOG_INFO("Max X: {0}", box.max.x);
-				LOG_INFO("Max Y: {0}", box.max.y);
-				LOG_INFO("Max Z: {0}", box.max.z);
+				//LOG_INFO("Max X: {0}", box.max.x);
+				//LOG_INFO("Max Y: {0}", box.max.y);
+				//LOG_INFO("Max Z: {0}", box.max.z);
 
-				LOG_INFO("Next DOOR");
+				//LOG_INFO("Next DOOR");
 
 				if (box.min.x > box.max.x)
 					std::swap(box.min.x, box.max.x);

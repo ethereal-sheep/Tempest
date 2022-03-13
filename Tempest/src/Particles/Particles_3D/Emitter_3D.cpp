@@ -12,7 +12,7 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "../Random.h"
 
-#include "Logger/Logger.h"
+#include "Logger/Log.h"
 
 #define GRAVITY -9.8f
 
@@ -149,12 +149,16 @@ void Emitter_3D::Update(const float dt)
 			// Colour
 			particle.m_colour = glm::mix(particle.m_colourEnd, particle.m_colourBegin, lifePercent);
 			
+			//LOG_INFO("Particle Rot X: {0}", particle.m_rotation.x);
+			//LOG_INFO("Particle Rot Y: {0}", particle.m_rotation.y);
+			//LOG_INFO("Particle Rot Z: {0}", particle.m_rotation.z);
+
 			// Change the string in this function
 			auto t = glm::translate(particle.m_position);
 			auto s = glm::scale(particle.m_scale);
 			auto r = glm::rotate(particle.m_rotation.x, glm::vec3(1.f, 0.f, 0.f))
-				* glm::rotate(particle.m_rotation.y, glm::vec3(0.f, 1.f, 0.f))
-				* glm::rotate(particle.m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
+				   * glm::rotate(particle.m_rotation.y, glm::vec3(0.f, 1.f, 0.f))
+				   * glm::rotate(particle.m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
 
 			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle, (t * r * s));
 		}
