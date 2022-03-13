@@ -2564,6 +2564,16 @@ namespace Tempest
 	void CombatModeOverlay::change_turn_order(const Event& e)
 	{
 		units = event_cast<ChangeTurnOrder>(e).entities;
+
+		/*for (const auto this_unit : units)
+		{
+			if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+				return submitted == this_unit;
+			}))
+			{
+				submitted_units.erase(std::remove(submitted_units.begin(), submitted_units.end(), this_unit), submitted_units.end());
+			}
+		}*/
 		curr_entity = units.front();
 		curr_turn = 0;
 	}
@@ -2592,6 +2602,18 @@ namespace Tempest
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
 		}
+
+		//// jankass stuff
+		//for (const auto this_unit : units)
+		//{
+		//	if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+		//		return submitted == this_unit;
+		//	}))
+		//	{
+		//		Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Idle.fbx", instance.ecs.get<tc::Transform>(this_unit), this_unit);
+		//		submitted_units.emplace_back(this_unit);
+		//	}
+		//}
 
 
 		auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
