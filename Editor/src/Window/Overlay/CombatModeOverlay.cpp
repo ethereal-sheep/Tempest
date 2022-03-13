@@ -317,7 +317,9 @@ namespace Tempest
 
 	void draw_range(const tmap<int, tmap<int, uint32_t>>& range_map)
 	{
-		auto drawbox1 = [](int x, int y, bool b, auto grey, bool second) {
+		auto& cam = Service<RenderSystem>::Get().GetCamera();
+
+		auto drawbox1 = [&](int x, int y, bool b, auto grey, bool second) {
 			if (!b) return;
 			AABB box;
 
@@ -344,7 +346,7 @@ namespace Tempest
 				Service<RenderSystem>::Get().DrawLine(box2, { grey, grey, grey, 1 });
 			}
 		};
-		auto drawbox2 = [](int x, int y, bool b) {
+		auto drawbox2 = [&](int x, int y, bool b) {
 			if (!b) return;
 			AABB box;
 
@@ -370,26 +372,38 @@ namespace Tempest
 			Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
 		};
 		
-		auto drawbox = [](int x, int y, const vec4& color = vec4{ 1,1,1,1 }, unsigned number_of_squares = 1, float interval = .15f)
+		auto drawbox = [&](int x, int y, ImU32 color)
 		{
-			AABB box;
 
-			number_of_squares = std::min(number_of_squares, 5u);
-
-			float curr = 0.05f;
-
-			while (number_of_squares--)
+			auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
 			{
-				box.min.x = (float)x + curr;
-				box.min.z = (float)y + curr;
-				box.min.y = 0;
+				tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+				tvector<ImVec2> ss_pts;
+				auto vp = cam.GetViewport();
+				for (auto pt : ws_pts)
+				{
+					auto t_ss = cam.WorldspaceToScreenspace(pt);
+					t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+					t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
 
-				box.max.x = x + 1 - curr;
-				box.max.z = y + 1 - curr;
-				box.max.y = 0;
-				Service<RenderSystem>::Get().DrawLine(box, color);
-				curr += interval;
-			}
+					ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+				}
+
+				return ss_pts;
+			};
+
+			AABB box;
+			box.min.x = (float)x + .1f;
+			box.min.z = (float)y + .1f;
+			box.min.y = 0;
+
+			box.max.x = x + .9f;
+			box.max.z = y + .9f;
+			box.max.y = 0;
+
+			auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+			ImGui::GetBackgroundDrawList()->AddConvexPolyFilled(pts.data(), 4, color);
 
 		};
 
@@ -397,18 +411,16 @@ namespace Tempest
 			for (auto [y, i] : m)
 			{
 				if (i == 0) // hit nothing dark green
-					drawbox(x, y, { 0.01f, 0.05f, 0.01f, 0.5f }, 2, .1f);
+					drawbox(x, y, IM_COL32(0x20, 0x20, 0x20, 0x20));
 				else if (i == 1) // hit collider dark red
-					drawbox(x, y, { 0.04f, 0.02f, 0.02f, 0.4f }, 1, .1f);
+					drawbox(x, y, IM_COL32(0x20, 0x20, 0x20, 0x20));
 				else if (i == 2) // hit cover only dark red
-					drawbox(x, y, { 0.04f, 0.02f, 0.02f, 0.4f }, 1, .1f);
+					drawbox(x, y, IM_COL32(0x20, 0x20, 0x20, 0x20));
 				else if (i == 3) // hit player
-					drawbox(x, y, { 0,1,0,1 }, 1);
+					drawbox(x, y, IM_COL32(0xAF, 0x20, 0x20, 0x60));
 				else // hit player behind cover
 				{
-					float p = (float)std::pow<float>(0.5f, i - 3);
-					vec4 color = { 1.f, 0.3725f * p, 0.121f * p, 1 };
-					drawbox(x, y, color, i - 3, .1f);
+					drawbox(x, y, IM_COL32(0xAF, 0x80, 0x80, 0x20));
 				}
 
 			}
@@ -1067,7 +1079,64 @@ namespace Tempest
 
 
 				// helpers
-				draw_range(range_map);
+				//draw_range(range_map);
+				auto drawbox = [&](int x, int y, ImU32 color)
+				{
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+					AABB box;
+					box.min.x = (float)x + .1f;
+					box.min.z = (float)y + .1f;
+					box.min.y = 0;
+
+					box.max.x = x + .9f;
+					box.max.z = y + .9f;
+					box.max.y = 0;
+
+					auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+					ImGui::GetBackgroundDrawList()->AddConvexPolyFilled(pts.data(), 4, color);
+
+				};
+
+				for (auto& [x, m] : range_map)
+					for (auto [y, i] : m)
+					{
+						if (p_x == x && p_y == y)
+							continue;
+
+						if (i == 0) // hit nothing dark green
+							drawbox(x, y, IM_COL32(0xFF, 0x20, 0x20, 0x60));
+						else if (i == 1) // hit collider dark red
+						{
+							drawbox(x, y, IM_COL32(0x80, 0x80, 0x80, 0x60));
+						}
+						else if (i == 2) // hit cover only dark red
+							drawbox(x, y, IM_COL32(0xFF, 0xAF, 0x20, 0x60));
+						else if (i == 3) // hit player
+							drawbox(x, y, IM_COL32(0xFF, 0x20, 0x20, 0x60));
+						else // hit player behind cover
+							drawbox(x, y, IM_COL32(0xFF, 0xAF, 0x20, 0x60));
+
+					}
+
+
 
 				if (visited[w_x][w_y])
 				{
@@ -1082,8 +1151,6 @@ namespace Tempest
 						r.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f - .5f);
 						Service<RenderSystem>::Get().DrawLine(l, { 1,0,0,1 });
 						Service<RenderSystem>::Get().DrawLine(r, { 1,0,0,1 });
-
-
 
 						if (ImGui::GetIO().MouseClicked[0])
 						{
@@ -1155,7 +1222,7 @@ namespace Tempest
 					}
 					else
 					{
-						Line l;
+						/*Line l;
 						l.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f - .1f);
 						l.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f + .1f);
 
@@ -1163,7 +1230,7 @@ namespace Tempest
 						r.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f + .1f);
 						r.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f - .1f);
 						Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });*/
 
 
 					}
@@ -1254,28 +1321,92 @@ namespace Tempest
 				// lousy line of sight
 				if (range_map.count(w_x) && range_map[w_x].count(w_y))
 				{
+					const float thickness = .15f;
 					auto i = range_map[w_x][w_y];
 					vec3 start_p = vec3(p_x + .5f, 0, p_y + .5f);
 					vec3 end_p = vec3(w_x + .5f, 0, w_y + .5f);
 					vec3 line_v = vec3(w_x, 0, w_y) - vec3(p_x, 0, p_y);
-					vec4 color = { 0,1,0,1 };
+					ImU32 color;
 
 					if (i == 0) // hit nothing not blocked
-						color = { 0,1,0,1 };
+						color = IM_COL32(0xFF, 0x20, 0x20, 0x80);
 					else if (i == 1) // hit collider
-						color = { 1,0,0,1 };
+						color = IM_COL32(0x80, 0x80, 0x80, 0x80);
 					else if (i == 2) // hit cover
-						color = { 1,0.3725,0.121,1 };
+						color = IM_COL32(0xFF, 0xAF, 0x20, 0x80);
 					else if (i == 3) // hit collider and collider is player
-						color = { 0,1,0,1 };
+						color = IM_COL32(0xFF, 0x20, 0x20, 0xFF);
 					else // hit player and its behind cover
-						color = { 1,0.3725,0.121,1 };
+						color = IM_COL32(0xFF, 0xAF, 0x20, 0xFF);
+
+					auto WorldSpaceLinetoSSVecOfPts = [](Camera& cam, vec3 start, vec3 end, float thickness)
+					{
+						auto v = glm::normalize(end - start);
+						auto n = vec3(v.z, 0.f, -v.x);
+						n *= thickness;
+
+						tvector<vec3> ws_pts{ 
+							start + n,
+							end + n,
+							end - n,
+							start - n, };
+
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+					auto pts = WorldSpaceLinetoSSVecOfPts(cam, start_p, end_p - glm::normalize(line_v) * thickness, thickness);
+
+					auto drawlist = ImGui::GetBackgroundDrawList();
+					drawlist->AddConvexPolyFilled(pts.data(), 4, color);
 
 
-					Line pointer;
+					auto WorldSpaceToScreenspace = [](Camera& cam, vec3 pt)
+					{
+						auto vp = cam.GetViewport();
+						auto t_ss = cam.WorldspaceToScreenspace(pt);
+						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+						return ImVec2{ t_ss.x, t_ss.y };
+					};
+
+					auto v = glm::normalize(line_v);
+					auto n = vec3(v.z, 0.f, -v.x);
+					n *= thickness * 1.5f;
+
+					auto tip = WorldSpaceToScreenspace(cam, end_p);
+
+					vec3 pt1, pt2;
+					auto a = end_p - glm::normalize(line_v) * thickness;
+					pt1.x = a.x + n.x;
+					pt1.z = a.z + n.z;
+					pt1.y = 0;
+
+					pt2.x = a.x - n.x;
+					pt2.z = a.z - n.z;
+					pt2.y = 0;
+
+					auto v1 = WorldSpaceToScreenspace(cam, pt1);
+					auto v2 = WorldSpaceToScreenspace(cam, pt2);
+
+					drawlist->AddTriangleFilled(tip, v1, v2, color);
+
+
+					/*Line pointer;
 					pointer.p0 = start_p;
 					pointer.p1 = end_p;
-					Service<RenderSystem>::Get().DrawLine(pointer, color);
+					Service<RenderSystem>::Get().DrawLine(pointer, color);*/
 
 
 				}
@@ -1327,7 +1458,35 @@ namespace Tempest
 					box.max.z = y + .9f;
 					box.max.y = 0;
 
-					Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+					//Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+
+					auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+					auto drawlist = ImGui::GetBackgroundDrawList();
+					if (p_x == x && p_y == y)
+						;// drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0xAF, 0x20, 0x20, 0x80));
+					else
+						drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x20, 0xAF, 0x20, 0x60));
+
 				}
 
 			if (visited[w_x][w_y])
@@ -1357,7 +1516,7 @@ namespace Tempest
 				}
 				else
 				{
-					Line l;
+					/*Line l;
 					l.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f - .1f);
 					l.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f + .1f);
 
@@ -1365,7 +1524,7 @@ namespace Tempest
 					r.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f + .1f);
 					r.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f - .1f);
 					Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-					Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+					Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });*/
 
 
 					auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
@@ -1385,10 +1544,212 @@ namespace Tempest
 					}
 
 
+					auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
+						[&collision_map = instance.collision_map, &wall_map = instance.wall_map](int x, int y, int n_x, int n_y) {
+
+						if (wall_map[x][y][n_x][n_y])
+							return true;
+						if (collision_map[n_x][n_y])
+							return true;
+						return false;
+					});
+
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+					auto WorldSpaceToScreenspace = [](Camera& cam, vec3 pt)
+					{
+						auto vp = cam.GetViewport();
+						auto t_ss = cam.WorldspaceToScreenspace(pt);
+						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+						return ImVec2{ t_ss.x, t_ss.y };
+					};
+
+
+					const auto arrow_color = IM_COL32(0x20, 0xFF, 0x20, 0xFF);
+					const auto thickness = .15f;
+					auto drawlist = ImGui::GetBackgroundDrawList();
+					for (int i = 1; i < v.size(); ++i)
+					{
+						auto dir = v[i] - v[i-1];
+						AABB box;
+						if (dir.x)
+						{
+							box.min.x = v[i - 1].x + .5f + thickness * dir.x;
+							box.min.z = v[i - 1].y + .5f + thickness;
+							box.min.y = 0;
+
+							box.max.x = v[i].x + .5f - thickness * dir.x;
+							box.max.z = v[i].y + .5f - thickness;
+							box.max.y = 0;
+						}
+						else
+						{
+							box.min.x = v[i - 1].x + .5f + thickness;
+							box.min.z = v[i - 1].y + .5f + thickness * dir.y;
+							box.min.y = 0;
+
+							box.max.x = v[i].x + .5f - thickness;
+							box.max.z = v[i].y + .5f -thickness * dir.y;
+							box.max.y = 0;
+						}
+
+						auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+						drawlist->AddConvexPolyFilled(pts.data(), 4, arrow_color);
+					}
+
+					for (int i = 1; i < v.size()-1; ++i)
+					{
+						AABB box;
+						box.min.x = v[i].x + .5f + thickness;
+						box.min.z = v[i].y + .5f + thickness;
+						box.min.y = 0;
+
+						box.max.x = v[i].x + .5f - thickness;
+						box.max.z = v[i].y + .5f - thickness;
+						box.max.y = 0;
+
+						auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+						drawlist->AddConvexPolyFilled(pts.data(), 4, arrow_color);
+					}
+
+					auto dir = v[1] - v[0];
+					auto tip = WorldSpaceToScreenspace(cam, vec3{ v.front().x + 0.5f, 0.f, v.front().y + 0.5f });
+
+					vec3 pt1, pt2;
+
+					pt1.x = v.front().x + .5f + thickness * dir.x;
+					pt1.z = v.front().y + .5f + thickness * dir.y;
+					pt1.y = 0;
+
+					pt2.x = v.front().x + .5f + thickness * dir.x;
+					pt2.z = v.front().y + .5f + thickness * dir.y;
+					pt2.y = 0;
+
+					if (dir.x)
+					{
+						pt1.z += thickness * 1.5f;
+						pt2.z -= thickness * 1.5f;
+					}
+					else
+					{
+						pt1.x += thickness * 1.5f;
+						pt2.x -= thickness * 1.5f;
+					}
+
+					auto v1 = WorldSpaceToScreenspace(cam, pt1);
+					auto v2 = WorldSpaceToScreenspace(cam, pt2);
+
+					drawlist->AddTriangleFilled(tip, v1, v2, arrow_color);
+
+
+					/*auto WorldSpaceVecToSSVecOfPts = [](Camera& cam, tvector<vec3> ws_pts)
+					{
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};*/
+
+					//const auto thickness = .25f;
+					//tvector<vec3> ws_pts;
+					//auto prev = v[1] - v[0];
+					//for (int i = 1; i < v.size()-1; ++i)
+					//{
+					//	auto next = v[i + 1] - v[i];
+					//	if (prev.x != next.x || prev.y != next.y)
+					//	{
+					//		auto a = glm::vec2(prev) * thickness;
+					//		auto b = glm::vec2(next) * -thickness;
+					//		auto c = a + b;
+
+					//		vec3 d{ v[i].x + c.x + 0.5f, 0.f, v[i].y + c.y + 0.5f };
+					//		// add the points first
+					//		ws_pts.push_back(d);
+					//	}
+					//	prev = next;
+					//}
+
+					//{
+					//	if (prev.x)
+					//	{
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f + thickness });
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f - thickness });
+					//	}
+					//	else
+					//	{
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f + thickness, 0, v[0].y + 0.5f });
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f - thickness, 0, v[0].y + 0.5f });
+					//	}
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f });
+					//	prev = -prev;
+					//}
+
+					//for (int i = v.size() - 2; i >= 1 ; --i)
+					//{
+					//	auto next = v[i - 1] - v[i];
+					//	if (prev.x != next.x || prev.y != next.y)
+					//	{
+					//		auto a = glm::vec2(prev) * -thickness;
+					//		auto b = glm::vec2(next) * thickness;
+					//		auto c = a + b;
+
+					//		vec3 d{ v[i].x + c.x + 0.5f, 0.f, v[i].y + c.y + 0.5f };
+					//		// add the points first
+					//		ws_pts.push_back(d);
+					//	}
+					//	prev = next;
+					//}
+
+					//if (prev.x)
+					//{
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f + thickness });
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f - thickness });
+					//}
+					//else
+					//{
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f + thickness, 0, v[0].y + 0.5f });
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f - thickness, 0, v[0].y + 0.5f });
+					//}
+					////ws_pts.push_back(vec3{ v.back().x + 0.5f - thickness, 0, v.back().y + 0.5f });
+
+					//// cap the end
+
+
+					//auto drawlist = ImGui::GetBackgroundDrawList();
+					//auto ss_pts = WorldSpaceVecToSSVecOfPts(cam, ws_pts);
+					//drawlist->AddConvexPolyFilled(ss_pts.data(), ss_pts.size(), IM_COL32(0xAF, 0x20, 0x20, 0xA0));
+
+
 					// Move
 					if (io.MouseClicked[0])
 					{
-						auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
+						/*auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
 							[&collision_map = instance.collision_map, &wall_map = instance.wall_map](int x, int y, int n_x, int n_y) {
 
 								if (wall_map[x][y][n_x][n_y])
@@ -1396,7 +1757,7 @@ namespace Tempest
 								if (collision_map[n_x][n_y])
 									return true;
 								return false;
-							});
+							});*/
 
 						// move
 						v.pop_back();
@@ -1820,6 +2181,13 @@ namespace Tempest
 				unit.set_path(v, xform);
 
 				triggered = false;
+
+				AudioEngine ae;
+				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
+
+				// PSEUDO 
+				// instead of jumping onto the enemy, wobble back-front
+				//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.a";
 			}
 
 
@@ -1871,6 +2239,10 @@ namespace Tempest
 				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
+
+				//PSEUDO
+				// make enemy wobble left-right
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.a";
 			}
 		}
 		break;
@@ -2260,6 +2632,11 @@ namespace Tempest
 		{
 			battle_state = BATTLE_STATE::CURR_TURN;
 			state = State::MENU;
+
+			//PSEUDO
+			// change back the models
+			//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+			//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 		}
 
 	}
@@ -2387,7 +2764,7 @@ namespace Tempest
 				else if (instance.ecs.has<tc::Unit>(character))
 					color = { 0.1,0.1,0.1,1 };
 
-				Service<RenderSystem>::Get().DrawLine(box, color);
+				//Service<RenderSystem>::Get().DrawLine(box, color);
 
 				if (m_unitTileEmitter.expired())
 					m_unitTileEmitter = ParticleSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
@@ -2531,7 +2908,7 @@ namespace Tempest
 				else if (instance.ecs.has<tc::Unit>(character))
 					color = { 0.1,0.1,0.1,1 };
 
-				Service<RenderSystem>::Get().DrawLine(box, color);
+				//Service<RenderSystem>::Get().DrawLine(box, color);
 			}
 		}
 	}
@@ -2578,6 +2955,16 @@ namespace Tempest
 	void CombatModeOverlay::change_turn_order(const Event& e)
 	{
 		units = event_cast<ChangeTurnOrder>(e).entities;
+
+		/*for (const auto this_unit : units)
+		{
+			if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+				return submitted == this_unit;
+			}))
+			{
+				submitted_units.erase(std::remove(submitted_units.begin(), submitted_units.end(), this_unit), submitted_units.end());
+			}
+		}*/
 		curr_entity = units.front();
 		curr_turn = 0;
 	}
@@ -2606,6 +2993,18 @@ namespace Tempest
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
 		}
+
+		//// jankass stuff
+		//for (const auto this_unit : units)
+		//{
+		//	if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+		//		return submitted == this_unit;
+		//	}))
+		//	{
+		//		Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Idle.fbx", instance.ecs.get<tc::Transform>(this_unit), this_unit);
+		//		submitted_units.emplace_back(this_unit);
+		//	}
+		//}
 
 
 		auto& runtime = dynamic_cast<RuntimeInstance&>(instance);

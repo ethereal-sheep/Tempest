@@ -119,9 +119,9 @@ namespace Tempest
 
 			test_future = Service<thread_pool>::Get().submit_task(init);
 			
-			/*AudioEngine ae;
+			AudioEngine ae;
 			ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
-			ae.SetMasterVolume(1.f);*/
+			ae.SetMasterVolume(1.f);
 
 		}
 
