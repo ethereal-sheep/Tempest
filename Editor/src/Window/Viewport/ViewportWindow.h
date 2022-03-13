@@ -203,7 +203,7 @@ namespace Tempest
 				current = instance.selected;
 			}
 
-
+			auto have_selected = instance.scene.get_map().exist(current) && instance.scene.get_map().get(current).has<tc::Transform>();
 			if (instance.scene.get_map().exist(current) && instance.scene.get_map().get(current).has<tc::Transform>())
 			{
 
@@ -363,7 +363,34 @@ namespace Tempest
 					r.p0 = glm::vec3(-.1, 0, .1);
 					r.p1 = glm::vec3(.1, 0, -.1);*/
 
-					Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+
+					auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+					auto drawlist = ImGui::GetBackgroundDrawList();
+
+					drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x40, 0xAF, 0x40, 0x80));
+					Service<RenderSystem>::Get().DrawLine(box, { 0.1,1,0.1,1 });
+
+
 					//Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
 					//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 				}
@@ -415,6 +442,9 @@ namespace Tempest
 			// highlights
 			if(!io.MouseDown[0])
 			{
+				if (have_selected)
+					return;
+
 				if (io.WantCaptureMouse)
 					return;
 
@@ -483,7 +513,32 @@ namespace Tempest
 							box.max.z += transform.position.z;
 							box.max.y = 0;
 
-							Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+
+
+							auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+							{
+								tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+								tvector<ImVec2> ss_pts;
+								auto vp = cam.GetViewport();
+								for (auto pt : ws_pts)
+								{
+									auto t_ss = cam.WorldspaceToScreenspace(pt);
+									t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+									t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+									ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+								}
+
+								return ss_pts;
+							};
+
+
+							auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+							auto drawlist = ImGui::GetBackgroundDrawList();
+
+							drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x20, 0xAF, 0x20, 0x80));
+							Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
 						}
 					}
 					else
@@ -500,7 +555,30 @@ namespace Tempest
 						box.max.z = b_y;
 						box.max.y = 0;
 
-						Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+
+						auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+						{
+							tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+							tvector<ImVec2> ss_pts;
+							auto vp = cam.GetViewport();
+							for (auto pt : ws_pts)
+							{
+								auto t_ss = cam.WorldspaceToScreenspace(pt);
+								t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+								t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+								ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+							}
+
+							return ss_pts;
+						};
+
+
+						auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+						auto drawlist = ImGui::GetBackgroundDrawList();
+						drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x60, 0x60, 0x60, 0x60));
+
 					}
 
 
