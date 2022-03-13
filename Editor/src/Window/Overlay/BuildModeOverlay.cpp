@@ -813,6 +813,29 @@ namespace Tempest
 								box.max.z = b_y;
 								box.max.y = 0;
 
+								auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+								{
+									tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+									tvector<ImVec2> ss_pts;
+									auto vp = cam.GetViewport();
+									for (auto pt : ws_pts)
+									{
+										auto t_ss = cam.WorldspaceToScreenspace(pt);
+										t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+										t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+										ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+									}
+
+									return ss_pts;
+								};
+
+
+								auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+								auto drawlist = ImGui::GetBackgroundDrawList();
+
+								drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x20, 0xAF, 0x20, 0x80));
 								Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
 
 								if (model)
@@ -1116,53 +1139,59 @@ namespace Tempest
 				r.p0 = glm::vec3(-.1, 0, .1);
 				r.p1 = glm::vec3(.1, 0, -.1);*/
 
-				Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+				// assume y is 0
+
+
+
+
+
+				//Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
 				//Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
 				//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
 			}
-			if (auto wall = pf.get_if<tc::Wall>())
-			{
-				auto shape = pf.get_if<tc::Shape>();
-				const int& x = shape->x;
-				const int& y = shape->y;
+			//if (auto wall = pf.get_if<tc::Wall>())
+			//{
+			//	auto shape = pf.get_if<tc::Shape>();
+			//	const int& x = shape->x;
+			//	const int& y = shape->y;
 
-				vec3 s, e;
+			//	vec3 s, e;
 
-				e.x = .5f;
-				e.z = .5f;
+			//	e.x = .5f;
+			//	e.z = .5f;
 
-				s.x = y ? -.5f : .5f;
-				s.z = x ? -.5f : .5f;
-
-
-				auto rot = transform.rotation;
-				//s = glm::rotateY(s, glm::pi<float>()/2.f);
-				//e = glm::rotateY(e, glm::pi<float>()/2.f);
-
-				s = rot * s;
-				e = rot * e;
-
-				s.x += transform.position.x;
-				s.z += transform.position.z;
-				s.y = 0;
-
-				e.x += transform.position.x;
-				e.z += transform.position.z;
-				e.y = 0;
+			//	s.x = y ? -.5f : .5f;
+			//	s.z = x ? -.5f : .5f;
 
 
-				Line l;
-				l.p0 = s;
-				l.p1 = e;
+			//	auto rot = transform.rotation;
+			//	//s = glm::rotateY(s, glm::pi<float>()/2.f);
+			//	//e = glm::rotateY(e, glm::pi<float>()/2.f);
 
-				/*Line r;
-				r.p0 = glm::vec3(-.1, 0, .1);
-				r.p1 = glm::vec3(.1, 0, -.1);*/
+			//	s = rot * s;
+			//	e = rot * e;
 
-				//Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
-				Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-				//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
-			}
+			//	s.x += transform.position.x;
+			//	s.z += transform.position.z;
+			//	s.y = 0;
+
+			//	e.x += transform.position.x;
+			//	e.z += transform.position.z;
+			//	e.y = 0;
+
+
+			//	Line l;
+			//	l.p0 = s;
+			//	l.p1 = e;
+
+			//	/*Line r;
+			//	r.p0 = glm::vec3(-.1, 0, .1);
+			//	r.p1 = glm::vec3(.1, 0, -.1);*/
+
+			//	//Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+			//	Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+			//	//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+			//}
 		}
 
 		// highlights
