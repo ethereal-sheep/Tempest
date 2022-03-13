@@ -1,9 +1,15 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Decoration"
+        "Category": "Unit"
     },
     "Components": [
+        {
+            "Metadata": {
+                "Type": "Unit"
+            },
+            "Component": {}
+        },
         {
             "Metadata": {
                 "Type": "Meta"
@@ -37,13 +43,21 @@
         },
         {
             "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 0
+            }
+        },
+        {
+            "Metadata": {
                 "Type": "Local"
             },
             "Component": {
                 "LocalPosition": [
-                    2.0999999046325685,
                     0.0,
-                    24.799999237060548
+                    0.0,
+                    0.0
                 ],
                 "LocalRotation": [
                     0.0,
@@ -60,10 +74,38 @@
         },
         {
             "Metadata": {
+                "Type": "Character"
+            },
+            "Component": {
+                "Charater_Name": "Combatant",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [],
+                "Charater_Stats": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": []
+            }
+        },
+        {
+            "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\SquareHole.a",
+                "Path": "Models/Chair.fbx",
                 "TexturePath": ""
             }
         },

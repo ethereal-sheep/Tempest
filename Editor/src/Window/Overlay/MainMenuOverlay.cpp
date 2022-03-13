@@ -525,7 +525,7 @@ namespace Tempest
 
 						auto second_fn = [passed = 0.0]() mutable
 						{
-							auto start = std::chrono::system_clock::now();
+							/*auto start = std::chrono::system_clock::now();
 
 							for (auto it : fs::directory_iterator(fs::path("Models")))
 							{
@@ -540,7 +540,7 @@ namespace Tempest
 									continue;
 
 								Service<RenderSystem>::Get().LoadModel(it.path().string());
-							}
+							}*/
 							return true;
 						};
 
@@ -892,7 +892,7 @@ namespace Tempest
 
 					auto second_fn = [passed = 0.0]() mutable
 					{
-						if (passed > 3.f)
+						/*if (passed > 3.f)
 							return true;
 
 						auto start = std::chrono::system_clock::now();
@@ -913,7 +913,7 @@ namespace Tempest
 								continue;
 
 							Service<RenderSystem>::Get().LoadModel(it.path().string());
-						}
+						}*/
 						return true;
 					};
 
@@ -1401,7 +1401,7 @@ namespace Tempest
 
 						auto second_fn = [passed = 0.0]() mutable
 						{
-							auto start = std::chrono::system_clock::now();
+							/*auto start = std::chrono::system_clock::now();
 
 							for (auto it : fs::directory_iterator(fs::path("Models")))
 							{
@@ -1419,7 +1419,7 @@ namespace Tempest
 									continue;
 
 								Service<RenderSystem>::Get().LoadModel(it.path().string());
-							}
+							}*/
 
 							return true;
 						};
@@ -1594,11 +1594,10 @@ namespace Tempest
 
 				auto second_fn = [passed = 0.0]() mutable
 				{
-					auto start = std::chrono::system_clock::now();
+					/*auto start = std::chrono::system_clock::now();
 
 					for (auto it : fs::directory_iterator(fs::path("Models")))
 					{
-
 						auto end = std::chrono::system_clock::now();
 						std::chrono::duration<double> diff = end - start;
 
@@ -1612,9 +1611,9 @@ namespace Tempest
 							continue;
 
 						Service<RenderSystem>::Get().LoadModel(it.path().string());
-					}
+					}*/
 
-						return true;
+					return true;
 				};
 
 				LoadTrigger t;
