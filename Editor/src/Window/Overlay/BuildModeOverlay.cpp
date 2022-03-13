@@ -116,7 +116,7 @@ namespace Tempest
 						ImVec2 pos2 = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.52f - 75.f };
 						ImVec2 size2 = { 150.f, 150.f };
 
-						UI::TutArea2(pos, pos2, size, size2);
+						UI::TutArea3(pos, pos2, size, size2);
 					//	UI::TutArea(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Drag and drop a Furniture into the scene";
 						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
@@ -131,7 +131,7 @@ namespace Tempest
 						ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 43.f};
 						ImVec2 size2 = { 50.f, 50.f };
 
-						UI::TutArea2(pos, pos2, size, size2);
+						UI::TutArea3(pos, pos2, size, size2);
 						//	UI::TutArea(pos, size);
 						
 						const float posY = pos2.y + size2.y * 0.5f;
@@ -181,7 +181,7 @@ namespace Tempest
 						ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 43.f };
 						ImVec2 size2 = { 50.f, 50.f };
 
-						UI::TutArea2(pos, pos2, size, size2);
+						UI::TutArea3(pos, pos2, size, size2);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to confirm furniture placement";
 						drawlist->AddText({ pos2.x + size2.x + 10.0f, pos2.y + 10.0f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
@@ -205,7 +205,7 @@ namespace Tempest
 						ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 43.f };
 						ImVec2 size2 = { 50.f, 50.f };
 
-						UI::TutArea2(pos, pos2, size, size2);
+						UI::TutArea3(pos, pos2, size, size2);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to delete the furniture.";
 						drawlist->AddText({ pos2.x + size2.x + 10.f, pos2.y + 10.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
@@ -759,7 +759,12 @@ namespace Tempest
 							{
 								auto [it, b] = instance.scene.get_map().create(proto);
 								AudioEngine ae;
-								ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
+
+								std::string sound_name = cat_name == "Tile" ?
+									"Sounds2D/SFX_TileCreate" + std::to_string(rand() % 2 + 1) + ".wav"
+									: "Sounds2D/SFX_PropPlacement" + std::to_string(rand() % 2 + 1) + ".wav";
+
+								ae.Play(sound_name.c_str(), "SFX");
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
 								{

@@ -2181,6 +2181,13 @@ namespace Tempest
 				unit.set_path(v, xform);
 
 				triggered = false;
+
+				AudioEngine ae;
+				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
+
+				// PSEUDO 
+				// instead of jumping onto the enemy, wobble back-front
+				//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.a";
 			}
 
 
@@ -2232,6 +2239,10 @@ namespace Tempest
 				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
+
+				//PSEUDO
+				// make enemy wobble left-right
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.a";
 			}
 		}
 		break;
@@ -2607,6 +2618,11 @@ namespace Tempest
 		{
 			battle_state = BATTLE_STATE::CURR_TURN;
 			state = State::MENU;
+
+			//PSEUDO
+			// change back the models
+			//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+			//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 		}
 
 	}
@@ -2925,6 +2941,16 @@ namespace Tempest
 	void CombatModeOverlay::change_turn_order(const Event& e)
 	{
 		units = event_cast<ChangeTurnOrder>(e).entities;
+
+		/*for (const auto this_unit : units)
+		{
+			if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+				return submitted == this_unit;
+			}))
+			{
+				submitted_units.erase(std::remove(submitted_units.begin(), submitted_units.end(), this_unit), submitted_units.end());
+			}
+		}*/
 		curr_entity = units.front();
 		curr_turn = 0;
 	}
@@ -2953,6 +2979,18 @@ namespace Tempest
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
 		}
+
+		//// jankass stuff
+		//for (const auto this_unit : units)
+		//{
+		//	if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+		//		return submitted == this_unit;
+		//	}))
+		//	{
+		//		Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Idle.fbx", instance.ecs.get<tc::Transform>(this_unit), this_unit);
+		//		submitted_units.emplace_back(this_unit);
+		//	}
+		//}
 
 
 		auto& runtime = dynamic_cast<RuntimeInstance&>(instance);

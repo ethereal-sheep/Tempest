@@ -171,6 +171,7 @@ namespace Tempest
         bool OverlayOpen = false;
 
         tvector<Entity> units;
+        tvector<Entity> submitted_units;
 
         CameraControls cam_ctrl;
 
