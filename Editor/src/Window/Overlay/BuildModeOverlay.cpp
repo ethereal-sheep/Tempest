@@ -480,7 +480,9 @@ namespace Tempest
 
 							if (ImGui::IsItemClicked())
 							{
-
+								instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
+								AudioEngine ae;
+								ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 								instance.selected = INVALID;
 							}
 
