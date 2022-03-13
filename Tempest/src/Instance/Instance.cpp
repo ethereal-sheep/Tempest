@@ -59,7 +59,7 @@ namespace Tempest
 		}
 
 		// with local
-		auto view3 = ecs.view<tc::Model, tc::Local, tc::Transform>(exclude_t<tc::Destroyed, tc::Door>());
+		auto view3 = ecs.view<tc::Model, tc::Local, tc::Transform>(exclude_t<tc::Destroyed, tc::Door, tc::Unit>());
 		for (auto id : view3)
 		{
 			auto model = ecs.get_if<tc::Model>(id);
@@ -121,6 +121,38 @@ namespace Tempest
 					* glm::scale(transform->scale);
 
 				Service<RenderSystem>::Get().SubmitModel(door->frame.path, test);
+			}
+
+			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
+		}
+
+		// with unit
+		auto view7 = ecs.view<tc::Model, tc::Local, tc::Unit, tc::Transform>(exclude_t<tc::Destroyed>());
+		for (auto id : view7)
+		{
+			auto unit = ecs.get_if<tc::Unit>(id);
+			auto transform = ecs.get_if<tc::Transform>(id);
+
+			{
+				auto model = ecs.get_if<tc::Model>(id);
+				auto local = ecs.get_if<tc::Local>(id);
+
+				auto test = glm::translate(transform->position)
+					* glm::mat4(transform->rotation)
+					* glm::translate(unit->get_current_local().local_position)
+					* glm::mat4(unit->get_current_local().local_rotation)
+					* glm::translate(local->local_position)
+					* glm::mat4(local->local_rotation)
+					* glm::scale(local->local_scale)
+					* glm::scale(unit->get_current_local().local_scale)
+					* glm::scale(transform->scale);
+
+				auto character = ecs.get_if<tc::Character>(id);
+				if (character != nullptr)
+				{
+					Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+				}
+				Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}
 
 			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);

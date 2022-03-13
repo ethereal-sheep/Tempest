@@ -2174,11 +2174,13 @@ namespace Tempest
 				// play whatever anim u want here
 				old_pos = xform.position;
 				// for now just jump on the spot
-				tvector<glm::ivec2> v;
+				/*tvector<glm::ivec2> v;
 				int p_x = (int)std::floor(oxform.position.x);
 				int p_y = (int)std::floor(oxform.position.z);
 				v.push_back({ p_x , p_y });
-				unit.set_path(v, xform);
+				unit.set_path(v, xform);*/
+
+				unit.attack();
 
 				triggered = false;
 
@@ -2197,7 +2199,7 @@ namespace Tempest
 
 			// once done -> we can go to the next fella
 			// wipe
-			if (!unit.is_moving() && !triggered)
+			if (!unit.is_attacking() && !triggered)
 			{
 				triggered = true;
 				// reset the attacker pos
@@ -2226,14 +2228,15 @@ namespace Tempest
 			{
 				battle_state = BATTLE_STATE::SELECT_OTHER;
 
-				tvector<glm::ivec2> v;
+				/*tvector<glm::ivec2> v;
 				int p_x = (int)std::floor(xform.position.x);
 				int p_y = (int)std::floor(xform.position.z);
 				v.push_back({ p_x , p_y });
 				p_x = (int)std::floor(oxform.position.x);
 				p_y = (int)std::floor(oxform.position.z);
 				v.push_back({ p_x , p_y });
-				unit.set_path(v, xform);
+				unit.set_path(v, xform);*/
+
 
 				triggered = false;
 				damageOnce = false;
@@ -2251,6 +2254,10 @@ namespace Tempest
 			// wipe
 			if (inter1.is_finished() && !triggered)
 			{
+
+				ounit.get_hit(10, 2.f);
+
+
 				triggered = true;
 				//if (damage == 0)
 				//{
