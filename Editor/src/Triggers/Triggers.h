@@ -248,4 +248,10 @@ namespace Tempest
 	};
 
 	struct SettingsTrigger : public Event {};
+
+	struct LoadTrigger : public Event
+	{
+		std::function<bool(void)> do_until_true_fn = []() { return true; };
+		std::function<void(void)> do_at_end_fn = [](){};
+	};
 }

@@ -295,6 +295,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Overlay\BuildModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\CombatModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\ConflictResOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\LoadingOverlay.h" />
     <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />
     <ClInclude Include="src\Window\Overlay\PauseOverlay.h" />
     <ClInclude Include="src\Window\Overlay\PlaceUnitsOverlay.h" />

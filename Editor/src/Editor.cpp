@@ -107,10 +107,6 @@ namespace Tempest
 			// can be defered
 
 
-			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_CombatStance.a");
-			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_Death.a");
-			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_Idle.a");
-
 			auto init = [&]() {
 
 

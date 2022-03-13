@@ -15,6 +15,7 @@
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 #include "Util/quitter.h"
+#include "Graphics/Basics/RenderSystem.h"
 
 namespace Tempest
 {
@@ -518,7 +519,39 @@ namespace Tempest
 						{
 							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(json_path, MemoryStrategy{}, InstanceType::EDIT_TIME);
 						};
-						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.3f, .3f, .0f, fn);
+
+
+						// fade in, fade out, visible
+
+						auto second_fn = [passed = 0.0]() mutable
+						{
+							auto start = std::chrono::system_clock::now();
+
+							for (auto it : fs::directory_iterator(fs::path("Models")))
+							{
+
+								auto end = std::chrono::system_clock::now();
+								std::chrono::duration<double> diff = end - start;
+
+								if (diff.count() > 1.0)
+									return false;
+
+								if (it.path().extension() != ".a")
+									continue;
+
+								Service<RenderSystem>::Get().LoadModel(it.path().string());
+							}
+							return true;
+						};
+
+						LoadTrigger t;
+						t.do_at_end_fn = fn;
+						t.do_until_true_fn = second_fn;
+
+						Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+
+
+						//Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.3f, .3f, .0f, fn);
 					}
 					ImGui::PopID();
 					ImGui::Dummy({ 0, 5.f });
@@ -853,7 +886,43 @@ namespace Tempest
 						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(json_path, MemoryStrategy{}, InstanceType::EDIT_TIME);
 					};
 
-					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, 0.f, fn);
+					// fade in, fade out, visible
+
+					auto second_fn = [passed = 0.0]() mutable
+					{
+						if (passed > 3.f)
+							return true;
+
+						auto start = std::chrono::system_clock::now();
+
+						for (auto it : fs::directory_iterator(fs::path("Models")))
+						{
+							auto end = std::chrono::system_clock::now();
+							std::chrono::duration<double> diff = end - start;
+
+
+							if (diff.count() > .5)
+							{
+								passed += diff.count();
+								return false;
+							}
+
+							if (it.path().extension() != ".a")
+								continue;
+
+							Service<RenderSystem>::Get().LoadModel(it.path().string());
+						}
+						return true;
+					};
+
+					LoadTrigger t;
+					t.do_at_end_fn = fn;
+					t.do_until_true_fn = second_fn;
+
+					Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+
+
+					//Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, 0.f, fn);
 
 				}
 				catch (std::exception a)
@@ -1329,7 +1398,40 @@ namespace Tempest
 							OverlayOpen = false;
 						};
 						// fade in, fade out, visible
-						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.5f, .15f, .0f, fn);
+
+						auto second_fn = [passed = 0.0]() mutable
+						{
+							auto start = std::chrono::system_clock::now();
+
+							for (auto it : fs::directory_iterator(fs::path("Models")))
+							{
+
+								auto end = std::chrono::system_clock::now();
+								std::chrono::duration<double> diff = end - start;
+
+								if (diff.count() > 1.0)
+								{
+									passed += diff.count();
+									return false;
+								}
+
+								if (it.path().extension() != ".a")
+									continue;
+
+								Service<RenderSystem>::Get().LoadModel(it.path().string());
+							}
+
+							return true;
+						};
+
+						LoadTrigger t;
+						t.do_at_end_fn = fn;
+						t.do_until_true_fn = second_fn;
+
+						Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+
+
+						//Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.5f, .15f, .0f, fn);
 					}
 					else
 					{
@@ -1469,18 +1571,60 @@ namespace Tempest
 
 			if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 			{
-				AudioEngine ae;
-				ae.StopAllChannels();
-				ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
-				OverlayOpen = false;
-				dynamic_cast<EditTimeInstance&>(instance).save();
-				Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-					dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
-					MemoryStrategy{},
-					InstanceType::RUN_TIME,
-					SelectedMap,
-					SelectedConflictRes + 1,
-					SelectedSequences);
+
+				auto fn = [&]()
+				{
+
+					AudioEngine ae;
+					ae.StopAllChannels();
+					ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
+					OverlayOpen = false;
+					dynamic_cast<EditTimeInstance&>(instance).save();
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
+						MemoryStrategy{},
+						InstanceType::RUN_TIME,
+						SelectedMap,
+						SelectedConflictRes + 1,
+						SelectedSequences);
+				};
+				// fade in, fade out, visible
+
+
+
+				auto second_fn = [passed = 0.0]() mutable
+				{
+					auto start = std::chrono::system_clock::now();
+
+					for (auto it : fs::directory_iterator(fs::path("Models")))
+					{
+
+						auto end = std::chrono::system_clock::now();
+						std::chrono::duration<double> diff = end - start;
+
+						if (diff.count() > 1.0)
+						{
+							passed += diff.count();
+							return false;
+						}
+
+						if (it.path().extension() != ".a")
+							continue;
+
+						Service<RenderSystem>::Get().LoadModel(it.path().string());
+					}
+
+						return true;
+				};
+
+				LoadTrigger t;
+				t.do_at_end_fn = fn;
+				t.do_until_true_fn = second_fn;
+
+				Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+
+
+
 			}
 
 		}

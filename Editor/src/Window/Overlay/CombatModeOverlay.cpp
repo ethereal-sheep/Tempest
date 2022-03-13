@@ -2455,6 +2455,8 @@ namespace Tempest
 						// the text thingy
 						ImGui::Text(text.c_str());
 
+						
+
 						ImGui::EndGroup();
 					}
 					ImGui::PopStyleColor();
