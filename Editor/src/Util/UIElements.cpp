@@ -3140,7 +3140,7 @@ namespace Tempest::UI
 		return { false,false };
 	}
 
-	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
+	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed, const ImVec4& tint_color)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = g.CurrentWindow;
@@ -3153,9 +3153,9 @@ namespace Tempest::UI
 		ImGui::PopID();
 
 		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
-		return UIImageButtonEx(id, user_texture_id, size, uv0, uv1, padding, bg_col, tint_hover, tint_pressed);
+		return UIImageButtonEx(id, user_texture_id, size, uv0, uv1, padding, bg_col, tint_hover, tint_pressed, tint_color);
 	}
-	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
+	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed, const ImVec4& tint_color)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -3188,7 +3188,7 @@ namespace Tempest::UI
 			ImGui::SetMouseCursor(7);
 		}
 		else
-			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_color));
 
 
 
