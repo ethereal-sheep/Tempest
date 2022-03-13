@@ -584,7 +584,6 @@ namespace Tempest
         model.color = particle.m_colour;
         model.isParticle = true;
         m_Pipeline.m_Models.push_back(model);
-
     }
  
     void RenderSystem::DrawLine(const Line& line, const glm::vec4& color)

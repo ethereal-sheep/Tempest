@@ -102,10 +102,11 @@
     <ClCompile Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\SphereExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.cpp" />
     <ClCompile Include="src\FrameRate\FrameRateManager.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -287,10 +288,11 @@
     <ClInclude Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\SphereExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.h" />
     <ClInclude Include="src\FrameRate\FrameRateManager.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

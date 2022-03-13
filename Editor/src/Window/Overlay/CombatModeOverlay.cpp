@@ -1952,15 +1952,21 @@ namespace Tempest
 					glm::vec3 maxRangeSpawnPos = oxform.position;
 
 					minRangeSpawnPos.x -= 1.0f;
-					minRangeSpawnPos.y += 0.7f;
+					minRangeSpawnPos.y += 0.3f;
 					minRangeSpawnPos.z -= 1.0f;
 
 					maxRangeSpawnPos.x += 1.0f;
-					minRangeSpawnPos.y += 0.3f;
+					maxRangeSpawnPos.y += 0.7f;
 					maxRangeSpawnPos.z += 1.0f;
 
+					glm::vec4 colourBegin;
+					colourBegin.r = ocs.color.r;
+					colourBegin.g = ocs.color.g;
+					colourBegin.b = ocs.color.b;
+					colourBegin.a = 1.0f;
+
 					if (m_characterDeathEmitter.expired())
-						m_characterDeathEmitter = ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3);
+						m_characterDeathEmitter = ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3, colourBegin, colourBegin);
 					else
 					{
 						m_characterDeathEmitter.lock()->m_GM.m_position = oxform.position;
@@ -1996,21 +2002,29 @@ namespace Tempest
 						text = std::to_string(-damage);
 						col = vec3(0, 1, 0);
 					}
-
-					auto emitterPosition = instance.ecs.get<tc::Transform>(other_entity).position;
-					emitterPosition.y += 1.0f;
-
-					if (m_characterDamageEmitter.expired())
-						m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition);
-					else if(damageOnce == false)
+					else
 					{
-						m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
-						//m_characterDamageEmitter.lock()->Emit(1);
-						m_characterDamageEmitter.lock()->m_EM.m_burstCycle = 1;
-						m_characterDamageEmitter.lock()->m_MM.m_duration = 0.6f;
-						m_characterDamageEmitter.lock()->m_GM.m_active = true;
-						m_characterDamageEmitter.lock()->m_MM.m_preWarm = true;
-						damageOnce = true;
+						auto emitterPosition = oxform.position;
+						emitterPosition.y += 1.0f;
+
+						glm::vec4 colourBegin;
+						colourBegin.r = ocs.color.r;
+						colourBegin.g = ocs.color.g;
+						colourBegin.b = ocs.color.b;
+						colourBegin.a = 1.0f;
+
+						if (m_characterDamageEmitter.expired())
+							m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition, colourBegin, colourBegin);
+						else if (damageOnce == false)
+						{
+							m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
+							//m_characterDamageEmitter.lock()->Emit(1);
+							m_characterDamageEmitter.lock()->m_EM.m_burstCycle = 1;
+							m_characterDamageEmitter.lock()->m_MM.m_duration = 0.6f;
+							m_characterDamageEmitter.lock()->m_GM.m_active = true;
+							m_characterDamageEmitter.lock()->m_MM.m_preWarm = true;
+							damageOnce = true;
+						}
 					}
 
 					ImGui::PushFont(FONT_HEAD);
