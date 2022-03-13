@@ -1820,6 +1820,9 @@ namespace Tempest
 				unit.set_path(v, xform);
 
 				triggered = false;
+
+				AudioEngine ae;
+				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
 			}
 
 

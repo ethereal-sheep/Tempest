@@ -759,7 +759,12 @@ namespace Tempest
 							{
 								auto [it, b] = instance.scene.get_map().create(proto);
 								AudioEngine ae;
-								ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
+
+								std::string sound_name = cat_name == "Tile" ?
+									"Sounds2D/SFX_TileCreate" + std::to_string(rand() % 2 + 1) + ".wav"
+									: "Sounds2D/SFX_PropPlacement" + std::to_string(rand() % 2 + 1) + ".wav";
+
+								ae.Play(sound_name.c_str(), "SFX");
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
 								{
