@@ -66,6 +66,21 @@ namespace Tempest
 						}
 					}*/
 				
+					if (UI::UIButton_2("Edit Action Graph", "Edit Action Graph", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.3f }, { 50,20 }, FONT_BTN))
+					{
+						OverlayOpen = false;
+						Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+						Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION, true);
+						EscDuringPause = false;
+					}
+
+					if (UI::UIButton_2("Edit Sequence Graph", "Edit Sequence Graph", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.4f }, { 50,20 }, FONT_BTN))
+					{
+						OverlayOpen = false;
+						Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+						Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE, true);
+						EscDuringPause = false;
+					}
 
 					if (UI::UIButton_2("Return", "Return", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
 					{
