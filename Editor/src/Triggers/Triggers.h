@@ -79,8 +79,8 @@ namespace Tempest
 
 	struct PauseOverlayTrigger : public Event
 	{
-		PauseOverlayTrigger(bool hasSaveLoad = true) : hasSaveLoad{ hasSaveLoad } {}
-		bool hasSaveLoad;
+		PauseOverlayTrigger(bool canOpenGraph = false) : canOpenGraph{ canOpenGraph } {}
+		bool canOpenGraph;
 	};
 
 	//Confirm Trigger

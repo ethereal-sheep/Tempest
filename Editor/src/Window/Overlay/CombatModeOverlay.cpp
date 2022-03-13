@@ -1206,7 +1206,7 @@ namespace Tempest
 							// Attack
 							auto attacker = curr_entity;
 							other_entity = instance.character_map[w_x][w_y];
-							battle_state = BATTLE_STATE::CURR_TURN;
+							battle_state = BATTLE_STATE::SELECT_ACTION;
 
 							LOG_ASSERT(instance.ecs.has<tc::Character>(attacker));
 							LOG_ASSERT(instance.ecs.has<tc::Character>(other_entity));
@@ -3041,7 +3041,7 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(battle_state == BATTLE_STATE::CURR_TURN);
 				}
 
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
