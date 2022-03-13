@@ -35,6 +35,7 @@ uniform mat4 finalBonesMatrices[MAX_BONES];
 uniform int HasAnimation;
 
 
+uniform mat4 NormalMat;
 
 void main()
 {
@@ -49,7 +50,7 @@ void main()
     {
         // Animation 
         mat3 normalMatrix = transpose(inverse(mat3(projViewModel)));
-        normal = normalMatrix * Normal;
+        normal = normalize(mat3(NormalMat) * Normal);
         
         vec4 totalPosition = vec4(0.0f);
         for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)

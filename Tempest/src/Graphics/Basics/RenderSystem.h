@@ -32,6 +32,7 @@
 #include "Graphics/PBR/MaterialPBR.h"
 
 #include "Graphics/PBR/ModelPBR.h"
+#include "gtc/matrix_inverse.hpp"
 
 #include "Particles/Particles_3D/Particles_3D.h"
 #include "Animation/AnimationManager.h"
@@ -161,11 +162,11 @@ namespace Tempest
         bool motionBlurMode = false;   // Motion Blur
         bool dirShadowBool = true;    // Direcitonal shadows toggle
         bool pointShadowBool = true;   // Point light shadows toggle
-        bool pbrMode = false;
-        bool envMapShow = false;        // Envmap toggle
+        bool pbrMode = true;
+        bool envMapShow = true;        // Envmap toggle
         bool tiltShiftMode = false;
 
-        bool AAgridShow = true;
+        bool AAgridShow = false;
         bool TestPBR = false;
         bool USO = false;
 
@@ -196,7 +197,7 @@ namespace Tempest
         glm::mat4 projViewModel;
         glm::mat4 prevProjViewModel = projViewModel;
 
-        GLfloat materialRoughness = 0.01f;   // Global for now (but should be per object/material).
+        GLfloat materialRoughness = 0.877f;   // Global for now (but should be per object/material).
         GLfloat materialMetallicity = 0.02f; // Global for now (but should be per object/material).
         GLfloat ambientIntensity = 0.005f;   // Global for now (but should be per object/material).
 
@@ -224,7 +225,7 @@ namespace Tempest
 
 
         void LoadTextures();
-
+        void calculateAllNorms();
         bool PREFABMODE = false;
 
         // ANIMATION TESTING

@@ -361,8 +361,8 @@ namespace Tempest
 
         materialF0 = glm::vec3(0.04f);
 
-        envMapHDR.setTextureHDR("textures/hdr/appart.hdr", "appartHDR", true);
-
+        //envMapHDR.setTextureHDR("textures/hdr/appart.hdr", "appartHDR", true);
+        envMapHDR.setTextureHDR("textures/hdr/lebombo_4k.hdr", "lebombo", true);
         //envMapHDR.setTexture( "Assets/dds_test.dds" , "appartHDR", true);
 
         envMapCube.setTextureCube(512, GL_RGB, GL_RGB16F, GL_FLOAT, GL_LINEAR_MIPMAP_LINEAR);
@@ -688,6 +688,7 @@ namespace Tempest
             SubmitModel("Models/SquareHole.a", (r * s));
         }
 
+        calculateAllNorms();
         LoadTextures();
         int WIDTH = getWidth(), HEIGHT = getHeight();
  
@@ -707,7 +708,9 @@ namespace Tempest
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(GetCamera().GetViewMatrix(), "view");
                 m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(m_Pipeline.m_Models[i].m_Transform, "projViewModel");
 
-
+                auto minv = glm::inverseTranspose(  m_Pipeline.m_Models[i].m_Transform * GetCamera().GetViewMatrix());//
+                //minv = minv * ; 
+                m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetMat4fv(minv, "NormalMat");
 
                 // Animation Stuff
                 if (m_Pipeline.m_Models[i].m_Model->HasAnimation)
@@ -1044,7 +1047,6 @@ namespace Tempest
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->SetVec4f(clearColor, "clearColor");
 
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(envMapShow, "envMapShow");
-
             m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1f(ambientStrength, "ambientAmount");
             quadRender.drawShape();
 
@@ -1315,5 +1317,30 @@ namespace Tempest
     void RenderSystem::ChangeAnimationDuration(uint32_t id, float duration)
     {
         m_Animation.ChangeDuration(id, duration);
+    }
+    void RenderSystem::calculateAllNorms()
+    {
+        for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+        {
+            for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); j++)
+            {
+                for (uint32_t k = 0; k < m_Pipeline.m_Models[i].m_Model->meshes[j].vertices.size(); k++)
+                {
+                    m_Pipeline.m_Models[i].m_Model->meshes[j].vertices[k].Normal = glm::vec3(0.0f);
+                }
+            }
+        }
+        for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
+        {
+            for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); j++)
+            {
+                m_Pipeline.m_Models[i].m_Model->meshes[j].calculateNorms();
+            }
+        }
+        //for (auto& m : mesh.vertices)
+        //{
+        //    m.Normal = glm::vec3(0.0f);
+        //}
+        //mesh.calculateNorms();
     }
 }

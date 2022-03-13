@@ -434,6 +434,9 @@ namespace Tempest
 			auto& materialF0 = Service<RenderSystem>::Get().materialF0;
 			UI::DragFloat3ColorBox("MaterialF0", "##MaterialF0", ImVec2{ padding , 0.f }, value_ptr(materialF0), 0.f, 0.1f).first;
 			
+			auto& rmat = Service<RenderSystem>::Get().materialRoughness;
+			ImGui::SliderFloat("Material Roughness", &rmat, 0.0f, 4.0f);
+
 			auto& ambientStrength = Service<RenderSystem>::Get().ambientStrength;
 			ImGui::SliderFloat("Global Ambient", &ambientStrength, 0.0f, 3.0f);
 
@@ -628,6 +631,27 @@ namespace Tempest
 				if (ImGui::Button("Circus"))
 				{
 					envMapHDR.setTextureHDR("textures/hdr/circus.hdr", "circusHDR", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+
+				if (ImGui::Button("lebombo"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/lebombo_4k.hdr", "lebombo", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+				if (ImGui::Button("spaichingen_hill_4k.hdr"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/spaichingen_hill_4k.hdr", "spaichingen_hill", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+				if (ImGui::Button("snowy_hillside"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/snowy_hillside_4k.hdr", "snowy_hillside", true);
+					Service<RenderSystem>::Get().iblSetup();
+				}
+				if (ImGui::Button("evening_meadow_4k"))
+				{
+					envMapHDR.setTextureHDR("textures/hdr/evening_meadow_4k.hdr", "evening_meadow_4k", true);
 					Service<RenderSystem>::Get().iblSetup();
 				}
 
