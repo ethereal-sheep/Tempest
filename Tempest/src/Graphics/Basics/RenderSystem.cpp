@@ -1332,10 +1332,15 @@ namespace Tempest
         }
         for (uint32_t i = 0; i < m_Pipeline.m_Models.size(); ++i)
         {
-            for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); j++)
+            if (m_Pipeline.m_Models[i].normalCalculated == false)
             {
-                m_Pipeline.m_Models[i].m_Model->meshes[j].calculateNorms();
+                for (uint32_t j = 0; j < m_Pipeline.m_Models[i].m_Model->meshes.size(); j++)
+                {
+                    m_Pipeline.m_Models[i].m_Model->meshes[j].calculateNorms();
+                }
             }
+          
+            m_Pipeline.m_Models[i].normalCalculated = true;
         }
         //for (auto& m : mesh.vertices)
         //{
