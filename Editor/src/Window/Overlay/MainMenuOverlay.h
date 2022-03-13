@@ -28,6 +28,7 @@ namespace Tempest
             INITIAL,
             PROJECTS,
             NEW_PROJECT,
+            MAIN_PAGE,
             CONFLICT_RES,
             SELECT_MAP,
             LOAD_MAP,
@@ -47,7 +48,7 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<OpenMainMenuTrigger>(&MainMenuOverlay::open_popup, this);
             if (dynamic_cast<EditTimeInstance*>(&instance))
             {
-                change_state(UI_SHOW::NEW_PROJECT);
+                change_state(UI_SHOW::MAIN_PAGE);
             }
             else
             {
@@ -61,12 +62,16 @@ namespace Tempest
 
         void OpenLocalUI(Instance& instance, const ImGuiViewport& viewport);
 
+        bool appearing = true;
+
         bool OverlayOpen = true;
         std::string MapTitle{ "" };
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
-        string SelectedMap = "";
+        tset<string> SelectedMaps;
+        string SelectedMap;
         string NewMapName = "Map";
+        string NewProjectName = "Blank";
         ImGuiID HoveredID{ 0 };
         std::vector<Entity> SelectedSequences; // will this be an entity id?
         std::vector<bool> OkayConRes = std::vector(3, false);
@@ -74,7 +79,8 @@ namespace Tempest
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
-
+        ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
+        ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
         ChannelID MenuBGM = 0;
     };
 }

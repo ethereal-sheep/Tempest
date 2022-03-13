@@ -25,6 +25,13 @@
 #include "Audio/AudioEngine.h"
 
 #include "Graphics/Basics/RenderSystem.h"
+#include "Profiler/Profiler.h"
+
+// Testing 
+#include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "FrameRate/FrameRateManager.h"
+
+
 
 namespace Tempest
 {
@@ -37,10 +44,14 @@ namespace Tempest
 		
 	}
 
+
+
 	void Application::OnEngineInit()
 	{
 		// init Engine stuff first
 		Logger::Init();
+		Profile::Profiler::Init();
+
 		Service<RenderSystem>::Register(m_width, m_height);
 		LOG("Initializing Tempest Engine");
 		Service<thread_pool>::Register(std::thread::hardware_concurrency());
@@ -52,6 +63,7 @@ namespace Tempest
 		Service<RenderSystem>::Get().dir_lights[0].Direction = v;
 		Service<RenderSystem>::Get().gammaValue = 1.0f;
 
+		// Profiler
 
 		AudioEngine::Init();
 
@@ -60,16 +72,32 @@ namespace Tempest
 
 	void Application::OnEngineUpdate()
 	{
+		T_FrameRateManager.FrameStart();
 		// Update Engine stuff first
+		ParticleSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
+
+		Profile::Profiler::FrameStart();
+		PROFILER_MARKER(UPDATE);
+
+		// Update Engine stuff first
+		NAMED_PROFILER_MARKER(Audio, AUDIO);
 		AudioEngine::Update();
+		END_NAMED_MARKER(Audio);
+
 		Service<RenderSystem>::Get().GetCamera().Update();
+
 		OnUpdate();
 		
 		//testing_physics_7_2();
+
+		T_FrameRateManager.FrameEnd();
+
+		//LOG_INFO("DT: {0}", T_FrameRateManager.GetDT());
 	}
 
 	void Application::OnEngineRender()
 	{
+		PROFILER_MARKER(RENDER);
 
 		Service<RenderSystem>::Get().Draw();
 		//Service<RenderSystem>::Get().EndFrame();
@@ -84,6 +112,7 @@ namespace Tempest
 		// then exit engine stuff
 
 		AudioEngine::Shutdown();
+		Profile::Profiler::Shutdown();
 	}
 
 	void Application::OnKeyPress([[maybe_unused]] uint8_t key, [[maybe_unused]] uint8_t repeat)

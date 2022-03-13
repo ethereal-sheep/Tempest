@@ -376,7 +376,7 @@ namespace Tempest
 							for (auto entry : fs::directory_iterator(instance.get_full_path() / "Models"))
 							{
 								// only get .a file
-								if (entry.path().extension() != ".a")
+								if (entry.path().extension() != ".a" && entry.path().extension() != ".fbx")
 									continue;
 								auto rel = fs::relative(entry.path(), instance.get_full_path()).string();
 								if (model->path == rel) {

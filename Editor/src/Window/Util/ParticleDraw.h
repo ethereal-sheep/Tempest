@@ -6,7 +6,7 @@
 
 #include "Instance/Instance.h"
 
-#include "../../Tempest/src/Particles/ParticleSystem_2D.h"
+#include "../../Tempest/src/Particles/Particles_2D/ParticleSystem_2D.h"
 #include "../../Tempest/src/Logger/Logger.h"
 
 namespace Tempest

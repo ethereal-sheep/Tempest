@@ -331,7 +331,7 @@ namespace Tempest
 					OverlayOpen = false;
 					AudioEngine ae;
 					ae.StopChannel(MapBuilderBGM);
-					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
 				};
 				// fade in, fade out, visible
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
