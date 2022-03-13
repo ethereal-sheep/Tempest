@@ -42,10 +42,6 @@ namespace Tempest
 		}
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
-		AudioEngine ae;
-		if (!ae.IsPlaying(CombatBGM))
-			CombatBGM = ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
-
 		tutorial_index = 0;
 		tutorial_p2 = false;
 		tut_openSlide = true;
@@ -983,8 +979,6 @@ namespace Tempest
 
 						auto fn = [&]()
 						{
-							AudioEngine ae;
-							ae.StopChannel(CombatBGM);
 							OverlayOpen = false;
 							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(4);
 							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();
