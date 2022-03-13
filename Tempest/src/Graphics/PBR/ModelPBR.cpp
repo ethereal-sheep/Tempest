@@ -236,6 +236,7 @@ namespace Tempest
 				count += sizes[i];
 
 				MeshPBR mesh{ vertices, indices };
+			
 				meshes.emplace_back(mesh);
 			}
 		}

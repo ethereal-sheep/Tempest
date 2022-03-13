@@ -1,0 +1,13 @@
+{
+    "Metadata": {
+        "Type": "Meta"
+    },
+    "Components": [
+        {
+            "Entity": 1,
+            "Component": {
+                "Name": "StatsData"
+            }
+        }
+    ]
+}

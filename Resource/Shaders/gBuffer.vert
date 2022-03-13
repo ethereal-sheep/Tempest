@@ -24,7 +24,7 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 projViewModel;
 uniform mat4 prevProjViewModel;
-
+uniform mat4 NormalMat;
 
 void main()
 {
@@ -34,9 +34,9 @@ void main()
 
     TexCoords = texCoords;
 
-    mat3 normalMatrix = transpose(inverse(mat3(projViewModel)));
-    normal = normalMatrix * Normal;
-
+    //mat3 normalMatrix = transpose(inverse(mat3(projViewModel)));
+    //normal = normalMatrix * Normal;
+	normal = normalize(mat3(NormalMat) * Normal);
     fragPosition = projViewModel * vec4(position, 1.0f);
     fragPrevPosition = prevProjViewModel * vec4(position, 1.0f);
 

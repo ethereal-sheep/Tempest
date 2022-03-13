@@ -115,6 +115,7 @@ void main()
 
     else
     {
+		roughness = materialRoughness;
         vec3 V = normalize(- viewPos);
         vec3 N = normalize(normal);
         vec3 R = reflect(-V, N);
@@ -216,7 +217,7 @@ void main()
 				if(dirShadowBool == 1)
 					shadow = computeShadowDir();
 
-				shadow *= 1.5;
+				shadow *= 1.95;
 				color += ((diffuse * kDisney)+ specular ) * lightColor * NdotL * (1.0f - shadow);
 				
 				//color += ambient +(( diffuse) * kD + specular ) * lightColor * NdotL * (1.0f - shadow);
@@ -224,8 +225,9 @@ void main()
             }
         }
 
-        if (iblMode && envMapShow)
+        if (iblMode )
         {
+			roughness = materialRoughness;
             F = computeFresnelSchlickRoughness(NdotV, F0, roughness);
 
             kS = F;
@@ -237,7 +239,7 @@ void main()
             diffuseIrradiance *= albedo;
 
             // Specular radiance computation
-            vec3 specularRadiance = textureLod(envMapPrefilter, R * mat3(view), roughness * prefilterLODLevel).rgb;
+            vec3 specularRadiance = textureLod(envMapPrefilter, R * mat3(view), materialRoughness).rgb;//2.0f * roughness * prefilterLODLevel
             vec2 brdfSampling = texture(envMapLUT, vec2(NdotV, roughness)).rg;
             specularRadiance *= F * brdfSampling.x + brdfSampling.y;
             vec3 ambientIBL = (diffuseIrradiance * kD) + specularRadiance;

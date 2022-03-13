@@ -17,6 +17,7 @@ namespace Tempest
         this->indices = indices;
 
         this->setupMesh();
+       // calculateNorms();
     }
 
     MeshPBR::~MeshPBR()
@@ -24,6 +25,41 @@ namespace Tempest
 
     }
 
+    void MeshPBR::calculateNorms()
+    {
+        
+        //auto normsfunc = [](glm::vec3 A, glm::vec3 B, glm::vec3 C) 
+        //{
+        //    auto v1 = C - B;
+        //    auto v2 = A - B;
+        //    return glm::normalize(glm::cross(v1, v2));
+        //};
+        //if (vertices.size() % 3)
+        //{
+        //    std::cout << "asd" << std::endl;
+        //}
+        //if (vertices.size() > 2000000)
+        //    return;
+        if (vertices.size() % 3)
+            return;
+        for (unsigned int i = 0; i < vertices.size(); i += 3) 
+        {
+            glm::vec3 A = vertices[i].Position;
+            glm::vec3 B = vertices[i + 1LL].Position;
+            glm::vec3 C = vertices[i + 2LL].Position;
+            //glm::vec3 norm = normsfunc(A, B, C);
+            auto v1 = C - B;
+            auto v2 = A - B;
+            auto norm = glm::normalize(glm::cross(v1, v2));
+            vertices[i].Normal += norm;
+            vertices[i + 1LL].Normal += norm;
+            vertices[i + 2LL].Normal += norm;
+
+
+        }
+        //for (unsigned int i = 0; i < vertices.size(); i++)
+        //    vertices[i].Normal = glm::normalize(vertices[i].Normal);
+    }
 
     void MeshPBR::Draw()
     {

@@ -34,6 +34,7 @@ namespace Tempest
 
         MeshPBR(std::vector<Vertex>& vertices, std::vector<GLuint>& indices);
         ~MeshPBR();
+        void calculateNorms();
         void Draw();
 
     private:
