@@ -330,7 +330,9 @@ namespace Tempest
 					edit.unload_current_scene();
 					OverlayOpen = false;
 					AudioEngine ae;
-					ae.StopChannel(MapBuilderBGM);
+				//	ae.StopChannel(MapBuilderBGM);
+					ae.StopAllChannels();
+					ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
 				};
 				// fade in, fade out, visible

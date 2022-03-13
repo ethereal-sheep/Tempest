@@ -205,6 +205,7 @@ namespace Tempest
 		instance->register_always<Delay>();
 		instance->register_always<SettingsPopup>();
 		instance->register_always<TutorialPopup>();
+		instance->register_always<AttackSystemOverlay>();
 	}
 
 }

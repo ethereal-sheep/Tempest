@@ -2,9 +2,9 @@
 #ifndef CHARACTER_DEATH_EMITTER_H
 #define CHARACTER_DEATH_EMITTER_H
 
-#include "MultipleExplosionEmitter_3D.h"
+#include "Multiple_Rotation_ExplosionEmitter_3D.h"
 
-struct CharacterDeathEmitter_3D : public MultipleExplosionEmitter_3D
+struct CharacterDeathEmitter_3D : public Multiple_Rotation_ExplosionEmitter_3D
 {
 	void OnDeath() override;
 };

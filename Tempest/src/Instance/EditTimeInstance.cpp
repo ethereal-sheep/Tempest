@@ -29,6 +29,34 @@ namespace Tempest
 			ecs.emplace<tc::Statline>(StatsLine);
 		}
 		
+		/*else
+		{
+			for (auto id : sl)
+			{
+				auto& StatsLine = ecs.get<Components::Statline>(id);
+				if (StatsLine.size() < tc::STAT_TOTAL)
+				{
+					for (auto i = StatsLine.size(); i < tc::STAT_TOTAL; i++)
+					{
+						string str = "Stats" + std::to_string(i);
+						LOG("FK");
+					}
+				
+				}
+			}
+			
+		}
+
+		for (auto id : view)
+		{
+			auto& rb = ecs.get<Components::Rigidbody>(id);
+			auto& transform = ecs.get<Components::Transform>(id);
+			rigidbody_config staticBody;
+			staticBody.is_static = true;
+			rb.internal_rb = po.create_actor(staticBody, rb.shape_data, transform.position, transform.rotation, id);
+			po.AddActorToScene(rb.internal_rb.get());
+		}*/
+
 		scene.get_map().update();
 
 
@@ -37,6 +65,7 @@ namespace Tempest
 		tvector<Entity> entities{ view.begin(), view.end() };
 		std::for_each(entities.begin(), entities.end(), std::bind(&ECS::destroy, &ecs, std::placeholders::_1));
 	}
+
 	void EditTimeInstance::_render()
 	{
 		for (auto& [id, pf] : scene.get_map())

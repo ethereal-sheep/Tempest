@@ -11,14 +11,16 @@
 
 // Forward Declarations
 struct ExplosionEmitter_3D;
-struct SphereExplosionEmitter_3D;
+struct Rotation_ExplosionEmitter_3D;
 struct MultipleExplosionEmitter_3D;
+struct Multiple_Rotation_ExplosionEmitter_3D;
 
 struct InteractiveParticle_3D;
 struct TileWaypointEmitter_3D;
 struct UnitTrailEmitter_3D;
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
+
 
 struct ParticleSystem_3D
 {
@@ -33,15 +35,17 @@ struct ParticleSystem_3D
 
 	// Explosion 
 	const std::weak_ptr<ExplosionEmitter_3D> CreateExplosionEmitter(glm::vec3 spawnPos);
+	const std::weak_ptr<Rotation_ExplosionEmitter_3D> CreateRotationExplosionEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<MultipleExplosionEmitter_3D> CreateMultipleExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount);
+	const std::weak_ptr<Multiple_Rotation_ExplosionEmitter_3D> CreateMultipleRotationExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount);
 
 	// Other Emitters
 	const std::weak_ptr<InteractiveParticle_3D> CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos);
 	const std::weak_ptr<TileWaypointEmitter_3D> CreateTileWaypointEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<UnitTrailEmitter_3D> CreateUnitTrailEmitter(glm::vec3 spawnPos);
 
-	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos);
-	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount);
+	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd);
+	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd);
 
 private:
 	ParticleSystem_3D();

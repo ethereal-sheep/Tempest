@@ -61,8 +61,6 @@ namespace Tempest
 	{
 		auto a = event_cast<OpenMainMenuTrigger>(e);
 		OverlayOpen = true;
-		AudioEngine ae;
-		MenuBGM = ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 		MapTitle = "";
 		SelectedConflictRes = 0;
 		SelectedSequences.clear();
@@ -517,6 +515,8 @@ namespace Tempest
 						ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 						auto fn = [&, json_path]()
 						{
+							AudioEngine ae;
+							ae.StopAllChannels();
 							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(json_path, MemoryStrategy{}, InstanceType::EDIT_TIME);
 						};
 
@@ -883,6 +883,8 @@ namespace Tempest
 
 					auto fn = [&, json_path]()
 					{
+						AudioEngine ae;
+						ae.StopAllChannels();
 						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(json_path, MemoryStrategy{}, InstanceType::EDIT_TIME);
 					};
 
@@ -1141,8 +1143,6 @@ namespace Tempest
 
 						auto fn = [&, path = path, str]()
 						{
-							AudioEngine ae;
-							ae.StopAllChannels();
 							OverlayOpen = false;
 							instance.tutorial_temp_enable = true;
 							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);

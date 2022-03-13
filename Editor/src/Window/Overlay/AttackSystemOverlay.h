@@ -121,5 +121,6 @@ namespace Tempest
         bool emitter_4 = false;
 
         bool tut_openSlide = true;
+        bool is_during_combat = false;
     };
 }

@@ -79,8 +79,8 @@ namespace Tempest
 
 	struct PauseOverlayTrigger : public Event
 	{
-		PauseOverlayTrigger(bool hasSaveLoad = true) : hasSaveLoad{ hasSaveLoad } {}
-		bool hasSaveLoad;
+		PauseOverlayTrigger(bool canOpenGraph = false) : canOpenGraph{ canOpenGraph } {}
+		bool canOpenGraph;
 	};
 
 	//Confirm Trigger
@@ -149,11 +149,12 @@ namespace Tempest
 	enum OPEN_GRAPH_TYPE{GRAPH_ACTION, GRAPH_SEQUENCE};
 	struct OpenGraphTrigger : public Event
 	{
-		OpenGraphTrigger(Entity entityid, Instance& in, OPEN_GRAPH_TYPE type) :
-			id{ entityid }, instance{ in }, type{type} {}
+		OpenGraphTrigger(Entity entityid, Instance& in, OPEN_GRAPH_TYPE type, bool isDuringCombat = false) :
+			id{ entityid }, instance{ in }, type{ type }, duringCombat{ isDuringCombat }{}
 		Entity id = UNDEFINED;
 		Instance& instance;
 		OPEN_GRAPH_TYPE type;
+		bool duringCombat;
 	};
 	struct OpenUnitSheetTrigger : public Event 
 	{

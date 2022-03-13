@@ -54,6 +54,10 @@ namespace Tempest
             {
                 change_state(UI_SHOW::INITIAL);
             }
+
+            AudioEngine ae;
+            ae.StopAllChannels();
+            MenuBGM = ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
         }
         void change_state(UI_SHOW state);
         void open_popup(const Event& e);

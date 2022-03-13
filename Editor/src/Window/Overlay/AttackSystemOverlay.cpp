@@ -27,6 +27,7 @@ namespace Tempest
 		auto a = event_cast<OpenGraphTrigger>(e);
 		OverlayOpen = true;
 		type = a.type;
+		is_during_combat = a.duringCombat;
 
 		id = UNDEFINED;
 
@@ -374,21 +375,28 @@ namespace Tempest
 						{
 							OverlayOpen = false;
 							//Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
-							Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+
+							if (!is_during_combat)
+								Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
+							else
+								Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
 						}
 
-						ImGui::SameLine();
-						ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
-						ImGui::SameLine();
-
-						tex = tex_map["Assets/QuickMenuBtn.dds"];
-
-						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+						if (!is_during_combat)
 						{
-							QUICKMENU_POPUP_TYPE t = type == OPEN_GRAPH_TYPE::GRAPH_ACTION ? QUICKMENU_POPUP_TYPE::ACTIONS : QUICKMENU_POPUP_TYPE::SEQUENCES;
-							Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(t);
-							if (instance.tutorial_enable && tutorial_index == 2)
-								tutorial_index = 3;
+							ImGui::SameLine();
+							ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
+							ImGui::SameLine();
+
+							tex = tex_map["Assets/QuickMenuBtn.dds"];
+
+							if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+							{
+								QUICKMENU_POPUP_TYPE t = type == OPEN_GRAPH_TYPE::GRAPH_ACTION ? QUICKMENU_POPUP_TYPE::ACTIONS : QUICKMENU_POPUP_TYPE::SEQUENCES;
+								Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(t);
+								if (instance.tutorial_enable && tutorial_index == 2)
+									tutorial_index = 3;
+							}
 						}
 
 						ImGui::SameLine();
