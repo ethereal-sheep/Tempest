@@ -1823,6 +1823,10 @@ namespace Tempest
 
 				AudioEngine ae;
 				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
+
+				// PSEUDO 
+				// instead of jumping onto the enemy, wobble back-front
+				//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.a";
 			}
 
 
@@ -1874,6 +1878,10 @@ namespace Tempest
 				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
+
+				//PSEUDO
+				// make enemy wobble left-right
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.a";
 			}
 		}
 		break;
@@ -2249,6 +2257,11 @@ namespace Tempest
 		{
 			battle_state = BATTLE_STATE::CURR_TURN;
 			state = State::MENU;
+
+			//PSEUDO
+			// change back the models
+			//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+			//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 		}
 
 	}
