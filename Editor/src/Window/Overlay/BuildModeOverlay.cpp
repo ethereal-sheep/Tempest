@@ -186,7 +186,7 @@ namespace Tempest
 
 					case 5:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 58.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
 						ImVec2 size = { 150.f, 150.f };
 
 						ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 45.f };

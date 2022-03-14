@@ -73,9 +73,8 @@ namespace Tempest
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
         tset<string> SelectedMaps;
-        string SelectedMap;
-        // std::pair<int, string> SelectedTemplate = std::pair( -1,"Assets/EmptyMapBG.dds" );
-        // string SelectedMap = "";
+        string SelectedMap = "";
+        std::pair<int, string> SelectedTemplate = std::pair( -1,"Assets/EmptyMapBG.dds" );
         string NewMapName = "Map";
         string NewProjectName = "Blank";
         ImGuiID HoveredID{ 0 };
