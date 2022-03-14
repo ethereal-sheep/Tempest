@@ -59,8 +59,11 @@ namespace Tempest
 
 			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
 			{
-				instance.tutorial_enable = true;
-				tutorial_index++;
+				if (tutorial_index++ >= 7)
+				{
+					instance.tutorial_enable = false;
+					tutorial_index = 0;
+				}
 			}
 
 			// tutorial progress
@@ -75,11 +78,11 @@ namespace Tempest
 					{
 					case 0:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.18f };
+						ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.21f };
 						ImVec2 size = { 600.f, 650.f };
 						UI::TutArea(pos, size);
 
-						const float posY = viewport->Size.y * 0.18f + size.y * 0.5f;
+						const float posY = viewport->Size.y * 0.2f + size.y * 0.5f;
 
 						// drawing the tips
 						string str = "CoReSys Map Builder";
@@ -94,12 +97,20 @@ namespace Tempest
 
 						str = "for designers to create their own unique 3D maps.";
 						drawlist->AddText({ viewport->Size.x * 0.3f, posY + 35.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+					/*	ImGui::PushFont(FONT_SHEAD);
+						str = "Click anywhere to continue.";
+						drawlist->AddText({ viewport->Size.x * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, viewport->Size.y * 0.85f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						ImGui::PopFont();
+
+						if (ImGui::IsMouseClicked(0))
+							tutorial_index = 1;*/
 					}
 					break;
 
 					case 1:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.195f };
+						ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.23f };
 						ImVec2 size = { 55.f, 55.f };
 						UI::TutArea(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a Furniture Category";
@@ -110,10 +121,10 @@ namespace Tempest
 
 					case 2:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.3f };
-						ImVec2 size = { 80.f, 80.f };
+						ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.33f };
+						ImVec2 size = { 90.f, 90.f };
 
-						ImVec2 pos2 = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.52f - 75.f };
+						ImVec2 pos2 = { viewport->Size.x * 0.57f - 75.f, viewport->Size.y * 0.52f - 75.f };
 						ImVec2 size2 = { 150.f, 150.f };
 
 						UI::TutArea3(pos, pos2, size, size2);
@@ -125,8 +136,8 @@ namespace Tempest
 
 					case 3:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
-						ImVec2 size = { 100.f, 100.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+						ImVec2 size = { 150.f, 150.f };
 
 						ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 43.f};
 						ImVec2 size2 = { 50.f, 50.f };
@@ -175,8 +186,8 @@ namespace Tempest
 
 					case 5:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
-						ImVec2 size = { 100.f, 100.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+						ImVec2 size = { 150.f, 150.f };
 
 						ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 43.f };
 						ImVec2 size2 = { 50.f, 50.f };
@@ -189,8 +200,8 @@ namespace Tempest
 
 					case 6:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
-						ImVec2 size = { 100.f, 100.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+						ImVec2 size = { 150.f, 150.f };
 
 						UI::TutArea(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click the placed furniture";
@@ -199,8 +210,8 @@ namespace Tempest
 					break;
 					case 7:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 50.f, viewport->Size.y * 0.49f - 50.f };
-						ImVec2 size = { 100.f, 100.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+						ImVec2 size = { 150.f, 150.f };
 
 						ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 43.f };
 						ImVec2 size2 = { 50.f, 50.f };
@@ -406,12 +417,18 @@ namespace Tempest
 					if (cat_name == "Unit")
 						continue;
 					
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
 					ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i][i == selected_cat]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);// use for images
 					//ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 					
 					if(ImGui::IsItemClicked())
 					{
 						selected_cat = i;
+						if (instance.tutorial_enable && tutorial_index == 1)
+							tutorial_index = 2;
 					}
 
 					if (ImGui::IsItemHovered())
@@ -420,6 +437,8 @@ namespace Tempest
 						ImGui::Text("%s", cat_name.c_str());
 						ImGui::EndTooltip();
 					}
+
+					ImGui::PopStyleColor(3);
 
 					++i;
 				}
@@ -476,6 +495,10 @@ namespace Tempest
 
 						ImGui::BeginChild("some_child", child4_box, false);
 
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
 						{
 							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[0]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
@@ -486,6 +509,12 @@ namespace Tempest
 								AudioEngine ae;
 								ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 								instance.selected = INVALID;
+
+								if (instance.tutorial_enable && tutorial_index == 7)
+								{
+									instance.tutorial_enable = false;
+									tutorial_index = 0;
+								}
 							}
 
 							if (ImGui::IsItemHovered())
@@ -509,6 +538,8 @@ namespace Tempest
 							if (ImGui::IsItemClicked())
 							{
 								instance.selected = INVALID;
+								if (instance.tutorial_enable && tutorial_index == 5)
+									tutorial_index = 6;
 							}
 
 							if (ImGui::IsItemHovered())
@@ -532,6 +563,8 @@ namespace Tempest
 							if (ImGui::IsItemClicked())
 							{
 								transform.rotation *= glm::angleAxis(glm::radians(90.f), glm::vec3{ 0, 1, 0 });
+
+								// check here for rotation
 							}
 
 							if (ImGui::IsItemHovered())
@@ -545,7 +578,7 @@ namespace Tempest
 								option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 						}
 
-
+						ImGui::PopStyleColor(3);
 						ImGui::EndChild();
 					}
 					
@@ -788,9 +821,10 @@ namespace Tempest
 
 									transform->position = inter;
 								}
+
+								if (instance.tutorial_enable && tutorial_index == 2)
+									tutorial_index = 3;
 								instance.action_history.Commit<CreatePrefab>(it->first);
-
-
 							}
 						}
 					))
