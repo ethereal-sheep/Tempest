@@ -417,6 +417,10 @@ namespace Tempest
 					if (cat_name == "Unit")
 						continue;
 					
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+
 					ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i][i == selected_cat]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);// use for images
 					//ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 					
@@ -433,6 +437,8 @@ namespace Tempest
 						ImGui::Text("%s", cat_name.c_str());
 						ImGui::EndTooltip();
 					}
+
+					ImGui::PopStyleColor(3);
 
 					++i;
 				}
@@ -488,6 +494,10 @@ namespace Tempest
 						ImGui::SetCursorPos(t_cursor_pos);
 
 						ImGui::BeginChild("some_child", child4_box, false);
+
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
 						{
 							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[0]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
@@ -568,7 +578,7 @@ namespace Tempest
 								option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 						}
 
-
+						ImGui::PopStyleColor(3);
 						ImGui::EndChild();
 					}
 					

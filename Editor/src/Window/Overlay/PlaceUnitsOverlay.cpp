@@ -114,8 +114,8 @@ namespace Tempest
 							ImVec2 pos = { 0, viewport->Size.y * 0.19f };
 							ImVec2 size = { 380.f, 80.f };
 
-							ImVec2 pos2 = { viewport->Size.x * 0.5f - 200.f, viewport->Size.y * 0.65f - 200.f };
-							ImVec2 size2 = { 400.f, 400.f};
+							ImVec2 pos2 = { viewport->Size.x * 0.5f - 300.f, viewport->Size.y * 0.65f - 200.f };
+							ImVec2 size2 = { 600.f, 400.f};
 
 							UI::TutArea3(pos, pos2, size, size2);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to add your units into the map";
@@ -128,8 +128,8 @@ namespace Tempest
 							ImVec2 pos = { 0, viewport->Size.y * 0.27f };
 							ImVec2 size = { 380.f, 80.f };
 
-							ImVec2 pos2 = { viewport->Size.x * 0.5f - 200.f, viewport->Size.y * 0.65f - 200.f };
-							ImVec2 size2 = { 400.f, 400.f };
+							ImVec2 pos2 = { viewport->Size.x * 0.5f - 300.f, viewport->Size.y * 0.65f - 200.f };
+							ImVec2 size2 = { 600.f, 400.f };
 
 							UI::TutArea3(pos, pos2, size, size2);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to add your units into the map";
