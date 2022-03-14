@@ -136,10 +136,10 @@ namespace Tempest
 
 					case 3:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
 						ImVec2 size = { 150.f, 150.f };
 
-						ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 43.f};
+						ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 45.f};
 						ImVec2 size2 = { 50.f, 50.f };
 
 						UI::TutArea3(pos, pos2, size, size2);

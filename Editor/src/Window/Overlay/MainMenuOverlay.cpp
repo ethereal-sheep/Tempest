@@ -485,7 +485,7 @@ namespace Tempest
 			}
 
 			//Load Recent Project Area
-			ImGui::SetCursorPos({ ProjectBGMin.x + 60.f, ProjectBGMax.y * 0.55f + 20.f});
+			ImGui::SetCursorPos({ ProjectBGMin.x + 60.f, ProjectBGMax.y * 0.55f + 40.f});
 			ImGui::BeginChild("##LoadRecentProj", { tex->GetWidth() * 0.85f, tex->GetHeight() * 0.35f }, false);
 
 			auto user_path = get_user_path();
@@ -570,196 +570,6 @@ namespace Tempest
 
 		case Tempest::MainMenuOverlay::UI_SHOW::NEW_PROJECT:
 		{
-			//ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4{ 0,0,0,0 });
-			//ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4{ 0,0,0,0 });
-
-			//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1, 1, 1, inter_nest[0].get() });
-			//// render the selectables
-			//std::string selectable = "";
-			//ImGui::PushFont(FONT_BTN);
-			//selectable = "Conflict Resolutions";
-			//ImGui::SetCursorPos(button_pos);
-			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			//if (ImGui::Selectable(selectable.c_str(), false))
-			//{
-			//	AudioEngine ae;
-			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-
-			//	auto fn = [&]()
-			//	{
-			//		change_state(UI_SHOW::CONFLICT_RES);
-			//	};
-			//	// fade in, fade out, visible
-			//	Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-
-
-			//}
-			//	
-
-			//if (ImGui::IsItemHovered())
-			//{
-			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-			//	ImGui::Text(">");
-			//}
-
-			//button_pos.y += 40.0f;
-
-			//selectable = "New Game";
-			//ImGui::SetCursorPos(button_pos);
-			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			//if (ImGui::Selectable(selectable.c_str(), false))
-			//{
-			//	AudioEngine ae;
-			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-
-			//	if (instance.get_scene_paths().empty())
-			//	{
-			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Map found!");
-			//	}
-			//	else
-			//	{
-			//		// check every con res
-			//		bool empty = true;
-			//		for (auto [b, load_path] : instance.get_conflict_resolution_paths()) {
-			//			if(b) empty = false;
-			//		}
-
-			//		if (empty)
-			//		{
-			//			Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!"); // no conres
-			//		}
-			//		else
-			//		{
-			//			auto check_unit_and_seq = [](tpath& load_path, std::vector<std::pair<Entity, string>>& sequences) {
-			//				
-			//				ECS ecs;
-			//				string res_name = load_path.stem().string();
-			//				auto path = load_path.parent_path();
-			//				int a = std::atoi(path.stem().string().c_str());
-			//				if (a >= 1 && a <= 3)
-			//				{
-			//					ecs.load(path, res_name);
-
-			//					if(ecs.view_first<tc::Character>() && ecs.view_first<tc::ConflictGraph>())
-			//					{
-			//						for (auto id : ecs.view<tc::ConflictGraph>())
-			//						{
-			//							const auto& name = ecs.get<tc::Graph>(id).g.get_name();
-			//							sequences.push_back(std::make_pair(id, name));
-			//						}
-			//						return true;
-			//					}
-			//				}
-
-			//				return false;
-			//			};
-
-			//			bool allowed = false;
-			//			int i = 0;
-			//			for (auto [b, load_path] : instance.get_conflict_resolution_paths())
-			//			{
-			//				ConResSequences[i].clear();
-			//				if (check_unit_and_seq(load_path, ConResSequences[i]))
-			//				{
-			//					OkayConRes[i] = true;
-			//					allowed = true;
-			//				}
-			//				++i;
-			//			}
-
-			//			if (allowed)
-			//			{
-			//				// go ahead
-			//				auto fn = [&, selectable]()
-			//				{
-			//					MapTitle = selectable;
-			//					change_state(UI_SHOW::LOAD_MAP);
-			//				};
-			//				// fade in, fade out, visible
-			//				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-
-			//			}
-			//			else
-			//			{
-			//				Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
-			//			}
-			//		}
-
-
-			//	}
-			//	/*else if(!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
-			//	{
-			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
-			//	}
-			//	else if (!instance.ecs.view_first<tc::ConflictGraph>())
-			//	{
-			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Sequence found!");
-			//	}
-			//	else
-			//	{
-			//		Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit found!");
-			//	}*/
-
-			//}
-			//if (ImGui::IsItemHovered())
-			//{
-			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-			//	ImGui::Text(">");
-			//}
-
-			//button_pos.y += 40.0f;
-			//	
-
-			//selectable = "Map Builder";
-			//ImGui::SetCursorPos(button_pos);
-			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			//if (ImGui::Selectable(selectable.c_str(), false))
-			//{
-
-			//	AudioEngine ae;
-			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-			//	// go ahead
-			//	auto fn = [&, selectable]()
-			//	{
-			//		MapTitle = selectable;
-			//		change_state(UI_SHOW::SELECT_MAP);
-			//	};
-			//	// fade in, fade out, visible
-			//	Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-
-			//}
-			//if (ImGui::IsItemHovered())
-			//{
-			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-			//	ImGui::Text(">");
-			//}
-
-			//button_pos.y += 40.0f;
-
-			//selectable = "Back";
-			//ImGui::SetCursorPos(button_pos);
-			//ImGui::SetCursorPosX(ImGui::GetCursorPosX());
-			//if (ImGui::Selectable(selectable.c_str(), false))
-			//{
-			//	AudioEngine ae;
-			//	ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-			//	auto fn = [&]()
-			//	{
-			//		change_state(UI_SHOW::PROJECTS);
-			//	};
-			//	inter_nest[0].start(1, 0, .25f, 0.f, [](float x) { return glm::sineEaseOut(x); });
-			//	Service<EventManager>::Get().instant_dispatch<DelayTrigger>(.25f, fn);
-			//}
-			//	
-			//if (ImGui::IsItemHovered())
-			//{
-			//	ImGui::SetCursorPos(ImVec2{ button_pos.x - 20.0f, button_pos.y });
-			//	ImGui::Text(">");
-			//}
-
-			//ImGui::PopFont();
-			//ImGui::PopStyleColor(3);
-
 			auto tex = tex_map["Assets/BackMenuBtn.dds"];
 			ImGui::Dummy({ 0, viewport.Size.y * 0.12f });
 			ImGui::Dummy({ viewport.Size.x * 0.07f, 0 });
@@ -779,7 +589,7 @@ namespace Tempest
 			}
 
 			//MapBG
-			tex = tex_map[SelectedTemplate.second];
+			tex = tex_map["Assets/PrisonMapBG.dds"];
 			auto center = viewport.GetCenter();
 			ImVec2 ProjectBGMin = { center.x - tex->GetWidth() * 0.5f ,center.y - tex->GetHeight() * 0.5f };
 			ImVec2 ProjectBGMax = { ProjectBGMin.x + tex->GetWidth() ,ProjectBGMin.y + tex->GetHeight() };
@@ -787,7 +597,7 @@ namespace Tempest
 			
 
 			//Select Map Area
-			ImGui::SetCursorPos({ ProjectBGMin.x + 60.f, ProjectBGMax.y * 0.2f });
+			ImGui::SetCursorPos({ ProjectBGMin.x + 60.f, ProjectBGMax.y * 0.25f });
 			ImGui::BeginChild("##LoadRecentProj", { tex->GetWidth() * 0.5f, tex->GetHeight() * 0.7f }, false);
 			
 			auto img = tex_map["Assets/TemplateBtn.dds"];
