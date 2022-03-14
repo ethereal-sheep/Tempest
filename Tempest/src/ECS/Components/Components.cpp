@@ -107,7 +107,7 @@ namespace Tempest::Components
 				end_frame = false;
 
 
-				Local zero, one, two;
+				Local zero{}, one{}, two{};
 				one.local_position = { 0, 0.1, 0.1 };
 				one.local_rotation = glm::quat(glm::radians(vec3{ 20, 0, 0 }));
 				two.local_position = { 0, 0.1, -0.5 };
@@ -116,7 +116,7 @@ namespace Tempest::Components
 
 				auto interpolate = [](Local t1, Local t2, float t)
 				{
-					Local new_local;
+					Local new_local{};
 					// set rotation
 					auto slerped = glm::slerp(t1.local_rotation, t2.local_rotation, t);
 					new_local.local_rotation = slerped;
@@ -132,22 +132,22 @@ namespace Tempest::Components
 
 				if (attack_state == 1)
 				{
-					float t = glm::quarticEaseOut(current_time / interpolation_time);
+					float t = glm::quarticEaseOut(a);
 					curr_local = interpolate(zero, one, t);
 				}
 				else if (attack_state == 2)
 				{
-					float t = glm::quarticEaseIn(current_time / interpolation_time);
+					float t = glm::quarticEaseIn(a);
 					curr_local = interpolate(one, two, t);
 				}
 				else if (attack_state == 3)
 				{
-					float t = glm::sineEaseOut(current_time / interpolation_time);
+					float t = glm::sineEaseOut(a);
 					curr_local = interpolate(two, zero, t);
 				}
 				else if (attack_state == 4)
 				{
-					float t = glm::sineEaseOut(current_time / interpolation_time);
+					float t = glm::sineEaseOut(a);
 					curr_local = interpolate(zero, zero, t);
 				}
 			}
@@ -188,7 +188,7 @@ namespace Tempest::Components
 				current_time += dt;
 				auto t = current_time / interpolation_time;
 
-				Local zero, one, two;
+				Local zero{}, one{}, two{};
 				one.local_position = { 0.1, 0.1, 0.0 };
 				one.local_rotation = glm::quat(glm::radians(vec3{ 0, 0, -20 }));
 				two.local_position = { -0.1, 0.1, 0.0 };
@@ -197,7 +197,7 @@ namespace Tempest::Components
 
 				auto interpolate = [](Local t1, Local t2, float t)
 				{
-					Local new_local;
+					Local new_local{};
 					// set rotation
 					auto slerped = glm::slerp(t1.local_rotation, t2.local_rotation, t);
 					new_local.local_rotation = slerped;
@@ -263,6 +263,7 @@ namespace Tempest::Components
 		{
 			attack_state = 0;
 			current_time = 10000.f;
+			interpolation_time = 10000.f;
 			attacking = true;
 
 			return true;
