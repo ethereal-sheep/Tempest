@@ -874,8 +874,17 @@ namespace Tempest
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
 
-								if (instance.tutorial_enable && tutorial_index == 1)
-									tutorial_index++;
+								if (instance.tutorial_enable)
+								{
+									if (tutorial_index == 1)
+										tutorial_index++;
+									else if (tutorial_index >= 3)
+									{
+										instance.tutorial_enable = false;
+										tutorial_index = 0;
+									}
+										
+								}
 							}
 							if (ImGui::IsItemHovered())
 								combat_button_tex[0] = tex_map["Assets/CActionSelected.dds"];
@@ -3044,8 +3053,11 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
 				{
-					instance.tutorial_enable = true;
-					tutorial_index++;
+					if (tutorial_index++ >= 3)
+					{
+						instance.tutorial_enable = false;
+						tutorial_index = 0;
+					}
 				}
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
@@ -3064,7 +3076,7 @@ namespace Tempest
 						{
 						case 0:
 						{
-							ImVec2 pos = { viewport->Size.x * 0.86f, viewport->Size.y * 0.86f };
+							ImVec2 pos = { viewport->Size.x * 0.86f, viewport->Size.y * 0.88f };
 							ImVec2 size = { 240.f, 130.f };
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to move your unit";
@@ -3113,7 +3125,7 @@ namespace Tempest
 
 						case 2:
 						{
-							ImVec2 pos = { viewport->Size.x * 0.73f, viewport->Size.y * 0.86f };
+							ImVec2 pos = { viewport->Size.x * 0.73f, viewport->Size.y * 0.88f };
 							ImVec2 size = { 240.f, 130.f };
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to perform an unit action";
