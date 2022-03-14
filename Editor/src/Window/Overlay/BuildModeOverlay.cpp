@@ -97,6 +97,14 @@ namespace Tempest
 
 						str = "for designers to create their own unique 3D maps.";
 						drawlist->AddText({ viewport->Size.x * 0.3f, posY + 35.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+					/*	ImGui::PushFont(FONT_SHEAD);
+						str = "Click anywhere to continue.";
+						drawlist->AddText({ viewport->Size.x * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, viewport->Size.y * 0.85f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						ImGui::PopFont();
+
+						if (ImGui::IsMouseClicked(0))
+							tutorial_index = 1;*/
 					}
 					break;
 
@@ -415,6 +423,8 @@ namespace Tempest
 					if(ImGui::IsItemClicked())
 					{
 						selected_cat = i;
+						if (instance.tutorial_enable && tutorial_index == 1)
+							tutorial_index = 2;
 					}
 
 					if (ImGui::IsItemHovered())
@@ -489,6 +499,12 @@ namespace Tempest
 								AudioEngine ae;
 								ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 								instance.selected = INVALID;
+
+								if (instance.tutorial_enable && tutorial_index == 7)
+								{
+									instance.tutorial_enable = false;
+									tutorial_index = 0;
+								}
 							}
 
 							if (ImGui::IsItemHovered())
@@ -512,6 +528,8 @@ namespace Tempest
 							if (ImGui::IsItemClicked())
 							{
 								instance.selected = INVALID;
+								if (instance.tutorial_enable && tutorial_index == 5)
+									tutorial_index = 6;
 							}
 
 							if (ImGui::IsItemHovered())
@@ -535,6 +553,8 @@ namespace Tempest
 							if (ImGui::IsItemClicked())
 							{
 								transform.rotation *= glm::angleAxis(glm::radians(90.f), glm::vec3{ 0, 1, 0 });
+
+								// check here for rotation
 							}
 
 							if (ImGui::IsItemHovered())
@@ -791,9 +811,10 @@ namespace Tempest
 
 									transform->position = inter;
 								}
+
+								if (instance.tutorial_enable && tutorial_index == 2)
+									tutorial_index = 3;
 								instance.action_history.Commit<CreatePrefab>(it->first);
-
-
 							}
 						}
 					))
