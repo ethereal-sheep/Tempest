@@ -237,7 +237,9 @@ namespace Tempest
 			ImGui::SetCursorPos(ImVec2{ button_pos.x, viewport.Size.y * 0.35f - title_size.y * 0.5f });
 			ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
 
-			if (UI::UIButton_1("START", "START", { viewport.Size.x * 0.5f, viewport.Size.y * 0.6f }, { 50.f, 10.f }, FONT_BTN))
+			auto imgBtn = tex_map["Assets/StartBtn.dds"];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.5f - (float)imgBtn->GetWidth()*0.5f , viewport.Size.y * 0.6f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(imgBtn->GetID()), ImVec2{ (float)imgBtn->GetWidth(),  (float)imgBtn->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 			{
 				auto fn = [&]()
 				{
@@ -246,7 +248,9 @@ namespace Tempest
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
 			}
 
-			if (UI::UIButton_1("QUIT", "QUIT", { viewport.Size.x * 0.5f, viewport.Size.y * 0.65f }, { 50.f, 10.f }, FONT_BTN))
+			imgBtn = tex_map["Assets/QuitBtn.dds"];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.5f - (float)imgBtn->GetWidth() * 0.5f, viewport.Size.y * 0.7f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(imgBtn->GetID()), ImVec2{ (float)imgBtn->GetWidth(),  (float)imgBtn->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -775,7 +779,7 @@ namespace Tempest
 			}
 
 			//MapBG
-			tex = tex_map["Assets/PrisonMapBG.dds"];
+			tex = tex_map[SelectedTemplate.second];
 			auto center = viewport.GetCenter();
 			ImVec2 ProjectBGMin = { center.x - tex->GetWidth() * 0.5f ,center.y - tex->GetHeight() * 0.5f };
 			ImVec2 ProjectBGMax = { ProjectBGMin.x + tex->GetWidth() ,ProjectBGMin.y + tex->GetHeight() };
@@ -790,6 +794,12 @@ namespace Tempest
 			
 			int i = 0;
 			for (auto it : fs::directory_iterator("Scenes"))
+			// tvector<string> mapList = { "Futuristic", "Modern", "Bar", "Prison", "Tutorial"};
+			// tvector<string> mapAsset = { "Assets/EmptyMapBG.dds" ,"Assets/EmptyMapBG.dds" ,"Assets/BarMapBG.dds" ,"Assets/PrisonMapBG.dds" ,"Assets/EmptyMapBG.dds"};
+			
+
+			// //Button for User to select Map
+			// for (int i = 0; i < mapList.size(); i++)
 			{
 				string str = it.path().stem().string();
 				ImGui::PushID(i);
@@ -804,6 +814,9 @@ namespace Tempest
 						SelectedMaps.erase(str);
 					else
 						SelectedMaps.insert(str);
+					// SelectedTemplate.first = i;
+					// SelectedTemplate.second = mapAsset[i];
+					// tex = tex_map[SelectedTemplate.second];
 				}
 				ImGui::PopID();
 
