@@ -3076,7 +3076,7 @@ namespace Tempest
 						{
 						case 0:
 						{
-							ImVec2 pos = { viewport->Size.x * 0.86f, viewport->Size.y * 0.88f };
+							ImVec2 pos = { viewport->Size.x * 0.86f, viewport->Size.y * 0.86f };
 							ImVec2 size = { 240.f, 130.f };
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to move your unit";
@@ -3125,7 +3125,7 @@ namespace Tempest
 
 						case 2:
 						{
-							ImVec2 pos = { viewport->Size.x * 0.73f, viewport->Size.y * 0.88f };
+							ImVec2 pos = { viewport->Size.x * 0.73f, viewport->Size.y * 0.86f };
 							ImVec2 size = { 240.f, 130.f };
 							UI::TutArea(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to perform an unit action";

@@ -78,7 +78,7 @@ namespace Tempest
 					{
 					case 0:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.21f };
+						ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.19f };
 						ImVec2 size = { 600.f, 650.f };
 						UI::TutArea(pos, size);
 
@@ -110,7 +110,7 @@ namespace Tempest
 
 					case 1:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.23f };
+						ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.21f };
 						ImVec2 size = { 55.f, 55.f };
 						UI::TutArea(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a Furniture Category";
@@ -121,7 +121,7 @@ namespace Tempest
 
 					case 2:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.33f };
+						ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.31f };
 						ImVec2 size = { 90.f, 90.f };
 
 						ImVec2 pos2 = { viewport->Size.x * 0.57f - 75.f, viewport->Size.y * 0.52f - 75.f };
@@ -173,23 +173,23 @@ namespace Tempest
 						// drawing the tips
 						string str = "Duplicate Furniture";
 						ImGui::PushFont(FONT_BTN);
-						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+						drawlist->AddText({ viewport->Size.x * 0.85f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
 						ImGui::PopFont();
 
-						drawlist->AddLine({ pos.x + size.x , posY }, { viewport->Size.x * 0.8f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+						drawlist->AddLine({ pos.x + size.x , posY }, { viewport->Size.x * 0.85f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 
 						str = "Hold the Alt key and drag the gizmo to duplicate the furniture";
-						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						drawlist->AddText({ viewport->Size.x * 0.85f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 					}
 					break;
 
 					case 5:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 58.f };
 						ImVec2 size = { 150.f, 150.f };
 
-						ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 43.f };
+						ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 45.f };
 						ImVec2 size2 = { 50.f, 50.f };
 
 						UI::TutArea3(pos, pos2, size, size2);
@@ -210,10 +210,10 @@ namespace Tempest
 					break;
 					case 7:
 					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
 						ImVec2 size = { 150.f, 150.f };
 
-						ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 43.f };
+						ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 45.f };
 						ImVec2 size2 = { 50.f, 50.f };
 
 						UI::TutArea3(pos, pos2, size, size2);
