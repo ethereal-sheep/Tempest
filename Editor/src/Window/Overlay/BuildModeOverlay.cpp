@@ -779,12 +779,12 @@ namespace Tempest
 						{
 							auto& cam = Service<RenderSystem>::Get().GetCamera();
 
-							auto& io = ImGui::GetIO();
+							//auto& io = ImGui::GetIO();
 							//Checking for mouse
 							//if (io.WantCaptureMouse)
 							//	return;
-							const ImGuiViewport* viewport = ImGui::GetMainViewport();
-							auto bbY = viewport->Size.y - swidth;
+							//const ImGuiViewport* viewport = ImGui::GetMainViewport();
+							//auto bbY = viewport->Size.y - swidth;
 							if (ImGui::IsMouseHoveringRect(place_box, place_box + place_box_size))
 								return;
 

@@ -3157,7 +3157,7 @@ namespace Tempest::UI
 	}
 	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed, const ImVec4& tint_color)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;
@@ -3218,7 +3218,7 @@ namespace Tempest::UI
 	}
 	bool UILoadProjectEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;
@@ -3284,7 +3284,7 @@ namespace Tempest::UI
 	}
 	bool UIImgBtnWithTextEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;

@@ -408,8 +408,7 @@ namespace Tempest
 			//New Project Area
 			{
 				auto img = tex_map["Assets/TemplateBtn.dds"];
-				ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
-				ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
+
 				ImGui::PushFont(FONT_BTN);
 
 				string str = "Gurps";

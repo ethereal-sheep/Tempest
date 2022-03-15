@@ -354,7 +354,7 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 5.f, 0.0f });
 						if (ImGui::BeginChild("TurnOrderTextInside", ImVec2{ ImGui::GetContentRegionMax().x * 0.65f, 40.0f }, true))
 						{
-							std::string text = "Select from stats, randomized order or both for your unit's turn order.";
+							std::string str = "Select from stats, randomized order or both for your unit's turn order.";
 							ImGui::PushFont(FONT_BODY);
 							ImGui::TextWrapped(text.c_str());
 							ImGui::PopFont();
@@ -401,7 +401,7 @@ namespace Tempest
 
 						ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 55.f , ImGui::GetCursorPosY() + 35.f });
 						const ImVec2 cursor{ ImGui::GetCursorPos() };
-						int col = 0; int row = 0;
+						int column = 0; int row = 0;
 
 						// sort by stats
 						for (int i = 0; i < sl->size(); i++)
@@ -410,7 +410,7 @@ namespace Tempest
 							{
 							//	bool is_selected = (current_stat == sl->operator[](i));
 								if (UI::UIButton_2(sl->operator[](i).c_str(), sl->operator[](i).c_str(), 
-									{ cursor.x + col++ * 120, cursor.y + row * 80 }, { -70, 5 }, FONT_PARA, current_stat == sl->operator[](i)))
+									{ cursor.x + column++ * 120, cursor.y + row * 80 }, { -70, 5 }, FONT_PARA, current_stat == sl->operator[](i)))
 								{
 									if (current_stat == sl->operator[](i))
 										current_stat = "NULL";
@@ -442,9 +442,9 @@ namespace Tempest
 								}
 
 								// display in cols of 5
-								if (col / 5)
+								if (column / 5)
 								{
-									col = 0;
+									column = 0;
 									row++;
 								}
 							}
