@@ -1,0 +1,61 @@
+p NULL
+p Models\Lab_Trolley.fbm\Lab_Crate_SofaCushion_BaseColor.dds
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+Ambient 0.834532 0.834532 0.834532
+Ambient 1 1 1
+Ambient 0.054902 0.392157 0.054902
+Ambient 0.406138 0.414574 0.42446
+Ambient 0.42446 0.42446 0.42446
+Ambient 0 0 0
+Ambient 0.179856 0.179856 0.179856
+Ambient 0.0313726 0.258824 0.521569
+Diffuse 0.834532 0.834532 0.834532
+Diffuse 1 1 1
+Diffuse 0.054902 0.392157 0.054902
+Diffuse 0.406138 0.414574 0.42446
+Diffuse 0.42446 0.42446 0.42446
+Diffuse 0.8 0.8 0.8
+Diffuse 0.179856 0.179856 0.179856
+Diffuse 0.0313726 0.258824 0.521569
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 0.42446 0.42446 0.42446
+Specular 0 0 0
+Specular 1 1 1
+Specular 1 1 1
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Refraction 0
+Reflection 0
+Shininess 1
+ShininessStrength 0
+Opacity 1

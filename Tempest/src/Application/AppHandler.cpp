@@ -19,7 +19,7 @@ namespace Tempest
 	int AppHandler::Run(std::unique_ptr<Application>&& pApp, HINSTANCE hInstance, [[maybe_unused]] LPWSTR lpCmdList, int nCmdShow)
 	{
 		s_pApp = std::move(pApp);
-
+		//ToggleFullscreen();
 #ifdef _DEBUG
 		// enable console
 		AllocConsole();
@@ -152,7 +152,13 @@ namespace Tempest
 				if (s_pApp)
 				{
 					if (wParam == VK_RETURN && !((lParam >> 30) & 1))
+					{
 						ToggleFullscreen();
+						const uint32_t width = ((uint32_t)(short)LOWORD(lParam));
+						const uint32_t height = ((uint32_t)(short)HIWORD(lParam));
+						if (wParam != SIZE_MINIMIZED)
+							s_pApp->Resize(width, height);
+					}
 				}
 				return 0;
 			}

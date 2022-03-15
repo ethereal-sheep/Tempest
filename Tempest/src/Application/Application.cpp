@@ -130,7 +130,7 @@ namespace Tempest
 	{
 		if (width == 0 || height == 0)
 			return;
-
+		
 		if(Service<RenderSystem>::GetIf())
 			Service<RenderSystem>::Get().Resize(width, height);
 

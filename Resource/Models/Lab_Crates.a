@@ -1,0 +1,33 @@
+p NULL
+p Models\Lab_Crates.fbm\Lab_Crate_SofaCushion_BaseColor.dds
+p NULL
+p Models\Lab_Crates.fbm\Lab_Crate_Band_Material _17746_BaseColor.dds
+Ambient 0.054902 0.392157 0.054902
+Ambient 1 1 1
+Ambient 0.406138 0.414574 0.42446
+Ambient 1 1 1
+Diffuse 0.054902 0.392157 0.054902
+Diffuse 1 1 1
+Diffuse 0.406138 0.414574 0.42446
+Diffuse 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Refraction 0
+Reflection 0
+Shininess 1024
+ShininessStrength 2
+Opacity 1

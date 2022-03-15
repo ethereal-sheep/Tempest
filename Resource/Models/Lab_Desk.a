@@ -1,0 +1,96 @@
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p Models\Lab_Desk.fbm\Lab_Crate_SofaCushion_BaseColor.dds
+p NULL
+p NULL
+p NULL
+Ambient 0.42446 0.42446 0.42446
+Ambient 0.081414 0.0817625 0.0935252
+Ambient 0.406138 0.414574 0.42446
+Ambient 0.028777 0.028777 0.028777
+Ambient 0.884892 0.750439 0.67481
+Ambient 0.0105585 0.0507862 0.122302
+Ambient 0.9 0.9 0.9
+Ambient 0.380392 0.396078 0.72549
+Ambient 0 0 0
+Ambient 1 1 1
+Ambient 0.054902 0.392157 0.054902
+Ambient 0.273744 0.281383 0.294964
+Ambient 1 1 1
+Diffuse 0.42446 0.42446 0.42446
+Diffuse 0.081414 0.0817625 0.0935252
+Diffuse 0.406138 0.414574 0.42446
+Diffuse 0.028777 0.028777 0.028777
+Diffuse 0.884892 0.750439 0.67481
+Diffuse 0.0105585 0.0507862 0.122302
+Diffuse 0.9 0.9 0.9
+Diffuse 0.380392 0.396078 0.72549
+Diffuse 0.8 0.8 0.8
+Diffuse 1 1 1
+Diffuse 0.054902 0.392157 0.054902
+Diffuse 0.273744 0.281383 0.294964
+Diffuse 1 1 1
+Specular 0.42446 0.42446 0.42446
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 0 0 0
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 2.04617 2.04617 2.04617
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Refraction 0
+Reflection 0
+Shininess 1
+ShininessStrength 0
+Opacity 1

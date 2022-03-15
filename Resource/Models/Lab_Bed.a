@@ -1,0 +1,89 @@
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p NULL
+p Models\Lab_Bed.fbm\Lab Bed_Monitor_BaseColor.dds
+p NULL
+p NULL
+p NULL
+p NULL
+Ambient 1 1 1
+Ambient 0.081414 0.0817625 0.0935252
+Ambient 0.273744 0.281383 0.294964
+Ambient 0.834532 0.834532 0.834532
+Ambient 0 0 0
+Ambient 0.42446 0.42446 0.42446
+Ambient 0.0313726 0.258824 0.521569
+Ambient 1 1 1
+Ambient 0 0 0
+Ambient 0 0 0
+Ambient 0 0 0
+Ambient 0 0 0
+Diffuse 1 1 1
+Diffuse 0.081414 0.0817625 0.0935252
+Diffuse 0.273744 0.281383 0.294964
+Diffuse 0.834532 0.834532 0.834532
+Diffuse 0.8 0.8 0.8
+Diffuse 0.42446 0.42446 0.42446
+Diffuse 0.0313726 0.258824 0.521569
+Diffuse 1 1 1
+Diffuse 0 0 0
+Diffuse 0 0 0
+Diffuse 0 0 0
+Diffuse 0 0 0
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 1 1 1
+Specular 0 0 0
+Specular 0.42446 0.42446 0.42446
+Specular 1 1 1
+Specular 1 1 1
+Specular 0 0 0
+Specular 0 0 0
+Specular 0 0 0
+Specular 0 0 0
+Emissive 0 0.369599 2.62415
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Emissive 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Transparent 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Reflective 0 0 0
+Refraction 0
+Reflection 0
+Shininess 1024
+ShininessStrength 2
+Opacity 1
