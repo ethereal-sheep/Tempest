@@ -64,7 +64,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Wall.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\Lab_wall.jpg"
             }
         },
         {

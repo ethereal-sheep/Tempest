@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_SmallMachine.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\Lab_small_machine.jpg"
             }
         },
         {

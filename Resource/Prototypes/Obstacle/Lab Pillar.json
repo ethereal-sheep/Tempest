@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Pillar.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\Lab_pillar.jpg"
             }
         },
         {
