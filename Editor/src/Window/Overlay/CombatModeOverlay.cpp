@@ -2483,9 +2483,20 @@ namespace Tempest
 					{
 						ImGui::BeginGroup();
 						// the text thingy
-						ImGui::Text(text.c_str());
+						//ImGui::Text(text.c_str());
+						auto drawlist = ImGui::GetWindowDrawList();
+						ImVec2 padding = { 10.f,10.f };
+						ImVec2 minRedBox = { cursor_pos.x - padding.x, cursor_pos.y - padding.y };
+						ImVec2 maxRedBox = minRedBox + ImGui::CalcTextSize(text.c_str()) + padding * 2;
+						drawlist->AddRectFilled(minRedBox, maxRedBox, ImGui::GetColorU32({ 1,0,0,1 }));
+						drawlist->AddText(minRedBox + padding, ImGui::GetColorU32({ 0,0,0,1 }), text.c_str());
 
-						
+						string word = "DAMAGE";
+						ImVec2 minGreyBox = { maxRedBox.x, minRedBox .y};
+						ImVec2 maxGreyBox = minGreyBox + ImGui::CalcTextSize(word.c_str()) + padding * 2;
+						drawlist->AddRectFilled(minGreyBox, maxGreyBox, ImGui::GetColorU32({ 0,0,0,0.6f }));
+						drawlist->AddText(minGreyBox + padding, ImGui::GetColorU32({ 1,1,1,1 }), word.c_str());
+
 
 						ImGui::EndGroup();
 					}

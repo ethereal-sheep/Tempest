@@ -209,7 +209,7 @@ namespace Tempest
 				auto window = ImGui::GetWindowDrawList();
 
 				auto sideBg = tex_map["Assets/FadingSideBG.dds"];
-				auto imgWidth = tex_map["Assets/SmallTurnSelectedBtn.dds"]->GetWidth();
+				auto imgWidth = tex_map["Assets/SmallTurnHoverBtn.dds"]->GetWidth();
 				ImVec2 sideBarSize = { imgWidth + 20.f, ImGui::GetWindowHeight() * 0.6f };
 				ImVec2 sideBgMin = ImGui::GetCurrentWindow()->Pos;
 				ImVec2 sideBgMax = { sideBgMin.x + (float)sideBg->GetWidth(), sideBgMin.x + (float)ImGui::GetWindowHeight() };
