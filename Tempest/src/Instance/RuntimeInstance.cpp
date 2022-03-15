@@ -262,7 +262,7 @@ namespace Tempest
 			if (m_map_interactiveEmitter_3D[id].expired())
 			{
 				auto& transform = ecs.get<tc::Transform>(id);
-				auto& door = ecs.get<tc::Door>(id);
+				//auto& door = ecs.get<tc::Door>(id);
 				auto& shape = ecs.get<tc::Shape>(id);
 
 				const int& x = shape.x;
