@@ -88,5 +88,9 @@ namespace Tempest
         ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
         ChannelID MenuBGM = 0;
 
+        //Main Page texture change
+        string confliceResBtn = "Assets/ConflictResolutionButton.dds";
+        string startGameBtn = "Assets/StartGameButton.dds";
+        string mapBuilderBtn = "Assets/MapBuilderButton.dds";
     };
 }

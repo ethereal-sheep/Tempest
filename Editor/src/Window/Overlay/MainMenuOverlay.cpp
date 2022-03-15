@@ -765,9 +765,9 @@ namespace Tempest
 			float y_pos = 800.f;
 
 			//Conflict Resolution Button
-			auto tex = tex_map["Assets/ConflictResolutionButton.dds"];
+			auto tex = tex_map[confliceResBtn];
 			ImGui::SetCursorPos({viewport.Size.x * 0.15f, viewport.Size.y * 0.25f - inter_nest[0].get() * y_pos });
-			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 
 				auto fn = [&]()
@@ -776,11 +776,15 @@ namespace Tempest
 				};
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
 			}
+			if (ImGui::IsItemHovered())
+				confliceResBtn = "Assets/ConflictResolutionHoverButton.dds";
+			else
+				confliceResBtn = "Assets/ConflictResolutionButton.dds";
 
 			//Start Game Button
-			tex = tex_map["Assets/StartGameButton.dds"];
+			tex = tex_map[startGameBtn];
 			ImGui::SetCursorPos({ viewport.Size.x * 0.37f, viewport.Size.y * 0.2f - inter_nest[1].get() * y_pos });
-			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				string selectable = "New Game";
 				AudioEngine ae;
@@ -861,6 +865,7 @@ namespace Tempest
 
 
 				}
+				
 				/*else if(!instance.ecs.view_first<tc::Character>() && !instance.ecs.view_first<tc::ConflictGraph>())
 				{
 					Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("No existing Unit or Sequence found!");
@@ -875,11 +880,15 @@ namespace Tempest
 				}*/
 
 			}
+			if (ImGui::IsItemHovered())
+				startGameBtn = "Assets/StartGameHoverButton.dds";
+			else
+				startGameBtn = "Assets/StartGameButton.dds";
 
 			//Map Builder Button
-			tex = tex_map["Assets/MapBuilderButton.dds"];
+			tex = tex_map[mapBuilderBtn];
 			ImGui::SetCursorPos({ viewport.Size.x * 0.6f, viewport.Size.y * 0.3f - inter_nest[2].get() * y_pos });
-			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				auto fn = [&]()
 				{
@@ -888,6 +897,10 @@ namespace Tempest
 				};
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
 			}
+			if (ImGui::IsItemHovered())
+				mapBuilderBtn = "Assets/MapBuilderHoverButton.dds";
+			else
+				mapBuilderBtn = "Assets/MapBuilderButton.dds";
 
 			//Project Icon Btn
 			tex = tex_map["Assets/ProjectIconBtn.dds"];
