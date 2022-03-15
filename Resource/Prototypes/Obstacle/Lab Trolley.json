@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Trolley.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\Lab_trolley.jpg"
             }
         },
         {
