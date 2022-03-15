@@ -2408,7 +2408,7 @@ f 102 103 104
 f 102 104 105
 f 0 1 2
 f 1 0 3
-p Models\Lab_DoorFrame.fbm\Lab_Exit_Material _17909_BaseColor.dds
+p Models\Lab_DoorFrame.fbm\Lab_Exit_Material_17909_BaseColor.png
 p NULL
 p NULL
 p NULL
