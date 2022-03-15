@@ -2502,7 +2502,7 @@ namespace Tempest
 						ImVec2 minGreyBox = { maxRedBox.x, minRedBox .y};
 						ImVec2 maxGreyBox = minGreyBox + (ImGui::CalcTextSize(word.c_str()) + padding * 2);// *inter5.get();
 						drawlist->AddRectFilled(minGreyBox, maxGreyBox, ImGui::GetColorU32({ 0,0,0,0.75f * inter5.get() }));
-						drawlist->AddText(minGreyBox + padding, ImGui::GetColorU32({ 0.8,.8,.8,inter5.get() }), word.c_str());
+						drawlist->AddText(minGreyBox + padding, ImGui::GetColorU32({ 0.8f,.8f,.8f,inter5.get() }), word.c_str());
 
 
 						ImGui::EndGroup();

@@ -1131,7 +1131,7 @@ namespace Tempest
 				else
 				{
 					auto& front = sequenceStack.back();
-					LOG_ASSERT(front.m_Key == sd.m_Key, "Function Keys not the same!");
+					LOG_ASSERT(front.m_Key == sd.m_Key); // "Function Keys not the same!");
 
 					Bar newBar{
 						front.m_Key,
@@ -1147,7 +1147,7 @@ namespace Tempest
 					maxRow = row;
 
 			}
-			LOG_ASSERT(sequenceStack.size() == 0, "Seq Stack Corrupted!");
+			LOG_ASSERT(sequenceStack.size() == 0); // , "Seq Stack Corrupted!");
 
 			if(profile.IsRecording())
 				ImPlot::SetNextPlotLimits(0, dt.count() / defaultDivisor, 0, 1.0 * maxRow, ImGuiCond_Always);

@@ -153,7 +153,7 @@ void MultipleExplosionEmitter_3D::OnDeath()
 		float rangeY = static_cast<float>(m_maxPos.y - m_minPos.y) > 0 ? static_cast<float>(m_maxPos.y - m_minPos.y) : 0;
 		float rangeZ = static_cast<float>(m_maxPos.z - m_minPos.z) > 0 ? static_cast<float>(m_maxPos.z - m_minPos.z) : 0;
 
-		glm::vec3 spawnPos;
+		glm::vec3 spawnPos{};
 
 
 		if (rangeX)

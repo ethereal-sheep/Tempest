@@ -9,7 +9,7 @@
 //{}
 
 
-void UnitTrailEmitter_3D::SelfUpdate(const float dt)
+void UnitTrailEmitter_3D::SelfUpdate([[maybe_unused]] const float dt)
 {
 	
 }
