@@ -2294,8 +2294,8 @@ namespace Tempest
 					float delay = 1.7f;
 					inter3.start(0, 1.f, sec, 0.f, [](float x) { return glm::circularEaseOut(x); });
 					inter4.start(0, 1.f, sec, 0.f, [](float x) { return glm::sineEaseIn(x); });
-					inter5.start(0, 1.f, 1.f, delay, [](float x) { return glm::elasticEaseOut(x); });
-					inter6.start(0, 1.f, delay, delay, [](float x) { return glm::sineEaseIn(x); });
+					inter5.start(0, 1.f, 0.5f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+					inter6.start(0, 1.f, delay, 0.f, [](float x) { return glm::sineEaseIn(x); });
 
 
 					inter_nest[0].start(2.0f, 1.0f, delay, 0.f,
@@ -2370,7 +2370,7 @@ namespace Tempest
 			if (triggered)
 			{
 				auto position = instance.ecs.get<tc::Transform>(other_entity).position;
-				position.y += 1.4f + inter3.get() * .3f;
+				position.y += 1.4f + inter3.get() * .25f;
 				auto ss = cam.WorldspaceToScreenspace(position);
 				auto vp = cam.GetViewport();
 				ss.x = (1 + ss.x) / 2 * vp.z;
@@ -2415,29 +2415,29 @@ namespace Tempest
 						}
 					}
 
-					ImGui::PushFont(FONT_HEAD);
-					auto text_size = ImGui::CalcTextSize(text.c_str());
-					ImGui::PopFont();
-					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
-					ImGui::SetCursorPos(cursor_pos);
+					//ImGui::PushFont(FONT_HEAD);
+					//auto text_size = ImGui::CalcTextSize(text.c_str());
+					//ImGui::PopFont();
+					//auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					//ImGui::SetCursorPos(cursor_pos);
 
-					ImGui::BeginGroup();
-					for (int i = 0; i < text.size() && i < 3; ++i)
-					{
-						float scale = FONT_HEAD->Scale;
-						FONT_HEAD->Scale = inter_nest[i].get();
-						ImGui::PushFont(FONT_HEAD);
-						// the text colour
-						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, 1.f - inter4.get()));
-						// the text thingy
-						ImGui::Text(std::string{ text[i] }.c_str());
-						ImGui::SameLine(0);
+					//ImGui::BeginGroup();
+					//for (int i = 0; i < text.size() && i < 3; ++i)
+					//{
+					//	float scale = FONT_HEAD->Scale;
+					//	FONT_HEAD->Scale = inter_nest[i].get();
+					//	ImGui::PushFont(FONT_HEAD);
+					//	// the text colour
+					//	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, 1.f - inter4.get()));
+					//	// the text thingy
+					//	ImGui::Text(std::string{ text[i] }.c_str());
+					//	ImGui::SameLine(0);
 
-						ImGui::PopStyleColor();
-						ImGui::PopFont();
-						FONT_HEAD->Scale = scale;
-					}
-					ImGui::EndGroup();
+					//	ImGui::PopStyleColor();
+					//	ImGui::PopFont();
+					//	FONT_HEAD->Scale = scale;
+					//}
+					//ImGui::EndGroup();
 
 				}
 				ImGui::SetCursorPos(temp);
@@ -2446,7 +2446,7 @@ namespace Tempest
 			if (triggered)
 			{
 				auto position = instance.ecs.get<tc::Transform>(other_entity).position;
-				position.y += 1.0f + inter5.get() * .2f;
+				position.y += 1.0f + 1.f * .3f;
 				auto ss = cam.WorldspaceToScreenspace(position);
 				auto vp = cam.GetViewport();
 				ss.x = (1 + ss.x) / 2 * vp.z;
@@ -2460,25 +2460,31 @@ namespace Tempest
 					const char* happys[] = { ICON_FA_GRIN_TONGUE_SQUINT, ICON_FA_LAUGH_BEAM, ICON_FA_LAUGH_SQUINT, ICON_FA_LAUGH_WINK };
 					const char* deads[] = { ICON_FA_SKULL_CROSSBONES, ICON_FA_SKULL };
 
-					std::string text = sads[rand1];
-					glm::vec3 col(1, 0, 0);
+					std::string text; 
+					text = ICON_FA_CIRCLE " ";
+					text += std::to_string(damage);
+					string word = "DAMAGE";
+					glm::vec3 col;;
+					col = vec3(1, 0, 0);
 
 					if (damage == 0)
 					{
-						col = vec3(0, 1, 0);
-						text = happys[rand2];
+						col = vec3(1, 0.6, 0);
+						text = ICON_FA_CIRCLE " !";
+						word = "MISSED!";
 					}
 					if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
 					{
-						col = vec3(0, 0, 0);
-						text = deads[rand2 % 2];
+						// for dead
 					}
 
+					FONT_HEAD->Scale = inter5.get();
 					ImGui::PushFont(FONT_HEAD);
 					// the text colour
 					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, inter5.get()));
 					auto text_size = ImGui::CalcTextSize(text.c_str());
-					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					//auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					auto cursor_pos = ImVec2{ ss.x , ss.y - text_size.y};
 					ImGui::SetCursorPos(cursor_pos);
 					{
 						ImGui::BeginGroup();
@@ -2487,21 +2493,23 @@ namespace Tempest
 						auto drawlist = ImGui::GetWindowDrawList();
 						ImVec2 padding = { 10.f,10.f };
 						ImVec2 minRedBox = { cursor_pos.x - padding.x, cursor_pos.y - padding.y };
-						ImVec2 maxRedBox = minRedBox + ImGui::CalcTextSize(text.c_str()) + padding * 2;
-						drawlist->AddRectFilled(minRedBox, maxRedBox, ImGui::GetColorU32({ 1,0,0,1 }));
-						drawlist->AddText(minRedBox + padding, ImGui::GetColorU32({ 0,0,0,1 }), text.c_str());
+						ImVec2 maxRedBox = minRedBox + (ImGui::CalcTextSize(text.c_str()) + padding * 2);// *inter5.get();
+						maxRedBox.y -= 4.f;
 
-						string word = "DAMAGE";
+						drawlist->AddRectFilled(minRedBox, maxRedBox, ImGui::GetColorU32({ col.r, col.g, col.b,inter5.get() }));
+						drawlist->AddText(minRedBox + padding, ImGui::GetColorU32({ 0,0,0,inter5.get() }), text.c_str());
+
 						ImVec2 minGreyBox = { maxRedBox.x, minRedBox .y};
-						ImVec2 maxGreyBox = minGreyBox + ImGui::CalcTextSize(word.c_str()) + padding * 2;
-						drawlist->AddRectFilled(minGreyBox, maxGreyBox, ImGui::GetColorU32({ 0,0,0,0.6f }));
-						drawlist->AddText(minGreyBox + padding, ImGui::GetColorU32({ 1,1,1,1 }), word.c_str());
+						ImVec2 maxGreyBox = minGreyBox + (ImGui::CalcTextSize(word.c_str()) + padding * 2);// *inter5.get();
+						drawlist->AddRectFilled(minGreyBox, maxGreyBox, ImGui::GetColorU32({ 0,0,0,0.75f * inter5.get() }));
+						drawlist->AddText(minGreyBox + padding, ImGui::GetColorU32({ 0.8,.8,.8,inter5.get() }), word.c_str());
 
 
 						ImGui::EndGroup();
 					}
 					ImGui::PopStyleColor();
 					ImGui::PopFont();
+					FONT_HEAD->Scale = 1.f;
 				}
 				ImGui::SetCursorPos(temp);
 			}

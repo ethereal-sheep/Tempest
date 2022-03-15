@@ -706,11 +706,6 @@ namespace Tempest
 			for (auto& pair : proto_cat)
 			{
 
-				if (i % cols == 0)
-				{
-					ImGui::Dummy({ xpadding, 0.01f });
-					ImGui::SameLine();
-				}
 
 				auto& proto_name = pair.first;
 				auto& proto = pair.second;
@@ -737,6 +732,11 @@ namespace Tempest
 				// display
 				if (filter.PassFilter(proto_name.c_str()))
 				{
+					if (i % cols == 0)
+					{
+						ImGui::Dummy({ xpadding, 0.01f });
+						ImGui::SameLine();
+					}
 
 					ImGui::PushID(proto_name.c_str());
 					ImGui::BeginGroup();
