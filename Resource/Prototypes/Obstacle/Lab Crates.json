@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Crates.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\Lab_crates.jpg"
             }
         },
         {

@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Curtain.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\Lab_curtain.jpg"
             }
         },
         {

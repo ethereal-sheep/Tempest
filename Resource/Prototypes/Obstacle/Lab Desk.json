@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Desk.a",
-                "TexturePath": ""
+                "TexturePath": "Assets\\Lab_desk.jpg"
             }
         },
         {
