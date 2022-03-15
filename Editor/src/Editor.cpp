@@ -59,6 +59,7 @@ namespace Tempest
 		
 		void OnInit() override
 		{
+			Tempest::AppHandler::ToggleFullscreen();
 			ShowWindow(AppHandler::GetContext()->GetHWND(), SW_SHOWMAXIMIZED);
 
 

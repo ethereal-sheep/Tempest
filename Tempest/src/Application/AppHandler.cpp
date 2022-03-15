@@ -214,7 +214,7 @@ namespace Tempest
 	bool AppHandler::InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		s_pContext = Context::Create();
-
+		ToggleFullscreen();
 		if (!s_pContext->OnInit(hInstance, nCmdShow, s_pApp))
 			return false;
 
