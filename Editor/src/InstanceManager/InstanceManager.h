@@ -72,7 +72,7 @@ namespace Tempest
 				{
 					// assign new pointer to instance
 					instance = create_new_instance();
-					
+					instance->tutorial_enable = next_config.enable_tutorial;
 				}
 				catch (const std::exception& a)
 				{

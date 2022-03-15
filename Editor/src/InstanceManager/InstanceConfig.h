@@ -55,6 +55,7 @@ namespace Tempest
 		string map_name;
 		int conflict_resolution;
 		std::vector<Entity> sequences;
+		bool enable_tutorial = false;
 	};
 
 	struct LoadNewInstance : public Event

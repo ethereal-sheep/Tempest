@@ -62,6 +62,7 @@ namespace Tempest
 
 		if (OverlayOpen)
 		{
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4{ 0.0f,0.0f,0.0f,0.8f});
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 
@@ -733,7 +734,7 @@ namespace Tempest
 
 			ImGui::End();
 			ImGui::PopStyleVar();
-			ImGui::PopStyleColor();
+			ImGui::PopStyleColor(2);
 		}
 	}
 }

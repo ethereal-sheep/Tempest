@@ -443,6 +443,7 @@ namespace Tempest
 				//Blank Template
 				str = "Blank";
 				ImGui::SetCursorPos(Pos);
+				ImGui::PushID((int)Pos.x);
 				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
 				{
 					AudioEngine ae;
@@ -457,6 +458,108 @@ namespace Tempest
 				}
 				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
 				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				ImGui::PopID();
+				Pos.x += 150.f;
+
+				str = "Tutorial";
+				ImGui::SetCursorPos(Pos);
+				ImGui::PushID((int)Pos.x);
+				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+				{
+					AudioEngine ae;
+					ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+					NewProjectName = str;
+
+					auto create_new_project = [](fs::path path, string name)
+					{
+						if (!std::filesystem::exists(path))
+							throw std::invalid_argument("Filepath does not exist!");
+
+						if (!std::filesystem::create_directory(path / name))
+							if (!std::filesystem::is_empty(path / name))
+								throw std::invalid_argument(name + " project folder already exists!");
+
+						std::ofstream out(path / name / (name + ".json"));
+						if (!out.good())
+							throw std::invalid_argument(name + " project files could not be created!");
+						out << "";
+						out.close();
+
+						return path / name;
+					};
+
+					try
+					{
+						std::unordered_set<string> project_list;
+
+						for (auto it : fs::directory_iterator(get_user_path() / "Projects"))
+						{
+							project_list.insert(it.path().stem().string());
+						}
+
+						auto actual = algo::get_next_name(NewProjectName, project_list);
+						auto project_path = create_new_project(get_user_path() / "Projects", actual);
+						auto json_path = project_path / (actual + ".json");
+
+						auto fn = [&, json_path]()
+						{
+							AudioEngine ae;
+							ae.StopAllChannels();
+							InstanceConfig config{ json_path, MemoryStrategy{}, InstanceType::EDIT_TIME };
+							config.enable_tutorial = true;
+							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
+						};
+
+						// fade in, fade out, visible
+
+						auto second_fn = [passed = 0.0]() mutable
+						{
+							/*if (passed > 3.f)
+								return true;
+
+							auto start = std::chrono::system_clock::now();
+
+							for (auto it : fs::directory_iterator(fs::path("Models")))
+							{
+								auto end = std::chrono::system_clock::now();
+								std::chrono::duration<double> diff = end - start;
+
+
+								if (diff.count() > .5)
+								{
+									passed += diff.count();
+									return false;
+								}
+
+								if (it.path().extension() != ".a")
+									continue;
+
+								Service<RenderSystem>::Get().LoadModel(it.path().string());
+							}*/
+							return true;
+						};
+
+						LoadTrigger t;
+						t.do_at_end_fn = fn;
+						t.do_until_true_fn = second_fn;
+
+						Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+
+
+						//Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, 0.f, fn);
+
+					}
+					catch (std::exception a)
+					{
+						change_state(UI_SHOW::PROJECTS);
+						Service<EventManager>::Get().instant_dispatch<ErrorTrigger>(a.what());
+
+					}
+				}
+				strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				ImGui::PopID();
+				Pos.x += 150.f; // for any following
 
 				////D&D Template
 				//str = "D&D";
