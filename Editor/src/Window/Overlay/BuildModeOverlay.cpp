@@ -238,7 +238,7 @@ namespace Tempest
 				}
 
 				//Tutorial Exit Button
-				if (instance.tutorial_slide == false)
+				if (tutorial_index <= 7 && instance.tutorial_slide == false)
 				{
 					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
@@ -258,7 +258,7 @@ namespace Tempest
 			}
 
 			// exit tutorial
-			if (tutorial_index <= 7 && UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+			if ( UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
 			{
 				Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(true);
 				instance.tutorial_temp_exit = false;

@@ -294,7 +294,7 @@ namespace Tempest
 						if (instance.tutorial_enable && tutorial_index == 0)
 						{
 							// check if there are two diff units here
-							if (added_entities.size() >= 2 && added_entities[0] != added_entities[1])
+							if (added_entities.size() >= 2)
 								tutorial_index = 1;
 						}
 					}
