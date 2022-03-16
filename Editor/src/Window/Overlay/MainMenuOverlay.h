@@ -74,7 +74,7 @@ namespace Tempest
         int SelectedConflictRes{ 0 };
         tset<string> SelectedMaps;
         string SelectedMap = "";
-        std::pair<int, string> SelectedTemplate = std::pair( -1,"Assets/EmptyMapBG.dds" );
+        string SelectedMapPreview = "Assets/EmptyMapBG.dds";
         string NewMapName = "Map";
         string NewProjectName = "Blank";
         ImGuiID HoveredID{ 0 };
@@ -92,5 +92,12 @@ namespace Tempest
         string confliceResBtn = "Assets/ConflictResolutionButton.dds";
         string startGameBtn = "Assets/StartGameButton.dds";
         string mapBuilderBtn = "Assets/MapBuilderButton.dds";
+
+        string projectIconBtn = "Assets/ProjectIconBtn_default.dds";
+        string settingIconBtn = "Assets/SettingIconBtn_default.dds";
+        string quitIconBtn = "Assets/QuitIconBtn_default.dds";
+
+        //BackGround Image
+        string backGroundImg = "Assets/StartScreenBG.dds";
     };
 }

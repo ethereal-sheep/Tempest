@@ -97,15 +97,13 @@ namespace Tempest
 		id = UNDEFINED;
 	}
 
-
-
 	void AttackSystemOverlay::show(Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
-
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.05f, 0.05f, 0.05f, 1.0f));
 		{
 			float dt = ImGui::GetIO().DeltaTime;
 			/*
@@ -124,15 +122,6 @@ namespace Tempest
 				const float title_left_padding = 40.f;
 				const float title_bottom_padding = 10.f;
 				const float graph_context_height = viewport->Size.y * 0.95f;
-
-				auto tex = tex_map["Assets/GraphBG.dds"];
-				{
-
-					ImVec2 Min{ 0,0 };
-					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
-					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
-				}
-
 
 				// draw the context
 				ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
@@ -369,7 +358,7 @@ namespace Tempest
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 						ImVec4 btnTintHover = { 0.922f,0.922f,0.922f,1.f };
 						ImVec4 btnTintPressed = { 0.768f, 0.768f, 0.768f, 1.f };
-						tex = tex_map["Assets/BackMenuBtn.dds"];
+						auto tex = tex_map["Assets/BackMenuBtn.dds"];
 
 						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 						{
@@ -883,6 +872,8 @@ namespace Tempest
 			}
 			ImGui::End();
 		}
+
+		ImGui::PopStyleColor();
 		if (!m_waypointEmitter.expired() && (!OverlayOpen || !instance.tutorial_enable))
 			m_waypointEmitter.lock()->m_GM.m_active = false;
 	}

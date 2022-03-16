@@ -4000,16 +4000,20 @@ namespace Tempest::UI
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
 		auto arrowImg = tex_map["Assets/SuccessArrow.dds"];
+		auto gradientImg = tex_map["Assets/AttackGradient.dds"];
 
 		//ImVec2 arrowMin = { windowPos.x + pos.x, windowPos.y + pos.y };
 		ImVec2 arrowMin = { windowPos.x + pos.x - arrowImg->GetWidth() * 0.5f, windowPos.y + pos.y - arrowImg->GetHeight() * 0.5f };
 		ImVec2 arrowMax = { arrowMin.x + arrowImg->GetWidth(), arrowMin.y + arrowImg->GetHeight() };
-		window->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), arrowMin, arrowMax);
+		
 
 		ImGui::PushFont(FONT_HEAD);
 		string atkStr = name.c_str();
 		auto atkTextSize = ImGui::CalcTextSize(atkStr.c_str());
 		ImVec2 atkTextPos = { arrowMin.x, arrowMin.y - atkTextSize.y *0.5f };
+
+		window->AddImage((void*)static_cast<size_t>(gradientImg->GetID()), atkTextPos, { arrowMin.x + arrowImg->GetWidth(), arrowMin.y + arrowImg->GetHeight()*0.5f });
+		window->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), arrowMin, arrowMax);
 		window->AddText(atkTextPos, ImGui::GetColorU32({ 1,1,1,1 }), atkStr.c_str());
 		ImGui::PopFont();
 
