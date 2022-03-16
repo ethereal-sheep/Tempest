@@ -1300,20 +1300,21 @@ namespace Tempest
 				}
 
 			}
-				
+
+			const ImVec2 child_size{ viewport.Size.x * 0.5f, viewport.Size.y * 0.55f };
+			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.35f - child_size.x * 0.5f, viewport.Size.y * 0.5f - child_size.y * 0.5f });
+			ImGui::BeginChild("TestChilDForCHoose", {child_size.x + viewport.Size.x * 0.3f, child_size.y});
 
 			ImGui::PopStyleColor(3);
 
 			// draw the child
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 10.0f, 10.f });
-			const ImVec2 child_size{viewport.Size.x * 0.5f, viewport.Size.y * 0.55f};
-			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.65f - child_size.x * 0.5f, viewport.Size.y * 0.5f - child_size.y * 0.5f });
 
 			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 			for (auto& [b, path] : instance.get_scene_paths())
 			{
 				auto scene_name = path.stem().string();
-				ImGui::SetCursorPosX(viewport.Size.x * 0.65f - child_size.x * (SelectedMap == scene_name ? inter_nest[0].get() : 0.5f));
+				ImGui::SetCursorPosX(child_size.x * (SelectedMap == scene_name ? inter_nest[0].get() : 0.5f));
 
 				const std::pair<bool, bool> map_pair = UI::UIMapSelectable(scene_name.c_str(), "Date created: WIP", false, MapTitle == "Map Builder", 1);
 
@@ -1326,7 +1327,7 @@ namespace Tempest
 					if (MapTitle == "Map Builder")
 					{
 						SelectedMap = scene_name;
-						inter_nest[0].start(.5f, -.5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
+						inter_nest[0].start(0.5, 1.5f, .5f, 0.f, [](float x) { return glm::backEaseIn(x); });
 						auto fn = [&, p = path]()
 						{
 							AudioEngine ae;
@@ -1395,6 +1396,8 @@ namespace Tempest
 
 			ImGui::PopStyleVar();
 			ImGui::PopStyleColor();
+
+			ImGui::EndChild();
 		}
 			break;
 		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
