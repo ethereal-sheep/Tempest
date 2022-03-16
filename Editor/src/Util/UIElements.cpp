@@ -108,7 +108,7 @@ namespace Tempest::UI
 			ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
 			ImGui::PushFont(FONT_SHEAD);
 			auto windowWidth = ImGui::GetWindowSize().x;
-			string warningstr =/* string(ICON_FA_EXCLAMATION_TRIANGLE) +*/ "WARNING!";
+			string warningstr ="WARNING!";
 			auto warningSize = ImGui::CalcTextSize(warningstr.c_str()).x;
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.792f,0.22f,0.22f,1.f });
 			ImGui::SetCursorPosX((windowWidth - warningSize) * 0.5f - ((float)warnImg->GetWidth() * 0.7f));

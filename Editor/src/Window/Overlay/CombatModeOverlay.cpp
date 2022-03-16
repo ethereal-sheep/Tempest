@@ -2532,17 +2532,15 @@ namespace Tempest
 
 			break;
 		case Tempest::CombatModeOverlay::BATTLE_STATE::BATTLE_GLIMPSE:
-
 		{
-
-			// pop up of three ending options
-			// TODO: shift to new function
-
 			const ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
 			ImGui::OpenPopup("End Unit Cycle");
 			ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-			ImGui::SetNextWindowSize(ImVec2(500, 550));
+			ImGui::SetNextWindowSize(ImVec2(600, 300));
+
+			ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
@@ -2550,102 +2548,100 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
 			ImGui::PushStyleColor(ImGuiCol_PopupBg, { 0.06f,0.06f, 0.06f, 0.85f });
 
-			ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
-							   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
-
-			if (ImGui::BeginPopupModal("End Unit Cycle", NULL, flags))
+			if (ImGui::BeginPopupModal("End Unit Cycle", nullptr, flags))
 			{
-				static int end_selection = -1;
-				// background
 				ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
-				ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
-				ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.5f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
+				ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 2.5f };
+				ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.25f, winMin.y + ImGui::GetWindowHeight() * 0.075f };
 				ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
 				ImVec4 textcol = { 0,0,0,1 };
 
-				// text
+				auto bgImg = tex_map["Assets/Popup_Backdrop.dds"];
+				auto warnImg = tex_map["Assets/YellowWarningIco.dds"];
+				string te = "CONFIRMATION";
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
 				ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+
 				ImGui::PushFont(FONT_OPEN);
-				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), std::string{ ocs.name + "'s HP has reached 0" }.c_str());
+				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }
+				, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
 				ImGui::PopFont();
 
-				// halftone
-				auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
-				ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
-				ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
-				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);
 
-				ImGui::BeginChild("##SimualteStuff", ImVec2{ 500,470 });
+				ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
+				ImGui::PushFont(FONT_SHEAD);
+				auto windowWidth = ImGui::GetWindowSize().x;
+				string warningstr = "";
+				auto warningSize = ImGui::CalcTextSize(warningstr.c_str()).x;
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.792f,0.22f,0.22f,1.f });
+				ImGui::SetCursorPosX((windowWidth - warningSize) * 0.5f - ((float)warnImg->GetWidth() * 0.7f));
+				ImGui::Image((void*)static_cast<size_t>(warnImg->GetID()), { (float)warnImg->GetWidth(), (float)warnImg->GetHeight()});
+				ImGui::SameLine();
+				ImGui::Text(warningstr.c_str());
+				ImGui::PopStyleColor();
+				ImGui::PopFont();
 
-				if (UI::UIButton_2("Revive with full HP", "Revive with full HP", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.35f },
-					ImVec2{ 0,0 }, FONT_PARA, end_selection == 0))
+				ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.05f });
+				ImGui::PushFont(FONT_BODY);
+				string str = ocs.name + " has died.";
+				string str2 = "What would you like to do?";
+				auto strSize = ImGui::CalcTextSize(str.c_str()).x;
+				
+				ImGui::SetCursorPosX((windowWidth - strSize) * 0.5f);
+				ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetColorU32({ 1,0,0,1 }));
+				ImGui::Text(ocs.name.c_str());
+				ImGui::PopStyleColor();
+				ImGui::SameLine();
+				ImGui::Text(" has died.");
+				ImGui::SetCursorPosX((windowWidth - ImGui::CalcTextSize(str2.c_str()).x) * 0.5f);
+				ImGui::Text(str2.c_str());
+				ImGui::PopFont();
+
+				ImGui::SetCursorPosX(0);
+				ImGui::SetCursorPosY(0);
+				if (UI::UIButton_2("Revive", "Revive", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.205f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 				{
-					end_selection = 0;
-				}
-
-				if (UI::UIButton_2("Delete from map", "Delete from map", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.5f },
-					ImVec2{ 0,0 }, FONT_PARA, end_selection == 1))
-				{
-					end_selection = 1;
-				}
-
-				if (UI::UIButton_2("Ignore", "Ignore", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.65f },
-					ImVec2{ 0,0 }, FONT_PARA, end_selection == 2))
-				{
-					end_selection = 2;
-				}
-
-				ImGui::EndChild();
-
-				// check for stuff here
-				if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.9f }, { 0.f, 0.f }, FONT_PARA) && end_selection != -1)
-				{
-					switch (end_selection)
-					{
-					case 0:
-						// full health
-						ocs.set_statDelta(0, 0);
-						break;
-					case 1:
-						// totally remove from map
-						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
-						instance.ecs.destroy(other_entity);
-						other_entity = INVALID;
-						break;
-					case 2:
-						// ignore
-						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
-						if (auto dead = instance.scene.get_prototype_if("Unit", "Dead"))
-						{
-							// create a new entity
-							auto new_e = instance.ecs.create(dead->instance());
-							LOG_ASSERT(instance.ecs.has<tc::Transform>(new_e));
-							LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
-
-							instance.ecs.get<tc::Transform>(new_e) = oxform;
-							instance.ecs.get<tc::Character>(new_e) = ocs;
-
-							instance.ecs.destroy(other_entity);
-						}
-						other_entity = INVALID;
-
-						break;
-					default:
-						break;
-					}
-
-					end_selection = -1;
-					//display_other_end_cycle = false;
+					ocs.set_statDelta(0, 0);
 					ImGui::CloseCurrentPopup();
-
 					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
 				}
+				ImGui::SetCursorPosX(0);
+				ImGui::SetCursorPosY(0);
+				if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
+				{
+					units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+					instance.ecs.destroy(other_entity);
+					other_entity = INVALID;
+					ImGui::CloseCurrentPopup();
+					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
+				}
+				ImGui::SetCursorPosX(0);
+				ImGui::SetCursorPosY(0);
+				if (UI::UIButton_2("Ignore", "Ignore", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.785f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
+				{
+					units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+					if (auto dead = instance.scene.get_prototype_if("Unit", "Dead"))
+					{
+						// create a new entity
+						auto new_e = instance.ecs.create(dead->instance());
+						LOG_ASSERT(instance.ecs.has<tc::Transform>(new_e));
+						LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
+
+						instance.ecs.get<tc::Transform>(new_e) = oxform;
+						instance.ecs.get<tc::Character>(new_e) = ocs;
+
+						instance.ecs.destroy(other_entity);
+					}
+					other_entity = INVALID;
+					ImGui::CloseCurrentPopup();
+					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
+				}
+				
 			}
-
 			ImGui::EndPopup();
-
 			ImGui::PopStyleVar(3);
 			ImGui::PopStyleColor(2);
+
 		}
 			break;
 		case Tempest::CombatModeOverlay::BATTLE_STATE::COMMENCE_BATTLE:
