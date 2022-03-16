@@ -1466,6 +1466,7 @@ namespace Tempest
 							ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 },
 							FONT_BTN, SelectedConflictRes == u))
 						{
+							SelectedSequences.clear();
 							SelectedConflictRes = u;
 						}
 						++i;
@@ -1510,7 +1511,11 @@ namespace Tempest
 
 			ImGui::PopStyleColor();
 
-			if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
+			if (SelectedSequences.size())
+			{
+
+
+				if (UI::UIButton_2("Next", "Next", ImVec2{viewport.Size.x * 0.9f, viewport.Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 			{
 
 				auto fn = [&]()
@@ -1567,6 +1572,7 @@ namespace Tempest
 
 			}
 
+			}
 		}
 			break;
 		default:
