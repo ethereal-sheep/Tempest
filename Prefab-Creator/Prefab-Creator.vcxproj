@@ -143,7 +143,8 @@
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mtd.dll" "$(TargetDir)" /q
 xcopy /y /d /s "..\Resource\Fonts" "$(TargetDir)Fonts\" /q
-xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q</Command>
+xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q
+xcopy /y /d /s "..\Resource\textures" "$(TargetDir)textures\" /q</Command>
       <Outputs>output;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -174,7 +175,8 @@ xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q</Command>
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mt.dll" "$(TargetDir)" /q
 xcopy /y /d /s "..\Resource\Fonts" "$(TargetDir)Fonts\" /q
-xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q</Command>
+xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q
+xcopy /y /d /s "..\Resource\textures" "$(TargetDir)textures\" /q</Command>
       <Outputs>output;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
