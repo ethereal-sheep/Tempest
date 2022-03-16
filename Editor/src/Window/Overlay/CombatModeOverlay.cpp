@@ -1808,6 +1808,12 @@ namespace Tempest
 
 		if (finish && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 		{
+			if (instance.tutorial_enable && tutorial_index == 3)
+			{
+				tutorial_index = 4;
+				instance.tutorial_enable = false;
+			}
+				
 			state = State::FIGHT;
 			display_other_stat = false;
 			display_curr_stat = false;
