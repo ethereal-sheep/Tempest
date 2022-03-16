@@ -291,6 +291,9 @@ namespace Tempest
 								new_transform->position = transform.position + tDelta;
 							instance.action_history.Commit<CreatePrefab>(it->first);
 							GC.ForceEnd();
+
+							if (instance.tutorial_enable)
+								Service<EventManager>::Get().instant_dispatch<BuildModeTutorialIndexTrigger>(4);
 						}
 						else
 						{

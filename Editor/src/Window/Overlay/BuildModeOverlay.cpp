@@ -39,7 +39,8 @@ namespace Tempest
 	{
 		auto a = event_cast<BuildModeTutorialIndexTrigger>(e);
 
-		// do some magic here
+		if (a.index == 4 && tutorial_index == 4)
+			tutorial_index = 5;
 	}
 
 	void BuildModeOverlay::show(Instance& instance)
@@ -472,6 +473,9 @@ namespace Tempest
 
 			if (something_selected)
 			{
+				if (instance.tutorial_enable && tutorial_index == 6)
+					tutorial_index = 7;
+
 				auto& cam = Service<RenderSystem>::Get().GetCamera();
 				// draw transform UI
 				auto vp = cam.GetViewport();
@@ -573,6 +577,8 @@ namespace Tempest
 							{
 								transform.rotation *= glm::angleAxis(glm::radians(90.f), glm::vec3{ 0, 1, 0 });
 
+								if (instance.tutorial_enable && tutorial_index == 3 && transform.rotation.y >= 0.9f)
+									tutorial_index = 4;
 								// check here for rotation
 							}
 
