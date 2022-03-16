@@ -23,6 +23,7 @@ namespace Tempest
 	void BuildModeOverlay::open_popup(const Event& e)
 	{
 		OverlayOpen = true;
+		tutorial_index = 0;
 		cam_ctrl.update(Service<RenderSystem>::Get().GetCamera());
 		AudioEngine ae;
 		MapBuilderBGM = ae.Play("Sounds2D/CoReSyS_BGM_BuildingMode.wav", "BGM", 0.7f, true);
@@ -257,8 +258,9 @@ namespace Tempest
 			}
 
 			// exit tutorial
-			if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+			if (tutorial_index <= 7 && UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
 			{
+				Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(true);
 				instance.tutorial_temp_exit = false;
 				instance.tutorial_enable = false;
 			}
@@ -525,8 +527,8 @@ namespace Tempest
 
 								if (instance.tutorial_enable && tutorial_index == 7)
 								{
-									instance.tutorial_enable = false;
-									tutorial_index = 0;
+								//	instance.tutorial_enable = false;
+									tutorial_index = 8;
 								}
 							}
 

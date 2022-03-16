@@ -880,7 +880,7 @@ namespace Tempest
 										tutorial_index++;
 									else if (tutorial_index >= 3)
 									{
-										instance.tutorial_enable = false;
+									//	instance.tutorial_enable = false;
 										tutorial_index = 0;
 									}
 										
@@ -1811,7 +1811,7 @@ namespace Tempest
 			if (instance.tutorial_enable && tutorial_index == 3)
 			{
 				tutorial_index = 4;
-				instance.tutorial_enable = false;
+				//instance.tutorial_enable = false;
 			}
 				
 			state = State::FIGHT;
@@ -3181,7 +3181,7 @@ namespace Tempest
 					}
 
 					//Tutorial Exit Button
-					if (instance.tutorial_slide == false)
+					if (tutorial_index <= 3 && instance.tutorial_slide == false)
 					{
 						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
