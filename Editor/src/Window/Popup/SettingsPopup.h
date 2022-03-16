@@ -193,7 +193,7 @@ namespace Tempest
                 ImGui::Dummy({ (ImGui::GetWindowWidth() - imgSize.x) * 0.5f ,0 });
                 ImGui::SameLine();
 
-                ImGui::BeginChild("SettingsID", ImVec2(imgSize.x, 306.f), false);
+                ImGui::BeginChild("SettingsID", ImVec2(imgSize.x + 20.f, 306.f), false);
 
                 // ============== SOUND SETTINGS ============== //
                 ImGui::Image((void*)static_cast<size_t>(img->GetID()), imgSize);

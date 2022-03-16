@@ -47,6 +47,7 @@ namespace Tempest
 
             editorStyle.Colors[0] = { 0,0,0,0 };
             editorStyle.Colors[2] = { 0,0,0,200 / 255.f };
+            editorStyle.NodeRounding = 0.f;
         }
 
         void exit(Instance&) override

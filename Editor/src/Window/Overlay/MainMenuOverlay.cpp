@@ -1216,6 +1216,8 @@ namespace Tempest
 						edit->delete_scene(scene_name);
 					}
 				}
+
+				ImGui::Dummy({ 0, 10.f });
 			}
 
 
