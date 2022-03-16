@@ -34,10 +34,12 @@ namespace Tempest
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs;
 
             Service<EventManager>::Get().register_listener<OpenBuildModeOverlay>(&BuildModeOverlay::open_popup, this);
+            Service<EventManager>::Get().register_listener<BuildModeTutorialIndexTrigger>(&BuildModeOverlay::tutorial_index_trigger, this);
             //cam_ctrl.reset(Service<RenderSystem>::Get().GetCamera());
         }
 
         void open_popup(const Event& e);
+        void tutorial_index_trigger(const Event& e);
         void draw_splitter(float posy);
         void show(Instance&) override;
         void renderTop();

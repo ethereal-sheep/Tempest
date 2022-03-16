@@ -1240,7 +1240,7 @@ namespace Tempest
 						{
 							AudioEngine ae;
 							ae.StopAllChannels();
-							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>(instance);
 							OverlayOpen = false;
 						}
 					}
@@ -1331,7 +1331,7 @@ namespace Tempest
 						{
 							AudioEngine ae;
 							ae.StopAllChannels();
-							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+							Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>(instance);
 							instance.load_new_scene_by_path(p);
 							OverlayOpen = false;
 						};

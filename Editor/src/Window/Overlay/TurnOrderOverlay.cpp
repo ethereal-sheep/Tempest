@@ -355,7 +355,7 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 5.f, 0.0f });
 						if (ImGui::BeginChild("TurnOrderTextInside", ImVec2{ ImGui::GetContentRegionMax().x * 0.65f, 40.0f }, true))
 						{
-							std::string str = "Select from stats, randomized order or both for your unit's turn order.";
+							text = "Select from stats, randomized order or both for your unit's turn order.";
 							ImGui::PushFont(FONT_BODY);
 							ImGui::TextWrapped(text.c_str());
 							ImGui::PopFont();

@@ -28,6 +28,7 @@ namespace Tempest
 	{
 		CameraControls cam_ctrl;
 		id_t current = INVALID;
+		bool camera_update{ true };
 
 		const char* window_name() override
 		{
@@ -48,7 +49,14 @@ namespace Tempest
 				;
 
 			Service<GuizmoController>::Register();
+			Service<EventManager>::Get().register_listener<ViewportCameraMoveTrigger>(&ViewportWindow::camera_move, this);
 			cam_ctrl.reset(Service<RenderSystem>::Get().GetCamera());
+		}
+
+		void camera_move(const Event& e)
+		{
+			auto a = event_cast<ViewportCameraMoveTrigger>(e);
+			camera_update = a.canMove;
 		}
 
 		void show(Instance& instance) override
@@ -84,7 +92,8 @@ namespace Tempest
 
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
 			cam_ctrl.controls(cam);
-			cam_ctrl.update(cam);
+			if (camera_update)
+				cam_ctrl.update(cam);
 
 
 			if (io.KeyCtrl)
@@ -277,7 +286,7 @@ namespace Tempest
 						{
 							auto [it, b] = instance.scene.get_map().create(pf);
 							instance.selected = it->first;
-							current = instance.selected;
+						//	current = instance.selected; // maybe try getting rid of this one
 							if (auto new_transform = it->second.force_if<tc::Transform>())
 								new_transform->position = transform.position + tDelta;
 							instance.action_history.Commit<CreatePrefab>(it->first);
