@@ -2478,7 +2478,7 @@ namespace Tempest
 						// for dead
 					}
 
-					FONT_HEAD->Scale = inter5.get();
+					FONT_HEAD->Scale = 0.1f + 0.9f * inter5.get();
 					ImGui::PushFont(FONT_HEAD);
 					// the text colour
 					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, inter5.get()));
