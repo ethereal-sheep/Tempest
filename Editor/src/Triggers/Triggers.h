@@ -45,6 +45,11 @@ namespace Tempest
 	struct AddingActionsTrigger : public Event {};
 	struct SelectSequenceTrigger : public Event {};
 	struct CloseAllConResOverlayTrigger : public Event {};
+	struct ViewportCameraMoveTrigger : public Event
+	{
+		ViewportCameraMoveTrigger(bool canMove) : canMove{ canMove } {}
+		bool canMove;
+	};
 	struct CharacterStatsTrigger : public Event
 	{
 		CharacterStatsTrigger(Entity a) : entity{ a } {}
@@ -185,7 +190,18 @@ namespace Tempest
 		bool openNewCombat;
 		Instance& instance;
 	};
-	struct OpenBuildModeOverlay : public Event {};
+	struct OpenBuildModeOverlay : public Event
+	{
+		OpenBuildModeOverlay(Instance& in) : instance{ in } {}
+		Instance& instance;
+	};
+
+	struct BuildModeTutorialIndexTrigger : public Event
+	{
+		BuildModeTutorialIndexTrigger(int indexNum) : index{ indexNum } {}
+		int index;
+	};
+
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}

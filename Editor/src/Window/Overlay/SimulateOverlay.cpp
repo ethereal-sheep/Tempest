@@ -745,8 +745,9 @@ namespace Tempest
 								if (ImGui::IsMouseClicked(0))
 								{
 									tutorial_index = 0;
-									instance.tutorial_level = 1;
-									instance.tutorial_enable = false;
+								//	instance.tutorial_level = 1;
+								//	instance.tutorial_enable = false;
+									instance.tutorial_level = 4;
 									if (!m_circularMotionEmitter.expired())
 										m_circularMotionEmitter.lock()->m_GM.m_active = false;
 								}
@@ -802,8 +803,8 @@ namespace Tempest
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
 					
-					if (m_circularMotionEmitter.expired())
-						m_circularMotionEmitter.lock()->m_GM.m_active = false;
+					/*if (m_circularMotionEmitter.expired())
+						m_circularMotionEmitter.lock()->m_GM.m_active = false;*/
 
 					if (!m_waypointEmitter.expired())
 						m_waypointEmitter.lock()->m_GM.m_active = false;
@@ -1041,12 +1042,12 @@ namespace Tempest
 					ImGui::PopStyleColor(3);
 				}
 
-				if (instance.tutorial_temp_enable && instance.ecs.view<tc::Graph>(exclude_t<tc::Destroyed>()).size_hint() <= 0 && 
+				/*	if (instance.tutorial_temp_enable && instance.ecs.view<tc::Graph>(exclude_t<tc::Destroyed>()).size_hint() <= 0 &&
 					instance.ecs.view<tc::Unit>(exclude_t<tc::Destroyed>()).size_hint() <= 0 &&
 					instance.ecs.view<tc::Weapon>(exclude_t<tc::Destroyed>()).size_hint() <= 0)
 					ImGui::OpenPopup("TutorialPopupConfirm");
 
-				if (UI::ConfirmTutorialPopup("TutorialPopupConfirm", "Do you want a tutorial?", false, []() {}))
+				if (!instance.tutorial_enable && UI::ConfirmTutorialPopup("TutorialPopupConfirm", "Do you want a tutorial?", false, []() {}))
 				{
 					instance.tutorial_enable = true;
 					instance.tutorial_level = 1;
@@ -1055,7 +1056,7 @@ namespace Tempest
 				else
 				{
 					instance.tutorial_temp_enable = false;
-				}
+				}*/
 			}
 
 			ImGui::PopStyleVar();

@@ -20,9 +20,10 @@
 
 namespace Tempest
 {
-	void BuildModeOverlay::open_popup(const Event& )
+	void BuildModeOverlay::open_popup(const Event& e)
 	{
 		OverlayOpen = true;
+		tutorial_index = 0;
 		cam_ctrl.update(Service<RenderSystem>::Get().GetCamera());
 		AudioEngine ae;
 		MapBuilderBGM = ae.Play("Sounds2D/CoReSyS_BGM_BuildingMode.wav", "BGM", 0.7f, true);
@@ -30,6 +31,17 @@ namespace Tempest
 		option_btns[0] = tex_map["Assets/MBOption_1_Unselected.dds"];
 		option_btns[1] = tex_map["Assets/MBOption_2_Unselected.dds"];
 		option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
+
+		if (event_cast<OpenBuildModeOverlay>(e).instance.tutorial_enable)
+			Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(false);
+	}
+
+	void BuildModeOverlay::tutorial_index_trigger(const Event& e)
+	{
+		auto a = event_cast<BuildModeTutorialIndexTrigger>(e);
+
+		if (a.index == 4 && tutorial_index == 4)
+			tutorial_index = 5;
 	}
 
 	void BuildModeOverlay::show(Instance& instance)
@@ -54,7 +66,7 @@ namespace Tempest
 				instance.tutorial_enable = true;
 				instance.tutorial_level = 1;
 				tutorial_index = 0;
-
+				Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(false);
 			}
 
 			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
@@ -72,158 +84,157 @@ namespace Tempest
 				auto drawlist = ImGui::GetForegroundDrawList();
 				//if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
 				//	instance.tutorial_slide = false;
-				if (instance.tutorial_level == 1)
+
+				switch (tutorial_index)
 				{
-					switch (tutorial_index)
+				case 0:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.19f };
+					ImVec2 size = { 600.f, 650.f };
+					UI::TutArea(pos, size);
+
+					const float posY = viewport->Size.y * 0.2f + size.y * 0.5f;
+
+					// drawing the tips
+					string str = "CoReSys Map Builder";
+					ImGui::PushFont(FONT_BTN);
+					drawlist->AddText({ viewport->Size.x * 0.3f, posY }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+					ImGui::PopFont();
+
+					drawlist->AddLine({ viewport->Size.x * 0.3f, posY + 20.f }, { viewport->Size.x * 0.65f, posY + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+					str = "Introducing the CoReSys Map Builder, a system made";
+					drawlist->AddText({ viewport->Size.x * 0.3f, posY + 25.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+					str = "for designers to create their own unique 3D maps.";
+					drawlist->AddText({ viewport->Size.x * 0.3f, posY + 35.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+					ImGui::PushFont(FONT_SHEAD);
+					str = "Click anywhere to continue.";
+					drawlist->AddText({ viewport->Size.x * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, viewport->Size.y * 0.85f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					ImGui::PopFont();
+
+					if (ImGui::IsMouseClicked(0))
 					{
-					case 0:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.19f };
-						ImVec2 size = { 600.f, 650.f };
-						UI::TutArea(pos, size);
-
-						const float posY = viewport->Size.y * 0.2f + size.y * 0.5f;
-
-						// drawing the tips
-						string str = "CoReSys Map Builder";
-						ImGui::PushFont(FONT_BTN);
-						drawlist->AddText({ viewport->Size.x * 0.3f, posY }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-						ImGui::PopFont();
-
-						drawlist->AddLine({ viewport->Size.x * 0.3f, posY + 20.f }, { viewport->Size.x * 0.65f, posY + 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-
-						str = "Introducing the CoReSys Map Builder, a system made";
-						drawlist->AddText({ viewport->Size.x * 0.3f, posY + 25.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-						str = "for designers to create their own unique 3D maps.";
-						drawlist->AddText({ viewport->Size.x * 0.3f, posY + 35.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-					/*	ImGui::PushFont(FONT_SHEAD);
-						str = "Click anywhere to continue.";
-						drawlist->AddText({ viewport->Size.x * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, viewport->Size.y * 0.85f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						ImGui::PopFont();
-
-						if (ImGui::IsMouseClicked(0))
-							tutorial_index = 1;*/
+						tutorial_index = 1;
 					}
-					break;
+				}
+				break;
 
-					case 1:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.21f };
-						ImVec2 size = { 55.f, 55.f };
-						UI::TutArea(pos, size);
-						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a Furniture Category";
-						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				case 1:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.21f };
+					ImVec2 size = { 55.f, 55.f };
+					UI::TutArea(pos, size);
+					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a Furniture Category";
+					drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				}
+				break;
 
-					}
-					break;
+				case 2:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.31f };
+					ImVec2 size = { 90.f, 90.f };
 
-					case 2:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.31f };
-						ImVec2 size = { 90.f, 90.f };
+					ImVec2 pos2 = { viewport->Size.x * 0.57f - 75.f, viewport->Size.y * 0.52f - 75.f };
+					ImVec2 size2 = { 150.f, 150.f };
 
-						ImVec2 pos2 = { viewport->Size.x * 0.57f - 75.f, viewport->Size.y * 0.52f - 75.f };
-						ImVec2 size2 = { 150.f, 150.f };
-
-						UI::TutArea3(pos, pos2, size, size2);
+					UI::TutArea3(pos, pos2, size, size2);
 					//	UI::TutArea(pos, size);
-						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Drag and drop a Furniture into the scene";
-						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-					}
+					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Drag and drop a Furniture into the scene";
+					drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				}
+				break;
+
+				case 3:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
+					ImVec2 size = { 150.f, 150.f };
+
+					ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 45.f };
+					ImVec2 size2 = { 50.f, 50.f };
+
+					UI::TutArea3(pos, pos2, size, size2);
+					//	UI::TutArea(pos, size);
+
+					const float posY = pos2.y + size2.y * 0.5f;
+					// drawing the tips
+					string str = "Rotate Furniture";
+					ImGui::PushFont(FONT_BTN);
+					drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+					ImGui::PopFont();
+
+					drawlist->AddLine({ pos2.x + size2.x , posY }, { viewport->Size.x * 0.8f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+					str = "Click this button to rotate the furniture 90 degrees clockwise.";
+					drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+					str = "Try rotating the furniture 180 degrees to continue.";
+					drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 15.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				}
+				break;
+
+				case 4:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.5f - 75.f };
+					ImVec2 size = { 300.f, 150.f };
+
+					UI::TutArea(pos, size);
+
+					const float posY = pos.y + size.y * 0.5f;
+					// drawing the tips
+					string str = "Duplicate Furniture";
+					ImGui::PushFont(FONT_BTN);
+					drawlist->AddText({ viewport->Size.x * 0.85f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+					ImGui::PopFont();
+
+					drawlist->AddLine({ pos.x + size.x , posY }, { viewport->Size.x * 0.85f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+					str = "Hold the Alt key and drag the gizmo to duplicate the furniture";
+					drawlist->AddText({ viewport->Size.x * 0.85f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+				}
+				break;
+
+				case 5:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
+					ImVec2 size = { 150.f, 150.f };
+
+					ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 45.f };
+					ImVec2 size2 = { 50.f, 50.f };
+
+					UI::TutArea3(pos, pos2, size, size2);
+					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to confirm furniture placement";
+					drawlist->AddText({ pos2.x + size2.x + 10.0f, pos2.y + 10.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				}
+				break;
+
+				case 6:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
+					ImVec2 size = { 150.f, 150.f };
+
+					UI::TutArea(pos, size);
+					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click the placed furniture";
+					drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				}
+				break;
+				case 7:
+				{
+					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
+					ImVec2 size = { 150.f, 150.f };
+
+					ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 45.f };
+					ImVec2 size2 = { 50.f, 50.f };
+
+					UI::TutArea3(pos, pos2, size, size2);
+					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to delete the furniture.";
+					drawlist->AddText({ pos2.x + size2.x + 10.f, pos2.y + 10.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				}
+				break;
+				default:
 					break;
-
-					case 3:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
-						ImVec2 size = { 150.f, 150.f };
-
-						ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 45.f};
-						ImVec2 size2 = { 50.f, 50.f };
-
-						UI::TutArea3(pos, pos2, size, size2);
-						//	UI::TutArea(pos, size);
-						
-						const float posY = pos2.y + size2.y * 0.5f;
-						// drawing the tips
-						string str = "Rotate Furniture";
-						ImGui::PushFont(FONT_BTN);
-						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-						ImGui::PopFont();
-
-						drawlist->AddLine({ pos2.x + size2.x , posY }, { viewport->Size.x * 0.8f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-
-						str = "Click this button to rotate the furniture 90 degrees clockwise.";
-						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-						str = "Try rotating the furniture 180 degrees to continue.";
-						drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, posY + 15.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-					}
-					break;
-
-					case 4:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.5f - 75.f };
-						ImVec2 size = { 300.f, 150.f };
-
-						UI::TutArea(pos, size);
-
-						const float posY = pos.y + size.y * 0.5f;
-						// drawing the tips
-						string str = "Duplicate Furniture";
-						ImGui::PushFont(FONT_BTN);
-						drawlist->AddText({ viewport->Size.x * 0.85f - ImGui::CalcTextSize(str.c_str()).x, posY - 20.0f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-						ImGui::PopFont();
-
-						drawlist->AddLine({ pos.x + size.x , posY }, { viewport->Size.x * 0.85f, posY }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-
-						str = "Hold the Alt key and drag the gizmo to duplicate the furniture";
-						drawlist->AddText({ viewport->Size.x * 0.85f - ImGui::CalcTextSize(str.c_str()).x, posY + 5.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-					}
-					break;
-
-					case 5:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
-						ImVec2 size = { 150.f, 150.f };
-
-						ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 45.f };
-						ImVec2 size2 = { 50.f, 50.f };
-
-						UI::TutArea3(pos, pos2, size, size2);
-						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to confirm furniture placement";
-						drawlist->AddText({ pos2.x + size2.x + 10.0f, pos2.y + 10.0f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-					}
-					break;
-
-					case 6:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 75.f };
-						ImVec2 size = { 150.f, 150.f };
-
-						UI::TutArea(pos, size);
-						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click the placed furniture";
-						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y * 0.5f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-					}
-					break;
-					case 7:
-					{
-						ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
-						ImVec2 size = { 150.f, 150.f };
-
-						ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 45.f };
-						ImVec2 size2 = { 50.f, 50.f };
-
-						UI::TutArea3(pos, pos2, size, size2);
-						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to delete the furniture.";
-						drawlist->AddText({ pos2.x + size2.x + 10.f, pos2.y + 10.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-					}
-					break;
-					default:
-						break;
-					}
 				}
 
 				//Tutorial Exit Button
@@ -247,8 +258,9 @@ namespace Tempest
 			}
 
 			// exit tutorial
-			if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
+			if (tutorial_index <= 7 && UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
 			{
+				Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(true);
 				instance.tutorial_temp_exit = false;
 				instance.tutorial_enable = false;
 			}
@@ -463,6 +475,9 @@ namespace Tempest
 
 			if (something_selected)
 			{
+				if (instance.tutorial_enable && tutorial_index == 6)
+					tutorial_index = 7;
+
 				auto& cam = Service<RenderSystem>::Get().GetCamera();
 				// draw transform UI
 				auto vp = cam.GetViewport();
@@ -512,8 +527,8 @@ namespace Tempest
 
 								if (instance.tutorial_enable && tutorial_index == 7)
 								{
-									instance.tutorial_enable = false;
-									tutorial_index = 0;
+								//	instance.tutorial_enable = false;
+									tutorial_index = 8;
 								}
 							}
 
@@ -564,6 +579,8 @@ namespace Tempest
 							{
 								transform.rotation *= glm::angleAxis(glm::radians(90.f), glm::vec3{ 0, 1, 0 });
 
+								if (instance.tutorial_enable && tutorial_index == 3 && transform.rotation.y >= 0.9f)
+									tutorial_index = 4;
 								// check here for rotation
 							}
 
@@ -823,7 +840,11 @@ namespace Tempest
 								}
 
 								if (instance.tutorial_enable && tutorial_index == 2)
+								{
 									tutorial_index = 3;
+									Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(true);
+								}
+									
 								instance.action_history.Commit<CreatePrefab>(it->first);
 							}
 						}

@@ -86,7 +86,7 @@ namespace Tempest
 				}
 				if (ImGui::Button("BUILD MODE"))
 				{
-					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>();
+					Service<EventManager>::Get().instant_dispatch<OpenBuildModeOverlay>(instance);
 				}
 
 				// funky stuff put here first cuz laze, mirgrating it out to somewhere else

@@ -85,10 +85,13 @@ namespace Tempest
 						ae.StopAllChannels();
 						OverlayOpen = false;
 						EscDuringPause = false;
-						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-							instance.get_full_path(),
+
+						InstanceConfig config{ instance.get_full_path(),
 							MemoryStrategy{},
-							InstanceType::EDIT_TIME);
+							InstanceType::EDIT_TIME };
+						config.enable_tutorial = instance.tutorial_enable;
+
+						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
 
 						ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();

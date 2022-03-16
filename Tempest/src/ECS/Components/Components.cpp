@@ -189,10 +189,10 @@ namespace Tempest::Components
 				auto t = current_time / interpolation_time;
 
 				Local zero{}, one{}, two{};
-				one.local_position = { 0.1, 0.1, 0.0 };
-				one.local_rotation = glm::quat(glm::radians(vec3{ 0, 0, -20 }));
-				two.local_position = { -0.1, 0.1, 0.0 };
-				two.local_rotation = glm::quat(glm::radians(vec3{ 0, 0, 20 }));
+				one.local_position = { 0.0, 0.1, 0.1 };
+				one.local_rotation = glm::quat(glm::radians(vec3{ 20, 0, 0 }));
+				two.local_position = { -0.0, 0.1, -0.1 };
+				two.local_rotation = glm::quat(glm::radians(vec3{ -20, 0, 0 }));
 
 
 				auto interpolate = [](Local t1, Local t2, float t)

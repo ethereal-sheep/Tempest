@@ -880,7 +880,7 @@ namespace Tempest
 										tutorial_index++;
 									else if (tutorial_index >= 3)
 									{
-										instance.tutorial_enable = false;
+									//	instance.tutorial_enable = false;
 										tutorial_index = 0;
 									}
 										
@@ -1808,6 +1808,12 @@ namespace Tempest
 
 		if (finish && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 		{
+			if (instance.tutorial_enable && tutorial_index == 3)
+			{
+				tutorial_index = 4;
+				//instance.tutorial_enable = false;
+			}
+				
 			state = State::FIGHT;
 			display_other_stat = false;
 			display_curr_stat = false;
@@ -2478,7 +2484,7 @@ namespace Tempest
 						// for dead
 					}
 
-					FONT_HEAD->Scale = inter5.get();
+					FONT_HEAD->Scale = 0.1f + 0.9f * inter5.get();
 					ImGui::PushFont(FONT_HEAD);
 					// the text colour
 					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, inter5.get()));
@@ -3171,7 +3177,7 @@ namespace Tempest
 					}
 
 					//Tutorial Exit Button
-					if (instance.tutorial_slide == false)
+					if (tutorial_index <= 3 && instance.tutorial_slide == false)
 					{
 						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
