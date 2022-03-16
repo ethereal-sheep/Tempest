@@ -428,7 +428,9 @@ namespace Tempest
 						{
 							AudioEngine ae;
 							ae.StopAllChannels();
-							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(json_path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+							InstanceConfig config{ json_path, MemoryStrategy{}, InstanceType::EDIT_TIME };
+							config.enable_tutorial = instance.tutorial_enable;
+							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
 						};
 
 
@@ -622,7 +624,9 @@ namespace Tempest
 					{
 						AudioEngine ae;
 						ae.StopAllChannels();
-						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(json_path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+						InstanceConfig config{ json_path, MemoryStrategy{}, InstanceType::EDIT_TIME };
+						config.enable_tutorial = instance.tutorial_enable;
+						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
 					};
 
 					// fade in, fade out, visible
@@ -1353,13 +1357,18 @@ namespace Tempest
 					ae.Play("Sounds2D/CoReSyS_BGM1_Old.wav", "BGM", 0.7f, true);
 					OverlayOpen = false;
 					dynamic_cast<EditTimeInstance&>(instance).save();
-					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+
+					InstanceConfig config{ 
 						dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
 						MemoryStrategy{},
 						InstanceType::RUN_TIME,
 						SelectedMap,
 						SelectedConflictRes + 1,
-						SelectedSequences);
+						SelectedSequences };
+
+					config.enable_tutorial = instance.tutorial_enable;
+
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
 				};
 				// fade in, fade out, visible
 
