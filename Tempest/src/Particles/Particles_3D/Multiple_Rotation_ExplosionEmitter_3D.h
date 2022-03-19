@@ -7,6 +7,7 @@
 
 struct Multiple_Rotation_ExplosionEmitter_3D : MultipleExplosionEmitter_3D
 {
+	virtual void Setup() override;
 	void ParticleSetUp(Particle_3D& particle) override;
 	void OnDeath() override;
 };

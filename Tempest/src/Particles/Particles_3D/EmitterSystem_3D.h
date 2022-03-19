@@ -21,7 +21,6 @@ struct UnitTrailEmitter_3D;
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
 
-
 struct EmitterSystem_3D
 {
 	static EmitterSystem_3D& GetInstance();

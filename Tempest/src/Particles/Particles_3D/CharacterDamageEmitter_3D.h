@@ -7,6 +7,6 @@
 
 struct CharacterDamageEmitter_3D : public ExplosionEmitter_3D
 {
-
+	void Setup() override;
 };
 #endif

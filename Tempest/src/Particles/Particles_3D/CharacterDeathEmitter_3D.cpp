@@ -4,6 +4,30 @@
 #include "../Random.h"
 #include "EmitterSystem_3D.h"
 
+void CharacterDeathEmitter_3D::Setup()
+{
+	m_MM.m_duration = 0.3f;
+	m_MM.m_simulationSpeed = 0.016f;
+	m_GM.m_active = true;
+	m_MM.m_preWarm = true;
+
+	m_EM.m_spawnTimeInterval = 10.0f;
+	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
+	m_EM.m_rateOverTime = 20;
+	m_MM.m_maxParticles = 1000;
+
+	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
+
+	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
+	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+
+	m_PAM.m_lifeTime = 0.3f;
+	m_RM.m_renderingPath = "Models/Cube.a";
+}
+
 void CharacterDeathEmitter_3D::OnDeath()
 {
 	// Emit for explosion emitter

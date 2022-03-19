@@ -12,6 +12,37 @@
 #include <time.h>       /* time */
 #include <numbers>		/* numbers */
 
+void InteractiveParticle_3D::Setup()
+{
+	m_GM.m_active = true;
+
+	m_MM.m_duration = 1000000.f;
+	m_MM.m_preWarm = true;
+	m_MM.m_maxParticles = 30;
+
+	m_EM.m_spawnTimeInterval = 0.1f;
+	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
+	m_EM.m_rateOverTime = 1;
+	
+	// Particle Architype values - without consideration for default ctor
+	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 3.0f, 0.0f };
+
+	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
+	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+
+	// Note - Values to be divided by 255.0f - Forgot the reason
+	m_PAM.m_colourBegin = glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f };
+	m_PAM.m_colourEnd = glm::vec4{ 0.0f, 0.0f, 0.0f, 0.0f };
+
+	m_PAM.m_lifeTime = 1.0f;
+	m_PAM.m_rebirth = false;
+
+	m_RM.m_renderingPath = "Models/Cube.a";
+}
+
 void InteractiveParticle_3D::Emit(const int particleAmount)
 {
 	// Emit only if there is enough particle

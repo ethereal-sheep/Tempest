@@ -7,6 +7,7 @@
 
 struct Rotation_ExplosionEmitter_3D : public ExplosionEmitter_3D
 {
+	virtual void Setup() override;
 	void ParticleSetUp(Particle_3D& particle) override;
 };
 

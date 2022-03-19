@@ -13,6 +13,36 @@
 // Additional Includes
 #include "../Random.h"
 
+void ExplosionEmitter_3D::Setup()
+{
+	m_GM.m_position = glm::vec3{ 0.0f, 0.0f, 0.0f };	
+	m_MM.m_duration = 15.0f;
+	m_GM.m_active = true;
+	m_MM.m_preWarm = true;
+
+	m_EM.m_spawnTimeInterval = 1.0f;
+	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
+
+	m_EM.m_rateOverTime = 20;
+	m_MM.m_maxParticles = 1000;
+
+	// Particle Architype values - without consideration for default ctor
+	m_PAM.m_gravity = true;
+	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
+
+	m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
+	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.3f, 0.3f, 0.3f };
+
+	m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+
+	m_PAM.m_lifeTime = 10.0f;
+	m_RM.m_renderingPath = "Models/Cube.a";
+}
+
 void ExplosionEmitter_3D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
