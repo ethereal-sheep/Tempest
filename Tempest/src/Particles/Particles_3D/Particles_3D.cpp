@@ -23,29 +23,5 @@ Particle_3D::Particle_3D()
 	, m_lifeTime { 1.0f }
 	, m_lifeRemaining{ 1.0f }
 	, m_isActive { false }
-	, m_rebirth { false }
 	, m_gravity { false }
-	, m_originalPosition{ 0.0f, 0.0f, 0.0f }
-	, m_originalVelocity{ 0.0f, 0.0f, 0.0f }
 {}
-
-//Particle_3D::Particle_3D(glm::vec3 pos, glm::vec3 vec, glm::vec3 scale, glm::vec4 colour, float lifeTime, bool isActive)
-//	: m_position { pos }
-//	, m_velocity { vec }
-//	, m_rotation { 0.0f }
-//	, m_colour { colour }
-//	, m_scale { scale }
-//	, m_lifeTime { lifeTime }
-//	, m_lifeRemaining{ lifeTime }
-//	, m_isActive { isActive }
-//{}
-
-void Particle_3D::Reborn()
-{
-	m_position = m_originalPosition;
-	m_velocity = m_originalVelocity;
-	m_colour   = m_colourBegin;
-	m_scale    = m_scaleBegin;
-	m_lifeRemaining = m_lifeTime;
-	m_isActive = true;
-}

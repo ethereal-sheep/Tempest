@@ -18,7 +18,7 @@
 #include "Audio/AudioEngine.h"
 #include "Util/pathfinding.h"
 
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
 #include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
 #include "Particles/Particles_3D/CharacterDeathEmitter_3D.h"
@@ -2360,7 +2360,7 @@ namespace Tempest
 					colourBegin.a = 1.0f;
 
 					if (m_characterDeathEmitter.expired())
-						m_characterDeathEmitter = ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3, colourBegin, colourBegin);
+						m_characterDeathEmitter = EmitterSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3, colourBegin, colourBegin);
 					else
 					{
 						m_characterDeathEmitter.lock()->m_GM.m_position = oxform.position;
@@ -2408,7 +2408,7 @@ namespace Tempest
 						colourBegin.a = 1.0f;
 
 						if (m_characterDamageEmitter.expired())
-							m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition, colourBegin, colourBegin);
+							m_characterDamageEmitter = EmitterSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition, colourBegin, colourBegin);
 						else if (damageOnce == false)
 						{
 							m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
@@ -2806,7 +2806,7 @@ namespace Tempest
 				//Service<RenderSystem>::Get().DrawLine(box, color);
 
 				if (m_unitTileEmitter.expired())
-					m_unitTileEmitter = ParticleSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+					m_unitTileEmitter = EmitterSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
 				else if (nextUnit)
 				{
 					nextUnit = false;

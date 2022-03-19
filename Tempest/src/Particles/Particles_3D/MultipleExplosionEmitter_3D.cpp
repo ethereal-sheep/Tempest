@@ -2,7 +2,7 @@
 
 #include "MultipleExplosionEmitter_3D.h"
 #include "ExplosionEmitter_3D.h"
-#include "ParticleSystem_3D.h"
+#include "EmitterSystem_3D.h"
 
 // Additional Includes
 #include "../Random.h"
@@ -166,7 +166,7 @@ void MultipleExplosionEmitter_3D::OnDeath()
 			spawnPos.z = Random::Float() * rangeZ + m_minPos.z;
 
 		// Creation of explosion emitter
-		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = ParticleSystem_3D::GetInstance().CreateExplosionEmitter(spawnPos).lock();
+		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = EmitterSystem_3D::GetInstance().CreateExplosionEmitter(spawnPos).lock();
 
 		// Emitter's velocity
 		//tempEmitter->m_GM.m_velocity = glm::vec3{ directionX, directionY, directionZ };

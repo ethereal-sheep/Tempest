@@ -96,7 +96,6 @@
     <ClCompile Include="src\Particles\Particles_3D\Particles_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\EmissionModules_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Emitter_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\ParticleSystem_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\ExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.cpp" />
@@ -107,6 +106,7 @@
     <ClCompile Include="src\FrameRate\FrameRateManager.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\EmitterSystem_3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -282,7 +282,6 @@
     <ClInclude Include="src\Particles\Particles_3D\Particles_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Emitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\EmissionModules_3D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\ParticleSystem_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\ExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.h" />
@@ -293,6 +292,7 @@
     <ClInclude Include="src\FrameRate\FrameRateManager.h" />
     <ClInclude Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\EmitterSystem_3D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

@@ -1,6 +1,6 @@
 
 // Main Header
-#include "ParticleSystem_3D.h"
+#include "EmitterSystem_3D.h"
 
 // Types of Emitters
 #include "ExplosionEmitter_3D.h"
@@ -15,21 +15,21 @@
 #include "CharacterDeathEmitter_3D.h"
 
 
-ParticleSystem_3D::ParticleSystem_3D()
+EmitterSystem_3D::EmitterSystem_3D()
 {}
 
-ParticleSystem_3D& ParticleSystem_3D::GetInstance()
+EmitterSystem_3D& EmitterSystem_3D::GetInstance()
 {
-	static ParticleSystem_3D instance;
+	static EmitterSystem_3D instance;
 	return instance;
 }
 
-void ParticleSystem_3D::ClearEmitters()
+void EmitterSystem_3D::ClearEmitters()
 {
 	m_Emitters.clear();
 }
 
-void ParticleSystem_3D::Update(const float dt)
+void EmitterSystem_3D::Update(const float dt)
 {
 	// Update all the emitters here
 	for (short i = 0; i < m_Emitters.size(); ++i)
@@ -55,12 +55,12 @@ void ParticleSystem_3D::Update(const float dt)
 	}
 }
 
-std::vector<std::shared_ptr<Emitter_3D>> ParticleSystem_3D::GetEmitter()
+std::vector<std::shared_ptr<Emitter_3D>> EmitterSystem_3D::GetEmitter()
 {
 	return m_Emitters;
 }
 
-void ParticleSystem_3D::AddEmitter(const std::shared_ptr<Emitter_3D> emitter)
+void EmitterSystem_3D::AddEmitter(const std::shared_ptr<Emitter_3D> emitter)
 {
 	// There is available slot
 	//if (m_AvailableEmitterSlots.size())
@@ -79,7 +79,7 @@ void ParticleSystem_3D::AddEmitter(const std::shared_ptr<Emitter_3D> emitter)
 		m_Emitters.push_back(emitter);
 }
 
-const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestModelShapeEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<Emitter_3D> EmitterSystem_3D::CreateTestModelShapeEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<Emitter_3D>();
 	AddEmitter(tempEmitter);
@@ -115,7 +115,7 @@ const std::weak_ptr<Emitter_3D> ParticleSystem_3D::CreateTestModelShapeEmitter(g
 	return tempEmitter;
 }
 
-const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<ExplosionEmitter_3D> EmitterSystem_3D::CreateExplosionEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
 	//ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
@@ -152,7 +152,7 @@ const std::weak_ptr<ExplosionEmitter_3D> ParticleSystem_3D::CreateExplosionEmitt
 	return tempEmitter;
 }
 
-const std::weak_ptr<Rotation_ExplosionEmitter_3D> ParticleSystem_3D::CreateRotationExplosionEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<Rotation_ExplosionEmitter_3D> EmitterSystem_3D::CreateRotationExplosionEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<Rotation_ExplosionEmitter_3D>();
 	//ExplosionEmitter_3D& explosionEmitter = *tempEmitter.get();
@@ -188,7 +188,7 @@ const std::weak_ptr<Rotation_ExplosionEmitter_3D> ParticleSystem_3D::CreateRotat
 	return tempEmitter;
 }
 
-const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultipleExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
+const std::weak_ptr<MultipleExplosionEmitter_3D> EmitterSystem_3D::CreateMultipleExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
 {
 	auto tempEmitter = std::make_shared<MultipleExplosionEmitter_3D>();
 
@@ -232,7 +232,7 @@ const std::weak_ptr<MultipleExplosionEmitter_3D> ParticleSystem_3D::CreateMultip
 	return tempEmitter;
 }
 
-const std::weak_ptr<Multiple_Rotation_ExplosionEmitter_3D> ParticleSystem_3D::CreateMultipleRotationExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
+const std::weak_ptr<Multiple_Rotation_ExplosionEmitter_3D> EmitterSystem_3D::CreateMultipleRotationExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
 {
 	auto tempEmitter = std::make_shared<Multiple_Rotation_ExplosionEmitter_3D>();
 
@@ -276,7 +276,7 @@ const std::weak_ptr<Multiple_Rotation_ExplosionEmitter_3D> ParticleSystem_3D::Cr
 	return tempEmitter;
 }
 
-const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos)
+const std::weak_ptr<InteractiveParticle_3D> EmitterSystem_3D::CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos)
 {
 	auto tempEmitter = std::make_shared<InteractiveParticle_3D>();
 	InteractiveParticle_3D& interactiveEmitter = *tempEmitter.get();
@@ -330,7 +330,7 @@ const std::weak_ptr<InteractiveParticle_3D> ParticleSystem_3D::CreateInteractive
 	return tempEmitter;
 }
 
-const std::weak_ptr<TileWaypointEmitter_3D> ParticleSystem_3D::CreateTileWaypointEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<TileWaypointEmitter_3D> EmitterSystem_3D::CreateTileWaypointEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<TileWaypointEmitter_3D>();
 	TileWaypointEmitter_3D& emitter = *tempEmitter.get();
@@ -402,7 +402,7 @@ const std::weak_ptr<TileWaypointEmitter_3D> ParticleSystem_3D::CreateTileWaypoin
 	return tempEmitter;
 }
 
-const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<UnitTrailEmitter_3D> EmitterSystem_3D::CreateUnitTrailEmitter(glm::vec3 spawnPos)
 {
 	auto tempEmitter = std::make_shared<UnitTrailEmitter_3D>();
 	UnitTrailEmitter_3D& emitter = *tempEmitter.get();
@@ -448,7 +448,7 @@ const std::weak_ptr<UnitTrailEmitter_3D> ParticleSystem_3D::CreateUnitTrailEmitt
 	return tempEmitter;
 }
 
-const std::weak_ptr<CharacterDamageEmitter_3D> ParticleSystem_3D::CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd)
+const std::weak_ptr<CharacterDamageEmitter_3D> EmitterSystem_3D::CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd)
 {
 	auto tempEmitter = std::make_shared<CharacterDamageEmitter_3D>();
 	AddEmitter(tempEmitter);
@@ -489,7 +489,7 @@ const std::weak_ptr<CharacterDamageEmitter_3D> ParticleSystem_3D::CreateChracter
 	return tempEmitter;
 }
 
-const std::weak_ptr<CharacterDeathEmitter_3D> ParticleSystem_3D::CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd)
+const std::weak_ptr<CharacterDeathEmitter_3D> EmitterSystem_3D::CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd)
 {
 	auto tempEmitter = std::make_shared<CharacterDeathEmitter_3D>();
 

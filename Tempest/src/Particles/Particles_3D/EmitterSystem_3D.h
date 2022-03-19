@@ -1,8 +1,8 @@
 
 
 
-#ifndef PARTICLE_SYSTEM_3D_H
-#define PARTICLE_SYSTEM_3D_H
+#ifndef EMITTER_SYSTEM_3D_H
+#define EMITTER_SYSTEM_3D_H
 
 #include "Core.h"
 #include "Emitter_3D.h"
@@ -22,9 +22,9 @@ struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
 
 
-struct ParticleSystem_3D
+struct EmitterSystem_3D
 {
-	static ParticleSystem_3D& GetInstance();
+	static EmitterSystem_3D& GetInstance();
 
 	void ClearEmitters();
 	void Update(const float dt);
@@ -48,7 +48,7 @@ struct ParticleSystem_3D
 	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd);
 
 private:
-	ParticleSystem_3D();
+	EmitterSystem_3D();
 
 	std::vector<std::shared_ptr<Emitter_3D>> m_Emitters;
 	// Emitter 3D Management

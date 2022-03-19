@@ -168,14 +168,12 @@ void Emitter_3D::Update(const float dt)
 void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 {
 	particle.m_position = m_GM.m_position;
-	particle.m_originalPosition = m_GM.m_position;
 	particle.m_isActive = true;
 	//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
 
 	// Velocity
 	particle.m_velocity = m_PAM.m_startVelocity;
 	particle.m_gravity = m_PAM.m_gravity;
-	particle.m_originalVelocity = m_PAM.m_startVelocity;
 
 	// Velocity Variations
 	if (m_PAM.m_velocityVariation.x >= 1)
@@ -209,7 +207,6 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 
 	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;
 	particle.m_scaleEnd = m_PAM.m_scaleEnd;
-	particle.m_rebirth = m_PAM.m_rebirth;
 
 	particle.m_renderingPath = m_RM.m_renderingPath;
 }

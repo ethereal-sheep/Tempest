@@ -38,9 +38,6 @@ void UnitTrailEmitter_3D::Emit(const int particleAmount)
 void UnitTrailEmitter_3D::ParticleSetUp(Particle_3D& particle)
 {
 	Emitter_3D::ParticleSetUp(particle);
-
-	// To have the effect from one place to another place
-	particle.m_rebirth = true;
 }
 
 void UnitTrailEmitter_3D::Reset()

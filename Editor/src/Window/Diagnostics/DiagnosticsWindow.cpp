@@ -19,7 +19,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "Profiler/Profiler.h"
 
 namespace Tempest
@@ -872,7 +872,7 @@ namespace Tempest
 	{
 		if (ImGui::CollapsingHeader("Emitters"))
 		{
-			auto m = ParticleSystem_3D::GetInstance().GetEmitter();
+			auto m = EmitterSystem_3D::GetInstance().GetEmitter();
 			for (auto& x : m)
 			{
 				ImGui::Text("Duration: %.2f", x->m_MM.m_duration);
