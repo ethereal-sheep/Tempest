@@ -2,19 +2,9 @@
 
 #include "UnitTrailEmitter_3D.h"
 
-//UnitTrailEmitter_3D::UnitTrailEmitter_3D()
-//	: m_waypointsCompleted{ false }
-//	, m_recalculateVelocity{ true }
-//	, m_wayPointIndex { 0 }
-//{}
 
 
-void UnitTrailEmitter_3D::SelfUpdate([[maybe_unused]] const float dt)
-{
-	
-}
-
-void UnitTrailEmitter_3D::Setup()
+UnitTrailEmitter_3D::UnitTrailEmitter_3D()
 {
 	m_GM.m_active = true;
 
@@ -26,7 +16,7 @@ void UnitTrailEmitter_3D::Setup()
 	m_EM.m_spawnTimeInterval = 0.08f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	m_EM.m_rateOverTime = 1;
-	
+
 	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
@@ -40,6 +30,11 @@ void UnitTrailEmitter_3D::Setup()
 
 	m_PAM.m_lifeTime = 1.0f;
 	m_RM.m_renderingPath = "Models/Cube.a";
+}
+
+void UnitTrailEmitter_3D::SelfUpdate([[maybe_unused]] const float dt)
+{
+	
 }
 
 void UnitTrailEmitter_3D::Emit(const int particleAmount)

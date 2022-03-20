@@ -6,7 +6,7 @@
 
 #define PI 3.141592653589793238f
 
-void Rotation_ExplosionEmitter_3D::Setup()
+Rotation_ExplosionEmitter_3D::Rotation_ExplosionEmitter_3D()
 {
 	m_GM.m_position = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	m_GM.m_active = true;

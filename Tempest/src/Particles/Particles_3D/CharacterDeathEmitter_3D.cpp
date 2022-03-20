@@ -4,7 +4,8 @@
 #include "../Random.h"
 #include "EmitterSystem_3D.h"
 
-void CharacterDeathEmitter_3D::Setup()
+
+CharacterDeathEmitter_3D::CharacterDeathEmitter_3D()
 {
 	m_MM.m_duration = 0.3f;
 	m_MM.m_simulationSpeed = 0.016f;

@@ -8,7 +8,7 @@
 #include "../Random.h"
 
 
-void Multiple_Rotation_ExplosionEmitter_3D::Setup()
+Multiple_Rotation_ExplosionEmitter_3D::Multiple_Rotation_ExplosionEmitter_3D()
 {
 	m_GM.m_active = true;
 

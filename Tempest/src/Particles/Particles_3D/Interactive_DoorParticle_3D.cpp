@@ -12,7 +12,7 @@
 #include <time.h>       /* time */
 #include <numbers>		/* numbers */
 
-void InteractiveParticle_3D::Setup()
+InteractiveParticle_3D::InteractiveParticle_3D()
 {
 	m_GM.m_active = true;
 

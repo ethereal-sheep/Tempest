@@ -7,9 +7,6 @@ TileWaypointEmitter_3D::TileWaypointEmitter_3D()
 	: Emitter_3D()
 	, m_wayPointIndex{ 0 }
 	, m_recalculateVelocity{ true }
-{}
-
-void TileWaypointEmitter_3D::Setup()
 {
 	m_GM.m_velocity.x = 0.0f;
 	m_MM.m_duration = 1000.0f;

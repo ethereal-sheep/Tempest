@@ -2,7 +2,7 @@
 
 #include "CharacterDamageEmitter_3D.h"
 
-void CharacterDamageEmitter_3D::Setup()
+CharacterDamageEmitter_3D::CharacterDamageEmitter_3D()
 {
 	m_GM.m_active = true;
 
@@ -13,7 +13,7 @@ void CharacterDamageEmitter_3D::Setup()
 	m_EM.m_spawnTimeInterval = 1.0f; // 5x slower of dt
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	m_EM.m_rateOverTime = 0;
-	
+
 	m_PAM.m_gravity = true;
 	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };

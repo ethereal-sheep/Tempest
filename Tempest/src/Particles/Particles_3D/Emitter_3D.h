@@ -33,7 +33,6 @@ struct Emitter_3D
 	void ClearAllParticles();
 
 protected:
-	virtual void Setup() {}
 	virtual void SelfUpdate(const float dt);
 	virtual void Emit(const int particleAmount);
 	virtual void ParticleSetUp(Particle_3D& particle);

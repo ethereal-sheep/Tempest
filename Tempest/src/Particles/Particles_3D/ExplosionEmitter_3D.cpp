@@ -13,7 +13,7 @@
 // Additional Includes
 #include "../Random.h"
 
-void ExplosionEmitter_3D::Setup()
+ExplosionEmitter_3D::ExplosionEmitter_3D()
 {
 	m_GM.m_position = glm::vec3{ 0.0f, 0.0f, 0.0f };	
 	m_MM.m_duration = 15.0f;

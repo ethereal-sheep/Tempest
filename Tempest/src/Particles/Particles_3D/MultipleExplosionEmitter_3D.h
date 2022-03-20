@@ -17,7 +17,6 @@ struct MultipleExplosionEmitter_3D : public Emitter_3D
 	glm::vec3 m_minPos;
 	glm::vec3 m_maxPos;
 
-	virtual void Setup() override;
 	virtual void Emit(const int particleAmount) override;
 	virtual void ParticleSetUp(Particle_3D& particle) override;
 	virtual void OnDeath() override;

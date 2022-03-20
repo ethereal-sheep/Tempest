@@ -120,9 +120,6 @@ const std::weak_ptr<ExplosionEmitter_3D> EmitterSystem_3D::CreateExplosionEmitte
 	auto tempEmitter = std::make_shared<ExplosionEmitter_3D>();
 	AddEmitter(tempEmitter);
 
-	// Set up the Emitter
-	tempEmitter->Setup();
-
 	// Customise values to Setup with
 	tempEmitter->m_GM.m_position = spawnPos;
 	return tempEmitter;
@@ -132,8 +129,6 @@ const std::weak_ptr<Rotation_ExplosionEmitter_3D> EmitterSystem_3D::CreateRotati
 {
 	auto tempEmitter = std::make_shared<Rotation_ExplosionEmitter_3D>();
 	AddEmitter(tempEmitter);
-	
-	tempEmitter->Setup();
 
 	tempEmitter->m_GM.m_position = spawnPos;
 
@@ -143,8 +138,6 @@ const std::weak_ptr<Rotation_ExplosionEmitter_3D> EmitterSystem_3D::CreateRotati
 const std::weak_ptr<MultipleExplosionEmitter_3D> EmitterSystem_3D::CreateMultipleExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
 {
 	auto tempEmitter = std::make_shared<MultipleExplosionEmitter_3D>();
-
-	tempEmitter->Setup();
 
 	tempEmitter->m_GM.m_position = spawnPos;
 	tempEmitter->m_minPos = minSpawnPos;
@@ -159,8 +152,6 @@ const std::weak_ptr<MultipleExplosionEmitter_3D> EmitterSystem_3D::CreateMultipl
 const std::weak_ptr<Multiple_Rotation_ExplosionEmitter_3D> EmitterSystem_3D::CreateMultipleRotationExplosionEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount)
 {
 	auto tempEmitter = std::make_shared<Multiple_Rotation_ExplosionEmitter_3D>();
-
-	tempEmitter->Setup();
 
 	tempEmitter->m_GM.m_position = spawnPos;
 	tempEmitter->m_minPos = minSpawnPos;
@@ -177,8 +168,6 @@ const std::weak_ptr<InteractiveParticle_3D> EmitterSystem_3D::CreateInteractiveP
 	auto tempEmitter = std::make_shared<InteractiveParticle_3D>();
 	InteractiveParticle_3D& interactiveEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
-
-	interactiveEmitter.Setup();
 
 	// Swap positions of max and min if wrong value
 	if (minSpawnPos.x > maxSpawnPos.x)
@@ -203,8 +192,6 @@ const std::weak_ptr<TileWaypointEmitter_3D> EmitterSystem_3D::CreateTileWaypoint
 	auto tempEmitter = std::make_shared<TileWaypointEmitter_3D>();
 	TileWaypointEmitter_3D& emitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
-
-	emitter.Setup();
 
 	// Center position of the tile
 	emitter.m_GM.m_position = spawnPos;
@@ -244,8 +231,6 @@ const std::weak_ptr<UnitTrailEmitter_3D> EmitterSystem_3D::CreateUnitTrailEmitte
 	UnitTrailEmitter_3D& emitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
-	emitter.Setup();
-
 	// Emitter_3D values - Without consideration for default ctor values
 	emitter.m_GM.m_position = spawnPos;
 
@@ -256,8 +241,6 @@ const std::weak_ptr<CharacterDamageEmitter_3D> EmitterSystem_3D::CreateChracterD
 {
 	auto tempEmitter = std::make_shared<CharacterDamageEmitter_3D>();
 	AddEmitter(tempEmitter);
-
-	tempEmitter->Setup();
 
 	// Emitter_3D values - Without consideration for default ctor values
 	tempEmitter->m_GM.m_position = spawnPos;
@@ -271,8 +254,6 @@ const std::weak_ptr<CharacterDamageEmitter_3D> EmitterSystem_3D::CreateChracterD
 const std::weak_ptr<CharacterDeathEmitter_3D> EmitterSystem_3D::CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd)
 {
 	auto tempEmitter = std::make_shared<CharacterDeathEmitter_3D>();
-
-	tempEmitter->Setup();
 
 	tempEmitter->m_GM.m_position = spawnPos;
 	tempEmitter->m_minPos = minSpawnPos;
