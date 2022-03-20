@@ -1,9 +1,9 @@
 
-#include "TileWaypointEmitter_3D.h"
+#include "Unit_Turn_IndicatorEmitter_3D.h"
 #include "Logger/Log.h"
 
 
-TileWaypointEmitter_3D::TileWaypointEmitter_3D()
+Unit_Turn_IndicatorEmitter_3D::Unit_Turn_IndicatorEmitter_3D()
 	: Emitter_3D()
 	, m_wayPointIndex{ 0 }
 	, m_recalculateVelocity{ true }
@@ -37,7 +37,7 @@ TileWaypointEmitter_3D::TileWaypointEmitter_3D()
 	m_RM.m_renderingPath = "Models/Cube.a";
 }
 
-void TileWaypointEmitter_3D::SelfUpdate(const float dt)
+void Unit_Turn_IndicatorEmitter_3D::Update(const float dt)
 {
 	if (m_MM.m_preWarm)
 	{
@@ -141,9 +141,11 @@ void TileWaypointEmitter_3D::SelfUpdate(const float dt)
 	else
 		//m_MM.m_duration -= m_MM.m_simulationSpeed;
 		m_MM.m_duration -= dt;
+
+	ParticleUpdate(dt);
 }
 
-void TileWaypointEmitter_3D::UpdateWaypoints(glm::vec3 tileOriginPosition)
+void Unit_Turn_IndicatorEmitter_3D::UpdateWaypoints(glm::vec3 tileOriginPosition)
 {
 	m_GM.m_position = tileOriginPosition;
 	m_wayPoints.clear();

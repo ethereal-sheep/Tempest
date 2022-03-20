@@ -29,7 +29,7 @@ Emitter_3D::Emitter_3D()
 		Emit(m_EM.m_rateOverTime);
 }
 
-void Emitter_3D::SelfUpdate(const float dt)
+void Emitter_3D::Update(const float dt)
 {
 	if (m_MM.m_preWarm)
 	{
@@ -100,12 +100,12 @@ void Emitter_3D::SelfUpdate(const float dt)
 	else
 		//m_MM.m_duration -= m_MM.m_simulationSpeed;
 		m_MM.m_duration -= dt;
+
+	ParticleUpdate(dt);
 }
 
-void Emitter_3D::Update(const float dt)
+void Emitter_3D::ParticleUpdate(const float dt)
 {
-	SelfUpdate(dt);
-
 	// Particle_3D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
 	{

@@ -1,10 +1,10 @@
 
 
-#include "UnitTrailEmitter_3D.h"
+#include "Unit_MovementTrailEmitter_3D.h"
 
 
 
-UnitTrailEmitter_3D::UnitTrailEmitter_3D()
+Unit_MovementTrailEmitter_3D::Unit_MovementTrailEmitter_3D()
 {
 	m_GM.m_active = true;
 
@@ -32,12 +32,12 @@ UnitTrailEmitter_3D::UnitTrailEmitter_3D()
 	m_RM.m_renderingPath = "Models/Cube.a";
 }
 
-void UnitTrailEmitter_3D::SelfUpdate([[maybe_unused]] const float dt)
+void Unit_MovementTrailEmitter_3D::Update([[maybe_unused]] const float dt)
 {
 	
 }
 
-void UnitTrailEmitter_3D::Emit(const int particleAmount)
+void Unit_MovementTrailEmitter_3D::Emit(const int particleAmount)
 {
 	// Emit only if there is enough particle and waypoint is reached
 	//if (!m_waypointsCompleted && particleAmount > 0 && m_available_ParticleSlots.size() > 0)
@@ -58,12 +58,12 @@ void UnitTrailEmitter_3D::Emit(const int particleAmount)
 	}
 }
 
-void UnitTrailEmitter_3D::ParticleSetUp(Particle_3D& particle)
+void Unit_MovementTrailEmitter_3D::ParticleSetUp(Particle_3D& particle)
 {
 	Emitter_3D::ParticleSetUp(particle);
 }
 
-void UnitTrailEmitter_3D::Reset()
+void Unit_MovementTrailEmitter_3D::Reset()
 {
 	/*m_GM.m_position = m_startPoint;
 	m_waypointReached = false;

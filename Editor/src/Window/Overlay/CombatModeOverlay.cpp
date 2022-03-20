@@ -19,7 +19,7 @@
 #include "Util/pathfinding.h"
 
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
-#include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
+#include "Particles/Particles_3D/Unit_Turn_IndicatorEmitter_3D.h"
 #include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
 #include "Particles/Particles_3D/CharacterDeathEmitter_3D.h"
 

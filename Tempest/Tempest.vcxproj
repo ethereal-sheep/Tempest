@@ -255,8 +255,8 @@
     <ClCompile Include="src\Particles\Particles_3D\Particles_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\Particle_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\ParticleSystem_2D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Random.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\WaypointEmitter_2D.cpp" />
     <ClCompile Include="src\Physics\PhysicsObject.cpp" />
@@ -386,8 +386,8 @@
     <ClInclude Include="src\Particles\Particles_3D\Particles_3D.h" />
     <ClInclude Include="src\Particles\Particles_2D\Particle_2D.h" />
     <ClInclude Include="src\Particles\Particles_2D\ParticleSystem_2D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.h" />
     <ClInclude Include="src\Particles\Random.h" />
     <ClInclude Include="src\Particles\Particles_2D\WaypointEmitter_2D.h" />
     <ClInclude Include="src\Physics\Filters\Filters.h" />

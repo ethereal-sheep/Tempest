@@ -12,7 +12,7 @@
 #include <time.h>       /* time */
 #include <numbers>		/* numbers */
 
-InteractiveParticle_3D::InteractiveParticle_3D()
+Interactive_DoorParticle_3D::Interactive_DoorParticle_3D()
 {
 	m_GM.m_active = true;
 
@@ -43,7 +43,7 @@ InteractiveParticle_3D::InteractiveParticle_3D()
 	m_RM.m_renderingPath = "Models/Cube.a";
 }
 
-void InteractiveParticle_3D::Emit(const int particleAmount)
+void Interactive_DoorParticle_3D::Emit(const int particleAmount)
 {
 	// Emit only if there is enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
@@ -64,7 +64,7 @@ void InteractiveParticle_3D::Emit(const int particleAmount)
 	}
 }
 
-void InteractiveParticle_3D::ParticleSetUp(Particle_3D& particle)
+void Interactive_DoorParticle_3D::ParticleSetUp(Particle_3D& particle)
 {
 	Emitter_3D::ParticleSetUp(particle);
 

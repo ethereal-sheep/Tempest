@@ -5,11 +5,11 @@
 
 #include "Emitter_3D.h"
 
-struct TileWaypointEmitter_3D final : public Emitter_3D
+struct Unit_Turn_IndicatorEmitter_3D final : public Emitter_3D
 {
-	TileWaypointEmitter_3D();
+	Unit_Turn_IndicatorEmitter_3D();
 
-	void SelfUpdate(const float dt) override;
+	void Update(const float dt) override;
 
 	std::vector<glm::vec3> m_wayPoints;
 	short m_wayPointIndex;

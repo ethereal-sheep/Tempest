@@ -5,10 +5,10 @@
 
 #include "Emitter_3D.h"
 
-struct UnitTrailEmitter_3D : public Emitter_3D
+struct Unit_MovementTrailEmitter_3D : public Emitter_3D
 {
-	UnitTrailEmitter_3D();
-	void SelfUpdate(const float dt) override;
+	Unit_MovementTrailEmitter_3D();
+	void Update(const float dt) override;
 	void Emit(const int particleAmount) override;
 	void ParticleSetUp(Particle_3D& particle) override;
 

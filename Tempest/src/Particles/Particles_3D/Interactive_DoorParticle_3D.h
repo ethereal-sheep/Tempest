@@ -1,16 +1,16 @@
 
 
 
-#ifndef INTERACTIVE_PARTICLE_3D_H
-#define INTERACTIVE_PARTICLE_3D_H
+#ifndef INTERACTIVE_DOOR_PARTICLE_3D_H
+#define INTERACTIVE_DOOR_PARTICLE_3D_H
 
 #include "Emitter_3D.h"
 
 #include <gtx/transform.hpp>
 
-struct InteractiveParticle_3D : public Emitter_3D
+struct Interactive_DoorParticle_3D : public Emitter_3D
 {
-	InteractiveParticle_3D();
+	Interactive_DoorParticle_3D();
 	void Emit(const int particleAmount) override;
 	void ParticleSetUp(Particle_3D& particle) override;
 

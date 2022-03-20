@@ -18,7 +18,7 @@
 #include "Instance/RuntimeInstance.h"
 #include "Util/interpolater.h"
 
-struct TileWaypointEmitter_3D;
+struct Unit_Turn_IndicatorEmitter_3D;
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
 
@@ -242,7 +242,7 @@ namespace Tempest
 
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
 
-        std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
+        std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> m_unitTileEmitter;
         std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
         std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
         bool damageOnce = false;

@@ -14,7 +14,7 @@
 
 // Not supposed to be here
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
-#include "Particles/Particles_3D/UnitTrailEmitter_3D.h"
+#include "Particles/Particles_3D/Unit_MovementTrailEmitter_3D.h"
 
 #include "../Graphics/Basics/LineRenderer.h"
 #include <Util/shape_manip.h>
@@ -157,14 +157,14 @@ namespace Tempest
 				transform = unit.get_current_transform();
 
 				// Shift emitter and calls it to emit particle
-				if (!m_unitTrailEmitter_3D.expired())
+				if (!m_Unit_MovementTrailEmitter_3D.expired())
 				{
-					m_unitTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
-					m_unitTrailEmitter_3D.lock()->Emit(1);
+					m_Unit_MovementTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
+					m_Unit_MovementTrailEmitter_3D.lock()->Emit(1);
 				}
 				else
 				{
-					m_unitTrailEmitter_3D = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
+					m_Unit_MovementTrailEmitter_3D = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
 				}
 			}
 

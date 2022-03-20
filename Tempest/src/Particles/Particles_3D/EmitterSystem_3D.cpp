@@ -9,8 +9,8 @@
 #include "Multiple_Rotation_ExplosionEmitter_3D.h"
 
 #include "Interactive_DoorParticle_3D.h"
-#include "TileWaypointEmitter_3D.h"
-#include "UnitTrailEmitter_3D.h"
+#include "Unit_Turn_IndicatorEmitter_3D.h"
+#include "Unit_MovementTrailEmitter_3D.h"
 #include "CharacterDamageEmitter_3D.h"
 #include "CharacterDeathEmitter_3D.h"
 
@@ -163,10 +163,10 @@ const std::weak_ptr<Multiple_Rotation_ExplosionEmitter_3D> EmitterSystem_3D::Cre
 	return tempEmitter;
 }
 
-const std::weak_ptr<InteractiveParticle_3D> EmitterSystem_3D::CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos)
+const std::weak_ptr<Interactive_DoorParticle_3D> EmitterSystem_3D::CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos)
 {
-	auto tempEmitter = std::make_shared<InteractiveParticle_3D>();
-	InteractiveParticle_3D& interactiveEmitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<Interactive_DoorParticle_3D>();
+	Interactive_DoorParticle_3D& interactiveEmitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Swap positions of max and min if wrong value
@@ -187,10 +187,10 @@ const std::weak_ptr<InteractiveParticle_3D> EmitterSystem_3D::CreateInteractiveP
 	return tempEmitter;
 }
 
-const std::weak_ptr<TileWaypointEmitter_3D> EmitterSystem_3D::CreateTileWaypointEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> EmitterSystem_3D::CreateTileWaypointEmitter(glm::vec3 spawnPos)
 {
-	auto tempEmitter = std::make_shared<TileWaypointEmitter_3D>();
-	TileWaypointEmitter_3D& emitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<Unit_Turn_IndicatorEmitter_3D>();
+	Unit_Turn_IndicatorEmitter_3D& emitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Center position of the tile
@@ -225,10 +225,10 @@ const std::weak_ptr<TileWaypointEmitter_3D> EmitterSystem_3D::CreateTileWaypoint
 	return tempEmitter;
 }
 
-const std::weak_ptr<UnitTrailEmitter_3D> EmitterSystem_3D::CreateUnitTrailEmitter(glm::vec3 spawnPos)
+const std::weak_ptr<Unit_MovementTrailEmitter_3D> EmitterSystem_3D::CreateUnitTrailEmitter(glm::vec3 spawnPos)
 {
-	auto tempEmitter = std::make_shared<UnitTrailEmitter_3D>();
-	UnitTrailEmitter_3D& emitter = *tempEmitter.get();
+	auto tempEmitter = std::make_shared<Unit_MovementTrailEmitter_3D>();
+	Unit_MovementTrailEmitter_3D& emitter = *tempEmitter.get();
 	AddEmitter(tempEmitter);
 
 	// Emitter_3D values - Without consideration for default ctor values
