@@ -167,9 +167,25 @@ void Emitter_3D::ParticleUpdate(const float dt)
 
 void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 {
+	//Default set values
 	particle.m_position = m_GM.m_position;
 	particle.m_isActive = true;
-	//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
+	particle.m_rotation = m_PAM.m_SpawnRotation;
+
+	// Spawn Position of the particle - To be between min and max of range
+	float rangeX = static_cast<float>(m_PAM.m_maxSpawnPos.x - m_PAM.m_minSpawnPos.x) > 0 ? static_cast<float>(m_PAM.m_maxSpawnPos.x - m_PAM.m_minSpawnPos.x) : 0;
+	float rangeY = static_cast<float>(m_PAM.m_maxSpawnPos.y - m_PAM.m_minSpawnPos.y) > 0 ? static_cast<float>(m_PAM.m_maxSpawnPos.y - m_PAM.m_minSpawnPos.y) : 0;
+	float rangeZ = static_cast<float>(m_PAM.m_maxSpawnPos.z - m_PAM.m_minSpawnPos.z) > 0 ? static_cast<float>(m_PAM.m_maxSpawnPos.z - m_PAM.m_minSpawnPos.z) : 0;
+
+	if (rangeX)
+		particle.m_position.x = Random::Float() * rangeX + m_PAM.m_minSpawnPos.x;
+
+	if (rangeY)
+		particle.m_position.y = Random::Float() * rangeY + m_PAM.m_minSpawnPos.y;
+
+	if (rangeZ)
+		particle.m_position.z = Random::Float() * rangeZ + m_PAM.m_minSpawnPos.z;
+
 
 	// Velocity
 	particle.m_velocity = m_PAM.m_startVelocity;
@@ -216,6 +232,8 @@ void Emitter_3D::Emit(const int particleAmount)
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 	{
+		LOG_INFO("Spawn Amount: {0}", particleAmount);
+
 		for (short i = 0; i < particleAmount; ++i)
 		{
 			// Initailisation of the particle
@@ -229,6 +247,10 @@ void Emitter_3D::Emit(const int particleAmount)
 			if (m_available_ParticleSlots.size() <= 0)
 				break;
 		}
+	}
+	else
+	{
+		LOG_INFO("No more slots");
 	}
 }
 

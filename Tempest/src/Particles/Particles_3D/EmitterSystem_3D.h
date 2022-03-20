@@ -21,6 +21,8 @@ struct Unit_MovementTrailEmitter_3D;
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
 
+struct Weather_Rain_Emitter_3D;
+
 struct EmitterSystem_3D
 {
 	static EmitterSystem_3D& GetInstance();
@@ -45,6 +47,8 @@ struct EmitterSystem_3D
 
 	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd);
 	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd);
+
+	const std::weak_ptr<Weather_Rain_Emitter_3D> CreateWeatherRainEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos);
 
 private:
 	EmitterSystem_3D();

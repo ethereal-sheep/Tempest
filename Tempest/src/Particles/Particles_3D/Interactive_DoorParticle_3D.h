@@ -11,12 +11,6 @@
 struct Interactive_DoorParticle_3D : public Emitter_3D
 {
 	Interactive_DoorParticle_3D();
-	void Emit(const int particleAmount) override;
-	void ParticleSetUp(Particle_3D& particle) override;
-
-	// Min and Max range of the spawn pos - Assume values given are correct to work
-	glm::vec3 minPos;
-	glm::vec3 maxPos;
 };
 
 

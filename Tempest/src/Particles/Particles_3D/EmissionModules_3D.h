@@ -40,6 +40,10 @@ struct ParticleArchetypeModule_3D
 {
 	ParticleArchetypeModule_3D();
 
+	glm::vec3 m_minSpawnPos, m_maxSpawnPos;
+
+	glm::vec3 m_SpawnRotation;
+
 	glm::vec3 m_startVelocity, m_endVelocity;
 	glm::vec3 m_velocityVariation;
 

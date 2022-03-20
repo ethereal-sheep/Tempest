@@ -141,7 +141,7 @@ namespace Tempest
 						//EmitterSystem_3D::GetInstance().CreateExplosionEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//EmitterSystem_3D::GetInstance().CreateRotationExplosionEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//EmitterSystem_3D::GetInstance().CreateMultipleExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
-						EmitterSystem_3D::GetInstance().CreateMultipleRotationExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
+						//EmitterSystem_3D::GetInstance().CreateMultipleRotationExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
 						
 						//auto emitter = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
 						//EmitterSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
@@ -153,6 +153,8 @@ namespace Tempest
 					{
 						//EmitterSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//EmitterSystem_3D::GetInstance().CreateChracterDeathEmitter(glm::vec3{ 2.0f, 0.0f, 2.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
+
+						auto& temp = EmitterSystem_3D::GetInstance().CreateWeatherRainEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ -20.0f, 15.0f, -10.0f }, glm::vec3{ 0.0f, 20.0f, 10.0f });
 					}
 					break;
 					break;

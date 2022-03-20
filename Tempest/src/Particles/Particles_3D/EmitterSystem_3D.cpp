@@ -14,6 +14,8 @@
 #include "CharacterDamageEmitter_3D.h"
 #include "CharacterDeathEmitter_3D.h"
 
+#include "Weather_Rain_Emitter_3D.h"
+
 
 EmitterSystem_3D::EmitterSystem_3D()
 {}
@@ -181,8 +183,8 @@ const std::weak_ptr<Interactive_DoorParticle_3D> EmitterSystem_3D::CreateInterac
 
 	// Emitter_3D values - Without consideration for default ctor values
 	interactiveEmitter.m_GM.m_position = spawnPos;
-	interactiveEmitter.minPos = minSpawnPos;
-	interactiveEmitter.maxPos = maxSpawnPos;
+	interactiveEmitter.m_PAM.m_minSpawnPos = minSpawnPos;
+	interactiveEmitter.m_PAM.m_maxSpawnPos = maxSpawnPos;
 	
 	return tempEmitter;
 }
@@ -265,6 +267,30 @@ const std::weak_ptr<CharacterDeathEmitter_3D> EmitterSystem_3D::CreateChracterDe
 	// Amount of Followup Explosion
 	tempEmitter->m_explosionEmitterAmount = explosionEmitterAmount;
 	AddEmitter(tempEmitter);
+
+	return tempEmitter;
+}
+
+const std::weak_ptr<Weather_Rain_Emitter_3D> EmitterSystem_3D::CreateWeatherRainEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos)
+{
+	auto tempEmitter = std::make_shared<Weather_Rain_Emitter_3D>();
+	Weather_Rain_Emitter_3D& interactiveEmitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
+
+	// Swap positions of max and min if wrong value
+	if (minSpawnPos.x > maxSpawnPos.x)
+		std::swap(minSpawnPos.x, maxSpawnPos.x);
+
+	if (minSpawnPos.y > maxSpawnPos.y)
+		std::swap(minSpawnPos.y, maxSpawnPos.y);
+
+	if (minSpawnPos.z > maxSpawnPos.z)
+		std::swap(minSpawnPos.z, maxSpawnPos.z);
+
+	// Emitter_3D values - Without consideration for default ctor values
+	interactiveEmitter.m_GM.m_position = spawnPos;
+	interactiveEmitter.m_PAM.m_minSpawnPos = minSpawnPos;
+	interactiveEmitter.m_PAM.m_maxSpawnPos = maxSpawnPos;
 
 	return tempEmitter;
 }

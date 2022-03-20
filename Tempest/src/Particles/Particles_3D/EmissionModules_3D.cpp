@@ -13,7 +13,7 @@
 MainModule_3D::MainModule_3D()
 	: m_duration{ 10.0f }
 	, m_looping{ false }
-	, m_maxParticles{ 1000 }
+	, m_maxParticles{ 2000 }
 	, m_simulationSpeed{ 0.016f }
 	, m_preWarm{ false }
 {}
@@ -25,7 +25,12 @@ GameObjectModule_3D::GameObjectModule_3D()
 {}
 
 ParticleArchetypeModule_3D::ParticleArchetypeModule_3D()
-	: m_startVelocity     { 0.0f, 0.0f, 0.0f }
+	: m_minSpawnPos{ 0.0f, 0.0f, 0.0f }
+	, m_maxSpawnPos{ 0.0f, 0.0f, 0.0f }
+	
+	, m_SpawnRotation{ 0, 0, 0 }
+
+	, m_startVelocity     { 0.0f, 0.0f, 0.0f }
 	, m_endVelocity       { 0.0f, 0.0f, 0.0f }
 	, m_velocityVariation { 3.0f, 1.0f, 0.0f }
 
