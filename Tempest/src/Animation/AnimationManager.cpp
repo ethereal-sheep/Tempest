@@ -4,9 +4,9 @@
 
 namespace Tempest
 {
-	void AnimationManager::AddAnimator(uint32_t id, tsptr<Animator> anim)
+	void AnimationManager::AddAnimator(uint32_t id, Animator anim)
 	{
-		m_Animators.insert(std::make_pair(id, anim));
+		m_Animators.insert(std::make_pair(id, std::move(anim)));
 	}
 
 	void AnimationManager::UpdateAnimations(float dt)
@@ -15,7 +15,7 @@ namespace Tempest
 			return;
 
 		for (auto& i : m_Animators)
-			i.second->UpdateAnimation(dt);
+			i.second.UpdateAnimation(dt);
 	}
 
 	void AnimationManager::ChangeAnimation(uint32_t id, Animation* animation)
@@ -29,14 +29,14 @@ namespace Tempest
 
 		else
 		{
-			m_Animators[id]->ChangeAnimation(animation);
+			m_Animators.at(id).ChangeAnimation(animation);
 		}
 	}
 
 	bool AnimationManager::CheckAnimation(uint32_t id, std::string name)
 	{
-		auto& animator = m_Animators[id];
-		return !strcmp(animator->GetName().c_str(), name.c_str());
+		auto& animator = m_Animators.at(id);
+		return !strcmp(animator.GetName().c_str(), name.c_str());
 	}
 
 	bool AnimationManager::CheckAnimator(uint32_t id)
@@ -46,6 +46,6 @@ namespace Tempest
 
 	void AnimationManager::ChangeDuration(uint32_t id, float duration)
 	{
-		m_Animators[id]->ChangeDuration(duration);
+		m_Animators.at(id).ChangeDuration(duration);
 	}
 }
