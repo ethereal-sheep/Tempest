@@ -470,6 +470,8 @@ namespace Tempest
 				ImGui::RadioButton("Depth", &gBufferView, 7);
 				ImGui::RadioButton("SAO", &gBufferView, 8);
 				ImGui::RadioButton("Velocity", &gBufferView, 9);
+				ImGui::RadioButton("Bloom", &gBufferView, 10);
+				ImGui::RadioButton("Bloom Blur", &gBufferView, 11);
 				ImGui::TreePop();
 			}
 

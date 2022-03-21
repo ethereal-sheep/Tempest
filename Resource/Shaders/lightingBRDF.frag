@@ -51,6 +51,9 @@ uniform sampler2D envMapLUT;
 uniform sampler2D shadowMap;
 uniform samplerCube shadowCube[10];
 
+uniform sampler2D gBloom;
+uniform sampler2D gBloomBlur;
+
 uniform int gBufferView;
 uniform bool pointMode;
 uniform bool directionalMode;
@@ -285,6 +288,14 @@ void main()
     // Velocity buffer
     else if (gBufferView == 9)
         colorOutput = vec4(velocity, 0.0f, 1.0f);
+
+    // Bloom buffer
+    else if (gBufferView == 10)
+        colorOutput = texture(gBloom, TexCoords);
+    //
+    // Bloom blur buffer
+    else if (gBufferView == 11)
+        colorOutput = texture(gBloomBlur, TexCoords);
 }
 
 

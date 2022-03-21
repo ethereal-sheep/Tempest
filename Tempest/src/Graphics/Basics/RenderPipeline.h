@@ -45,7 +45,9 @@ namespace Tempest
 
 		firstpassPPShader,
 		saoShader,
-		saoBlurShader
+		saoBlurShader,
+
+		bloomBlurShader
 			
 	};
 

@@ -119,12 +119,17 @@ namespace Tempest
         float gammaValue = 2.2f; // 1.0f to 4.0f
 
         //Testing
-        GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects;
+        GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects, gBloom;
         GLuint saoFBO, saoBlurFBO, saoBuffer, saoBlurBuffer;
         GLuint postprocessFBO, postprocessBuffer;
         GLuint envToCubeFBO, irradianceFBO, prefilterFBO, brdfLUTFBO, envToCubeRBO, irradianceRBO, prefilterRBO, brdfLUTRBO;
         GLuint gBuffer2, gBuffer2t;
-        
+
+        // ping-pong-framebuffer for blurring
+        GLuint pingpongFBO[2];
+        GLuint pingpongColorbuffers[2];
+        bool horizontal = true;
+
         GLint gBufferView = 1;     // To see the different buffers
         GLint tonemappingMode = 2; // Tonemapping types 
         GLint attenuationMode = 2; // Attenuation type
