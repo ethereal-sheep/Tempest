@@ -18,7 +18,7 @@ Interactive_DoorParticle_3D::Interactive_DoorParticle_3D()
 
 	m_MM.m_duration = 1000000.f;
 	m_MM.m_preWarm = true;
-	m_MM.m_maxParticles = 30;
+	Emitter_3D::UpdateMaxParticle(30);
 
 	m_EM.m_spawnTimeInterval = 0.1f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;

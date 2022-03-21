@@ -96,7 +96,6 @@ const std::weak_ptr<Emitter_3D> EmitterSystem_3D::CreateTestModelShapeEmitter(gl
 	tempEmitter->m_EM.m_spawnTimeInterval = 1.0f; // 5x slower of dt
 	tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
 	tempEmitter->m_EM.m_rateOverTime = 1;
-	tempEmitter->m_MM.m_maxParticles = 1000;
 
 	// Particle Architype values - without consideration for default ctor
 	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };

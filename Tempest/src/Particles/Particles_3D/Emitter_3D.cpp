@@ -29,6 +29,22 @@ Emitter_3D::Emitter_3D()
 		Emit(m_EM.m_rateOverTime);
 }
 
+void Emitter_3D::UpdateMaxParticle(const int newMaxParticleCapacity)
+{
+	int endSlotNo = m_particles.size();
+	int newSlotAmount = newMaxParticleCapacity - m_particles.size();
+
+	// Increase in particle slot management
+	if (newSlotAmount > 0)
+	{
+		m_particles.resize(newMaxParticleCapacity);
+
+		for (short i = endSlotNo; i < newMaxParticleCapacity; ++i)
+			m_available_ParticleSlots.push(i);
+	}
+}
+
+
 void Emitter_3D::Update(const float dt)
 {
 	if (m_MM.m_preWarm)

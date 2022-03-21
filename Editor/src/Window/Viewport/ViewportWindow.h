@@ -154,7 +154,7 @@ namespace Tempest
 						//EmitterSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//EmitterSystem_3D::GetInstance().CreateChracterDeathEmitter(glm::vec3{ 2.0f, 0.0f, 2.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
 
-						auto& temp = EmitterSystem_3D::GetInstance().CreateWeatherRainEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ -20.0f, 15.0f, -10.0f }, glm::vec3{ 0.0f, 20.0f, 10.0f });
+						auto& temp = EmitterSystem_3D::GetInstance().CreateWeatherRainEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ -30.0f, 20.0f, -10.0f }, glm::vec3{ -10.0f, 40.0f, 10.0f });
 					}
 					break;
 					break;

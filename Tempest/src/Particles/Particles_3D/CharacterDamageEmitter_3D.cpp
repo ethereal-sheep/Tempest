@@ -8,7 +8,7 @@ CharacterDamageEmitter_3D::CharacterDamageEmitter_3D()
 
 	m_MM.m_duration = 0.6f;
 	m_MM.m_preWarm = true;
-	m_MM.m_maxParticles = 1000;
+	Emitter_3D::UpdateMaxParticle(1000);
 
 	m_EM.m_spawnTimeInterval = 1.0f; // 5x slower of dt
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;

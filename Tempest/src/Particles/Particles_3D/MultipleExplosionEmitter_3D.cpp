@@ -17,7 +17,7 @@ MultipleExplosionEmitter_3D::MultipleExplosionEmitter_3D(int explosionEmitterAmo
 	m_MM.m_duration = 0.3f;
 	m_MM.m_simulationSpeed = 0.016f;
 	m_MM.m_preWarm = true;
-	m_MM.m_maxParticles = 1000;
+	Emitter_3D::UpdateMaxParticle(1000);
 
 	m_EM.m_spawnTimeInterval = 10.0f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;

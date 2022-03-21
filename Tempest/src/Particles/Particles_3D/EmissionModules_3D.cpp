@@ -13,7 +13,7 @@
 MainModule_3D::MainModule_3D()
 	: m_duration{ 10.0f }
 	, m_looping{ false }
-	, m_maxParticles{ 2000 }
+	, m_maxParticles{ 500 }
 	, m_simulationSpeed{ 0.016f }
 	, m_preWarm{ false }
 {}

@@ -34,6 +34,7 @@ struct Emitter_3D
 	void ClearAllParticles();
 
 protected:
+	void UpdateMaxParticle(const int newMaxParticleCapacity);
 	void ParticleUpdate(const float dt);
 	virtual void Emit(const int particleAmount);
 	virtual void ParticleSetUp(Particle_3D& particle);

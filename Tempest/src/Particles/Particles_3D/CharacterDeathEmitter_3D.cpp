@@ -15,7 +15,7 @@ CharacterDeathEmitter_3D::CharacterDeathEmitter_3D()
 	m_EM.m_spawnTimeInterval = 10.0f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	m_EM.m_rateOverTime = 20;
-	m_MM.m_maxParticles = 1000;
+	Emitter_3D::UpdateMaxParticle(1000);
 
 	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };

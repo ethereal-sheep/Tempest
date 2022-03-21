@@ -20,10 +20,10 @@ struct MainModule_3D
 
 	float m_duration;		 // Duration of emitter
 	bool  m_looping;		 // Resets on the emitter death
-	short m_maxParticles;	 // Max amount of particles 
 
 	float m_simulationSpeed; // What DT to run in
 	bool m_preWarm;
+	short m_maxParticles;	 // Max amount of particles 
 };
 
 struct GameObjectModule_3D

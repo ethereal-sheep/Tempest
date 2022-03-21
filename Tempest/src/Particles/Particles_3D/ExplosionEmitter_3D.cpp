@@ -24,7 +24,7 @@ ExplosionEmitter_3D::ExplosionEmitter_3D()
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 
 	m_EM.m_rateOverTime = 20;
-	m_MM.m_maxParticles = 1000;
+	Emitter_3D::UpdateMaxParticle(1000);
 
 	// Particle Architype values - without consideration for default ctor
 	m_PAM.m_gravity = true;

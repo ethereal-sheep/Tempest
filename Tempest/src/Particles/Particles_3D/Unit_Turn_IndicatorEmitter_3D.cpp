@@ -17,7 +17,7 @@ Unit_Turn_IndicatorEmitter_3D::Unit_Turn_IndicatorEmitter_3D()
 	m_EM.m_spawnTimeInterval = 0.016f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	m_EM.m_rateOverTime = 1;
-	m_MM.m_maxParticles = 1000;
+	Emitter_3D::UpdateMaxParticle(1000);
 
 	m_wayPointIndex = 0;
 	m_recalculateVelocity = true;
