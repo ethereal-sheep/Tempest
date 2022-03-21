@@ -179,7 +179,7 @@ namespace Tempest
         glm::vec4 USOcolor{ 0.0f };
         //bool captured = false;
         //vec2 vp_size = vec2(0.f);
-        glm::vec4 clearColor{0.4f, 0.5f, 0.6f, 1.0f};
+        glm::vec4 clearColor{0.0f, 0.0f, 0.0f, 1.0f};
 
 
         glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric
