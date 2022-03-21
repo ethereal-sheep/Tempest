@@ -15,7 +15,7 @@ Unit_MovementTrailEmitter_3D::Unit_MovementTrailEmitter_3D()
 
 	m_EM.m_spawnTimeInterval = 0.08f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
-	m_EM.m_rateOverTime = 1;
+	m_EM.m_rateOverTime = 0;
 
 	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
@@ -32,28 +32,34 @@ Unit_MovementTrailEmitter_3D::Unit_MovementTrailEmitter_3D()
 	m_RM.m_renderingPath = "Models/Cube.a";
 }
 
-void Unit_MovementTrailEmitter_3D::Update([[maybe_unused]] const float dt)
-{
-	
-}
+//void Unit_MovementTrailEmitter_3D::Update([[maybe_unused]] const float dt)
+//{
+//	
+//}
 
 void Unit_MovementTrailEmitter_3D::Emit(const int particleAmount)
 {
 	// Emit only if there is enough particle and waypoint is reached
 	//if (!m_waypointsCompleted && particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 	{
-		for (short i = 0; i < particleAmount; ++i)
+		// Emit only if enough particle
+		if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 		{
-			// Initialisation of the particle
-			Particle_3D particle;
-			ParticleSetUp(particle);
+			//LOG_INFO("Spawn Amount: {0}", particleAmount);
 
-			// Allocation of particle
-			m_particles[m_available_ParticleSlots.front()] = particle;
-			m_available_ParticleSlots.pop();
+			for (short i = 0; i < particleAmount; ++i)
+			{
+				// Initailisation of the particle
+				Particle_3D particle;
+				ParticleSetUp(particle);
 
-			if (m_available_ParticleSlots.size() <= 0)
-				break;
+				// Allocation of particle
+				m_particles[m_available_ParticleSlots.front()] = particle;
+				m_available_ParticleSlots.pop();
+
+				if (m_available_ParticleSlots.size() <= 0)
+					break;
+			}
 		}
 	}
 }

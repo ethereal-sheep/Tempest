@@ -39,7 +39,7 @@ void Emitter_3D::UpdateMaxParticle(const int newMaxParticleCapacity)
 	{
 		m_particles.resize(newMaxParticleCapacity);
 
-		for (short i = endSlotNo; i < newMaxParticleCapacity; ++i)
+		for (int i = endSlotNo; i < newMaxParticleCapacity; ++i)
 			m_available_ParticleSlots.push(i);
 	}
 }
@@ -170,11 +170,32 @@ void Emitter_3D::ParticleUpdate(const float dt)
 			//LOG_INFO("Particle Rot Z: {0}", particle.m_rotation.z);
 
 			// Change the string in this function
+			//auto t = glm::translate(particle.m_position);
+			//auto s = glm::scale(particle.m_scale);
+			//auto r = glm::rotate(particle.m_rotation.x, glm::vec3(1.f, 0.f, 0.f))
+			//	   * glm::rotate(particle.m_rotation.y, glm::vec3(0.f, 1.f, 0.f))
+			//	   * glm::rotate(particle.m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
+
+			//Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle, (t * r * s));
+		}
+	}
+}
+
+void Emitter_3D::ParticleRender(glm::vec4 modelMatrix)
+{
+	// Particle_3D Behaviour
+	for (short i = 0; i < m_particles.size(); ++i)
+	{
+		auto& particle = m_particles[i];
+
+		if (particle.m_isActive)
+		{
+			// Change the string in this function
 			auto t = glm::translate(particle.m_position);
 			auto s = glm::scale(particle.m_scale);
 			auto r = glm::rotate(particle.m_rotation.x, glm::vec3(1.f, 0.f, 0.f))
-				   * glm::rotate(particle.m_rotation.y, glm::vec3(0.f, 1.f, 0.f))
-				   * glm::rotate(particle.m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
+				* glm::rotate(particle.m_rotation.y, glm::vec3(0.f, 1.f, 0.f))
+				* glm::rotate(particle.m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
 
 			Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle, (t * r * s));
 		}
@@ -248,7 +269,7 @@ void Emitter_3D::Emit(const int particleAmount)
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 	{
-		LOG_INFO("Spawn Amount: {0}", particleAmount);
+		//LOG_INFO("Spawn Amount: {0}", particleAmount);
 
 		for (short i = 0; i < particleAmount; ++i)
 		{
@@ -264,10 +285,10 @@ void Emitter_3D::Emit(const int particleAmount)
 				break;
 		}
 	}
-	else
-	{
-		LOG_INFO("No more slots");
-	}
+	//else
+	//{
+	//	LOG_INFO("No more slots");
+	//}
 }
 
 void Emitter_3D::ClearAllParticles()

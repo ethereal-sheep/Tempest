@@ -74,7 +74,6 @@ namespace Tempest
 	{
 		T_FrameRateManager.FrameStart();
 		// Update Engine stuff first
-		EmitterSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
 
 		Profile::Profiler::FrameStart();
 		PROFILER_MARKER(UPDATE);

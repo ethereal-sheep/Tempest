@@ -31,6 +31,7 @@ struct Emitter_3D
 	Emitter_3D();
 	
 	virtual void Update(const float dt);
+	void ParticleRender(glm::vec4 modelMatrix = glm::vec4{ 0.f, 0.f, 0.f, 0.f });
 	void ClearAllParticles();
 
 protected:

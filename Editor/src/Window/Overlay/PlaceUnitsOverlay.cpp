@@ -387,6 +387,8 @@ namespace Tempest
 									AudioEngine ae;
 									ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
 
+									// Instantiate the character VFX
+
 									chars[selected] = entity;
 									LOG_ASSERT(instance.ecs.has<tc::Character>(entity));
 									LOG_ASSERT(instance.ecs.has<tc::Transform>(entity));
