@@ -9,8 +9,11 @@
 #include "Multiple_Rotation_ExplosionEmitter_3D.h"
 
 #include "Interactive_DoorParticle_3D.h"
+
 #include "Unit_Turn_IndicatorEmitter_3D.h"
 #include "Unit_MovementTrailEmitter_3D.h"
+
+#include "CharacterSpawnEmitter_3D.h"
 #include "CharacterDamageEmitter_3D.h"
 #include "CharacterDeathEmitter_3D.h"
 
@@ -234,6 +237,18 @@ const std::weak_ptr<Unit_MovementTrailEmitter_3D> EmitterSystem_3D::CreateUnitTr
 
 	// Emitter_3D values - Without consideration for default ctor values
 	emitter.m_GM.m_position = spawnPos;
+
+	return tempEmitter;
+}
+
+
+const std::weak_ptr<CharacterSpawnEmitter_3D> EmitterSystem_3D::CreateChracterSpawnEmitter(glm::vec3 spawnPos)
+{
+	auto tempEmitter = std::make_shared<CharacterSpawnEmitter_3D>();
+	AddEmitter(tempEmitter);
+
+	// Emitter_3D values - Without consideration for default ctor values
+	tempEmitter->m_GM.m_position = spawnPos;
 
 	return tempEmitter;
 }

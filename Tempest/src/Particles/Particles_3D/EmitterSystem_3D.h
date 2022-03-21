@@ -16,8 +16,11 @@ struct MultipleExplosionEmitter_3D;
 struct Multiple_Rotation_ExplosionEmitter_3D;
 
 struct Interactive_DoorParticle_3D;
+
 struct Unit_Turn_IndicatorEmitter_3D;
 struct Unit_MovementTrailEmitter_3D;
+
+struct CharacterSpawnEmitter_3D;
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
 
@@ -45,6 +48,7 @@ struct EmitterSystem_3D
 	const std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> CreateTileWaypointEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<Unit_MovementTrailEmitter_3D> CreateUnitTrailEmitter(glm::vec3 spawnPos);
 
+	const std::weak_ptr<CharacterSpawnEmitter_3D> CreateChracterSpawnEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd);
 	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd);
 
