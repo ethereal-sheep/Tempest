@@ -317,11 +317,11 @@ bool LoadModel(const std::string& path)
 	Mesh mMesh;
 	ProcessNodeData(s_Scene->mRootNode, aiMatrix4x4{}, mMesh, offset);
 
-	for (auto i = 0; i < s_Scene->mNumAnimations; ++i)
+	for (auto i = 0; i < (int)s_Scene->mNumAnimations; ++i)
 	{
-		auto sss = s_Scene->mAnimations[i];
-		auto qqq = sss->mName;
-		auto asd = sss->mNumChannels;
+		[[maybe_unused]] auto sss = s_Scene->mAnimations[i];
+		[[maybe_unused]] auto qqq = sss->mName;
+		[[maybe_unused]] auto asd = sss->mNumChannels;
 	}
 
 	for (uint32_t i = 0; i < s_Scene->mNumMaterials; ++i)

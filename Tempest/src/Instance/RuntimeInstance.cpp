@@ -13,8 +13,8 @@
 #include "Audio/AudioEngine.h"
 
 // Not supposed to be here
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
-#include "Particles/Particles_3D/UnitTrailEmitter_3D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "Particles/Particles_3D/Unit_MovementTrailEmitter_3D.h"
 
 #include "../Graphics/Basics/LineRenderer.h"
 #include <Util/shape_manip.h>
@@ -157,14 +157,14 @@ namespace Tempest
 				transform = unit.get_current_transform();
 
 				// Shift emitter and calls it to emit particle
-				if (!m_unitTrailEmitter_3D.expired())
+				if (!m_Unit_MovementTrailEmitter_3D.expired())
 				{
-					m_unitTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
-					m_unitTrailEmitter_3D.lock()->Emit(1);
+					m_Unit_MovementTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
+					m_Unit_MovementTrailEmitter_3D.lock()->Emit(1);
 				}
 				else
 				{
-					m_unitTrailEmitter_3D = ParticleSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
+					m_Unit_MovementTrailEmitter_3D = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
 				}
 			}
 
@@ -262,7 +262,7 @@ namespace Tempest
 			if (m_map_interactiveEmitter_3D[id].expired())
 			{
 				auto& transform = ecs.get<tc::Transform>(id);
-				auto& door = ecs.get<tc::Door>(id);
+				//auto& door = ecs.get<tc::Door>(id);
 				auto& shape = ecs.get<tc::Shape>(id);
 
 				const int& x = shape.x;
@@ -291,21 +291,21 @@ namespace Tempest
 				box.max.y = 0;
 
 				// Convert to Yaw, Roll, Pitch (Degree)
-				glm::vec3 euler = glm::eulerAngles(transform.rotation) * 180.0f / 3.14159f;
+				//glm::vec3 euler = glm::eulerAngles(transform.rotation) * 180.0f / 3.14159f;
 
-				LOG_INFO("Euler X: {0}", euler.x);
-				LOG_INFO("Euler Y: {0}", euler.y);
-				LOG_INFO("Euler Z: {0}", euler.z);
+				//LOG_INFO("Euler X: {0}", euler.x);
+				//LOG_INFO("Euler Y: {0}", euler.y);
+				//LOG_INFO("Euler Z: {0}", euler.z);
 
-				LOG_INFO("Min X: {0}", box.min.x);
-				LOG_INFO("Min Y: {0}", box.min.y);
-				LOG_INFO("Min Z: {0}", box.min.z);
+				//LOG_INFO("Min X: {0}", box.min.x);
+				//LOG_INFO("Min Y: {0}", box.min.y);
+				//LOG_INFO("Min Z: {0}", box.min.z);
 
-				LOG_INFO("Max X: {0}", box.max.x);
-				LOG_INFO("Max Y: {0}", box.max.y);
-				LOG_INFO("Max Z: {0}", box.max.z);
+				//LOG_INFO("Max X: {0}", box.max.x);
+				//LOG_INFO("Max Y: {0}", box.max.y);
+				//LOG_INFO("Max Z: {0}", box.max.z);
 
-				LOG_INFO("Next DOOR");
+				//LOG_INFO("Next DOOR");
 
 				if (box.min.x > box.max.x)
 					std::swap(box.min.x, box.max.x);
@@ -316,14 +316,14 @@ namespace Tempest
 				if (box.min.z > box.max.z)
 					std::swap(box.min.z, box.max.z);
 
-				m_map_interactiveEmitter_3D[id] = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, box.min, box.max);
+				m_map_interactiveEmitter_3D[id] = EmitterSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, box.min, box.max);
 
 			}
 		}
 	}
 	void RuntimeInstance::_exit()
 	{
-		ParticleSystem_3D::GetInstance().ClearEmitters();
+		EmitterSystem_3D::GetInstance().ClearEmitters();
 		m_map_interactiveEmitter_3D.clear();
 	}
 

@@ -12,6 +12,9 @@
 #include "Graphics/Basics/RenderSystem.h"
 
 #include "Particles/Particles_2D/ParticleSystem_2D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "FrameRate/FrameRateManager.h"
+
 
 namespace Tempest
 {
@@ -40,6 +43,9 @@ namespace Tempest
 		window_manager.show(*this);
 
 
+		EmitterSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
+
+
 		// move this to instance call when test finish
 		auto view = ecs.view<tc::Mesh>(exclude_t<tc::Destroyed>());
 		for (auto id : view)
@@ -59,7 +65,7 @@ namespace Tempest
 		}
 
 		// with local
-		auto view3 = ecs.view<tc::Model, tc::Local, tc::Transform>(exclude_t<tc::Destroyed, tc::Door>());
+		auto view3 = ecs.view<tc::Model, tc::Local, tc::Transform>(exclude_t<tc::Destroyed, tc::Door, tc::Unit>());
 		for (auto id : view3)
 		{
 			auto model = ecs.get_if<tc::Model>(id);
@@ -126,6 +132,38 @@ namespace Tempest
 			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
 		}
 
+		// with unit
+		auto view7 = ecs.view<tc::Model, tc::Local, tc::Unit, tc::Transform>(exclude_t<tc::Destroyed>());
+		for (auto id : view7)
+		{
+			auto unit = ecs.get_if<tc::Unit>(id);
+			auto transform = ecs.get_if<tc::Transform>(id);
+
+			{
+				auto model = ecs.get_if<tc::Model>(id);
+				auto local = ecs.get_if<tc::Local>(id);
+
+				auto test = glm::translate(transform->position)
+					* glm::mat4(transform->rotation)
+					* glm::translate(unit->get_current_local().local_position)
+					* glm::mat4(unit->get_current_local().local_rotation)
+					* glm::translate(local->local_position)
+					* glm::mat4(local->local_rotation)
+					* glm::scale(local->local_scale)
+					* glm::scale(unit->get_current_local().local_scale)
+					* glm::scale(transform->scale);
+
+				auto character = ecs.get_if<tc::Character>(id);
+				if (character != nullptr)
+				{
+					Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+				}
+				Service<RenderSystem>::Get().SubmitModel(model->path, test);
+			}
+
+			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
+		}
+
 		auto view5 = ecs.view<tc::PointLight>(exclude_t<tc::Destroyed, tc::Local>());
 		for (auto id : view5)
 		{
@@ -152,6 +190,42 @@ namespace Tempest
 			mdl = translate * rotate * scale;
 			
 			Service<RenderSystem>::Get().SubmitModel(model->path, mdl, animation->id);
+		}
+
+		for (auto& elem : EmitterSystem_3D::GetInstance().GetEmitter())
+		{
+			elem->ParticleRender();
+
+
+			// Check if the particle requires prefab
+			for (int i = 0; i < elem->m_particles.size(); ++i)
+			{
+				// Particle is alive
+				if (elem->m_particles[i].m_isActive)
+				{
+					// Search for the correct prefab to setup
+					if (elem->m_particles[i].m_renderingPath == "Models/SquareHole.a")
+					{
+						if (auto particle = this->scene.get_prototype_if("Unit", "particle"))
+						{
+							auto prefab = particle->instance();
+							auto local = prefab.get_if<tc::Local>();
+
+							auto myParticlePosition = elem->m_particles[i].m_position;
+							//auto myParticleRotation = elem->m_particles[i].m_rotation;
+							auto myParticleScale = elem->m_particles[i].m_scale;
+
+							// Assume no rotation
+							auto test = glm::translate(myParticlePosition)
+								* glm::mat4({ 0.f, 0.f, 0.f, 0.f })
+								* glm::translate(local->local_position)
+								* glm::mat4(local->local_rotation)
+								* glm::scale(local->local_scale)
+								* glm::scale(myParticleScale);
+						}
+					}
+				}
+			}
 		}
 	}
 	void Instance::internal_exit()

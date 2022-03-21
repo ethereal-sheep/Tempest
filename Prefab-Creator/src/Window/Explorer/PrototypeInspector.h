@@ -84,6 +84,7 @@ namespace Tempest
 				bool p_open = true;
 				static bool show_frame = true;
 				static bool show_door = true;
+				static bool show_unit_state = true;
 
 				if (ImGui::Begin("Inspector", &p_open))
 				{
@@ -298,6 +299,42 @@ namespace Tempest
 					if (auto mesh = _current->get_if<tc::Mesh>())
 					{
 					}
+					if (auto unit = _current->get_if<tc::Unit>())
+					{
+						{
+							bool header = ImGui::CollapsingHeader("unit##Frame", nullptr, ImGuiTreeNodeFlags_DefaultOpen);
+
+							if (header)
+							{
+
+								auto transform = &unit->attack_test;
+
+								{
+									UI::DragFloat3ColorBox("Position", "##unitPositionDrag", ImVec2{ padding , 0.f }, glm::value_ptr(transform->local_position), 0.f, 0.1f);
+								}
+								{
+									auto vec = glm::degrees(glm::eulerAngles(transform->local_rotation));
+									auto [x, y] = UI::DragFloat3ColorBox("Rotation", "##unitRotationDrag", ImVec2{ padding , 0.f }, &vec.x, 0.f, 0.1f);
+									if (x)
+									{
+										transform->local_rotation = glm::quat(glm::radians(vec));
+									}
+
+									auto rot = transform->local_rotation;
+									ImGui::DragFloat4("Quat", &rot.x);
+								}
+								{
+									auto vec = transform->local_scale;
+									static bool uniform = false;
+									auto [x, y] = UI::UniformScaleFloat3("Scale", "##unitScaleDrag", ImVec2{ padding , 0.f }, &uniform, glm::value_ptr(vec), 1.f, 0.001f, 0.001f, 5.f);
+									transform->local_scale.x = std::max(0.001f, vec.x);
+									transform->local_scale.y = std::max(0.001f, vec.y);
+									transform->local_scale.z = std::max(0.001f, vec.z);
+								}
+							}
+						}
+
+					}
 					if (auto shape = _current->get_if<tc::Shape>())
 					{
 						//auto rb = instance.ecs.get_if<tc::Rigidbody>(instance.selected);
@@ -429,7 +466,6 @@ namespace Tempest
 
 									auto local = &_current->get<tc::Local>();
 
-
 									auto mat = glm::translate(transform->position)
 										* glm::mat4(transform->rotation)
 										* glm::translate(local->local_position)
@@ -463,6 +499,33 @@ namespace Tempest
 
 									Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), t);
 								}
+							}
+							if (auto unit = _current->get_if<tc::Unit>())
+							{
+								auto l = unit->attack_test;
+								tc::Transform t;
+
+								t.position = l.local_position;
+								t.rotation = l.local_rotation;
+								t.scale = l.local_scale;
+
+								auto transform = &t;
+
+								auto local = &_current->get<tc::Local>();
+
+								auto mat = glm::translate(transform->position)
+									* glm::mat4(transform->rotation)
+									* glm::translate(local->local_position)
+									* glm::mat4(local->local_rotation)
+									* glm::scale(local->local_scale)
+									* glm::scale(transform->scale);
+
+								std::filesystem::path p{ model->path };
+								if (strcmp(p.extension().string().c_str(), ".a"))
+								{
+									p.replace_extension(".a");
+								}
+								Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), mat);
 							}
 							else
 							{

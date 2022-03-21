@@ -1,0 +1,91 @@
+{
+    "Metadata": {
+        "Type": "Meta"
+    },
+    "Components": [
+        {
+            "Entity": 1,
+            "Component": {
+                "Name": "StatsData"
+            }
+        },
+        {
+            "Entity": 5,
+            "Component": {
+                "Name": "Char"
+            }
+        },
+        {
+            "Entity": 51,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 53,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 57,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 62,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 6,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 60,
+            "Component": {
+                "Name": "Combatant"
+            }
+        },
+        {
+            "Entity": 9,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 56,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 10,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 58,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 61,
+            "Component": {
+                "Name": "Weapon"
+            }
+        },
+        {
+            "Entity": 11,
+            "Component": {
+                "Name": "Weapon"
+            }
+        }
+    ]
+}

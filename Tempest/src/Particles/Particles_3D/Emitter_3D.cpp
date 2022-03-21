@@ -12,7 +12,7 @@
 #include "Graphics/Basics/RenderSystem.h"
 #include "../Random.h"
 
-#include "Logger/Logger.h"
+#include "Logger/Log.h"
 
 #define GRAVITY -9.8f
 
@@ -29,7 +29,23 @@ Emitter_3D::Emitter_3D()
 		Emit(m_EM.m_rateOverTime);
 }
 
-void Emitter_3D::SelfUpdate(const float dt)
+void Emitter_3D::UpdateMaxParticle(const int newMaxParticleCapacity)
+{
+	int endSlotNo = m_particles.size();
+	int newSlotAmount = newMaxParticleCapacity - m_particles.size();
+
+	// Increase in particle slot management
+	if (newSlotAmount > 0)
+	{
+		m_particles.resize(newMaxParticleCapacity);
+
+		for (int i = endSlotNo; i < newMaxParticleCapacity; ++i)
+			m_available_ParticleSlots.push(i);
+	}
+}
+
+
+void Emitter_3D::Update(const float dt)
 {
 	if (m_MM.m_preWarm)
 	{
@@ -100,12 +116,12 @@ void Emitter_3D::SelfUpdate(const float dt)
 	else
 		//m_MM.m_duration -= m_MM.m_simulationSpeed;
 		m_MM.m_duration -= dt;
+
+	ParticleUpdate(dt);
 }
 
-void Emitter_3D::Update(const float dt)
+void Emitter_3D::ParticleUpdate(const float dt)
 {
-	SelfUpdate(dt);
-
 	// Particle_3D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
 	{
@@ -149,6 +165,31 @@ void Emitter_3D::Update(const float dt)
 			// Colour
 			particle.m_colour = glm::mix(particle.m_colourEnd, particle.m_colourBegin, lifePercent);
 			
+			//LOG_INFO("Particle Rot X: {0}", particle.m_rotation.x);
+			//LOG_INFO("Particle Rot Y: {0}", particle.m_rotation.y);
+			//LOG_INFO("Particle Rot Z: {0}", particle.m_rotation.z);
+
+			// Change the string in this function
+			//auto t = glm::translate(particle.m_position);
+			//auto s = glm::scale(particle.m_scale);
+			//auto r = glm::rotate(particle.m_rotation.x, glm::vec3(1.f, 0.f, 0.f))
+			//	   * glm::rotate(particle.m_rotation.y, glm::vec3(0.f, 1.f, 0.f))
+			//	   * glm::rotate(particle.m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
+
+			//Tempest::Service<Tempest::RenderSystem>::Get().SubmitModel(particle, (t * r * s));
+		}
+	}
+}
+
+void Emitter_3D::ParticleRender(glm::vec4 modelMatrix)
+{
+	// Particle_3D Behaviour
+	for (short i = 0; i < m_particles.size(); ++i)
+	{
+		auto& particle = m_particles[i];
+
+		if (particle.m_isActive)
+		{
 			// Change the string in this function
 			auto t = glm::translate(particle.m_position);
 			auto s = glm::scale(particle.m_scale);
@@ -163,15 +204,29 @@ void Emitter_3D::Update(const float dt)
 
 void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 {
+	//Default set values
 	particle.m_position = m_GM.m_position;
-	particle.m_originalPosition = m_GM.m_position;
 	particle.m_isActive = true;
-	//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
+	particle.m_rotation = m_PAM.m_SpawnRotation;
+
+	// Spawn Position of the particle - To be between min and max of range
+	float rangeX = static_cast<float>(m_PAM.m_maxSpawnPos.x - m_PAM.m_minSpawnPos.x) > 0 ? static_cast<float>(m_PAM.m_maxSpawnPos.x - m_PAM.m_minSpawnPos.x) : 0;
+	float rangeY = static_cast<float>(m_PAM.m_maxSpawnPos.y - m_PAM.m_minSpawnPos.y) > 0 ? static_cast<float>(m_PAM.m_maxSpawnPos.y - m_PAM.m_minSpawnPos.y) : 0;
+	float rangeZ = static_cast<float>(m_PAM.m_maxSpawnPos.z - m_PAM.m_minSpawnPos.z) > 0 ? static_cast<float>(m_PAM.m_maxSpawnPos.z - m_PAM.m_minSpawnPos.z) : 0;
+
+	if (rangeX)
+		particle.m_position.x = Random::Float() * rangeX + m_PAM.m_minSpawnPos.x;
+
+	if (rangeY)
+		particle.m_position.y = Random::Float() * rangeY + m_PAM.m_minSpawnPos.y;
+
+	if (rangeZ)
+		particle.m_position.z = Random::Float() * rangeZ + m_PAM.m_minSpawnPos.z;
+
 
 	// Velocity
 	particle.m_velocity = m_PAM.m_startVelocity;
 	particle.m_gravity = m_PAM.m_gravity;
-	particle.m_originalVelocity = m_PAM.m_startVelocity;
 
 	// Velocity Variations
 	if (m_PAM.m_velocityVariation.x >= 1)
@@ -205,7 +260,6 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 
 	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;
 	particle.m_scaleEnd = m_PAM.m_scaleEnd;
-	particle.m_rebirth = m_PAM.m_rebirth;
 
 	particle.m_renderingPath = m_RM.m_renderingPath;
 }
@@ -215,6 +269,8 @@ void Emitter_3D::Emit(const int particleAmount)
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 	{
+		//LOG_INFO("Spawn Amount: {0}", particleAmount);
+
 		for (short i = 0; i < particleAmount; ++i)
 		{
 			// Initailisation of the particle
@@ -229,6 +285,10 @@ void Emitter_3D::Emit(const int particleAmount)
 				break;
 		}
 	}
+	//else
+	//{
+	//	LOG_INFO("No more slots");
+	//}
 }
 
 void Emitter_3D::ClearAllParticles()

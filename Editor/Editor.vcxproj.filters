@@ -413,6 +413,9 @@
     <ClInclude Include="src\Window\Util\ParticleDraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\Overlay\LoadingOverlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Extern\imgui\imgui_bezier_math.inl">

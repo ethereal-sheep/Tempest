@@ -59,6 +59,7 @@ namespace Tempest
 		
 		void OnInit() override
 		{
+			Tempest::AppHandler::ToggleFullscreen();
 			ShowWindow(AppHandler::GetContext()->GetHWND(), SW_SHOWMAXIMIZED);
 
 
@@ -107,10 +108,6 @@ namespace Tempest
 			// can be defered
 
 
-			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_CombatStance.a");
-			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_Death.a");
-			Service<RenderSystem>::Get().LoadModel("Models\\UnitBlack_Idle.a");
-
 			auto init = [&]() {
 
 
@@ -119,7 +116,7 @@ namespace Tempest
 
 			test_future = Service<thread_pool>::Get().submit_task(init);
 			
-			/*AudioEngine ae;
+	/*		AudioEngine ae;
 			ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 			ae.SetMasterVolume(1.f);*/
 

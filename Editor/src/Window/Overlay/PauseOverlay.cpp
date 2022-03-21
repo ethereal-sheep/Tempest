@@ -20,7 +20,7 @@ namespace Tempest
 	{
 		auto a = event_cast<PauseOverlayTrigger>(e);
 		OverlayOpen = true;
-		hasSaveLoad = a.hasSaveLoad;
+		CanOpenGraph = a.canOpenGraph;
 	}
 
 	void PauseOverlay::show(Instance& instance)
@@ -53,19 +53,24 @@ namespace Tempest
 					UI::SubHeader("Paused");
 					ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
-					/*if (hasSaveLoad)
+					if (CanOpenGraph)
 					{
-						if (UI::UIButton_2("Save", "Save", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.4f }, { 50,20 }, FONT_BTN))
+						if (UI::UIButton_2("Edit Action Graph", "Edit Action Graph", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.3f }, { 50,20 }, FONT_BTN))
 						{
-							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>();
-
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+							Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION, true);
+							EscDuringPause = false;
 						}
-						if (UI::UIButton_2("Load", "Load", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
+
+						if (UI::UIButton_2("Edit Sequence Graph", "Edit Sequence Graph", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.4f }, { 50,20 }, FONT_BTN))
 						{
-
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+							Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE, true);
+							EscDuringPause = false;
 						}
-					}*/
-				
+					}
 
 					if (UI::UIButton_2("Return", "Return", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
 					{
@@ -80,10 +85,13 @@ namespace Tempest
 						ae.StopAllChannels();
 						OverlayOpen = false;
 						EscDuringPause = false;
-						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-							instance.get_full_path(),
+
+						InstanceConfig config{ instance.get_full_path(),
 							MemoryStrategy{},
-							InstanceType::EDIT_TIME);
+							InstanceType::EDIT_TIME };
+						config.enable_tutorial = instance.tutorial_enable;
+
+						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
 
 						ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();

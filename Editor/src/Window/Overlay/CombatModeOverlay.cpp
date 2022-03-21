@@ -18,8 +18,8 @@
 #include "Audio/AudioEngine.h"
 #include "Util/pathfinding.h"
 
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
-#include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "Particles/Particles_3D/Unit_Turn_IndicatorEmitter_3D.h"
 #include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
 #include "Particles/Particles_3D/CharacterDeathEmitter_3D.h"
 
@@ -317,7 +317,9 @@ namespace Tempest
 
 	void draw_range(const tmap<int, tmap<int, uint32_t>>& range_map)
 	{
-		auto drawbox1 = [](int x, int y, bool b, auto grey, bool second) {
+		auto& cam = Service<RenderSystem>::Get().GetCamera();
+
+		auto drawbox1 = [&](int x, int y, bool b, auto grey, bool second) {
 			if (!b) return;
 			AABB box;
 
@@ -344,7 +346,7 @@ namespace Tempest
 				Service<RenderSystem>::Get().DrawLine(box2, { grey, grey, grey, 1 });
 			}
 		};
-		auto drawbox2 = [](int x, int y, bool b) {
+		auto drawbox2 = [&](int x, int y, bool b) {
 			if (!b) return;
 			AABB box;
 
@@ -370,26 +372,38 @@ namespace Tempest
 			Service<RenderSystem>::Get().DrawLine(box2, { 1,0,0,1 });
 		};
 		
-		auto drawbox = [](int x, int y, const vec4& color = vec4{ 1,1,1,1 }, unsigned number_of_squares = 1, float interval = .15f)
+		auto drawbox = [&](int x, int y, ImU32 color)
 		{
-			AABB box;
 
-			number_of_squares = std::min(number_of_squares, 5u);
-
-			float curr = 0.05f;
-
-			while (number_of_squares--)
+			auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
 			{
-				box.min.x = (float)x + curr;
-				box.min.z = (float)y + curr;
-				box.min.y = 0;
+				tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+				tvector<ImVec2> ss_pts;
+				auto vp = cam.GetViewport();
+				for (auto pt : ws_pts)
+				{
+					auto t_ss = cam.WorldspaceToScreenspace(pt);
+					t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+					t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
 
-				box.max.x = x + 1 - curr;
-				box.max.z = y + 1 - curr;
-				box.max.y = 0;
-				Service<RenderSystem>::Get().DrawLine(box, color);
-				curr += interval;
-			}
+					ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+				}
+
+				return ss_pts;
+			};
+
+			AABB box;
+			box.min.x = (float)x + .1f;
+			box.min.z = (float)y + .1f;
+			box.min.y = 0;
+
+			box.max.x = x + .9f;
+			box.max.z = y + .9f;
+			box.max.y = 0;
+
+			auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+			ImGui::GetBackgroundDrawList()->AddConvexPolyFilled(pts.data(), 4, color);
 
 		};
 
@@ -397,18 +411,16 @@ namespace Tempest
 			for (auto [y, i] : m)
 			{
 				if (i == 0) // hit nothing dark green
-					drawbox(x, y, { 0.01f, 0.05f, 0.01f, 0.5f }, 2, .1f);
+					drawbox(x, y, IM_COL32(0x20, 0x20, 0x20, 0x20));
 				else if (i == 1) // hit collider dark red
-					drawbox(x, y, { 0.04f, 0.02f, 0.02f, 0.4f }, 1, .1f);
+					drawbox(x, y, IM_COL32(0x20, 0x20, 0x20, 0x20));
 				else if (i == 2) // hit cover only dark red
-					drawbox(x, y, { 0.04f, 0.02f, 0.02f, 0.4f }, 1, .1f);
+					drawbox(x, y, IM_COL32(0x20, 0x20, 0x20, 0x20));
 				else if (i == 3) // hit player
-					drawbox(x, y, { 0,1,0,1 }, 1);
+					drawbox(x, y, IM_COL32(0xAF, 0x20, 0x20, 0x60));
 				else // hit player behind cover
 				{
-					float p = (float)std::pow<float>(0.5f, i - 3);
-					vec4 color = { 1.f, 0.3725f * p, 0.121f * p, 1 };
-					drawbox(x, y, color, i - 3, .1f);
+					drawbox(x, y, IM_COL32(0xAF, 0x80, 0x80, 0x20));
 				}
 
 			}
@@ -862,8 +874,17 @@ namespace Tempest
 							{
 								battle_state = BATTLE_STATE::SELECT_ACTION;
 
-								if (instance.tutorial_enable && tutorial_index == 1)
-									tutorial_index++;
+								if (instance.tutorial_enable)
+								{
+									if (tutorial_index == 1)
+										tutorial_index++;
+									else if (tutorial_index >= 3)
+									{
+									//	instance.tutorial_enable = false;
+										tutorial_index = 0;
+									}
+										
+								}
 							}
 							if (ImGui::IsItemHovered())
 								combat_button_tex[0] = tex_map["Assets/CActionSelected.dds"];
@@ -1067,7 +1088,64 @@ namespace Tempest
 
 
 				// helpers
-				draw_range(range_map);
+				//draw_range(range_map);
+				auto drawbox = [&](int x, int y, ImU32 color)
+				{
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+					AABB box;
+					box.min.x = (float)x + .1f;
+					box.min.z = (float)y + .1f;
+					box.min.y = 0;
+
+					box.max.x = x + .9f;
+					box.max.z = y + .9f;
+					box.max.y = 0;
+
+					auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+					ImGui::GetBackgroundDrawList()->AddConvexPolyFilled(pts.data(), 4, color);
+
+				};
+
+				for (auto& [x, m] : range_map)
+					for (auto [y, i] : m)
+					{
+						if (p_x == x && p_y == y)
+							continue;
+
+						if (i == 0) // hit nothing dark green
+							drawbox(x, y, IM_COL32(0xFF, 0x20, 0x20, 0x60));
+						else if (i == 1) // hit collider dark red
+						{
+							drawbox(x, y, IM_COL32(0x80, 0x80, 0x80, 0x60));
+						}
+						else if (i == 2) // hit cover only dark red
+							drawbox(x, y, IM_COL32(0xFF, 0xAF, 0x20, 0x60));
+						else if (i == 3) // hit player
+							drawbox(x, y, IM_COL32(0xFF, 0x20, 0x20, 0x60));
+						else // hit player behind cover
+							drawbox(x, y, IM_COL32(0xFF, 0xAF, 0x20, 0x60));
+
+					}
+
+
 
 				if (visited[w_x][w_y])
 				{
@@ -1082,8 +1160,6 @@ namespace Tempest
 						r.p1 = glm::vec3(w_x + .5f + .5f, 0, w_y + .5f - .5f);
 						Service<RenderSystem>::Get().DrawLine(l, { 1,0,0,1 });
 						Service<RenderSystem>::Get().DrawLine(r, { 1,0,0,1 });
-
-
 
 						if (ImGui::GetIO().MouseClicked[0])
 						{
@@ -1139,7 +1215,7 @@ namespace Tempest
 							// Attack
 							auto attacker = curr_entity;
 							other_entity = instance.character_map[w_x][w_y];
-							battle_state = BATTLE_STATE::CURR_TURN;
+							battle_state = BATTLE_STATE::SELECT_ACTION;
 
 							LOG_ASSERT(instance.ecs.has<tc::Character>(attacker));
 							LOG_ASSERT(instance.ecs.has<tc::Character>(other_entity));
@@ -1155,7 +1231,7 @@ namespace Tempest
 					}
 					else
 					{
-						Line l;
+						/*Line l;
 						l.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f - .1f);
 						l.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f + .1f);
 
@@ -1163,7 +1239,7 @@ namespace Tempest
 						r.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f + .1f);
 						r.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f - .1f);
 						Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+						Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });*/
 
 
 					}
@@ -1254,28 +1330,92 @@ namespace Tempest
 				// lousy line of sight
 				if (range_map.count(w_x) && range_map[w_x].count(w_y))
 				{
+					const float thickness = .15f;
 					auto i = range_map[w_x][w_y];
 					vec3 start_p = vec3(p_x + .5f, 0, p_y + .5f);
 					vec3 end_p = vec3(w_x + .5f, 0, w_y + .5f);
 					vec3 line_v = vec3(w_x, 0, w_y) - vec3(p_x, 0, p_y);
-					vec4 color = { 0,1,0,1 };
+					ImU32 color;
 
 					if (i == 0) // hit nothing not blocked
-						color = { 0,1,0,1 };
+						color = IM_COL32(0xFF, 0x20, 0x20, 0x80);
 					else if (i == 1) // hit collider
-						color = { 1,0,0,1 };
+						color = IM_COL32(0x80, 0x80, 0x80, 0x80);
 					else if (i == 2) // hit cover
-						color = { 1,0.3725,0.121,1 };
+						color = IM_COL32(0xFF, 0xAF, 0x20, 0x80);
 					else if (i == 3) // hit collider and collider is player
-						color = { 0,1,0,1 };
+						color = IM_COL32(0xFF, 0x20, 0x20, 0xFF);
 					else // hit player and its behind cover
-						color = { 1,0.3725,0.121,1 };
+						color = IM_COL32(0xFF, 0xAF, 0x20, 0xFF);
+
+					auto WorldSpaceLinetoSSVecOfPts = [](Camera& cam, vec3 start, vec3 end, float thickness)
+					{
+						auto v = glm::normalize(end - start);
+						auto n = vec3(v.z, 0.f, -v.x);
+						n *= thickness;
+
+						tvector<vec3> ws_pts{ 
+							start + n,
+							end + n,
+							end - n,
+							start - n, };
+
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+					auto pts = WorldSpaceLinetoSSVecOfPts(cam, start_p, end_p - glm::normalize(line_v) * thickness, thickness);
+
+					auto drawlist = ImGui::GetBackgroundDrawList();
+					drawlist->AddConvexPolyFilled(pts.data(), 4, color);
 
 
-					Line pointer;
+					auto WorldSpaceToScreenspace = [](Camera& cam, vec3 pt)
+					{
+						auto vp = cam.GetViewport();
+						auto t_ss = cam.WorldspaceToScreenspace(pt);
+						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+						return ImVec2{ t_ss.x, t_ss.y };
+					};
+
+					auto v = glm::normalize(line_v);
+					auto n = vec3(v.z, 0.f, -v.x);
+					n *= thickness * 1.5f;
+
+					auto tip = WorldSpaceToScreenspace(cam, end_p);
+
+					vec3 pt1, pt2;
+					auto a = end_p - glm::normalize(line_v) * thickness;
+					pt1.x = a.x + n.x;
+					pt1.z = a.z + n.z;
+					pt1.y = 0;
+
+					pt2.x = a.x - n.x;
+					pt2.z = a.z - n.z;
+					pt2.y = 0;
+
+					auto v1 = WorldSpaceToScreenspace(cam, pt1);
+					auto v2 = WorldSpaceToScreenspace(cam, pt2);
+
+					drawlist->AddTriangleFilled(tip, v1, v2, color);
+
+
+					/*Line pointer;
 					pointer.p0 = start_p;
 					pointer.p1 = end_p;
-					Service<RenderSystem>::Get().DrawLine(pointer, color);
+					Service<RenderSystem>::Get().DrawLine(pointer, color);*/
 
 
 				}
@@ -1327,7 +1467,35 @@ namespace Tempest
 					box.max.z = y + .9f;
 					box.max.y = 0;
 
-					Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+					//Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+
+					auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+					auto drawlist = ImGui::GetBackgroundDrawList();
+					if (p_x == x && p_y == y)
+						;// drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0xAF, 0x20, 0x20, 0x80));
+					else
+						drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x20, 0xAF, 0x20, 0x60));
+
 				}
 
 			if (visited[w_x][w_y])
@@ -1357,7 +1525,7 @@ namespace Tempest
 				}
 				else
 				{
-					Line l;
+					/*Line l;
 					l.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f - .1f);
 					l.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f + .1f);
 
@@ -1365,7 +1533,7 @@ namespace Tempest
 					r.p0 = glm::vec3(w_x + .5f - .1f, 0, w_y + .5f + .1f);
 					r.p1 = glm::vec3(w_x + .5f + .1f, 0, w_y + .5f - .1f);
 					Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
-					Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+					Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });*/
 
 
 					auto& transform = instance.ecs.get<tc::Transform>(curr_entity);
@@ -1385,10 +1553,212 @@ namespace Tempest
 					}
 
 
+					auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
+						[&collision_map = instance.collision_map, &wall_map = instance.wall_map](int x, int y, int n_x, int n_y) {
+
+						if (wall_map[x][y][n_x][n_y])
+							return true;
+						if (collision_map[n_x][n_y])
+							return true;
+						return false;
+					});
+
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+					auto WorldSpaceToScreenspace = [](Camera& cam, vec3 pt)
+					{
+						auto vp = cam.GetViewport();
+						auto t_ss = cam.WorldspaceToScreenspace(pt);
+						t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+						t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+						return ImVec2{ t_ss.x, t_ss.y };
+					};
+
+
+					const auto arrow_color = IM_COL32(0x20, 0xFF, 0x20, 0xFF);
+					const auto thickness = .15f;
+					auto drawlist = ImGui::GetBackgroundDrawList();
+					for (int i = 1; i < v.size(); ++i)
+					{
+						auto dir = v[i] - v[i-1];
+						AABB box;
+						if (dir.x)
+						{
+							box.min.x = v[i - 1].x + .5f + thickness * dir.x;
+							box.min.z = v[i - 1].y + .5f + thickness;
+							box.min.y = 0;
+
+							box.max.x = v[i].x + .5f - thickness * dir.x;
+							box.max.z = v[i].y + .5f - thickness;
+							box.max.y = 0;
+						}
+						else
+						{
+							box.min.x = v[i - 1].x + .5f + thickness;
+							box.min.z = v[i - 1].y + .5f + thickness * dir.y;
+							box.min.y = 0;
+
+							box.max.x = v[i].x + .5f - thickness;
+							box.max.z = v[i].y + .5f -thickness * dir.y;
+							box.max.y = 0;
+						}
+
+						auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+						drawlist->AddConvexPolyFilled(pts.data(), 4, arrow_color);
+					}
+
+					for (int i = 1; i < v.size()-1; ++i)
+					{
+						AABB box;
+						box.min.x = v[i].x + .5f + thickness;
+						box.min.z = v[i].y + .5f + thickness;
+						box.min.y = 0;
+
+						box.max.x = v[i].x + .5f - thickness;
+						box.max.z = v[i].y + .5f - thickness;
+						box.max.y = 0;
+
+						auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+						drawlist->AddConvexPolyFilled(pts.data(), 4, arrow_color);
+					}
+
+					auto dir = v[1] - v[0];
+					auto tip = WorldSpaceToScreenspace(cam, vec3{ v.front().x + 0.5f, 0.f, v.front().y + 0.5f });
+
+					vec3 pt1, pt2;
+
+					pt1.x = v.front().x + .5f + thickness * dir.x;
+					pt1.z = v.front().y + .5f + thickness * dir.y;
+					pt1.y = 0;
+
+					pt2.x = v.front().x + .5f + thickness * dir.x;
+					pt2.z = v.front().y + .5f + thickness * dir.y;
+					pt2.y = 0;
+
+					if (dir.x)
+					{
+						pt1.z += thickness * 1.5f;
+						pt2.z -= thickness * 1.5f;
+					}
+					else
+					{
+						pt1.x += thickness * 1.5f;
+						pt2.x -= thickness * 1.5f;
+					}
+
+					auto v1 = WorldSpaceToScreenspace(cam, pt1);
+					auto v2 = WorldSpaceToScreenspace(cam, pt2);
+
+					drawlist->AddTriangleFilled(tip, v1, v2, arrow_color);
+
+
+					/*auto WorldSpaceVecToSSVecOfPts = [](Camera& cam, tvector<vec3> ws_pts)
+					{
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};*/
+
+					//const auto thickness = .25f;
+					//tvector<vec3> ws_pts;
+					//auto prev = v[1] - v[0];
+					//for (int i = 1; i < v.size()-1; ++i)
+					//{
+					//	auto next = v[i + 1] - v[i];
+					//	if (prev.x != next.x || prev.y != next.y)
+					//	{
+					//		auto a = glm::vec2(prev) * thickness;
+					//		auto b = glm::vec2(next) * -thickness;
+					//		auto c = a + b;
+
+					//		vec3 d{ v[i].x + c.x + 0.5f, 0.f, v[i].y + c.y + 0.5f };
+					//		// add the points first
+					//		ws_pts.push_back(d);
+					//	}
+					//	prev = next;
+					//}
+
+					//{
+					//	if (prev.x)
+					//	{
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f + thickness });
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f - thickness });
+					//	}
+					//	else
+					//	{
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f + thickness, 0, v[0].y + 0.5f });
+					//		//ws_pts.push_back(vec3{ v[0].x + 0.5f - thickness, 0, v[0].y + 0.5f });
+					//	}
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f });
+					//	prev = -prev;
+					//}
+
+					//for (int i = v.size() - 2; i >= 1 ; --i)
+					//{
+					//	auto next = v[i - 1] - v[i];
+					//	if (prev.x != next.x || prev.y != next.y)
+					//	{
+					//		auto a = glm::vec2(prev) * -thickness;
+					//		auto b = glm::vec2(next) * thickness;
+					//		auto c = a + b;
+
+					//		vec3 d{ v[i].x + c.x + 0.5f, 0.f, v[i].y + c.y + 0.5f };
+					//		// add the points first
+					//		ws_pts.push_back(d);
+					//	}
+					//	prev = next;
+					//}
+
+					//if (prev.x)
+					//{
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f + thickness });
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f, 0, v[0].y + 0.5f - thickness });
+					//}
+					//else
+					//{
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f + thickness, 0, v[0].y + 0.5f });
+					//	ws_pts.push_back(vec3{ v[0].x + 0.5f - thickness, 0, v[0].y + 0.5f });
+					//}
+					////ws_pts.push_back(vec3{ v.back().x + 0.5f - thickness, 0, v.back().y + 0.5f });
+
+					//// cap the end
+
+
+					//auto drawlist = ImGui::GetBackgroundDrawList();
+					//auto ss_pts = WorldSpaceVecToSSVecOfPts(cam, ws_pts);
+					//drawlist->AddConvexPolyFilled(ss_pts.data(), ss_pts.size(), IM_COL32(0xAF, 0x20, 0x20, 0xA0));
+
+
 					// Move
 					if (io.MouseClicked[0])
 					{
-						auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
+						/*auto v = algo::bfs(p_x, p_y, w_x, w_y, steps,
 							[&collision_map = instance.collision_map, &wall_map = instance.wall_map](int x, int y, int n_x, int n_y) {
 
 								if (wall_map[x][y][n_x][n_y])
@@ -1396,7 +1766,7 @@ namespace Tempest
 								if (collision_map[n_x][n_y])
 									return true;
 								return false;
-							});
+							});*/
 
 						// move
 						v.pop_back();
@@ -1438,6 +1808,12 @@ namespace Tempest
 
 		if (finish && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.45f, viewport->Size.y * 0.8f }, { -60,0 }, FONT_BODY))
 		{
+			if (instance.tutorial_enable && tutorial_index == 3)
+			{
+				tutorial_index = 4;
+				//instance.tutorial_enable = false;
+			}
+				
 			state = State::FIGHT;
 			display_other_stat = false;
 			display_curr_stat = false;
@@ -1813,13 +2189,22 @@ namespace Tempest
 				// play whatever anim u want here
 				old_pos = xform.position;
 				// for now just jump on the spot
-				tvector<glm::ivec2> v;
+				/*tvector<glm::ivec2> v;
 				int p_x = (int)std::floor(oxform.position.x);
 				int p_y = (int)std::floor(oxform.position.z);
 				v.push_back({ p_x , p_y });
-				unit.set_path(v, xform);
+				unit.set_path(v, xform);*/
+
+				unit.attack();
 
 				triggered = false;
+
+				AudioEngine ae;
+				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
+
+				// PSEUDO 
+				// instead of jumping onto the enemy, wobble back-front
+				//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.a";
 			}
 
 
@@ -1829,7 +2214,7 @@ namespace Tempest
 
 			// once done -> we can go to the next fella
 			// wipe
-			if (!unit.is_moving() && !triggered)
+			if (!unit.is_attacking() && !triggered)
 			{
 				triggered = true;
 				// reset the attacker pos
@@ -1858,19 +2243,24 @@ namespace Tempest
 			{
 				battle_state = BATTLE_STATE::SELECT_OTHER;
 
-				tvector<glm::ivec2> v;
+				/*tvector<glm::ivec2> v;
 				int p_x = (int)std::floor(xform.position.x);
 				int p_y = (int)std::floor(xform.position.z);
 				v.push_back({ p_x , p_y });
 				p_x = (int)std::floor(oxform.position.x);
 				p_y = (int)std::floor(oxform.position.z);
 				v.push_back({ p_x , p_y });
-				unit.set_path(v, xform);
+				unit.set_path(v, xform);*/
+
 
 				triggered = false;
 				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
+
+				//PSEUDO
+				// make enemy wobble left-right
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.a";
 			}
 		}
 		break;
@@ -1879,6 +2269,10 @@ namespace Tempest
 			// wipe
 			if (inter1.is_finished() && !triggered)
 			{
+
+				ounit.get_hit(10, 2.f);
+
+
 				triggered = true;
 				//if (damage == 0)
 				//{
@@ -1906,8 +2300,8 @@ namespace Tempest
 					float delay = 1.7f;
 					inter3.start(0, 1.f, sec, 0.f, [](float x) { return glm::circularEaseOut(x); });
 					inter4.start(0, 1.f, sec, 0.f, [](float x) { return glm::sineEaseIn(x); });
-					inter5.start(0, 1.f, 1.f, delay, [](float x) { return glm::elasticEaseOut(x); });
-					inter6.start(0, 1.f, delay, delay, [](float x) { return glm::sineEaseIn(x); });
+					inter5.start(0, 1.f, 0.5f, 0.f, [](float x) { return glm::sineEaseOut(x); });
+					inter6.start(0, 1.f, delay, 0.f, [](float x) { return glm::sineEaseIn(x); });
 
 
 					inter_nest[0].start(2.0f, 1.0f, delay, 0.f,
@@ -1952,15 +2346,21 @@ namespace Tempest
 					glm::vec3 maxRangeSpawnPos = oxform.position;
 
 					minRangeSpawnPos.x -= 1.0f;
-					minRangeSpawnPos.y += 0.7f;
+					minRangeSpawnPos.y += 0.3f;
 					minRangeSpawnPos.z -= 1.0f;
 
 					maxRangeSpawnPos.x += 1.0f;
-					minRangeSpawnPos.y += 0.3f;
+					maxRangeSpawnPos.y += 0.7f;
 					maxRangeSpawnPos.z += 1.0f;
 
+					glm::vec4 colourBegin;
+					colourBegin.r = ocs.color.r;
+					colourBegin.g = ocs.color.g;
+					colourBegin.b = ocs.color.b;
+					colourBegin.a = 1.0f;
+
 					if (m_characterDeathEmitter.expired())
-						m_characterDeathEmitter = ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3);
+						m_characterDeathEmitter = EmitterSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3, colourBegin, colourBegin);
 					else
 					{
 						m_characterDeathEmitter.lock()->m_GM.m_position = oxform.position;
@@ -1976,7 +2376,7 @@ namespace Tempest
 			if (triggered)
 			{
 				auto position = instance.ecs.get<tc::Transform>(other_entity).position;
-				position.y += 1.4f + inter3.get() * .3f;
+				position.y += 1.4f + inter3.get() * .25f;
 				auto ss = cam.WorldspaceToScreenspace(position);
 				auto vp = cam.GetViewport();
 				ss.x = (1 + ss.x) / 2 * vp.z;
@@ -1996,46 +2396,54 @@ namespace Tempest
 						text = std::to_string(-damage);
 						col = vec3(0, 1, 0);
 					}
-
-					auto emitterPosition = instance.ecs.get<tc::Transform>(other_entity).position;
-					emitterPosition.y += 1.0f;
-
-					if (m_characterDamageEmitter.expired())
-						m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition);
-					else if(damageOnce == false)
+					else
 					{
-						m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
-						//m_characterDamageEmitter.lock()->Emit(1);
-						m_characterDamageEmitter.lock()->m_EM.m_burstCycle = 1;
-						m_characterDamageEmitter.lock()->m_MM.m_duration = 0.6f;
-						m_characterDamageEmitter.lock()->m_GM.m_active = true;
-						m_characterDamageEmitter.lock()->m_MM.m_preWarm = true;
-						damageOnce = true;
+						auto emitterPosition = oxform.position;
+						emitterPosition.y += 1.0f;
+
+						glm::vec4 colourBegin;
+						colourBegin.r = ocs.color.r;
+						colourBegin.g = ocs.color.g;
+						colourBegin.b = ocs.color.b;
+						colourBegin.a = 1.0f;
+
+						if (m_characterDamageEmitter.expired())
+							m_characterDamageEmitter = EmitterSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition, colourBegin, colourBegin);
+						else if (damageOnce == false)
+						{
+							m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
+							//m_characterDamageEmitter.lock()->Emit(1);
+							m_characterDamageEmitter.lock()->m_EM.m_burstCycle = 1;
+							m_characterDamageEmitter.lock()->m_MM.m_duration = 0.6f;
+							m_characterDamageEmitter.lock()->m_GM.m_active = true;
+							m_characterDamageEmitter.lock()->m_MM.m_preWarm = true;
+							damageOnce = true;
+						}
 					}
 
-					ImGui::PushFont(FONT_HEAD);
-					auto text_size = ImGui::CalcTextSize(text.c_str());
-					ImGui::PopFont();
-					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
-					ImGui::SetCursorPos(cursor_pos);
+					//ImGui::PushFont(FONT_HEAD);
+					//auto text_size = ImGui::CalcTextSize(text.c_str());
+					//ImGui::PopFont();
+					//auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					//ImGui::SetCursorPos(cursor_pos);
 
-					ImGui::BeginGroup();
-					for (int i = 0; i < text.size() && i < 3; ++i)
-					{
-						float scale = FONT_HEAD->Scale;
-						FONT_HEAD->Scale = inter_nest[i].get();
-						ImGui::PushFont(FONT_HEAD);
-						// the text colour
-						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, 1.f - inter4.get()));
-						// the text thingy
-						ImGui::Text(std::string{ text[i] }.c_str());
-						ImGui::SameLine(0);
+					//ImGui::BeginGroup();
+					//for (int i = 0; i < text.size() && i < 3; ++i)
+					//{
+					//	float scale = FONT_HEAD->Scale;
+					//	FONT_HEAD->Scale = inter_nest[i].get();
+					//	ImGui::PushFont(FONT_HEAD);
+					//	// the text colour
+					//	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, 1.f - inter4.get()));
+					//	// the text thingy
+					//	ImGui::Text(std::string{ text[i] }.c_str());
+					//	ImGui::SameLine(0);
 
-						ImGui::PopStyleColor();
-						ImGui::PopFont();
-						FONT_HEAD->Scale = scale;
-					}
-					ImGui::EndGroup();
+					//	ImGui::PopStyleColor();
+					//	ImGui::PopFont();
+					//	FONT_HEAD->Scale = scale;
+					//}
+					//ImGui::EndGroup();
 
 				}
 				ImGui::SetCursorPos(temp);
@@ -2044,7 +2452,7 @@ namespace Tempest
 			if (triggered)
 			{
 				auto position = instance.ecs.get<tc::Transform>(other_entity).position;
-				position.y += 1.0f + inter5.get() * .2f;
+				position.y += 1.0f + 1.f * .3f;
 				auto ss = cam.WorldspaceToScreenspace(position);
 				auto vp = cam.GetViewport();
 				ss.x = (1 + ss.x) / 2 * vp.z;
@@ -2058,35 +2466,56 @@ namespace Tempest
 					const char* happys[] = { ICON_FA_GRIN_TONGUE_SQUINT, ICON_FA_LAUGH_BEAM, ICON_FA_LAUGH_SQUINT, ICON_FA_LAUGH_WINK };
 					const char* deads[] = { ICON_FA_SKULL_CROSSBONES, ICON_FA_SKULL };
 
-					std::string text = sads[rand1];
-					glm::vec3 col(1, 0, 0);
+					std::string text; 
+					text = ICON_FA_CIRCLE " ";
+					text += std::to_string(damage);
+					string word = "DAMAGE";
+					glm::vec3 col;;
+					col = vec3(1, 0, 0);
 
 					if (damage == 0)
 					{
-						col = vec3(0, 1, 0);
-						text = happys[rand2];
+						col = vec3(1, 0.6, 0);
+						text = ICON_FA_CIRCLE " !";
+						word = "MISSED!";
 					}
 					if (ocs.get_stat(0) + ocs.get_statDelta(0) <= 0)
 					{
-						col = vec3(0, 0, 0);
-						text = deads[rand2 % 2];
+						// for dead
 					}
 
+					FONT_HEAD->Scale = 0.1f + 0.9f * inter5.get();
 					ImGui::PushFont(FONT_HEAD);
 					// the text colour
 					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(col.r, col.g, col.b, inter5.get()));
 					auto text_size = ImGui::CalcTextSize(text.c_str());
-					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					//auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					auto cursor_pos = ImVec2{ ss.x , ss.y - text_size.y};
 					ImGui::SetCursorPos(cursor_pos);
 					{
 						ImGui::BeginGroup();
 						// the text thingy
-						ImGui::Text(text.c_str());
+						//ImGui::Text(text.c_str());
+						auto drawlist = ImGui::GetWindowDrawList();
+						ImVec2 padding = { 10.f,10.f };
+						ImVec2 minRedBox = { cursor_pos.x - padding.x, cursor_pos.y - padding.y };
+						ImVec2 maxRedBox = minRedBox + (ImGui::CalcTextSize(text.c_str()) + padding * 2);// *inter5.get();
+						maxRedBox.y -= 4.f;
+
+						drawlist->AddRectFilled(minRedBox, maxRedBox, ImGui::GetColorU32({ col.r, col.g, col.b,inter5.get() }));
+						drawlist->AddText(minRedBox + padding, ImGui::GetColorU32({ 0,0,0,inter5.get() }), text.c_str());
+
+						ImVec2 minGreyBox = { maxRedBox.x, minRedBox .y};
+						ImVec2 maxGreyBox = minGreyBox + (ImGui::CalcTextSize(word.c_str()) + padding * 2);// *inter5.get();
+						drawlist->AddRectFilled(minGreyBox, maxGreyBox, ImGui::GetColorU32({ 0,0,0,0.75f * inter5.get() }));
+						drawlist->AddText(minGreyBox + padding, ImGui::GetColorU32({ 0.8f,.8f,.8f,inter5.get() }), word.c_str());
+
 
 						ImGui::EndGroup();
 					}
 					ImGui::PopStyleColor();
 					ImGui::PopFont();
+					FONT_HEAD->Scale = 1.f;
 				}
 				ImGui::SetCursorPos(temp);
 			}
@@ -2109,17 +2538,15 @@ namespace Tempest
 
 			break;
 		case Tempest::CombatModeOverlay::BATTLE_STATE::BATTLE_GLIMPSE:
-
 		{
-
-			// pop up of three ending options
-			// TODO: shift to new function
-
 			const ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
 			ImGui::OpenPopup("End Unit Cycle");
 			ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-			ImGui::SetNextWindowSize(ImVec2(500, 550));
+			ImGui::SetNextWindowSize(ImVec2(600, 300));
+
+			ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
@@ -2127,102 +2554,100 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
 			ImGui::PushStyleColor(ImGuiCol_PopupBg, { 0.06f,0.06f, 0.06f, 0.85f });
 
-			ImGuiWindowFlags flags{ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
-							   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove };
-
-			if (ImGui::BeginPopupModal("End Unit Cycle", NULL, flags))
+			if (ImGui::BeginPopupModal("End Unit Cycle", nullptr, flags))
 			{
-				static int end_selection = -1;
-				// background
 				ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
-				ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 5.f };
-				ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.5f, winMin.y + ImGui::GetWindowHeight() * 0.05f };
+				ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 2.5f };
+				ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.25f, winMin.y + ImGui::GetWindowHeight() * 0.075f };
 				ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
 				ImVec4 textcol = { 0,0,0,1 };
 
-				// text
+				auto bgImg = tex_map["Assets/Popup_Backdrop.dds"];
+				auto warnImg = tex_map["Assets/YellowWarningIco.dds"];
+				string te = "CONFIRMATION";
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
 				ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+
 				ImGui::PushFont(FONT_OPEN);
-				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }, ImGui::GetColorU32({ 0,0,0,1 }), std::string{ ocs.name + "'s HP has reached 0" }.c_str());
+				ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }
+				, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
 				ImGui::PopFont();
 
-				// halftone
-				auto halfToneImg = tex_map["Assets/HalftoneWhite.dds"];
-				ImVec2 htMin = { winMin.x, winMin.y + ImGui::GetWindowHeight() * 0.55f };
-				ImVec2 htMax = { htMin.x + halfToneImg->GetWidth(), htMin.y + halfToneImg->GetHeight() };
-				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(halfToneImg->GetID()), htMin, htMax);
 
-				ImGui::BeginChild("##SimualteStuff", ImVec2{ 500,470 });
+				ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
+				ImGui::PushFont(FONT_SHEAD);
+				auto windowWidth = ImGui::GetWindowSize().x;
+				string warningstr = "";
+				auto warningSize = ImGui::CalcTextSize(warningstr.c_str()).x;
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.792f,0.22f,0.22f,1.f });
+				ImGui::SetCursorPosX((windowWidth - warningSize) * 0.5f - ((float)warnImg->GetWidth() * 0.7f));
+				ImGui::Image((void*)static_cast<size_t>(warnImg->GetID()), { (float)warnImg->GetWidth(), (float)warnImg->GetHeight()});
+				ImGui::SameLine();
+				ImGui::Text(warningstr.c_str());
+				ImGui::PopStyleColor();
+				ImGui::PopFont();
 
-				if (UI::UIButton_2("Revive with full HP", "Revive with full HP", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.35f },
-					ImVec2{ 0,0 }, FONT_PARA, end_selection == 0))
+				ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.05f });
+				ImGui::PushFont(FONT_BODY);
+				string str = ocs.name + " has died.";
+				string str2 = "What would you like to do?";
+				auto strSize = ImGui::CalcTextSize(str.c_str()).x;
+				
+				ImGui::SetCursorPosX((windowWidth - strSize) * 0.5f);
+				ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetColorU32({ 1,0,0,1 }));
+				ImGui::Text(ocs.name.c_str());
+				ImGui::PopStyleColor();
+				ImGui::SameLine();
+				ImGui::Text(" has died.");
+				ImGui::SetCursorPosX((windowWidth - ImGui::CalcTextSize(str2.c_str()).x) * 0.5f);
+				ImGui::Text(str2.c_str());
+				ImGui::PopFont();
+
+				ImGui::SetCursorPosX(0);
+				ImGui::SetCursorPosY(0);
+				if (UI::UIButton_2("Revive", "Revive", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.205f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 				{
-					end_selection = 0;
-				}
-
-				if (UI::UIButton_2("Delete from map", "Delete from map", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.5f },
-					ImVec2{ 0,0 }, FONT_PARA, end_selection == 1))
-				{
-					end_selection = 1;
-				}
-
-				if (UI::UIButton_2("Ignore", "Ignore", ImVec2{ ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.65f },
-					ImVec2{ 0,0 }, FONT_PARA, end_selection == 2))
-				{
-					end_selection = 2;
-				}
-
-				ImGui::EndChild();
-
-				// check for stuff here
-				if (UI::UIButton_2("Confirm", "Confirm", { ImGui::GetContentRegionMax().x * 0.5f, ImGui::GetContentRegionMax().y * 0.9f }, { 0.f, 0.f }, FONT_PARA) && end_selection != -1)
-				{
-					switch (end_selection)
-					{
-					case 0:
-						// full health
-						ocs.set_statDelta(0, 0);
-						break;
-					case 1:
-						// totally remove from map
-						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
-						instance.ecs.destroy(other_entity);
-						other_entity = INVALID;
-						break;
-					case 2:
-						// ignore
-						units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
-						if (auto dead = instance.scene.get_prototype_if("Unit", "Dead"))
-						{
-							// create a new entity
-							auto new_e = instance.ecs.create(dead->instance());
-							LOG_ASSERT(instance.ecs.has<tc::Transform>(new_e));
-							LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
-
-							instance.ecs.get<tc::Transform>(new_e) = oxform;
-							instance.ecs.get<tc::Character>(new_e) = ocs;
-
-							instance.ecs.destroy(other_entity);
-						}
-						other_entity = INVALID;
-
-						break;
-					default:
-						break;
-					}
-
-					end_selection = -1;
-					//display_other_end_cycle = false;
+					ocs.set_statDelta(0, 0);
 					ImGui::CloseCurrentPopup();
-
 					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
 				}
+				ImGui::SetCursorPosX(0);
+				ImGui::SetCursorPosY(0);
+				if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
+				{
+					units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+					instance.ecs.destroy(other_entity);
+					other_entity = INVALID;
+					ImGui::CloseCurrentPopup();
+					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
+				}
+				ImGui::SetCursorPosX(0);
+				ImGui::SetCursorPosY(0);
+				if (UI::UIButton_2("Ignore", "Ignore", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.785f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
+				{
+					units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+					if (auto dead = instance.scene.get_prototype_if("Unit", "Dead"))
+					{
+						// create a new entity
+						auto new_e = instance.ecs.create(dead->instance());
+						LOG_ASSERT(instance.ecs.has<tc::Transform>(new_e));
+						LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
+
+						instance.ecs.get<tc::Transform>(new_e) = oxform;
+						instance.ecs.get<tc::Character>(new_e) = ocs;
+
+						instance.ecs.destroy(other_entity);
+					}
+					other_entity = INVALID;
+					ImGui::CloseCurrentPopup();
+					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
+				}
+				
 			}
-
 			ImGui::EndPopup();
-
 			ImGui::PopStyleVar(3);
 			ImGui::PopStyleColor(2);
+
 		}
 			break;
 		case Tempest::CombatModeOverlay::BATTLE_STATE::COMMENCE_BATTLE:
@@ -2246,6 +2671,11 @@ namespace Tempest
 		{
 			battle_state = BATTLE_STATE::CURR_TURN;
 			state = State::MENU;
+
+			//PSEUDO
+			// change back the models
+			//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+			//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 		}
 
 	}
@@ -2373,10 +2803,10 @@ namespace Tempest
 				else if (instance.ecs.has<tc::Unit>(character))
 					color = { 0.1,0.1,0.1,1 };
 
-				Service<RenderSystem>::Get().DrawLine(box, color);
+				//Service<RenderSystem>::Get().DrawLine(box, color);
 
 				if (m_unitTileEmitter.expired())
-					m_unitTileEmitter = ParticleSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+					m_unitTileEmitter = EmitterSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
 				else if (nextUnit)
 				{
 					nextUnit = false;
@@ -2517,7 +2947,7 @@ namespace Tempest
 				else if (instance.ecs.has<tc::Unit>(character))
 					color = { 0.1,0.1,0.1,1 };
 
-				Service<RenderSystem>::Get().DrawLine(box, color);
+				//Service<RenderSystem>::Get().DrawLine(box, color);
 			}
 		}
 	}
@@ -2564,6 +2994,16 @@ namespace Tempest
 	void CombatModeOverlay::change_turn_order(const Event& e)
 	{
 		units = event_cast<ChangeTurnOrder>(e).entities;
+
+		/*for (const auto this_unit : units)
+		{
+			if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+				return submitted == this_unit;
+			}))
+			{
+				submitted_units.erase(std::remove(submitted_units.begin(), submitted_units.end(), this_unit), submitted_units.end());
+			}
+		}*/
 		curr_entity = units.front();
 		curr_turn = 0;
 	}
@@ -2592,6 +3032,18 @@ namespace Tempest
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
 		}
+
+		//// jankass stuff
+		//for (const auto this_unit : units)
+		//{
+		//	if (!std::any_of(submitted_units.begin(), submitted_units.end(), [&](const auto submitted) {
+		//		return submitted == this_unit;
+		//	}))
+		//	{
+		//		Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Idle.fbx", instance.ecs.get<tc::Transform>(this_unit), this_unit);
+		//		submitted_units.emplace_back(this_unit);
+		//	}
+		//}
 
 
 		auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
@@ -2622,13 +3074,16 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
 				{
-					instance.tutorial_enable = true;
-					tutorial_index++;
+					if (tutorial_index++ >= 3)
+					{
+						instance.tutorial_enable = false;
+						tutorial_index = 0;
+					}
 				}
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(battle_state == BATTLE_STATE::CURR_TURN);
 				}
 
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
@@ -2722,7 +3177,7 @@ namespace Tempest
 					}
 
 					//Tutorial Exit Button
-					if (instance.tutorial_slide == false)
+					if (tutorial_index <= 3 && instance.tutorial_slide == false)
 					{
 						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };

@@ -89,6 +89,8 @@ namespace Tempest
                 {
                     auto& gv = Service<RenderSystem>::Get().gammaValue;
                     reader.Member("Gamma", gv);
+                    gv = Service<RenderSystem>::Get().originalGV + .1f * std::round(std::clamp((gv - Service<RenderSystem>::Get().originalGV) / .1f, -2.f, 2.f));
+
                 }
                 reader.EndObject();
             }
@@ -191,7 +193,7 @@ namespace Tempest
                 ImGui::Dummy({ (ImGui::GetWindowWidth() - imgSize.x) * 0.5f ,0 });
                 ImGui::SameLine();
 
-                ImGui::BeginChild("SettingsID", ImVec2(imgSize.x, 306.f), false);
+                ImGui::BeginChild("SettingsID", ImVec2(imgSize.x + 20.f, 306.f), false);
 
                 // ============== SOUND SETTINGS ============== //
                 ImGui::Image((void*)static_cast<size_t>(img->GetID()), imgSize);
@@ -309,9 +311,15 @@ namespace Tempest
                 ImGui::PushItemWidth(sliderWidth);
                 {
                     auto& gv = Service<RenderSystem>::Get().gammaValue;
-                    if (UI::UISliderFloat("##Gamma", &gv, 1.f, 4.f))
+                    auto org = Service<RenderSystem>::Get().originalGV;
+                    float do_nothing = std::round((gv - org) / 0.1f);
+                    do_nothing += 3;
+
+                    if (UI::UISliderFloat("##Gamma", &do_nothing, 1.f, 5.f))
                     {
-                        gv = std::clamp(gv, 1.f, 4.f);
+                        do_nothing = std::clamp(do_nothing, 1.f, 5.f) - 3;
+                        do_nothing *= .1f;
+                        gv = org + do_nothing;
                     }
                 }
                 ImGui::PopItemWidth();

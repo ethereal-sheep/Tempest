@@ -91,8 +91,6 @@ namespace Tempest
         interpolater<float> inter;
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        ChannelID CombatBGM = 0;
-
         // For tutorial emitter
         std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
         std::weak_ptr<CircularMotionEmitter_2D> m_circularMotionEmitter;

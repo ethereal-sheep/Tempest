@@ -1,8 +1,33 @@
 
 #include "CharacterDeathEmitter_3D.h"
-#include "ExplosionEmitter_3D.h"
+#include "Rotation_ExplosionEmitter_3D.h"
 #include "../Random.h"
-#include "ParticleSystem_3D.h"
+#include "EmitterSystem_3D.h"
+
+
+CharacterDeathEmitter_3D::CharacterDeathEmitter_3D()
+{
+	m_MM.m_duration = 0.3f;
+	m_MM.m_simulationSpeed = 0.016f;
+	m_GM.m_active = true;
+	m_MM.m_preWarm = true;
+
+	m_EM.m_spawnTimeInterval = 10.0f;
+	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
+	m_EM.m_rateOverTime = 20;
+	Emitter_3D::UpdateMaxParticle(1000);
+
+	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
+
+	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
+	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+
+	m_PAM.m_lifeTime = 0.3f;
+	m_RM.m_renderingPath = "Models/Cube.a";
+}
 
 void CharacterDeathEmitter_3D::OnDeath()
 {
@@ -70,7 +95,7 @@ void CharacterDeathEmitter_3D::OnDeath()
 		spawnPos.z = Random::Float() * rangeZ + m_minPos.z;
 
 		// Creation of explosion emitter
-		const std::shared_ptr<ExplosionEmitter_3D> tempEmitter = ParticleSystem_3D::GetInstance().CreateExplosionEmitter(spawnPos).lock();
+		const std::shared_ptr<Rotation_ExplosionEmitter_3D> tempEmitter = EmitterSystem_3D::GetInstance().CreateRotationExplosionEmitter(spawnPos).lock();
 
 		// Emitter's velocity
 		//tempEmitter->m_GM.m_velocity = glm::vec3{ directionX, directionY, directionZ };
@@ -86,5 +111,8 @@ void CharacterDeathEmitter_3D::OnDeath()
 		tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
 		tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
 		tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+
+		tempEmitter->m_PAM.m_colourBegin = m_PAM.m_colourBegin;
+		tempEmitter->m_PAM.m_colourEnd = m_PAM.m_colourEnd;
 	}
 }

@@ -62,6 +62,7 @@ namespace Tempest
 
 		if (OverlayOpen)
 		{
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4{ 0.0f,0.0f,0.0f,0.8f});
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 
@@ -88,124 +89,123 @@ namespace Tempest
 					auto drawlist = ImGui::GetForegroundDrawList();
 					//if (instance.tutorial_level != 1) //set Slide to false if not tut level 1
 					//	instance.tutorial_slide = false;
-					if (instance.tutorial_level == 1)
+					
+					switch (tutorial_index)
 					{
-						switch (tutorial_index)
-						{
-						case 0:
-						{
-							ImVec2 pos = { 0, viewport->Size.y * 0.275f };
-							ImVec2 size = { 640.f, 290.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to add your units into the turn order";
-							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y * 0.5f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-							break;
-
-						case 1:
-						{
-							ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f};
-							ImVec2 size = { 180.f, 50.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to go to the next page";
-							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f}, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
-
-						case 2:
-						{
-							ImVec2 pos = { viewport->Size.x * 0.221f, viewport->Size.y * 0.673f };
-							ImVec2 size = { 220.f, 140.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to customize your turn order";
-							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
-
-						case 3:
-						{
-							ImVec2 pos = { viewport->Size.x * 0.28f, viewport->Size.y * 0.475f };
-							ImVec2 size = { 105.f, 50.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Move";
-							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
-
-
-						case 4:
-						{
-							// draw the other section 
-
-							ImVec2 pos = { viewport->Size.x * 0.12f , viewport->Size.y * 0.7f };
-							ImVec2 pos2 = { viewport->Size.x * 0.42f , viewport->Size.y * 0.15f };
-							ImVec2 size = { 270.f, 110.f };
-							ImVec2 size2 = { viewport->Size.x * 0.55f, viewport->Size.y * 0.7f };
-							UI::TutArea2(pos, pos2, size, size2);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Randomize + Move";
-							drawlist->AddText({ pos.x + 140.f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, pos.y - 20.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							//Add Line
-							ImGui::PushFont(FONT_BTN);
-							str = "Sort according to stats";
-							drawlist->AddText({ viewport->Size.x * 0.1f , pos2.y + size2.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-							ImGui::PopFont();
-							drawlist->AddLine({ viewport->Size.x * 0.1f, pos2.y + size2.y * 0.3f }, { pos2.x, pos2.y + size2.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-
-							str = "The units are sorted according to the stat you";
-							ImVec2 strPos = { viewport->Size.x * 0.1f, pos2.y + size2.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
-							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-							str = "selected.";
-							strPos.x = viewport->Size.x * 0.1f;
-							strPos.y += ImGui::CalcTextSize(str.c_str()).y;
-							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
-
-						case 5:
-						{
-							// draw the other section
-
-							
-							ImVec2 pos = { viewport->Size.x * 0.42f , viewport->Size.y * 0.15f };
-							ImVec2 pos2 = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
-							ImVec2 size = { viewport->Size.x * 0.55f, viewport->Size.y * 0.7f };
-							ImVec2 size2 = { 180.f, 50.f };
-							UI::TutArea3(pos, pos2, size, size2);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save and return to the previous page";
-							drawlist->AddText({ pos2.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos2.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-							//Add Line
-							ImGui::PushFont(FONT_BTN);
-							str = "Sort manually";
-							drawlist->AddText({ viewport->Size.x * 0.1f , pos.y + size.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-							ImGui::PopFont();
-							drawlist->AddLine({ viewport->Size.x * 0.1f, pos.y + size.y * 0.3f }, { pos.x, pos.y + size.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
-
-							str = "You can also drag the units around to sort turn";
-							ImVec2 strPos = { viewport->Size.x * 0.1f, pos.y + size.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
-							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-							str = "order manually.";
-							strPos.x = viewport->Size.x * 0.1f;
-							strPos.y += ImGui::CalcTextSize(str.c_str()).y;
-							drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
-
-						case 6:
-						{
-							ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
-							ImVec2 size = { 180.f, 50.f };
-							UI::TutArea(pos, size);
-							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save the turn order and start the game";
-							drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-						}
-						break;
-
-						default:
-							break;
-						}
+					case 0:
+					{
+						ImVec2 pos = { 0, viewport->Size.y * 0.275f };
+						ImVec2 size = { 640.f, 290.f };
+						UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to add your units into the turn order";
+						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
+					break;
+
+					case 1:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
+						ImVec2 size = { 180.f, 50.f };
+						UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to go to the next page";
+						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 2:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.221f, viewport->Size.y * 0.673f };
+						ImVec2 size = { 220.f, 140.f };
+						UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to customize your turn order";
+						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 3:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.28f, viewport->Size.y * 0.475f };
+						ImVec2 size = { 105.f, 50.f };
+						UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Move";
+						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+
+					case 4:
+					{
+						// draw the other section 
+
+						ImVec2 pos = { viewport->Size.x * 0.12f , viewport->Size.y * 0.7f };
+						ImVec2 pos2 = { viewport->Size.x * 0.42f , viewport->Size.y * 0.15f };
+						ImVec2 size = { 270.f, 110.f };
+						ImVec2 size2 = { viewport->Size.x * 0.55f, viewport->Size.y * 0.7f };
+						UI::TutArea2(pos, pos2, size, size2);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Randomize + Move";
+						drawlist->AddText({ pos.x + 140.f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, pos.y - 20.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+						//Add Line
+						ImGui::PushFont(FONT_BTN);
+						str = "Sort according to stats";
+						drawlist->AddText({ viewport->Size.x * 0.1f , pos2.y + size2.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+						ImGui::PopFont();
+						drawlist->AddLine({ viewport->Size.x * 0.1f, pos2.y + size2.y * 0.3f }, { pos2.x, pos2.y + size2.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+						str = "The units are sorted according to the stat you";
+						ImVec2 strPos = { viewport->Size.x * 0.1f, pos2.y + size2.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
+						drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						str = "selected.";
+						strPos.x = viewport->Size.x * 0.1f;
+						strPos.y += ImGui::CalcTextSize(str.c_str()).y;
+						drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 5:
+					{
+						// draw the other section
+
+
+						ImVec2 pos = { viewport->Size.x * 0.42f , viewport->Size.y * 0.15f };
+						ImVec2 pos2 = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
+						ImVec2 size = { viewport->Size.x * 0.55f, viewport->Size.y * 0.7f };
+						ImVec2 size2 = { 180.f, 50.f };
+						UI::TutArea3(pos, pos2, size, size2);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save and return to the previous page";
+						drawlist->AddText({ pos2.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos2.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+
+						//Add Line
+						ImGui::PushFont(FONT_BTN);
+						str = "Sort manually";
+						drawlist->AddText({ viewport->Size.x * 0.1f , pos.y + size.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+						ImGui::PopFont();
+						drawlist->AddLine({ viewport->Size.x * 0.1f, pos.y + size.y * 0.3f }, { pos.x, pos.y + size.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+
+						str = "You can also drag the units around to sort turn";
+						ImVec2 strPos = { viewport->Size.x * 0.1f, pos.y + size.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
+						drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+						str = "order manually.";
+						strPos.x = viewport->Size.x * 0.1f;
+						strPos.y += ImGui::CalcTextSize(str.c_str()).y;
+						drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					case 6:
+					{
+						ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
+						ImVec2 size = { 180.f, 50.f };
+						UI::TutArea(pos, size);
+						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save the turn order and start the game";
+						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					}
+					break;
+
+					default:
+						break;
+					}
+						
 
 					//Tutorial Exit Button
 					if (instance.tutorial_slide == false)
@@ -294,7 +294,7 @@ namespace Tempest
 						if (instance.tutorial_enable && tutorial_index == 0)
 						{
 							// check if there are two diff units here
-							if (added_entities.size() >= 2 && added_entities[0] != added_entities[1])
+							if (added_entities.size() >= 2)
 								tutorial_index = 1;
 						}
 					}
@@ -354,7 +354,7 @@ namespace Tempest
 						ImGui::Dummy(ImVec2{ 5.f, 0.0f });
 						if (ImGui::BeginChild("TurnOrderTextInside", ImVec2{ ImGui::GetContentRegionMax().x * 0.65f, 40.0f }, true))
 						{
-							std::string text = "Select from stats, randomized order or both for your unit's turn order.";
+							text = "Select from stats, randomized order or both for your unit's turn order.";
 							ImGui::PushFont(FONT_BODY);
 							ImGui::TextWrapped(text.c_str());
 							ImGui::PopFont();
@@ -401,7 +401,7 @@ namespace Tempest
 
 						ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 55.f , ImGui::GetCursorPosY() + 35.f });
 						const ImVec2 cursor{ ImGui::GetCursorPos() };
-						int col = 0; int row = 0;
+						int column = 0; int row = 0;
 
 						// sort by stats
 						for (int i = 0; i < sl->size(); i++)
@@ -410,7 +410,7 @@ namespace Tempest
 							{
 							//	bool is_selected = (current_stat == sl->operator[](i));
 								if (UI::UIButton_2(sl->operator[](i).c_str(), sl->operator[](i).c_str(), 
-									{ cursor.x + col++ * 120, cursor.y + row * 80 }, { -70, 5 }, FONT_PARA, current_stat == sl->operator[](i)))
+									{ cursor.x + column++ * 120, cursor.y + row * 80 }, { -70, 5 }, FONT_PARA, current_stat == sl->operator[](i)))
 								{
 									if (current_stat == sl->operator[](i))
 										current_stat = "NULL";
@@ -442,9 +442,9 @@ namespace Tempest
 								}
 
 								// display in cols of 5
-								if (col / 5)
+								if (column / 5)
 								{
-									col = 0;
+									column = 0;
 									row++;
 								}
 							}
@@ -523,7 +523,8 @@ namespace Tempest
 							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
 							UI::UIImageButton((void*)static_cast<size_t>(character_icon->GetID()), ImVec2{ character_icon->GetWidth() * 1.0f, character_icon->GetHeight() * 1.0f },
-								ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 });
+								ImVec2{ 0,0 }, ImVec2{ 1,1 }, -1, ImVec4{ 0,0,0,0}, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 },
+								ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 }, ImVec4{ cs->color.x, cs->color.y,cs->color.z,1 });
 
 							if (cs)
 							{
@@ -732,7 +733,7 @@ namespace Tempest
 
 			ImGui::End();
 			ImGui::PopStyleVar();
-			ImGui::PopStyleColor();
+			ImGui::PopStyleColor(2);
 		}
 	}
 }

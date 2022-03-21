@@ -45,6 +45,11 @@ namespace Tempest
 	struct AddingActionsTrigger : public Event {};
 	struct SelectSequenceTrigger : public Event {};
 	struct CloseAllConResOverlayTrigger : public Event {};
+	struct ViewportCameraMoveTrigger : public Event
+	{
+		ViewportCameraMoveTrigger(bool canMove) : canMove{ canMove } {}
+		bool canMove;
+	};
 	struct CharacterStatsTrigger : public Event
 	{
 		CharacterStatsTrigger(Entity a) : entity{ a } {}
@@ -79,8 +84,8 @@ namespace Tempest
 
 	struct PauseOverlayTrigger : public Event
 	{
-		PauseOverlayTrigger(bool hasSaveLoad = true) : hasSaveLoad{ hasSaveLoad } {}
-		bool hasSaveLoad;
+		PauseOverlayTrigger(bool canOpenGraph = false) : canOpenGraph{ canOpenGraph } {}
+		bool canOpenGraph;
 	};
 
 	//Confirm Trigger
@@ -149,11 +154,12 @@ namespace Tempest
 	enum OPEN_GRAPH_TYPE{GRAPH_ACTION, GRAPH_SEQUENCE};
 	struct OpenGraphTrigger : public Event
 	{
-		OpenGraphTrigger(Entity entityid, Instance& in, OPEN_GRAPH_TYPE type) :
-			id{ entityid }, instance{ in }, type{type} {}
+		OpenGraphTrigger(Entity entityid, Instance& in, OPEN_GRAPH_TYPE type, bool isDuringCombat = false) :
+			id{ entityid }, instance{ in }, type{ type }, duringCombat{ isDuringCombat }{}
 		Entity id = UNDEFINED;
 		Instance& instance;
 		OPEN_GRAPH_TYPE type;
+		bool duringCombat;
 	};
 	struct OpenUnitSheetTrigger : public Event 
 	{
@@ -184,7 +190,18 @@ namespace Tempest
 		bool openNewCombat;
 		Instance& instance;
 	};
-	struct OpenBuildModeOverlay : public Event {};
+	struct OpenBuildModeOverlay : public Event
+	{
+		OpenBuildModeOverlay(Instance& in) : instance{ in } {}
+		Instance& instance;
+	};
+
+	struct BuildModeTutorialIndexTrigger : public Event
+	{
+		BuildModeTutorialIndexTrigger(int indexNum) : index{ indexNum } {}
+		int index;
+	};
+
 	struct SaveCurrentBeforeOpenTrigger : public Event 
 	{
 		SaveCurrentBeforeOpenTrigger(const tpath& path) : open_path{ path } {}
@@ -248,4 +265,10 @@ namespace Tempest
 	};
 
 	struct SettingsTrigger : public Event {};
+
+	struct LoadTrigger : public Event
+	{
+		std::function<bool(void)> do_until_true_fn = []() { return true; };
+		std::function<void(void)> do_at_end_fn = [](){};
+	};
 }

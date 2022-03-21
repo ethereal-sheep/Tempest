@@ -274,26 +274,43 @@ namespace Tempest
 			static const char* get_type() { return "Unit"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Unit&) { ar.StartObject(); return ar.EndObject(); }
+			friend Archiver& operator&(Archiver& ar, Unit& ) 
+			{ 
+				ar.StartObject(); 
+				return ar.EndObject(); 
+			}
 
 			void update(float dt);
 			bool set_path(const tvector<glm::ivec2>& path, const Transform& curr);
 			bool is_moving() { return moving; }
+			bool is_attacking() { return attacking; }
 			bool is_end_frame() { return end_frame; }
 			Transform get_current_transform() const { return curr_xform; };
+			Local get_current_local() const { return curr_local; };
+
+			bool attack();
+			bool get_hit(float str, float time);
+
+			Local attack_test;
 
 		private:
 			Transform prev_xform;
 			Transform curr_xform;
 			Transform next_xform;
+
+			Local curr_local;
+			int attack_state = 0;
+
 			tvector<glm::ivec2> path;
 
 			float interpolation_time = 1.f;
 			float current_time = 0.f;
+			float hit_str = 1.f;
 
 			bool end_frame = false;
 			bool moving = false;
-
+			bool attacking = false;
+			bool getting_hit = false;
 		};
 
 		struct Wall

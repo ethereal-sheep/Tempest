@@ -54,6 +54,10 @@ namespace Tempest
             {
                 change_state(UI_SHOW::INITIAL);
             }
+
+            AudioEngine ae;
+            ae.StopAllChannels();
+            MenuBGM = ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
         }
         void change_state(UI_SHOW state);
         void open_popup(const Event& e);
@@ -69,7 +73,8 @@ namespace Tempest
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
         tset<string> SelectedMaps;
-        string SelectedMap;
+        string SelectedMap = "";
+        string SelectedMapPreview = "Assets/EmptyMapBG.dds";
         string NewMapName = "Map";
         string NewProjectName = "Blank";
         ImGuiID HoveredID{ 0 };
@@ -82,5 +87,17 @@ namespace Tempest
         ImVec4 tintPressed = { 0.305f, 0.612f, 0.717f, 1.f };
         ImVec4 tintHover = { 0.443f, 0.690f, 0.775f, 1.f };
         ChannelID MenuBGM = 0;
+
+        //Main Page texture change
+        string confliceResBtn = "Assets/ConflictResolutionButton.dds";
+        string startGameBtn = "Assets/StartGameButton.dds";
+        string mapBuilderBtn = "Assets/MapBuilderButton.dds";
+
+        string projectIconBtn = "Assets/ProjectIconBtn_default.dds";
+        string settingIconBtn = "Assets/SettingIconBtn_default.dds";
+        string quitIconBtn = "Assets/QuitIconBtn_default.dds";
+
+        //BackGround Image
+        string backGroundImg = "Assets/StartScreenBG.dds";
     };
 }

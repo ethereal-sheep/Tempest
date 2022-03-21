@@ -10,7 +10,7 @@ namespace Tempest
 		for (int positionIndex = 0; positionIndex < m_NumPositions; ++positionIndex)
 		{
 			aiVector3D aiPosition = channel->mPositionKeys[positionIndex].mValue;
-			float timeStamp = channel->mPositionKeys[positionIndex].mTime;
+			float timeStamp = static_cast<float>(channel->mPositionKeys[positionIndex].mTime);
 			KeyPosition data;
 			data.m_Position = AssimpHelper::GetGLMVec(aiPosition);
 			data.m_TimeStamp = timeStamp;
@@ -21,7 +21,7 @@ namespace Tempest
 		for (int rotationIndex = 0; rotationIndex < m_NumRotations; ++rotationIndex)
 		{
 			aiQuaternion aiOrientation = channel->mRotationKeys[rotationIndex].mValue;
-			float timeStamp = channel->mRotationKeys[rotationIndex].mTime;
+			float timeStamp = static_cast<float>(channel->mRotationKeys[rotationIndex].mTime);
 			KeyRotation data;
 			data.m_Orientation = AssimpHelper::GetGLMQuat(aiOrientation);
 			data.m_TimeStamp = timeStamp;
@@ -32,7 +32,7 @@ namespace Tempest
 		for (int keyIndex = 0; keyIndex < m_NumScalings; ++keyIndex)
 		{
 			aiVector3D scale = channel->mScalingKeys[keyIndex].mValue;
-			float timeStamp = channel->mScalingKeys[keyIndex].mTime;
+			float timeStamp = static_cast<float>(channel->mScalingKeys[keyIndex].mTime);
 			KeyScale data;
 			data.m_Scale = AssimpHelper::GetGLMVec(scale);
 			data.m_TimeStamp = timeStamp;
@@ -55,6 +55,8 @@ namespace Tempest
 			if (animationTime < m_Positions[index + 1].m_TimeStamp)
 				return index;
 		}
+
+		return 0;
 	}
 
 	int Bone::GetRotationIndex(float animationTime)
@@ -64,6 +66,8 @@ namespace Tempest
 			if (animationTime < m_Rotations[index + 1].m_TimeStamp)
 				return index;
 		}
+
+		return 0;
 	}
 
 	int Bone::GetScaleIndex(float animationTime)
@@ -73,6 +77,8 @@ namespace Tempest
 			if (animationTime < m_Scales[index + 1].m_TimeStamp)
 				return index;
 		}
+
+		return 0;
 	}
 
 	float Bone::GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime)
@@ -90,8 +96,8 @@ namespace Tempest
 			return glm::translate(glm::mat4(1.0f), m_Positions[0].m_Position);
 
 		int p0Index = GetPositionIndex(animationTime);
-		if (p0Index == m_Positions.size() - 1)
-			p0Index = 0;
+		//if (p0Index == m_Positions.size() - 1)
+		//	p0Index = 0;
 		int p1Index = p0Index + 1;
 		float scaleFactor = GetScaleFactor(m_Positions[p0Index].m_TimeStamp, m_Positions[p1Index].m_TimeStamp, animationTime);
 		glm::vec3 finalPosition = glm::mix(m_Positions[p0Index].m_Position, m_Positions[p1Index].m_Position, scaleFactor);
@@ -107,8 +113,8 @@ namespace Tempest
 		}
 
 		int p0Index = GetRotationIndex(animationTime);
-		if (p0Index == m_Rotations.size() - 1)
-			p0Index = 0;
+		//if (p0Index == m_Rotations.size() - 1)
+		//	p0Index = 0;
 		int p1Index = p0Index + 1;
 		float scaleFactor = GetScaleFactor(m_Rotations[p0Index].m_TimeStamp, m_Rotations[p1Index].m_TimeStamp, animationTime);
 		glm::quat finalRotation = glm::slerp(m_Rotations[p0Index].m_Orientation, m_Rotations[p1Index].m_Orientation, scaleFactor);

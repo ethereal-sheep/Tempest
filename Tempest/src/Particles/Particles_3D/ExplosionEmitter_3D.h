@@ -7,6 +7,7 @@
 
 struct ExplosionEmitter_3D : public Emitter_3D
 {
+	ExplosionEmitter_3D();
 	void Emit(const int particleAmount) override;
 	void ParticleSetUp(Particle_3D& particle) override;
 };

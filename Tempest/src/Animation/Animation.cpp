@@ -7,7 +7,11 @@ namespace Tempest
 	{
 		auto animation = scene->mAnimations[index];
 		m_Name = std::string{ animation->mName.C_Str() };
-		m_Duration = static_cast<float>(animation->mDuration);
+		auto asd = animation->mNumChannels;
+		auto qqq = animation->mChannels[asd - 1];
+		auto qwe = qqq->mNumPositionKeys;
+		m_Duration = static_cast<float>(qqq->mPositionKeys[qwe - 1].mTime);
+		//m_Duration = static_cast<float>(animation->mDuration);
 		m_Ticks = static_cast<float>(animation->mTicksPerSecond);
 		aiMatrix4x4 globalTransformation = scene->mRootNode->mTransformation;
 		globalTransformation = globalTransformation.Inverse();

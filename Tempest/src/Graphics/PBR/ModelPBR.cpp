@@ -28,7 +28,7 @@ namespace Tempest
 
 	void ModelPBR::LoadTextures(const aiScene* scene)
 	{
-		for (auto i = 0; i < scene->mNumMaterials; ++i)
+		for (uint32_t i = 0; i < scene->mNumMaterials; ++i)
 		{
 			auto pMaterial = scene->mMaterials[i];
 			aiString texture;
@@ -44,7 +44,7 @@ namespace Tempest
 
 	void ModelPBR::LoadMaterial(const aiScene* scene)
 	{
-		for (auto i = 0; i < scene->mNumMaterials; ++i)
+		for (uint32_t i = 0; i < scene->mNumMaterials; ++i)
 		{
 			auto pMaterial = scene->mMaterials[i];
 			aiColor3D diffuse;
@@ -281,6 +281,7 @@ namespace Tempest
 				count += sizes[i];
 
 				MeshPBR mesh{ vertices, indices };
+			
 				meshes.emplace_back(mesh);
 			}
 		}

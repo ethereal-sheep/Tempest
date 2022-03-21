@@ -42,10 +42,6 @@ namespace Tempest
 		}
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); });
 
-		AudioEngine ae;
-		if (!ae.IsPlaying(CombatBGM))
-			CombatBGM = ae.Play("Sounds2D/BGM_1.wav", "BGM", 0.3f, true);
-
 		tutorial_index = 0;
 		tutorial_p2 = false;
 		tut_openSlide = true;
@@ -749,8 +745,9 @@ namespace Tempest
 								if (ImGui::IsMouseClicked(0))
 								{
 									tutorial_index = 0;
-									instance.tutorial_level = 1;
-									instance.tutorial_enable = false;
+								//	instance.tutorial_level = 1;
+								//	instance.tutorial_enable = false;
+									instance.tutorial_level = 4;
 									if (!m_circularMotionEmitter.expired())
 										m_circularMotionEmitter.lock()->m_GM.m_active = false;
 								}
@@ -806,8 +803,8 @@ namespace Tempest
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
 					
-					if (m_circularMotionEmitter.expired())
-						m_circularMotionEmitter.lock()->m_GM.m_active = false;
+					/*if (m_circularMotionEmitter.expired())
+						m_circularMotionEmitter.lock()->m_GM.m_active = false;*/
 
 					if (!m_waypointEmitter.expired())
 						m_waypointEmitter.lock()->m_GM.m_active = false;
@@ -983,8 +980,6 @@ namespace Tempest
 
 						auto fn = [&]()
 						{
-							AudioEngine ae;
-							ae.StopChannel(CombatBGM);
 							OverlayOpen = false;
 							Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(4);
 							Service<EventManager>::Get().instant_dispatch<CloseAllConResOverlayTrigger>();
@@ -1047,12 +1042,12 @@ namespace Tempest
 					ImGui::PopStyleColor(3);
 				}
 
-				if (instance.tutorial_temp_enable && instance.ecs.view<tc::Graph>(exclude_t<tc::Destroyed>()).size_hint() <= 0 && 
+				/*	if (instance.tutorial_temp_enable && instance.ecs.view<tc::Graph>(exclude_t<tc::Destroyed>()).size_hint() <= 0 &&
 					instance.ecs.view<tc::Unit>(exclude_t<tc::Destroyed>()).size_hint() <= 0 &&
 					instance.ecs.view<tc::Weapon>(exclude_t<tc::Destroyed>()).size_hint() <= 0)
 					ImGui::OpenPopup("TutorialPopupConfirm");
 
-				if (UI::ConfirmTutorialPopup("TutorialPopupConfirm", "Do you want a tutorial?", false, []() {}))
+				if (!instance.tutorial_enable && UI::ConfirmTutorialPopup("TutorialPopupConfirm", "Do you want a tutorial?", false, []() {}))
 				{
 					instance.tutorial_enable = true;
 					instance.tutorial_level = 1;
@@ -1061,7 +1056,7 @@ namespace Tempest
 				else
 				{
 					instance.tutorial_temp_enable = false;
-				}
+				}*/
 			}
 
 			ImGui::PopStyleVar();

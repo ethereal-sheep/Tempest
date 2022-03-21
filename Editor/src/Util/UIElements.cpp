@@ -108,7 +108,7 @@ namespace Tempest::UI
 			ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
 			ImGui::PushFont(FONT_SHEAD);
 			auto windowWidth = ImGui::GetWindowSize().x;
-			string warningstr =/* string(ICON_FA_EXCLAMATION_TRIANGLE) +*/ "WARNING!";
+			string warningstr ="WARNING!";
 			auto warningSize = ImGui::CalcTextSize(warningstr.c_str()).x;
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.792f,0.22f,0.22f,1.f });
 			ImGui::SetCursorPosX((windowWidth - warningSize) * 0.5f - ((float)warnImg->GetWidth() * 0.7f));
@@ -3140,7 +3140,7 @@ namespace Tempest::UI
 		return { false,false };
 	}
 
-	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
+	bool UIImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed, const ImVec4& tint_color)
 	{
 		ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = g.CurrentWindow;
@@ -3153,11 +3153,11 @@ namespace Tempest::UI
 		ImGui::PopID();
 
 		const ImVec2 padding = (frame_padding >= 0) ? ImVec2((float)frame_padding, (float)frame_padding) : g.Style.FramePadding;
-		return UIImageButtonEx(id, user_texture_id, size, uv0, uv1, padding, bg_col, tint_hover, tint_pressed);
+		return UIImageButtonEx(id, user_texture_id, size, uv0, uv1, padding, bg_col, tint_hover, tint_pressed, tint_color);
 	}
-	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
+	bool UIImageButtonEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed, const ImVec4& tint_color)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;
@@ -3188,7 +3188,7 @@ namespace Tempest::UI
 			ImGui::SetMouseCursor(7);
 		}
 		else
-			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32({ 1,1,1,1 }));
+			window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, ImGui::GetColorU32(tint_color));
 
 
 
@@ -3218,7 +3218,7 @@ namespace Tempest::UI
 	}
 	bool UILoadProjectEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;
@@ -3284,7 +3284,7 @@ namespace Tempest::UI
 	}
 	bool UIImgBtnWithTextEx(ImGuiID id, ImTextureID texture_id, const ImVec2& size, string str, const ImVec2& uv0, const ImVec2& uv1, const ImVec2& padding, const ImVec4& bg_col, const ImVec4& tint_hover, const ImVec4& tint_pressed)
 	{
-		ImGuiContext& g = *GImGui;
+		//ImGuiContext& g = *GImGui;
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;
@@ -4000,16 +4000,20 @@ namespace Tempest::UI
 		auto window = ImGui::GetWindowDrawList();
 		auto windowPos = ImGui::GetCurrentWindow()->Pos;
 		auto arrowImg = tex_map["Assets/SuccessArrow.dds"];
+		auto gradientImg = tex_map["Assets/AttackGradient.dds"];
 
 		//ImVec2 arrowMin = { windowPos.x + pos.x, windowPos.y + pos.y };
 		ImVec2 arrowMin = { windowPos.x + pos.x - arrowImg->GetWidth() * 0.5f, windowPos.y + pos.y - arrowImg->GetHeight() * 0.5f };
 		ImVec2 arrowMax = { arrowMin.x + arrowImg->GetWidth(), arrowMin.y + arrowImg->GetHeight() };
-		window->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), arrowMin, arrowMax);
+		
 
 		ImGui::PushFont(FONT_HEAD);
 		string atkStr = name.c_str();
 		auto atkTextSize = ImGui::CalcTextSize(atkStr.c_str());
 		ImVec2 atkTextPos = { arrowMin.x, arrowMin.y - atkTextSize.y *0.5f };
+
+		window->AddImage((void*)static_cast<size_t>(gradientImg->GetID()), atkTextPos, { arrowMin.x + arrowImg->GetWidth(), arrowMin.y + arrowImg->GetHeight()*0.5f });
+		window->AddImage((void*)static_cast<size_t>(arrowImg->GetID()), arrowMin, arrowMax);
 		window->AddText(atkTextPos, ImGui::GetColorU32({ 1,1,1,1 }), atkStr.c_str());
 		ImGui::PopFont();
 
@@ -4190,7 +4194,7 @@ namespace Tempest::UI
 		ImVec2 max2 = { min2.x + size2.x, min2.y + size2.y };
 
 		ImRect Box1 = { {0.f,0.f}, {viewport->Size.x , min1.y} };
-		ImRect Box2 = { {0.f, min1.y}, {min1.x , max2.y} };
+		ImRect Box2 = { {0.f, min1.y}, {min1.x , max1.y} };
 		ImRect Box3 = { {max1.x, min1.y}, {viewport->Size.x,max1.y} };
 		ImRect Box4 = { {0.f, max1.y}, {viewport->Size.x, min2.y} };
 		ImRect Box5 = { {0.f, min2.y}, {min2.x, max2.y} };
