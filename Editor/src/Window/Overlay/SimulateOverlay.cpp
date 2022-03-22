@@ -803,8 +803,8 @@ namespace Tempest
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
 					
-					/*if (m_circularMotionEmitter.expired())
-						m_circularMotionEmitter.lock()->m_GM.m_active = false;*/
+					if (!m_circularMotionEmitter.expired())
+						m_circularMotionEmitter.lock()->m_GM.m_active = false;
 
 					if (!m_waypointEmitter.expired())
 						m_waypointEmitter.lock()->m_GM.m_active = false;
