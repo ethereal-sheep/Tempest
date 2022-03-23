@@ -15,6 +15,7 @@
 #include "Logger/Log.h"
 #include "Animation/AnimationManager.h"
 #include "Profiler/Profiler.h"
+#include "Animation/AnimMultithreadHelper.h"
 
 namespace Tempest
 {
@@ -532,11 +533,12 @@ namespace Tempest
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
 
-        if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
+        if (!Service<AnimMultithreadHelper>::Get().CheckAnimator(id))                 // Check if Animator exists in Animation Manager
         {
             //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);  // Multiple Animations
-            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
-            m_Animation.AddAnimator(id, animator);
+            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
+            Service<AnimMultithreadHelper>::Get().AddAnimator(id, Animator(&m_Pipeline.m_ModelLibrary[path]->GetAnimation()));
+            return;
         }
         // Multiple Animations
         //else if (!m_Animation.CheckAnimation(id, anim))
@@ -546,7 +548,7 @@ namespace Tempest
         m.m_Transform = to_Model_Matrix(transform);
         m.m_Model = m_Pipeline.m_ModelLibrary[path];
 
-        auto transforms = m_Animation.GetBoneMatrix(id);
+        auto transforms = Service<AnimMultithreadHelper>::Get().get().GetBoneMatrix(id);
         for (auto& i : transforms)
             m.m_Bones.push_back(i);
         m_Pipeline.m_Models.push_back(m);
@@ -561,11 +563,12 @@ namespace Tempest
             m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
         }
         
-        if (!m_Animation.CheckAnimator(id))                 // Check if Animator exists in Animation Manager
+        if (!Service<AnimMultithreadHelper>::Get().CheckAnimator(id))                 // Check if Animator exists in Animation Manager
         {
-            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);        // Multiple Animations
-            tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
-            m_Animation.AddAnimator(id, animator);
+            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->animations[anim]);  // Multiple Animations
+            //tsptr<Animator> animator = std::make_shared<Animator>(&m_Pipeline.m_ModelLibrary[path]->GetAnimation());
+            Service<AnimMultithreadHelper>::Get().AddAnimator(id, Animator(&m_Pipeline.m_ModelLibrary[path]->GetAnimation()));
+            return;
         }
           
         // Multiple Animations
@@ -576,7 +579,7 @@ namespace Tempest
         m.m_Transform = model_matrix;
         m.m_Model = m_Pipeline.m_ModelLibrary[path];
         
-        auto transforms = m_Animation.GetBoneMatrix(id);
+        auto transforms = Service<AnimMultithreadHelper>::Get().get().GetBoneMatrix(id);
         for (auto& i : transforms)
             m.m_Bones.push_back(i);
         m_Pipeline.m_Models.push_back(m);
@@ -683,7 +686,12 @@ namespace Tempest
     {
         //ModelPBR model;
         //model.loadModel("../../../Resource/Models/test14.fbx");
-        //SubmitModel("../../../Resource/Models/qwe.fbx", glm::mat4{ 1.f }, 1900);
+        /*SubmitModel("../../../Resource/Models/Unit_Punch.fbx", glm::mat4{ 1.f }, 1900);
+
+
+        glm::mat4 tf = glm::translate(vec3{1, 1, 1});
+
+        SubmitModel("../../../Resource/Models/Unit_Punch.fbx", tf, 1901);*/
 
         if (USO)
         {
@@ -1369,12 +1377,13 @@ namespace Tempest
 
     void RenderSystem::UpdateAnimation(float dt)
     {
-        m_Animation.UpdateAnimations(dt);
+        Service<AnimMultithreadHelper>::Get().step(dt);
     }
 
     void RenderSystem::ChangeAnimationDuration(uint32_t id, float duration)
-    {
-        m_Animation.ChangeDuration(id, duration);
+    {/*
+        m_Animation.ChangeDuration(id, duration);*/
+        Service<AnimMultithreadHelper>::Get().ChangeDuration(id, duration);
     }
     void RenderSystem::calculateAllNorms()
     {

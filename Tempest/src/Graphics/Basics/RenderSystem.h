@@ -57,6 +57,7 @@ namespace Tempest
         //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
         FBO m_FrameBuffer{ 1600, 900 };
+
         AnimationManager m_Animation;
 
         int  GammaCorrection = 1;

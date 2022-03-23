@@ -30,6 +30,7 @@
 // Testing 
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "FrameRate/FrameRateManager.h"
+#include "Animation/AnimMultithreadHelper.h"
 
 
 
@@ -57,6 +58,8 @@ namespace Tempest
 		Service<thread_pool>::Register(std::thread::hardware_concurrency());
 		Service<EventManager>::Register();
 
+		Service<AnimMultithreadHelper>::Register();
+		Service<AnimMultithreadHelper>::Get().init();
 
 		auto v = glm::vec3{ .33f, -1.f, -.33f };
 		v = glm::normalize(v);
@@ -112,6 +115,7 @@ namespace Tempest
 
 		AudioEngine::Shutdown();
 		Profile::Profiler::Shutdown();
+		Service<AnimMultithreadHelper>::Get().shutdown();
 	}
 
 	void Application::OnKeyPress([[maybe_unused]] uint8_t key, [[maybe_unused]] uint8_t repeat)

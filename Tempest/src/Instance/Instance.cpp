@@ -83,6 +83,9 @@ namespace Tempest
 			if (character != nullptr)
 			{
 				Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+				//Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test, id);
+
+
 			}
 
 			Service<RenderSystem>::Get().SubmitModel(model->path, test);
@@ -156,9 +159,16 @@ namespace Tempest
 				auto character = ecs.get_if<tc::Character>(id);
 				if (character != nullptr)
 				{
-					Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+					//Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+
+					auto test1 = glm::translate(transform->position)
+						* glm::mat4(transform->rotation)
+						* glm::scale(transform->scale);
+
+
+					Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
 				}
-				Service<RenderSystem>::Get().SubmitModel(model->path, test);
+				//Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}
 
 			//Service<RenderSystem>::Get().SubmitModel(model.path.c_str(), transform);
