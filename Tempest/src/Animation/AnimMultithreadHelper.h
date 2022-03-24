@@ -16,7 +16,23 @@ namespace Tempest
 			{
 				if (run_once)
 				{
-					buffer.UpdateAnimations(member_dt);
+					auto v =  buffer.AsyncUpdateAnimations(member_dt);
+					
+					bool still_running = true;
+					while (still_running)
+					{
+						still_running = false;
+						for (auto& f : v)
+						{
+							if (f.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+							{
+								still_running = true;
+								break;
+							}
+
+						}
+					}
+
 					run_once = false;
 				}
 			}

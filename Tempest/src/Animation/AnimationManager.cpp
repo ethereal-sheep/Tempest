@@ -6,16 +6,32 @@ namespace Tempest
 {
 	void AnimationManager::AddAnimator(uint32_t id, Animator anim)
 	{
+
 		m_Animators.insert(std::make_pair(id, std::move(anim)));
 	}
 
 	void AnimationManager::UpdateAnimations(float dt)
 	{
-		if (m_Animators.empty())
-			return;
-
 		for (auto& i : m_Animators)
+		{
 			i.second.UpdateAnimation(dt);
+		}
+	}
+	
+	tvector<future_bool> AnimationManager::AsyncUpdateAnimations(float dt)
+	{
+		tvector<future_bool> v;
+		for (auto& i : m_Animators)
+		{
+			auto fn = [&]()
+			{
+				i.second.UpdateAnimation(dt);
+			};
+
+			v.push_back(Service<thread_pool>::Get().submit_task(fn));
+		}
+
+		return v;
 	}
 
 	void AnimationManager::ChangeAnimation(uint32_t id, Animation* animation)
