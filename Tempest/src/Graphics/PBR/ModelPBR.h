@@ -58,7 +58,7 @@ namespace Tempest
         void LoadMaterial(const aiScene* scene);
         void LoadTextures(const aiScene* scene);
         void processNode(aiNode* node, [[maybe_unused]] const aiScene* scene);
-        MeshPBR processMesh(aiMesh* mesh);
+        MeshPBR processMesh(aiMesh* mesh, std::vector<uint32_t>& matindex);
         void SetVertexBoneDataToDefault(Vertex& vertex);
         void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
         bool ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh);

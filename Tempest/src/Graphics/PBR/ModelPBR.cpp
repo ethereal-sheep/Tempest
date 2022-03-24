@@ -84,7 +84,7 @@ namespace Tempest
 
 			this->directory = file.substr(0, file.find_last_of('/'));
 			this->processNode(scene->mRootNode, scene);
-			//LoadMaterial(scene);
+			LoadMaterial(scene);
 
 			// Multiple Animations embedded in 1 fbx
 			//for (unsigned int i = 0; i < static_cast<unsigned int>(scene->mNumAnimations); ++i)
@@ -300,7 +300,7 @@ namespace Tempest
         for (GLuint i = 0; i < node->mNumMeshes; i++)
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            this->meshes.push_back(this->processMesh(mesh));
+            this->meshes.push_back(this->processMesh(mesh, mats));
         }
 
         for (GLuint i = 0; i < node->mNumChildren; i++)
@@ -310,7 +310,7 @@ namespace Tempest
     }
 
 
-    MeshPBR ModelPBR::processMesh(aiMesh* mesh)
+	MeshPBR ModelPBR::processMesh(aiMesh* mesh, std::vector<uint32_t>& matindex)
     {
         std::vector<Vertex> vertices;
         std::vector<GLuint> indices;
@@ -353,6 +353,7 @@ namespace Tempest
         }
 		
 		HasAnimation = ExtractBoneWeightForVertices(vertices, mesh);
+		matindex.push_back(mesh->mMaterialIndex);
         return MeshPBR(vertices, indices);
     }
 
