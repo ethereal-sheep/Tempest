@@ -190,6 +190,7 @@
     <ClCompile Include="src\Animation\Bone.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\FrameRate\FrameRateManager.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MeshPrimitives.cpp" />
     <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />
     <ClCompile Include="src\Graphics\PBR\ModelPBR.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="src\Animation\AnimMultithreadHelper.h" />
     <ClInclude Include="src\Animation\AssimpHelper.h" />
     <ClInclude Include="src\Animation\Bone.h" />
+    <ClInclude Include="src\Graphics\PBR\MeshPrimitives.h" />
     <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
     <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
     <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />

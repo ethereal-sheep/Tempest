@@ -17,6 +17,7 @@
 #include "Graphics/Basics/Model.h"
 #include "Util.h"
 #include "Graphics/PBR/ModelPBR.h"
+#include "Graphics/PBR/MeshPrimitives.h"
 
 namespace Tempest
 {
@@ -78,6 +79,30 @@ namespace Tempest
 		VertexBuffer m_Instanced;
 	};
 
+	struct ParticleObj
+	{
+		glm::mat4 m_Transform;
+		glm::mat3 m_Normal;
+	};
+
+	struct ParticlePlane
+	{
+		ParticleObj m_Object;
+		MeshPrim m_Mesh = GeometryFactory::GenerateIndexedPlane();
+	};
+
+	struct ParticleCube
+	{
+		ParticleObj m_Object;
+		MeshPrim m_Mesh = GeometryFactory::GenerateIndexedCube(1, 1);
+	};
+
+	struct ParticleSphere
+	{
+		ParticleObj m_Object;
+		MeshPrim m_Mesh = GeometryFactory::GenerateIndexedSphere(1, 1);
+	};
+
 	struct RenderPipeline
 	{
 		using ShaderLibrary = tmap<ShaderCode, tuptr<Shader>>;
@@ -96,6 +121,10 @@ namespace Tempest
 		tvector<SpriteObj> m_Cubes;
 		tvector<SpriteObj> m_Planes;
 		tvector<SpriteObj> m_Icosahedrons;
+
+		tvector<ParticlePlane> p_Plane;
+		tvector<ParticleCube> p_Cube;
+		tvector<ParticleSphere> p_Sphere;
 		
 		tvector<Camera> m_Cameras;
 		ShaderLibrary m_Shaders;
