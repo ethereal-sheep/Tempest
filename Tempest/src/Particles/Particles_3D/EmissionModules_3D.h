@@ -83,6 +83,7 @@ struct RendererModule_3D
  
 	// Path Name for rendering modle
 	std::string m_renderingPath;
+	bool m_emissiveLighting;
 };
 
 #endif // !EMISSION_MODULE_3D_H

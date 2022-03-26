@@ -41,4 +41,5 @@ Interactive_DoorParticle_3D::Interactive_DoorParticle_3D()
 	m_PAM.m_rebirth = false;
 
 	m_RM.m_renderingPath = "Models/Cube.a";
+	m_RM.m_emissiveLighting = true;
 }

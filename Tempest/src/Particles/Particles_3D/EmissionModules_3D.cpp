@@ -65,4 +65,5 @@ EmissionModule_3D::EmissionModule_3D()
 
 RendererModule_3D::RendererModule_3D()
 	: m_renderingPath{ "Models/Cube.a" }
+	, m_emissiveLighting { false }
 {}

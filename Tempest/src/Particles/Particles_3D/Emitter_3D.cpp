@@ -265,6 +265,7 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 	particle.m_scaleEnd = m_PAM.m_scaleEnd;
 
 	particle.m_renderingPath = m_RM.m_renderingPath;
+	particle.m_emissive = m_RM.m_emissiveLighting;
 }
 
 void Emitter_3D::Emit(const int particleAmount)
