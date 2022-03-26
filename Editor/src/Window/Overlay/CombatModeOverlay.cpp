@@ -601,7 +601,10 @@ namespace Tempest
 					// end turn button
 					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA))
 					{
+						// reset previous unit to default
+						instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 						curr_entity = increase_turn();
+
 						if (auto t = instance.ecs.get_if<tc::Transform>(curr_entity))
 						{
 							cam_ctrl.move_look_at(cam, t->position);
@@ -620,6 +623,10 @@ namespace Tempest
 						{
 						case Tempest::CombatModeOverlay::BATTLE_STATE::CURR_TURN:
 						{
+							// make current unit idle (comment out first cuz can't switch fbx)
+						//	if (state != State::CINEMATIC)
+						//		instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Idle.fbx";
+
 							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -1214,7 +1221,11 @@ namespace Tempest
 						{
 							// Attack
 							auto attacker = curr_entity;
+
 							other_entity = instance.character_map[w_x][w_y];
+
+							// PSEUDO (this does not work ? when it needs to be changed to block)
+						//	instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Idle.fbx";
 							battle_state = BATTLE_STATE::SELECT_ACTION;
 
 							LOG_ASSERT(instance.ecs.has<tc::Character>(attacker));
@@ -1861,6 +1872,8 @@ namespace Tempest
 			//battle_state = BATTLE_STATE::SELECT_OTHER;
 			display_curr_stat = false;
 			display_other_stat = false;
+			if (other_entity != INVALID)
+				instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
 			instance.selected = INVALID;
 			state = State::MENU;
 			battle_state = BATTLE_STATE::CURR_TURN; // temp testing
@@ -2127,6 +2140,11 @@ namespace Tempest
 
 			auto back_to_main = [&]() {
 
+				// reset model
+				instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+				if (other_entity != INVALID)
+					instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+
 				cam.SetPosition(cam_pos);
 				cam.SetRotation(cam_rot);
 
@@ -2202,9 +2220,9 @@ namespace Tempest
 				AudioEngine ae;
 				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
 
-				// PSEUDO 
+				// PSEUDO (well this does not work either when changing from idle to punch)
 				// instead of jumping onto the enemy, wobble back-front
-				//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.a";
+				instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.fbx";
 			}
 
 
@@ -2218,7 +2236,6 @@ namespace Tempest
 			{
 				triggered = true;
 				// reset the attacker pos
-
 				inter1.start(0, 1, 0.7f);
 				auto fn = [&, oxform, dist_from_char, dist_from_ground, angle]()
 				{
@@ -2232,6 +2249,7 @@ namespace Tempest
 
 					cam.SetPosition(new_cam_pos);
 					cam.SetRotation(new_cam_rot * glm::angleAxis(glm::radians(180.f), vec3{ 0,1,0 }));
+
 					/*auto look_at_pos = oxform.position;
 					look_at_pos.y = dist_from_ground;
 					cam_ctrl.look_at(cam, look_at_pos, 2.f);*/
@@ -2260,7 +2278,7 @@ namespace Tempest
 
 				//PSEUDO
 				// make enemy wobble left-right
-				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.a";
+				instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.fbx";
 			}
 		}
 		break;
@@ -2269,7 +2287,6 @@ namespace Tempest
 			// wipe
 			if (inter1.is_finished() && !triggered)
 			{
-
 				ounit.get_hit(10, 2.f);
 
 
@@ -2674,8 +2691,8 @@ namespace Tempest
 
 			//PSEUDO
 			// change back the models
-			//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
-			//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+			instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+			instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 		}
 
 	}
