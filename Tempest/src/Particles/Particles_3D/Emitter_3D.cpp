@@ -112,6 +112,9 @@ void Emitter_3D::Update(const float dt)
 	{
 		OnDeath();
 		m_GM.m_active = false;
+
+		// Clear all the particles it handles
+		ClearAllParticles();
 	}
 	else
 		//m_MM.m_duration -= m_MM.m_simulationSpeed;

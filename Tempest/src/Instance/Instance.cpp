@@ -206,36 +206,35 @@ namespace Tempest
 		{
 			elem->ParticleRender();
 
-
 			// Check if the particle requires prefab
-			for (int i = 0; i < elem->m_particles.size(); ++i)
-			{
-				// Particle is alive
-				if (elem->m_particles[i].m_isActive)
-				{
-					// Search for the correct prefab to setup
-					if (elem->m_particles[i].m_renderingPath == "Models/SquareHole.a")
-					{
-						if (auto particle = this->scene.get_prototype_if("Unit", "particle"))
-						{
-							auto prefab = particle->instance();
-							auto local = prefab.get_if<tc::Local>();
+			//for (int i = 0; i < elem->m_particles.size(); ++i)
+			//{
+			//	// Particle is alive
+			//	if (elem->m_particles[i].m_isActive)
+			//	{
+			//		// Search for the correct prefab to setup
+			//		if (elem->m_particles[i].m_renderingPath == "Models/SquareHole.a")
+			//		{
+			//			if (auto particle = this->scene.get_prototype_if("Unit", "particle"))
+			//			{
+			//				auto prefab = particle->instance();
+			//				auto local = prefab.get_if<tc::Local>();
 
-							auto myParticlePosition = elem->m_particles[i].m_position;
-							//auto myParticleRotation = elem->m_particles[i].m_rotation;
-							auto myParticleScale = elem->m_particles[i].m_scale;
+			//				auto myParticlePosition = elem->m_particles[i].m_position;
+			//				//auto myParticleRotation = elem->m_particles[i].m_rotation;
+			//				auto myParticleScale = elem->m_particles[i].m_scale;
 
-							// Assume no rotation
-							auto test = glm::translate(myParticlePosition)
-								* glm::mat4({ 0.f, 0.f, 0.f, 0.f })
-								* glm::translate(local->local_position)
-								* glm::mat4(local->local_rotation)
-								* glm::scale(local->local_scale)
-								* glm::scale(myParticleScale);
-						}
-					}
-				}
-			}
+			//				// Assume no rotation
+			//				auto test = glm::translate(myParticlePosition)
+			//					* glm::mat4({ 0.f, 0.f, 0.f, 0.f })
+			//					* glm::translate(local->local_position)
+			//					* glm::mat4(local->local_rotation)
+			//					* glm::scale(local->local_scale)
+			//					* glm::scale(myParticleScale);
+			//			}
+			//		}
+			//	}
+			//}
 		}
 	}
 	void Instance::internal_exit()
