@@ -617,6 +617,7 @@ namespace Tempest
         //model.m_Model->colours[0] = particle.m_colour;
         model.color = particle.m_colour;
         model.isParticle = true;
+        model.m_Emissive = particle.m_emissive;
         m_Pipeline.m_Models.push_back(model);
     }
  
@@ -803,7 +804,7 @@ namespace Tempest
                     else
                         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
 
-                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].isParticle, "particle");
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Emissive, "emissive");
 
 
                     glActiveTexture(GL_TEXTURE0);

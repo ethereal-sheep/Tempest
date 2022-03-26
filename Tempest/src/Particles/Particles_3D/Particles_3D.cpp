@@ -24,4 +24,5 @@ Particle_3D::Particle_3D()
 	, m_lifeRemaining{ 1.0f }
 	, m_isActive { false }
 	, m_gravity { false }
+	, m_emissive { false }
 {}

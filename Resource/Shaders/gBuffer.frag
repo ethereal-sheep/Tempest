@@ -33,7 +33,7 @@ uniform sampler2D texAO;
 uniform vec3 colour;
 uniform int texID;
 uniform int TestPBR;
-uniform bool particle;
+uniform bool emissive;
 float LinearizeDepth(float depth);
 vec3 computeTexNormal(vec3 viewNormal, vec3 texNormal);
 
@@ -90,7 +90,7 @@ void main()
     gEffects.gb = fragPosA - fragPosB;
 	gViewPos = fragPosition;
 
-	if (particle)
+	if (emissive)
 		gBloom = bloomColor;
 	else
 		gBloom = vec4(0.0, 0.0, 0.0, 1.0);

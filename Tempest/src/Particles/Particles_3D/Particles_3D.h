@@ -34,6 +34,7 @@ struct Particle_3D
 	bool m_isActive;
 
 	bool m_gravity;
+	bool m_emissive;
 
 	// Eg: Models/Cube.a
 	std::string m_renderingPath;
