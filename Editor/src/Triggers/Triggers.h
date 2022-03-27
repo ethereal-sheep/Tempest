@@ -82,10 +82,14 @@ namespace Tempest
 		QUICKMENU_POPUP_TYPE current;
 	};
 
+
+	// add another bool to check for results
 	struct PauseOverlayTrigger : public Event
 	{
-		PauseOverlayTrigger(bool canOpenGraph = false) : canOpenGraph{ canOpenGraph } {}
+		PauseOverlayTrigger(bool canOpenGraph = false, bool fromCombatMode = false) :
+			canOpenGraph{ canOpenGraph }, fromCombatMode{ fromCombatMode } {}
 		bool canOpenGraph;
+		bool fromCombatMode;
 	};
 
 	//Confirm Trigger
@@ -270,5 +274,24 @@ namespace Tempest
 	{
 		std::function<bool(void)> do_until_true_fn = []() { return true; };
 		std::function<void(void)> do_at_end_fn = [](){};
+	};
+
+	// for ending screen
+	struct UnitResult
+	{
+		unsigned short dmg_done{ 0 };
+		unsigned short dmg_taken{ 0 };
+		unsigned short defeated{ 0 };
+		unsigned short total_attacks{ 0 };
+		unsigned short successful_attacks{ 0 };
+		unsigned short deaths{ 0 };
+	};
+
+	struct CombatResultsTrigger : public Event {};
+
+	struct SendCombatResults : public Event
+	{
+		SendCombatResults(std::map<Entity, UnitResult> results) : units_results{ results } {}
+		std::map<Entity, UnitResult>  units_results;
 	};
 }

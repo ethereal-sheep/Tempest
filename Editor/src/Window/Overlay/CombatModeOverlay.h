@@ -241,6 +241,7 @@ namespace Tempest
         interpolater<float> menu2;
 
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
+        std::map<Entity, UnitResult> units_results;
 
         std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
         std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;

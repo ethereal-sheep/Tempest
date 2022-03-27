@@ -234,6 +234,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\AttackSystemOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\BuildModeOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\CombatModeOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\CombatResultsOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\PauseOverlay.cpp" />
@@ -298,6 +299,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Overlay\AttackSystemOverlay.h" />
     <ClInclude Include="src\Window\Overlay\BuildModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\CombatModeOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\CombatResultsOverlay.h" />
     <ClInclude Include="src\Window\Overlay\ConflictResOverlay.h" />
     <ClInclude Include="src\Window\Overlay\LoadingOverlay.h" />
     <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />

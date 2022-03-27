@@ -1856,6 +1856,22 @@ namespace Tempest
 
 			damage = temp_oc.get_statDelta(0) - cs.get_statDelta(0);
 
+			// get the results
+			auto curr_entity_result = units_results.find(curr_entity);
+			curr_entity_result->second.dmg_done += damage;
+			curr_entity_result->second.total_attacks += 1;
+			if (damage > 0)
+				curr_entity_result->second.successful_attacks += 1;
+
+			units_results.find(other_entity)->second.dmg_taken += damage;
+			if (temp_oc.get_stat(0) + temp_oc.get_statDelta(0) <= 0)
+			{
+				// for dead
+				curr_entity_result->second.defeated += 1;
+				units_results.find(other_entity)->second.deaths += 1;
+			}
+
+
 			atk_rolled = false;
 			def_rolled = false;
 			// clear
@@ -2633,6 +2649,7 @@ namespace Tempest
 				if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 				{
 					units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
+					units_results.erase(other_entity); //halp
 					instance.ecs.destroy(other_entity);
 					other_entity = INVALID;
 					ImGui::CloseCurrentPopup();
@@ -3000,6 +3017,13 @@ namespace Tempest
 		curr_entity = units[curr_turn];
 
 		reset_menu();
+
+		units_results.clear();
+
+		for (const auto this_unit : units)
+		{
+			units_results.emplace( this_unit, UnitResult{} );
+		}
 	};
 
 	void CombatModeOverlay::visibility(const Event& e)
@@ -3023,6 +3047,13 @@ namespace Tempest
 		}*/
 		curr_entity = units.front();
 		curr_turn = 0;
+
+		// add unit to results if it's not inside
+		for (const auto this_unit : units)
+		{
+			if (units_results.find(this_unit) == units_results.end())
+				units_results.emplace( this_unit, UnitResult{} );
+		}
 	}
 
 	void CombatModeOverlay::show(Instance& instance)
@@ -3100,7 +3131,8 @@ namespace Tempest
 
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(battle_state == BATTLE_STATE::CURR_TURN);
+					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(battle_state == BATTLE_STATE::CURR_TURN, true);
+					Service<EventManager>::Get().instant_dispatch<SendCombatResults>(units_results);
 				}
 
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
