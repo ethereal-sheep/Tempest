@@ -977,7 +977,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight() }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1018,7 +1018,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight()}))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1104,7 +1104,7 @@ namespace Tempest
 
 
 
-			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight()}))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1254,7 +1254,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight() }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
