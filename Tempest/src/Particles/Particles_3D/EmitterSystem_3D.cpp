@@ -1,4 +1,8 @@
 
+
+// C++ lib
+
+
 // Main Header
 #include "EmitterSystem_3D.h"
 
@@ -16,6 +20,8 @@
 #include "CharacterSpawnEmitter_3D.h"
 #include "CharacterDamageEmitter_3D.h"
 #include "CharacterDeathEmitter_3D.h"
+
+#include "CharacterTileCharged_Emitter_3D.h"
 
 #include "Weather_Rain_Emitter_3D.h"
 
@@ -311,4 +317,28 @@ const std::weak_ptr<Weather_Rain_Emitter_3D> EmitterSystem_3D::CreateWeatherRain
 	interactiveEmitter.m_PAM.m_maxSpawnPos = maxSpawnPos;
 
 	return tempEmitter;
+}
+
+void EmitterSystem_3D::CreateChracterChargedAttackEmitter(glm::vec3 spawnPos, std::weak_ptr<CharacterTileCharged_Emitter_3D> wk_ptr)
+{
+	if (wk_ptr.expired())
+	{
+		auto sh_ptr = std::make_shared<CharacterTileCharged_Emitter_3D>();
+		wk_ptr = sh_ptr;
+	}
+
+	auto sh_ptr = std::make_shared<CharacterTileCharged_Emitter_3D>();
+	AddEmitter(sh_ptr);
+
+	// Emitter_3D values - Without consideration for default ctor values
+	sh_ptr->m_GM.m_position = spawnPos;
+
+	// Assign waypoints
+	std::array<glm::vec3, 4> waypoints;
+	waypoints[0] = spawnPos;
+	waypoints[1] = glm::vec3{ spawnPos.x, spawnPos.y, spawnPos.z + 2.0f };
+	waypoints[2] = glm::vec3{ spawnPos.x + 2.0f, spawnPos.y, spawnPos.z + 2.0f };
+	waypoints[3] = glm::vec3{ spawnPos.x + 2.0f, spawnPos.y, spawnPos.z };
+
+	sh_ptr->AssignWaypoint(waypoints);
 }
