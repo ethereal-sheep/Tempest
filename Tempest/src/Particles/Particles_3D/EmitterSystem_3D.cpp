@@ -101,8 +101,8 @@ const std::weak_ptr<Emitter_3D> EmitterSystem_3D::CreateTestModelShapeEmitter(gl
 	tempEmitter->m_EM.m_rateOverTime = 1;
 
 	// Particle Architype values - without consideration for default ctor
-	tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	tempEmitter->m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
+	tempEmitter->m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 	tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 1.0f, 1.0f, 1.0f };
@@ -242,15 +242,19 @@ const std::weak_ptr<Unit_MovementTrailEmitter_3D> EmitterSystem_3D::CreateUnitTr
 }
 
 
-const std::weak_ptr<CharacterSpawnEmitter_3D> EmitterSystem_3D::CreateChracterSpawnEmitter(glm::vec3 spawnPos)
+void EmitterSystem_3D::CreateChracterSpawnEmitter(glm::vec3 spawnPos, std::weak_ptr<CharacterSpawnEmitter_3D> wk_ptr)
 {
-	auto tempEmitter = std::make_shared<CharacterSpawnEmitter_3D>();
-	AddEmitter(tempEmitter);
+	if (wk_ptr.expired())
+	{
+		auto sh_ptr = std::make_shared<CharacterSpawnEmitter_3D>();
+		wk_ptr = sh_ptr;
+	}
+
+	auto sh_ptr = std::make_shared<CharacterSpawnEmitter_3D>();
+	AddEmitter(sh_ptr);
 
 	// Emitter_3D values - Without consideration for default ctor values
-	tempEmitter->m_GM.m_position = spawnPos;
-
-	return tempEmitter;
+	sh_ptr->m_GM.m_position = spawnPos;
 }
 
 const std::weak_ptr<CharacterDamageEmitter_3D> EmitterSystem_3D::CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd)

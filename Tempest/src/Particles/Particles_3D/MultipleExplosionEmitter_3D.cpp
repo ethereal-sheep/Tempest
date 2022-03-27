@@ -23,8 +23,8 @@ MultipleExplosionEmitter_3D::MultipleExplosionEmitter_3D(int explosionEmitterAmo
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	m_EM.m_rateOverTime = 20;
 
-	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };

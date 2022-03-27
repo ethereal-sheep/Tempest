@@ -30,8 +30,8 @@ ParticleArchetypeModule_3D::ParticleArchetypeModule_3D()
 	
 	, m_SpawnRotation{ 0, 0, 0 }
 
-	, m_startVelocity     { 0.0f, 0.0f, 0.0f }
-	, m_endVelocity       { 0.0f, 0.0f, 0.0f }
+	, m_velocityStart{ 0.0f, 0.0f, 0.0f }
+	, m_velocityEnd { 0.0f, 0.0f, 0.0f }
 	, m_velocityVariation { 3.0f, 1.0f, 0.0f }
 
 	, m_scaleBegin{ 20.0f, 20.0f, 20.0f }

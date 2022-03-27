@@ -25,8 +25,8 @@ Interactive_DoorParticle_3D::Interactive_DoorParticle_3D()
 	m_EM.m_rateOverTime = 1;
 	
 	// Particle Architype values - without consideration for default ctor
-	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 3.0f, 0.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };

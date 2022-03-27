@@ -21,8 +21,8 @@ Rotation_ExplosionEmitter_3D::Rotation_ExplosionEmitter_3D()
 	
 	// Particle Architype values - without consideration for default ctor
 	m_PAM.m_gravity = true;
-	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.1f, 0.1f, 0.1f };

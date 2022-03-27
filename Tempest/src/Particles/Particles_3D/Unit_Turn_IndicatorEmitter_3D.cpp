@@ -22,8 +22,8 @@ Unit_Turn_IndicatorEmitter_3D::Unit_Turn_IndicatorEmitter_3D()
 	m_wayPointIndex = 0;
 	m_recalculateVelocity = true;
 
-	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.1f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.1f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.05f, 0.05f, 0.05f };

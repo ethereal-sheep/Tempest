@@ -146,19 +146,25 @@ void Emitter_3D::ParticleUpdate(const float dt)
 		}
 		else
 		{
-			//particle.m_position += particle.m_velocity * m_MM.m_simulationSpeed;
-			particle.m_position += particle.m_velocity * dt;
-
-			// Update Velocity
-			if (particle.m_gravity)
-				particle.m_velocity.y += GRAVITY * dt;
-
-			//particle.m_rotation += 0.01f * m_MM.m_simulationSpeed;
-
 			// lifeTime and percentage of lifeTime remaining
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
 			//particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
 			particle.m_lifeRemaining -= dt;
+
+			//particle.m_position += particle.m_velocity * m_MM.m_simulationSpeed;
+			particle.m_position += particle.m_velocity * dt;
+			//particle.m_rotation += 0.01f * m_MM.m_simulationSpeed;
+
+			// Update Velocity
+			if (particle.m_gravity)
+				particle.m_velocity.y += GRAVITY * dt;
+			else
+			{
+				// Velocity
+				particle.m_velocity.x = glm::mix(particle.m_velocityEnd.x, particle.m_velocityBegin.x, lifePercent);
+				particle.m_velocity.y = glm::mix(particle.m_velocityEnd.y, particle.m_velocityBegin.y, lifePercent);
+				particle.m_velocity.z = glm::mix(particle.m_velocityEnd.z, particle.m_velocityBegin.z, lifePercent);
+			}
 
 			// Scale
 			particle.m_scale.x = glm::mix(particle.m_scaleEnd.x, particle.m_scaleBegin.x, lifePercent);
@@ -226,20 +232,35 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 	if (rangeZ)
 		particle.m_position.z = Random::Float() * rangeZ + m_PAM.m_minSpawnPos.z;
 
-
-	// Velocity
-	particle.m_velocity = m_PAM.m_startVelocity;
+	// Velocity from EmissionModule
+	particle.m_velocityBegin = m_PAM.m_velocityStart;
+	particle.m_velocityEnd = m_PAM.m_velocityEnd;
 	particle.m_gravity = m_PAM.m_gravity;
 
-	// Velocity Variations
+	// Velocity Variation for the Individual Particle
 	if (m_PAM.m_velocityVariation.x >= 1)
-		particle.m_velocity.x += Random::Float() * m_PAM.m_velocityVariation.x;
+	{
+		auto rand_Vel_X = Random::Float() * m_PAM.m_velocityVariation.x;
+
+		particle.m_velocityBegin.x += rand_Vel_X;
+		particle.m_velocityEnd.x += rand_Vel_X;
+	}
 
 	if (m_PAM.m_velocityVariation.y >= 1)
-		particle.m_velocity.y += Random::Float() * m_PAM.m_velocityVariation.y;
+	{
+		auto rand_Vel_Y = Random::Float() * m_PAM.m_velocityVariation.y;
+
+		particle.m_velocityBegin.y += rand_Vel_Y;
+		particle.m_velocityEnd.y += rand_Vel_Y;
+	}
 
 	if (m_PAM.m_velocityVariation.z >= 1)
-		particle.m_velocity.z += Random::Float() * m_PAM.m_velocityVariation.z;
+	{
+		auto rand_Vel_Z = Random::Float() * m_PAM.m_velocityVariation.z;
+
+		particle.m_velocityBegin.z += rand_Vel_Z;
+		particle.m_velocityEnd.z += rand_Vel_Z;
+	}
 
 	// Color
 	particle.m_colourBegin = m_PAM.m_colourBegin;

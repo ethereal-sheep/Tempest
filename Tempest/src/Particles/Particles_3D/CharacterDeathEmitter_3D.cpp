@@ -17,8 +17,8 @@ CharacterDeathEmitter_3D::CharacterDeathEmitter_3D()
 	m_EM.m_rateOverTime = 20;
 	Emitter_3D::UpdateMaxParticle(1000);
 
-	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
@@ -104,8 +104,8 @@ void CharacterDeathEmitter_3D::OnDeath()
 		tempEmitter->m_EM.m_spawnCountTimer = tempEmitter->m_EM.m_spawnTimeInterval;
 
 		tempEmitter->m_PAM.m_gravity = true;
-		tempEmitter->m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-		tempEmitter->m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+		tempEmitter->m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
+		tempEmitter->m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 		tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
 		tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };

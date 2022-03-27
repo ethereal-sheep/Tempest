@@ -15,8 +15,8 @@ CharacterDamageEmitter_3D::CharacterDamageEmitter_3D()
 	m_EM.m_rateOverTime = 0;
 
 	m_PAM.m_gravity = true;
-	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 1.0f, 2.0f, 1.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };

@@ -44,7 +44,7 @@ struct ParticleArchetypeModule_3D
 
 	glm::vec3 m_SpawnRotation;
 
-	glm::vec3 m_startVelocity, m_endVelocity;
+	glm::vec3 m_velocityStart, m_velocityEnd;
 	glm::vec3 m_velocityVariation;
 
 	glm::vec3 m_scaleBegin, m_scaleEnd;

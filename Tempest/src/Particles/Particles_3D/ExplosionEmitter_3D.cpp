@@ -28,8 +28,8 @@ ExplosionEmitter_3D::ExplosionEmitter_3D()
 
 	// Particle Architype values - without consideration for default ctor
 	m_PAM.m_gravity = true;
-	m_PAM.m_startVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.5f, 0.5f, 0.5f };
@@ -70,13 +70,13 @@ void ExplosionEmitter_3D::ParticleSetUp(Particle_3D& particle)
 
 	// Velocity Variations
 	if (m_PAM.m_velocityVariation.x >= 1)
-		particle.m_velocity.x += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.x) + m_PAM.m_startVelocity.x;
+		particle.m_velocity.x += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.x) + m_PAM.m_velocityStart.x;
 
 	if (m_PAM.m_velocityVariation.y >= 1)
-		particle.m_velocity.y += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.y) + m_PAM.m_startVelocity.y;
+		particle.m_velocity.y += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.y) + m_PAM.m_velocityStart.y;
 
 	if (m_PAM.m_velocityVariation.z >= 1)
-		particle.m_velocity.z += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.z) + m_PAM.m_startVelocity.z;
+		particle.m_velocity.z += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.z) + m_PAM.m_velocityStart.z;
 
 	short spawnSector = std::rand() % 7;
 	short directionX = 1;

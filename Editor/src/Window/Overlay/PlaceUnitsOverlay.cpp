@@ -17,6 +17,8 @@
 #include "ECS/Prototypes/Prototype_Category.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+
 namespace Tempest
 {
 	void PlaceUnitsOverlay::open_popup(const Event& e)
@@ -372,6 +374,12 @@ namespace Tempest
 									auto& transform = instance.ecs.get<tc::Transform>(chars[selected]);
 									// take note that inter has already been processed
 									transform.position = inter;
+
+									// Instantiate the character VFX
+									auto vfx_SpawnPos = transform.position;
+									vfx_SpawnPos.x += 0.1f;
+									vfx_SpawnPos.z += 0.8f;
+									EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(vfx_SpawnPos, m_characterSpawnEmitter);
 								}
 								else
 								{
@@ -386,8 +394,6 @@ namespace Tempest
 
 									AudioEngine ae;
 									ae.Play("Sounds2D/ObjectPlacement.wav", "SFX");
-
-									// Instantiate the character VFX
 
 									chars[selected] = entity;
 									LOG_ASSERT(instance.ecs.has<tc::Character>(entity));

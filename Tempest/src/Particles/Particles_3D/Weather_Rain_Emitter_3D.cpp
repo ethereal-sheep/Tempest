@@ -17,8 +17,8 @@ Weather_Rain_Emitter_3D::Weather_Rain_Emitter_3D()
 	// Particle Architype values - without consideration for default ctor
 	m_PAM.m_SpawnRotation.z = 60;
 
-	m_PAM.m_startVelocity = glm::vec3{ 10.f, -50.0f, 0.0f };
-	m_PAM.m_endVelocity = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 10.f, -50.0f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 30.0f, -1000.0f, 0.0f };
 	m_PAM.m_gravity = true;
 

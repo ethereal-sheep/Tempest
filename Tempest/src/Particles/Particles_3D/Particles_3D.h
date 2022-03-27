@@ -19,6 +19,8 @@ struct Particle_3D
 	Particle_3D();
 
 	glm::vec3 m_position;
+
+	glm::vec3 m_velocityBegin, m_velocityEnd;
 	glm::vec3 m_velocity;
 
 	glm::vec3 m_rotation;
