@@ -78,7 +78,6 @@ void CharacterTileCharged_Emitter_3D::Emit(const int particleAmount)
 glm::vec3 CharacterTileCharged_Emitter_3D::RandomPoint()
 {
 	// Random points to emit the particle
-	static int indexCounter = 0;
 	int first_Waypoint = std::rand() % waypoint_Index;
 	int second_Waypoint = 0;
 
