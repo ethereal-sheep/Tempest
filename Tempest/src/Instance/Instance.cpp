@@ -159,8 +159,10 @@ namespace Tempest
 						* glm::mat4(transform->rotation)
 						* glm::scale(transform->scale);
 
-
-					Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
+					if(character->color == glm::vec3(0.f, 0.f, 0.f))
+						Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
+					else
+						Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id, character->color);
 				}
 				//Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}

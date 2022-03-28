@@ -553,6 +553,34 @@ namespace Tempest
             m.m_Bones.push_back(i);
         m_Pipeline.m_Models.push_back(m);
     }
+
+    void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id, glm::vec3 color)
+    {
+        if (!m_Pipeline.m_ModelLibrary.count(path))
+        {
+            std::shared_ptr<ModelPBR> temp = std::make_shared<ModelPBR>();
+            temp->loadModel(path);
+            m_Pipeline.m_ModelLibrary.insert(std::make_pair(path, std::move(temp)));
+        }
+
+        if (!Service<AnimMultithreadHelper>::Get().CheckAnimator(id))                 
+        {
+            Service<AnimMultithreadHelper>::Get().AddAnimator(id, Animator(&m_Pipeline.m_ModelLibrary[path]->GetAnimation()));
+            return;
+        }
+
+        ModelObj m;
+        m.m_Transform = model_matrix;
+        m.m_Model = m_Pipeline.m_ModelLibrary[path];
+        m.isAnim = true;
+        m.hasColor = true;
+        m.color = color;
+
+        auto transforms = Service<AnimMultithreadHelper>::Get().get().GetBoneMatrix(id);
+        for (auto& i : transforms)
+            m.m_Bones.push_back(i);
+        m_Pipeline.m_Models.push_back(m);
+    }
     
     void RenderSystem::SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color)
     {
@@ -765,6 +793,9 @@ namespace Tempest
                             //    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(USOcolor.x,USOcolor.y,USOcolor.z), "colour");
                         }
                         else if (m_Pipeline.m_Models[i].isParticle)
+                            m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].color, "colour");
+
+                        else if (m_Pipeline.m_Models[i].isAnim && (j == 1))
                             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].color, "colour");
                         else
                             m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(m_Pipeline.m_Models[i].m_Model->colours[m_Pipeline.m_Models[i].m_Model->mats[j]], "colour");

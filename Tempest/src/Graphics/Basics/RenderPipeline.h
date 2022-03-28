@@ -62,6 +62,7 @@ namespace Tempest
 		glm::mat4 m_Transform{ 1.0f };
 		glm::mat4 m_TransformPrev{ 1.0f };
 		bool hasColor = false;
+		bool isAnim = false;
 		vec3 color = { 0.f, 0.f, 0.f };
 		bool isParticle = false;
 		bool normalCalculated = false;
