@@ -318,7 +318,7 @@ void Emitter_3D::Emit(const int particleAmount)
 
 void Emitter_3D::ClearAllParticles()
 {
-	// Particle_2D Behaviour
+	// Particle_3D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
 	{
 		auto& particle = m_particles[i];

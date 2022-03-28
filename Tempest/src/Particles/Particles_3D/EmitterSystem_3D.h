@@ -50,7 +50,7 @@ struct EmitterSystem_3D
 	const std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> CreateTileWaypointEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<Unit_MovementTrailEmitter_3D> CreateUnitTrailEmitter(glm::vec3 spawnPos);
 
-	void CreateChracterSpawnEmitter(glm::vec3 spawnPos = { 0.f, 0.f, 0.f }, std::weak_ptr<CharacterSpawnEmitter_3D> wk_ptr = std::weak_ptr<CharacterSpawnEmitter_3D>());
+	void CreateChracterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
 	void CreateChracterChargedAttackEmitter(glm::vec3 spawnPos = { 0.f, 0.f, 0.f }, std::weak_ptr<CharacterTileCharged_Emitter_3D> wk_ptr = std::weak_ptr<CharacterTileCharged_Emitter_3D>());
 	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd);
 	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd);

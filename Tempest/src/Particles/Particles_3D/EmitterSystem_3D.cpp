@@ -248,19 +248,25 @@ const std::weak_ptr<Unit_MovementTrailEmitter_3D> EmitterSystem_3D::CreateUnitTr
 }
 
 
-void EmitterSystem_3D::CreateChracterSpawnEmitter(glm::vec3 spawnPos, std::weak_ptr<CharacterSpawnEmitter_3D> wk_ptr)
+void EmitterSystem_3D::CreateChracterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos)
 {
 	if (wk_ptr.expired())
 	{
 		auto sh_ptr = std::make_shared<CharacterSpawnEmitter_3D>();
 		wk_ptr = sh_ptr;
+		AddEmitter(sh_ptr);
+	}
+	else
+	{
+		// Reset the emitter
+		wk_ptr.lock()->ClearAllParticles();
+
+		// Reborn the emitter
+		wk_ptr.lock()->Reborn();
 	}
 
-	auto sh_ptr = std::make_shared<CharacterSpawnEmitter_3D>();
-	AddEmitter(sh_ptr);
-
 	// Emitter_3D values - Without consideration for default ctor values
-	sh_ptr->m_GM.m_position = spawnPos;
+	wk_ptr.lock()->m_GM.m_position = spawnPos;
 }
 
 const std::weak_ptr<CharacterDamageEmitter_3D> EmitterSystem_3D::CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd)

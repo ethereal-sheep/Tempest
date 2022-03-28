@@ -8,6 +8,7 @@
 struct CharacterSpawnEmitter_3D : public Emitter_3D
 {
 	CharacterSpawnEmitter_3D();
+	void Reborn();
 };
 
 #endif // !CHARACTER_SPAWN_EMITTER_3D_H

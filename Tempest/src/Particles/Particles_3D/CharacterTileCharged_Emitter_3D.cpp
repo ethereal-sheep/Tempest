@@ -16,18 +16,18 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	// Values for Emission Module
 	m_GM.m_active = true;
 
-	m_MM.m_duration = 10000.0f;
+	m_MM.m_duration = 2.0f;
 	m_MM.m_preWarm = true;
-	Emitter_3D::UpdateMaxParticle(30);
+	Emitter_3D::UpdateMaxParticle(1000);
 
-	m_EM.m_spawnTimeInterval = 0.1f;
+	m_EM.m_spawnTimeInterval = 0.0166f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
-	m_EM.m_rateOverTime = 10;
+	m_EM.m_rateOverTime = 30;
 
 	// Particle Architype values - without consideration for default ctor
-	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
-	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 3.0f, 0.0f };
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 1.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 1.f, 0.0f };
+	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 8.0f, 0.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
 	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
@@ -37,7 +37,7 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	m_PAM.m_colourBegin = glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f };
 	m_PAM.m_colourEnd = glm::vec4{ 0.0f, 0.0f, 0.0f, 0.0f };
 
-	m_PAM.m_lifeTime = 1.0f;
+	m_PAM.m_lifeTime = 0.5f;
 	m_PAM.m_rebirth = false;
 
 	m_RM.m_renderingPath = "Models/Cube.a";
@@ -53,6 +53,7 @@ void CharacterTileCharged_Emitter_3D::AssignWaypoint(const std::array<glm::vec3,
 
 void CharacterTileCharged_Emitter_3D::Emit(const int particleAmount)
 {
+	static int incremental_Amount = 100;
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
 	{
@@ -72,6 +73,15 @@ void CharacterTileCharged_Emitter_3D::Emit(const int particleAmount)
 			if (m_available_ParticleSlots.size() <= 0)
 				break;
 		}
+	}
+
+	// Each time emit increase the speed by abit
+	if (incremental_Amount++ < 100)
+	{
+		m_PAM.m_velocityStart *= 1.5f;
+		m_PAM.m_velocityEnd *= 1.5f;
+		m_PAM.m_velocityVariation *= 1.5f;
+		m_PAM.m_lifeTime *= 0.5f;
 	}
 }
 

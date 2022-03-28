@@ -153,7 +153,8 @@ namespace Tempest
 					break;
 					case 'e':
 					{
-						EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+						std::weak_ptr<CharacterSpawnEmitter_3D> testEmitter;
+						EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(testEmitter, glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//EmitterSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
 						//EmitterSystem_3D::GetInstance().CreateChracterDeathEmitter(glm::vec3{ 2.0f, 0.0f, 2.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
 					}

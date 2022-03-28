@@ -159,14 +159,14 @@ namespace Tempest
 				auto character = ecs.get_if<tc::Character>(id);
 				if (character != nullptr)
 				{
-					//Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+					Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
 
-					auto test1 = glm::translate(transform->position)
+					/*auto test1 = glm::translate(transform->position)
 						* glm::mat4(transform->rotation)
-						* glm::scale(transform->scale);
+						* glm::scale(transform->scale);*/
 
 
-					Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
+					//Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
 				}
 				//Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}

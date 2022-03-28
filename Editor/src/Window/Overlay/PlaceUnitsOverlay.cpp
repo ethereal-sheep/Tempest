@@ -379,7 +379,8 @@ namespace Tempest
 									auto vfx_SpawnPos = transform.position;
 									vfx_SpawnPos.x += 0.1f;
 									vfx_SpawnPos.z += 0.8f;
-									EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(vfx_SpawnPos, m_characterSpawnEmitter);
+
+									EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(m_characterSpawnEmitter, vfx_SpawnPos);
 								}
 								else
 								{
