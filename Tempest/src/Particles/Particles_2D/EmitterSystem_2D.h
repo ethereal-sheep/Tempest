@@ -74,14 +74,8 @@ struct EmitterSystem_2D
 	void CreateExplosionEmitter(std::weak_ptr<ExplosionEmitter_2D>& emitter, glm::vec2 spawnPos);
 	void CreateExplosionEmitter(std::weak_ptr<ExplosionEmitter_2D>& emitter, ImVec2 spawnPos);
 
-	//void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, glm::vec2 spawnPos);
-	//void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, ImVec2 spawnPos);
-
 	void CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
 	void CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
-
-	//void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
-	//void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
 
 	//--------------------------------------------------------------
 
