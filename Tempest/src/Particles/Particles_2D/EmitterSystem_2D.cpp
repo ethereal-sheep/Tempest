@@ -269,12 +269,12 @@ void EmitterSystem_2D::CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMoti
 	emitter.lock()->m_RM.m_type = ParticleType::Square;
 }
 
-void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, ImVec2 centrePos, float radius)
+void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, ImVec2 min, ImVec2 max)
 {
-	CreateBackgroundEmitter(emitter, Imvec2_To_GlmVec2_Converter(centrePos), radius);
+	CreateBackgroundEmitter(emitter, Imvec2_To_GlmVec2_Converter(min), Imvec2_To_GlmVec2_Converter(max));
 }
 
-void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, glm::vec2 centrePos, float radius)
+void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, glm::vec2 min, glm::vec2 max)
 {
 	if (emitter.expired())
 	{
@@ -288,9 +288,9 @@ void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmi
 	}
 
 	// Center position of the circle
-	emitter.lock()->m_centre = centrePos;
+	emitter.lock()->m_Min = min;
 	//tempEmitter->m_GM.m_position = centrePos;
-	emitter.lock()->m_radius = radius;
+	emitter.lock()->m_Max = max;
 
 	// Emitter_2D values - Without consideration for default ctor values
 	emitter.lock()->m_GM.m_velocity.x = 0.0f;
@@ -299,15 +299,15 @@ void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmi
 	emitter.lock()->m_MM.m_preWarm = true;
 	emitter.lock()->m_MM.m_simulationSpeed = 0.016f;
 
-	emitter.lock()->m_EM.m_spawnTimeInterval = 0.016f;
+	emitter.lock()->m_EM.m_spawnTimeInterval = 0.08f;
 	emitter.lock()->m_EM.m_spawnCountTimer = emitter.lock()->m_EM.m_spawnTimeInterval;
 	emitter.lock()->m_EM.m_rateOverTime = 1;
-	emitter.lock()->m_MM.m_maxParticles = 1000;
+	emitter.lock()->m_MM.m_maxParticles = 300;
 
 	// Particle Architype values - without consideration for default ctor
 	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
 	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
-	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 50.0f, 50.0f };
+	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 100.0f, 100.0f };
 
 	emitter.lock()->m_PAM.m_scaleBegin = 8.0f;
 	emitter.lock()->m_PAM.m_scaleEnd = 8.0f;

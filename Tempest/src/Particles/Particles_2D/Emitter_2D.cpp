@@ -16,6 +16,8 @@
 #include "Util.h"
 #include <numbers>
 
+#define GRAVITY -9.8f
+
 Emitter_2D::Emitter_2D()
 {
 	m_particles.resize(m_MM.m_maxParticles);
@@ -89,6 +91,16 @@ void Emitter_2D::ParticleUpdate()
 
 			// Calculate the lifeTime remaining
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
+
+			// Update Velocity
+			if (particle.m_gravity)
+				particle.m_velocity.y += GRAVITY * m_MM.m_simulationSpeed;
+			else
+			{
+				// Velocity
+				particle.m_velocity.x = glm::mix(particle.m_velocityEnd.x, particle.m_velocityBegin.x, lifePercent);
+				particle.m_velocity.y = glm::mix(particle.m_velocityEnd.y, particle.m_velocityBegin.y, lifePercent);
+			}
 
 			particle.m_size = glm::mix(m_PAM.m_scaleEnd, m_PAM.m_scaleBegin, lifePercent);
 			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);

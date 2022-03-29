@@ -12,8 +12,7 @@ struct RandomSpawnPointEmitter_2D : public Emitter_2D
 	RandomSpawnPointEmitter_2D();
 
 	// Random Point
-	glm::vec2 m_centre;
-	float m_radius;
+	glm::vec2 m_Min, m_Max;
 
 	glm::vec2 RandomPoint();
 

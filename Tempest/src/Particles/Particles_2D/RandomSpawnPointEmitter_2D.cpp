@@ -3,10 +3,9 @@
 #include "RandomSpawnPointEmitter_2D.h"
 #include "../Random.h"
 
-
 RandomSpawnPointEmitter_2D::RandomSpawnPointEmitter_2D()
-	: m_centre { 0.0f,0.0f }
-	, m_radius { 0.0f }
+	: m_Min { 0.0f }
+	, m_Max { 0.0f }
 {
 
 }
@@ -14,10 +13,12 @@ RandomSpawnPointEmitter_2D::RandomSpawnPointEmitter_2D()
 glm::vec2 RandomSpawnPointEmitter_2D::RandomPoint()
 {
 	// A random point between the axis 
-	float randomDistance = Random::Float() * m_radius;
+	glm::vec2 distance = m_Max - m_Min;
 
 	// Pick the random point
-	glm::vec2 randomPoint_2D = m_centre + randomDistance;
+	glm::vec2 randomPoint_2D = m_Min;
+	randomPoint_2D.x += Random::Float() * distance.x;
+	randomPoint_2D.y += Random::Float() * distance.y;
 
 	return randomPoint_2D;
 }
@@ -31,13 +32,9 @@ void RandomSpawnPointEmitter_2D::Emit(const int particleAmount)
 		{
 			// Initailisation of the particle
 			Particle_2D particle;
+			Emitter_2D::ParticleSetUp(particle);
 
 			particle.m_position = RandomPoint();
-			particle.m_isActive = true;
-			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
-
-			// Velocity - RNG
-			particle.m_velocity = m_PAM.m_velocityStart;
 
 			short spawnSector = std::rand() % 4;
 			short directionX = 1;
@@ -66,20 +63,12 @@ void RandomSpawnPointEmitter_2D::Emit(const int particleAmount)
 				break;
 			}
 
-			particle.m_velocity.x = Random::Float() * m_PAM.m_velocityVariation.x * directionX;
-			particle.m_velocity.y = Random::Float() * m_PAM.m_velocityVariation.y * directionY;
+			particle.m_velocityBegin.x *= directionX;
+			particle.m_velocityEnd.x *= directionX;
 
-			// Color
-			particle.m_colour.r = (Random::Float() - 0.5f);
-			particle.m_colour.g = (Random::Float() - 0.5f);
-			particle.m_colour.b = (Random::Float() - 0.5f);
+			particle.m_velocityBegin.y *= directionY;
+			particle.m_velocityEnd.y *= directionY;
 
-			particle.m_type = m_RM.m_type;
-
-			// Lifetime
-			particle.m_lifeTime = m_PAM.m_lifeTime;
-			particle.m_lifeRemaining = m_PAM.m_lifeTime;
-			particle.m_size = m_PAM.m_scaleBegin + m_PAM.m_scaleVariation * (Random::Float() - 0.5f);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

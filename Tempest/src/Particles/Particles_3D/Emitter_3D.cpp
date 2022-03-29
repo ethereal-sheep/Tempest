@@ -44,7 +44,6 @@ void Emitter_3D::UpdateMaxParticle(const int newMaxParticleCapacity)
 	}
 }
 
-
 void Emitter_3D::Update(const float dt)
 {
 	if (m_MM.m_preWarm)

@@ -171,6 +171,13 @@ namespace Tempest
 					// Test prepared functions for XR
 					//EmitterSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
 
+					glm::vec2 tempVec;
+					tempVec.x = ImGui::GetMousePos().x;
+					tempVec.y = ImGui::GetMousePos().y;
+
+					static std::weak_ptr<RandomSpawnPointEmitter_2D> testEmitter1;
+					EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(testEmitter1, tempVec, glm::vec2(1920.0f, 1080.0f));
+
 				}
 				//if (ImGui::IsMouseDown(1))
 				if (ImGui::IsMouseClicked(1))  // Right click
@@ -183,10 +190,6 @@ namespace Tempest
 					//auto& reg = particleSys.Register(tempVec);
 					static std::weak_ptr<ExplosionEmitter_2D> testEmitter2;
 					EmitterSystem_2D::GetInstance().CreateExplosionEmitter(testEmitter2, tempVec);
-
-
-					static std::weak_ptr<RandomSpawnPointEmitter_2D> testEmitter1;
-					EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(testEmitter1, tempVec, 50.0f);
 
 					//reg->m_RM.m_type = ParticleType::Circle;
 					//reg->m_GM.m_velocity.x = -500.0f;
