@@ -17,7 +17,7 @@ namespace Tempest
 			i.second.UpdateAnimation(dt);
 		}
 	}
-	
+
 	tvector<future_bool> AnimationManager::AsyncUpdateAnimations(float dt)
 	{
 		tvector<future_bool> v;
@@ -63,5 +63,45 @@ namespace Tempest
 	void AnimationManager::ChangeDuration(uint32_t id, float duration)
 	{
 		m_Animators.at(id).ChangeDuration(duration);
+	}
+
+	void AnimationManager::PlayAnimation(uint32_t id, bool loop)
+	{
+		m_Animators.at(id).Play(loop);
+	}
+
+	void AnimationManager::PauseAnimation(uint32_t id)
+	{
+		m_Animators.at(id).Pause();
+	}
+
+	void AnimationManager::StopAnimation(uint32_t id)
+	{
+		m_Animators.at(id).Stop();
+	}
+
+	void AnimationManager::SetSpeed(uint32_t id, float speed)
+	{
+		m_Animators.at(id).SetSpeed(speed);
+	}
+
+	bool AnimationManager::isPlaying(uint32_t id) const
+	{
+		return m_Animators.at(id).GetState() == ANIMATOR_STATE::PLAY;
+	}
+
+	bool AnimationManager::isPaused(uint32_t id) const
+	{
+		return m_Animators.at(id).GetState() == ANIMATOR_STATE::PAUSE;
+	}
+
+	bool AnimationManager::isStopped(uint32_t id) const
+	{
+		return m_Animators.at(id).GetState() == ANIMATOR_STATE::STOP;
+	}
+
+	bool AnimationManager::hasEnded(uint32_t id) const
+	{
+		return m_Animators.at(id).hasEnded();
 	}
 }

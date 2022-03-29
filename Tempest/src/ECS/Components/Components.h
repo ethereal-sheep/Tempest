@@ -20,6 +20,8 @@
 #include "Scripting/Graph/graph.h"
 #include "Graphics/Basics/Model.h"
 #include "Graphics/Basics/Lights.h"
+#include "Animation/AnimMultithreadHelper.h"
+//#include "Util/Service.h"
 
 /**
 * @brief 
@@ -887,10 +889,80 @@ namespace Tempest
 				return ar.EndObject();
 			}
 
-			Animation(uint32_t _id = 0) : id{ _id }{}
+			Animation(uint32_t _id = 0, std::string _curr = "../../../Resource/Models/Unit_Punch.fbx") : id{_id}, current_animation{_curr}{}
+
+			void play(bool loop = false)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				{
+					Service<AnimMultithreadHelper>::Get().PlayAnimation(id, loop);
+				}
+			}
+
+			void pause()
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				{
+					Service<AnimMultithreadHelper>::Get().PauseAnimation(id);
+				}
+			}
+
+			void stop()
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				{
+					Service<AnimMultithreadHelper>::Get().StopAnimation(id);
+				}
+			}
+
+			void set_speed(float spd = 1.f)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				{
+					Service<AnimMultithreadHelper>::Get().SetSpeed(id, spd);
+				}
+			}
 
 			uint32_t id;
+			std::string current_animation;
 		};
+
+		//class
+		//{
+		//	string starting_animation;
+		//
+		//	void play(bool loop = false);
+		//	void change_after(string);
+		//	void force_change(string);
+		//	void set_speed(float = 1.f);
+		//	void pause();
+		//	void stop();
+		//
+		//	bool is_playing()
+		//	{
+		//		//
+		//	}
+		//
+		//	bool is_pause()
+		//	{
+		//		animator.is_pause();
+		//	}
+		//
+		//	bool is_stop()
+		//	{
+		//		animator.is_stop();
+		//	}
+		//
+		//	void draw()
+		//	{
+		//		animator->get_model_name();
+		//		
+		//	}
+		//
+		//	ptr* animator;
+		//
+		//
+		//};
 	}
 	namespace tc = Tempest::Components;
 
