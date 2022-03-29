@@ -12,6 +12,7 @@
 #include "WaypointEmitter_2D.h"
 #include "CircularMotionEmitter_2D.h"
 #include "ExplosionEmitter_2D.h"
+#include "RandomSpawnPointEmitter_2D.h"
 
 // Debugging purpose
 #include "Logger/Log.h"
@@ -132,13 +133,13 @@ void EmitterSystem_2D::CreateButtonEmitter(std::weak_ptr<WaypointEmitter_2D>& em
 	emitter.lock()->m_recalculateVelocity = true;
 
 	// Particle Architype values - without consideration for default ctor
-	emitter.lock()->m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
-	emitter.lock()->m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
 	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 0.0f, 0.0f };
 
-	emitter.lock()->m_PAM.m_sizeBegin = 3.0f;
-	emitter.lock()->m_PAM.m_sizeEnd = 3.0f;
-	emitter.lock()->m_PAM.m_sizeVariation = 0.0f;
+	emitter.lock()->m_PAM.m_scaleBegin = 3.0f;
+	emitter.lock()->m_PAM.m_scaleEnd = 3.0f;
+	emitter.lock()->m_PAM.m_scaleVariation = 0.0f;
 
 	emitter.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	emitter.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
@@ -202,13 +203,13 @@ void EmitterSystem_2D::CreateExplosionEmitter(std::weak_ptr<ExplosionEmitter_2D>
 	emitter.lock()->m_MM.m_maxParticles = 1000;
 
 	// Particle Architype values - without consideration for default ctor
-	emitter.lock()->m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
-	emitter.lock()->m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
 	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 3.0f, 1.0f };
 
-	emitter.lock()->m_PAM.m_sizeBegin = 10.0f;
-	emitter.lock()->m_PAM.m_sizeEnd = 0.0f;
-	emitter.lock()->m_PAM.m_sizeVariation = 0.3f;
+	emitter.lock()->m_PAM.m_scaleBegin = 10.0f;
+	emitter.lock()->m_PAM.m_scaleEnd = 0.0f;
+	emitter.lock()->m_PAM.m_scaleVariation = 0.3f;
 
 	emitter.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	emitter.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
@@ -253,13 +254,13 @@ void EmitterSystem_2D::CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMoti
 	emitter.lock()->m_MM.m_maxParticles = 1000;
 
 	// Particle Architype values - without consideration for default ctor
-	emitter.lock()->m_PAM.m_startVelocity = glm::vec2{ 0.f, 0.f };
-	emitter.lock()->m_PAM.m_endVelocity = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
 	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 0.0f, 0.0f };
 
-	emitter.lock()->m_PAM.m_sizeBegin = 8.0f;
-	emitter.lock()->m_PAM.m_sizeEnd = 8.0f;
-	emitter.lock()->m_PAM.m_sizeVariation = 0.0f;
+	emitter.lock()->m_PAM.m_scaleBegin = 8.0f;
+	emitter.lock()->m_PAM.m_scaleEnd = 8.0f;
+	emitter.lock()->m_PAM.m_scaleVariation = 0.0f;
 
 	emitter.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	emitter.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
@@ -267,3 +268,55 @@ void EmitterSystem_2D::CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMoti
 	emitter.lock()->m_PAM.m_lifeTime = 1.0f;
 	emitter.lock()->m_RM.m_type = ParticleType::Square;
 }
+
+void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, ImVec2 centrePos, float radius)
+{
+	CreateBackgroundEmitter(emitter, Imvec2_To_GlmVec2_Converter(centrePos), radius);
+}
+
+void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, glm::vec2 centrePos, float radius)
+{
+	if (emitter.expired())
+	{
+		auto tempEmitter = std::make_shared<RandomSpawnPointEmitter_2D>();
+		emitter = tempEmitter;
+		AddEmitter(tempEmitter);
+	}
+	else
+	{
+		emitter.lock()->ClearAllParticles();
+	}
+
+	// Center position of the circle
+	emitter.lock()->m_centre = centrePos;
+	//tempEmitter->m_GM.m_position = centrePos;
+	emitter.lock()->m_radius = radius;
+
+	// Emitter_2D values - Without consideration for default ctor values
+	emitter.lock()->m_GM.m_velocity.x = 0.0f;
+	emitter.lock()->m_MM.m_duration = 1000.0f;
+	emitter.lock()->m_GM.m_active = true;
+	emitter.lock()->m_MM.m_preWarm = true;
+	emitter.lock()->m_MM.m_simulationSpeed = 0.016f;
+
+	emitter.lock()->m_EM.m_spawnTimeInterval = 0.016f;
+	emitter.lock()->m_EM.m_spawnCountTimer = emitter.lock()->m_EM.m_spawnTimeInterval;
+	emitter.lock()->m_EM.m_rateOverTime = 1;
+	emitter.lock()->m_MM.m_maxParticles = 1000;
+
+	// Particle Architype values - without consideration for default ctor
+	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 50.0f, 50.0f };
+
+	emitter.lock()->m_PAM.m_scaleBegin = 8.0f;
+	emitter.lock()->m_PAM.m_scaleEnd = 8.0f;
+	emitter.lock()->m_PAM.m_scaleVariation = 0.0f;
+
+	emitter.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	emitter.lock()->m_PAM.m_lifeTime = 1.0f;
+	emitter.lock()->m_RM.m_type = ParticleType::Square;
+}
+

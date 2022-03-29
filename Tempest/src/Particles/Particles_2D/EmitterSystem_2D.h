@@ -15,10 +15,12 @@
 #include "Emitter_2D.h"
 
 // Forward Declarations
+struct ImVec2;
+
 struct WaypointEmitter_2D;
 struct ExplosionEmitter_2D;
 struct CircularMotionEmitter_2D;
-struct ImVec2;
+struct RandomSpawnPointEmitter_2D;
 
 struct EmitterSystem_2D
 {
@@ -76,6 +78,9 @@ struct EmitterSystem_2D
 
 	void CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
 	void CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
+
+	void CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, ImVec2 centrePos, float radius);
+	void CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
 
 	//--------------------------------------------------------------
 

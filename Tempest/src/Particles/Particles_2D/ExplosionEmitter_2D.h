@@ -15,7 +15,7 @@
 
 #include <gtx/transform.hpp>
 
-struct ExplosionEmitter_2D final : public Emitter_2D
+struct ExplosionEmitter_2D : public Emitter_2D
 {
 	void Emit(const int particleAmount) override;
 };

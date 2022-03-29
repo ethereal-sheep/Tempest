@@ -571,8 +571,8 @@ namespace Tempest
 									emitter_C_0 = true;
 									EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.0f);
 									auto sm = m_circularMotionEmitter.lock();
-									sm->m_PAM.m_sizeBegin = 30.0f;
-									sm->m_PAM.m_sizeEnd = 30.0f;
+									sm->m_PAM.m_scaleBegin = 30.0f;
+									sm->m_PAM.m_scaleEnd = 30.0f;
 
 								}
 							}

@@ -17,11 +17,11 @@ WaypointEmitter_2D::WaypointEmitter_2D()
 	, m_wayPointIndex{ 0 }
 	, m_recalculateVelocity{ true }
 	// , m_initialDistanceSquared {0.0f}
-	// , m_startVelocity { glm::vec2{0.0f, 0.0f}}
-	// , m_endVelocity{ glm::vec2{0.0f, 0.0f}}
+	// , m_velocityStart { glm::vec2{0.0f, 0.0f}}
+	// , m_velocityEnd{ glm::vec2{0.0f, 0.0f}}
 {}
 
-void WaypointEmitter_2D::SelfUpdate()
+void WaypointEmitter_2D::Update()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -54,10 +54,10 @@ void WaypointEmitter_2D::SelfUpdate()
 				LOG_INFO("Position X : {0}", m_GM.m_position.x);
 				LOG_INFO("Position Y : {0}", m_GM.m_position.y);*/
 
-				//m_startVelocity = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
+				//m_velocityStart = m_wayPoints[m_wayPointIndex] - m_GM.m_position;
 				
 				// 20% of the initial velocity
-				//m_endVelocity = m_startVelocity * 0.5f;
+				//m_velocityEnd = m_velocityStart * 0.5f;
 
 				//m_initialDistanceSquared = DistanceCalculation(m_wayPoints[m_wayPointIndex], m_GM.m_position);
 
@@ -87,7 +87,7 @@ void WaypointEmitter_2D::SelfUpdate()
 
 			// Travel Progression Velocity
 			//float travelProgression = (m_initialDistanceSquared - distanceSquared) / m_initialDistanceSquared;
-			//m_GM.m_velocity = glm::mix(m_startVelocity, m_endVelocity, travelProgression);
+			//m_GM.m_velocity = glm::mix(m_velocityStart, m_velocityEnd, travelProgression);
 
 			//Move towards waypoint
 			m_GM.m_position += m_GM.m_velocity * m_MM.m_simulationSpeed;
@@ -131,4 +131,5 @@ void WaypointEmitter_2D::SelfUpdate()
 	else
 		m_MM.m_duration -= m_MM.m_simulationSpeed;
 
+	Emitter_2D::ParticleUpdate();
 }

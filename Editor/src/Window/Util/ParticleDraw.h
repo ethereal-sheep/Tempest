@@ -94,30 +94,6 @@ namespace Tempest
 							topLeft  = rotatePoint(pos.x, pos.y, particle.m_rotation, topLeft);
 							topRight = rotatePoint(pos.x, pos.y, particle.m_rotation, topRight);
 
-							/*topRight.x = max.x + 0.5f * cos(particle.m_rotation) - 0.5f * sin(particle.m_rotation);
-							topRight.y = max.y + 0.5f * sin(particle.m_rotation) + 0.5f * cos(particle.m_rotation);
-
-							topLeft.x = min.x - 0.5f * cos(particle.m_rotation) - 0.5f * sin(particle.m_rotation);
-							topLeft.y = max.y - 0.5f * sin(particle.m_rotation) + 0.5f * cos(particle.m_rotation);
-
-							btmLeft.x = min.x - 0.5f * cos(particle.m_rotation) + 0.5f * sin(particle.m_rotation);
-							btmLeft.x = min.y - 0.5f * sin(particle.m_rotation) - 0.5f * cos(particle.m_rotation);
-
-							btmRight.x = max.x + 0.5f * cos(particle.m_rotation) + 0.5f * sin(particle.m_rotation);
-							btmRight.y = min.y + 0.5f * sin(particle.m_rotation) - 0.5f * cos(particle.m_rotation);*/
-
-							/*btmLeft.x = min.x * cos(particle.m_rotation) - min.y * sin(particle.m_rotation);
-							btmLeft.y = min.x * sin(particle.m_rotation) + min.y * cos(particle.m_rotation);
-
-							btmRight.x = max.x * cos(particle.m_rotation) - min.y * sin(particle.m_rotation);
-							btmRight.y = max.x * sin(particle.m_rotation) + min.y * cos(particle.m_rotation);
-
-							topLeft.x = min.x * cos(particle.m_rotation) - max.y * sin(particle.m_rotation);
-							topLeft.y = min.x * sin(particle.m_rotation) + max.y * cos(particle.m_rotation);
-
-							topRight.x = max.x * cos(particle.m_rotation) - max.y * sin(particle.m_rotation);
-							topRight.y = max.x * sin(particle.m_rotation) + max.y * cos(particle.m_rotation);*/
-
 							if (particle.m_type == ParticleType::Circle)
 								drawlist->AddCircleFilled(pos, particle.m_size, ImGui::GetColorU32({ colour }));
 							else if (particle.m_type == ParticleType::Square)
