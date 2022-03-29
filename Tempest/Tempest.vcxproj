@@ -240,6 +240,7 @@
     <ClCompile Include="src\Memory\Resource\malloc_resource.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\CircularMotionEmitter_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\EmissionModules_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\LineEmitter_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.cpp" />
@@ -375,6 +376,7 @@
     <ClInclude Include="src\Memory\Util\aligned_malloc.h" />
     <ClInclude Include="src\Particles\Particles_2D\CircularMotionEmitter_2D.h" />
     <ClInclude Include="src\Particles\Particles_2D\EmissionModules_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\LineEmitter_2D.h" />
     <ClInclude Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.h" />

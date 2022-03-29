@@ -22,6 +22,8 @@ struct ExplosionEmitter_2D;
 struct CircularMotionEmitter_2D;
 struct RandomMinMaxSpawnPointEmitter_2D;
 
+struct LineEmitter_2D;
+
 struct EmitterSystem_2D
 {
 	static EmitterSystem_2D& GetInstance();
@@ -81,6 +83,9 @@ struct EmitterSystem_2D
 
 	void CreateBackgroundEmitter(std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D>& emitter, ImVec2 min, ImVec2 max);
 	void CreateBackgroundEmitter(std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D>& emitter, glm::vec2 min, glm::vec2 max);
+
+	void CreateLineEmitter(std::weak_ptr<LineEmitter_2D>& emitter, ImVec2 startPoint, ImVec2 endPoint);
+	void CreateLineEmitter(std::weak_ptr<LineEmitter_2D>& emitter, glm::vec2 startPoint, glm::vec2 endPoint);
 
 	//--------------------------------------------------------------
 

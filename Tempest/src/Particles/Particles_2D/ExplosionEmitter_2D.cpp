@@ -25,8 +25,8 @@ void ExplosionEmitter_2D::Emit(const int particleAmount)
 			Emitter_2D::ParticleSetUp(particle);
 
 			short spawnSector = std::rand() % 4;
-			short directionX = (std::rand() % 500);
-			short directionY = (std::rand() % 500);
+			short directionX = 1;
+			short directionY = 1;
 
 			switch (spawnSector)
 			{
@@ -51,23 +51,11 @@ void ExplosionEmitter_2D::Emit(const int particleAmount)
 				break;
 			}
 
-			particle.m_velocity.x += m_PAM.m_velocityVariation.x + directionX;
-			particle.m_velocity.y += m_PAM.m_velocityVariation.y + directionY;
+			particle.m_velocityBegin.x *= directionX;
+			particle.m_velocityEnd.x *= directionX;
 
-			//particle.m_velocity.x += m_PAM.m_velocityVariation.x - (Random::Float() - 50.f);
-			//particle.m_velocity.y += m_PAM.m_velocityVariation.y - (Random::Float() - 50.f);
-
-			//// Color
-			//particle.m_colour.r = (Random::Float() - 0.5f);
-			//particle.m_colour.g = (Random::Float() - 0.5f);
-			//particle.m_colour.b = (Random::Float() - 0.5f);
-
-			//particle.m_type = m_RM.m_type;
-
-			//// Lifetime
-			//particle.m_lifeTime = m_PAM.m_lifeTime;
-			//particle.m_lifeRemaining = m_PAM.m_lifeTime;
-			//particle.m_size = m_PAM.m_scaleBegin + m_PAM.m_scaleVariation * (Random::Float() - 0.5f);
+			particle.m_velocityBegin.y *= directionY;
+			particle.m_velocityEnd.y *= directionY;
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

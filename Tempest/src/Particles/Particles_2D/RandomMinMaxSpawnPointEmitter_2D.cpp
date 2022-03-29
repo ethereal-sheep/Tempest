@@ -69,7 +69,6 @@ void RandomMinMaxSpawnPointEmitter_2D::Emit(const int particleAmount)
 			particle.m_velocityBegin.y *= directionY;
 			particle.m_velocityEnd.y *= directionY;
 
-
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;
 			m_available_ParticleSlots.pop();

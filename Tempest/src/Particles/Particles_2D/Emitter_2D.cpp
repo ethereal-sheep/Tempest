@@ -121,7 +121,7 @@ void Emitter_2D::ParticleSetUp(Particle_2D& particle)
 	particle.m_gravity = m_PAM.m_gravity;
 
 	// Velocity Variation for the Individual Particle
-	if (m_PAM.m_velocityVariation.x >= 1)
+	if (m_PAM.m_velocityVariation.x)
 	{
 		auto rand_Vel_X = Random::Float() * m_PAM.m_velocityVariation.x;
 
@@ -129,7 +129,7 @@ void Emitter_2D::ParticleSetUp(Particle_2D& particle)
 		particle.m_velocityEnd.x += rand_Vel_X;
 	}
 
-	if (m_PAM.m_velocityVariation.y >= 1)
+	if (m_PAM.m_velocityVariation.y)
 	{
 		auto rand_Vel_Y = Random::Float() * m_PAM.m_velocityVariation.y;
 

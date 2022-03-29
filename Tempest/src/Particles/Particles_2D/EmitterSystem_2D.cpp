@@ -7,12 +7,19 @@
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
+
+
 #include "EmitterSystem_2D.h"
 
-#include "WaypointEmitter_2D.h"
+// Base 
 #include "CircularMotionEmitter_2D.h"
 #include "ExplosionEmitter_2D.h"
+
 #include "RandomMinMaxSpawnPointEmitter_2D.h"
+#include "LineEmitter_2D.h"
+
+// Specialised
+#include "WaypointEmitter_2D.h"
 
 // Debugging purpose
 #include "Logger/Log.h"
@@ -205,7 +212,7 @@ void EmitterSystem_2D::CreateExplosionEmitter(std::weak_ptr<ExplosionEmitter_2D>
 	// Particle Architype values - without consideration for default ctor
 	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
 	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
-	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 3.0f, 1.0f };
+	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 500.0f, 500.0f };
 
 	emitter.lock()->m_PAM.m_scaleBegin = 10.0f;
 	emitter.lock()->m_PAM.m_scaleEnd = 0.0f;
@@ -320,3 +327,52 @@ void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomMinMaxSpawnPo
 	emitter.lock()->m_RM.m_type = ParticleType::Square;
 }
 
+void EmitterSystem_2D::CreateLineEmitter(std::weak_ptr<LineEmitter_2D>& emitter, ImVec2 startPoint, ImVec2 endPoint)
+{
+	CreateLineEmitter(emitter, Imvec2_To_GlmVec2_Converter(startPoint), Imvec2_To_GlmVec2_Converter(endPoint));
+}
+
+void EmitterSystem_2D::CreateLineEmitter(std::weak_ptr<LineEmitter_2D>& emitter, glm::vec2 startPoint, glm::vec2 endPoint)
+{
+	if (emitter.expired())
+	{
+		auto tempEmitter = std::make_shared<LineEmitter_2D>();
+		emitter = tempEmitter;
+		AddEmitter(tempEmitter);
+	}
+	else
+	{
+		emitter.lock()->ClearAllParticles();
+	}
+
+	// Center position of the circle
+	emitter.lock()->m_startPoint = startPoint;
+	emitter.lock()->m_endPoint = endPoint;
+
+	// Emitter_2D values - Without consideration for default ctor values
+	emitter.lock()->m_GM.m_velocity.x = 0.0f;
+	emitter.lock()->m_MM.m_duration = 1000.0f;
+	emitter.lock()->m_GM.m_active = true;
+	emitter.lock()->m_MM.m_preWarm = true;
+	emitter.lock()->m_MM.m_simulationSpeed = 0.016f;
+
+	emitter.lock()->m_EM.m_spawnTimeInterval = 0.08f;
+	emitter.lock()->m_EM.m_spawnCountTimer = emitter.lock()->m_EM.m_spawnTimeInterval;
+	emitter.lock()->m_EM.m_rateOverTime = 1;
+	emitter.lock()->m_MM.m_maxParticles = 300;
+
+	// Particle Architype values - without consideration for default ctor
+	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
+	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 0.0f, -300.0f };
+
+	emitter.lock()->m_PAM.m_scaleBegin = 8.0f;
+	emitter.lock()->m_PAM.m_scaleEnd = 8.0f;
+	emitter.lock()->m_PAM.m_scaleVariation = 0.0f;
+
+	emitter.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	emitter.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	emitter.lock()->m_PAM.m_lifeTime = 1.0f;
+	emitter.lock()->m_RM.m_type = ParticleType::Square;
+}

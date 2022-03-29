@@ -175,9 +175,11 @@ namespace Tempest
 					tempVec.x = ImGui::GetMousePos().x;
 					tempVec.y = ImGui::GetMousePos().y;
 
-					static std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D> testEmitter1;
-					EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(testEmitter1, tempVec, glm::vec2(1920.0f, 1080.0f));
+					//static std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D> testEmitter1;
+					//EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(testEmitter1, tempVec, glm::vec2(1920.0f, 1080.0f));
 
+					static std::weak_ptr<LineEmitter_2D> testEmitter3;
+					EmitterSystem_2D::GetInstance().CreateLineEmitter(testEmitter3, glm::vec2{ 0.0f, 1080.0f }, glm::vec2(1920.0f, 1080.0f));
 				}
 				//if (ImGui::IsMouseDown(1))
 				if (ImGui::IsMouseClicked(1))  // Right click
