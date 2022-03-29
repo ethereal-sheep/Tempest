@@ -240,6 +240,7 @@
     <ClCompile Include="src\Memory\Resource\malloc_resource.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\CircularMotionEmitter_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\EmissionModules_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\RandomSpawnPointEmitter_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.cpp" />
@@ -256,7 +257,7 @@
     <ClCompile Include="src\Particles\Particles_3D\EmitterSystem_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Particles_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\Particle_2D.cpp" />
-    <ClCompile Include="src\Particles\Particles_2D\ParticleSystem_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\EmitterSystem_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.cpp" />
@@ -374,6 +375,7 @@
     <ClInclude Include="src\Memory\Util\aligned_malloc.h" />
     <ClInclude Include="src\Particles\Particles_2D\CircularMotionEmitter_2D.h" />
     <ClInclude Include="src\Particles\Particles_2D\EmissionModules_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\RandomSpawnPointEmitter_2D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.h" />
@@ -390,7 +392,7 @@
     <ClInclude Include="src\Particles\Particles_3D\EmitterSystem_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Particles_3D.h" />
     <ClInclude Include="src\Particles\Particles_2D\Particle_2D.h" />
-    <ClInclude Include="src\Particles\Particles_2D\ParticleSystem_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\EmitterSystem_2D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.h" />

@@ -247,7 +247,6 @@ const std::weak_ptr<Unit_MovementTrailEmitter_3D> EmitterSystem_3D::CreateUnitTr
 	return tempEmitter;
 }
 
-
 void EmitterSystem_3D::CreateChracterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos)
 {
 	if (wk_ptr.expired())

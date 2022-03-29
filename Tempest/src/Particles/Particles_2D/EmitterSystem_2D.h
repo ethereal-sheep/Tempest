@@ -20,9 +20,9 @@ struct ExplosionEmitter_2D;
 struct CircularMotionEmitter_2D;
 struct ImVec2;
 
-struct ParticleSystem_2D
+struct EmitterSystem_2D
 {
-	static ParticleSystem_2D& GetInstance();
+	static EmitterSystem_2D& GetInstance();
 
 	//struct Handler
 	//{
@@ -68,28 +68,25 @@ struct ParticleSystem_2D
 
 	// ----------------------- Screenspace Particle_2D -------------
 
-	const std::weak_ptr<WaypointEmitter_2D> CreateButtonEmitter(glm::vec2 topLeftPos, glm::vec2 buttonSize);
-	const std::weak_ptr<WaypointEmitter_2D> CreateButtonEmitter(ImVec2 topLeftPos, ImVec2 buttonSize);
+	void CreateButtonEmitter(std::weak_ptr<WaypointEmitter_2D>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);
+	void CreateButtonEmitter(std::weak_ptr<WaypointEmitter_2D>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
 
-	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter_2D>& emitter, glm::vec2 topLeftPos, glm::vec2 buttonSize);
-	void ReuseButtonEmitter(const std::shared_ptr<WaypointEmitter_2D>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);
+	void CreateExplosionEmitter(std::weak_ptr<ExplosionEmitter_2D>& emitter, glm::vec2 spawnPos);
+	void CreateExplosionEmitter(std::weak_ptr<ExplosionEmitter_2D>& emitter, ImVec2 spawnPos);
 
-	const std::weak_ptr<ExplosionEmitter_2D> CreateExplosionEmitter(glm::vec2 spawnPos);
-	const std::weak_ptr<ExplosionEmitter_2D> CreateExplosionEmitter(ImVec2 spawnPos);
+	//void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, glm::vec2 spawnPos);
+	//void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, ImVec2 spawnPos);
 
-	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, glm::vec2 spawnPos);
-	void ReuseExplosionEmitter(const std::shared_ptr<ExplosionEmitter_2D>& emitter, ImVec2 spawnPos);
+	void CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
+	void CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
 
-	const std::weak_ptr<CircularMotionEmitter_2D> CreateCircularMotionEmitter_2D(glm::vec2 centrePos, float radius);
-	const std::weak_ptr<CircularMotionEmitter_2D> CreateCircularMotionEmitter_2D(ImVec2 centrePos, float radius);
-
-	void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
-	void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
+	//void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, ImVec2 centrePos, float radius);
+	//void ReuseCircularMotionEmitter_2D(const std::shared_ptr<CircularMotionEmitter_2D>& emitter, glm::vec2 centrePos, float radius);
 
 	//--------------------------------------------------------------
 
 private:
-	ParticleSystem_2D();
+	EmitterSystem_2D();
 
 	std::vector <std::shared_ptr<Emitter_2D>> m_emitters;
 

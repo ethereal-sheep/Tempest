@@ -10,11 +10,9 @@
 
 #include "Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
-
-#include "Particles/Particles_2D/ParticleSystem_2D.h"
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "FrameRate/FrameRateManager.h"
-
 
 namespace Tempest
 {
@@ -36,15 +34,13 @@ namespace Tempest
 			door.update(dt);
 		}
 		
-		ParticleSystem_2D::GetInstance().Update();
+		EmitterSystem_2D::GetInstance().Update();
 	}
 	void Instance::internal_render()
 	{
 		window_manager.show(*this);
 
-
 		EmitterSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
-
 
 		// move this to instance call when test finish
 		auto view = ecs.view<tc::Mesh>(exclude_t<tc::Destroyed>());
@@ -328,7 +324,6 @@ namespace Tempest
 		}
 		return false;
 	}
-
 
 	tvector<tpair<int, tpath>> Instance::get_scene_paths()
 	{

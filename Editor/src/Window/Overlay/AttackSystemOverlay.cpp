@@ -16,7 +16,7 @@
 #include "Instance/EditTimeInstance.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
-#include "Particles/Particles_2D/ParticleSystem_2D.h"
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
 
 namespace Tempest
 {
@@ -443,10 +443,7 @@ namespace Tempest
 								if (emitter_0 == false)
 								{
 									emitter_0 = true;
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 								}
 							}
 							break;
@@ -575,11 +572,7 @@ namespace Tempest
 
 								if (emitter_2 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2 = true;
 								}
 							}
@@ -602,12 +595,8 @@ namespace Tempest
 									glm::vec2 real_mousePosition;
 									real_mousePosition.x = pos.x;
 									real_mousePosition.y = pos.y;
-
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), real_mousePosition, real_buttonSize);
-
+									
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 									emitter_3 = true;
 								}
 							}
@@ -640,11 +629,7 @@ namespace Tempest
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								if (emitter_4 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_4 = true;
 								}
 							}
@@ -2137,10 +2122,7 @@ namespace Tempest
 
 							mouse = ImGui::GetMousePos();
 
-							if (m_explosionEmitter.expired())
-								m_explosionEmitter = ParticleSystem_2D::GetInstance().CreateExplosionEmitter(mouse);
-							else
-								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter.lock(), mouse);
+							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosionEmitter, mouse);
 						}
 					}
 					else if (e_pin->get_type() != pin_type::Flow && e_pin->is_linked())
@@ -2153,10 +2135,7 @@ namespace Tempest
 
 							mouse = ImGui::GetMousePos();
 
-							if (m_explosionEmitter.expired())
-								m_explosionEmitter = ParticleSystem_2D::GetInstance().CreateExplosionEmitter(mouse);
-							else
-								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter.lock(), mouse);
+							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosionEmitter, mouse);
 						}
 					}
 					else if (s_pin->is_linked() && e_pin->is_linked())
@@ -2173,10 +2152,7 @@ namespace Tempest
 
 							mouse = ImGui::GetMousePos();
 
-							if (m_explosionEmitter.expired())
-								m_explosionEmitter = ParticleSystem_2D::GetInstance().CreateExplosionEmitter(mouse);
-							else
-								ParticleSystem_2D::GetInstance().ReuseExplosionEmitter(m_explosionEmitter.lock(), mouse);
+							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosionEmitter, mouse);;
 						}
 					}
 				}

@@ -15,7 +15,7 @@
 #include "rttr/type.h"
 #include "rttr/registration.h"
 #include "ECS/Rttr_Register.h"
-#include "Particles/Particles_2D/ParticleSystem_2D.h"
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
 
 namespace Tempest
 {
@@ -168,7 +168,7 @@ namespace Tempest
 				//if (ImGui::IsMouseClicked(0))
 				//{
 				//	// Test prepared functions for XR
-				//	ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
+				//	EmitterSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
 				//}
 				////if (ImGui::IsMouseDown(1))
 				//if (ImGui::IsMouseClicked(1))
@@ -179,7 +179,7 @@ namespace Tempest
 
 				//	//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
 				//	//auto& reg = particleSys.Register(tempVec);
-				//	ParticleSystem_2D::GetInstance().CreateExplosionEmitter(tempVec);
+				//	EmitterSystem_2D::GetInstance().CreateExplosionEmitter(tempVec);
 				//	//reg->m_RM.m_type = ParticleType::Circle;
 				//	//reg->m_GM.m_velocity.x = -500.0f;
 
@@ -187,9 +187,9 @@ namespace Tempest
 				//}
 
 				//// Update the emitters
-				//ParticleSystem_2D::GetInstance().Update();
+				//EmitterSystem_2D::GetInstance().Update();
 
-				//for (auto& emitter : ParticleSystem_2D::GetInstance().get_emitters())
+				//for (auto& emitter : EmitterSystem_2D::GetInstance().get_emitters())
 				//{
 				//	// Render the particle
 				//	if(emitter->m_GM.m_active)

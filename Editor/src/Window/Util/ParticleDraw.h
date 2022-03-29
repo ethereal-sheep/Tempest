@@ -6,7 +6,7 @@
 
 #include "Instance/Instance.h"
 
-#include "../../Tempest/src/Particles/Particles_2D/ParticleSystem_2D.h"
+#include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
 #include "../../Tempest/src/Logger/Logger.h"
 
 namespace Tempest
@@ -24,7 +24,7 @@ namespace Tempest
 
 			//LOG_INFO("Draw Particles");
 
-			for (auto& emitter : ParticleSystem_2D::GetInstance().get_emitters())
+			for (auto& emitter : EmitterSystem_2D::GetInstance().get_emitters())
 			{
 				// Render the particle
 				if (emitter->m_GM.m_active)
