@@ -12,7 +12,7 @@
 #include "WaypointEmitter_2D.h"
 #include "CircularMotionEmitter_2D.h"
 #include "ExplosionEmitter_2D.h"
-#include "RandomSpawnPointEmitter_2D.h"
+#include "RandomMinMaxSpawnPointEmitter_2D.h"
 
 // Debugging purpose
 #include "Logger/Log.h"
@@ -269,16 +269,16 @@ void EmitterSystem_2D::CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMoti
 	emitter.lock()->m_RM.m_type = ParticleType::Square;
 }
 
-void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, ImVec2 min, ImVec2 max)
+void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D>& emitter, ImVec2 min, ImVec2 max)
 {
 	CreateBackgroundEmitter(emitter, Imvec2_To_GlmVec2_Converter(min), Imvec2_To_GlmVec2_Converter(max));
 }
 
-void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomSpawnPointEmitter_2D>& emitter, glm::vec2 min, glm::vec2 max)
+void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D>& emitter, glm::vec2 min, glm::vec2 max)
 {
 	if (emitter.expired())
 	{
-		auto tempEmitter = std::make_shared<RandomSpawnPointEmitter_2D>();
+		auto tempEmitter = std::make_shared<RandomMinMaxSpawnPointEmitter_2D>();
 		emitter = tempEmitter;
 		AddEmitter(tempEmitter);
 	}

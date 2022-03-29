@@ -7,9 +7,9 @@
 
 #include "EmitterSystem_2D.h"
 
-struct RandomSpawnPointEmitter_2D : public Emitter_2D
+struct RandomMinMaxSpawnPointEmitter_2D : public Emitter_2D
 {
-	RandomSpawnPointEmitter_2D();
+	RandomMinMaxSpawnPointEmitter_2D();
 
 	// Random Point
 	glm::vec2 m_Min, m_Max;

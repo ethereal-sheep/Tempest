@@ -175,7 +175,7 @@ namespace Tempest
 					tempVec.x = ImGui::GetMousePos().x;
 					tempVec.y = ImGui::GetMousePos().y;
 
-					static std::weak_ptr<RandomSpawnPointEmitter_2D> testEmitter1;
+					static std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D> testEmitter1;
 					EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(testEmitter1, tempVec, glm::vec2(1920.0f, 1080.0f));
 
 				}

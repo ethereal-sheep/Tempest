@@ -110,7 +110,7 @@
     <ClCompile Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_2D\RandomSpawnPointEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -300,7 +300,7 @@
     <ClInclude Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.h" />
-    <ClInclude Include="src\Particles\Particles_2D\RandomSpawnPointEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

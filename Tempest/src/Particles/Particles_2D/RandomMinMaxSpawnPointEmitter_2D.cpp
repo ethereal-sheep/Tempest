@@ -1,16 +1,16 @@
 
 
-#include "RandomSpawnPointEmitter_2D.h"
+#include "RandomMinMaxSpawnPointEmitter_2D.h"
 #include "../Random.h"
 
-RandomSpawnPointEmitter_2D::RandomSpawnPointEmitter_2D()
+RandomMinMaxSpawnPointEmitter_2D::RandomMinMaxSpawnPointEmitter_2D()
 	: m_Min { 0.0f }
 	, m_Max { 0.0f }
 {
 
 }
 
-glm::vec2 RandomSpawnPointEmitter_2D::RandomPoint()
+glm::vec2 RandomMinMaxSpawnPointEmitter_2D::RandomPoint()
 {
 	// A random point between the axis 
 	glm::vec2 distance = m_Max - m_Min;
@@ -23,7 +23,7 @@ glm::vec2 RandomSpawnPointEmitter_2D::RandomPoint()
 	return randomPoint_2D;
 }
 
-void RandomSpawnPointEmitter_2D::Emit(const int particleAmount)
+void RandomMinMaxSpawnPointEmitter_2D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
