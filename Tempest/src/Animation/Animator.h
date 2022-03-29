@@ -18,12 +18,13 @@ namespace Tempest
 		tvector<glm::mat4> GetFinalBoneMatrix() { return m_BoneMatrices; }
 		std::string GetName() { return m_Animation->GetName(); }
 		void ChangeDuration(float duration) { m_Animation->ChangeDuration(duration); }
+		//bool IsAnimationEnded()
 	private:
 
 		tvector<glm::mat4> m_BoneMatrices;
 		float m_CurrentTime;
 		float m_DeltaTime;
-
+		bool m_Ended = false;
 		Animation* m_Animation;
 	};
 }

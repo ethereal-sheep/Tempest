@@ -155,14 +155,14 @@ namespace Tempest
 				{
 					//Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
 
-					auto test1 = glm::translate(transform->position)
+					/*auto test1 = glm::translate(transform->position)
 						* glm::mat4(transform->rotation)
-						* glm::scale(transform->scale);
+						* glm::scale(transform->scale);*/
 
 					if(character->color == glm::vec3(0.f, 0.f, 0.f))
-						Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
+						Service<RenderSystem>::Get().SubmitModel(model->path, test, id);
 					else
-						Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id, character->color);
+						Service<RenderSystem>::Get().SubmitModel(model->path, test, id, character->color);
 				}
 				//Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}

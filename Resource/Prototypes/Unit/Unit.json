@@ -55,9 +55,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -8.008000373840332,
                     0.0,
-                    -1.059999942779541
+                    0.0,
+                    0.0
                 ],
                 "LocalRotation": [
                     0.0,
@@ -66,9 +66,9 @@
                     1.0
                 ],
                 "LocalScale": [
-                    0.008999999612569809,
-                    0.008999999612569809,
-                    0.008999999612569809
+                    0.5099999904632568,
+                    0.5,
+                    0.5
                 ]
             }
         },
@@ -108,7 +108,7 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\UnitBlack_CombatStance.a",
+                "Path": "Models\\Unit_Punch.fbx",
                 "TexturePath": ""
             }
         },

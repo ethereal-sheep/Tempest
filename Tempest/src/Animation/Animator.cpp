@@ -19,6 +19,10 @@ namespace Tempest
 		if (m_Animation)
 		{
 			m_CurrentTime += m_Animation->GetTicksPerSecond() * dt * 25.f;
+
+			// check if ended
+			//m_Ended = current > durantion;
+
 			m_CurrentTime = fmod(m_CurrentTime, m_Animation->GetDuration());
 			CalculateBoneTransform(&m_Animation->GetRootNode(), glm::mat4(1.0f));
 		}
