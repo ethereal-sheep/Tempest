@@ -923,46 +923,19 @@ namespace Tempest
 				}
 			}
 
+			bool if_end()
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				{
+					return Service<AnimMultithreadHelper>::Get().get().hasEnded(id);
+				}
+
+				return false;
+			}
+
 			uint32_t id;
 			std::string current_animation;
 		};
-
-		//class
-		//{
-		//	string starting_animation;
-		//
-		//	void play(bool loop = false);
-		//	void change_after(string);
-		//	void force_change(string);
-		//	void set_speed(float = 1.f);
-		//	void pause();
-		//	void stop();
-		//
-		//	bool is_playing()
-		//	{
-		//		//
-		//	}
-		//
-		//	bool is_pause()
-		//	{
-		//		animator.is_pause();
-		//	}
-		//
-		//	bool is_stop()
-		//	{
-		//		animator.is_stop();
-		//	}
-		//
-		//	void draw()
-		//	{
-		//		animator->get_model_name();
-		//		
-		//	}
-		//
-		//	ptr* animator;
-		//
-		//
-		//};
 	}
 	namespace tc = Tempest::Components;
 

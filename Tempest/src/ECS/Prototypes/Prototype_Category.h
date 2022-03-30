@@ -157,6 +157,7 @@ namespace Tempest
 			REQUIRE(Unit)
 			REQUIRE(Collision)
 			REQUIRE(Character)
+			REQUIRE(Animation)
 		});
 	}
 

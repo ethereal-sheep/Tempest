@@ -120,6 +120,14 @@
                 "X": 1,
                 "Y": 1
             }
+        },
+        {
+            "Metadata": {
+                "Type": "Animation"
+            },
+            "Component": {
+                "id": 0
+            }
         }
     ]
 }

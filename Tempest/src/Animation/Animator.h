@@ -53,7 +53,7 @@ namespace Tempest
 		float m_Speed = 1.f;
 		Animation* m_Animation;
 
-		ANIMATOR_STATE m_State = ANIMATOR_STATE::IDLE;
+		ANIMATOR_STATE m_State = ANIMATOR_STATE::PLAY;
 		ANIMATION_TYPE m_Type = ANIMATION_TYPE::PLAY_ONCE;
 	};
 }
