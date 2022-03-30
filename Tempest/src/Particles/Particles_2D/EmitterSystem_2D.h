@@ -70,6 +70,11 @@ struct EmitterSystem_2D
 		return m_emitters;
 	}
 
+	void Reset()
+	{
+		m_emitters.clear();
+	}
+
 	// ----------------------- Screenspace Particle_2D -------------
 
 	void CreateButtonEmitter(std::weak_ptr<WaypointEmitter_2D>& emitter, ImVec2 topLeftPos, ImVec2 buttonSize);

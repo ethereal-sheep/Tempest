@@ -18,6 +18,10 @@
 #include "Util/interpolater.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
+//Forward Declaration
+struct RandomMinMaxSpawnPointEmitter_2D;
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
+
 namespace Tempest
 {
     class MainMenuOverlay : public Window
@@ -58,6 +62,9 @@ namespace Tempest
             AudioEngine ae;
             ae.StopAllChannels();
             MenuBGM = ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
+
+            //EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(1920.f, 1080.f));
+            EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(2560.f, 1440.f));
         }
         void change_state(UI_SHOW state);
         void open_popup(const Event& e);
@@ -99,5 +106,8 @@ namespace Tempest
 
         //BackGround Image
         string backGroundImg = "Assets/StartScreenBG.dds";
+
+        // BG VFX
+        std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D> m_bg_VFX;
     };
 }

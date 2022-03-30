@@ -102,6 +102,8 @@ namespace Tempest
 		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
 		instance->register_always<LoadingOverlay>();
+
+		instance->register_always<ParticleDraw>();
 	}
 
 	void InstanceManager::register_physicstime_windows()
@@ -172,7 +174,6 @@ namespace Tempest
 		
 		instance->register_always<SimulationStart>();
 		
-
 		//instance->register_always<ShowRecent>();
 		instance->register_always<WipePopup>();
 		instance->register_always<WipeColourPopup>();
@@ -206,6 +207,8 @@ namespace Tempest
 		instance->register_always<SettingsPopup>();
 		instance->register_always<TutorialPopup>();
 		instance->register_always<AttackSystemOverlay>();
+
+		instance->register_always<ParticleDraw>();
 	}
 
 }

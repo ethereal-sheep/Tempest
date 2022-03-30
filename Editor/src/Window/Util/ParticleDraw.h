@@ -17,7 +17,6 @@ namespace Tempest
 		{
 			return "";
 		}
-
 		void show(Instance&) override
 		{
 			auto drawlist = ImGui::GetForegroundDrawList();
