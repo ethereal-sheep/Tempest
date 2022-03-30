@@ -18,6 +18,10 @@
 #include "Instance/RuntimeInstance.h"
 #include "Util/interpolater.h"
 
+
+struct ExplosionEmitter_2D;
+struct LineEmitter_2D;
+
 struct Unit_Turn_IndicatorEmitter_3D;
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
@@ -242,6 +246,14 @@ namespace Tempest
 
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
 
+
+        // 2D VFX
+        std::weak_ptr<LineEmitter_2D> m_winningNumber_VFX;
+
+        std::weak_ptr<ExplosionEmitter_2D> m_combatRoll_VFX;
+        bool b_combatRoll_VFX_Ready = false;
+
+        // 3D VFX
         std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> m_unitTileEmitter;
         std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
         std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
