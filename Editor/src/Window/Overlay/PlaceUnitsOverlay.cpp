@@ -107,6 +107,9 @@ namespace Tempest
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		cam_ctrl.set_fixed_camera(cam, 90, 45);
 
+
+
+
 	}
 	void PlaceUnitsOverlay::init(Instance&)
 	{

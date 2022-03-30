@@ -36,7 +36,7 @@ namespace Tempest
 
             Service<EventManager>::Get().register_listener<OpenTurnOrderOverlay>(&TurnOrderOverlay::open_popup, this);
 
-            OverlayOpen = true;
+            OverlayOpen = false;
 
             change_state(TURN_ORDER_STATE::ORDER_ADD_UNITS);
             character_icon = tex_map["Assets/CharacterIcon.dds"];
@@ -62,6 +62,6 @@ namespace Tempest
         tsptr<Texture> character_icon;
         tvector<Entity> added_entities; // temp
 
-        std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(10);
+        std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(10);
     };
 }
