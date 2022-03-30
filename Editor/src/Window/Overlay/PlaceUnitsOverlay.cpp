@@ -19,6 +19,62 @@
 
 namespace Tempest
 {
+	static float timer = 0.f;
+
+	void draw_indicator(Instance& instance, vec3 pos)
+	{
+		auto height = 2.5f;
+		auto amplitude = .1f;
+		auto speed = 2.f;
+		auto ring_speed = 2.f;
+		auto spin_speed = 2.f;
+		auto dice_speed = 4.f;
+
+		pos.y = height;
+		pos.y += (float)sin(timer * speed) * amplitude;
+
+		if (auto pf = instance.scene.get_prototype_if("Unit", "Indicator"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * spin_speed, glm::vec3{ 0, -1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+		if (auto pf = instance.scene.get_prototype_if("Unit", "IndicatorRing"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * ring_speed, glm::vec3{ 0, 1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+
+		if (auto pf = instance.scene.get_prototype_if("Unit", "IndicatorDice"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * dice_speed, glm::vec3{ 0, 1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+	}
+
 	void PlaceUnitsOverlay::open_popup(const Event& e)
 	{
 		OverlayOpen = true;
@@ -71,6 +127,13 @@ namespace Tempest
 			return;
 
 		auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
+		
+		{
+			float dt = ImGui::GetIO().DeltaTime;
+
+			timer += dt;
+		}
+
 
 		if (OverlayOpen)
 		{
@@ -455,14 +518,16 @@ namespace Tempest
 						// Draw whatever thing on their head
 						{
 
-							ImGui::PushFont(FONT_BOLD);
+							/*ImGui::PushFont(FONT_BOLD);
 							auto text_size = ImGui::CalcTextSize(ICON_FA_ICE_CREAM);
 							auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
 							if (cursor_pos.x < viewport->WorkSize.x && ss.y + text_size.y / 2 < viewport->WorkSize.y) {
 								ImGui::SetCursorPos(cursor_pos);
 								ImGui::Text(ICON_FA_ICE_CREAM);
 							}
-							ImGui::PopFont();
+							ImGui::PopFont();*/
+
+							draw_indicator(instance, position);
 						}
 
 

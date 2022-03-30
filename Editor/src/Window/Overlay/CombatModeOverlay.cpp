@@ -25,6 +25,8 @@
 
 namespace Tempest
 {
+	static float timer = 0.f;
+
 	auto collide_first_edited(
 		int x0, int y0, int x1, int y1,
 		tmap<int, tmap<int, id_t>>& collision_map,
@@ -425,6 +427,67 @@ namespace Tempest
 
 			}
 	}
+	
+	void draw_indicator(RuntimeInstance& instance, vec3 pos)
+	{
+		auto height = 2.5f;
+		auto amplitude = .1f;
+		auto speed = 2.f;
+		auto ring_speed = 2.f;
+		auto spin_speed = 2.f;
+		auto dice_speed = 4.f;
+
+		pos.y = height;
+		pos.y += (float)sin(timer * speed) * amplitude;
+
+		if (auto pf = instance.scene.get_prototype_if("Unit", "Indicator"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * spin_speed, glm::vec3{ 0, -1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+		if (auto pf = instance.scene.get_prototype_if("Unit", "IndicatorRing"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * ring_speed, glm::vec3{ 0, 1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+
+		if (auto pf = instance.scene.get_prototype_if("Unit", "IndicatorDice"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * dice_speed, glm::vec3{ 0, 1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+
+		
+		
+
+
+
+	}
+	
 	void CombatModeOverlay::reset_menu()
 	{
 		menu1.start(-1.f, 0.f, 0.6f, 0.f, [](float x) { return glm::sineEaseOut(x); });
@@ -575,21 +638,24 @@ namespace Tempest
 
 				// Draw whatever thing on their head
 				{
-					ImGui::PushFont(FONT_BOLD);
-					auto text_size = ImGui::CalcTextSize(ICON_FA_ICE_CREAM);
-					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
-					ImGui::SetCursorPos(cursor_pos);
-					ImGui::BeginGroup();
-					ImGui::Text(ICON_FA_ICE_CREAM);
-					/*if (ImGui::Button("Attack"))
-					{
-						state = State::ATTACKING;
-					}
-					if (ImGui::Button("Move"))
-					{
-					}*/
-					ImGui::EndGroup();
-					ImGui::PopFont();
+					//ImGui::PushFont(FONT_BOLD);
+					//auto text_size = ImGui::CalcTextSize(ICON_FA_ICE_CREAM);
+					//auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					//ImGui::SetCursorPos(cursor_pos);
+					//ImGui::BeginGroup();
+					//ImGui::Text(ICON_FA_ICE_CREAM);
+
+
+					///*if (ImGui::Button("Attack"))
+					//{
+					//	state = State::ATTACKING;
+					//}
+					//if (ImGui::Button("Move"))
+					//{
+					//}*/
+					//ImGui::EndGroup();
+					//ImGui::PopFont();
+					draw_indicator(instance, position);
 				}
 				ImGui::SetCursorPos(temp);
 
@@ -3031,6 +3097,8 @@ namespace Tempest
 				banner.update(dt);
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
+
+			timer += dt;
 		}
 
 		//// jankass stuff

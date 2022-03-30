@@ -284,6 +284,23 @@ namespace Tempest
 
 		}
 
+		template<typename Component>
+		const Component& get() const
+		{
+			return static_cast<coptional<Component>*>(
+				components.at(t_hash<Component>()).get())->get();
+		}
+
+		template<typename Component>
+		const Component* get_if() const
+		{
+			if (!has<Component>())
+				return nullptr;
+
+			return &get<Component>();
+
+		}
+
 
 		template <typename Component>
 		Component* try_emplace()
