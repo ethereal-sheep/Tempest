@@ -18,9 +18,6 @@
 #include "Util/interpolater.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
-//Forward Declaration
-//struct RandomMinMaxSpawnPointEmitter_2D;
-//struct LineEmitter_2D;
 #include "Particles/Particles_2D/EmitterSystem_2D.h"
 //#include "Particles/Particles_2D/LineEmitter_2D.h"
 #include "Particles/Particles_2D/RandomMinMaxSpawnPointEmitter_2D.h"
@@ -68,9 +65,6 @@ namespace Tempest
 
             //EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(1920.f, 1080.f));
             EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(2560.f, 1440.f));
-
-            //m_bg_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 218 / 255.0f, 165 / 255.0f, 32 / 255.0f, 0.7f };
-            //m_bg_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 184 / 255.0f, 134 / 255.0f, 11 / 255.0f, 0.0f };
 
             m_bg_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 0.5f };
             m_bg_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
