@@ -1,7 +1,7 @@
 
 
-#ifndef EXPLOSION_EMITTER_H
-#define EXPLOSION_EMITTER_H
+#ifndef EXPLOSION_EMITTER_3D_H
+#define EXPLOSION_EMITTER_3D_H
 
 #include "Emitter_3D.h"
 
@@ -12,4 +12,4 @@ struct ExplosionEmitter_3D : public Emitter_3D
 	void ParticleSetUp(Particle_3D& particle) override;
 };
 
-#endif // !EXPLOSION_EMITTER_H
+#endif // !EXPLOSION_EMITTER_3D_H

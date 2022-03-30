@@ -356,7 +356,7 @@ void EmitterSystem_2D::CreateLineEmitter(std::weak_ptr<LineEmitter_2D>& emitter,
 	emitter.lock()->m_MM.m_preWarm = true;
 	emitter.lock()->m_MM.m_simulationSpeed = 0.016f;
 
-	emitter.lock()->m_EM.m_spawnTimeInterval = 0.08f;
+	emitter.lock()->m_EM.m_spawnTimeInterval = 0.64f;
 	emitter.lock()->m_EM.m_spawnCountTimer = emitter.lock()->m_EM.m_spawnTimeInterval;
 	emitter.lock()->m_EM.m_rateOverTime = 1;
 	emitter.lock()->m_MM.m_maxParticles = 300;
@@ -364,7 +364,7 @@ void EmitterSystem_2D::CreateLineEmitter(std::weak_ptr<LineEmitter_2D>& emitter,
 	// Particle Architype values - without consideration for default ctor
 	emitter.lock()->m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
 	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
-	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 0.0f, -300.0f };
+	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 0.0f, -100.0f };
 
 	emitter.lock()->m_PAM.m_scaleBegin = 8.0f;
 	emitter.lock()->m_PAM.m_scaleEnd = 8.0f;

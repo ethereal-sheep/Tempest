@@ -249,6 +249,8 @@ namespace Tempest
 
         // 2D VFX
         std::weak_ptr<LineEmitter_2D> m_winningNumber_VFX;
+        bool b_playerOne_Rolled = false;
+        bool b_playerTwo_Rolled = false;
 
         std::weak_ptr<ExplosionEmitter_2D> m_combatRoll_VFX;
         bool b_combatRoll_VFX_Ready = false;

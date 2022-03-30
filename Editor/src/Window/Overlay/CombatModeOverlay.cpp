@@ -19,6 +19,8 @@
 #include "Util/pathfinding.h"
 
 #include "Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/LineEmitter_2D.h"
+#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
 
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "Particles/Particles_3D/Unit_Turn_IndicatorEmitter_3D.h"
@@ -1913,6 +1915,7 @@ namespace Tempest
 
 			// Ready to show bam VFX
 			b_combatRoll_VFX_Ready = true;
+			b_playerOne_Rolled = true;
 		}
 
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(attacker.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
@@ -1922,16 +1925,15 @@ namespace Tempest
 		if (inter1.is_finished())
 		{
 			if (win)
-			{
 				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
-			}
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
 
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f });
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 		}
 
@@ -1947,6 +1949,7 @@ namespace Tempest
 
 			// Ready to show bam VFX
 			b_combatRoll_VFX_Ready = true;
+			b_playerTwo_Rolled = true;
 		}
 
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
@@ -1955,7 +1958,7 @@ namespace Tempest
 		
 		if (inter2.is_finished())
 		{
-			if(!win)
+			if (!win)
 				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
@@ -1964,7 +1967,8 @@ namespace Tempest
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f });
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 		}
 
@@ -1975,20 +1979,40 @@ namespace Tempest
 
 		ImGui::PopFont();
 
+		// VFX for combat roll
+		if (inter1.is_finished() && inter2.is_finished())
+		{
+			if (b_playerOne_Rolled && b_playerTwo_Rolled)
+			{
+				ImVec2 startPos = ImVec2{ 0.f, 0.f };
+				ImVec2 endPos = ImVec2{ 0.f, 0.f };
+
+				if (win)
+					startPos = ImVec2{ viewport->Size.x * 0.36f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+				else
+					startPos = ImVec2{ viewport->Size.x * 0.62f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+
+				endPos = ImVec2{ startPos.x + 50.0f, startPos.y };
+				EmitterSystem_2D::GetInstance().CreateLineEmitter(m_winningNumber_VFX, startPos, endPos);
+
+				b_playerOne_Rolled = false;
+				b_playerTwo_Rolled = false;
+			}
+		}
+
 		// only trigger this if no more rolls
 		if (inter1.is_finished() && inter2.is_finished() && atk_rolled && def_rolled && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
 		{
 			// TODO: affect the entities
 
-			//// Winning Number VFX
-			//if (showOnce == false)
-			//{
-			//	EmitterSystem_2D::GetInstance().CreateLineEmitter(m_winningNumber_VFX, glm::vec2{ 1000.f, -1000.0f }, glm::vec2{ 2000.0f, -1000.0f });
-			//	showOnce = true;
+			//Turn off VFX
+			{
+				m_winningNumber_VFX.lock()->ClearAllParticles();
+				m_winningNumber_VFX.lock()->m_MM.m_duration = 0.f;
 
-			//	// BAM VFX
-			//	EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
-			//}
+				m_combatRoll_VFX.lock()->ClearAllParticles();
+				m_combatRoll_VFX.lock()->m_MM.m_duration = 0.f;
+			}
 
 			///////////////////////// MOVE THIS TO END STATE OF CINEMATIC //////////////////////
 			//if (charac.get_stat(0) + charac.get_statDelta(0) <= 0)

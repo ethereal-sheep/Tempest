@@ -8,8 +8,8 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 
-#ifndef EXPLOSION_EMITTER_H
-#define EXPLOSION_EMITTER_H
+#ifndef EXPLOSION_EMITTER_2D_H
+#define EXPLOSION_EMITTER_2D_H
 
 #include "Emitter_2D.h"
 
@@ -20,5 +20,5 @@ struct ExplosionEmitter_2D : public Emitter_2D
 	void Emit(const int particleAmount) override;
 };
 
-#endif // ! EXPLOSION_EMITTER_H
+#endif // ! EXPLOSION_EMITTER_2D_H
 
