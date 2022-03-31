@@ -15,9 +15,12 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/Particles_2D/WaypointEmitter_2D.h"
-#include "Particles/Particles_2D/CircularMotionEmitter_2D.h"
 #include <Tempest/src/Audio/AudioEngine.h>
+
+// Forward Declarations
+struct WaypointEmitter_2D;
+struct ExplosionEmitter_2D;
+struct CircularMotionEmitter_2D;
 
 namespace Tempest
 {
@@ -91,8 +94,18 @@ namespace Tempest
         interpolater<float> inter;
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        // For tutorial emitter
+        // Task complete VFX
+        std::weak_ptr<ExplosionEmitter_2D> m_explosion_VFX;
+
+        // Task Complete VFX Triggers
+        bool b_unit_select_defender_task_VFX = false;
+        bool b_unit_select_weapon_task_VFX = false;
+        bool b_unit_select_action_task_VFX = false;
+
+        // Guiding Tutorial Button VFX
         std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
+
+        // Tutorial Complete VFX
         std::weak_ptr<CircularMotionEmitter_2D> m_circularMotionEmitter;
 
         // Tutorial part 1 emitter

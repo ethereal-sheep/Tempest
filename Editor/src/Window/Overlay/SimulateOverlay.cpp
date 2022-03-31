@@ -17,6 +17,8 @@
 #include "InstanceManager/InstanceConfig.h"
 
 #include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/CircularMotionEmitter_2D.h"
 
 namespace Tempest
 {
@@ -45,6 +47,11 @@ namespace Tempest
 		tutorial_index = 0;
 		tutorial_p2 = false;
 		tut_openSlide = true;
+
+		// Task Complete VFX Triggers
+		b_unit_select_defender_task_VFX = false;
+		b_unit_select_weapon_task_VFX = false;
+		b_unit_select_action_task_VFX = false;
 
 		emitter_1_0 = false;
 		emitter_1_1 = false;
@@ -407,11 +414,19 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_select_defender_task_VFX)
+									{
+										b_unit_select_defender_task_VFX = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_select_defender_task_VFX = false;
 								}
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
@@ -422,11 +437,19 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_select_weapon_task_VFX)
+									{
+										b_unit_select_weapon_task_VFX = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_select_weapon_task_VFX = false;
 								}
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
@@ -437,11 +460,19 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_select_action_task_VFX)
+									{
+										b_unit_select_action_task_VFX = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_select_action_task_VFX = false;
 								}
 								ImGui::PopFont();
 

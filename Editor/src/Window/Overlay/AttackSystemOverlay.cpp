@@ -71,10 +71,25 @@ namespace Tempest
 			sidebar_title = "SEQUENCES";
 		}
 		tutorial_index = 0;
+
+		// Action Graph Task VFX Trigger
+		b_action_rename_task_VFX = false;
+		b_attackNode_create_task_vfx = false;
+		b_attakNode_connect_task_vfx = false;
+
+		// Sequence Graph Task VFX Trigger
+		b_sequence_rename_task_VFX = false;
+		b_defendNode_create_task_VFX = false;
+		b_defendNode_connect_attackNode_task_VFX = false;
+		b_defendNode_connect_compareNode_task_VFX = false;
+		b_defendNode_output_connect_task_VFX = false;
+
+		// Guiding Tutorial Button VFX Trigger
 		emitter_0 = false;
 		emitter_2 = false;
 		emitter_3 = false;
 		emitter_4 = false;
+
 		tut_openSlide = true;
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
@@ -474,11 +489,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_action_rename_task_VFX)
+									{
+										b_action_rename_task_VFX = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_action_rename_task_VFX = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -497,11 +521,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_attackNode_create_task_vfx)
+									{
+										b_attackNode_create_task_vfx = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_attackNode_create_task_vfx = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -533,11 +566,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_attakNode_connect_task_vfx)
+									{
+										b_attakNode_connect_task_vfx = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_attakNode_connect_task_vfx = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PopFont();
@@ -662,11 +704,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_sequence_rename_task_VFX)
+									{
+										b_sequence_rename_task_VFX = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 									else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_sequence_rename_task_VFX = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -684,11 +735,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_defendNode_create_task_VFX)
+									{
+										b_defendNode_create_task_VFX = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_defendNode_create_task_VFX = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -716,11 +776,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_defendNode_connect_attackNode_task_VFX)
+									{
+										b_defendNode_connect_attackNode_task_VFX = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_defendNode_connect_attackNode_task_VFX = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -748,11 +817,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_defendNode_connect_compareNode_task_VFX)
+									{
+										b_defendNode_connect_compareNode_task_VFX = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_defendNode_connect_compareNode_task_VFX = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -780,11 +858,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_defendNode_output_connect_task_VFX)
+									{
+										b_defendNode_output_connect_task_VFX = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_defendNode_output_connect_task_VFX = false;
 								}
 								drawlist->AddText({ xPos + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								min = { min.x, min.y + 17.f };
@@ -2122,7 +2209,7 @@ namespace Tempest
 
 							mouse = ImGui::GetMousePos();
 
-							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosionEmitter, mouse);
+							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, mouse);
 						}
 					}
 					else if (e_pin->get_type() != pin_type::Flow && e_pin->is_linked())
@@ -2135,7 +2222,7 @@ namespace Tempest
 
 							mouse = ImGui::GetMousePos();
 
-							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosionEmitter, mouse);
+							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, mouse);
 						}
 					}
 					else if (s_pin->is_linked() && e_pin->is_linked())
@@ -2152,7 +2239,7 @@ namespace Tempest
 
 							mouse = ImGui::GetMousePos();
 
-							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosionEmitter, mouse);;
+							EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, mouse);;
 						}
 					}
 				}

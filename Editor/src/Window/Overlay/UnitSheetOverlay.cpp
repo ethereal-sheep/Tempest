@@ -16,6 +16,7 @@
 #include <Tempest/src/Audio/AudioEngine.h>
 
 #include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
 
 namespace Tempest
 {
@@ -70,10 +71,15 @@ namespace Tempest
 		cam_ctrl.force_reset_pos(cam);
 		cam_ctrl.force_reset_rot(cam);
 
+		// Refresh tutorial vfx bool
+		b_unit_NAME_task_vfx = false;
+		b_unit_ATK_task_vfx = false;
+		b_unit_HP_task_vfx = false;
 		emitter_0 = false;
 		emitter_1 = false;
 		emitter_2 = false;
-		emitter_3 = false;
+		b_Weapon_button_vfx = false;
+
 		tut_openSlide = true;
 	}
 
@@ -418,11 +424,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_NAME_task_vfx)
+									{
+										b_unit_NAME_task_vfx = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f );
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_NAME_task_vfx = false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -432,11 +447,19 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_ATK_task_vfx)
+									{
+										b_unit_ATK_task_vfx = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_ATK_task_vfx = false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -446,11 +469,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_HP_task_vfx)
+									{
+										b_unit_HP_task_vfx = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_HP_task_vfx = false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PopFont();
@@ -496,10 +528,10 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access Weapon page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (emitter_3 == false)
+								if (b_Weapon_button_vfx == false)
 								{
 									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
-									emitter_3 = true;
+									b_Weapon_button_vfx = true;
 								}
 							}
 							break;

@@ -14,6 +14,7 @@
 #include <Tempest/src/Audio/AudioEngine.h>
 
 #include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
 
 namespace Tempest
 {
@@ -338,11 +339,20 @@ namespace Tempest
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 								taskCompleted &= true;
+
+								if (!b_weapon_RENAME_task_vfx)
+								{
+									b_weapon_RENAME_task_vfx = true;
+
+									ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+									EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+								}
 							}
 							else
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 								taskCompleted &= false;
+								b_weapon_RENAME_task_vfx = false;
 							}
 							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -352,11 +362,20 @@ namespace Tempest
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 								taskCompleted &= true;
+
+								if (!b_weapon_ATK_task_vfx)
+								{
+									b_weapon_ATK_task_vfx = true;
+
+									ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+									EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+								}
 							}
 							else
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 								taskCompleted &= false;
+								b_weapon_ATK_task_vfx = false;
 							}
 							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 							ImGui::PopFont();
