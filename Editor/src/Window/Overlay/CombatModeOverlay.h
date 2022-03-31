@@ -79,6 +79,8 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<ChangeTurnOrder>(&CombatModeOverlay::change_turn_order, this);
 
             initialise_tabs();
+
+            turn_tex_size = ImVec2{ tex_map["Assets/TurnSelected.dds"]->GetWidth() * 1.0f, tex_map["Assets/TurnSelected.dds"]->GetHeight() * 1.0f };
         }
 
         void open_popup(const Event& e);
@@ -214,6 +216,7 @@ namespace Tempest
 
         float action_button_diff = 40.0f;
         float placeholder_height = 0.0f;
+        ImVec2 turn_tex_size{ 0.f,0.f };
         ImVec2 action_background_size{0.f,0.f};
         bool display_curr_stat{ false };
         bool display_other_stat{ false };

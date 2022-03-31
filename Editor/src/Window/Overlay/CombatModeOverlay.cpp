@@ -617,7 +617,7 @@ namespace Tempest
 
 					ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
 
-					if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, true, ImGuiWindowFlags_NoScrollbar))
+					if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, false, ImGuiWindowFlags_NoScrollbar))
 					{
 						switch (battle_state)
 						{
@@ -864,7 +864,7 @@ namespace Tempest
 				{
 					UI::ActionUI(ImVec2{ viewport->Size.x, viewport->Size.y - action_background_size.y }, battle_state == BATTLE_STATE::SELECT_WEAPON ? "SELECT A WEAPON" : "SELECT AN ACTION");
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x - action_background_size.x * 0.85f , viewport->Size.y - action_background_size.y * 0.7f });
-					if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, true, ImGuiWindowFlags_NoScrollbar))
+					if (ImGui::BeginChild("Action content", ImVec2{ action_background_size.x * 0.85f, action_background_size.y * 0.7f }, false, ImGuiWindowFlags_NoScrollbar))
 					{
 						switch (battle_state)
 						{
@@ -3273,19 +3273,26 @@ namespace Tempest
 
 				glm::ivec2 world_mouse = calculate_world_mouse(cam);
 
-				ImGui::Dummy(ImVec2{ 5.0f,40.f });
-				bool first = true;
-				float padding = 0.0f;
-
-				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				for (auto id : units)
+				if (state != State::CINEMATIC)
 				{
-					// check if turn is over
-					UI::CharacterTurn(instance, id, { 0.f + menu1.get() * (padding + 400.f) * 2.f, ImGui::GetCursorPosY() + padding }, curr_entity == id);
-					padding += 85.0f;
-					first = false;
+					ImGui::Dummy(ImVec2{ 5.0f,40.f });
+
+					if (ImGui::BeginChild("CombatCharTurnDisplay", { turn_tex_size.x, turn_tex_size.y * 3.f + 15.f * 2.0f }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysVerticalScrollbar))
+					{
+						bool first = true;
+						float padding = 0.0f;
+						ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+						for (auto id : units)
+						{
+							// check if turn is over
+							UI::CharacterTurn(instance, id, { 0.f + menu1.get() * (padding + 400.f) * 2.f, ImGui::GetCursorPosY() }, curr_entity == id);
+							padding += 85.0f;
+							first = false;
+						}
+						ImGui::PopItemFlag();
+					}
+					ImGui::EndChild();
 				}
-				ImGui::PopItemFlag();
 				
 			/*	if (!instance.selected || !instance.ecs.valid(instance.selected))
 				{

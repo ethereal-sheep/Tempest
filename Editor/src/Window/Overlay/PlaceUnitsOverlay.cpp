@@ -83,6 +83,10 @@ namespace Tempest
 
 			if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 			{
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+				{
+					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+				}
 
 				// just for testing
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
@@ -239,7 +243,7 @@ namespace Tempest
 				{
 
 				}
-				if (UI::UIButton_2("Save", "Save", { buttonPos.x + 200.f, buttonPos.y }, { -40.f,20.f }, FONT_BODY))
+				if (UI::UIButton_2("Next", "Next", { buttonPos.x + 200.f, buttonPos.y }, { -40.f,20.f }, FONT_BODY))
 				{
 					bool okay = true;
 					for (auto i : chars)
