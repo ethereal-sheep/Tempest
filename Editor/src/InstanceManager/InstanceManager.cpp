@@ -74,6 +74,7 @@
 #include "Window/Overlay/PauseOverlay.h"
 #include "Window/Overlay/LoadingOverlay.h"
 #include "Window/Overlay/RuntimeStartup.h"
+#include "Window/Overlay/Startup.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -103,6 +104,7 @@ namespace Tempest
 		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
 		instance->register_always<LoadingOverlay>();
+		instance->register_always<Startup>();
 	}
 
 	void InstanceManager::register_physicstime_windows()
@@ -169,7 +171,7 @@ namespace Tempest
 		instance->register_always<MainMenuOverlay>();
 		instance->register_always<BuildModeOverlay>();
 		instance->register_always<PauseOverlay>();
-		instance->register_always<LoadingOverlay>();
+		instance->register_always<LoadingOverlay>(true);
 		
 		instance->register_always<SimulationStart>();
 		
@@ -201,12 +203,13 @@ namespace Tempest
 		instance->register_always<RunTimeMenuBar>();
 		instance->register_always<ErrorMsgPopup>();
 		instance->register_always<BottomRightOverlayPopup>();
-		instance->register_always<WipePopup>(true);
+		instance->register_always<WipePopup>();
 		instance->register_always<WipeColourPopup>();
 		instance->register_always<Delay>();
 		instance->register_always<SettingsPopup>();
 		instance->register_always<TutorialPopup>();
 		instance->register_always<AttackSystemOverlay>();
+		instance->register_always<LoadingOverlay>(true);
 		instance->register_always<RuntimeStartupOverlay>();
 	}
 

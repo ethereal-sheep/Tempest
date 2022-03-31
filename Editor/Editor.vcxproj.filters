@@ -422,6 +422,9 @@
     <ClInclude Include="src\Window\Overlay\RuntimeStartup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\Overlay\Startup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Extern\imgui\imgui_bezier_math.inl">
