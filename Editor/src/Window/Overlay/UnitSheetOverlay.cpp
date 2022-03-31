@@ -256,8 +256,37 @@ namespace Tempest
 					}
 					ImGui::EndChild();
 					
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.33f, viewport->Size.y * 0.85f });
-					ImGui::ColorEdit4("##colorbuttonunit", glm::value_ptr(cs->color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
+					// color palette
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.335f, viewport->Size.y * 0.15f });
+					ImGuiColorEditFlags palette_button_flags = ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoTooltip;
+					bool open_color_popup = ImGui::ColorButton("##colorpreview", ImVec4{ cs->color.x,cs->color.y, cs->color.z ,1.0f }, palette_button_flags, ImVec2(30, 30));
+					if (open_color_popup)
+					{
+						ImGui::OpenPopup("unitcolorpicker");
+					}
+
+					if (ImGui::BeginPopup("unitcolorpicker"))
+					{
+						ImGui::BeginGroup();
+
+						for (int n = 0; n < IM_ARRAYSIZE(saved_palette); n++)
+						{
+							ImGui::PushID(n);
+							if ((n % 4) != 0)
+								ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+
+							if (ImGui::ColorButton("##unitpalette", saved_palette[n], palette_button_flags, ImVec2(40, 40)))
+							{
+								cs->color.x = saved_palette[n].x;
+								cs->color.y = saved_palette[n].y;
+								cs->color.z = saved_palette[n].z;
+							}
+
+							ImGui::PopID();
+						}
+						ImGui::EndGroup();
+						ImGui::EndPopup();
+					}
 				}
 
 				// tabs 
