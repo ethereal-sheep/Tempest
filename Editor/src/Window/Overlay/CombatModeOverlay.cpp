@@ -1931,7 +1931,8 @@ namespace Tempest
 		auto& defender = instance.ecs.get<tc::Character>(other_entity);
 
 		// display the character name and rolls
-		ImGui::PushFont(FONT_HEAD);
+		FONT_HEAD->Scale = 1.0f;
+		
 
 		std::string roll = atk_rolled ? std::to_string(atk_output) : "";
 		if (inter1.is_in_progress())
@@ -1939,8 +1940,15 @@ namespace Tempest
 			roll = std::to_string(els::random::uniform_rand(0, 999));
 		}
 
+		ImGui::PushFont(FONT_HEAD);
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(attacker.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(attacker.name.c_str());
+		ImGui::PopFont();
+
+		if (inter1.is_finished())
+			FONT_HEAD->Scale = 2.0f;
+
+		ImGui::PushFont(FONT_HEAD);
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
 
 		if (inter1.is_finished())
@@ -1949,22 +1957,56 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
-		}
 
-		ImGui::Text(roll.c_str());
+			if (atk_rolled)
+			{
+				if (start_inter_atk_roll)
+				{
+					atk_roll_inter[0].start(2.0f, 1.0f, .5f, 0.f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					atk_roll_inter[1].start(2.0f, 1.0f, .5f, 0.2f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					atk_roll_inter[2].start(0.5f, 2.f, .15f, 0.0f,
+						[](float x) { return glm::backEaseInOut(x);
+					});
+					start_inter_atk_roll = false;
+				}
+
+				for (int i = 0; i < roll.size(); i++)
+				{
+					FONT_HEAD->Scale = atk_roll_inter[i].get();
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::Text(std::string{ roll[i] }.c_str());
+					ImGui::PopFont();
+					ImGui::SameLine();
+				}
+			}
+		}
+		else
+			ImGui::Text(roll.c_str());
+		ImGui::PopFont();
 
 		if (inter1.is_finished())
 			ImGui::PopStyleColor();
 
-		roll = def_rolled ? std::to_string(def_output) : "";
+		FONT_HEAD->Scale = 1.0f;
+		string roll2 = def_rolled ? std::to_string(def_output) : "";
 		if (inter2.is_in_progress())
 		{
-			roll = std::to_string(els::random::uniform_rand(0, 999));
+			roll2 = std::to_string(els::random::uniform_rand(0, 999));
 		}
 
+		ImGui::PushFont(FONT_HEAD);
 		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(defender.name.c_str()).x * 0.5f, viewport->Size.y * 0.27f });
 		ImGui::Text(defender.name.c_str());
-		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
+		ImGui::PopFont();
+
+		if (inter2.is_finished())
+			FONT_HEAD->Scale = 2.0f;
+		ImGui::PushFont(FONT_HEAD);
+		ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll2.c_str()).x * 0.5f, viewport->Size.y * 0.35f });
 		
 		if (inter2.is_finished())
 		{
@@ -1972,17 +2014,45 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
-		}
 
-		ImGui::Text(roll.c_str());
+			if (def_rolled)
+			{
+				if (start_inter_def_roll)
+				{
+					def_roll_inter[0].start(2.0f, 1.0f, .5f, 0.f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					def_roll_inter[1].start(2.0f, 1.0f, .5f, 0.2f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					def_roll_inter[2].start(0.5f, 2.f, .15f, 0.0f,
+						[](float x) { return glm::backEaseInOut(x);
+					});
+
+					start_inter_def_roll = false;
+				}
+
+				for (int i = 0; i < roll2.size(); i++)
+				{
+					FONT_HEAD->Scale = def_roll_inter[i].get();
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::Text(std::string{ roll2[i] }.c_str());
+					ImGui::PopFont();
+					ImGui::SameLine();
+				}
+			}
+		}
+		else
+			ImGui::Text(roll2.c_str());
+		ImGui::PopFont();
 
 		if (inter2.is_finished())
 			ImGui::PopStyleColor();
 
-		ImGui::PopFont();
-
+		// reset the scale
+		FONT_HEAD->Scale = 1.0f;
 		// only trigger this if no more rolls
-		if (inter1.is_finished() && inter2.is_finished() && atk_rolled && def_rolled && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
+		if (atk_roll_inter[roll.size() - 1].is_finished() && def_roll_inter[roll2.size() - 1].is_finished() && !start_inter_atk_roll && !start_inter_def_roll && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
 		{
 			// TODO: affect the entities
 
@@ -2001,12 +2071,12 @@ namespace Tempest
 			//	selected_action = UNDEFINED;
 			//	selected_weapon = UNDEFINED;
 			//}
-
-
 			auto fn = [&]()
 			{
 				battle_state = BATTLE_STATE::CURR_TURN; // temp testing
 				state = State::CINEMATIC;
+				start_inter_atk_roll = true;
+				start_inter_def_roll = true;
 			};
 
 			Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, fn));
@@ -3072,6 +3142,11 @@ namespace Tempest
 			inter6.update(dt);
 			menu1.update(dt);
 			menu2.update(dt);
+			for (int i = 0; i < 3; ++i)
+			{
+				atk_roll_inter[i].update(dt);
+				def_roll_inter[i].update(dt);
+			}
 
 			for (auto& i : inter_nest)
 				i.update(dt);
@@ -3277,7 +3352,8 @@ namespace Tempest
 				{
 					ImGui::Dummy(ImVec2{ 5.0f,40.f });
 
-					if (ImGui::BeginChild("CombatCharTurnDisplay", { turn_tex_size.x, turn_tex_size.y * 3.f + 15.f * 2.0f }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysVerticalScrollbar))
+					// halp (can't scroll)
+					if (ImGui::BeginChild("CombatCharTurnDisplay", { turn_tex_size.x, turn_tex_size.y * 3.f + 15.f * 2.0f }, true, ImGuiWindowFlags_NoScrollbar))
 					{
 						bool first = true;
 						float padding = 0.0f;
@@ -3285,7 +3361,7 @@ namespace Tempest
 						for (auto id : units)
 						{
 							// check if turn is over
-							UI::CharacterTurn(instance, id, { 0.f + menu1.get() * (padding + 400.f) * 2.f, ImGui::GetCursorPosY() }, curr_entity == id);
+							UI::CharacterTurn(instance, id, { 0.f + menu1.get() * (padding + 400.f) * 2.f, ImGui::GetCursorPosY() + padding }, curr_entity == id);
 							padding += 85.0f;
 							first = false;
 						}

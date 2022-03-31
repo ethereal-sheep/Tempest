@@ -239,6 +239,8 @@ namespace Tempest
         interpolater<float> inter4;
         interpolater<float> inter5;
         interpolater<float> inter6;
+        interpolater<float> atk_roll_inter[3];
+        interpolater<float> def_roll_inter[3];
         interpolater<float> banner;
         interpolater<float> menu1;
         interpolater<float> menu2;
@@ -249,6 +251,9 @@ namespace Tempest
         std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
         std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
         std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
+
+        bool start_inter_atk_roll = true;
+        bool start_inter_def_roll = true;
         bool damageOnce = false;
         bool nextUnit = false;
         bool stopMoving = true;
