@@ -1962,14 +1962,14 @@ namespace Tempest
 			{
 				if (start_inter_atk_roll)
 				{
-					atk_roll_inter[0].start(2.0f, 1.0f, .5f, 0.f,
+					atk_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
 						[](float x) { return glm::elasticEaseOut(x);
 					});
-					atk_roll_inter[1].start(2.0f, 1.0f, .5f, 0.2f,
+					atk_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
 						[](float x) { return glm::elasticEaseOut(x);
 					});
-					atk_roll_inter[2].start(0.5f, 2.f, .15f, 0.0f,
-						[](float x) { return glm::backEaseInOut(x);
+					atk_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
+						[](float x) { return glm::elasticEaseOut(x);
 					});
 					start_inter_atk_roll = false;
 				}
@@ -2019,14 +2019,14 @@ namespace Tempest
 			{
 				if (start_inter_def_roll)
 				{
-					def_roll_inter[0].start(2.0f, 1.0f, .5f, 0.f,
+					def_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
 						[](float x) { return glm::elasticEaseOut(x);
 					});
-					def_roll_inter[1].start(2.0f, 1.0f, .5f, 0.2f,
+					def_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
 						[](float x) { return glm::elasticEaseOut(x);
 					});
-					def_roll_inter[2].start(0.5f, 2.f, .15f, 0.0f,
-						[](float x) { return glm::backEaseInOut(x);
+					def_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
+						[](float x) { return glm::elasticEaseOut(x);
 					});
 
 					start_inter_def_roll = false;
