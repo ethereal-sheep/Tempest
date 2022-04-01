@@ -26,6 +26,7 @@
 #include "Particles/Particles_3D/Unit_Turn_IndicatorEmitter_3D.h"
 #include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
 #include "Particles/Particles_3D/CharacterDeathEmitter_3D.h"
+#include "Particles/Particles_3D/CharacterTileCharged_Emitter_3D.h"
 
 namespace Tempest
 {
@@ -2259,6 +2260,12 @@ namespace Tempest
 				AudioEngine ae;
 				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
 
+				if (beginAttack)
+				{
+					beginAttack = false;
+					EmitterSystem_3D::GetInstance().CreateChracterChargedAttackEmitter(m_characterAttackEmitter, xform.position);
+				}
+
 				// PSEUDO 
 				// instead of jumping onto the enemy, wobble back-front
 				//instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.a";
@@ -2314,6 +2321,14 @@ namespace Tempest
 				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
+
+				if (!beginAttack)
+				{
+					beginAttack = true;
+
+					if(!m_characterAttackEmitter.expired())
+						m_characterAttackEmitter.lock()->m_MM.m_duration = 0.0f;
+				}
 
 				//PSEUDO
 				// make enemy wobble left-right

@@ -16,7 +16,7 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	// Values for Emission Module
 	m_GM.m_active = true;
 
-	m_MM.m_duration = 2.0f;
+	m_MM.m_duration = 60.0f;
 	m_MM.m_preWarm = true;
 	Emitter_3D::UpdateMaxParticle(1000);
 
@@ -27,7 +27,7 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	// Particle Architype values - without consideration for default ctor
 	m_PAM.m_velocityStart = glm::vec3{ 0.f, 1.f, 0.0f };
 	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 1.f, 0.0f };
-	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 8.0f, 0.0f };
+	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 6.0f, 0.0f };
 
 	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
 	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };

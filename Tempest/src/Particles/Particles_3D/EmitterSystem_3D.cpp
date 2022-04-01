@@ -324,26 +324,35 @@ const std::weak_ptr<Weather_Rain_Emitter_3D> EmitterSystem_3D::CreateWeatherRain
 	return tempEmitter;
 }
 
-void EmitterSystem_3D::CreateChracterChargedAttackEmitter(glm::vec3 spawnPos, std::weak_ptr<CharacterTileCharged_Emitter_3D> wk_ptr)
+void EmitterSystem_3D::CreateChracterChargedAttackEmitter(std::weak_ptr<CharacterTileCharged_Emitter_3D>& wk_ptr, glm::vec3 spawnPos)
 {
 	if (wk_ptr.expired())
 	{
 		auto sh_ptr = std::make_shared<CharacterTileCharged_Emitter_3D>();
 		wk_ptr = sh_ptr;
+		AddEmitter(sh_ptr);
+	}
+	else
+	{
+		wk_ptr.lock()->ClearAllParticles();
 	}
 
-	auto sh_ptr = std::make_shared<CharacterTileCharged_Emitter_3D>();
-	AddEmitter(sh_ptr);
-
 	// Emitter_3D values - Without consideration for default ctor values
-	sh_ptr->m_GM.m_position = spawnPos;
+	wk_ptr.lock()->m_GM.m_position = spawnPos;
+	wk_ptr.lock()->m_MM.m_duration = 60.0f;
+	wk_ptr.lock()->m_GM.m_active = true;
+
+	// Edit the position for waypoint - spawnPos is the middle of the tile;
+	glm::vec3 wp_btm_left_Pos = spawnPos;
+	wp_btm_left_Pos.x -= 0.5f;
+	wp_btm_left_Pos.z -= 0.5f;
 
 	// Assign waypoints
 	std::array<glm::vec3, 4> waypoints;
-	waypoints[0] = spawnPos;
-	waypoints[1] = glm::vec3{ spawnPos.x, spawnPos.y, spawnPos.z + 2.0f };
-	waypoints[2] = glm::vec3{ spawnPos.x + 2.0f, spawnPos.y, spawnPos.z + 2.0f };
-	waypoints[3] = glm::vec3{ spawnPos.x + 2.0f, spawnPos.y, spawnPos.z };
+	waypoints[0] = wp_btm_left_Pos;
+	waypoints[1] = glm::vec3{ wp_btm_left_Pos.x,        wp_btm_left_Pos.y, wp_btm_left_Pos.z + 1.0f };
+	waypoints[2] = glm::vec3{ wp_btm_left_Pos.x + 1.0f, wp_btm_left_Pos.y, wp_btm_left_Pos.z + 1.0f };
+	waypoints[3] = glm::vec3{ wp_btm_left_Pos.x + 1.0f, wp_btm_left_Pos.y, wp_btm_left_Pos.z };
 
-	sh_ptr->AssignWaypoint(waypoints);
+	wk_ptr.lock()->AssignWaypoint(waypoints);
 }
