@@ -189,8 +189,11 @@ namespace Tempest
 					ImGui::PushFont(FONT_HEAD);
 					auto pSize = ImGui::CalcTextSize("+");
 					ImGui::PopFont();
-					// just try with get cursor pos
-					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 80, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
+
+					tex = tex_map["Assets/NewUnitIcon.dds"];
+					ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 185 });
+					if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f, tex->GetHeight() * 1.0f }, "New Unit", "##notselectable"))
+				//	if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 80, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
 					{
 						create_new_unit(instance);
 						cs = instance.ecs.get_if<tc::Character>(SelectedID);
@@ -203,6 +206,7 @@ namespace Tempest
 							tutorial_index = 1;
 
 					}
+
 					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0 && instance.tutorial_slide == false && instance.tutorial_level == 1)
 					{
 						if (emitter_0 == false)
