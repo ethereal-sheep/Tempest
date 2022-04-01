@@ -156,7 +156,11 @@ namespace Tempest
 					ImGui::PushFont(FONT_HEAD);
 					auto pSize = ImGui::CalcTextSize("+");
 					ImGui::PopFont();
-					if (UI::UIButton_1("+", "+", { ImGui::GetCursorPosX() + 99,  ImGui::GetCursorPosY() + 80 }, { 140,-5 }, FONT_HEAD))
+
+					tex = tex_map["Assets/NewWeaponIcon.dds"];
+					ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 99 - tex->GetWidth() * 0.5f * 0.8f,  ImGui::GetCursorPosY() + 80 - tex->GetHeight() * 0.8f * 0.5f });
+					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.8f, tex->GetHeight() * 0.8f }))
+			//		if (UI::UIButton_1("+", "+", { ImGui::GetCursorPosX() + 99,  ImGui::GetCursorPosY() + 80 }, { 140,-5 }, FONT_HEAD))
 					{
 						create_new_weapon(instance);
 						weap = instance.ecs.get_if<tc::Weapon>(SelectedID);

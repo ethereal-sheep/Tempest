@@ -294,7 +294,10 @@ namespace Tempest
 						}
 
 						// create new graphs
-						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 80 }, { 150,-10 }, FONT_HEAD))
+						auto tex = tex_map[type == OPEN_GRAPH_TYPE::GRAPH_ACTION ? "Assets/NewActionIcon.dds" : "Assets/NewSeqIcon.dds"];
+						ImGui::SetCursorPos(ImVec2{ cursor.x - tex->GetWidth() * 0.5f * 0.7f,  cursor.y + i * 80 - tex->GetHeight() * 0.5f * 0.7f });
+						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					//	if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 80 }, { 150,-10 }, FONT_HEAD))
 						{
 							auto new_graph = instance.ecs.create();
 

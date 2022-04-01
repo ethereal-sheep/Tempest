@@ -859,11 +859,20 @@ namespace Tempest
 		}
 		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
-		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
+		auto tex = tex_map["Assets/AddWeaponIcon.dds"];
+		ImGui::SetCursorPos(ImVec2{ cursor.x + i * 300.0f - tex->GetWidth() * 0.5f * 0.9f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.9f });
+		if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, false, TempWeapon, true);
 		}
+
+
+		/*if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
+		{
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::WEAPON, false, TempWeapon, true);
+		}*/
 
 		ImGui::EndChild();
 		ImGui::PopStyleColor();
@@ -918,11 +927,19 @@ namespace Tempest
 
 		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
-		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
+		auto tex = tex_map["Assets/AddActionIcon.dds"];
+		ImGui::SetCursorPos(ImVec2{ cursor.x + i * 300.0f - tex->GetWidth() * 0.5f * 0.9f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.9f });
+		if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::ACTION, false, TempWeapon, true);
 		}
+
+	/*	if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
+		{
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::ACTION, false, TempWeapon, true);
+		}*/
 
 		ImGui::EndChild();
 		ImGui::PopStyleColor();

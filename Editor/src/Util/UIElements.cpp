@@ -3563,7 +3563,8 @@ namespace Tempest::UI
 
 		if(selected)
 			window->DrawList->AddImage(texture_id, { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
-
+		else
+			window->DrawList->AddImage((void*)static_cast<size_t>(tex_map["Assets/NewUnitIcon.dds"]->GetID()), { bb.Min.x + padding.x,  bb.Min.y + padding.y }, { bb.Max.x - padding.x, bb.Max.y - padding.y }, uv0, uv1, ImGui::GetColorU32(tint_col));
 		if (pressed)
 		{
 			AudioEngine ae;
