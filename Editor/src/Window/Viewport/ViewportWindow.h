@@ -144,6 +144,8 @@ namespace Tempest
 						//EmitterSystem_3D::GetInstance().CreateMultipleRotationExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
 						
 						//auto emitter = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
+						//std::weak_ptr<Smoke_Poof_Emitter_3D> testEmitter;
+						//EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(testEmitter, glm::vec3{ 0.0f, 0.0f, 0.0f });
 						//EmitterSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
 						//auto& temp = EmitterSystem_3D::GetInstance().CreateInteractiveParticle(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 5.0f, 5.0f, 0.0f });
 						

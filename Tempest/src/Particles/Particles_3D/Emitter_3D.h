@@ -36,7 +36,7 @@ struct Emitter_3D
 
 protected:
 	void UpdateMaxParticle(const int newMaxParticleCapacity);
-	void ParticleUpdate(const float dt);
+	virtual void ParticleUpdate(const float dt);
 	virtual void Emit(const int particleAmount);
 	virtual void ParticleSetUp(Particle_3D& particle);
 	virtual void OnDeath();

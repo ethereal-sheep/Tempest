@@ -6,23 +6,28 @@
 // Main Header
 #include "EmitterSystem_3D.h"
 
-// Types of Emitters
+// General VFX
 #include "ExplosionEmitter_3D.h"
 #include "Rotation_ExplosionEmitter_3D.h"
 #include "MultipleExplosionEmitter_3D.h"
 #include "Multiple_Rotation_ExplosionEmitter_3D.h"
 
+// Indicator/Feedback VFX w.r.t the user
 #include "Interactive_DoorParticle_3D.h"
+#include "Smoke_Poof_Emitter_3D.h"
 
+// Unit VFX
 #include "Unit_Turn_IndicatorEmitter_3D.h"
 #include "Unit_MovementTrailEmitter_3D.h"
 
+// Characters VFX
 #include "CharacterSpawnEmitter_3D.h"
 #include "CharacterDamageEmitter_3D.h"
 #include "CharacterDeathEmitter_3D.h"
 
 #include "CharacterTileCharged_Emitter_3D.h"
 
+// Weather VFX
 #include "Weather_Rain_Emitter_3D.h"
 
 
@@ -355,4 +360,18 @@ void EmitterSystem_3D::CreateChracterChargedAttackEmitter(std::weak_ptr<Characte
 	waypoints[3] = glm::vec3{ wp_btm_left_Pos.x + 1.0f, wp_btm_left_Pos.y, wp_btm_left_Pos.z };
 
 	wk_ptr.lock()->AssignWaypoint(waypoints);
+}
+
+const std::weak_ptr<Smoke_Poof_Emitter_3D> EmitterSystem_3D::CreateSmokePoofEmitter(glm::vec3 spawnPos)
+{
+	auto tempEmitter = std::make_shared<Smoke_Poof_Emitter_3D>();
+	Smoke_Poof_Emitter_3D& emitter = *tempEmitter.get();
+	AddEmitter(tempEmitter);
+
+	// Emitter_3D values - Without consideration for default ctor values
+	emitter.m_GM.m_position = spawnPos;
+	emitter.m_MM.m_duration = 0.8f;
+	emitter.m_GM.m_active = true;
+
+	return tempEmitter;
 }

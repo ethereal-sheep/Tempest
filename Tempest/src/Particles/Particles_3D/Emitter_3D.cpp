@@ -39,7 +39,7 @@ void Emitter_3D::UpdateMaxParticle(const int newMaxParticleCapacity)
 	{
 		m_particles.resize(newMaxParticleCapacity);
 
-		for (int i = endSlotNo; i < newMaxParticleCapacity; ++i)
+		for (short i = endSlotNo; i < newMaxParticleCapacity; ++i)
 			m_available_ParticleSlots.push(i);
 	}
 }
@@ -236,30 +236,20 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 	particle.m_velocityEnd = m_PAM.m_velocityEnd;
 	particle.m_gravity = m_PAM.m_gravity;
 
+	glm::vec3 rand_Velocity{ 0.f,0.f,0.f };
+
 	// Velocity Variation for the Individual Particle
-	if (m_PAM.m_velocityVariation.x >= 1)
-	{
-		auto rand_Vel_X = Random::Float() * m_PAM.m_velocityVariation.x;
+	if (m_PAM.m_velocityVariation.x)
+		rand_Velocity.x = Random::Float() * m_PAM.m_velocityVariation.x;
 
-		particle.m_velocityBegin.x += rand_Vel_X;
-		particle.m_velocityEnd.x += rand_Vel_X;
-	}
+	if (m_PAM.m_velocityVariation.y)
+		rand_Velocity.y = Random::Float() * m_PAM.m_velocityVariation.y;
 
-	if (m_PAM.m_velocityVariation.y >= 1)
-	{
-		auto rand_Vel_Y = Random::Float() * m_PAM.m_velocityVariation.y;
+	if (m_PAM.m_velocityVariation.z)
+		rand_Velocity.z = Random::Float() * m_PAM.m_velocityVariation.z;
 
-		particle.m_velocityBegin.y += rand_Vel_Y;
-		particle.m_velocityEnd.y += rand_Vel_Y;
-	}
-
-	if (m_PAM.m_velocityVariation.z >= 1)
-	{
-		auto rand_Vel_Z = Random::Float() * m_PAM.m_velocityVariation.z;
-
-		particle.m_velocityBegin.z += rand_Vel_Z;
-		particle.m_velocityEnd.z += rand_Vel_Z;
-	}
+	particle.m_velocityBegin += rand_Velocity;
+	particle.m_velocityEnd += rand_Velocity;
 
 	// Color
 	particle.m_colourBegin = m_PAM.m_colourBegin;
@@ -272,17 +262,17 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 	// Scale Variation
 	glm::vec3 scaleVariation{ 0.0f, 0.0f, 0.0f };
 
-	if (m_PAM.m_scaleVariation.x >= 1)
+	if (m_PAM.m_scaleVariation.x)
 		scaleVariation.x = Random::Float() * m_PAM.m_scaleVariation.x;
 
-	if (m_PAM.m_scaleVariation.y >= 1)
+	if (m_PAM.m_scaleVariation.y)
 		scaleVariation.y = Random::Float() * m_PAM.m_scaleVariation.y;
 
-	if (m_PAM.m_scaleVariation.z >= 1)
+	if (m_PAM.m_scaleVariation.z)
 		scaleVariation.z = Random::Float() * m_PAM.m_scaleVariation.z;
 
 	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;
-	particle.m_scaleEnd = m_PAM.m_scaleEnd;
+	particle.m_scaleEnd = m_PAM.m_scaleEnd + scaleVariation;
 
 	particle.m_renderingPath = m_RM.m_renderingPath;
 	particle.m_emissive = m_RM.m_emissiveLighting;

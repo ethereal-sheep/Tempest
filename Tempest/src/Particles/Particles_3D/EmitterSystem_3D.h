@@ -9,23 +9,28 @@
 
 #include <glm.hpp>
 
-// Forward Declarations
+
+// General VFX
 struct ExplosionEmitter_3D;
 struct Rotation_ExplosionEmitter_3D;
 struct MultipleExplosionEmitter_3D;
 struct Multiple_Rotation_ExplosionEmitter_3D;
 
+// Indicator/Feedback VFX w.r.t the user
 struct Interactive_DoorParticle_3D;
+struct Smoke_Poof_Emitter_3D;
 
+// Unit VFX
 struct Unit_Turn_IndicatorEmitter_3D;
 struct Unit_MovementTrailEmitter_3D;
 
+// Characters VFX
 struct CharacterSpawnEmitter_3D;
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
-
 struct CharacterTileCharged_Emitter_3D;
 
+// Weather VFX
 struct Weather_Rain_Emitter_3D;
 
 struct EmitterSystem_3D
@@ -49,6 +54,7 @@ struct EmitterSystem_3D
 	const std::weak_ptr<Interactive_DoorParticle_3D> CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos);
 	const std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> CreateTileWaypointEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<Unit_MovementTrailEmitter_3D> CreateUnitTrailEmitter(glm::vec3 spawnPos);
+	const std::weak_ptr<Smoke_Poof_Emitter_3D> CreateSmokePoofEmitter(glm::vec3 spawnPos);
 
 	void CreateChracterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
 	void CreateChracterChargedAttackEmitter(std::weak_ptr<CharacterTileCharged_Emitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });

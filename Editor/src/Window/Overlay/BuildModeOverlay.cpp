@@ -18,6 +18,8 @@
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+
 namespace Tempest
 {
 	void BuildModeOverlay::open_popup(const Event& e)
@@ -524,6 +526,8 @@ namespace Tempest
 								AudioEngine ae;
 								ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 								instance.selected = INVALID;
+								
+								EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(t_position);
 
 								if (instance.tutorial_enable && tutorial_index == 7)
 								{
@@ -837,6 +841,7 @@ namespace Tempest
 									}
 
 									transform->position = inter;
+									EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(transform->position);
 								}
 
 								if (instance.tutorial_enable && tutorial_index == 2)
@@ -1086,6 +1091,7 @@ namespace Tempest
 				instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 				AudioEngine ae;
 				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
+				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(transform.position);
 				instance.selected = INVALID;
 				return;
 			}

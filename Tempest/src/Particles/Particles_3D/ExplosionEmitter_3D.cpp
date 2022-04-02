@@ -68,16 +68,6 @@ void ExplosionEmitter_3D::ParticleSetUp(Particle_3D& particle)
 {
 	Emitter_3D::ParticleSetUp(particle);
 
-	// Velocity Variations
-	if (m_PAM.m_velocityVariation.x >= 1)
-		particle.m_velocity.x += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.x) + m_PAM.m_velocityStart.x;
-
-	if (m_PAM.m_velocityVariation.y >= 1)
-		particle.m_velocity.y += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.y) + m_PAM.m_velocityStart.y;
-
-	if (m_PAM.m_velocityVariation.z >= 1)
-		particle.m_velocity.z += Random::Float() * static_cast<float>(m_PAM.m_velocityVariation.z) + m_PAM.m_velocityStart.z;
-
 	short spawnSector = std::rand() % 7;
 	short directionX = 1;
 	short directionY = 1;
@@ -130,4 +120,12 @@ void ExplosionEmitter_3D::ParticleSetUp(Particle_3D& particle)
 	particle.m_velocity.x *= directionX;
 	particle.m_velocity.y *= directionY;
 	particle.m_velocity.z *= directionZ;
+
+	particle.m_velocityBegin.x *= directionX;
+	particle.m_velocityBegin.y *= directionY;
+	particle.m_velocityBegin.z *= directionZ;
+
+	particle.m_velocityEnd.x *= directionX;
+	particle.m_velocityEnd.y *= directionY;
+	particle.m_velocityEnd.z *= directionZ;
 }
