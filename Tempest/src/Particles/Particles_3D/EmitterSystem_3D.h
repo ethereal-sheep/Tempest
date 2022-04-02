@@ -54,7 +54,7 @@ struct EmitterSystem_3D
 	const std::weak_ptr<Interactive_DoorParticle_3D> CreateInteractiveParticle(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos);
 	const std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> CreateTileWaypointEmitter(glm::vec3 spawnPos);
 	const std::weak_ptr<Unit_MovementTrailEmitter_3D> CreateUnitTrailEmitter(glm::vec3 spawnPos);
-	const std::weak_ptr<Smoke_Poof_Emitter_3D> CreateSmokePoofEmitter(glm::vec3 spawnPos);
+	void CreateSmokePoofEmitter(std::weak_ptr<Smoke_Poof_Emitter_3D>& wk_ptr, glm::vec3 spawnPos);
 
 	void CreateChracterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
 	void CreateChracterChargedAttackEmitter(std::weak_ptr<CharacterTileCharged_Emitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });

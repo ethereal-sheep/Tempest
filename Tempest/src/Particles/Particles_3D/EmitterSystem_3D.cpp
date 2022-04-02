@@ -362,16 +362,24 @@ void EmitterSystem_3D::CreateChracterChargedAttackEmitter(std::weak_ptr<Characte
 	wk_ptr.lock()->AssignWaypoint(waypoints);
 }
 
-const std::weak_ptr<Smoke_Poof_Emitter_3D> EmitterSystem_3D::CreateSmokePoofEmitter(glm::vec3 spawnPos)
+void EmitterSystem_3D::CreateSmokePoofEmitter(std::weak_ptr<Smoke_Poof_Emitter_3D>& wk_ptr, glm::vec3 spawnPos)
 {
-	auto tempEmitter = std::make_shared<Smoke_Poof_Emitter_3D>();
-	Smoke_Poof_Emitter_3D& emitter = *tempEmitter.get();
-	AddEmitter(tempEmitter);
+	if (wk_ptr.expired())
+	{
+		auto sh_ptr = std::make_shared<Smoke_Poof_Emitter_3D>();
+		wk_ptr = sh_ptr;
+		AddEmitter(sh_ptr);
+	}
+	else
+	{
+		wk_ptr.lock()->ClearAllParticles();
+	}
 
 	// Emitter_3D values - Without consideration for default ctor values
-	emitter.m_GM.m_position = spawnPos;
-	emitter.m_MM.m_duration = 0.8f;
-	emitter.m_GM.m_active = true;
-
-	return tempEmitter;
+	wk_ptr.lock()->m_GM.m_position = spawnPos;
+	wk_ptr.lock()->m_MM.m_duration = 0.8f;
+	wk_ptr.lock()->m_GM.m_active = true;
+	wk_ptr.lock()->m_MM.m_preWarm = true;
+	wk_ptr.lock()->m_EM.m_spawnTimeInterval = 1.0f;
+	wk_ptr.lock()->m_EM.m_spawnCountTimer = wk_ptr.lock()->m_EM.m_spawnTimeInterval;
 }

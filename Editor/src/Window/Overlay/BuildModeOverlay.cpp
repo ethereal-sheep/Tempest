@@ -527,7 +527,7 @@ namespace Tempest
 								ae.Play("Sounds2D/DeleteObject.wav", "SFX");
 								instance.selected = INVALID;
 								
-								EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(t_position);
+								EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, t_position);
 
 								if (instance.tutorial_enable && tutorial_index == 7)
 								{
@@ -841,7 +841,7 @@ namespace Tempest
 									}
 
 									transform->position = inter;
-									EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(transform->position);
+									EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform->position);
 								}
 
 								if (instance.tutorial_enable && tutorial_index == 2)
@@ -1091,7 +1091,7 @@ namespace Tempest
 				instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 				AudioEngine ae;
 				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
-				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(transform.position);
+				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform.position);
 				instance.selected = INVALID;
 				return;
 			}
