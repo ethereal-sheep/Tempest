@@ -25,6 +25,8 @@ struct LineEmitter_2D;
 
 // In-Game Simulation VFX
 struct Unit_Turn_IndicatorEmitter_3D;
+struct Smoke_Poof_Emitter_3D;
+
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
 struct CharacterTileCharged_Emitter_3D;
@@ -260,12 +262,16 @@ namespace Tempest
 
         // 3D VFX
         std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> m_unitTileEmitter;
-        std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
-        std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
-        std::weak_ptr< CharacterTileCharged_Emitter_3D> m_characterAttackEmitter;
-        bool beginAttack = true;
-        bool damageOnce = false;
         bool nextUnit = false;
         bool stopMoving = true;
+
+        std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
+        bool damageOnce = false;
+        
+        std::weak_ptr< CharacterTileCharged_Emitter_3D> m_characterAttackEmitter;
+        bool beginAttack = true;
+
+        std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
+        std::weak_ptr<Smoke_Poof_Emitter_3D> m_unit_Remove_VFX;
     };
 }

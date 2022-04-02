@@ -2687,6 +2687,8 @@ namespace Tempest
 				ImGui::SetCursorPosY(0);
 				if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 				{
+					EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_unit_Remove_VFX, instance.ecs.get<tc::Transform>(other_entity).position);
+
 					units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
 					instance.ecs.destroy(other_entity);
 					other_entity = INVALID;
