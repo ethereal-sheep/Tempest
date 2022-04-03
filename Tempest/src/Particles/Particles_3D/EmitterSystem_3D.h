@@ -58,7 +58,7 @@ struct EmitterSystem_3D
 
 	void CreateChracterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
 	void CreateChracterChargedAttackEmitter(std::weak_ptr<CharacterTileCharged_Emitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
-	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd);
+	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f }, glm::vec4 colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f });
 	const std::weak_ptr<CharacterDeathEmitter_3D> CreateChracterDeathEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos, int explosionEmitterAmount, glm::vec4 colourBegin, glm::vec4 colourEnd);
 
 	const std::weak_ptr<Weather_Rain_Emitter_3D> CreateWeatherRainEmitter(glm::vec3 spawnPos, glm::vec3 minSpawnPos, glm::vec3 maxSpawnPos);

@@ -20,7 +20,7 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	m_MM.m_preWarm = true;
 	Emitter_3D::UpdateMaxParticle(1000);
 
-	m_EM.m_spawnTimeInterval = 0.0166f;
+	m_EM.m_spawnTimeInterval = 0.032f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	m_EM.m_rateOverTime = 30;
 

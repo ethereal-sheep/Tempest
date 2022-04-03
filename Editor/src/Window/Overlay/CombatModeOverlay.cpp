@@ -1763,7 +1763,10 @@ namespace Tempest
 
 						// Turn off particle
 						if (!m_unitTileEmitter.expired())
-							m_unitTileEmitter.lock()->m_GM.m_active = true;
+						{
+							m_unitTileEmitter.lock()->m_GM.m_active = false;
+							m_unitTileEmitter.lock()->ClearAllParticles();
+						}
 					}
 				}
 				else
@@ -2024,6 +2027,7 @@ namespace Tempest
 						if (!m_unitTileEmitter.expired())
 						{
 							m_unitTileEmitter.lock()->m_GM.m_active = false;
+							m_unitTileEmitter.lock()->ClearAllParticles();
 							stopMoving = false;
 						}
 					}
@@ -3130,7 +3134,7 @@ namespace Tempest
 				else if (nextUnit)
 				{
 					nextUnit = false;
-					// TEST CODE @JUN HAO
+					// Update the position for the emitter
 					if (!m_unitTileEmitter.expired())
 					{
 						auto tempUnitEmitter = m_unitTileEmitter.lock();

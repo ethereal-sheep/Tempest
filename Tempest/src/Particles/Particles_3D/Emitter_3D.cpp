@@ -15,6 +15,7 @@
 #include "Logger/Log.h"
 
 #define GRAVITY -9.8f
+#define PSEUDO_AIR_RESISTANCE 0.997f
 
 
 Emitter_3D::Emitter_3D()
@@ -156,7 +157,10 @@ void Emitter_3D::ParticleUpdate(const float dt)
 
 			// Update Velocity
 			if (particle.m_gravity)
+			{
 				particle.m_velocity.y += GRAVITY * dt;
+				particle.m_velocity *= PSEUDO_AIR_RESISTANCE;
+			}
 			else
 			{
 				// Velocity
@@ -212,6 +216,8 @@ void Emitter_3D::ParticleRender(glm::vec4 modelMatrix)
 
 void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 {
+	LOG_INFO("Base Emitter_3D Particle Setup");
+
 	//Default set values
 	particle.m_position = m_GM.m_position;
 	particle.m_isActive = true;
@@ -248,8 +254,10 @@ void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 	if (m_PAM.m_velocityVariation.z)
 		rand_Velocity.z = Random::Float() * m_PAM.m_velocityVariation.z;
 
+	// Final Velocity Setup
 	particle.m_velocityBegin += rand_Velocity;
 	particle.m_velocityEnd += rand_Velocity;
+	particle.m_velocity = particle.m_velocityBegin;
 
 	// Color
 	particle.m_colourBegin = m_PAM.m_colourBegin;
