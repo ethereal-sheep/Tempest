@@ -824,7 +824,7 @@ namespace Tempest
 
 			//Project Icon Btn
 			tex = tex_map[projectIconBtn];
-			ImGui::SetCursorPos({ viewport.Size.x * 0.05f, viewport.Size.y * 0.75f });
+			ImGui::SetCursorPos({ viewport.Size.x * 0.05f, viewport.Size.y * 0.78f });
 			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				auto fn = [&]()
@@ -852,9 +852,23 @@ namespace Tempest
 			else
 				settingIconBtn = "Assets/SettingIconBtn_default.dds";
 
+			//Credits Icon Btn
+			tex = tex_map[creditsIconBtn];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.21f, viewport.Size.y * 0.8f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
+			}
+			if (ImGui::IsItemHovered())
+				creditsIconBtn = "Assets/CreditsIconBtn_hover.dds";
+			else
+				creditsIconBtn = "Assets/CreditsIconBtn_default.dds";
+
 			//QuitIconBtn
 			tex = tex_map[quitIconBtn];
-			ImGui::SetCursorPos({ viewport.Size.x * 0.21f, viewport.Size.y * 0.8f });
+			ImGui::SetCursorPos({ viewport.Size.x * 0.29f, viewport.Size.y * 0.8f });
 			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 
@@ -999,16 +1013,17 @@ namespace Tempest
 		{
 			// render the select map image
 			auto image = tex_map["Assets/MM_SelectMap.dds"];
-			ImVec2 point = ImGui::GetCursorScreenPos();
-			ImVec2 Min{ point.x, point.y };
-			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
-			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
+			float y_pos = 800.f;
+			//ImVec2 point = ImGui::GetCursorScreenPos();
+			//ImVec2 Min{ point.x, point.y };
+			//ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
 
 			// render title
-			ImGui::SetCursorPos(ImVec2{ 0,0 });
+			/*ImGui::SetCursorPos(ImVec2{ 0,0 });
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 			UI::SubHeader("Map Builder");
-			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });*/
 
 
 			// render back button
@@ -1029,21 +1044,27 @@ namespace Tempest
 				// fade in, fade out, visible
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
 			}
-				
-
 			ImGui::PopStyleColor(3);
 
-			ImGui::PushFont(FONT_BTN);
-			// render bottom two buttons
-			if (UI::UIButton_2("New Map", "New Map", ImVec2{ viewport.Size.x * 0.34f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
+			//New Map
+			auto tex = tex_map[newMapBtn];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.2f, viewport.Size.y * 0.25f - inter_nest[0].get() * y_pos });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				ImGui::OpenPopup("NEW MAP");
 				NewMapName = "Map";
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 			}
+			if (ImGui::IsItemHovered())
+				newMapBtn = "Assets/NewMapHoverButton.dds";
+			else
+				newMapBtn = "Assets/NewMapButton.dds";
 
-			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
+			//Load Map
+			tex = tex_map[loadMapBtn];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.5f, viewport.Size.y * 0.25f - inter_nest[2].get() * y_pos });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1055,8 +1076,10 @@ namespace Tempest
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
 
 			}
-			
-			ImGui::PopFont();
+			if (ImGui::IsItemHovered())
+				loadMapBtn = "Assets/LoadMapHoverButton.dds";
+			else
+				loadMapBtn = "Assets/LoadMapButton.dds";
 
 			if (UI::ConfirmInputNamePopup("NEW MAP", NewMapName))
 			{
