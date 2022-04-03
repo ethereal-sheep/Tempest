@@ -58,7 +58,7 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 				image = tex_map["Assets/BackMenuBtn.dds"];
 
-				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight() }))
 				{
 					OverlayOpen = false;
 					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
