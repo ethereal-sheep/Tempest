@@ -262,15 +262,29 @@ void EmitterSystem_3D::CreateChracterSpawnEmitter(std::weak_ptr<CharacterSpawnEm
 	}
 	else
 	{
-		// Reset the emitter
 		wk_ptr.lock()->ClearAllParticles();
-
-		// Reborn the emitter
-		wk_ptr.lock()->Reborn();
 	}
 
 	// Emitter_3D values - Without consideration for default ctor values
 	wk_ptr.lock()->m_GM.m_position = spawnPos;
+	wk_ptr.lock()->m_MM.m_duration = 0.4f;
+	wk_ptr.lock()->m_GM.m_active = true;
+
+	// Assign waypoints
+	std::array<glm::vec3, 4> waypoints;
+
+	/*
+	* 0 - Left
+	* 1 - Right
+	* 2 - Top
+	* 3 - Btm
+	*/
+	waypoints[0] = glm::vec3{ spawnPos.x       ,  spawnPos.y, spawnPos.z - 0.5f };
+	waypoints[1] = glm::vec3{ spawnPos.x       ,  spawnPos.y, spawnPos.z + 0.5f };
+	waypoints[2] = glm::vec3{ spawnPos.x + 0.5f,  spawnPos.y, spawnPos.z        };
+	waypoints[3] = glm::vec3{ spawnPos.x - 0.5f,  spawnPos.y, spawnPos.z        };
+
+	wk_ptr.lock()->AssignWaypoint(waypoints);
 }
 
 const std::weak_ptr<CharacterDamageEmitter_3D> EmitterSystem_3D::CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin, glm::vec4 colourEnd)

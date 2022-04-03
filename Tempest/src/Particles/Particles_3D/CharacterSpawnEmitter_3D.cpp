@@ -2,78 +2,122 @@
 
 #include "CharacterSpawnEmitter_3D.h"
 
+#include "../Random.h"
+#include <algorithm>
+
+#include "Logger/Log.h"
+
 CharacterSpawnEmitter_3D::CharacterSpawnEmitter_3D()
 {
+	// Initialise all the waypoints
+	for (short i = 0; i < waypoint_Index; ++i)
+		m_wayPoints[i] = glm::vec3{ 0.0f, 0.0f, 0.0f };
+
+	// Values for Emission Module
 	m_GM.m_active = true;
 
 	m_MM.m_duration = 0.4f;
 	m_MM.m_preWarm = true;
-	Emitter_3D::UpdateMaxParticle(10);
+	Emitter_3D::UpdateMaxParticle(500);
 
-	m_EM.m_spawnTimeInterval = 0.064f;
+	m_EM.m_spawnTimeInterval = 0.08f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
-	m_EM.m_rateOverTime = 1;
+	m_EM.m_rateOverTime = 4;
 
-	m_PAM.m_lifeTime = 0.3f;
-	m_PAM.m_gravity = false;
-
-	/*m_PAM.m_velocityStart = glm::vec3{ -1.0f, 6.0f, -1.0f };
-	m_PAM.m_velocityEnd = glm::vec3{ -1.1f, 0.0f, -1.0f };*/
-
-	 //Minimise the spawn VFX
-	m_PAM.m_velocityStart = glm::vec3{ -2.0f, 8.0f, -2.0f };
-	m_PAM.m_velocityEnd = glm::vec3{ -4.0f, 1.0f, -4.0f };
+	// Particle Architype values - without consideration for default ctor
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 5.f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 5.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
-	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.01f, 0.03f };
-	m_PAM.m_scaleEnd = glm::vec3{ 0.00f, 0.01f, 0.00f };
-	m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
+	m_PAM.m_scaleEnd = glm::vec3{ 0.03f, 0.03f, 0.03f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.f, 0.f, 0.f };
 
+	// Note - Values to be divided by 255.0f - Forgot the reason
+	m_PAM.m_colourBegin = glm::vec4{ 0.f / 255.f, 191.f / 255.f, 255.f / 255.f, 1.0f };
+	m_PAM.m_colourEnd = glm::vec4{ 0.f / 255.f, 191.f / 255.f, 255.f / 255.f, 1.0f };
 
-	m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	m_PAM.m_colourEnd   = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+	m_PAM.m_lifeTime = 0.3f;
+	//m_PAM.m_lifeTime = 0.3f;
+	m_PAM.m_rebirth = false;
 
-	//m_EM.m_burstCycle = 5;
-	//m_EM.m_burstTime = 0.01f;
-	//m_EM.m_burstInterval = 0.48f;
-	//m_EM.m_burstCount = 1;
-
-	m_RM.m_renderingPath = "Models/SquareHole.a";
+	m_RM.m_renderingPath = "Models/Cube.a";
 	m_RM.m_emissiveLighting = true;
 }
 
-void CharacterSpawnEmitter_3D::Reborn()
+void CharacterSpawnEmitter_3D::AssignWaypoint(const std::array<glm::vec3, waypoint_Index> newWaypoints)
 {
-	m_GM.m_active = true;
+	// Initialise all the waypoints
+	for (short i = 0; i < waypoint_Index; ++i)
+		m_wayPoints[i] = newWaypoints[i];
+}
 
-	m_MM.m_duration = 0.4f;
-	m_MM.m_preWarm = true;
-	Emitter_3D::UpdateMaxParticle(10);
+void CharacterSpawnEmitter_3D::Emit(const int particleAmount)
+{
+	// Emit only if enough particle
+	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
+	{
+		for (short i = 0; i < particleAmount; ++i)
+		{
+			// Initailisation of the particle
+			Particle_3D particle;
+			ParticleSetUp(particle);
 
-	m_EM.m_spawnTimeInterval = 0.064f;
-	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
-	m_EM.m_rateOverTime = 1;
+			/*
+			* 0 - Left
+			* 1 - Right
+			* 2 - Top
+			* 3 - Btm
+			*/
 
-	m_PAM.m_lifeTime = 0.3f;
-	m_PAM.m_gravity = false;
+			switch (i)
+			{
+			case 0: // LEFT
+				particle.m_position   = m_wayPoints[0];
 
-	//Minimise the spawn VFX
-	m_PAM.m_velocityStart = glm::vec3{ -2.0f, 8.0f, -2.0f };
-	m_PAM.m_velocityEnd = glm::vec3{ -4.0f, 1.0f, -4.0f };
-	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+				particle.m_velocityBegin = glm::vec3{ 0.f, 8.f, 1.5f };
+				particle.m_velocityEnd   = glm::vec3{ 0.f, 8.f, 1.1f };
 
-	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.01f, 0.03f };
-	m_PAM.m_scaleEnd = glm::vec3{ 0.00f, 0.01f, 0.00f };
-	m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+				particle.m_scaleBegin = glm::vec3{ 0.53f, 0.03f, 0.03f };
+				particle.m_scaleEnd   = glm::vec3{ 0.095f, 0.03f, 0.01f };
+				break;
+			case 1: // RIGHT
+				particle.m_position   = m_wayPoints[1];
 
-	m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+				particle.m_velocityBegin = glm::vec3{ 0.f, 8.f, -1.5f };
+				particle.m_velocityEnd = glm::vec3{ 0.f, 8.f, -1.1f };
 
-	//m_EM.m_burstCycle = 5;
-	//m_EM.m_burstTime = 0.01f;
-	//m_EM.m_burstInterval = 0.48f;
-	//m_EM.m_burstCount = 1;
+				particle.m_scaleBegin = glm::vec3{ 0.53f, 0.03f, 0.03f };
+				particle.m_scaleEnd   = glm::vec3{ 0.095f, 0.03f, 0.01f };
+				break;
+			case 2: // TOP
+				particle.m_position   = m_wayPoints[2];
 
-	m_RM.m_renderingPath = "Models/SquareHole.a";
-	m_RM.m_emissiveLighting = true;
+				particle.m_velocityBegin = glm::vec3{ -1.5f, 8.f, 0.f };
+				particle.m_velocityEnd = glm::vec3{ -1.1f, 8.f, 0.0f };
+
+				particle.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.53f };
+				particle.m_scaleEnd   = glm::vec3{ 0.01f, 0.03f, 0.095f };
+				break;
+			case 3: // BTM
+				particle.m_position   = m_wayPoints[3];
+
+				particle.m_velocityBegin = glm::vec3{ 1.5f, 8.f, 0.f };
+				particle.m_velocityEnd = glm::vec3{ 1.1f, 8.f, 0.0f };
+
+				particle.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.53f };
+				particle.m_scaleEnd   = glm::vec3{ 0.01f, 0.03f, 0.095f };
+				break;
+			default:
+				break;
+			}
+
+			// Allocation of particle
+			m_particles[m_available_ParticleSlots.front()] = particle;
+			m_available_ParticleSlots.pop();
+
+			if (m_available_ParticleSlots.size() <= 0)
+				break;
+		}
+	}
 }
