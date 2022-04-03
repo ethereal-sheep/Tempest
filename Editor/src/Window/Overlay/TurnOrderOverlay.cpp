@@ -715,22 +715,59 @@ namespace Tempest
 
 				if (UI::ConfirmDeletePopup("TurnOrderGoBackConfirmation##", new_instance ? "Go back to select conflict resolution?": "Go back to combat mode?"))
 				{
-					OverlayOpen = false;
 
 					if (new_instance)
 					{
-						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
-							instance.get_full_path(),
-							MemoryStrategy{},
-							InstanceType::EDIT_TIME);
-						AudioEngine ae;
-						ae.StopAllChannels();
-						ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+
+						auto fn = [&]() {
+							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+								instance.get_full_path(),
+								MemoryStrategy{},
+								InstanceType::EDIT_TIME);
+							AudioEngine ae;
+							ae.StopAllChannels();
+							ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
+							//Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(2);
+						};
+
+
+						auto second_fn = [passed = 0.0]() mutable
+						{
+							/*auto start = std::chrono::system_clock::now();
+
+							for (auto it : fs::directory_iterator(fs::path("Models")))
+							{
+								auto end = std::chrono::system_clock::now();
+								std::chrono::duration<double> diff = end - start;
+
+								if (diff.count() > 1.0)
+								{
+									passed += diff.count();
+									return false;
+								}
+
+								if (it.path().extension() != ".a")
+									continue;
+
+								Service<RenderSystem>::Get().LoadModel(it.path().string());
+							}*/
+
+							return true;
+						};
+
+						LoadTrigger t;
+						t.do_at_end_fn = fn;
+						t.do_until_true_fn = second_fn;
+
+						Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+
 					}
 						
 					else
+					{
+						OverlayOpen = false;
 						Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+					}
 					
 				}
 

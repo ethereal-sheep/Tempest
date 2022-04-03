@@ -81,20 +81,53 @@ namespace Tempest
 					// where does this go to?
 					if (UI::UIButton_2("Quit", "Quit", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.6f }, { 50,20 }, FONT_BTN))
 					{
-						AudioEngine ae;
-						ae.StopAllChannels();
-						OverlayOpen = false;
-						EscDuringPause = false;
 
-						InstanceConfig config{ instance.get_full_path(),
-							MemoryStrategy{},
-							InstanceType::EDIT_TIME };
-						config.enable_tutorial = instance.tutorial_enable;
 
-						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
+						auto fn = [&]() {
 
-						ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
-						Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
+							AudioEngine ae;
+							ae.StopAllChannels();
+							OverlayOpen = false;
+							EscDuringPause = false;
+							InstanceConfig config{ instance.get_full_path(),
+								MemoryStrategy{},
+								InstanceType::EDIT_TIME };
+							config.enable_tutorial = instance.tutorial_enable;
+
+							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
+							ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
+
+						};
+
+						auto second_fn = [passed = 0.0]() mutable
+						{
+							/*auto start = std::chrono::system_clock::now();
+
+							for (auto it : fs::directory_iterator(fs::path("Models")))
+							{
+								auto end = std::chrono::system_clock::now();
+								std::chrono::duration<double> diff = end - start;
+
+								if (diff.count() > 1.0)
+								{
+									passed += diff.count();
+									return false;
+								}
+
+								if (it.path().extension() != ".a")
+									continue;
+
+								Service<RenderSystem>::Get().LoadModel(it.path().string());
+							}*/
+
+							return true;
+						};
+
+						LoadTrigger t;
+						t.do_at_end_fn = fn;
+						t.do_until_true_fn = second_fn;
+
+						Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
 					}
 				}
 				ImGui::End();

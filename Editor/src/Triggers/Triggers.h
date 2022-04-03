@@ -231,6 +231,8 @@ namespace Tempest
 		{
 
 		}
+
+		bool force = false;
 		float fade_in_time, fade_out_time, visible_time;
 		std::function<void(void)> do_on_fade;
 	};
