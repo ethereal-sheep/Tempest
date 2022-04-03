@@ -150,6 +150,7 @@ namespace Tempest::UI
 	// Button size will not scale with Text
 	// Default Btn Color
 	bool UIButton_2(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
+	bool UIButton_3(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected = false);
 
 	// Button size will not scale with Text
 	// Blueish Button for Select Weapon Btn

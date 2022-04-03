@@ -72,6 +72,7 @@ namespace Tempest
         std::string MapTitle{ "" };
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
+        int SelectedSequencesint{ -1 };
         tset<string> SelectedMaps;
         string SelectedMap = "";
         string SelectedMapPreview = "Assets/EmptyMapBG.dds";
