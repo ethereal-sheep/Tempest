@@ -18,9 +18,18 @@
 #include "Instance/RuntimeInstance.h"
 #include "Util/interpolater.h"
 
-struct TileWaypointEmitter_3D;
+
+// Tutorial VFX
+struct ExplosionEmitter_2D;
+struct LineEmitter_2D;
+
+// In-Game Simulation VFX
+struct Unit_Turn_IndicatorEmitter_3D;
+struct Smoke_Poof_Emitter_3D;
+
 struct CharacterDamageEmitter_3D;
 struct CharacterDeathEmitter_3D;
+struct CharacterTileCharged_Emitter_3D;
 
 namespace Tempest
 {
@@ -248,14 +257,28 @@ namespace Tempest
         std::vector<interpolater<float>> inter_nest = std::vector< interpolater<float>>(5);
         std::map<Entity, UnitResult> units_results;
 
-        std::weak_ptr<TileWaypointEmitter_3D> m_unitTileEmitter;
         std::weak_ptr<CharacterDamageEmitter_3D> m_characterDamageEmitter;
         std::weak_ptr<CharacterDeathEmitter_3D> m_characterDeathEmitter;
 
         bool start_inter_atk_roll = true;
         bool start_inter_def_roll = true;
         bool damageOnce = false;
+
+        std::weak_ptr<LineEmitter_2D> m_winningNumber_VFX;
+        bool b_playerOne_Rolled = false;
+        bool b_playerTwo_Rolled = false;
+
+        std::weak_ptr<ExplosionEmitter_2D> m_combatRoll_VFX;
+        bool b_combatRoll_VFX_Ready = false;
+
+        // 3D VFX
+        std::weak_ptr<Unit_Turn_IndicatorEmitter_3D> m_unitTileEmitter;
         bool nextUnit = false;
         bool stopMoving = true;
+        
+        std::weak_ptr< CharacterTileCharged_Emitter_3D> m_characterAttackEmitter;
+        bool beginAttack = true;
+        
+        std::weak_ptr<Smoke_Poof_Emitter_3D> m_unit_Remove_VFX;
     };
 }

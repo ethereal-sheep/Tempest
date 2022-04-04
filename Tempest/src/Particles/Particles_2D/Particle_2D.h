@@ -22,18 +22,25 @@ enum class ParticleType
 struct Particle_2D
 {
 	Particle_2D();
-	Particle_2D(glm::vec2 pos, glm::vec2 vec, glm::vec4 colour, float size, float lifeTime, bool isActive, ParticleType particleType);
 
 	glm::vec2 m_position;
+
+	glm::vec2 m_velocityBegin, m_velocityEnd;
 	glm::vec2 m_velocity;
 
 	float m_rotation;
 
+	glm::vec4 m_colourBegin, m_colourEnd;
 	glm::vec4 m_colour;
+
+	float m_scaleBegin, m_scaleEnd;
 	float m_size;
+
 	float m_lifeTime;
 	float m_lifeRemaining;
 	bool  m_isActive;
+
+	bool m_gravity;
 
 	ParticleType m_type;
 };

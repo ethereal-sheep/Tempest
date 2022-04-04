@@ -25,13 +25,13 @@ GameObjectModule_2D::GameObjectModule_2D()
 {}
 
 ParticleArchetypeModule_2D::ParticleArchetypeModule_2D()
-	: m_startVelocity{ 0.0f, 0.0f }
-	, m_endVelocity{ 0.0f, 0.0f }
+	: m_velocityStart{ 0.0f, 0.0f }
+	, m_velocityEnd{ 0.0f, 0.0f }
 	, m_velocityVariation{ 3.0f, 1.0f }
 
-	, m_sizeBegin{ 20.0f }
-	, m_sizeEnd{ 0.0f }
-	, m_sizeVariation{ 0.3f }
+	, m_scaleBegin{ 20.0f }
+	, m_scaleEnd{ 0.0f }
+	, m_scaleVariation{ 0.3f }
 
 	, m_colourBegin{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f }
 	, m_colourEnd{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f }
@@ -39,6 +39,7 @@ ParticleArchetypeModule_2D::ParticleArchetypeModule_2D()
 
 	, m_lifeTime{ 2.0f }
 	//, m_lifeVariation{ 5.0f }
+	, m_gravity {false}
 {}
 
 EmissionModule_2D::EmissionModule_2D()

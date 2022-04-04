@@ -18,13 +18,20 @@
 #include "Audio/AudioEngine.h"
 #include "Util/pathfinding.h"
 
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
-#include "Particles/Particles_3D/TileWaypointEmitter_3D.h"
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/LineEmitter_2D.h"
+#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
+
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "Particles/Particles_3D/Unit_Turn_IndicatorEmitter_3D.h"
 #include "Particles//Particles_3D/CharacterDamageEmitter_3D.h"
 #include "Particles/Particles_3D/CharacterDeathEmitter_3D.h"
+#include "Particles/Particles_3D/CharacterTileCharged_Emitter_3D.h"
 
 namespace Tempest
 {
+	static float timer = 0.f;
+
 	auto collide_first_edited(
 		int x0, int y0, int x1, int y1,
 		tmap<int, tmap<int, id_t>>& collision_map,
@@ -425,6 +432,67 @@ namespace Tempest
 
 			}
 	}
+	
+	void draw_indicator(RuntimeInstance& instance, vec3 pos)
+	{
+		auto height = 2.5f;
+		auto amplitude = .1f;
+		auto speed = 2.f;
+		auto ring_speed = 2.f;
+		auto spin_speed = 2.f;
+		auto dice_speed = 4.f;
+
+		pos.y = height;
+		pos.y += (float)sin(timer * speed) * amplitude;
+
+		if (auto pf = instance.scene.get_prototype_if("Unit", "Indicator"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * spin_speed, glm::vec3{ 0, -1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+		if (auto pf = instance.scene.get_prototype_if("Unit", "IndicatorRing"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * ring_speed, glm::vec3{ 0, 1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+
+		if (auto pf = instance.scene.get_prototype_if("Unit", "IndicatorDice"))
+		{
+			auto model = pf->get_if<tc::Model>();
+			auto local = pf->get_if<tc::Local>();
+
+			auto test = glm::translate(pos)
+				* glm::rotate(timer * dice_speed, glm::vec3{ 0, 1, 0 })
+				* glm::translate(local->local_position)
+				* glm::mat4(local->local_rotation)
+				* glm::scale(local->local_scale);
+
+			Service<RenderSystem>::Get().SubmitModel(model->path, test);
+		}
+
+		
+		
+
+
+
+	}
+	
 	void CombatModeOverlay::reset_menu()
 	{
 		menu1.start(-1.f, 0.f, 0.6f, 0.f, [](float x) { return glm::sineEaseOut(x); });
@@ -575,21 +643,24 @@ namespace Tempest
 
 				// Draw whatever thing on their head
 				{
-					ImGui::PushFont(FONT_BOLD);
-					auto text_size = ImGui::CalcTextSize(ICON_FA_ICE_CREAM);
-					auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
-					ImGui::SetCursorPos(cursor_pos);
-					ImGui::BeginGroup();
-					ImGui::Text(ICON_FA_ICE_CREAM);
-					/*if (ImGui::Button("Attack"))
-					{
-						state = State::ATTACKING;
-					}
-					if (ImGui::Button("Move"))
-					{
-					}*/
-					ImGui::EndGroup();
-					ImGui::PopFont();
+					//ImGui::PushFont(FONT_BOLD);
+					//auto text_size = ImGui::CalcTextSize(ICON_FA_ICE_CREAM);
+					//auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+					//ImGui::SetCursorPos(cursor_pos);
+					//ImGui::BeginGroup();
+					//ImGui::Text(ICON_FA_ICE_CREAM);
+
+
+					///*if (ImGui::Button("Attack"))
+					//{
+					//	state = State::ATTACKING;
+					//}
+					//if (ImGui::Button("Move"))
+					//{
+					//}*/
+					//ImGui::EndGroup();
+					//ImGui::PopFont();
+					draw_indicator(instance, position);
 				}
 				ImGui::SetCursorPos(temp);
 
@@ -758,9 +829,15 @@ namespace Tempest
 		auto start = cam.GetPosition();
 		float dist = 0;
 		Entity door = INVALID;
+		Entity dead_guy = INVALID;
 		if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
 		{
 			auto inter = cam.GetPosition() + ray * dist;
+
+			if (instance.character_map.count((int)std::round(inter.x - .5f)) && instance.character_map[(int)std::round(inter.x - .5f)].count((int)std::round(inter.z - .5f)))
+			{
+				dead_guy = instance.character_map[(int)std::round(inter.x - .5f)][(int)std::round(inter.z - .5f)];
+			}
 
 			float r_x = std::round(inter.x) - inter.x;
 			float r_y = std::round(inter.z) - inter.z;
@@ -788,6 +865,7 @@ namespace Tempest
 					door = instance.door_map[c_x][a_y][c_x][b_y];
 				}
 			}
+
 		}
 
 		if (door && instance.ecs.has<tc::Door>(door) && instance.ecs.has<tc::Shape>(door) && instance.ecs.has<tc::Transform>(door))
@@ -834,6 +912,171 @@ namespace Tempest
 				}
 			}
 		}
+		
+		if (dead_guy && instance.ecs.has<tc::Unit>(dead_guy) && instance.ecs.get<tc::Unit>(dead_guy).is_dead() && instance.ecs.has<tc::Shape>(dead_guy) && instance.ecs.has<tc::Transform>(dead_guy))
+		{
+			auto shape = instance.ecs.get_if<tc::Shape>(dead_guy);
+			auto& transform = instance.ecs.get<tc::Transform>(dead_guy);
+
+			const int& x = shape->x;
+			const int& y = shape->y;
+
+			AABB box;
+
+			auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
+
+			box.min.x = a_x;
+			box.min.z = a_y;
+
+			box.max.x = b_x;
+			box.max.z = b_y;
+
+			auto rot = transform.rotation;
+			box.min = rot * box.min;
+			box.max = rot * box.max;
+
+			box.min.x += transform.position.x;
+			box.min.z += transform.position.z;
+			box.min.y = 0;
+
+			box.max.x += transform.position.x;
+			box.max.z += transform.position.z;
+			box.max.y = 0;
+
+			Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+
+
+			if (ImGui::GetIO().MouseClicked[0])
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Door_Open.wav", "SFX");
+
+
+				const ImGuiViewport* viewport = ImGui::GetMainViewport();
+				ImGui::OpenPopup("End Unit Cycle");
+				ImGui::SetNextWindowPos(ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+				ImGui::SetNextWindowSize(ImVec2(600, 300));
+
+				other_entity = dead_guy;
+			}
+		}
+
+
+		//const ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+		ImVec4 borderCol = { 0.980f, 0.768f, 0.509f, 1.f };
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
+		ImGui::PushStyleColor(ImGuiCol_Border, borderCol);
+		ImGui::PushStyleColor(ImGuiCol_PopupBg, { 0.06f,0.06f, 0.06f, 0.85f });
+
+		if (ImGui::BeginPopupModal("End Unit Cycle", nullptr, flags))
+		{
+			auto& ocs = instance.ecs.get<tc::Character>(other_entity);
+			auto& ounit = instance.ecs.get<tc::Unit>(other_entity);
+
+			ImVec2 winMin = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+			ImVec2 TextMin = { ImGui::GetWindowPos().x + 10.f, ImGui::GetWindowPos().y + 2.5f };
+			ImVec2 winMax = { winMin.x + ImGui::GetWindowWidth() * 0.25f, winMin.y + ImGui::GetWindowHeight() * 0.075f };
+			ImVec4 col = { 0.980f, 0.768f, 0.509f, 1.f };
+			ImVec4 textcol = { 0,0,0,1 };
+
+			auto bgImg = tex_map["Assets/Popup_Backdrop.dds"];
+			auto warnImg = tex_map["Assets/YellowWarningIco.dds"];
+			string te = "CONFIRMATION";
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bgImg->GetID()), winMin, { winMin.x + ImGui::GetWindowWidth() * 0.8f,winMin.y + ImGui::GetWindowHeight() });
+			ImGui::GetWindowDrawList()->AddRectFilled({ winMin.x, winMin.y }, { winMax.x, winMax.y }, ImGui::GetColorU32(col));
+
+			ImGui::PushFont(FONT_OPEN);
+			ImGui::GetWindowDrawList()->AddText({ TextMin.x, TextMin.y }
+			, ImGui::GetColorU32({ 0,0,0,1 }), te.c_str());
+			ImGui::PopFont();
+
+
+			ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.2f });
+			ImGui::PushFont(FONT_SHEAD);
+			auto windowWidth = ImGui::GetWindowSize().x;
+			string warningstr = "";
+			auto warningSize = ImGui::CalcTextSize(warningstr.c_str()).x;
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.792f,0.22f,0.22f,1.f });
+			ImGui::SetCursorPosX((windowWidth - warningSize) * 0.5f - ((float)warnImg->GetWidth() * 0.7f));
+			ImGui::Image((void*)static_cast<size_t>(warnImg->GetID()), { (float)warnImg->GetWidth(), (float)warnImg->GetHeight()});
+			ImGui::SameLine();
+			ImGui::Text(warningstr.c_str());
+			ImGui::PopStyleColor();
+			ImGui::PopFont();
+
+			ImGui::Dummy({ 0.f, ImGui::GetWindowHeight() * 0.05f });
+			ImGui::PushFont(FONT_BODY);
+			string str = ocs.name + " has died.";
+			string str2 = "What would you like to do?";
+			auto strSize = ImGui::CalcTextSize(str.c_str()).x;
+				
+			ImGui::SetCursorPosX((windowWidth - strSize) * 0.5f);
+			ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetColorU32({ 1,0,0,1 }));
+			ImGui::Text(ocs.name.c_str());
+			ImGui::PopStyleColor();
+			ImGui::SameLine();
+			ImGui::Text(" has died.");
+			ImGui::SetCursorPosX((windowWidth - ImGui::CalcTextSize(str2.c_str()).x) * 0.5f);
+			ImGui::Text(str2.c_str());
+			ImGui::PopFont();
+
+			ImGui::SetCursorPosX(0);
+			ImGui::SetCursorPosY(0);
+			if (UI::UIButton_2("Revive", "Revive", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.205f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
+			{
+				units.push_back(other_entity);
+				if (auto unit = instance.scene.get_prototype_if("Unit", "Unit"))
+				{
+					// create a new entity
+					/*auto new_e = instance.ecs.create(dead->instance());
+					LOG_ASSERT(instance.ecs.has<tc::Transform>(new_e));
+					LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
+
+					instance.ecs.get<tc::Transform>(new_e) = oxform;
+					instance.ecs.get<tc::Character>(new_e) = ocs;
+
+					instance.ecs.destroy(other_entity);*/
+
+					LOG_ASSERT(unit->get_if<tc::Model>());
+					LOG_ASSERT(unit->get_if<tc::Local>());
+					//LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
+
+					ounit.revive();
+					instance.ecs.get<tc::Model>(other_entity) = *unit->get_if<tc::Model>();
+					instance.ecs.get<tc::Local>(other_entity) = *unit->get_if<tc::Local>();
+				}
+
+				ocs.set_statDelta(0, 0);
+				other_entity = INVALID;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SetCursorPosX(0);
+			ImGui::SetCursorPosY(0);
+			if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
+			{
+				instance.ecs.destroy(other_entity);
+				other_entity = INVALID;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SetCursorPosX(0);
+			ImGui::SetCursorPosY(0);
+			if (UI::UIButton_2("Ignore", "Ignore", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.785f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
+			{
+				other_entity = INVALID;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+				
+		}
+		ImGui::PopStyleVar(3);
+		ImGui::PopStyleColor(2);
+
 	}
 
 	void CombatModeOverlay::attacking(RuntimeInstance& instance, const glm::ivec2& world_mouse)
@@ -1531,7 +1774,10 @@ namespace Tempest
 
 						// Turn off particle
 						if (!m_unitTileEmitter.expired())
-							m_unitTileEmitter.lock()->m_GM.m_active = true;
+						{
+							m_unitTileEmitter.lock()->m_GM.m_active = false;
+							m_unitTileEmitter.lock()->ClearAllParticles();
+						}
 					}
 				}
 				else
@@ -1792,6 +2038,7 @@ namespace Tempest
 						if (!m_unitTileEmitter.expired())
 						{
 							m_unitTileEmitter.lock()->m_GM.m_active = false;
+							m_unitTileEmitter.lock()->ClearAllParticles();
 							stopMoving = false;
 						}
 					}
@@ -1938,6 +2185,10 @@ namespace Tempest
 		if (inter1.is_in_progress())
 		{
 			roll = std::to_string(els::random::uniform_rand(0, 999));
+
+			// Ready to show bam VFX
+			b_combatRoll_VFX_Ready = true;
+			b_playerOne_Rolled = true;
 		}
 
 		ImGui::PushFont(FONT_HEAD);
@@ -1953,35 +2204,42 @@ namespace Tempest
 
 		if (inter1.is_finished())
 		{
-			if(win)
+			if (win)
 				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
 
-			if (atk_rolled)
+			if (b_combatRoll_VFX_Ready)
 			{
-				if (start_inter_atk_roll)
-				{
-					atk_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
-						[](float x) { return glm::elasticEaseOut(x);
-					});
-					atk_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
-						[](float x) { return glm::elasticEaseOut(x);
-					});
-					atk_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
-						[](float x) { return glm::elasticEaseOut(x);
-					});
-					start_inter_atk_roll = false;
-				}
+				b_combatRoll_VFX_Ready = false;
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
+			}
+		}
 
-				for (int i = 0; i < roll.size(); i++)
-				{
-					FONT_HEAD->Scale = atk_roll_inter[i].get();
-					ImGui::PushFont(FONT_HEAD);
-					ImGui::Text(std::string{ roll[i] }.c_str());
-					ImGui::PopFont();
-					ImGui::SameLine();
-				}
+		if (atk_rolled)
+		{
+			if (start_inter_atk_roll)
+			{
+				atk_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
+					[](float x) { return glm::elasticEaseOut(x);
+				});
+				atk_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
+					[](float x) { return glm::elasticEaseOut(x);
+				});
+				atk_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
+					[](float x) { return glm::elasticEaseOut(x);
+				});
+				start_inter_atk_roll = false;
+			}
+
+			for (int i = 0; i < roll.size(); i++)
+			{
+				FONT_HEAD->Scale = atk_roll_inter[i].get();
+				ImGui::PushFont(FONT_HEAD);
+				ImGui::Text(std::string{ roll[i] }.c_str());
+				ImGui::PopFont();
+				ImGui::SameLine();
 			}
 		}
 		else
@@ -1996,6 +2254,10 @@ namespace Tempest
 		if (inter2.is_in_progress())
 		{
 			roll2 = std::to_string(els::random::uniform_rand(0, 999));
+
+			// Ready to show bam VFX
+			b_combatRoll_VFX_Ready = true;
+			b_playerTwo_Rolled = true;
 		}
 
 		ImGui::PushFont(FONT_HEAD);
@@ -2010,38 +2272,46 @@ namespace Tempest
 		
 		if (inter2.is_finished())
 		{
-			if(!win)
+			if (!win)
 				ImGui::PushStyleColor(ImGuiCol_Text, { 0,1,0,1 });
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
 
-			if (def_rolled)
+			if (b_combatRoll_VFX_Ready)
 			{
-				if (start_inter_def_roll)
-				{
-					def_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
-						[](float x) { return glm::elasticEaseOut(x);
-					});
-					def_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
-						[](float x) { return glm::elasticEaseOut(x);
-					});
-					def_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
-						[](float x) { return glm::elasticEaseOut(x);
-					});
-
-					start_inter_def_roll = false;
-				}
-
-				for (int i = 0; i < roll2.size(); i++)
-				{
-					FONT_HEAD->Scale = def_roll_inter[i].get();
-					ImGui::PushFont(FONT_HEAD);
-					ImGui::Text(std::string{ roll2[i] }.c_str());
-					ImGui::PopFont();
-					ImGui::SameLine();
-				}
+				b_combatRoll_VFX_Ready = false;
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 		}
+
+		if (def_rolled)
+		{
+			if (start_inter_def_roll)
+			{
+				def_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
+					[](float x) { return glm::elasticEaseOut(x);
+				});
+				def_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
+					[](float x) { return glm::elasticEaseOut(x);
+				});
+				def_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
+					[](float x) { return glm::elasticEaseOut(x);
+				});
+
+				start_inter_def_roll = false;
+			}
+
+			for (int i = 0; i < roll2.size(); i++)
+			{
+				FONT_HEAD->Scale = def_roll_inter[i].get();
+				ImGui::PushFont(FONT_HEAD);
+				ImGui::Text(std::string{ roll2[i] }.c_str());
+				ImGui::PopFont();
+				ImGui::SameLine();
+			}
+		}
+
 		else
 			ImGui::Text(roll2.c_str());
 		ImGui::PopFont();
@@ -2051,10 +2321,41 @@ namespace Tempest
 
 		// reset the scale
 		FONT_HEAD->Scale = 1.0f;
+		
+		// VFX for combat roll
+		if (inter1.is_finished() && inter2.is_finished())
+		{
+			if (b_playerOne_Rolled && b_playerTwo_Rolled)
+			{
+				ImVec2 startPos = ImVec2{ 0.f, 0.f };
+				ImVec2 endPos = ImVec2{ 0.f, 0.f };
+
+				if (win)
+					startPos = ImVec2{ viewport->Size.x * 0.36f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+				else
+					startPos = ImVec2{ viewport->Size.x * 0.62f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+
+				endPos = ImVec2{ startPos.x + 50.0f, startPos.y };
+				EmitterSystem_2D::GetInstance().CreateLineEmitter(m_winningNumber_VFX, startPos, endPos);
+
+				b_playerOne_Rolled = false;
+				b_playerTwo_Rolled = false;
+			}
+		}
+
 		// only trigger this if no more rolls
 		if (atk_roll_inter[roll.size() - 1].is_finished() && def_roll_inter[roll2.size() - 1].is_finished() && !start_inter_atk_roll && !start_inter_def_roll && UI::UIButton_2("Confirm", "Confirm", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.55f }, { 0,0 }, FONT_BODY))
 		{
 			// TODO: affect the entities
+
+			//Turn off VFX
+			{
+				m_winningNumber_VFX.lock()->ClearAllParticles();
+				m_winningNumber_VFX.lock()->m_MM.m_duration = 0.f;
+
+				m_combatRoll_VFX.lock()->ClearAllParticles();
+				m_combatRoll_VFX.lock()->m_MM.m_duration = 0.f;
+			}
 
 			///////////////////////// MOVE THIS TO END STATE OF CINEMATIC //////////////////////
 			//if (charac.get_stat(0) + charac.get_statDelta(0) <= 0)
@@ -2307,6 +2608,13 @@ namespace Tempest
 				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
 
 				// PSEUDO (well this does not work either when changing from idle to punch)
+				if (beginAttack)
+				{
+					beginAttack = false;
+					EmitterSystem_3D::GetInstance().CreateChracterChargedAttackEmitter(m_characterAttackEmitter, xform.position);
+				}
+
+				// PSEUDO 
 				// instead of jumping onto the enemy, wobble back-front
 				instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.fbx";
 			}
@@ -2361,6 +2669,14 @@ namespace Tempest
 				damageOnce = false;
 
 				inter1.start(0, 1, 0.1f);
+
+				if (!beginAttack)
+				{
+					beginAttack = true;
+
+					if(!m_characterAttackEmitter.expired())
+						m_characterAttackEmitter.lock()->m_MM.m_duration = 0.0f;
+				}
 
 				//PSEUDO
 				// make enemy wobble left-right
@@ -2463,7 +2779,7 @@ namespace Tempest
 					colourBegin.a = 1.0f;
 
 					if (m_characterDeathEmitter.expired())
-						m_characterDeathEmitter = ParticleSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3, colourBegin, colourBegin);
+						m_characterDeathEmitter = EmitterSystem_3D::GetInstance().CreateChracterDeathEmitter(oxform.position, minRangeSpawnPos, maxRangeSpawnPos, 3, colourBegin, colourBegin);
 					else
 					{
 						m_characterDeathEmitter.lock()->m_GM.m_position = oxform.position;
@@ -2511,7 +2827,7 @@ namespace Tempest
 						colourBegin.a = 1.0f;
 
 						if (m_characterDamageEmitter.expired())
-							m_characterDamageEmitter = ParticleSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition, colourBegin, colourBegin);
+							m_characterDamageEmitter = EmitterSystem_3D::GetInstance().CreateChracterDamageEmitter(emitterPosition, colourBegin, colourBegin);
 						else if (damageOnce == false)
 						{
 							m_characterDamageEmitter.lock()->m_GM.m_position = emitterPosition;
@@ -2718,6 +3034,8 @@ namespace Tempest
 				ImGui::SetCursorPosY(0);
 				if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 				{
+					EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_unit_Remove_VFX, instance.ecs.get<tc::Transform>(other_entity).position);
+
 					units.erase(std::remove(units.begin(), units.end(), other_entity), units.end());
 					units_results.erase(other_entity); //halp
 					instance.ecs.destroy(other_entity);
@@ -2733,14 +3051,22 @@ namespace Tempest
 					if (auto dead = instance.scene.get_prototype_if("Unit", "Dead"))
 					{
 						// create a new entity
-						auto new_e = instance.ecs.create(dead->instance());
+						/*auto new_e = instance.ecs.create(dead->instance());
 						LOG_ASSERT(instance.ecs.has<tc::Transform>(new_e));
 						LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
 
 						instance.ecs.get<tc::Transform>(new_e) = oxform;
 						instance.ecs.get<tc::Character>(new_e) = ocs;
 
-						instance.ecs.destroy(other_entity);
+						instance.ecs.destroy(other_entity);*/
+
+						LOG_ASSERT(dead->get_if<tc::Model>());
+						LOG_ASSERT(dead->get_if<tc::Local>());
+						//LOG_ASSERT(instance.ecs.has<tc::Character>(new_e));
+						
+						ounit.die();
+						instance.ecs.get<tc::Model>(other_entity) = *dead->get_if<tc::Model>();
+						instance.ecs.get<tc::Local>(other_entity) = *dead->get_if<tc::Local>();
 					}
 					other_entity = INVALID;
 					ImGui::CloseCurrentPopup();
@@ -2910,11 +3236,11 @@ namespace Tempest
 				//Service<RenderSystem>::Get().DrawLine(box, color);
 
 				if (m_unitTileEmitter.expired())
-					m_unitTileEmitter = ParticleSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+					m_unitTileEmitter = EmitterSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3(transform.position.x, transform.position.y, transform.position.z));
 				else if (nextUnit)
 				{
 					nextUnit = false;
-					// TEST CODE @JUN HAO
+					// Update the position for the emitter
 					if (!m_unitTileEmitter.expired())
 					{
 						auto tempUnitEmitter = m_unitTileEmitter.lock();
@@ -3154,6 +3480,8 @@ namespace Tempest
 				banner.update(dt);
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
+
+			timer += dt;
 		}
 
 		//// jankass stuff

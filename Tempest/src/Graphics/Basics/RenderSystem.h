@@ -122,12 +122,17 @@ namespace Tempest
         float gammaValue = originalGV; 
 
         //Testing
-        GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects;
+        GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects, gBloom;
         GLuint saoFBO, saoBlurFBO, saoBuffer, saoBlurBuffer;
         GLuint postprocessFBO, postprocessBuffer;
         GLuint envToCubeFBO, irradianceFBO, prefilterFBO, brdfLUTFBO, envToCubeRBO, irradianceRBO, prefilterRBO, brdfLUTRBO;
         GLuint gBuffer2, gBuffer2t;
-        
+
+        // ping-pong-framebuffer for blurring
+        GLuint pingpongFBO[2];
+        GLuint pingpongColorbuffers[2];
+        bool horizontal = true;
+
         GLint gBufferView = 1;     // To see the different buffers
         GLint tonemappingMode = 2; // Tonemapping types 
         GLint attenuationMode = 2; // Attenuation type
@@ -175,7 +180,7 @@ namespace Tempest
         glm::vec4 USOcolor{ 0.0f };
         //bool captured = false;
         //vec2 vp_size = vec2(0.f);
-        glm::vec4 clearColor{0.4f, 0.5f, 0.6f, 1.0f};
+        glm::vec4 clearColor{0.0f, 0.0f, 0.0f, 1.0f};
 
 
         glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric

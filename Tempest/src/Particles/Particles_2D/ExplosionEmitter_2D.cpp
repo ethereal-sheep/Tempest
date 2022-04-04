@@ -13,6 +13,34 @@
 // Additional Includes
 #include "../Random.h"
 
+ExplosionEmitter_2D::ExplosionEmitter_2D()
+{
+	// Emitter_2D values - Without consideration for default ctor values
+	m_GM.m_position = glm::vec2{ 0.f, 0.f };
+	m_MM.m_duration = 2.f;
+	m_GM.m_active = true;
+	m_MM.m_preWarm = true;
+
+	m_EM.m_spawnTimeInterval = 2.f;
+	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
+	m_EM.m_rateOverTime = 20;
+	m_MM.m_maxParticles = 1000;
+
+	m_PAM.m_velocityStart = glm::vec2{ 0.f, 0.f };
+	m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
+	m_PAM.m_velocityVariation = glm::vec2{ 500.0f, 500.0f };
+
+	m_PAM.m_scaleBegin = 10.0f;
+	m_PAM.m_scaleEnd = 0.0f;
+	m_PAM.m_scaleVariation = 0.3f;
+
+	m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	m_PAM.m_lifeTime = 0.3f;
+	m_RM.m_type = ParticleType::Circle;
+}
+
 void ExplosionEmitter_2D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
@@ -22,17 +50,11 @@ void ExplosionEmitter_2D::Emit(const int particleAmount)
 		{
 			// Initailisation of the particle
 			Particle_2D particle;
-
-			particle.m_position = m_GM.m_position;
-			particle.m_isActive = true;
-			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
-
-			// Velocity - RNG
-			particle.m_velocity = m_PAM.m_startVelocity;
+			Emitter_2D::ParticleSetUp(particle);
 
 			short spawnSector = std::rand() % 4;
-			short directionX = (std::rand() % 500);
-			short directionY = (std::rand() % 500);
+			short directionX = 1;
+			short directionY = 1;
 
 			switch (spawnSector)
 			{
@@ -57,23 +79,11 @@ void ExplosionEmitter_2D::Emit(const int particleAmount)
 				break;
 			}
 
-			particle.m_velocity.x += m_PAM.m_velocityVariation.x + directionX;
-			particle.m_velocity.y += m_PAM.m_velocityVariation.y + directionY;
+			particle.m_velocityBegin.x *= directionX;
+			particle.m_velocityEnd.x *= directionX;
 
-			//particle.m_velocity.x += m_PAM.m_velocityVariation.x - (Random::Float() - 50.f);
-			//particle.m_velocity.y += m_PAM.m_velocityVariation.y - (Random::Float() - 50.f);
-
-			// Color
-			particle.m_colour.r = (Random::Float() - 0.5f);
-			particle.m_colour.g = (Random::Float() - 0.5f);
-			particle.m_colour.b = (Random::Float() - 0.5f);
-
-			particle.m_type = m_RM.m_type;
-
-			// Lifetime
-			particle.m_lifeTime = m_PAM.m_lifeTime;
-			particle.m_lifeRemaining = m_PAM.m_lifeTime;
-			particle.m_size = m_PAM.m_sizeBegin + m_PAM.m_sizeVariation * (Random::Float() - 0.5f);
+			particle.m_velocityBegin.y *= directionY;
+			particle.m_velocityEnd.y *= directionY;
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

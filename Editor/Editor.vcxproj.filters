@@ -130,6 +130,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Window\Overlay\CombatResultsOverlay.cpp">
+    <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\Overlay\RuntimeStartup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -420,6 +423,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Overlay\CombatResultsOverlay.h">
+    <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\RuntimeStartup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Overlay\Startup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

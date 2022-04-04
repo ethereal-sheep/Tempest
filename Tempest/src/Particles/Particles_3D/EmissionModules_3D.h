@@ -20,10 +20,10 @@ struct MainModule_3D
 
 	float m_duration;		 // Duration of emitter
 	bool  m_looping;		 // Resets on the emitter death
-	short m_maxParticles;	 // Max amount of particles 
 
 	float m_simulationSpeed; // What DT to run in
 	bool m_preWarm;
+	short m_maxParticles;	 // Max amount of particles 
 };
 
 struct GameObjectModule_3D
@@ -40,7 +40,11 @@ struct ParticleArchetypeModule_3D
 {
 	ParticleArchetypeModule_3D();
 
-	glm::vec3 m_startVelocity, m_endVelocity;
+	glm::vec3 m_minSpawnPos, m_maxSpawnPos;
+
+	glm::vec3 m_SpawnRotation;
+
+	glm::vec3 m_velocityStart, m_velocityEnd;
 	glm::vec3 m_velocityVariation;
 
 	glm::vec3 m_scaleBegin, m_scaleEnd;
@@ -79,6 +83,7 @@ struct RendererModule_3D
  
 	// Path Name for rendering modle
 	std::string m_renderingPath;
+	bool m_emissiveLighting;
 };
 
 #endif // !EMISSION_MODULE_3D_H

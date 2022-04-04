@@ -31,11 +31,12 @@ struct Emitter_2D
 
 
 	Emitter_2D();
-	void Update();
+	virtual void Update();
 	void ClearAllParticles();
 
 protected:
-	virtual void SelfUpdate();
+	void ParticleUpdate();
+	void ParticleSetUp(Particle_2D& particle);
 	virtual void Emit(const int particleAmount);
 };
 

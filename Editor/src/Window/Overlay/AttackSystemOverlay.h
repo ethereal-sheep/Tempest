@@ -16,8 +16,8 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/Particles_2D/WaypointEmitter_2D.h"
-#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
+struct WaypointEmitter_2D;
+struct ExplosionEmitter_2D;
 
 #include <Tempest/src/Audio/AudioEngine.h>
 
@@ -113,10 +113,25 @@ namespace Tempest
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        // For tutorial emitter
-        std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
-        std::weak_ptr<ExplosionEmitter_2D> m_explosionEmitter;
+        // Node Connection & Task Complete VFX
+        std::weak_ptr<ExplosionEmitter_2D> m_explosion_VFX;
 
+        // Action Graph Task VFX Trigger
+        bool b_action_rename_task_VFX = false;
+        bool b_attackNode_create_task_vfx = false;
+        bool b_attakNode_connect_task_vfx = false;
+
+        // Sequence Graph Task VFX Trigger
+        bool b_sequence_rename_task_VFX = false;
+        bool b_defendNode_create_task_VFX = false;
+        bool b_defendNode_connect_attackNode_task_VFX = false;
+        bool b_defendNode_connect_compareNode_task_VFX = false;
+        bool b_defendNode_output_connect_task_VFX = false;
+
+        // Guiding Tutorial Button VFX
+        std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
+
+        // Guiding Tutorial Button VFX Trigger
         bool emitter_0 = false;
         //bool emitter_1 = false;
         bool emitter_2 = false;

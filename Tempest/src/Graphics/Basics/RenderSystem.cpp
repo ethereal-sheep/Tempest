@@ -64,7 +64,7 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::saoShader, std::make_unique<Shader>("Shaders/sao.vert", "Shaders/sao.frag"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::saoBlurShader, std::make_unique<Shader>("Shaders/sao.vert", "Shaders/saoBlur.frag"));
 
-        
+        m_Pipeline.m_Shaders.emplace(ShaderCode::bloomBlurShader, std::make_unique<Shader>("Shaders/bloomBlur.vert", "Shaders/bloomBlur.frag"));        
 
 
     }
@@ -109,9 +109,17 @@ namespace Tempest
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gEffects, 0);
 
+        // Effects (gBloom)
+        glGenTextures(1, &gBloom);
+        glBindTexture(GL_TEXTURE_2D, gBloom);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, WIDTH, HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gBloom, 0);
+
         // Define the COLOR_ATTACHMENTS for the G-Buffer
-        GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-        glDrawBuffers(4, attachments);
+        GLuint attachments[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 , GL_COLOR_ATTACHMENT4 };
+        glDrawBuffers(5, attachments);
 
         // Z-Buffer
         glGenRenderbuffers(1, &zBuffer);
@@ -185,6 +193,23 @@ namespace Tempest
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             std::cout << "Postprocess Framebuffer not complete !" << std::endl;
+
+        glGenFramebuffers(2, pingpongFBO);
+        glGenTextures(2, pingpongColorbuffers);
+        for (unsigned int i = 0; i < 2; i++)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
+            glBindTexture(GL_TEXTURE_2D, pingpongColorbuffers[i]);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, WIDTH, HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // we clamp to the edge as the blur filter would otherwise sample repeated texture values!
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingpongColorbuffers[i], 0);
+            // also check if framebuffers are complete (no need for depth buffer)
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+                std::cout << "Framebuffer not complete!" << std::endl;
+        }
     }
 
 
@@ -396,6 +421,8 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(6, "envMapIrradiance");
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(7, "envMapPrefilter");
         m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(8, "envMapLUT");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "gBloom");
+        m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10, "gBloomBlur");
 
         m_Pipeline.m_Shaders[ShaderCode::saoShader]->Bind();
         m_Pipeline.m_Shaders[ShaderCode::saoShader]->Set1i(0, "gPosition");
@@ -404,6 +431,7 @@ namespace Tempest
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Bind();
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(1, "sao");
         m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(2, "gEffects");
+        m_Pipeline.m_Shaders[ShaderCode::firstpassPPShader]->Set1i(3, "bloomBlur");
 
         m_Pipeline.m_Shaders[ShaderCode::latlongToCubeShader]->Bind();
         m_Pipeline.m_Shaders[ShaderCode::latlongToCubeShader]->Set1i(0, "envMap");
@@ -413,7 +441,10 @@ namespace Tempest
 
         m_Pipeline.m_Shaders[ShaderCode::prefilterIBLShader]->Bind();
         m_Pipeline.m_Shaders[ShaderCode::prefilterIBLShader]->Set1i(0, "envMap");
-            
+        
+        m_Pipeline.m_Shaders[ShaderCode::bloomBlurShader]->Bind();
+        m_Pipeline.m_Shaders[ShaderCode::bloomBlurShader]->Set1i(0, "image");
+
         gBufferSetup();
 
         //------------
@@ -586,6 +617,7 @@ namespace Tempest
         //model.m_Model->colours[0] = particle.m_colour;
         model.color = particle.m_colour;
         model.isParticle = true;
+        model.m_Emissive = particle.m_emissive;
         m_Pipeline.m_Models.push_back(model);
     }
  
@@ -772,6 +804,7 @@ namespace Tempest
                     else
                         m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->SetVec3f(vec3(0.0f), "colour");
 
+                    m_Pipeline.m_Shaders[ShaderCode::gBufferShader]->Set1i(m_Pipeline.m_Models[i].m_Emissive, "emissive");
 
 
                     glActiveTexture(GL_TEXTURE0);
@@ -964,6 +997,23 @@ namespace Tempest
                 glViewport(0, 0, WIDTH, HEIGHT);
             }
         }
+        // Bloom Blurring
+        {
+            bool first_iteration = true;
+            unsigned int amount = 10;
+            m_Pipeline.m_Shaders[ShaderCode::bloomBlurShader]->Bind();
+            for (unsigned int i = 0; i < amount; i++)
+            {
+                glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
+                m_Pipeline.m_Shaders[ShaderCode::bloomBlurShader]->Set1i(horizontal, "horizontal");
+                glBindTexture(GL_TEXTURE_2D, first_iteration ? gBloom : pingpongColorbuffers[!horizontal]);  // bind texture of other framebuffer (or scene if first iteration)
+                quadRender.drawShape();
+                horizontal = !horizontal;
+                if (first_iteration)
+                    first_iteration = false;
+            }
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
         //------------------------
         // Lighting Pass rendering
         //------------------------
@@ -994,9 +1044,15 @@ namespace Tempest
             envMapLUT.useTexture();
 
             glActiveTexture(GL_TEXTURE9);
-            glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
-            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(9, "shadowMap");
+            glBindTexture(GL_TEXTURE_2D, gBloom);
+            glActiveTexture(GL_TEXTURE10);
+            glBindTexture(GL_TEXTURE_2D, pingpongColorbuffers[!horizontal]);
 
+            glActiveTexture(GL_TEXTURE11);
+            glBindTexture(GL_TEXTURE_2D, dir_lights[0].m_depthmap);
+            m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(11, "shadowMap");
+            
+            
             //if (!pt_lights.empty())
             //{
             //    glActiveTexture(GL_TEXTURE10);
@@ -1006,7 +1062,7 @@ namespace Tempest
 
             for (size_t pt_light_ = 0; pt_light_ < pt_lights.size(); pt_light_++) //pt_lights.size()
             {
-                glActiveTexture(GL_TEXTURE10 + (int)pt_light_);
+                glActiveTexture(GL_TEXTURE12 + (int)pt_light_);
                 glBindTexture(GL_TEXTURE_CUBE_MAP, pt_lights[pt_light_].m_cubemap);
                 m_Pipeline.m_Shaders[ShaderCode::lightingBRDFShader]->Set1i(10 + (int)pt_light_, ("shadowCube[" + std::to_string((int)pt_light_) + "]").c_str());
 
@@ -1062,6 +1118,7 @@ namespace Tempest
             m_LineRenderer.Render(m_Pipeline.m_Cameras[0].GetViewProjectionMatrix(), m_Pipeline.m_Shaders[ShaderCode::LINE]);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
+        
         //-------------------------------
         // Post-processing Pass rendering
         //-------------------------------
@@ -1094,6 +1151,8 @@ namespace Tempest
             glBindTexture(GL_TEXTURE_2D, saoBlurBuffer);
             glActiveTexture(GL_TEXTURE2);
             glBindTexture(GL_TEXTURE_2D, gEffects);
+            glActiveTexture(GL_TEXTURE3);
+            glBindTexture(GL_TEXTURE_2D, pingpongColorbuffers[!horizontal]);
 
             quadRender.drawShape();
             /*

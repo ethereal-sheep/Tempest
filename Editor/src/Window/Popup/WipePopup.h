@@ -20,6 +20,19 @@ namespace Tempest
 {
     class WipePopup : public Window
     {
+    public:
+        WipePopup(bool fade_in = false) : Window()
+        {
+            if (fade_in)
+            {
+                fade_in_time = 0.f;
+                fade_out_time = .7f;
+                visible_time = 0.f;
+                to_do = [](){};
+
+                state = state::APPEAR;
+            }
+        }
 
         enum struct state
         {
@@ -30,7 +43,8 @@ namespace Tempest
             INVISIBLE
         };
 
-        float fade_in_time = 0, fade_out_time = 0, visible_time = 0;
+
+        float fade_in_time = 0, fade_out_time = 0, visible_time = 0, start = 0;
         std::function<void(void)> to_do;
         interpolater<float> inter;
         state state = state::INVISIBLE;
@@ -54,10 +68,19 @@ namespace Tempest
 
         void open_popup(const Event& e)
         {
+            auto& a = event_cast<WipeTrigger>(e);
             if (state == state::INVISIBLE)
             {
-                auto& a = event_cast<WipeTrigger>(e);
-
+                fade_in_time = a.fade_in_time;
+                fade_out_time = a.fade_out_time;
+                visible_time = a.visible_time;
+                to_do = a.do_on_fade;
+                start = 0;
+                state = state::APPEAR;
+            }
+            else if (a.force)
+            {
+                start = inter.get();
                 fade_in_time = a.fade_in_time;
                 fade_out_time = a.fade_out_time;
                 visible_time = a.visible_time;
@@ -89,7 +112,7 @@ namespace Tempest
                 ImGui::SetNextWindowViewport(viewport->ID);
                 window_flags |= ImGuiWindowFlags_NoMove;
 
-                inter.start(0, end, fade_in_time, 0, [](float x) { return glm::sineEaseOut(x); });
+                inter.start(start, end, fade_in_time, 0, [](float x) { return glm::sineEaseOut(x); });
                 state = state::FADING_IN;
             }
             [[fallthrough]];

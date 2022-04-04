@@ -12,7 +12,9 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/Basics/RenderSystem.h"
 
-#include "../../Tempest/src/Particles/Particles_2D/ParticleSystem_2D.h"
+#include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
 
 namespace Tempest
 {
@@ -191,10 +193,7 @@ namespace Tempest
 							real_mousePosition.x = ImGui::GetCursorPos().x + real_buttonSize.x*0.5f - 37.f;
 							real_mousePosition.y = ImGui::GetCursorPos().y + 80 + pSize.y * 0.45f;
 
-							if (m_waypointEmitter.expired())
-								m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
-							else
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), real_mousePosition, real_buttonSize);
+							EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 						}
 					}
 				}
@@ -280,10 +279,7 @@ namespace Tempest
 							real_mousePosition.x = quickMenuPos.x ;
 							real_mousePosition.y = quickMenuPos.y ;
 
-							if (m_waypointEmitter.expired())
-								m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
-							else
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), real_mousePosition, real_buttonSize);
+							EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 						}
 					}
 
@@ -351,11 +347,22 @@ namespace Tempest
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 								taskCompleted &= true;
+
+								if (!b_weapon_RENAME_task_vfx)
+								{
+									b_weapon_RENAME_task_vfx = true;
+
+									ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+									EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									m_explosion_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
+									m_explosion_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
+								}
 							}
 							else
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 								taskCompleted &= false;
+								b_weapon_RENAME_task_vfx = false;
 							}
 							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -365,11 +372,20 @@ namespace Tempest
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 								taskCompleted &= true;
+
+								if (!b_weapon_ATK_task_vfx)
+								{
+									b_weapon_ATK_task_vfx = true;
+
+									ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+									EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+								}
 							}
 							else
 							{
 								drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 								taskCompleted &= false;
+								b_weapon_ATK_task_vfx = false;
 							}
 							drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 							ImGui::PopFont();
@@ -429,11 +445,7 @@ namespace Tempest
 
 							if (emitter_3 == false)
 							{
-								if (m_waypointEmitter.expired())
-									m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-								else
-									ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+								EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 								emitter_3 = true;
 							}
 						}

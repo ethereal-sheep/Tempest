@@ -20,6 +20,8 @@
 #include "Util/interpolater.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
+struct Smoke_Poof_Emitter_3D;
+
 namespace Tempest
 {
     class BuildModeOverlay : public Window
@@ -70,5 +72,7 @@ namespace Tempest
 
         ChannelID MapBuilderBGM = 0;
         ImGuiTextFilter filter;
+
+        std::weak_ptr<Smoke_Poof_Emitter_3D> m_Prop_Placement_VFX;
     };
 }

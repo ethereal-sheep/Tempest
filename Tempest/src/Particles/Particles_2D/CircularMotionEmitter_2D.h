@@ -17,7 +17,7 @@ struct CircularMotionEmitter_2D final : public Emitter_2D
 {
 	CircularMotionEmitter_2D();
 
-	void SelfUpdate() override;
+	void Update() override;
 	void Emit(const int particleAmount) override;
 
 	glm::vec2 m_centrePoint;

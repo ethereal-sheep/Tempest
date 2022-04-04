@@ -26,6 +26,7 @@ float maxOffs     = (float(steps-1.0)) / +2.0;
 uniform sampler2D screenTexture;
 uniform sampler2D sao;
 uniform sampler2D gEffects;
+uniform sampler2D bloomBlur;
 
 uniform int gBufferView;
 uniform int tonemappingMode;
@@ -52,6 +53,7 @@ void main()
     vec3 color;
 	float amount = pow((TexCoords.y * center) * 2.0 - 1.0, 2.0) * bluramount;
     vec4 blurredColor = vec4(0.0, 0.0, 0.0, 1.0);
+    vec3 bloomColor = texture(bloomBlur, TexCoords).rgb;
 
     if(gBufferView == 1)
     {
@@ -80,7 +82,7 @@ void main()
 			else
 				color = texture(screenTexture, TexCoords).rgb;
 		}
-		
+		color += bloomColor;
         // SAO computation
         if(saoMode)
         {

@@ -16,7 +16,10 @@
 #include "Instance/EditTimeInstance.h"
 #include "InstanceManager/InstanceConfig.h"
 
-#include "../../Tempest/src/Particles/Particles_2D/ParticleSystem_2D.h"
+#include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/CircularMotionEmitter_2D.h"
+#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
 
 namespace Tempest
 {
@@ -45,6 +48,11 @@ namespace Tempest
 		tutorial_index = 0;
 		tutorial_p2 = false;
 		tut_openSlide = true;
+
+		// Task Complete VFX Triggers
+		b_unit_select_defender_task_VFX = false;
+		b_unit_select_weapon_task_VFX = false;
+		b_unit_select_action_task_VFX = false;
 
 		emitter_1_0 = false;
 		emitter_1_1 = false;
@@ -226,11 +234,7 @@ namespace Tempest
 
 								if (emitter_1_1 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_1_1 = true;
 								}
 							}
@@ -259,11 +263,7 @@ namespace Tempest
 
 								if (emitter_2_0 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_0 = true;
 								}	
 							}
@@ -282,11 +282,7 @@ namespace Tempest
 
 								if (emitter_2_1 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_1 = true;
 								}
 							}
@@ -302,11 +298,7 @@ namespace Tempest
 
 								if (emitter_2_2 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_2 = true;
 								}
 							}
@@ -325,11 +317,7 @@ namespace Tempest
 
 								if (emitter_2_3 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_3 = true;
 								}
 							}
@@ -345,11 +333,7 @@ namespace Tempest
 
 								if (emitter_2_4 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_4 = true;
 								}
 							}
@@ -368,11 +352,7 @@ namespace Tempest
 
 								if (emitter_2_5 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_5 = true;
 								}
 							}
@@ -388,11 +368,7 @@ namespace Tempest
 
 								if (emitter_2_6 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_6 = true;
 								}
 							}
@@ -411,11 +387,7 @@ namespace Tempest
 
 								if (emitter_2_7 == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_7 = true;
 								}
 							}
@@ -453,11 +425,21 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_select_defender_task_VFX)
+									{
+										b_unit_select_defender_task_VFX = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+										m_explosion_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
+										m_explosion_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_select_defender_task_VFX = false;
 								}
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
@@ -468,11 +450,19 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_select_weapon_task_VFX)
+									{
+										b_unit_select_weapon_task_VFX = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_select_weapon_task_VFX = false;
 								}
 
 								min = { min.x, min.y + unselected->GetWidth() * 0.9f };
@@ -483,11 +473,19 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_select_action_task_VFX)
+									{
+										b_unit_select_action_task_VFX = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_select_action_task_VFX = false;
 								}
 								ImGui::PopFont();
 
@@ -615,17 +613,11 @@ namespace Tempest
 								if (emitter_C_0 == false)
 								{
 									emitter_C_0 = true;
+									EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.0f);
+									auto sm = m_circularMotionEmitter.lock();
+									sm->m_PAM.m_scaleBegin = 30.0f;
+									sm->m_PAM.m_scaleEnd = 30.0f;
 
-									if (m_circularMotionEmitter.expired())
-									{
-										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(glm::vec2{ 980.0f, 450.0f }, 300.0f);
-										
-										auto sm = m_circularMotionEmitter.lock();
-										sm->m_PAM.m_sizeBegin = 30.0f;
-										sm->m_PAM.m_sizeEnd = 30.0f;
-									}
-									else
-										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2D(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
 								}
 							}
 							break;
@@ -690,17 +682,7 @@ namespace Tempest
 								if (emitter_C_0 == false)
 								{
 									emitter_C_0 = true;
-
-									if (m_circularMotionEmitter.expired())
-									{
-										m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(glm::vec2{ 980.0f, 450.0f }, 300.0f);
-
-										auto sm = m_circularMotionEmitter.lock();
-										sm->m_PAM.m_sizeBegin = 30.0f;
-										sm->m_PAM.m_sizeEnd = 30.0f;
-									}
-									else
-										ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2D(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
+									EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.0f);
 								}
 							}
 								break;
@@ -766,17 +748,7 @@ namespace Tempest
 							if (emitter_C_0 == false)
 							{
 								emitter_C_0 = true;
-
-								if (m_circularMotionEmitter.expired())
-								{
-									m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(glm::vec2{ 980.0f, 450.0f }, 300.0f);
-
-									auto sm = m_circularMotionEmitter.lock();
-									sm->m_PAM.m_sizeBegin = 30.0f;
-									sm->m_PAM.m_sizeEnd = 30.0f;
-								}
-								else
-									ParticleSystem_2D::GetInstance().ReuseCircularMotionEmitter_2D(m_circularMotionEmitter.lock(), glm::vec2{ 980.0f, 450.0f }, 300.f);
+								EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.0f);
 							}
 						}
 						break;
@@ -1036,13 +1008,9 @@ namespace Tempest
 							//real_mousePosition.x = 500.0f;
 							//real_mousePosition.y = 600.0f;
 
-							if (m_waypointEmitter.expired())
-								m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
-							else
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), real_mousePosition, real_buttonSize);
-
+							EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 							/*if (!m_circularMotionEmitter)
-								m_circularMotionEmitter = ParticleSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(real_mousePosition, 100.0f);*/
+								m_circularMotionEmitter = EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(real_mousePosition, 100.0f);*/
 						}
 					}
 					
