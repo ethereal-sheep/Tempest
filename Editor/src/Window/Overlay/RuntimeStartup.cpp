@@ -1,7 +1,7 @@
 #include "RuntimeStartup.h"
 #include "Graphics/Basics/RenderSystem.h"
 
-void Tempest::RuntimeStartupOverlay::init(Instance& instance)
+void Tempest::RuntimeStartupOverlay::init(Instance&)
 {
 	
 }
@@ -120,7 +120,7 @@ void Tempest::RuntimeStartupOverlay::show(Instance& instance)
 		for (auto id : instance.ecs.view<tc::Transform>())
 		{
 			auto& pos = instance.ecs.get<tc::Transform>(id).position;
-			pos.y += 55.f * dt;
+			pos.y += 55.f * std::min(dt, 0.016f);
 			if (pos.y > 0.f)
 				pos.y = 0.f;
 		}
@@ -155,12 +155,20 @@ void Tempest::RuntimeStartupOverlay::show(Instance& instance)
 			should_play_ended = true;
 			auto fn = [&]()
 			{
+
+				for (auto id : instance.ecs.view<tc::Transform>())
+				{
+					auto& pos = instance.ecs.get<tc::Transform>(id).position;
+					pos.y = 0.f;
+				}
+
 				Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
 				should_play = false;
 			};
 			WipeTrigger trigger(.7f, .3f, 1.f, fn);
 			trigger.force = true;
 			Service<EventManager>::Get().instant_dispatch<WipeTrigger>(trigger);
+
 		}
 	}
 }
