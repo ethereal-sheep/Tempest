@@ -1404,6 +1404,128 @@ namespace Tempest::UI
 		return false;
 	}
 
+	bool UIButton_3(string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected)
+	{
+		const float default_padding_x = 8.f;
+		const float default_padding_y = 8.f;
+		const float border_size = 1.5f;
+
+		const ImVec4 default_border_col = { 0.f, 0.f, 0.f, 1.f };
+		//const ImVec4 hovered_border_col = { 0.980f, 0.768f, 0.509f, 1.f };
+		const ImVec4 hovered_border_col = { 0.f, 0.f, 0.f, 1.f };
+		const ImVec4 button_bg_col = { 0.f, 0.f, 0.f, 0.f };
+		string str = "aaaaaaaaaaaaaaa000000";
+		float rounding = 0.f;
+		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
+		padding.y += 10.f;
+
+		// button shit
+		ImGui::PushFont(font);
+		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 act_text_size = {
+			std::max(text_size.x, alt_text_size.x),
+			std::max(text_size.y, alt_text_size.y)
+		};
+		ImGui::PopFont();
+
+		ImVec2 button_size = {
+			act_text_size.x + default_padding_x + padding.x,
+			act_text_size.y + default_padding_y + padding.y
+		};
+
+		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
+		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.x * 0.1f - test.x * 0.1f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f};
+
+		ImGui::SetCursorPos(new_pos);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+		ImGui::InvisibleButton("##NiceButton", button_size);
+		if (ImGui::IsItemHovered())
+			ImGui::SetMouseCursor(7);
+		ImGui::PopStyleVar(1);
+		bool hovered = ImGui::IsItemHovered();
+		ImGui::SetCursorPos(new_pos);
+		if (selected)
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1 });
+			ImGui::Text(hover.c_str());
+			ImGui::PopStyleColor();
+			ImGui::PopFont();
+			auto io = ImGui::GetIO();
+			if (hovered && ImGui::IsMouseClicked(0))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+				return true;
+			}
+		}
+		else if (!ImGui::IsItemHovered())
+		{
+			// default
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, default_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1 });
+			ImGui::Text(unselected.c_str());
+			ImGui::PopStyleColor();
+			ImGui::PopFont();
+		}
+		else
+		{
+			// hovered
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, border_size);
+			ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
+			ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_bg_col);
+			ImGui::Button("##NiceButton_Dummy", button_size);
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(4);
+
+			ImGui::SetCursorPos(text_pos);
+			ImGui::PushFont(font);
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1 });
+			ImGui::Text(hover.c_str());
+			ImGui::PopStyleColor();
+			ImGui::PopFont();
+
+			auto io = ImGui::GetIO();
+			if (ImGui::IsMouseClicked(0))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	//Blueish Button for Select Weapon Btn
 	bool UIButton_Weapon(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, [[maybe_unused]] bool selected)
 	{

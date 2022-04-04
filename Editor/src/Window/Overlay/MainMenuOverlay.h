@@ -72,6 +72,7 @@ namespace Tempest
         std::string MapTitle{ "" };
         UI_SHOW MainMenuUI = UI_SHOW::INITIAL;
         int SelectedConflictRes{ 0 };
+        int SelectedSequencesint{ -1 };
         tset<string> SelectedMaps;
         string SelectedMap = "";
         string SelectedMapPreview = "Assets/EmptyMapBG.dds";
@@ -92,9 +93,12 @@ namespace Tempest
         string confliceResBtn = "Assets/ConflictResolutionButton.dds";
         string startGameBtn = "Assets/StartGameButton.dds";
         string mapBuilderBtn = "Assets/MapBuilderButton.dds";
+        string newMapBtn = "Assets/NewMapButton.dds";
+        string loadMapBtn = "Assets/LoadMapButton.dds";
 
         string projectIconBtn = "Assets/ProjectIconBtn_default.dds";
         string settingIconBtn = "Assets/SettingIconBtn_default.dds";
+        string creditsIconBtn = "Assets/CreditsIconBtn_default.dds";
         string quitIconBtn = "Assets/QuitIconBtn_default.dds";
 
         //BackGround Image
