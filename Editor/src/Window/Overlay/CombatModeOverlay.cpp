@@ -2215,35 +2215,37 @@ namespace Tempest
 				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
+
+			if (atk_rolled)
+			{
+				if (start_inter_atk_roll)
+				{
+					atk_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					atk_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					atk_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					start_inter_atk_roll = false;
+				}
+
+				for (int i = 0; i < roll.size(); i++)
+				{
+					FONT_HEAD->Scale = atk_roll_inter[i].get();
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::Text(std::string{ roll[i] }.c_str());
+					ImGui::PopFont();
+					ImGui::SameLine();
+				}
+			}
 		}
 
-		if (atk_rolled)
-		{
-			if (start_inter_atk_roll)
-			{
-				atk_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
-					[](float x) { return glm::elasticEaseOut(x);
-				});
-				atk_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
-					[](float x) { return glm::elasticEaseOut(x);
-				});
-				atk_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
-					[](float x) { return glm::elasticEaseOut(x);
-				});
-				start_inter_atk_roll = false;
-			}
-
-			for (int i = 0; i < roll.size(); i++)
-			{
-				FONT_HEAD->Scale = atk_roll_inter[i].get();
-				ImGui::PushFont(FONT_HEAD);
-				ImGui::Text(std::string{ roll[i] }.c_str());
-				ImGui::PopFont();
-				ImGui::SameLine();
-			}
-		}
 		else
 			ImGui::Text(roll.c_str());
+
 		ImGui::PopFont();
 
 		if (inter1.is_finished())
@@ -2283,32 +2285,32 @@ namespace Tempest
 				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
-		}
 
-		if (def_rolled)
-		{
-			if (start_inter_def_roll)
+			if (def_rolled)
 			{
-				def_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
-					[](float x) { return glm::elasticEaseOut(x);
-				});
-				def_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
-					[](float x) { return glm::elasticEaseOut(x);
-				});
-				def_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
-					[](float x) { return glm::elasticEaseOut(x);
-				});
+				if (start_inter_def_roll)
+				{
+					def_roll_inter[0].start(3.0f, 2.0f, .5f, 0.f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					def_roll_inter[1].start(3.0f, 2.0f, .5f, 0.2f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
+					def_roll_inter[2].start(3.0f, 2.0f, .5f, 0.4f,
+						[](float x) { return glm::elasticEaseOut(x);
+					});
 
-				start_inter_def_roll = false;
-			}
+					start_inter_def_roll = false;
+				}
 
-			for (int i = 0; i < roll2.size(); i++)
-			{
-				FONT_HEAD->Scale = def_roll_inter[i].get();
-				ImGui::PushFont(FONT_HEAD);
-				ImGui::Text(std::string{ roll2[i] }.c_str());
-				ImGui::PopFont();
-				ImGui::SameLine();
+				for (int i = 0; i < roll2.size(); i++)
+				{
+					FONT_HEAD->Scale = def_roll_inter[i].get();
+					ImGui::PushFont(FONT_HEAD);
+					ImGui::Text(std::string{ roll2[i] }.c_str());
+					ImGui::PopFont();
+					ImGui::SameLine();
+				}
 			}
 		}
 
