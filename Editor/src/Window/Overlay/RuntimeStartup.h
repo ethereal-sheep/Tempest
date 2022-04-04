@@ -16,6 +16,8 @@
 #include "../Viewport/CameraControls.h"
 #include "Util/interpolater.h"
 
+struct Interactive_DoorParticle_3D;
+
 namespace Tempest
 {
     class RuntimeStartupOverlay : public Window
@@ -38,5 +40,8 @@ namespace Tempest
         quat start = glm::quat_identity<float, glm::highp>();
         CameraControls cam_ctrl;
         interpolater<float> inter;
+
+        // Not suppose to be here.... @Jun Hao
+        std::map<Entity, std::weak_ptr<Interactive_DoorParticle_3D>> m_map_interactiveEmitter_3D;
     };
 }

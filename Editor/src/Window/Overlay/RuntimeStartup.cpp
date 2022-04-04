@@ -1,6 +1,9 @@
 #include "RuntimeStartup.h"
 #include "Graphics/Basics/RenderSystem.h"
 
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include <Util/shape_manip.h>
+
 void Tempest::RuntimeStartupOverlay::init(Instance& instance)
 {
 	
@@ -161,6 +164,54 @@ void Tempest::RuntimeStartupOverlay::show(Instance& instance)
 			WipeTrigger trigger(.7f, .3f, 1.f, fn);
 			trigger.force = true;
 			Service<EventManager>::Get().instant_dispatch<WipeTrigger>(trigger);
+
+			// Update the emitter
+			for (auto id : instance.ecs.view<tc::Door, tc::Transform, tc::Shape>())
+			{
+				// Create the emitters if they do not exist
+				if (m_map_interactiveEmitter_3D[id].expired())
+				{
+					auto& transform = instance.ecs.get<tc::Transform>(id);
+					//auto& door = ecs.get<tc::Door>(id);
+					auto& shape = instance.ecs.get<tc::Shape>(id);
+
+					const int& x = shape.x;
+					const int& y = shape.y;
+
+					AABB box;
+
+					auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
+
+					box.min.x = a_x;
+					box.min.z = a_y;
+
+					box.max.x = b_x;
+					box.max.z = b_y;
+
+					auto rot = transform.rotation;
+					box.min = rot * box.min;
+					box.max = rot * box.max;
+
+					box.min.x += transform.position.x;
+					box.min.z += transform.position.z;
+					box.min.y = 0;
+
+					box.max.x += transform.position.x;
+					box.max.z += transform.position.z;
+					box.max.y = 0;
+
+					if (box.min.x > box.max.x)
+						std::swap(box.min.x, box.max.x);
+
+					if (box.min.y > box.max.y)
+						std::swap(box.min.x, box.max.y);
+
+					if (box.min.z > box.max.z)
+						std::swap(box.min.z, box.max.z);
+
+					m_map_interactiveEmitter_3D[id] = EmitterSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, box.min, box.max);
+				}
+			}
 		}
 	}
 }
