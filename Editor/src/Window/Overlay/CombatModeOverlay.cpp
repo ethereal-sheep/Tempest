@@ -2502,6 +2502,7 @@ namespace Tempest
 				AudioEngine ae;
 				ae.Play("Sounds2D/SFX_UnitAttackVoice" + std::to_string(rand() % 4 + 1) + ".wav", "SFX", 1.0f);
 
+				// Attack VFX
 				if (beginAttack)
 				{
 					beginAttack = false;
@@ -2567,7 +2568,7 @@ namespace Tempest
 				if (!beginAttack)
 				{
 					beginAttack = true;
-
+					// Turn off the particle
 					if(!m_characterAttackEmitter.expired())
 						m_characterAttackEmitter.lock()->m_MM.m_duration = 0.0f;
 				}

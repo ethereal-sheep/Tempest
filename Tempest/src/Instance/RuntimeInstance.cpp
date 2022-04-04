@@ -305,8 +305,6 @@ namespace Tempest
 				//LOG_INFO("Max Y: {0}", box.max.y);
 				//LOG_INFO("Max Z: {0}", box.max.z);
 
-				//LOG_INFO("Next DOOR");
-
 				if (box.min.x > box.max.x)
 					std::swap(box.min.x, box.max.x);
 
@@ -317,7 +315,6 @@ namespace Tempest
 					std::swap(box.min.z, box.max.z);
 
 				m_map_interactiveEmitter_3D[id] = EmitterSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, box.min, box.max);
-
 			}
 		}
 	}

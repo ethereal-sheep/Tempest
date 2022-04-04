@@ -48,7 +48,7 @@ namespace Tempest
 	private:
 		// Not suppose to be here.... @Jun Hao
 		std::weak_ptr<Unit_MovementTrailEmitter_3D> m_Unit_MovementTrailEmitter_3D;
-		std::map<Entity, std::weak_ptr< Interactive_DoorParticle_3D>> m_map_interactiveEmitter_3D;
+		std::map<Entity, std::weak_ptr<Interactive_DoorParticle_3D>> m_map_interactiveEmitter_3D;
 
 	public:
 		std::vector<Entity> sequences;

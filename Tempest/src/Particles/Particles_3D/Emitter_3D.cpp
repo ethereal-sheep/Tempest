@@ -216,8 +216,6 @@ void Emitter_3D::ParticleRender(glm::vec4 modelMatrix)
 
 void Emitter_3D::ParticleSetUp(Particle_3D& particle)
 {
-	LOG_INFO("Base Emitter_3D Particle Setup");
-
 	//Default set values
 	particle.m_position = m_GM.m_position;
 	particle.m_isActive = true;
