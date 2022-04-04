@@ -50,6 +50,9 @@ namespace Tempest
 
 	void Animator::ChangeAnimation(Animation* animation)
 	{
+		//if(animation->GetName() == m_Animation->GetName())
+		//	return;
+
 		m_Animation = animation;
 		m_CurrentTime = 0.f;
 		m_DeltaTime = 0.f;

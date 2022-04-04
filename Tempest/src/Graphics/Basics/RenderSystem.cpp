@@ -63,10 +63,6 @@ namespace Tempest
         m_Pipeline.m_Shaders.emplace(ShaderCode::firstpassPPShader, std::make_unique<Shader>("Shaders/postprocess.vert", "Shaders/firstpass.frag"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::saoShader, std::make_unique<Shader>("Shaders/sao.vert", "Shaders/sao.frag"));
         m_Pipeline.m_Shaders.emplace(ShaderCode::saoBlurShader, std::make_unique<Shader>("Shaders/sao.vert", "Shaders/saoBlur.frag"));
-
-        
-
-
     }
 
     void RenderSystem::InitAnimations()
@@ -341,6 +337,7 @@ namespace Tempest
         InitMeshes();
         InitShaders();
         InitBuffers();
+        InitAnimations();
 
         if (m_Pipeline.m_Cameras.empty())
         {

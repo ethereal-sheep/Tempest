@@ -891,6 +891,7 @@ namespace Tempest
 
 			Animation(uint32_t _id = 0, std::string _curr = "../../../Resource/Models/Unit_Punch.fbx") : id{_id}, current_animation{_curr}{}
 
+			// Plays the animation
 			void play(uint32_t tid, bool loop = false)
 			{
 				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
@@ -899,6 +900,7 @@ namespace Tempest
 				}
 			}
 
+			// Pauses the current animation, setting it to play will resume it
 			void pause(uint32_t tid)
 			{
 				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
@@ -907,6 +909,7 @@ namespace Tempest
 				}
 			}
 
+			// Stops the current animation and resets it
 			void stop(uint32_t tid)
 			{
 				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
@@ -915,6 +918,7 @@ namespace Tempest
 				}
 			}
 
+			// Changes the speed of the animation
 			void set_speed(uint32_t tid,float spd = 1.f)
 			{
 				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
@@ -923,6 +927,7 @@ namespace Tempest
 				}
 			}
 
+			// Checks if the current animation has reached the end
 			bool if_end(uint32_t tid)
 			{
 				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
@@ -931,6 +936,24 @@ namespace Tempest
 				}
 
 				return false;
+			}
+
+			// Changes the animation after the current one ends
+			void change_animation(uint32_t tid, const std::string& anim)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().ChangeAnimation(tid, anim);
+				}
+			}
+
+			// Instantly changes the animation
+			void force_change(uint32_t tid, const std::string& anim)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().ForceChange(tid, anim);
+				}
 			}
 
 			uint32_t id;
