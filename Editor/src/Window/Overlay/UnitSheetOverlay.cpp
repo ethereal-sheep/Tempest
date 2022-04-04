@@ -13,7 +13,6 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/Basics/RenderSystem.h"
 #include "Instance/EditTimeInstance.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
 #include "../../Tempest/src/Particles/Particles_2D/ParticleSystem_2D.h"
 
@@ -84,6 +83,11 @@ namespace Tempest
 		{
 			OverlayOpen = false;
 			cs = nullptr;
+
+			AudioEngine ae;
+			ae.StopChannel(voice_line);
+			voice_line = 0;
+			voice_played = false;
 		}
 	}
 
@@ -501,6 +505,16 @@ namespace Tempest
 
 								if (taskCompleted)
 								{
+									if (!voice_played)
+									{
+										AudioEngine ae;
+										if (!ae.IsPlaying(voice_line))
+										{
+											voice_line = ae.Play("Sounds2D/Cr_Units_2.wav", "VL", 1.0f);
+											voice_played = true;
+										}
+									}
+									
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
 									if (UI::MouseIsWithin(tut_min, tut_max))

@@ -258,6 +258,11 @@ namespace Tempest
 			if (bus)
 				m_Buses.emplace("BGM", bus);
 
+			bus = nullptr;
+			mp_System->createChannelGroup("VL", &bus);
+			if (bus)
+				m_Buses.emplace("VL", bus);
+
 		}
 
 		~Implementation()

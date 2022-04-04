@@ -19,6 +19,8 @@
 
 #include "Particles/Particles_2D/WaypointEmitter_2D.h"
 
+#include <Tempest/src/Audio/AudioEngine.h>
+
 namespace Tempest
 {
     class UnitSheetOverlay : public Window
@@ -122,6 +124,9 @@ namespace Tempest
         bool emitter_1 = false;
         bool emitter_2 = false;
         bool emitter_3 = false;
+
+        ChannelID voice_line{ 0 };
+        bool voice_played{ false };
 
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;
