@@ -16,7 +16,7 @@
 struct WaypointEmitter_2D final : public Emitter_2D
 {
 	WaypointEmitter_2D();
-	void SelfUpdate() override;
+	void Update() override;
 
 	std::vector<glm::vec2> m_wayPoints;
 	short m_wayPointIndex;
@@ -27,7 +27,7 @@ struct WaypointEmitter_2D final : public Emitter_2D
 	// float m_initialDistanceSquared;
 
 	// Velocity controls
-	// glm::vec2 m_startVelocity, m_endVelocity;
+	// glm::vec2 m_velocityStart, m_velocityEnd;
 };
 
 #endif // !WAYPOINT_EMITTER_H

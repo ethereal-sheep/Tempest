@@ -18,6 +18,10 @@
 #include "Util/interpolater.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
+//#include "Particles/Particles_2D/LineEmitter_2D.h"
+#include "Particles/Particles_2D/RandomMinMaxSpawnPointEmitter_2D.h"
+
 namespace Tempest
 {
     class MainMenuOverlay : public Window
@@ -58,6 +62,18 @@ namespace Tempest
             AudioEngine ae;
             ae.StopAllChannels();
             MenuBGM = ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
+
+            //EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(1920.f, 1080.f));
+            EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(2560.f, 1440.f));
+
+            m_bg_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 0.5f };
+            m_bg_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+            //EmitterSystem_2D::GetInstance().CreateLineEmitter(m_bg_VFX_2, glm::vec2{ 0.0f, 1440.f }, glm::vec2(2560.f, 1440.f));
+            //m_bg_VFX_2.lock()->m_PAM.m_velocityVariation = glm::vec2{ 0.f, -500.0f };
+            //m_bg_VFX_2.lock()->m_EM.m_spawnTimeInterval = 0.016f;
+            //m_bg_VFX_2.lock()->m_EM.m_spawnCountTimer = m_bg_VFX_2.lock()->m_EM.m_spawnTimeInterval;
+            //m_bg_VFX_2.lock()->m_EM.m_rateOverTime = 1;
         }
         void change_state(UI_SHOW state);
         void open_popup(const Event& e);
@@ -99,5 +115,9 @@ namespace Tempest
 
         //BackGround Image
         string backGroundImg = "Assets/StartScreenBG.dds";
+
+        // BG VFX
+        std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D> m_bg_VFX;
+        //std::weak_ptr<LineEmitter_2D> m_bg_VFX_2;
     };
 }

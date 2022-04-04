@@ -28,7 +28,7 @@
 #include "Profiler/Profiler.h"
 
 // Testing 
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "FrameRate/FrameRateManager.h"
 #include "Animation/AnimMultithreadHelper.h"
 
@@ -77,7 +77,6 @@ namespace Tempest
 	{
 		T_FrameRateManager.FrameStart();
 		// Update Engine stuff first
-		ParticleSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
 
 		Profile::Profiler::FrameStart();
 		PROFILER_MARKER(UPDATE);

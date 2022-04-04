@@ -45,7 +45,9 @@ namespace Tempest
 
 		firstpassPPShader,
 		saoShader,
-		saoBlurShader
+		saoBlurShader,
+
+		bloomBlurShader
 			
 	};
 
@@ -63,6 +65,7 @@ namespace Tempest
 		bool hasColor = false;
 		vec3 color = { 0.f, 0.f, 0.f };
 		bool isParticle = false;
+		bool m_Emissive = false;
 		bool normalCalculated = false;
 		tvector<glm::mat4> m_Bones;
 	};

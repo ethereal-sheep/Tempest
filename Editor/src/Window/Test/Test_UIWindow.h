@@ -15,7 +15,8 @@
 #include "rttr/type.h"
 #include "rttr/registration.h"
 #include "ECS/Rttr_Register.h"
-#include "Particles/Particles_2D/ParticleSystem_2D.h"
+
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
 
 namespace Tempest
 {
@@ -164,32 +165,44 @@ namespace Tempest
 
 				//}
 
-				////if (ImGui::IsMouseDown(0))
-				//if (ImGui::IsMouseClicked(0))
-				//{
-				//	// Test prepared functions for XR
-				//	ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
-				//}
-				////if (ImGui::IsMouseDown(1))
-				//if (ImGui::IsMouseClicked(1))
-				//{
-				//	glm::vec2 tempVec;
-				//	tempVec.x = ImGui::GetMousePos().x;
-				//	tempVec.y = ImGui::GetMousePos().y;
+				//if (ImGui::IsMouseDown(0))
+				if (ImGui::IsMouseClicked(0))
+				{
+					// Test prepared functions for XR
+					//EmitterSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
 
-				//	//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
-				//	//auto& reg = particleSys.Register(tempVec);
-				//	ParticleSystem_2D::GetInstance().CreateExplosionEmitter(tempVec);
-				//	//reg->m_RM.m_type = ParticleType::Circle;
-				//	//reg->m_GM.m_velocity.x = -500.0f;
+					glm::vec2 tempVec;
+					tempVec.x = ImGui::GetMousePos().x;
+					tempVec.y = ImGui::GetMousePos().y;
 
-				//	//LOG_INFO("ExplossionEmitter");
-				//}
+					//static std::weak_ptr<RandomMinMaxSpawnPointEmitter_2D> testEmitter1;
+					//EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(testEmitter1, tempVec, glm::vec2(1920.0f, 1080.0f));
+
+					static std::weak_ptr<LineEmitter_2D> testEmitter3;
+					EmitterSystem_2D::GetInstance().CreateLineEmitter(testEmitter3, glm::vec2{ 0.0f, 1080.0f }, glm::vec2(1920.0f, 1080.0f));
+				}
+				//if (ImGui::IsMouseDown(1))
+				if (ImGui::IsMouseClicked(1))  // Right click
+				{
+					glm::vec2 tempVec;
+					tempVec.x = ImGui::GetMousePos().x;
+					tempVec.y = ImGui::GetMousePos().y;
+
+					//auto reg = particleSys.Register(tempVec).m_weakEmmitters.lock();
+					//auto& reg = particleSys.Register(tempVec);
+					static std::weak_ptr<ExplosionEmitter_2D> testEmitter2;
+					EmitterSystem_2D::GetInstance().CreateExplosionEmitter(testEmitter2, tempVec);
+
+					//reg->m_RM.m_type = ParticleType::Circle;
+					//reg->m_GM.m_velocity.x = -500.0f;
+
+					//LOG_INFO("ExplossionEmitter");
+				}
 
 				//// Update the emitters
-				//ParticleSystem_2D::GetInstance().Update();
+				//EmitterSystem_2D::GetInstance().Update();
 
-				//for (auto& emitter : ParticleSystem_2D::GetInstance().get_emitters())
+				//for (auto& emitter : EmitterSystem_2D::GetInstance().get_emitters())
 				//{
 				//	// Render the particle
 				//	if(emitter->m_GM.m_active)

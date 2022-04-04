@@ -15,6 +15,9 @@
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
 #include <Tempest/src/Audio/AudioEngine.h>
+
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
+
 namespace Tempest
 {
 	float easyInBack(float x)
@@ -626,6 +629,10 @@ namespace Tempest
 							Service<EventManager>::Get().instant_dispatch<ChangeTurnOrder>(added_entities);
 
 						Service<EventManager>::Get().instant_dispatch<OpenPlaceUnitsOverlay>(added_entities, instance, new_instance);
+
+						// Reset the 2D VFX
+						EmitterSystem_2D::GetInstance().Reset();
+
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_SUB:
 					{

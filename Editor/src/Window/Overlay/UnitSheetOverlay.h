@@ -17,7 +17,8 @@
 #include "Util/interpolater.h"
 #include "Window/Viewport/CameraControls.h"
 
-#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+struct WaypointEmitter_2D;
+struct ExplosionEmitter_2D;
 
 namespace Tempest
 {
@@ -106,13 +107,21 @@ namespace Tempest
 
         CameraControls cam_ctrl;
 
-        // For tutorial emitter
+
+        // Task complete VFX
+        std::weak_ptr<ExplosionEmitter_2D> m_explosion_VFX;
+
+        bool b_unit_NAME_task_vfx = false;
+        bool b_unit_ATK_task_vfx = false;
+        bool b_unit_HP_task_vfx = false;
+
+        // Guiding Tutorial Button VFX
         std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
 
         bool emitter_0 = false;
         bool emitter_1 = false;
         bool emitter_2 = false;
-        bool emitter_3 = false;
+        bool b_Weapon_button_vfx = false;
 
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;

@@ -13,7 +13,8 @@ layout (location = 0) out vec4 gPosition;
 layout (location = 1) out vec4 gAlbedo;
 layout (location = 2) out vec4 gNormal;
 layout (location = 3) out vec3 gEffects;
-layout (location = 4) out vec4 gViewPos;
+layout (location = 5) out vec4 gViewPos;
+layout (location = 4) out vec4 gBloom;
 in vec3 viewPos;
 in vec2 TexCoords;
 in vec3 normal;
@@ -32,13 +33,15 @@ uniform sampler2D texAO;
 uniform vec3 colour;
 uniform int texID;
 uniform int TestPBR;
+uniform bool emissive;
 float LinearizeDepth(float depth);
 vec3 computeTexNormal(vec3 viewNormal, vec3 texNormal);
 
 
 void main()
 {
-    vec3 texNormal = normalize(texture(texNormal, TexCoords).rgb * 2.0f - 1.0f);
+    vec4 bloomColor = vec4(0.0, 0.0, 0.0, 1.0);
+	vec3 texNormal = normalize(texture(texNormal, TexCoords).rgb * 2.0f - 1.0f);
     texNormal.g = -texNormal.g;   // In case the normal map was made with DX3D coordinates system in mind
 
     vec2 fragPosA = (fragPosition.xy / fragPosition.w) * 0.5f + 0.5f;
@@ -51,7 +54,7 @@ void main()
 	{
 		gAlbedo.rgb = vec3(texture(texAlbedo, TexCoords));
 		//gAlbedo.rgb *= 1.2;
-		
+		bloomColor.rgb = vec3(texture(texAlbedo, TexCoords));
 				
 	}
 	else
@@ -64,6 +67,8 @@ void main()
 			gAlbedo.g *= 1.2f;
 		if (gAlbedo.b > 0.05f  && gAlbedo.b < 0.5f)
 			gAlbedo.b *= 1.2f;
+
+		bloomColor.rgb = vec3(colour);
 	}
 	//gAlbedo.rgb = vec3(colour);
 	//if(TestPBR == 1)
@@ -84,6 +89,11 @@ void main()
     gEffects.r = vec3(texture(texAO, TexCoords)).r;
     gEffects.gb = fragPosA - fragPosB;
 	gViewPos = fragPosition;
+
+	if (emissive)
+		gBloom = bloomColor;
+	else
+		gBloom = vec4(0.0, 0.0, 0.0, 1.0);
 }
 
 

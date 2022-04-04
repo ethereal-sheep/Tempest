@@ -25,7 +25,7 @@ CircularMotionEmitter_2D::CircularMotionEmitter_2D()
 	, m_angle {0.0f }
 {}
 
-void CircularMotionEmitter_2D::SelfUpdate()
+void CircularMotionEmitter_2D::Update()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -68,6 +68,8 @@ void CircularMotionEmitter_2D::SelfUpdate()
 		m_GM.m_active = false;
 	else
 		m_MM.m_duration -= m_MM.m_simulationSpeed;
+
+	Emitter_2D::ParticleUpdate();
 }
 
 void CircularMotionEmitter_2D::Emit(const int particleAmount)
@@ -89,7 +91,7 @@ void CircularMotionEmitter_2D::Emit(const int particleAmount)
 			particle.m_rotation = m_angle;
 
 			// Velocity
-			particle.m_velocity = m_PAM.m_startVelocity;
+			particle.m_velocity = m_PAM.m_velocityStart;
 			particle.m_velocity.x += m_PAM.m_velocityVariation.x; //* (Random::Float() - 0.5f);
 			particle.m_velocity.y += m_PAM.m_velocityVariation.y; //* (Random::Float() - 0.5f);
 
@@ -104,7 +106,7 @@ void CircularMotionEmitter_2D::Emit(const int particleAmount)
 			// Lifetime
 			particle.m_lifeTime = m_PAM.m_lifeTime;
 			particle.m_lifeRemaining = m_PAM.m_lifeTime;
-			particle.m_size = m_PAM.m_sizeBegin + m_PAM.m_sizeVariation;// *(Random::Float() - 0.5f);
+			particle.m_size = m_PAM.m_scaleBegin + m_PAM.m_scaleVariation;// *(Random::Float() - 0.5f);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

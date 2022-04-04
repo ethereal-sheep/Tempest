@@ -17,6 +17,8 @@
 #include "ECS/Prototypes/Prototype_Category.h"
 #include <Tempest/src/Audio/AudioEngine.h>
 
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+
 namespace Tempest
 {
 	static float timer = 0.f;
@@ -438,6 +440,9 @@ namespace Tempest
 									auto& transform = instance.ecs.get<tc::Transform>(chars[selected]);
 									// take note that inter has already been processed
 									transform.position = inter;
+
+									// Instantiate the character VFX
+									EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(m_characterSpawnEmitter, transform.position);
 								}
 								else
 								{
@@ -475,6 +480,7 @@ namespace Tempest
 									}
 									*/
 									auto& transform = instance.ecs.get<tc::Transform>(entity);
+									
 									//auto& model = instance.ecs.get<tc::Model>(entity);
 
 									/* ===========================================
@@ -488,6 +494,8 @@ namespace Tempest
 										instance.ecs.get<tc::Character>(entity) = entities[selected] ? instance.ecs.get<tc::Character>(entities[selected]) : instance.ecs.get<tc::Character>(random_char_id);
 									instance.ecs.get<tc::Character>(entity).isInCombat = true;
 									transform.position = inter;
+
+									EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(m_characterSpawnEmitter, transform.position);
 
 									// tutorial stuff oh dears
 									if (instance.tutorial_enable)

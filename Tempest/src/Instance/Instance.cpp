@@ -10,8 +10,9 @@
 
 #include "Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
-
-#include "Particles/Particles_2D/ParticleSystem_2D.h"
+#include "Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "FrameRate/FrameRateManager.h"
 
 namespace Tempest
 {
@@ -33,12 +34,13 @@ namespace Tempest
 			door.update(dt);
 		}
 		
-		ParticleSystem_2D::GetInstance().Update();
+		EmitterSystem_2D::GetInstance().Update();
 	}
 	void Instance::internal_render()
 	{
 		window_manager.show(*this);
 
+		EmitterSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
 
 		// move this to instance call when test finish
 		auto view = ecs.view<tc::Mesh>(exclude_t<tc::Destroyed>());
@@ -153,14 +155,14 @@ namespace Tempest
 				auto character = ecs.get_if<tc::Character>(id);
 				if (character != nullptr)
 				{
-					//Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+					Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
 
-					auto test1 = glm::translate(transform->position)
+					/*auto test1 = glm::translate(transform->position)
 						* glm::mat4(transform->rotation)
-						* glm::scale(transform->scale);
+						* glm::scale(transform->scale);*/
 
 
-					Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
+					//Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
 				}
 				//Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}
@@ -194,6 +196,41 @@ namespace Tempest
 			mdl = translate * rotate * scale;
 			
 			Service<RenderSystem>::Get().SubmitModel(model->path, mdl, animation->id);
+		}
+
+		for (auto& elem : EmitterSystem_3D::GetInstance().GetEmitter())
+		{
+			elem->ParticleRender();
+
+			// Check if the particle requires prefab
+			//for (int i = 0; i < elem->m_particles.size(); ++i)
+			//{
+			//	// Particle is alive
+			//	if (elem->m_particles[i].m_isActive)
+			//	{
+			//		// Search for the correct prefab to setup
+			//		if (elem->m_particles[i].m_renderingPath == "Models/SquareHole.a")
+			//		{
+			//			if (auto particle = this->scene.get_prototype_if("Unit", "particle"))
+			//			{
+			//				auto prefab = particle->instance();
+			//				auto local = prefab.get_if<tc::Local>();
+
+			//				auto myParticlePosition = elem->m_particles[i].m_position;
+			//				//auto myParticleRotation = elem->m_particles[i].m_rotation;
+			//				auto myParticleScale = elem->m_particles[i].m_scale;
+
+			//				// Assume no rotation
+			//				auto test = glm::translate(myParticlePosition)
+			//					* glm::mat4({ 0.f, 0.f, 0.f, 0.f })
+			//					* glm::translate(local->local_position)
+			//					* glm::mat4(local->local_rotation)
+			//					* glm::scale(local->local_scale)
+			//					* glm::scale(myParticleScale);
+			//			}
+			//		}
+			//	}
+			//}
 		}
 	}
 	void Instance::internal_exit()
@@ -287,7 +324,6 @@ namespace Tempest
 		}
 		return false;
 	}
-
 
 	tvector<tpair<int, tpath>> Instance::get_scene_paths()
 	{

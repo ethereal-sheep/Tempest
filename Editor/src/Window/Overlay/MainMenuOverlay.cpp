@@ -17,6 +17,8 @@
 #include "Util/quitter.h"
 #include "Graphics/Basics/RenderSystem.h"
 
+
+
 namespace Tempest
 {
 	void MainMenuOverlay::change_state(UI_SHOW state)
@@ -91,8 +93,6 @@ namespace Tempest
 				appearing = false;
 				return;
 			}
-
-
 
 			instance.window_manager.close_all();
 

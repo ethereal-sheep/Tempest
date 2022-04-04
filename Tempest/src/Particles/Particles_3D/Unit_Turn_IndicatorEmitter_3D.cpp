@@ -1,15 +1,43 @@
 
-#include "TileWaypointEmitter_3D.h"
+#include "Unit_Turn_IndicatorEmitter_3D.h"
 #include "Logger/Log.h"
 
 
-TileWaypointEmitter_3D::TileWaypointEmitter_3D()
+Unit_Turn_IndicatorEmitter_3D::Unit_Turn_IndicatorEmitter_3D()
 	: Emitter_3D()
 	, m_wayPointIndex{ 0 }
 	, m_recalculateVelocity{ true }
-{}
+{
+	m_GM.m_velocity.x = 0.0f;
+	m_MM.m_duration = 1000.0f;
+	m_GM.m_active = true;
+	m_MM.m_preWarm = true;
+	m_MM.m_simulationSpeed = 0.016f;
 
-void TileWaypointEmitter_3D::SelfUpdate(const float dt)
+	m_EM.m_spawnTimeInterval = 0.016f;
+	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
+	m_EM.m_rateOverTime = 1;
+	Emitter_3D::UpdateMaxParticle(1000);
+
+	m_wayPointIndex = 0;
+	m_recalculateVelocity = true;
+
+	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.1f, 0.0f };
+	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
+	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+
+	m_PAM.m_scaleBegin = glm::vec3{ 0.05f, 0.05f, 0.05f };
+	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
+
+	m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
+
+	m_PAM.m_lifeTime = 0.3f;
+	m_RM.m_renderingPath = "Models/Cube.a";
+}
+
+void Unit_Turn_IndicatorEmitter_3D::Update(const float dt)
 {
 	if (m_MM.m_preWarm)
 	{
@@ -113,9 +141,11 @@ void TileWaypointEmitter_3D::SelfUpdate(const float dt)
 	else
 		//m_MM.m_duration -= m_MM.m_simulationSpeed;
 		m_MM.m_duration -= dt;
+
+	ParticleUpdate(dt);
 }
 
-void TileWaypointEmitter_3D::UpdateWaypoints(glm::vec3 tileOriginPosition)
+void Unit_Turn_IndicatorEmitter_3D::UpdateWaypoints(glm::vec3 tileOriginPosition)
 {
 	m_GM.m_position = tileOriginPosition;
 	m_wayPoints.clear();
