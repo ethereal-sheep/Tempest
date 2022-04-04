@@ -69,6 +69,14 @@ namespace Tempest
 
     }
 
+    void RenderSystem::InitAnimations()
+    {
+        string path = "../../../Resource/Animations/";
+
+        for (const auto & file : std::filesystem::directory_iterator(path))
+            LoadModel(file.path().string());
+    }
+
     void RenderSystem::gBufferSetup()
     {
         glGenFramebuffers(1, &gBuffer);

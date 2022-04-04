@@ -891,43 +891,43 @@ namespace Tempest
 
 			Animation(uint32_t _id = 0, std::string _curr = "../../../Resource/Models/Unit_Punch.fbx") : id{_id}, current_animation{_curr}{}
 
-			void play(bool loop = false)
+			void play(uint32_t tid, bool loop = false)
 			{
-				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
 				{
-					Service<AnimMultithreadHelper>::Get().PlayAnimation(id, loop);
+					Service<AnimMultithreadHelper>::Get().PlayAnimation(tid, loop);
 				}
 			}
 
-			void pause()
+			void pause(uint32_t tid)
 			{
-				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
 				{
-					Service<AnimMultithreadHelper>::Get().PauseAnimation(id);
+					Service<AnimMultithreadHelper>::Get().PauseAnimation(tid);
 				}
 			}
 
-			void stop()
+			void stop(uint32_t tid)
 			{
-				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
 				{
-					Service<AnimMultithreadHelper>::Get().StopAnimation(id);
+					Service<AnimMultithreadHelper>::Get().StopAnimation(tid);
 				}
 			}
 
-			void set_speed(float spd = 1.f)
+			void set_speed(uint32_t tid,float spd = 1.f)
 			{
-				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
 				{
-					Service<AnimMultithreadHelper>::Get().SetSpeed(id, spd);
+					Service<AnimMultithreadHelper>::Get().SetSpeed(tid, spd);
 				}
 			}
 
-			bool if_end()
+			bool if_end(uint32_t tid)
 			{
-				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(id))
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
 				{
-					return Service<AnimMultithreadHelper>::Get().get().hasEnded(id);
+					return Service<AnimMultithreadHelper>::Get().get().hasEnded(tid);
 				}
 
 				return false;

@@ -159,9 +159,9 @@ namespace Tempest
 					/*auto test1 = glm::translate(transform->position)
 						* glm::mat4(transform->rotation)
 						* glm::scale(transform->scale);*/
-					if(anim->if_end())
+					if(anim->if_end(id))
 					{
-						anim->play(true);
+						anim->play(id, true);
 					}
 					if(character->color == glm::vec3(0.f, 0.f, 0.f))
 						Service<RenderSystem>::Get().SubmitModel(model->path, test, id);

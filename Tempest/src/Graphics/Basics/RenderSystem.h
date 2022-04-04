@@ -66,6 +66,7 @@ namespace Tempest
         void InitMeshes();
         void InitShaders();
         void InitBuffers();
+        void InitAnimations();
 
     public:
         RenderPipeline m_Pipeline;
