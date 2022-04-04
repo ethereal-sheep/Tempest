@@ -19,6 +19,7 @@
 #include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
 #include "Particles/Particles_2D/WaypointEmitter_2D.h"
 #include "Particles/Particles_2D/CircularMotionEmitter_2D.h"
+#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
 
 namespace Tempest
 {
@@ -420,6 +421,8 @@ namespace Tempest
 										b_unit_select_defender_task_VFX = true;
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
 										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+										m_explosion_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
+										m_explosion_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
 									}
 								}
 								else
