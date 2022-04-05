@@ -201,6 +201,7 @@ const std::weak_ptr<Interactive_DoorParticle_3D> EmitterSystem_3D::CreateInterac
 
 	// Emitter_3D values - Without consideration for default ctor values
 	interactiveEmitter.m_GM.m_position = spawnPos;
+	interactiveEmitter.m_GM.m_position.y = 0.0f;
 	interactiveEmitter.m_PAM.m_minSpawnPos = minSpawnPos;
 	interactiveEmitter.m_PAM.m_maxSpawnPos = maxSpawnPos;
 	
