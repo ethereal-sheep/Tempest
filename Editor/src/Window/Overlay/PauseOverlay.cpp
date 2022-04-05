@@ -21,6 +21,7 @@ namespace Tempest
 		auto a = event_cast<PauseOverlayTrigger>(e);
 		OverlayOpen = true;
 		CanOpenGraph = a.canOpenGraph;
+		FromCombatMode = a.fromCombatMode;
 	}
 
 	void PauseOverlay::show(Instance& instance)
@@ -83,7 +84,15 @@ namespace Tempest
 					{
 
 
-						auto fn = [&]() {
+						if (FromCombatMode)
+						{
+							OverlayOpen = false;
+							Service<EventManager>::Get().instant_dispatch<CombatResultsTrigger>();
+						}
+
+						else
+						{
+							auto fn = [&]() {
 
 							AudioEngine ae;
 							ae.StopAllChannels();
@@ -97,37 +106,39 @@ namespace Tempest
 							Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(config);
 							ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 
-						};
+							};
 
-						auto second_fn = [passed = 0.0]() mutable
-						{
-							/*auto start = std::chrono::system_clock::now();
-
-							for (auto it : fs::directory_iterator(fs::path("Models")))
+							auto second_fn = [passed = 0.0]() mutable
 							{
-								auto end = std::chrono::system_clock::now();
-								std::chrono::duration<double> diff = end - start;
+								/*auto start = std::chrono::system_clock::now();
 
-								if (diff.count() > 1.0)
+								for (auto it : fs::directory_iterator(fs::path("Models")))
 								{
-									passed += diff.count();
-									return false;
-								}
+									auto end = std::chrono::system_clock::now();
+									std::chrono::duration<double> diff = end - start;
 
-								if (it.path().extension() != ".a")
-									continue;
+									if (diff.count() > 1.0)
+									{
+										passed += diff.count();
+										return false;
+									}
 
-								Service<RenderSystem>::Get().LoadModel(it.path().string());
-							}*/
+									if (it.path().extension() != ".a")
+										continue;
 
-							return true;
-						};
+									Service<RenderSystem>::Get().LoadModel(it.path().string());
+								}*/
 
-						LoadTrigger t;
-						t.do_at_end_fn = fn;
-						t.do_until_true_fn = second_fn;
+								return true;
+							};
 
-						Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+							LoadTrigger t;
+							t.do_at_end_fn = fn;
+							t.do_until_true_fn = second_fn;
+
+							Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
+						}
+					
 					}
 				}
 				ImGui::End();

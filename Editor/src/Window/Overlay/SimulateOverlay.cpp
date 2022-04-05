@@ -74,7 +74,12 @@ namespace Tempest
 	{
 		auto a = event_cast<CloseOverlayTrigger>(e);
 		if (a.current == QUICKMENU_POPUP_TYPE::SIMULATE)
+		{
 			OverlayOpen = false;
+			AudioEngine ae;
+			ae.StopChannel(voice_line);
+			voice_line = 0;
+		}
 	}
 
 	void SimulateOverlay::force_close(const Event&)
@@ -119,6 +124,8 @@ namespace Tempest
 	void SimulateOverlay::simulate_tutorial_p2(const Event&)
 	{
 		tutorial_p2 = true;
+		AudioEngine ae;
+		voice_line = ae.Play("Sounds2D/Cr_Simulation_1.wav", "VL", 1.0f);
 	}
 
 	void SimulateOverlay::show(Instance& instance)
@@ -142,7 +149,6 @@ namespace Tempest
 
 			if (ImGui::Begin("Simulate Page Configure", nullptr, window_flags))
 			{
-
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
 					tutorial_p2 = true;
@@ -155,8 +161,6 @@ namespace Tempest
 					ImGui::GetIO().MouseClicked[0] = false;
 				else
 					ImGui::GetIO().MouseClicked[0] = true;*/
-
-				
 
 				// tutorial progrss
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
@@ -208,7 +212,14 @@ namespace Tempest
 									m_waypointEmitter.lock()->m_GM.m_active = false;
 
 								if (ImGui::IsMouseClicked(0))
+								{
 									tutorial_index = 2;
+
+									AudioEngine ae;
+									if (!ae.IsPlaying(voice_line))
+										voice_line = ae.Play("Sounds2D/Cr_Units_1.wav", "VL", 1.0f);
+								}
+									
 							}
 							break;
 							case 2:
@@ -244,7 +255,6 @@ namespace Tempest
 							{
 							case 0:
 							{
-								
 								ImVec2 pos = { viewport->Size.x * 0.446f, viewport->Size.y * 0.18f };
 								ImVec2 size = { 200.f, 150.f };
 								UI::TutArea(pos, size);
@@ -972,7 +982,14 @@ namespace Tempest
 						
 						//Tutorial progression
 						if (instance.tutorial_enable && instance.tutorial_level == 1 && !tutorial_p2 && tutorial_index == 0)
+						{
 							tutorial_index = 1;
+
+							AudioEngine ae;
+							if (!ae.IsPlaying(voice_line))
+								voice_line = ae.Play("Sounds2D/Cr_QuickMenu_1.wav", "VL", 1.0f);
+						}
+							
 					}
 					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished() && !tutorial_p2 && instance.tutorial_level == 1)
 					{ 

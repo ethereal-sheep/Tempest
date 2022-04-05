@@ -19,6 +19,7 @@
 struct WaypointEmitter_2D;
 struct ExplosionEmitter_2D;
 
+#include <Tempest/src/Audio/AudioEngine.h>
 namespace Tempest
 {
     class WeaponSheetOverlay : public Window
@@ -102,5 +103,8 @@ namespace Tempest
         bool emitter_1 = false;
         bool emitter_2 = false;
         bool emitter_3 = false;
+
+        ChannelID voice_line;
+        bool voice_played{ false };
     };
 }

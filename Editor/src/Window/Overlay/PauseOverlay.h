@@ -37,6 +37,7 @@ namespace Tempest
         bool OverlayOpen = false;
         bool EscDuringPause = false;
         bool CanOpenGraph = false;
+        bool FromCombatMode = false;
         ImGuiID HoveredID{ 0 };
     };
 }

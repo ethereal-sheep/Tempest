@@ -19,6 +19,8 @@
 struct WaypointEmitter_2D;
 struct ExplosionEmitter_2D;
 
+#include <Tempest/src/Audio/AudioEngine.h>
+
 namespace Tempest
 {
     class AttackSystemOverlay : public Window
@@ -61,16 +63,16 @@ namespace Tempest
 
         void show(Instance&) override;
 
-		void draw_context(Instance& instance, float height);
-		void draw_node(node_ptr n, const graph& g, Instance& instance);
-		void draw_link(link l, pin_id_t from, pin_id_t to, pin_type type);
+        void draw_context(Instance& instance, float height);
+        void draw_node(node_ptr n, const graph& g, Instance& instance);
+        void draw_link(link l, pin_id_t from, pin_id_t to, pin_type type);
         void draw_input_pin(const input_pin& p, const graph& g);
-		void draw_output_pin(const output_pin& p, float owidth);
+        void draw_output_pin(const output_pin& p, float owidth);
 
-		template <typename TNode>
-		void node_context(
-			graph& g,
-			const char* title);
+        template <typename TNode>
+        void node_context(
+            graph& g,
+            const char* title);
 
         void draw_context(graph& g, Instance& instance);
 
@@ -82,29 +84,29 @@ namespace Tempest
         void copy_selected();
         void paste_selected(graph& g, Instance& instance);
 
-		void update_create(graph& g);
-		void update_delete(graph& g);
-		ImColor get_pin_color(pin_type type);
-		ax::Drawing::IconType get_pin_icon(pin_type type);
+        void update_create(graph& g);
+        void update_delete(graph& g);
+        ImColor get_pin_color(pin_type type);
+        ax::Drawing::IconType get_pin_icon(pin_type type);
 
         ImGuiID HoveredID{ 0 };
-		graph temp_graph;
+        graph temp_graph;
         Entity id = UNDEFINED;
 
         int tutorial_index = 0;
-        
+
         // copyable stuff
         tvector<node> nodes_copied;
         tvector<size_t> links_copied;
         Entity copy_from = UNDEFINED;
 
         ax::NodeEditor::EditorContext* context;
-		ImVec2 mouse = ImVec2(0, 0);
-		bool OverlayOpen = false;
+        ImVec2 mouse = ImVec2(0, 0);
+        bool OverlayOpen = false;
         bool attack_action = false;
         bool defend_action = false;
-        std::string overlay_title{""};
-        std::string sidebar_title{""};
+        std::string overlay_title{ "" };
+        std::string sidebar_title{ "" };
         OPEN_GRAPH_TYPE type{ OPEN_GRAPH_TYPE::GRAPH_ACTION };
         ImGuiTextFilter filter;
 
@@ -138,5 +140,8 @@ namespace Tempest
 
         bool tut_openSlide = true;
         bool is_during_combat = false;
+
+        ChannelID voice_line{ 0 };
+        bool voice_played[3] = { false, false, false };
     };
 }

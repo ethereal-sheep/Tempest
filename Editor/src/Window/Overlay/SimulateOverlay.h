@@ -125,5 +125,8 @@ namespace Tempest
 
         // Tutorial Complete
         bool emitter_C_0 = false;
+
+
+        ChannelID voice_line{ 0 };
     };
 }

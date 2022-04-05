@@ -139,8 +139,8 @@ namespace Tempest
                     }
                     
                     auto tex = tex_map["Assets/closeBtn.dds"];
-                    ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.85f,viewport->Size.y * 0.1f });
-                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
+                    ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.85f,viewport->Size.y * 0.05f });
+                    if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(), (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
                     {
                         instance.tutorial_slide = false;
                         enable_popup = false;

@@ -20,6 +20,8 @@
 struct WaypointEmitter_2D;
 struct ExplosionEmitter_2D;
 
+#include <Tempest/src/Audio/AudioEngine.h>
+
 namespace Tempest
 {
     class UnitSheetOverlay : public Window
@@ -61,6 +63,13 @@ namespace Tempest
             Service<EventManager>::Get().register_listener<CloseAllConResOverlayTrigger>(&UnitSheetOverlay::force_close, this);
 
             initialise_tabs();
+
+            for (int n = 0; n < IM_ARRAYSIZE(saved_palette); n++)
+            {
+                ImGui::ColorConvertHSVtoRGB(n / 31.0f, 0.5f, 0.9f,
+                    saved_palette[n].x, saved_palette[n].y, saved_palette[n].z);
+                saved_palette[n].w = 1.0f; // Alpha
+            }
         }
 
        /* ~UnitSheetOverlay() override
@@ -88,6 +97,8 @@ namespace Tempest
 
         template<typename F>
         void render_tabs(TABS_TYPE type, F&& func);
+
+        ImVec4 saved_palette[32] = {};
 
         bool OverlayOpen = false;
         bool IsUnitCreation = false;
@@ -122,6 +133,9 @@ namespace Tempest
         bool emitter_1 = false;
         bool emitter_2 = false;
         bool b_Weapon_button_vfx = false;
+
+        ChannelID voice_line{ 0 };
+        bool voice_played{ false };
 
    /*     bool AddWeaponPopup = false;
         bool EditWeaponPopup = false;

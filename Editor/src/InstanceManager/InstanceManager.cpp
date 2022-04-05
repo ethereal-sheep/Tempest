@@ -73,6 +73,7 @@
 #include "Window/Overlay/BuildModeOverlay.h"
 #include "Window/Overlay/PauseOverlay.h"
 #include "Window/Overlay/LoadingOverlay.h"
+#include "Window/Overlay/CombatResultsOverlay.h"
 #include "Window/Overlay/RuntimeStartup.h"
 #include "Window/Overlay/Startup.h"
 
@@ -197,6 +198,7 @@ namespace Tempest
 		instance->register_always<CombatModeOverlay>();
 		instance->register_always<PlaceUnitsOverlay>();
 		instance->register_always<PauseOverlay>();
+		instance->register_always<CombatResultsOverlay>();
 		//instance->register_always<TurnOrderOverlay>();
 		instance->register_always<SimulationStart>();
 		//instance->register_window<test_window4>();

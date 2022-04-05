@@ -13,7 +13,6 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/Basics/RenderSystem.h"
 #include "Instance/EditTimeInstance.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
 #include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
 #include "Particles/Particles_2D/WaypointEmitter_2D.h"
@@ -92,6 +91,11 @@ namespace Tempest
 		{
 			OverlayOpen = false;
 			cs = nullptr;
+
+			AudioEngine ae;
+			ae.StopChannel(voice_line);
+			voice_line = 0;
+			voice_played = false;
 		}
 	}
 
@@ -197,8 +201,11 @@ namespace Tempest
 					ImGui::PushFont(FONT_HEAD);
 					auto pSize = ImGui::CalcTextSize("+");
 					ImGui::PopFont();
-					// just try with get cursor pos
-					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 80, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
+
+					tex = tex_map["Assets/NewUnitIcon.dds"];
+					ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 185 });
+					if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f, tex->GetHeight() * 1.0f }, "New Unit", "##notselectable"))
+				//	if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 80, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
 					{
 						create_new_unit(instance);
 						cs = instance.ecs.get_if<tc::Character>(SelectedID);
@@ -211,6 +218,7 @@ namespace Tempest
 							tutorial_index = 1;
 
 					}
+
 					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0 && instance.tutorial_slide == false && instance.tutorial_level == 1)
 					{
 						if (emitter_0 == false)
@@ -261,8 +269,37 @@ namespace Tempest
 					}
 					ImGui::EndChild();
 					
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.33f, viewport->Size.y * 0.85f });
-					ImGui::ColorEdit4("##colorbuttonunit", glm::value_ptr(cs->color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
+					// color palette
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.335f, viewport->Size.y * 0.15f });
+					ImGuiColorEditFlags palette_button_flags = ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoTooltip;
+					bool open_color_popup = ImGui::ColorButton("##colorpreview", ImVec4{ cs->color.x,cs->color.y, cs->color.z ,1.0f }, palette_button_flags, ImVec2(30, 30));
+					if (open_color_popup)
+					{
+						ImGui::OpenPopup("unitcolorpicker");
+					}
+
+					if (ImGui::BeginPopup("unitcolorpicker"))
+					{
+						ImGui::BeginGroup();
+
+						for (int n = 0; n < IM_ARRAYSIZE(saved_palette); n++)
+						{
+							ImGui::PushID(n);
+							if ((n % 4) != 0)
+								ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+
+							if (ImGui::ColorButton("##unitpalette", saved_palette[n], palette_button_flags, ImVec2(40, 40)))
+							{
+								cs->color.x = saved_palette[n].x;
+								cs->color.y = saved_palette[n].y;
+								cs->color.z = saved_palette[n].z;
+							}
+
+							ImGui::PopID();
+						}
+						ImGui::EndGroup();
+						ImGui::EndPopup();
+					}
 				}
 
 				// tabs 
@@ -497,6 +534,16 @@ namespace Tempest
 
 								if (taskCompleted)
 								{
+									if (!voice_played)
+									{
+										AudioEngine ae;
+										if (!ae.IsPlaying(voice_line))
+										{
+											voice_line = ae.Play("Sounds2D/Cr_Units_2.wav", "VL", 1.0f);
+											voice_played = true;
+										}
+									}
+									
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
 									if (UI::MouseIsWithin(tut_min, tut_max))
@@ -855,11 +902,20 @@ namespace Tempest
 		}
 		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
-		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
+		auto tex = tex_map["Assets/AddWeaponIcon.dds"];
+		ImGui::SetCursorPos(ImVec2{ cursor.x + i * 300.0f - tex->GetWidth() * 0.5f * 0.9f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.9f });
+		if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, false, TempWeapon, true);
 		}
+
+
+		/*if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
+		{
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::WEAPON, false, TempWeapon, true);
+		}*/
 
 		ImGui::EndChild();
 		ImGui::PopStyleColor();
@@ -914,11 +970,19 @@ namespace Tempest
 
 		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
-		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
+		auto tex = tex_map["Assets/AddActionIcon.dds"];
+		ImGui::SetCursorPos(ImVec2{ cursor.x + i * 300.0f - tex->GetWidth() * 0.5f * 0.9f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.9f });
+		if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::ACTION, false, TempWeapon, true);
 		}
+
+	/*	if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
+		{
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::ACTION, false, TempWeapon, true);
+		}*/
 
 		ImGui::EndChild();
 		ImGui::PopStyleColor();

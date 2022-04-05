@@ -14,7 +14,6 @@
 #include "AttackSystemOverlay.h"
 #include "Util/UIElements.h"
 #include "Instance/EditTimeInstance.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
 #include "Particles/Particles_2D/EmitterSystem_2D.h"
 #include "Particles/Particles_2D/WaypointEmitter_2D.h"
@@ -103,7 +102,15 @@ namespace Tempest
 		auto a = event_cast<CloseOverlayTrigger>(e);
 		if (a.current == QUICKMENU_POPUP_TYPE::ACTIONS ||
 			a.current == QUICKMENU_POPUP_TYPE::SEQUENCES)
+		{
 			OverlayOpen = false;
+
+			AudioEngine ae;
+			ae.StopChannel(voice_line);
+			voice_line = 0;
+			for (int i = 0; i < 3; ++i)
+				voice_played[i] = false;
+		}
 	}
 
 	void AttackSystemOverlay::force_close(const Event&)
@@ -311,7 +318,10 @@ namespace Tempest
 						}
 
 						// create new graphs
-						if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 80 }, { 150,-10 }, FONT_HEAD))
+						auto tex = tex_map[type == OPEN_GRAPH_TYPE::GRAPH_ACTION ? "Assets/NewActionIcon.dds" : "Assets/NewSeqIcon.dds"];
+						ImGui::SetCursorPos(ImVec2{ cursor.x - tex->GetWidth() * 0.5f * 0.7f,  cursor.y + i * 80 - tex->GetHeight() * 0.5f * 0.7f });
+						if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
+					//	if (UI::UIButton_1("+", "+", { cursor.x , cursor.y + i * 80 }, { 150,-10 }, FONT_HEAD))
 						{
 							auto new_graph = instance.ecs.create();
 
@@ -341,7 +351,23 @@ namespace Tempest
 
 							//Tutorial progression
 							if (instance.tutorial_enable && tutorial_index == 0)
+							{
 								tutorial_index = 1;
+
+								AudioEngine ae;
+
+								if (type == OPEN_GRAPH_TYPE::GRAPH_ACTION)
+								{
+									voice_line = ae.Play("Sounds2D/Cr_Actions_1.wav", "VL", 1.0f);
+								}
+								else
+								{
+									voice_line = ae.Play("Sounds2D/Cr_Sequence_1.wav", "VL", 1.0f);
+								}
+
+								voice_played[0] = true;
+							}
+								
 
 							id = new_graph;
 							temp_graph = instance.ecs.get<tc::Graph>(id).g;
@@ -470,6 +496,16 @@ namespace Tempest
 								if (!m_waypointEmitter.expired())
 									m_waypointEmitter.lock()->m_GM.m_active = false;
 
+								if (!voice_played[1])
+								{
+									AudioEngine ae;
+									if (!ae.IsPlaying(voice_line))
+									{
+										voice_line = ae.Play("Sounds2D/Cr_Actions_2.wav", "VL", 1.0f);
+										voice_played[1] = true;
+									}
+								}
+
 								// Task List
 								string str = "";
 								auto selected = tex_map["Assets/Selected.dds"];
@@ -594,6 +630,16 @@ namespace Tempest
 
 								if (taskCompleted)
 								{
+									if (!voice_played[2])
+									{
+										AudioEngine ae;
+										if (!ae.IsPlaying(voice_line))
+										{
+											voice_line = ae.Play("Sounds2D/Cr_Actions_3.wav", "VL", 1.0f);
+											voice_played[2] = true;
+										}
+									}
+
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
 									if (UI::MouseIsWithin(tut_min, tut_max))
@@ -683,6 +729,16 @@ namespace Tempest
 
 							case 1:
 							{
+
+								if (!voice_played[1])
+								{
+									AudioEngine ae;
+									if (!ae.IsPlaying(voice_line))
+									{
+										voice_line = ae.Play("Sounds2D/Cr_Sequence_2.wav", "VL", 1.0f);
+										voice_played[1] = true;
+									}
+								}
 								//Task List
 								if (!m_waypointEmitter.expired())
 									m_waypointEmitter.lock()->m_GM.m_active = false;
@@ -890,6 +946,16 @@ namespace Tempest
 
 								if (taskCompleted)
 								{
+									if (!voice_played[2])
+									{
+										AudioEngine ae;
+										if (!ae.IsPlaying(voice_line))
+										{
+											voice_line = ae.Play("Sounds2D/Cr_Sequence_3.wav", "VL", 1.0f);
+											voice_played[2] = true;
+										}
+									}
+
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
 									if (UI::MouseIsWithin(tut_min, tut_max))
