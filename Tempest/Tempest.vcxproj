@@ -244,6 +244,7 @@
     <ClCompile Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterDespawnEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.cpp" />
@@ -381,6 +382,7 @@
     <ClInclude Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterDespawnEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.h" />

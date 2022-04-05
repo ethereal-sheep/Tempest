@@ -54,7 +54,7 @@ void Emitter_3D::Update(const float dt)
 	}
 
 	// Emitter_3D emission
-	if (m_EM.m_spawnCountTimer <= 0.0f)
+	if (m_EM.m_spawnTimeInterval > 0.f && m_EM.m_spawnCountTimer <= 0.0f)
 	{
 		while (m_EM.m_spawnCountTimer <= 0.0f)
 		{
@@ -78,8 +78,12 @@ void Emitter_3D::Update(const float dt)
 		// Emit Initial Burst Particle
 		Emit(m_EM.m_burstCount);
 
-		// Reduce cycle
+		// Start the cycle
 		m_EM.m_startBurstCycle = true;
+		m_EM.m_burstCountTimer = m_EM.m_burstInterval;
+
+		// Reduce cycle, initial cycle is done above
+		--m_EM.m_burstCycle;
 	}
 	else
 	{	

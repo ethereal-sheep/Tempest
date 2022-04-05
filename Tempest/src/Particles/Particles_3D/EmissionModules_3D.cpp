@@ -54,8 +54,8 @@ EmissionModule_3D::EmissionModule_3D()
 	, m_burstCycle{ 0 }
 	, m_burstCount{ 0 }
 
-	, m_rateOverTime{ 1 }
-	, m_spawnTimeInterval{ 0.080f }
+	, m_rateOverTime{ 0 }
+	, m_spawnTimeInterval{ 0.0f }
 	, m_spawnCountTimer{ m_spawnTimeInterval }
 
 	, m_burstCountTimer {0.0f}
