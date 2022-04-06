@@ -98,7 +98,8 @@ void Tempest::RuntimeStartupOverlay::show(Instance& instance)
 	const float how_many_rounds = .5f;
 
 	auto& cam = Service<RenderSystem>::Get().GetCamera();
-	auto dt = ImGui::GetIO().DeltaTime;
+	auto dt = ImGui::GetIO().DeltaTime; 
+	dt = std::min(dt, 0.016f);;
 	timer += dt;
 	inter.update(dt);
 
@@ -120,7 +121,7 @@ void Tempest::RuntimeStartupOverlay::show(Instance& instance)
 		for (auto id : instance.ecs.view<tc::Transform>())
 		{
 			auto& pos = instance.ecs.get<tc::Transform>(id).position;
-			pos.y += 55.f * std::min(dt, 0.016f);
+			pos.y += 55.f * dt;
 			if (pos.y > 0.f)
 				pos.y = 0.f;
 		}
