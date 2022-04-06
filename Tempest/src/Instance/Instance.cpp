@@ -161,8 +161,8 @@ namespace Tempest
 					/*auto test1 = glm::translate(transform->position)
 						* glm::mat4(transform->rotation)
 						* glm::scale(transform->scale);*/
-					if(anim->if_end(id))
-						anim->force_change(id, "../../../Resource/Animations/Unit_TaiChi.fbx");
+				//	if(anim->if_end(id))
+				//		anim->force_change(id, "../../../Resource/Animations/Unit_TaiChi.fbx");
 
 					if(character->color == glm::vec3(0.f, 0.f, 0.f))
 						Service<RenderSystem>::Get().SubmitModel(model->path, test, id);
