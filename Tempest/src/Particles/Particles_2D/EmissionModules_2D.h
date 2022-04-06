@@ -21,9 +21,9 @@ struct MainModule_2D
 
 	float m_duration;		// Duration of emitter
 	bool  m_looping;		// Resets on the emitter death
-	short m_maxParticles;	// Max amount of particles 
 
 	float m_simulationSpeed;	// What DT to run in
+	short m_maxParticles;	// Max amount of particles 
 	bool m_preWarm;
 };
 
@@ -41,16 +41,17 @@ struct ParticleArchetypeModule_2D
 {
 	ParticleArchetypeModule_2D();
 
-	glm::vec2 m_startVelocity, m_endVelocity;
+	glm::vec2 m_velocityStart, m_velocityEnd;
 	glm::vec2 m_velocityVariation;
 
-	float m_sizeBegin, m_sizeEnd;
-	float m_sizeVariation;
+	float m_scaleBegin, m_scaleEnd;
+	float m_scaleVariation;
 
 	glm::vec4 m_colourBegin, m_colourEnd;
 	//glm::vec4 m_colourVariation
 
 	float m_lifeTime;		// Particle life duration
+	bool m_gravity;
 };
 
 struct EmissionModule_2D

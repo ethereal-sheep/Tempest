@@ -79,7 +79,7 @@
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Scripting\Nodes\GroupNode.cpp" />
     <ClCompile Include="src\Scripting\Test\test_compare_node.cpp" />
-    <ClCompile Include="src\Particles\Particles_2D\ParticleSystem_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\EmitterSystem_2D.cpp" />
     <ClCompile Include="src\Particles\Random.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\Particle_2D.cpp" />
     <ClCompile Include="src\Particles\Particles_2D\Emitter_2D.cpp" />
@@ -96,18 +96,25 @@
     <ClCompile Include="src\Particles\Particles_3D\Particles_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\EmissionModules_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Emitter_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\ParticleSystem_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\ExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.cpp" />
-    <ClCompile Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.cpp" />
     <ClCompile Include="src\FrameRate\FrameRateManager.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Graphics\PBR\MeshPrimitives.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\EmitterSystem_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\LineEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Smoke_Poof_Emitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterDespawnEmitter_3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -262,7 +269,7 @@
     <ClInclude Include="src\Util\pathfinding.h" />
     <ClInclude Include="src\Util\quitter.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Particles\Particles_2D\ParticleSystem_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\EmitterSystem_2D.h" />
     <ClInclude Include="src\Particles\Random.h" />
     <ClInclude Include="src\Util\interpolater.h" />
     <ClInclude Include="src\Particles\Particles_2D\Particle_2D.h" />
@@ -283,18 +290,25 @@
     <ClInclude Include="src\Particles\Particles_3D\Particles_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Emitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\EmissionModules_3D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\ParticleSystem_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\ExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\TileWaypointEmitter_3D.h" />
-    <ClInclude Include="src\Particles\Particles_3D\UnitTrailEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.h" />
     <ClInclude Include="src\FrameRate\FrameRateManager.h" />
     <ClInclude Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.h" />
     <ClInclude Include="src\Graphics\PBR\MeshPrimitives.h" />
+    <ClInclude Include="src\Particles\Particles_3D\EmitterSystem_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\LineEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Smoke_Poof_Emitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterDespawnEmitter_3D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />

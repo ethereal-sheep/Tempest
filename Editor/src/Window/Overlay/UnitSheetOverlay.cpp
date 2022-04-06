@@ -13,9 +13,11 @@
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
 #include "Tempest/src/Graphics/Basics/RenderSystem.h"
 #include "Instance/EditTimeInstance.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
-#include "../../Tempest/src/Particles/Particles_2D/ParticleSystem_2D.h"
+#include "../../Tempest/src/Particles/Particles_2D/EmitterSystem_2D.h"
+#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
+
 
 namespace Tempest
 {
@@ -70,10 +72,15 @@ namespace Tempest
 		cam_ctrl.force_reset_pos(cam);
 		cam_ctrl.force_reset_rot(cam);
 
+		// Refresh tutorial vfx bool
+		b_unit_NAME_task_vfx = false;
+		b_unit_ATK_task_vfx = false;
+		b_unit_HP_task_vfx = false;
 		emitter_0 = false;
 		emitter_1 = false;
 		emitter_2 = false;
-		emitter_3 = false;
+		b_Weapon_button_vfx = false;
+
 		tut_openSlide = true;
 	}
 
@@ -84,6 +91,11 @@ namespace Tempest
 		{
 			OverlayOpen = false;
 			cs = nullptr;
+
+			AudioEngine ae;
+			ae.StopChannel(voice_line);
+			voice_line = 0;
+			voice_played = false;
 		}
 	}
 
@@ -189,8 +201,11 @@ namespace Tempest
 					ImGui::PushFont(FONT_HEAD);
 					auto pSize = ImGui::CalcTextSize("+");
 					ImGui::PopFont();
-					// just try with get cursor pos
-					if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 80, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
+
+					tex = tex_map["Assets/NewUnitIcon.dds"];
+					ImGui::SetCursorPos(ImVec2{ cursor.x , cursor.y + i++ * 185 });
+					if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.0f, tex->GetHeight() * 1.0f }, "New Unit", "##notselectable"))
+				//	if (UI::UIButton_1("+", "+", ImVec2{ ImGui::GetCursorPos().x + 80, ImGui::GetCursorPos().y + 60 }, { 45,20 }, FONT_HEAD))
 					{
 						create_new_unit(instance);
 						cs = instance.ecs.get_if<tc::Character>(SelectedID);
@@ -203,6 +218,7 @@ namespace Tempest
 							tutorial_index = 1;
 
 					}
+
 					if (instance.tutorial_enable && !instance.tutorial_temp_exit && tutorial_index == 0 && instance.tutorial_slide == false && instance.tutorial_level == 1)
 					{
 						if (emitter_0 == false)
@@ -216,11 +232,8 @@ namespace Tempest
 							glm::vec2 real_mousePosition;
 							real_mousePosition.x = ImGui::GetCursorPos().x + 80 ;
 							real_mousePosition.y = ImGui::GetCursorPos().y + 60 + real_buttonSize.y * 0.35f;
-
-							if (m_waypointEmitter.expired())
-								m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
-							else
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), real_mousePosition, real_buttonSize);
+							
+							EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 						}
 					}
 
@@ -256,8 +269,37 @@ namespace Tempest
 					}
 					ImGui::EndChild();
 					
-					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.33f, viewport->Size.y * 0.85f });
-					ImGui::ColorEdit4("##colorbuttonunit", glm::value_ptr(cs->color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
+					// color palette
+					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.335f, viewport->Size.y * 0.15f });
+					ImGuiColorEditFlags palette_button_flags = ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoTooltip;
+					bool open_color_popup = ImGui::ColorButton("##colorpreview", ImVec4{ cs->color.x,cs->color.y, cs->color.z ,1.0f }, palette_button_flags, ImVec2(30, 30));
+					if (open_color_popup)
+					{
+						ImGui::OpenPopup("unitcolorpicker");
+					}
+
+					if (ImGui::BeginPopup("unitcolorpicker"))
+					{
+						ImGui::BeginGroup();
+
+						for (int n = 0; n < IM_ARRAYSIZE(saved_palette); n++)
+						{
+							ImGui::PushID(n);
+							if ((n % 4) != 0)
+								ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+
+							if (ImGui::ColorButton("##unitpalette", saved_palette[n], palette_button_flags, ImVec2(40, 40)))
+							{
+								cs->color.x = saved_palette[n].x;
+								cs->color.y = saved_palette[n].y;
+								cs->color.z = saved_palette[n].z;
+							}
+
+							ImGui::PopID();
+						}
+						ImGui::EndGroup();
+						ImGui::EndPopup();
+					}
 				}
 
 				// tabs 
@@ -323,11 +365,7 @@ namespace Tempest
 							real_mousePosition.x = quickMenuPos.x;
 							real_mousePosition.y = quickMenuPos.y;
 
-							if (m_waypointEmitter.expired())
-								m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(real_mousePosition, real_buttonSize);
-							else
-								ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), real_mousePosition, real_buttonSize);
-
+							EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 							emitter_2 = true;
 						}
 					}
@@ -425,11 +463,22 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_NAME_task_vfx)
+									{
+										b_unit_NAME_task_vfx = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f );
+										m_explosion_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
+										m_explosion_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 250.f / 255.f, 250.f / 255.f, 210.f / 255.f, 1.0f };
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_NAME_task_vfx = false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -439,11 +488,19 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_ATK_task_vfx)
+									{
+										b_unit_ATK_task_vfx = true;
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_ATK_task_vfx = false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f, min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -453,11 +510,20 @@ namespace Tempest
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(selected->GetID()), min, { min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f });
 									taskCompleted &= true;
+
+									if (!b_unit_HP_task_vfx)
+									{
+										b_unit_HP_task_vfx = true;
+
+										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
+										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
+									}
 								}
 								else
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(unselected->GetID()), min, { min.x + (float)unselected->GetWidth() * 0.6f, min.y + (float)unselected->GetHeight() * 0.6f });
 									taskCompleted &= false;
+									b_unit_HP_task_vfx = false;
 								}
 								drawlist->AddText({ viewport->Size.x * 0.8f + selected->GetWidth() * 0.7f , min.y + (float)unselected->GetHeight() * 0.2f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PopFont();
@@ -468,6 +534,16 @@ namespace Tempest
 
 								if (taskCompleted)
 								{
+									if (!voice_played)
+									{
+										AudioEngine ae;
+										if (!ae.IsPlaying(voice_line))
+										{
+											voice_line = ae.Play("Sounds2D/Cr_Units_2.wav", "VL", 1.0f);
+											voice_played = true;
+										}
+									}
+									
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
 									if (UI::MouseIsWithin(tut_min, tut_max))
@@ -503,14 +579,10 @@ namespace Tempest
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access Weapon page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
-								if (emitter_3 == false)
+								if (b_Weapon_button_vfx == false)
 								{
-									if (m_waypointEmitter.expired())
-										m_waypointEmitter = ParticleSystem_2D::GetInstance().CreateButtonEmitter(pos, size);
-									else
-										ParticleSystem_2D::GetInstance().ReuseButtonEmitter(m_waypointEmitter.lock(), pos, size);
-
-									emitter_3 = true;
+									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
+									b_Weapon_button_vfx = true;
 								}
 							}
 							break;
@@ -830,11 +902,20 @@ namespace Tempest
 		}
 		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
-		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
+		auto tex = tex_map["Assets/AddWeaponIcon.dds"];
+		ImGui::SetCursorPos(ImVec2{ cursor.x + i * 300.0f - tex->GetWidth() * 0.5f * 0.9f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.9f });
+		if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, false, TempWeapon, true);
 		}
+
+
+		/*if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, {10,0}, FONT_BODY))
+		{
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::WEAPON, false, TempWeapon, true);
+		}*/
 
 		ImGui::EndChild();
 		ImGui::PopStyleColor();
@@ -889,11 +970,19 @@ namespace Tempest
 
 		std::_Erase_remove_if(cs->actions, [&destroyed](Entity e) { return destroyed.count(e); });
 
-		if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
+		auto tex = tex_map["Assets/AddActionIcon.dds"];
+		ImGui::SetCursorPos(ImVec2{ cursor.x + i * 300.0f - tex->GetWidth() * 0.5f * 0.9f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.9f });
+		if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.9f, tex->GetHeight() * 0.9f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::ACTION, false, TempWeapon, true);
 		}
+
+	/*	if (UI::UIButton_2("+", "+", ImVec2{ cursor.x + i * 300.0f, cursor.y + j * 100.0f }, { 10,0 }, FONT_BODY))
+		{
+			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
+				SIMULATE_POPUP_TYPE::ACTION, false, TempWeapon, true);
+		}*/
 
 		ImGui::EndChild();
 		ImGui::PopStyleColor();

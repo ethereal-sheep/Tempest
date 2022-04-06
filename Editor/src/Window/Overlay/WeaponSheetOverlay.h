@@ -16,8 +16,10 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/Particles_2D/WaypointEmitter_2D.h"
+struct WaypointEmitter_2D;
+struct ExplosionEmitter_2D;
 
+#include <Tempest/src/Audio/AudioEngine.h>
 namespace Tempest
 {
     class WeaponSheetOverlay : public Window
@@ -88,12 +90,21 @@ namespace Tempest
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        // For tutorial emitter
+        // Task complete VFX
+        std::weak_ptr<ExplosionEmitter_2D> m_explosion_VFX;
+
+        bool b_weapon_RENAME_task_vfx = false;
+        bool b_weapon_ATK_task_vfx = false;
+
+        // Guiding Tutorial Button VFX
         std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
 
         bool emitter_0 = false;
         bool emitter_1 = false;
         bool emitter_2 = false;
         bool emitter_3 = false;
+
+        ChannelID voice_line;
+        bool voice_played{ false };
     };
 }

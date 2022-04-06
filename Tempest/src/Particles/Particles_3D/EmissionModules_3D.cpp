@@ -13,7 +13,7 @@
 MainModule_3D::MainModule_3D()
 	: m_duration{ 10.0f }
 	, m_looping{ false }
-	, m_maxParticles{ 1000 }
+	, m_maxParticles{ 500 }
 	, m_simulationSpeed{ 0.016f }
 	, m_preWarm{ false }
 {}
@@ -25,8 +25,13 @@ GameObjectModule_3D::GameObjectModule_3D()
 {}
 
 ParticleArchetypeModule_3D::ParticleArchetypeModule_3D()
-	: m_startVelocity     { 0.0f, 0.0f, 0.0f }
-	, m_endVelocity       { 0.0f, 0.0f, 0.0f }
+	: m_minSpawnPos{ 0.0f, 0.0f, 0.0f }
+	, m_maxSpawnPos{ 0.0f, 0.0f, 0.0f }
+	
+	, m_SpawnRotation{ 0, 0, 0 }
+
+	, m_velocityStart{ 0.0f, 0.0f, 0.0f }
+	, m_velocityEnd { 0.0f, 0.0f, 0.0f }
 	, m_velocityVariation { 3.0f, 1.0f, 0.0f }
 
 	, m_scaleBegin{ 20.0f, 20.0f, 20.0f }
@@ -49,8 +54,8 @@ EmissionModule_3D::EmissionModule_3D()
 	, m_burstCycle{ 0 }
 	, m_burstCount{ 0 }
 
-	, m_rateOverTime{ 1 }
-	, m_spawnTimeInterval{ 0.080f }
+	, m_rateOverTime{ 0 }
+	, m_spawnTimeInterval{ 0.0f }
 	, m_spawnCountTimer{ m_spawnTimeInterval }
 
 	, m_burstCountTimer {0.0f}
@@ -60,4 +65,5 @@ EmissionModule_3D::EmissionModule_3D()
 
 RendererModule_3D::RendererModule_3D()
 	: m_renderingPath{ "Models/Cube.a" }
+	, m_emissiveLighting { false }
 {}

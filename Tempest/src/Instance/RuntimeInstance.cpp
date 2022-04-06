@@ -13,8 +13,8 @@
 #include "Audio/AudioEngine.h"
 
 // Not supposed to be here
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
-#include "Particles/Particles_3D/UnitTrailEmitter_3D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "Particles/Particles_3D/Unit_MovementTrailEmitter_3D.h"
 
 #include "../Graphics/Basics/LineRenderer.h"
 #include <Util/shape_manip.h>
@@ -157,14 +157,14 @@ namespace Tempest
 				transform = unit.get_current_transform();
 
 				// Shift emitter and calls it to emit particle
-				if (!m_unitTrailEmitter_3D.expired())
+				if (!m_Unit_MovementTrailEmitter_3D.expired())
 				{
-					m_unitTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
-					m_unitTrailEmitter_3D.lock()->Emit(1);
+					m_Unit_MovementTrailEmitter_3D.lock()->m_GM.m_position = transform.position;
+					m_Unit_MovementTrailEmitter_3D.lock()->Emit(1);
 				}
 				else
 				{
-					m_unitTrailEmitter_3D = ParticleSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
+					m_Unit_MovementTrailEmitter_3D = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
 				}
 			}
 
@@ -255,76 +255,11 @@ namespace Tempest
 	}
 	void RuntimeInstance::_render()
 	{
-		// Update the emitter
-		for (auto id : ecs.view<tc::Door, tc::Transform, tc::Shape>())
-		{
-			// Create the emitters if they do not exist
-			if (m_map_interactiveEmitter_3D[id].expired())
-			{
-				auto& transform = ecs.get<tc::Transform>(id);
-				//auto& door = ecs.get<tc::Door>(id);
-				auto& shape = ecs.get<tc::Shape>(id);
 
-				const int& x = shape.x;
-				const int& y = shape.y;
-
-				AABB box;
-
-				auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
-
-				box.min.x = a_x;
-				box.min.z = a_y;
-
-				box.max.x = b_x;
-				box.max.z = b_y;
-
-				auto rot = transform.rotation;
-				box.min = rot * box.min;
-				box.max = rot * box.max;
-
-				box.min.x += transform.position.x;
-				box.min.z += transform.position.z;
-				box.min.y = 0;
-
-				box.max.x += transform.position.x;
-				box.max.z += transform.position.z;
-				box.max.y = 0;
-
-				// Convert to Yaw, Roll, Pitch (Degree)
-				//glm::vec3 euler = glm::eulerAngles(transform.rotation) * 180.0f / 3.14159f;
-
-				//LOG_INFO("Euler X: {0}", euler.x);
-				//LOG_INFO("Euler Y: {0}", euler.y);
-				//LOG_INFO("Euler Z: {0}", euler.z);
-
-				//LOG_INFO("Min X: {0}", box.min.x);
-				//LOG_INFO("Min Y: {0}", box.min.y);
-				//LOG_INFO("Min Z: {0}", box.min.z);
-
-				//LOG_INFO("Max X: {0}", box.max.x);
-				//LOG_INFO("Max Y: {0}", box.max.y);
-				//LOG_INFO("Max Z: {0}", box.max.z);
-
-				//LOG_INFO("Next DOOR");
-
-				if (box.min.x > box.max.x)
-					std::swap(box.min.x, box.max.x);
-
-				if (box.min.y > box.max.y)
-					std::swap(box.min.x, box.max.y);
-
-				if (box.min.z > box.max.z)
-					std::swap(box.min.z, box.max.z);
-
-				m_map_interactiveEmitter_3D[id] = ParticleSystem_3D::GetInstance().CreateInteractiveParticle(transform.position, box.min, box.max);
-
-			}
-		}
 	}
 	void RuntimeInstance::_exit()
 	{
-		ParticleSystem_3D::GetInstance().ClearEmitters();
-		m_map_interactiveEmitter_3D.clear();
+		EmitterSystem_3D::GetInstance().ClearEmitters();
 	}
 
 }

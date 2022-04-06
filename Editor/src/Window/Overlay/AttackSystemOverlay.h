@@ -16,8 +16,10 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
 
-#include "Particles/Particles_2D/WaypointEmitter_2D.h"
-#include "Particles/Particles_2D/ExplosionEmitter_2D.h"
+struct WaypointEmitter_2D;
+struct ExplosionEmitter_2D;
+
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -61,16 +63,16 @@ namespace Tempest
 
         void show(Instance&) override;
 
-		void draw_context(Instance& instance, float height);
-		void draw_node(node_ptr n, const graph& g, Instance& instance);
-		void draw_link(link l, pin_id_t from, pin_id_t to, pin_type type);
+        void draw_context(Instance& instance, float height);
+        void draw_node(node_ptr n, const graph& g, Instance& instance);
+        void draw_link(link l, pin_id_t from, pin_id_t to, pin_type type);
         void draw_input_pin(const input_pin& p, const graph& g);
-		void draw_output_pin(const output_pin& p, float owidth);
+        void draw_output_pin(const output_pin& p, float owidth);
 
-		template <typename TNode>
-		void node_context(
-			graph& g,
-			const char* title);
+        template <typename TNode>
+        void node_context(
+            graph& g,
+            const char* title);
 
         void draw_context(graph& g, Instance& instance);
 
@@ -82,39 +84,54 @@ namespace Tempest
         void copy_selected();
         void paste_selected(graph& g, Instance& instance);
 
-		void update_create(graph& g);
-		void update_delete(graph& g);
-		ImColor get_pin_color(pin_type type);
-		ax::Drawing::IconType get_pin_icon(pin_type type);
+        void update_create(graph& g);
+        void update_delete(graph& g);
+        ImColor get_pin_color(pin_type type);
+        ax::Drawing::IconType get_pin_icon(pin_type type);
 
         ImGuiID HoveredID{ 0 };
-		graph temp_graph;
+        graph temp_graph;
         Entity id = UNDEFINED;
 
         int tutorial_index = 0;
-        
+
         // copyable stuff
         tvector<node> nodes_copied;
         tvector<size_t> links_copied;
         Entity copy_from = UNDEFINED;
 
         ax::NodeEditor::EditorContext* context;
-		ImVec2 mouse = ImVec2(0, 0);
-		bool OverlayOpen = false;
+        ImVec2 mouse = ImVec2(0, 0);
+        bool OverlayOpen = false;
         bool attack_action = false;
         bool defend_action = false;
-        std::string overlay_title{""};
-        std::string sidebar_title{""};
+        std::string overlay_title{ "" };
+        std::string sidebar_title{ "" };
         OPEN_GRAPH_TYPE type{ OPEN_GRAPH_TYPE::GRAPH_ACTION };
         ImGuiTextFilter filter;
 
         interpolater<float> inter{};
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(3);
 
-        // For tutorial emitter
-        std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
-        std::weak_ptr<ExplosionEmitter_2D> m_explosionEmitter;
+        // Node Connection & Task Complete VFX
+        std::weak_ptr<ExplosionEmitter_2D> m_explosion_VFX;
 
+        // Action Graph Task VFX Trigger
+        bool b_action_rename_task_VFX = false;
+        bool b_attackNode_create_task_vfx = false;
+        bool b_attakNode_connect_task_vfx = false;
+
+        // Sequence Graph Task VFX Trigger
+        bool b_sequence_rename_task_VFX = false;
+        bool b_defendNode_create_task_VFX = false;
+        bool b_defendNode_connect_attackNode_task_VFX = false;
+        bool b_defendNode_connect_compareNode_task_VFX = false;
+        bool b_defendNode_output_connect_task_VFX = false;
+
+        // Guiding Tutorial Button VFX
+        std::weak_ptr<WaypointEmitter_2D> m_waypointEmitter;
+
+        // Guiding Tutorial Button VFX Trigger
         bool emitter_0 = false;
         //bool emitter_1 = false;
         bool emitter_2 = false;
@@ -123,5 +140,8 @@ namespace Tempest
 
         bool tut_openSlide = true;
         bool is_during_combat = false;
+
+        ChannelID voice_line{ 0 };
+        bool voice_played[3] = { false, false, false };
     };
 }

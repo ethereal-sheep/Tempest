@@ -16,6 +16,8 @@
 #include "Util.h"
 #include <numbers>
 
+#define GRAVITY -9.8f
+
 Emitter_2D::Emitter_2D()
 {
 	m_particles.resize(m_MM.m_maxParticles);
@@ -28,7 +30,7 @@ Emitter_2D::Emitter_2D()
 		Emit(m_EM.m_rateOverTime);
 }
 
-void Emitter_2D::SelfUpdate()
+void Emitter_2D::Update()
 {
 	if (m_MM.m_preWarm)
 	{
@@ -62,12 +64,12 @@ void Emitter_2D::SelfUpdate()
 		m_GM.m_active = false;
 	else
 		m_MM.m_duration -= m_MM.m_simulationSpeed;
+
+	ParticleUpdate();
 }
 
-void Emitter_2D::Update()
+void Emitter_2D::ParticleUpdate()
 {
-	SelfUpdate();
-
 	// Particle_2D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
 	{
@@ -90,11 +92,69 @@ void Emitter_2D::Update()
 			// Calculate the lifeTime remaining
 			float lifePercent = particle.m_lifeRemaining / particle.m_lifeTime;
 
-			particle.m_size = glm::mix(m_PAM.m_sizeEnd, m_PAM.m_sizeBegin, lifePercent);
+			// Update Velocity
+			if (particle.m_gravity)
+				particle.m_velocity.y += GRAVITY * m_MM.m_simulationSpeed;
+			else
+			{
+				// Velocity
+				particle.m_velocity.x = glm::mix(particle.m_velocityEnd.x, particle.m_velocityBegin.x, lifePercent);
+				particle.m_velocity.y = glm::mix(particle.m_velocityEnd.y, particle.m_velocityBegin.y, lifePercent);
+			}
+
+			particle.m_size = glm::mix(m_PAM.m_scaleEnd, m_PAM.m_scaleBegin, lifePercent);
 			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);
 			particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
 		}
 	}
+}
+
+void Emitter_2D::ParticleSetUp(Particle_2D& particle)
+{
+	//Default set values
+	particle.m_position = m_GM.m_position;
+	particle.m_isActive = true;
+
+	// Velocity from EmissionModule
+	particle.m_velocityBegin = m_PAM.m_velocityStart;
+	particle.m_velocityEnd = m_PAM.m_velocityEnd;
+	particle.m_gravity = m_PAM.m_gravity;
+
+	// Velocity Variation for the Individual Particle
+	if (m_PAM.m_velocityVariation.x)
+	{
+		auto rand_Vel_X = Random::Float() * m_PAM.m_velocityVariation.x;
+
+		particle.m_velocityBegin.x += rand_Vel_X;
+		particle.m_velocityEnd.x += rand_Vel_X;
+	}
+
+	if (m_PAM.m_velocityVariation.y)
+	{
+		auto rand_Vel_Y = Random::Float() * m_PAM.m_velocityVariation.y;
+
+		particle.m_velocityBegin.y += rand_Vel_Y;
+		particle.m_velocityEnd.y += rand_Vel_Y;
+	}
+
+	// Color
+	particle.m_colourBegin = m_PAM.m_colourBegin;
+	particle.m_colourEnd = m_PAM.m_colourEnd;
+
+	// Lifetime
+	particle.m_lifeTime = m_PAM.m_lifeTime;
+	particle.m_lifeRemaining = m_PAM.m_lifeTime;
+
+	// Scale Variation
+	float scaleVariation = 0.0f;
+
+	if (m_PAM.m_scaleVariation >= 1)
+		scaleVariation = Random::Float() * m_PAM.m_scaleVariation;
+
+	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;
+	particle.m_scaleEnd = m_PAM.m_scaleEnd;
+
+	particle.m_type = m_RM.m_type;
 }
 
 void Emitter_2D::Emit(const int particleAmount)
@@ -106,27 +166,7 @@ void Emitter_2D::Emit(const int particleAmount)
 		{
 			// Initailisation of the particle
 			Particle_2D particle;
-
-			particle.m_position = m_GM.m_position;
-			particle.m_isActive = true;
-			//particle.m_rotation = Random::Float() * 2.0f * std::numbers::pi;
-
-			// Velocity
-			particle.m_velocity = m_PAM.m_startVelocity;
-			particle.m_velocity.x += m_PAM.m_velocityVariation.x; //* (Random::Float() - 0.5f);
-			particle.m_velocity.y += m_PAM.m_velocityVariation.y; //* (Random::Float() - 0.5f);
-
-			// Color
-			particle.m_colour.r = m_PAM.m_colourBegin.r; //(Random::Float() - 0.5f);
-			particle.m_colour.g = m_PAM.m_colourBegin.g; //(Random::Float() - 0.5f);
-			particle.m_colour.b = m_PAM.m_colourBegin.b; //(Random::Float() - 0.5f);
-			
-			particle.m_type = m_RM.m_type;
-
-			// Lifetime
-			particle.m_lifeTime = m_PAM.m_lifeTime;
-			particle.m_lifeRemaining = m_PAM.m_lifeTime;
-			particle.m_size = m_PAM.m_sizeBegin + m_PAM.m_sizeVariation;// *(Random::Float() - 0.5f);
+			ParticleSetUp(particle);
 
 			// Allocation of particle
 			m_particles[m_available_ParticleSlots.front()] = particle;

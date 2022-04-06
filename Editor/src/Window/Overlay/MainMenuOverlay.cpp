@@ -17,6 +17,8 @@
 #include "Util/quitter.h"
 #include "Graphics/Basics/RenderSystem.h"
 
+
+
 namespace Tempest
 {
 	void MainMenuOverlay::change_state(UI_SHOW state)
@@ -91,8 +93,6 @@ namespace Tempest
 				appearing = false;
 				return;
 			}
-
-
 
 			instance.window_manager.close_all();
 
@@ -824,7 +824,7 @@ namespace Tempest
 
 			//Project Icon Btn
 			tex = tex_map[projectIconBtn];
-			ImGui::SetCursorPos({ viewport.Size.x * 0.05f, viewport.Size.y * 0.75f });
+			ImGui::SetCursorPos({ viewport.Size.x * 0.05f, viewport.Size.y * 0.78f });
 			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				auto fn = [&]()
@@ -852,9 +852,23 @@ namespace Tempest
 			else
 				settingIconBtn = "Assets/SettingIconBtn_default.dds";
 
+			//Credits Icon Btn
+			tex = tex_map[creditsIconBtn];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.21f, viewport.Size.y * 0.8f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
+			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
+			}
+			if (ImGui::IsItemHovered())
+				creditsIconBtn = "Assets/CreditsIconBtn_hover.dds";
+			else
+				creditsIconBtn = "Assets/CreditsIconBtn_default.dds";
+
 			//QuitIconBtn
 			tex = tex_map[quitIconBtn];
-			ImGui::SetCursorPos({ viewport.Size.x * 0.21f, viewport.Size.y * 0.8f });
+			ImGui::SetCursorPos({ viewport.Size.x * 0.29f, viewport.Size.y * 0.8f });
 			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 
@@ -977,7 +991,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight() }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -999,16 +1013,17 @@ namespace Tempest
 		{
 			// render the select map image
 			auto image = tex_map["Assets/MM_SelectMap.dds"];
-			ImVec2 point = ImGui::GetCursorScreenPos();
-			ImVec2 Min{ point.x, point.y };
-			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
-			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
+			float y_pos = 800.f;
+			//ImVec2 point = ImGui::GetCursorScreenPos();
+			//ImVec2 Min{ point.x, point.y };
+			//ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
 
 			// render title
-			ImGui::SetCursorPos(ImVec2{ 0,0 });
+			/*ImGui::SetCursorPos(ImVec2{ 0,0 });
 			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 			UI::SubHeader("Map Builder");
-			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });*/
 
 
 			// render back button
@@ -1018,7 +1033,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight()}))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1029,21 +1044,27 @@ namespace Tempest
 				// fade in, fade out, visible
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
 			}
-				
-
 			ImGui::PopStyleColor(3);
 
-			ImGui::PushFont(FONT_BTN);
-			// render bottom two buttons
-			if (UI::UIButton_2("New Map", "New Map", ImVec2{ viewport.Size.x * 0.34f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
+			//New Map
+			auto tex = tex_map[newMapBtn];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.2f, viewport.Size.y * 0.25f - inter_nest[0].get() * y_pos });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				ImGui::OpenPopup("NEW MAP");
 				NewMapName = "Map";
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 			}
+			if (ImGui::IsItemHovered())
+				newMapBtn = "Assets/NewMapHoverButton.dds";
+			else
+				newMapBtn = "Assets/NewMapButton.dds";
 
-			if (UI::UIButton_2("Load Map", "Load Map", ImVec2{ viewport.Size.x * 0.66f, viewport.Size.y * 0.85f }, { 0,0 }, FONT_BTN))
+			//Load Map
+			tex = tex_map[loadMapBtn];
+			ImGui::SetCursorPos({ viewport.Size.x * 0.5f, viewport.Size.y * 0.25f - inter_nest[2].get() * y_pos });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ (float)tex->GetWidth(),  (float)tex->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1055,8 +1076,10 @@ namespace Tempest
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
 
 			}
-			
-			ImGui::PopFont();
+			if (ImGui::IsItemHovered())
+				loadMapBtn = "Assets/LoadMapHoverButton.dds";
+			else
+				loadMapBtn = "Assets/LoadMapButton.dds";
 
 			if (UI::ConfirmInputNamePopup("NEW MAP", NewMapName))
 			{
@@ -1104,7 +1127,7 @@ namespace Tempest
 
 
 
-			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight()}))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1234,17 +1257,17 @@ namespace Tempest
 		case Tempest::MainMenuOverlay::UI_SHOW::SELECT_CONFLICT_RES:
 		{
 			// render the select map image
-			auto image = tex_map["Assets/MM_SelectCR.dds"];
+			auto image = tex_map["Assets/Conflict_Sequence_Bg.dds"];
 			ImVec2 point = ImGui::GetCursorScreenPos();
-			ImVec2 Min{ point.x, point.y };
-			ImVec2 Max{ Min.x + viewport.Size.x, Min.y + viewport.Size.y };
+			ImVec2 Min{ point.x + viewport.Size.x * 0.2f, point.y + viewport.Size.y * 0.2f };
+			ImVec2 Max{ Min.x + (float)image->GetWidth(), Min.y + (float)image->GetHeight() };
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
 
 			// render title
-			ImGui::SetCursorPos(ImVec2{ 0,0 });
-			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
-			UI::SubHeader("Select Conflict Resolution");
-			ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			//ImGui::SetCursorPos(ImVec2{ 0,0 });
+			//ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+			//UI::SubHeader("Select Conflict Resolution");
+			//ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
 
 			// render back button
@@ -1254,7 +1277,7 @@ namespace Tempest
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 			image = tex_map["Assets/BackMenuBtn.dds"];
 
-			if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ image->GetWidth() * 0.7f, image->GetHeight() * 0.7f }))
+			if (UI::UIImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight() }))
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
@@ -1273,13 +1296,14 @@ namespace Tempest
 			ImGui::PopStyleColor(3);
 
 			// draw the child
-			const ImVec2 child_size{ viewport.Size.x * 0.25f, viewport.Size.y * 0.55f };
-			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.5f - child_size.x * 0.5f, viewport.Size.y * 0.55f - child_size.y * 0.5f });
+			image = tex_map["Assets/Conflict_Sequence_Bg.dds"];
+			const ImVec2 child_size{ (float)image->GetWidth() * 0.38f, (float)image->GetHeight() * 0.7f };
+			ImGui::SetCursorPos(ImVec2{ Min.x + (float)image->GetWidth()*0.05f, Min.y + (float)image->GetHeight() * 0.18f });
 
-			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,0 });
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0,0,0,1 });
 			if (ImGui::BeginChild("##LoadConflictResMainMenu", child_size, true))
 			{
-				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+				const ImVec2 cusor{ ImGui::GetCursorPosX() + 250.0f, ImGui::GetCursorPosY() + 40.0f };
 				// TODO: load the conflict stuff here
 				int i = 0, u = 0; // i for positioning, u for index
 				for (auto& [b, path] : instance.get_conflict_resolution_paths())
@@ -1291,7 +1315,7 @@ namespace Tempest
 
 					if (OkayConRes[u])
 					{
-						if (UI::UIButton_2(
+						if (UI::UIButton_3(
 							std::string{ name + " " + std::to_string(u+1) }.c_str(),
 							std::string{ name + " " + std::to_string(u+1) }.c_str(),
 							ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50,20 },
@@ -1299,20 +1323,29 @@ namespace Tempest
 						{
 							SelectedSequences.clear();
 							SelectedConflictRes = u;
+							SelectedSequencesint = -1;
 						}
 						++i;
 					}
 					u++;
 					ImGui::PopID();
 				}
-			}
+			
 
+				auto arrow = tex_map["Assets/SelectArrowConflict.dds"];
+				ImVec2 cusor2{ ImVec2{ Min.x + 110.f, Min.y + 155.f} };
+				
+				ImVec2 arrowMin{ cusor2.x, cusor2.y + SelectedConflictRes * 90.0f };
+				ImVec2 arrowMax{ arrowMin.x + (float)arrow->GetWidth(), arrowMin.y + (float)arrow->GetHeight()};
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(arrow->GetID()), arrowMin, arrowMax);
+
+			}
 			ImGui::EndChild();
 
-			ImGui::SetCursorPos(ImVec2{ viewport.Size.x * 0.8f - child_size.x * 0.5f, viewport.Size.y * 0.55f - child_size.y * 0.5f });
+			ImGui::SetCursorPos(ImVec2{ Min.x + (float)image->GetWidth() * 0.57f, Min.y + (float)image->GetHeight() * 0.18f });
 			if (ImGui::BeginChild("##LoadSequenceMainMenu", child_size, true) && SelectedConflictRes >= 0 && SelectedConflictRes < 3 && OkayConRes[SelectedConflictRes])
 			{
-				const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+				const ImVec2 cusor{ ImGui::GetCursorPosX() + 250.0f, ImGui::GetCursorPosY() + 40.0f };
 
 				// TODO: render all the sequences from selected conflict
 				// TODO: make a popup menu
@@ -1323,19 +1356,27 @@ namespace Tempest
 				for (auto& [id, name] : ConResSequences[SelectedConflictRes])
 				{
 					ImGui::PushID(name.c_str());
-					if (UI::UIButton_2(name.c_str(), name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, SelectedSequences.empty() ? false : SelectedSequences[0] == id))
+					if (UI::UIButton_3(name.c_str(), name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, SelectedSequences.empty() ? false : SelectedSequences[0] == id))
 					{
 						SelectedSequences.clear();
 						SelectedSequences.push_back(id);
+						SelectedSequencesint = i;
 						//Service<EventManager>::Get().instant_dispatch<MainMenuSequencePopupTrigger>(SelectedSequences);
 					}
 					i++;
 					ImGui::PopID();
 				}
-
-
-
 				++i;
+
+				if (SelectedSequencesint != -1)
+				{
+					auto arrow = tex_map["Assets/SelectArrowConflict.dds"];
+					ImVec2 cusor2{ ImVec2{ Min.x + (float)image->GetWidth() * 0.52f + 110.f, Min.y + 155.f} };
+
+					ImVec2 arrowMin{ cusor2.x, cusor2.y + SelectedSequencesint * 90.0f };
+					ImVec2 arrowMax{ arrowMin.x + (float)arrow->GetWidth(), arrowMin.y + (float)arrow->GetHeight() };
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(arrow->GetID()), arrowMin, arrowMax);
+				}
 			}
 
 			ImGui::EndChild();

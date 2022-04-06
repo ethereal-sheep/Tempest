@@ -284,4 +284,14 @@ namespace Tempest::Components
 		}
 		return false;
 	}
+	bool Unit::die()
+	{
+		dead = true;
+		return dead;
+	}
+	bool Unit::revive()
+	{
+		dead = false;
+		return dead;
+	}
 }

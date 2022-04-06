@@ -16,6 +16,9 @@
 #include "../Viewport/CameraControls.h"
 #include "Util/interpolater.h"
 
+struct CharacterSpawnEmitter_3D;
+struct CharacterDespawnEmitter_3D;
+
 namespace Tempest
 {
     class PlaceUnitsOverlay : public Window
@@ -39,5 +42,7 @@ namespace Tempest
         void DrawSideBar(Instance& instance, ImVec2 size);
 
         int tutorial_index{ 0 };
+
+        std::weak_ptr<CharacterSpawnEmitter_3D> m_characterSpawnEmitter;
     };
 }

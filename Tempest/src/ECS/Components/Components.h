@@ -287,11 +287,15 @@ namespace Tempest
 			bool is_moving() { return moving; }
 			bool is_attacking() { return attacking; }
 			bool is_end_frame() { return end_frame; }
+			bool is_dead() { return dead; }
+			bool is_dying() { return dying; }
 			Transform get_current_transform() const { return curr_xform; };
 			Local get_current_local() const { return curr_local; };
 
 			bool attack();
 			bool get_hit(float str, float time);
+			bool die();
+			bool revive();
 
 			Local attack_test;
 
@@ -313,6 +317,8 @@ namespace Tempest
 			bool moving = false;
 			bool attacking = false;
 			bool getting_hit = false;
+			bool dying = false;
+			bool dead = false;
 		};
 
 		struct Wall

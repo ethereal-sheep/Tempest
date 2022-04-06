@@ -19,7 +19,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "Particles/Particles_3D/ParticleSystem_3D.h"
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "Profiler/Profiler.h"
 
 namespace Tempest
@@ -473,6 +473,8 @@ namespace Tempest
 				ImGui::RadioButton("Depth", &gBufferView, 7);
 				ImGui::RadioButton("SAO", &gBufferView, 8);
 				ImGui::RadioButton("Velocity", &gBufferView, 9);
+				ImGui::RadioButton("Bloom", &gBufferView, 10);
+				ImGui::RadioButton("Bloom Blur", &gBufferView, 11);
 				ImGui::TreePop();
 			}
 
@@ -872,7 +874,7 @@ namespace Tempest
 	{
 		if (ImGui::CollapsingHeader("Emitters"))
 		{
-			auto m = ParticleSystem_3D::GetInstance().GetEmitter();
+			auto m = EmitterSystem_3D::GetInstance().GetEmitter();
 			for (auto& x : m)
 			{
 				ImGui::Text("Duration: %.2f", x->m_MM.m_duration);

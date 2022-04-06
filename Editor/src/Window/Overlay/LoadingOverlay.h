@@ -20,6 +20,18 @@ namespace Tempest
 {
     class LoadingOverlay : public Window
     {
+    public:
+        LoadingOverlay(bool fade_in = false) : Window()
+        {
+            if (fade_in)
+            {
+                LoadTrigger a;
+                run_until_true = a.do_until_true_fn;
+                to_do_at_end = a.do_at_end_fn;
+
+                state = state::VISIBLE_SKIP;
+            }
+        }
 
         enum struct state
         {
@@ -28,12 +40,14 @@ namespace Tempest
             FULLY_BLACK,
             FADING_IN_LOGO,
             VISIBLE,
+            VISIBLE_SKIP,
+            VISIBLE_SKIP_TWO,
             FULLY_BLACK_OUT,
             FADING_OUT,
             INVISIBLE
         };
 
-        float fade_in_time = .5f, logo_fade_in_time = 1.f, fade_out_time = .5f, visible_time = 0.2f;
+        float fade_in_time = .5f, logo_fade_in_time = .5f, fade_out_time = .5f, visible_time = .5f;
         std::function<bool(void)> run_until_true;
         std::function<void(void)> to_do_at_end;
         interpolater<float> inter;
@@ -106,25 +120,27 @@ namespace Tempest
                 ImGui::PopStyleColor(1);
                 if (inter.is_finished())
                 {
-                    state = state::FULLY_BLACK;
-                    inter.start(end, end, 1.f);
-                }
-                break;
-                [[fallthrough]];
-            case state::FULLY_BLACK:
-                ImGui::SetNextWindowFocus();
-                ImGui::SetNextWindowBgAlpha(end); // Transparent background
-                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
-                if (ImGui::Begin("LOADING##LOADING", nullptr, window_flags))
-                {
-                }
-                ImGui::End();
-                ImGui::PopStyleColor(1);
-                if (inter.is_finished())
-                {
                     state = state::FADING_IN_LOGO;
+                    inter.start(0, end, logo_fade_in_time);
                 }
                 break;
+                //[[fallthrough]];
+            case state::FULLY_BLACK:
+                //ImGui::SetNextWindowFocus();
+                //ImGui::SetNextWindowBgAlpha(end); // Transparent background
+                //ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
+                //if (ImGui::Begin("LOADING##LOADING", nullptr, window_flags))
+                //{
+                //}
+                //ImGui::End();
+                //ImGui::PopStyleColor(1);
+                //if (inter.is_finished())
+                //{
+                //    state = state::FADING_IN_LOGO;
+                //    inter.start(0, end, 1.f);
+                //}
+                //break;
+                [[fallthrough]];
             case state::FADING_IN_LOGO:
                 ImGui::SetNextWindowFocus();
                 ImGui::SetNextWindowBgAlpha(end); // Transparent background
@@ -136,11 +152,14 @@ namespace Tempest
                     const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
                     //button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
                     ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - title_size.x * 0.5f, viewport->Size.y * 0.5f - title_size.y * 0.5f });
-                    ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
+                    ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size, { 0, 0 }, { 1, 1 }, { 1,1,1, inter.get() });
                 }
                 ImGui::End();
                 ImGui::PopStyleColor(1);
-                state = state::VISIBLE;
+                if (inter.is_finished())
+                {
+                    state = state::VISIBLE;
+                }
                 break;
             case state::VISIBLE:
             {
@@ -154,18 +173,59 @@ namespace Tempest
                     const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
                     //button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
                     ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - title_size.x * 0.5f, viewport->Size.y * 0.5f - title_size.y * 0.5f });
-                    ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size);
+                    ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size, { 0, 0 }, { 1, 1 }, { 1,1,1, 1 });
                 }
                 ImGui::End();
                 ImGui::PopStyleColor(1);
                 if (std::invoke(run_until_true))
                 {
                     std::invoke(to_do_at_end);
-                    state = state::FULLY_BLACK_OUT;
-                    inter.start(end, end, visible_time);
+                    state = state::VISIBLE_SKIP;
                 }
                 break;
             }
+            case state::VISIBLE_SKIP:
+            {
+                // skip next frame after 
+                ImGui::SetNextWindowFocus();
+                ImGui::SetNextWindowBgAlpha(end); // Transparent background
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
+                if (ImGui::Begin("LOADING##LOADING", nullptr, window_flags))
+                {
+                    auto viewport = ImGui::GetMainViewport();
+                    auto title_img = tex_map["Assets/MainMenuTitle.dds"];
+                    const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
+                    //button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
+                    ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - title_size.x * 0.5f, viewport->Size.y * 0.5f - title_size.y * 0.5f });
+                    ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size, { 0, 0 }, { 1, 1 }, { 1,1,1, 1 });
+                }
+                ImGui::End();
+                ImGui::PopStyleColor(1);
+                state = state::VISIBLE_SKIP_TWO;
+                break;
+            }
+            case state::VISIBLE_SKIP_TWO:
+            {
+                // skip next frame after 
+                ImGui::SetNextWindowFocus();
+                ImGui::SetNextWindowBgAlpha(end); // Transparent background
+                ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
+                if (ImGui::Begin("LOADING##LOADING", nullptr, window_flags))
+                {
+                    auto viewport = ImGui::GetMainViewport();
+                    auto title_img = tex_map["Assets/MainMenuTitle.dds"];
+                    const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
+                    //button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
+                    ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - title_size.x * 0.5f, viewport->Size.y * 0.5f - title_size.y * 0.5f });
+                    ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size, { 0, 0 }, { 1, 1 }, { 1,1,1, 1 });
+                }
+                ImGui::End();
+                ImGui::PopStyleColor(1);
+                state = state::FULLY_BLACK_OUT;
+                inter.start(end, 0, logo_fade_in_time);
+                break;
+            }
+
             case state::FULLY_BLACK_OUT:
             {
                 ImGui::SetNextWindowFocus();
@@ -173,6 +233,12 @@ namespace Tempest
                 ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, inter.get()));
                 if (ImGui::Begin("LOADING##LOADING", nullptr, window_flags))
                 {
+                    auto viewport = ImGui::GetMainViewport();
+                    auto title_img = tex_map["Assets/MainMenuTitle.dds"];
+                    const ImVec2 title_size{ title_img->GetWidth() * 1.0f, title_img->GetHeight() * 1.0f };
+                    //button_pos.x = viewport.Size.x * 0.5f - title_size.x * 0.5f;
+                    ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - title_size.x * 0.5f, viewport->Size.y * 0.5f - title_size.y * 0.5f });
+                    ImGui::Image((void*)static_cast<size_t>(title_img->GetID()), title_size, { 0, 0 }, { 1, 1 }, { 1,1,1, inter.get() });
                 }
                 ImGui::End();
                 ImGui::PopStyleColor(1);

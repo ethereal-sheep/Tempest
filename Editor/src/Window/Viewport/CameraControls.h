@@ -808,6 +808,7 @@ namespace Tempest
 
 		void force_look_at(Camera& cam, glm::vec3 point)
 		{
+			cam.SetRotation(glm::quat_identity<float, glm::highp>());
 			auto pos = point - cam.GetPosition();
 			auto front = cam.GetFront();
 
