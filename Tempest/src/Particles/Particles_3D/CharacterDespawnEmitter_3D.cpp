@@ -1,13 +1,13 @@
 
 
-#include "CharacterSpawnEmitter_3D.h"
+#include "CharacterDespawnEmitter_3D.h"
 
 #include "../Random.h"
 #include <algorithm>
 
 #include "Logger/Log.h"
 
-CharacterSpawnEmitter_3D::CharacterSpawnEmitter_3D()
+CharacterDespawnEmitter_3D::CharacterDespawnEmitter_3D()
 {
 	// Initialise all the waypoints
 	for (short i = 0; i < waypoint_Index; ++i)
@@ -49,14 +49,14 @@ CharacterSpawnEmitter_3D::CharacterSpawnEmitter_3D()
 	m_RM.m_emissiveLighting = true;
 }
 
-void CharacterSpawnEmitter_3D::AssignWaypoint(const std::array<glm::vec3, waypoint_Index> newWaypoints)
+void CharacterDespawnEmitter_3D::AssignWaypoint(const std::array<glm::vec3, waypoint_Index> newWaypoints)
 {
 	// Initialise all the waypoints
 	for (short i = 0; i < waypoint_Index; ++i)
 		m_wayPoints[i] = newWaypoints[i];
 }
 
-void CharacterSpawnEmitter_3D::Emit(const int particleAmount)
+void CharacterDespawnEmitter_3D::Emit(const int particleAmount)
 {
 	// Emit only if enough particle
 	if (particleAmount > 0 && m_available_ParticleSlots.size() > 0)
@@ -79,38 +79,38 @@ void CharacterSpawnEmitter_3D::Emit(const int particleAmount)
 			case 0: // LEFT
 				particle.m_position   = m_wayPoints[0];
 
-				particle.m_velocityBegin = glm::vec3{ 0.f, -8.f, -1.5f };
-				particle.m_velocityEnd   = glm::vec3{ 0.f, -8.f, -2.0f };
+				particle.m_velocityBegin = glm::vec3{ 0.f, 8.f, 1.5f };
+				particle.m_velocityEnd   = glm::vec3{ 0.f, 8.f, 1.1f };
 
-				particle.m_scaleBegin = glm::vec3{ 0.1f, 0.03f, 0.01f };
-				particle.m_scaleEnd   = glm::vec3{ 0.62f, 0.03f, 0.03f };
+				particle.m_scaleBegin = glm::vec3{ 0.53f, 0.03f, 0.03f };
+				particle.m_scaleEnd   = glm::vec3{ 0.095f, 0.03f, 0.01f };
 				break;
 			case 1: // RIGHT
 				particle.m_position   = m_wayPoints[1];
 
-				particle.m_velocityBegin = glm::vec3{ 0.f, -8.f, 1.5f };
-				particle.m_velocityEnd   = glm::vec3{ 0.f, -8.f, 2.0f };
+				particle.m_velocityBegin = glm::vec3{ 0.f, 8.f, -1.5f };
+				particle.m_velocityEnd = glm::vec3{ 0.f, 8.f, -1.1f };
 
-				particle.m_scaleBegin = glm::vec3{ 0.1f, 0.03f, 0.01f };
-				particle.m_scaleEnd   = glm::vec3{ 0.62f, 0.03f, 0.03f };
+				particle.m_scaleBegin = glm::vec3{ 0.53f, 0.03f, 0.03f };
+				particle.m_scaleEnd   = glm::vec3{ 0.095f, 0.03f, 0.01f };
 				break;
 			case 2: // TOP
 				particle.m_position   = m_wayPoints[2];
 
-				particle.m_velocityBegin = glm::vec3{ 1.5f, -8.f, 0.f };
-				particle.m_velocityEnd   = glm::vec3{ 2.0f, -8.f, 0.0f };
+				particle.m_velocityBegin = glm::vec3{ -1.5f, 8.f, 0.f };
+				particle.m_velocityEnd = glm::vec3{ -1.1f, 8.f, 0.0f };
 
-				particle.m_scaleBegin = glm::vec3{ 0.01f, 0.03f, 0.1f };
-				particle.m_scaleEnd   = glm::vec3{ 0.03f, 0.03f, 0.62f };
+				particle.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.53f };
+				particle.m_scaleEnd   = glm::vec3{ 0.01f, 0.03f, 0.095f };
 				break;
 			case 3: // BTM
 				particle.m_position   = m_wayPoints[3];
 
-				particle.m_velocityBegin = glm::vec3{ -1.5f, -8.f, 0.f };
-				particle.m_velocityEnd   = glm::vec3{ -2.0f, -8.f, 0.0f };
+				particle.m_velocityBegin = glm::vec3{ 1.5f, 8.f, 0.f };
+				particle.m_velocityEnd = glm::vec3{ 1.1f, 8.f, 0.0f };
 
-				particle.m_scaleBegin = glm::vec3{ 0.01f, 0.03f, 0.1f };
-				particle.m_scaleEnd   = glm::vec3{ 0.03f, 0.03f, 0.62f };
+				particle.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.53f };
+				particle.m_scaleEnd   = glm::vec3{ 0.01f, 0.03f, 0.095f };
 				break;
 			default:
 				break;

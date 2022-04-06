@@ -17,6 +17,7 @@
 #include "Util/interpolater.h"
 
 struct CharacterSpawnEmitter_3D;
+struct CharacterDespawnEmitter_3D;
 
 namespace Tempest
 {

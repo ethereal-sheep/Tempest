@@ -446,7 +446,7 @@ namespace Tempest
 									transform.position = inter;
 
 									// Instantiate the character VFX
-									EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(m_characterSpawnEmitter, transform.position);
+									EmitterSystem_3D::GetInstance().CharacterSpawnEmitter(m_characterSpawnEmitter, transform.position);
 								}
 								else
 								{
@@ -499,7 +499,7 @@ namespace Tempest
 									instance.ecs.get<tc::Character>(entity).isInCombat = true;
 									transform.position = inter;
 
-									EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(m_characterSpawnEmitter, transform.position);
+									EmitterSystem_3D::GetInstance().CharacterSpawnEmitter(m_characterSpawnEmitter, transform.position);
 
 									// tutorial stuff oh dears
 									if (instance.tutorial_enable)
