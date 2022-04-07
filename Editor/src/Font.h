@@ -112,15 +112,19 @@ namespace Tempest
 		return path;
 	}
 
+	void reset_blocking();
+	bool check_mouse_blocking();
 	bool check_if_mouse_within(const ImVec2 min, const ImVec2 max);
 
-	void block_input_if_mouse_in_bounds(ImVec2 pos, ImVec2 size);
 
+	/* IMPT*/
+	// Blocks all imgui input if mouse is not in bounds
+	void block_input_if_mouse_not_in_bounds(ImVec2 pos, ImVec2 size);
+
+	// Override the mouse blocking if the mouse is in a certain bounds
 	void override_mouse_blocking(ImVec2 pos, ImVec2 size);
 
-	void reset_blocking();
-
-	bool check_mouse_blocking();
-
+	// Use when u still want mouse click when everything is blocked
+	// not affected by mouse blocking
 	bool NonImGuiMouseClick();
 }

@@ -14,7 +14,7 @@ namespace Tempest
 		return false;
 	}
 
-	void block_input_if_mouse_in_bounds(ImVec2 pos, ImVec2 size)
+	void block_input_if_mouse_not_in_bounds(ImVec2 pos, ImVec2 size)
 	{
 		auto max = pos;
 		max.x += size.x;
