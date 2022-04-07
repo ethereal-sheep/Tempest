@@ -2227,7 +2227,7 @@ namespace Tempest
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.635f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.38f };
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.636f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.383f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 
@@ -2298,7 +2298,7 @@ namespace Tempest
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.375f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.38f };
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.376f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.384f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 
@@ -2349,11 +2349,12 @@ namespace Tempest
 				ImVec2 endPos = ImVec2{ 0.f, 0.f };
 
 				if (win)
-					startPos = ImVec2{ viewport->Size.x * 0.36f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+					startPos = ImVec2{ viewport->Size.x * 0.35f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.4f };
 				else
-					startPos = ImVec2{ viewport->Size.x * 0.62f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+					startPos = ImVec2{ viewport->Size.x * 0.61f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.4f };
 
-				endPos = ImVec2{ startPos.x + 50.0f, startPos.y };
+				
+				endPos = ImVec2{ startPos.x + 100.0f, startPos.y };
 				EmitterSystem_2D::GetInstance().CreateLineEmitter(m_winningNumber_VFX, startPos, endPos);
 
 				b_playerOne_Rolled = false;
