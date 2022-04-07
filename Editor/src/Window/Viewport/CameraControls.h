@@ -848,7 +848,7 @@ namespace Tempest
 			start_position = cam.GetPosition();
 
 			auto currentPos = cam.GetPosition();
-			auto now = cam.GetFrontRay();
+			auto now = cam.GetFront();
 
 			float now_dist = 0.f;
 			bool now_intersect = glm::intersectRayPlane(currentPos, now, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
@@ -865,6 +865,29 @@ namespace Tempest
 				end_position = currentPos + v;
 
 				easing = EasingMode::INOUTSINE;
+			}
+		}
+
+		void force_move_look_at(Camera& cam, glm::vec3 point, float time = 1.f)
+		{
+			auto currentPos = cam.GetPosition();
+			auto now = cam.GetFront();
+
+			float now_dist = 0.f;
+			bool now_intersect = glm::intersectRayPlane(currentPos, now, glm::vec3{}, glm::vec3{ 0,1,0 }, now_dist);
+
+			if (now_intersect)
+			{
+				auto now_pos = currentPos + now * now_dist;
+				auto v = point - now_pos;
+
+				current_pos_time = time;
+				total_pos_time = time;
+
+				start_position = currentPos + v;
+				end_position = currentPos + v;
+
+				cam.SetPosition(start_position);
 			}
 		}
 
@@ -920,10 +943,41 @@ namespace Tempest
 				current_pos_time = 1.f;
 				total_pos_time = 1.f;
 
+
+
 				start_rotation = cam.GetQuatRotation();
 				end_rotation = rot;
 
 				current_rot_time = 0.f;
+				total_rot_time = 1.f;
+
+				mode = CameraControlMode::FIXED;
+			}
+		}
+
+		void force_set_fixed_camera(Camera& cam, float yaw = 0.f, float pitch = 45.f)
+		{
+			if (mode != CameraControlMode::FIXED)
+			{
+				auto rot = glm::angleAxis(glm::radians(yaw), vec3{ 0, 1 ,0 });
+				auto left = glm::conjugate(rot) * vec3 { 1, 0, 0 };
+
+				rot = rot * glm::angleAxis(glm::radians(pitch), left);
+
+				start_position = cam.GetPosition();
+				end_position = cam.GetPosition();
+
+				current_pos_time = 1.f;
+				total_pos_time = 1.f;
+
+
+
+				start_rotation = rot;
+				end_rotation = rot;
+
+				cam.SetRotation(rot);
+
+				current_rot_time = 1.f;
 				total_rot_time = 1.f;
 
 				mode = CameraControlMode::FIXED;

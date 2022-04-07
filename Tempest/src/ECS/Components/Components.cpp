@@ -8,6 +8,7 @@
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
 #include "Components.h"
+#include "Audio/AudioEngine.h"
 
 namespace Tempest::Components
 {
@@ -127,6 +128,11 @@ namespace Tempest::Components
 
 
 				end_frame = true;
+
+
+				AudioEngine ae;
+				ae.Play("Sounds2D/PlayerMovement.wav", "SFX");
+
 			}
 			else
 			{
@@ -274,6 +280,24 @@ namespace Tempest::Components
 				end_frame = true;
 			}
 		}
+		else if (dropping)
+		{
+			if (current_time < interpolation_time)
+			{
+				end_frame = false;
+
+				current_time += dt;
+				auto a = glm::clamp(current_time / interpolation_time, 0.f, 1.f);
+				auto t = glm::sineEaseIn(a);
+
+				curr_local.local_position.y = glm::mix(height, 0.f, t);
+			}
+			else
+			{
+				dropping = false;
+				end_frame = true;
+			}
+		}
 		else
 		{
 			end_frame = false;
@@ -282,7 +306,7 @@ namespace Tempest::Components
 
 	bool Unit::set_path(const tvector<glm::ivec2>& p, const Transform& curr)
 	{
-		if (!moving && !attacking && !getting_hit)
+		if (!moving && !attacking && !getting_hit && !dropping)
 		{
 			path = p;
 			moving = true;
@@ -297,7 +321,7 @@ namespace Tempest::Components
 
 	bool Unit::attack()
 	{
-		if (!moving && !attacking && !getting_hit)
+		if (!moving && !attacking && !getting_hit && !dropping)
 		{
 			attack_state = 0;
 			current_time = 10000.f;
@@ -311,7 +335,7 @@ namespace Tempest::Components
 	}
 	bool Unit::get_hit(float str, float time)
 	{
-		if (!moving && !attacking && !getting_hit)
+		if (!moving && !attacking && !getting_hit && !dropping)
 		{
 			current_time = 0.f;
 			interpolation_time = time;
@@ -326,6 +350,19 @@ namespace Tempest::Components
 	{
 		dead = true;
 		return dead;
+	}
+	bool Unit::drop(float fall_height, float time)
+	{
+		if (!moving && !attacking && !getting_hit && !dropping)
+		{
+			current_time = 0.f;
+			interpolation_time = time;
+			height = fall_height;
+			dropping = true;
+			curr_local = Local();
+			return true;
+		}
+		return false;
 	}
 	bool Unit::revive()
 	{

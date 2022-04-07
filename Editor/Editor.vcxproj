@@ -238,6 +238,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\PauseOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\PlaceUnitCinematic.cpp" />
     <ClCompile Include="src\Window\Overlay\PlaceUnitsOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\RuntimeStartup.cpp" />
     <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp" />
@@ -305,6 +306,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Overlay\LoadingOverlay.h" />
     <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />
     <ClInclude Include="src\Window\Overlay\PauseOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\PlaceUnitCinematic.h" />
     <ClInclude Include="src\Window\Overlay\PlaceUnitsOverlay.h" />
     <ClInclude Include="src\Window\Overlay\RuntimeStartup.h" />
     <ClInclude Include="src\Window\Overlay\SimulateOverlay.h" />

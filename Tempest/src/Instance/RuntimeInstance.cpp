@@ -167,12 +167,11 @@ namespace Tempest
 					m_Unit_MovementTrailEmitter_3D = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(transform.position);
 				}
 			}
-
-			if (unit.is_end_frame())
+			/*else if (unit.is_dropping())
 			{
-				AudioEngine ae;
-				ae.Play("Sounds2D/PlayerMovement.wav", "SFX");
-			}
+				transform = unit.get_current_transform();
+			}*/
+
 		}
 
 

@@ -3445,7 +3445,10 @@ namespace Tempest
 		state = State::MENU;
 
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		cam_ctrl.set_fixed_camera(cam, 0 , 70);
+		cam_ctrl.force_set_fixed_camera(cam, 0 , 70);
+
+
+		
 
 		selected_action = UNDEFINED;
 		other_selected_action = UNDEFINED;
@@ -3455,6 +3458,11 @@ namespace Tempest
 		curr_entity = units[curr_turn];
 
 		reset_menu();
+
+		if (auto t = a.instance.ecs.get_if<tc::Transform>(curr_entity))
+		{
+			cam_ctrl.move_look_at(cam, t->position);
+		}
 
 		units_results.clear();
 

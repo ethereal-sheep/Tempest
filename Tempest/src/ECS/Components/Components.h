@@ -289,11 +289,13 @@ namespace Tempest
 			bool is_end_frame() { return end_frame; }
 			bool is_dead() { return dead; }
 			bool is_dying() { return dying; }
+			bool is_dropping() { return dropping; }
 			Transform get_current_transform() const { return curr_xform; };
 			Local get_current_local() const { return curr_local; };
 
 			bool attack();
 			bool get_hit(float str, float time);
+			bool drop(float height, float time);
 			bool die();
 			bool revive();
 
@@ -312,6 +314,7 @@ namespace Tempest
 			float interpolation_time = 1.f;
 			float current_time = 0.f;
 			float hit_str = 1.f;
+			float height = 0.f;
 
 			bool end_frame = false;
 			bool moving = false;
@@ -319,6 +322,7 @@ namespace Tempest
 			bool getting_hit = false;
 			bool dying = false;
 			bool dead = false;
+			bool dropping = false;
 		};
 
 		struct Wall

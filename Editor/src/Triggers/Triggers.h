@@ -132,7 +132,8 @@ namespace Tempest
 	};
 	struct OpenCombatModeTrigger : public Event 
 	{
-		OpenCombatModeTrigger(const tvector<Entity>& _units) : units{ _units }  {}
+		OpenCombatModeTrigger(Instance& in, const tvector<Entity>& _units) : instance{ in }, units { _units }  {}
+		Instance& instance;
 		tvector<Entity> units;
 	};
 	struct CombatModeVisibility : public Event
@@ -295,5 +296,13 @@ namespace Tempest
 	{
 		SendCombatResults(std::map<Entity, UnitResult> results) : units_results{ results } {}
 		std::map<Entity, UnitResult>  units_results;
+	};
+
+	struct PlayPlaceUnitCinematic : public Event
+	{
+		PlayPlaceUnitCinematic(Instance& in, tvector<Entity> newTurnOrder) 
+			: instance{ in }, entities{ newTurnOrder } {}
+		Instance& instance;
+		tvector<Entity> entities;
 	};
 }
