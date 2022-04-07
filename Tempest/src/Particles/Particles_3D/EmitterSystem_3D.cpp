@@ -278,7 +278,7 @@ void EmitterSystem_3D::CharacterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter
 	wk_ptr.lock()->m_MM.m_duration = 5.0f;
 	wk_ptr.lock()->m_GM.m_active = true;
 
-	wk_ptr.lock()->m_EM.m_burstInterval = 0.064f;
+	wk_ptr.lock()->m_EM.m_burstInterval = 0.096f;
 	wk_ptr.lock()->m_EM.m_burstCount = 4;
 	wk_ptr.lock()->m_EM.m_burstCycle = 8;
 
@@ -411,6 +411,10 @@ void EmitterSystem_3D::CreateChracterChargedAttackEmitter(std::weak_ptr<Characte
 	wk_ptr.lock()->m_GM.m_position = spawnPos;
 	wk_ptr.lock()->m_MM.m_duration = 60.0f;
 	wk_ptr.lock()->m_GM.m_active = true;
+
+	wk_ptr.lock()->m_EM.m_burstInterval = 0.016f;
+	wk_ptr.lock()->m_EM.m_burstCount = 2;
+	wk_ptr.lock()->m_EM.m_burstCycle = 56;
 
 	// Edit the position for waypoint - spawnPos is the middle of the tile;
 	glm::vec3 wp_btm_left_Pos = spawnPos;
