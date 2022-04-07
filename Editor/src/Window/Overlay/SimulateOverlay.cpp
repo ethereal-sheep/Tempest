@@ -769,7 +769,7 @@ namespace Tempest
 						if (UI::MouseIsWithin(tut_min, tut_max))
 						{
 							ImGui::SetMouseCursor(7);
-							if (ImGui::IsMouseClicked(0))
+							if (NonImGuiMouseClick())
 							{
 								instance.tutorial_temp_exit = true;
 								ImGui::OpenPopup("TutorialExitPopupConfirm");

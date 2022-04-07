@@ -138,6 +138,9 @@
     <ClCompile Include="src\Window\Overlay\PlaceUnitCinematic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Font.h">
@@ -435,6 +438,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\Overlay\PlaceUnitCinematic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\InputBlocker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
