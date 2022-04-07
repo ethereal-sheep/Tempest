@@ -68,7 +68,7 @@ namespace Tempest
 
     void RenderSystem::InitAnimations()
     {
-        string path = "../../../Resource/Animations/";
+        string path = "Animations/";
         for (const auto & file : std::filesystem::directory_iterator(path))
             LoadModel(file.path().string());
     }
