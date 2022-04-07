@@ -132,11 +132,12 @@ namespace Tempest
 		}
 
 		// with unit
-		auto view7 = ecs.view<tc::Model, tc::Local, tc::Unit, tc::Transform>(exclude_t<tc::Destroyed>());
+		auto view7 = ecs.view<tc::Animation, tc::Model, tc::Local, tc::Unit, tc::Transform>(exclude_t<tc::Destroyed>());
 		for (auto id : view7)
 		{
 			auto unit = ecs.get_if<tc::Unit>(id);
 			auto transform = ecs.get_if<tc::Transform>(id);
+			auto anim = ecs.get_if<tc::Animation>(id);
 
 			{
 				auto model = ecs.get_if<tc::Model>(id);
@@ -160,18 +161,13 @@ namespace Tempest
 					/*auto test1 = glm::translate(transform->position)
 						* glm::mat4(transform->rotation)
 						* glm::scale(transform->scale);*/
+				//	if(anim->if_end(id))
+				//		anim->force_change(id, "../../../Resource/Animations/Unit_TaiChi.fbx");
 
-					if (model->path.substr(model->path.length() - 2) == ".a")
-						Service<RenderSystem>::Get().SubmitModel(model->path, test, character->color);
+					if(character->color == glm::vec3(0.f, 0.f, 0.f))
+						Service<RenderSystem>::Get().SubmitModel(model->path, test, id);
 					else
-					{
-						auto test1 = glm::translate(transform->position)
-							* glm::mat4(transform->rotation)
-							* glm::scale(transform->scale);
-						Service<RenderSystem>::Get().SubmitModel(model->path, test1, id);
-					}
-
-					//Service<RenderSystem>::Get().SubmitModel("../../../Resource/Models/Unit_Punch.fbx", test1, id);
+						Service<RenderSystem>::Get().SubmitModel(model->path, test, id, character->color);
 				}
 				//Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}

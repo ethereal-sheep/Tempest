@@ -673,7 +673,8 @@ namespace Tempest
 					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA))
 					{
 						// reset previous unit to default
-						instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+					//	instance.ecs.get_if<tc::Animation>(curr_entity)->stop(curr_entity);
+					//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 						curr_entity = increase_turn();
 
 						if (auto t = instance.ecs.get_if<tc::Transform>(curr_entity))
@@ -697,7 +698,7 @@ namespace Tempest
 							// make current unit idle (comment out first cuz can't switch fbx)
 						//	if (state != State::CINEMATIC)
 						//		instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Idle.fbx";
-
+							
 							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -1465,7 +1466,18 @@ namespace Tempest
 							// Attack
 							auto attacker = curr_entity;
 
+
+						//	if (other_entity != UNDEFINED)
+						//		instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+
 							other_entity = instance.character_map[w_x][w_y];
+
+						//	auto anim = instance.ecs.get_if<tc::Animation>(other_entity);
+						//	if (anim->if_end(other_entity))
+						//	{
+						//		anim->change_animation(other_entity, "../../../Resource/Animations/Unit_Idle.fbx");
+						//		anim->play(other_entity, true);
+						//	}
 
 							// PSEUDO (this does not work ? when it needs to be changed to block)
 						//	instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Idle.fbx";
@@ -2135,8 +2147,9 @@ namespace Tempest
 			//battle_state = BATTLE_STATE::SELECT_OTHER;
 			display_curr_stat = false;
 			display_other_stat = false;
-			if (other_entity != INVALID)
-				instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+		//	if (other_entity != INVALID)
+		//		instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
 			instance.selected = INVALID;
 			state = State::MENU;
 			battle_state = BATTLE_STATE::CURR_TURN; // temp testing
@@ -2530,9 +2543,16 @@ namespace Tempest
 			auto back_to_main = [&]() {
 
 				// reset model
-				instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
-				if (other_entity != INVALID)
-					instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+				
+			//	auto anim = instance.ecs.get_if<tc::Animation>(curr_entity);
+			//	anim->stop(curr_entity);
+			//	anim->change_animation(curr_entity, "../../../Resource/Animations/Unit_Idle.fbx");
+			//	anim->play(curr_entity, true);
+
+			//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+			//	if (other_entity != INVALID)
+			//		instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+					//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
 
 				cam.SetPosition(cam_pos);
 				cam.SetRotation(cam_rot);
@@ -2619,7 +2639,11 @@ namespace Tempest
 
 				// PSEUDO 
 				// instead of jumping onto the enemy, wobble back-front
-				instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.fbx";
+				auto anim = instance.ecs.get_if<tc::Animation>(curr_entity);
+			//	anim->stop(curr_entity);
+				anim->change_animation(curr_entity, "../../../Resource/Animations/Unit_Punch.fbx");
+				anim->play(curr_entity);
+			//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.fbx";
 			}
 
 
@@ -2683,7 +2707,11 @@ namespace Tempest
 
 				//PSEUDO
 				// make enemy wobble left-right
-				instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.fbx";
+				auto anim = instance.ecs.get_if<tc::Animation>(other_entity);
+			//	anim->stop(other_entity);
+				anim->change_animation(other_entity, "../../../Resource/Animations/Unit_Block.fbx");
+				anim->play(other_entity);
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.fbx";
 			}
 		}
 		break;
@@ -3107,8 +3135,10 @@ namespace Tempest
 
 			//PSEUDO
 			// change back the models
-			instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
-			instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+		//	instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+		//	instance.ecs.get_if<tc::Animation>(curr_entity)->stop(curr_entity);
+		//	instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+		//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 		}
 
 	}
