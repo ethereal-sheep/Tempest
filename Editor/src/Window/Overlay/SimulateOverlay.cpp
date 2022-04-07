@@ -825,9 +825,9 @@ namespace Tempest
 						SIMULATE_POPUP_TYPE::SEQUENCE, false, sequence);
 				}
 				push_button_style();
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.25f });
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.25f });
 				ImGui::PushID("seq");
-				if (sequence != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
+				if (sequence != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 				{
 					Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
 					Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(sequence, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
@@ -1097,7 +1097,7 @@ namespace Tempest
 		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() - 15.0f, ImGui::GetCursorPosY() + 15.0f});
 		push_button_style();
 		ImGui::PushID("chara" + is_attacker);
-		if (temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
+		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_UNIT, is_attacker, temp);
@@ -1112,18 +1112,20 @@ namespace Tempest
 
 		temp = is_attacker ? attacker.weapon : defender.weapon;
 		ImGui::SetCursorPos({ start_pos.x + offset2, start_pos.y + padding * 4.0f });
-		if (UI::UIButton_Weapon(instance, temp, "SELECT WEAPON", "SELECT WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		if (UI::UIButton_Weapon(instance, temp, "NO WEAPON", "NO WEAPON", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
 				tutorial_index = 5;
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, temp);
 		}
-		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
+		/*ImGui::SameLine();
+		ImGui::Dummy({ 80.f,0.f });
+		ImGui::SameLine();*/
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 100.f, ImGui::GetCursorPosY() - 30.f});
 		push_button_style();
 		ImGui::PushID("weapon" + is_attacker);
-		if (temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
+		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_WEAPON, is_attacker, temp);
@@ -1141,7 +1143,7 @@ namespace Tempest
 		temp = is_attacker ? attacker.action : defender.action;
 		ImGui::SetCursorPos({ start_pos.x + offset3, start_pos.y + padding * 7.0f });
 		ImGui::PushID("action" + is_attacker);
-		if (UI::UIButton_Action(instance, temp,"SELECT ACTION", "SELECT ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		if (UI::UIButton_Action(instance, temp,"NO ACTION", "NO ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
 				tutorial_index = 7;
@@ -1149,10 +1151,9 @@ namespace Tempest
 				SIMULATE_POPUP_TYPE::ACTION, is_attacker, temp);
 		}
 		ImGui::PopID();
-		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 100.f, ImGui::GetCursorPosY() - 30.f });
 		push_button_style();
-		if (temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
+		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{
 			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
