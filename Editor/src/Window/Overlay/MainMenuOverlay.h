@@ -63,8 +63,8 @@ namespace Tempest
             ae.StopAllChannels();
             MenuBGM = ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 
-            //EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(1920.f, 1080.f));
-            EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(2560.f, 1440.f));
+            EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(1920.f, 1080.f));
+            //EmitterSystem_2D::GetInstance().CreateBackgroundEmitter(m_bg_VFX, glm::vec2(0.f, 0.f), glm::vec2(2560.f, 1440.f));
 
             m_bg_VFX.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 0.5f };
             m_bg_VFX.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };

@@ -1061,6 +1061,7 @@ namespace Tempest
 			ImGui::SetCursorPosY(0);
 			if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 			{
+				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_unit_Remove_VFX, instance.ecs.get<tc::Transform>(other_entity).position);
 				instance.ecs.destroy(other_entity);
 				other_entity = INVALID;
 				ImGui::CloseCurrentPopup();
@@ -2222,10 +2223,11 @@ namespace Tempest
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
 
+			// Defender / Right hand side combat roll
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.635f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.38f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 
@@ -2292,10 +2294,11 @@ namespace Tempest
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
 
+			// Attacker / Left hand side combat roll
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.375f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.38f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 
@@ -2337,7 +2340,7 @@ namespace Tempest
 		// reset the scale
 		FONT_HEAD->Scale = 1.0f;
 		
-		// VFX for combat roll
+		// VFX for combat roll done
 		if (inter1.is_finished() && inter2.is_finished())
 		{
 			if (b_playerOne_Rolled && b_playerTwo_Rolled)
