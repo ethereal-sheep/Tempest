@@ -24,7 +24,7 @@ CharacterSpawnEmitter_3D::CharacterSpawnEmitter_3D()
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
 	m_EM.m_rateOverTime = 4;*/
 
-	m_EM.m_burstInterval = 0.064f;
+	m_EM.m_burstInterval = 0.096f;
 	m_EM.m_burstCount = 4;
 	m_EM.m_burstCycle = 8;
 

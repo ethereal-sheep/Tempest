@@ -21,9 +21,13 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	m_MM.m_preWarm = true;
 	Emitter_3D::UpdateMaxParticle(1000);
 
-	m_EM.m_spawnTimeInterval = 0.016f;
-	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
-	m_EM.m_rateOverTime = 10;
+	//m_EM.m_spawnTimeInterval = 0.016f;
+	//m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
+	//m_EM.m_rateOverTime = 2;
+
+	m_EM.m_burstInterval = 0.016f;
+	m_EM.m_burstCount = 2;
+	m_EM.m_burstCycle = 56;
 
 	// Particle Architype values - without consideration for default ctor
 	m_PAM.m_velocityStart = glm::vec3{ 0.f, 1.f, 0.0f };
