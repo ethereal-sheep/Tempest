@@ -65,7 +65,7 @@ namespace Tempest
         state state = state::APPEAR;
 
         string logo1 = "Assets/DigiPen_Logo_RED.png";
-        string logo2 = "Assets/Placeholder_Character.dds";
+        string logo2 = "Assets/IntroSoft.png";
 
         const char* window_name() override
         {

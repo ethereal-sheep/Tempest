@@ -81,14 +81,51 @@ namespace Tempest::Components
 			{
 				current_time = 0.f;
 
+				//auto current_front = next_xform.position - prev_xform.position;
 				prev_xform = next_xform;
 
-				auto& v1 = path[path.size() - 1];
+				auto v1 = path[path.size() - 1];
 
 				next_xform.position.x = v1.x + .5f;
 				next_xform.position.z = v1.y + .5f;
 
 				path.pop_back();
+
+				if (path.size())
+				{
+					auto& next = path[path.size() - 1];
+
+
+					auto next_front = next - v1;
+					auto next_front3 = vec3(next_front.x, 0, next_front.y);
+
+					auto a = glm::normalize(vec3{0, 0, -1});
+					auto b = glm::normalize(next_front3);
+					auto dot_ab = glm::dot(a, b);
+					if (dot_ab * dot_ab < 0.1f)
+					{
+						glm::quat q;
+						auto c = glm::cross(a, b);
+						q.x = c.x;
+						q.y = c.y;
+						q.z = c.z;
+						q.w = glm::sqrt(glm::dot(a,a) * glm::dot(b, b)) + dot_ab;
+
+						next_xform.rotation = glm::normalize(q);
+					}
+					else if(dot_ab < -0.999f)
+					{
+						next_xform.rotation = glm::rotate(glm::quat_identity<float, glm::highp>(), glm::pi<float>(), vec3{ 0,1,0 });
+					}
+					else
+					{
+						next_xform.rotation = glm::quat_identity<float, glm::highp>();
+					}
+
+
+				}
+
+
 				end_frame = true;
 			}
 			else
@@ -252,6 +289,7 @@ namespace Tempest::Components
 			interpolation_time = 0.2f;
 			current_time = interpolation_time;
 			next_xform = curr;
+
 			return true;
 		}
 		return false;
