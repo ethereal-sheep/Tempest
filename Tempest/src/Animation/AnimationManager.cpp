@@ -12,7 +12,7 @@ namespace Tempest
 
 	void AnimationManager::LoadAnimations()
 	{
-		string path = "../../../Resource/Animations/";
+		string path = "Animations/";
 
         for (const auto & file : std::filesystem::directory_iterator(path))
             LoadAnimation(file.path().string());

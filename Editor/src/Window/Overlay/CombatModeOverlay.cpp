@@ -626,7 +626,7 @@ namespace Tempest
 				int p_x = (int)std::floor(position.x);
 				int p_y = (int)std::floor(position.z);
 
-				LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
+				//LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
 
 				// Turn on particle
 				if (!m_unitTileEmitter.expired() && !instance.ecs.get<tc::Unit>(curr_entity).is_moving() && !stopMoving)
@@ -2533,10 +2533,12 @@ namespace Tempest
 			[[maybe_unused]]auto& cs = instance.ecs.get<tc::Character>(curr_entity);
 			[[maybe_unused]] auto& unit = instance.ecs.get<tc::Unit>(curr_entity);
 			[[maybe_unused]] auto& xform = instance.ecs.get<tc::Transform>(curr_entity);
+			[[maybe_unused]] auto canim = instance.ecs.get_if<tc::Animation>(curr_entity);
 
 			[[maybe_unused]] auto& ocs = instance.ecs.get<tc::Character>(other_entity);
 			[[maybe_unused]] auto& ounit = instance.ecs.get<tc::Unit>(other_entity);
 			[[maybe_unused]] auto& oxform = instance.ecs.get<tc::Transform>(other_entity);
+			[[maybe_unused]] auto oanim = instance.ecs.get_if<tc::Animation>(other_entity);
 
 			[[maybe_unused]] auto& cam = Service<RenderSystem>::Get().GetCamera();
 
@@ -2561,6 +2563,13 @@ namespace Tempest
 				cam_ctrl.force_reset_rot(cam);
 
 				// clear
+
+				canim->change_animation(curr_entity, "Animations/Unit_Idle.fbx");
+				canim->play(curr_entity, true);
+				oanim->change_animation(other_entity, "Animations/Unit_Idle.fbx");
+				oanim->play(other_entity, true);
+
+
 				instance.selected = INVALID;
 				other_entity = INVALID;
 				battle_state = BATTLE_STATE::CURR_TURN; // temp testing
@@ -2641,7 +2650,7 @@ namespace Tempest
 				// instead of jumping onto the enemy, wobble back-front
 				auto anim = instance.ecs.get_if<tc::Animation>(curr_entity);
 			//	anim->stop(curr_entity);
-				anim->change_animation(curr_entity, "../../../Resource/Animations/Unit_Punch.fbx");
+				anim->change_animation(curr_entity, "Animations/Unit_Punch.fbx");
 				anim->play(curr_entity);
 			//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.fbx";
 			}
@@ -2709,7 +2718,7 @@ namespace Tempest
 				// make enemy wobble left-right
 				auto anim = instance.ecs.get_if<tc::Animation>(other_entity);
 			//	anim->stop(other_entity);
-				anim->change_animation(other_entity, "../../../Resource/Animations/Unit_Block.fbx");
+				anim->change_animation(other_entity, "Animations/Unit_Block.fbx");
 				anim->play(other_entity);
 				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.fbx";
 			}

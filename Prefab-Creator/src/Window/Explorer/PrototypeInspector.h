@@ -422,6 +422,18 @@ namespace Tempest
 								resources.emplace_back(rel);
 							}
 
+							for (auto entry : fs::directory_iterator(instance.get_full_path() / "Animations"))
+							{
+								// only get .a file
+								if (entry.path().extension() != ".a" && entry.path().extension() != ".fbx")
+									continue;
+								auto rel = fs::relative(entry.path(), instance.get_full_path()).string();
+								if (model->path == rel) {
+									index = (int)resources.size();
+								}
+								resources.emplace_back(rel);
+							}
+
 							if (ImGui::ComboWithFilter("Decoration", &index, resources))
 							{
 								model->path = resources[index];
@@ -521,10 +533,10 @@ namespace Tempest
 									* glm::scale(transform->scale);
 
 								std::filesystem::path p{ model->path };
-								if (strcmp(p.extension().string().c_str(), ".a"))
+								/*if (strcmp(p.extension().string().c_str(), ".a"))
 								{
 									p.replace_extension(".a");
-								}
+								}*/
 								Service<RenderSystem>::Get().SubmitModel((instance.get_full_path() / p.string()).string(), mat);
 							}
 							else
