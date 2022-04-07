@@ -670,7 +670,7 @@ namespace Tempest
 				if (battle_state == BATTLE_STATE::CURR_TURN || battle_state == BATTLE_STATE::SELECT_ACTION || battle_state == BATTLE_STATE::SELECT_WEAPON)
 				{
 					// end turn button
-					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA))
+					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA, true))
 					{
 						// reset previous unit to default
 						instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
@@ -2150,20 +2150,8 @@ namespace Tempest
 		// check if the other_entity has health (only other for now)
 		//auto& charac = instance.ecs.get<tc::Character>(other_entity);
 
-		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, !atk_rolled))
-		{
-			// attacker roll
-			atk_rolled = true;
-			inter1.start(0, 1);
-		}
-
-		if (UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true, !def_rolled))
-		{
-			// defender roll
-			def_rolled = true;
-			inter2.start(0, 1);
-		}
-
+		UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false);
+		UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true);
 
 		// draw the combat roll
 		auto tex = tex_map["Assets/CombatRollBG.dds"];
@@ -2172,6 +2160,31 @@ namespace Tempest
 			ImVec2 Min{ point.x, point.y };
 			ImVec2 Max{ Min.x + viewport->Size.x , Min.y + viewport->Size.y * 0.3f };
 			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
+		}
+
+		tex = tex_map["Assets/RollButton.dds"];
+		const ImVec2 roll_size{ tex->GetWidth() * 1.0f, tex->GetHeight() * 1.0f };
+
+		if (!atk_rolled)
+		{
+			ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - roll_size.x * 0.5f, viewport->Size.y * 0.27f + roll_size.y * 0.5f });
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), roll_size))
+			{
+				inter1.start(0, 1);
+				atk_rolled = true;
+			}
+		}
+
+		if (!def_rolled)
+		{
+			ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.63f - roll_size.x * 0.5f, viewport->Size.y * 0.27f + roll_size.y * 0.5f });
+			ImGui::PushID("second");
+			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), roll_size))
+			{
+				inter2.start(0, 1);
+				def_rolled = true;
+			}
+			ImGui::PopID();
 		}
 
 		auto& attacker = instance.ecs.get<tc::Character>(curr_entity);

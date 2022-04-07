@@ -825,7 +825,9 @@ namespace Tempest
 						SIMULATE_POPUP_TYPE::SEQUENCE, false, sequence);
 				}
 				push_button_style();
-				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.545f, viewport->Size.y * 0.25f });
+				ImGui::SameLine();
+				ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 10.f, ImGui::GetCursorPosY() - 10.0f });
+
 				ImGui::PushID("seq");
 				if (sequence != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 				{
@@ -842,14 +844,20 @@ namespace Tempest
 
 				// display number percentage
 				float result = 0.0f;
-
+				ImU32 color = IM_COL32(232, 137, 64, 255); // orange
 				// display number percentage
 				if (win + lose)
 				{
 					result = 100.f * win / (win + lose);
+
+					if (result >= 75.f)
+						color = IM_COL32(141, 218, 50, 255); // green
+					else if (result <= 25.f)
+						color = IM_COL32(202, 56, 56, 255); // red
+
 					ImGui::SetCursorPos({ viewport->Size.x * 0.465f, viewport->Size.y * 0.55f });
 					ImGui::PushFont(FONT_HEAD);
-					ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(232, 137, 64, 255));
+					ImGui::PushStyleColor(ImGuiCol_Text, color);
 					ImGui::Text("%.1f %%", result);
 					ImGui::PopStyleColor();
 					ImGui::PopFont();
@@ -857,7 +865,7 @@ namespace Tempest
 
 				// render progress bar
 				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - 350.0f * 0.5f, viewport->Size.y * 0.45f });
-				ImGui::PushStyleColor(ImGuiCol_PlotHistogram, IM_COL32(232, 137, 64, 255));
+				ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 				ImGui::ProgressBar(result * 0.01f, { 350.0f, 50.0f });
 				ImGui::PopStyleColor();
 
@@ -1120,7 +1128,7 @@ namespace Tempest
 				SIMULATE_POPUP_TYPE::WEAPON, is_attacker, temp);
 		}
 		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 10.f, ImGui::GetCursorPosY() - 10.0f });
 		push_button_style();
 		ImGui::PushID("weapon" + is_attacker);
 		if (temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
@@ -1150,7 +1158,7 @@ namespace Tempest
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - 10.0f });
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 10.f, ImGui::GetCursorPosY() - 10.0f });
 		push_button_style();
 		if (temp != UNDEFINED && ImGui::ImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
 		{

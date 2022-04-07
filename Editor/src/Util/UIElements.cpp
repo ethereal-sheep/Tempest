@@ -2277,8 +2277,8 @@ namespace Tempest::UI
 
 		const ImVec4 default_border_col = { 0.98f, 0.769f, 0.51f, 1.f };
 		const ImVec4 hovered_border_col = { 0.984f, 0.816f, 0.608f, 1.f };
-		const ImVec4 button_bg_col = { 0.98f, 0.769f, 0.51f, 1.f };
-		const ImVec4 button_active_col = { 0.784f, 0.616f, 0.408f, 1.f };
+		const ImVec4 button_bg_col = { 0.45f, 0.77f, 0.09f, 1.f };
+		const ImVec4 button_active_col = { 0.53f, 0.89f, 0.11f, 1.f };
 
 		string str = "aaaaaaaaaaaaaaa000000";
 		string unselected = "End Turn";
@@ -2355,8 +2355,8 @@ namespace Tempest::UI
 			else
 			{
 				ImGui::PushStyleColor(ImGuiCol_Border, hovered_border_col);
-				ImGui::PushStyleColor(ImGuiCol_Button, hovered_border_col);
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hovered_border_col);
+				ImGui::PushStyleColor(ImGuiCol_Button, button_bg_col);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, button_bg_col);
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, button_active_col);		
 			}
 			ImGui::Button("##NiceButton_Dummy", button_size);
