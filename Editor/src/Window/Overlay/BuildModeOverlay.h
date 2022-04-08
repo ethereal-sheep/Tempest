@@ -64,7 +64,7 @@ namespace Tempest
         float max_swidth = 500.f;
         ImVec2 place_box;
         ImVec2 place_box_size;
-
+        ImVec2 ButtonSize = { 60.f,60.f };
         tc::Transform temp_xform;
         interpolater<float> banner;
         tvector<interpolater<float>> inter_nest = tvector<interpolater<float>>(5);

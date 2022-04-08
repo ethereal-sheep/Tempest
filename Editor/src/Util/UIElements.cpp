@@ -1529,24 +1529,27 @@ namespace Tempest::UI
 	//Blueish Button for Select Weapon Btn
 	bool UIButton_Weapon(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, [[maybe_unused]] bool selected)
 	{
-		const float default_padding_x = 8.f;
-		const float default_padding_y = 8.f;
+		const float default_padding_x = 0.f;
+		const float default_padding_y = 0.f;
 		const float border_size = 1.5f;
 
 		const ImVec4 default_border_col = { 0.305f, 0.612f, 0.717f, 1.f };
 		const ImVec4 hovered_border_col = { 0.443f, 0.690f, 0.775f, 1.f };
 		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
-
-		string str = "aaaaaaaaaaaaaaa000000";
+		auto tex = tex_map["Assets/WeaponBtn.dds"];
 		float rounding = 0.f;
 		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
-		padding.y += 10.f;
+		//padding.y += 10.f;
 
 		// button shit
 		ImGui::PushFont(font);
-		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		/*ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
 		ImVec2 test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
-		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);*/
+
+		ImVec2 text_size = { (float)tex->GetWidth()*0.7f, (float)tex->GetHeight() * 0.7f };
+		ImVec2 test = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
+		ImVec2 alt_text_size = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
 		ImVec2 act_text_size = {
 			std::max(text_size.x, alt_text_size.x),
 			std::max(text_size.y, alt_text_size.y)
@@ -1557,12 +1560,13 @@ namespace Tempest::UI
 			act_text_size.x + default_padding_x + padding.x,
 			act_text_size.y + default_padding_y + padding.y
 		};
-
+		ImVec2 ResetPos = ImGui::GetCursorPos();
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
 		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
 		ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 		
+		ImVec2 imgMax = new_pos + text_size;
 
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
@@ -1593,6 +1597,9 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(2);
 			
+			
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), new_pos, imgMax);
+
 			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.3f - test.x * 0.5f, text_pos.y });
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1.f });
 			ImGui::PushFont(font);
@@ -1628,7 +1635,8 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
-
+			test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushStyleColor(ImGuiCol_Text, default_border_col);
 			ImGui::PushFont(font);
@@ -1649,6 +1657,9 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
+
+			test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushStyleColor(ImGuiCol_Text, hovered_border_col);
 			ImGui::PushFont(font);
@@ -1664,39 +1675,29 @@ namespace Tempest::UI
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 			}
 		}
-
-		if (id != UNDEFINED)
-		{
-			auto SearchIcon = tex_map["Assets/Search_Icon.dds"];
-			ImVec2 iconMin = { pos.x,  pos.y };
-			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
-			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.6f, new_pos.y});
-			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f});
-		}
+		ImGui::SetCursorPos(ResetPos);
 		return res;
 	}
 
 	//Greenish Button for Select Action Btn
 	bool UIButton_Action(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, [[maybe_unused]] bool selected)
 	{
-		const float default_padding_x = 8.f;
-		const float default_padding_y = 8.f;
+		const float default_padding_x = 0.f;
+		const float default_padding_y = 0.f;
 		const float border_size = 1.5f;
 
 		const ImVec4 default_border_col = { 0.627f, 0.333f, 0.859f, 1.f };
 		const ImVec4 hovered_border_col = { 0.701f, 0.466f, 0.886f, 1.f };
 		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
-		string str = "aaaaaaaaaaaaaaa000000";
+		auto tex = tex_map["Assets/ActionBtn.dds"];
 		float rounding = 0.f;
-		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
-		padding.y += 10.f;
 
 		// button shit
 		ImGui::PushFont(font);
-		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
-		ImVec2 test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
-		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+
+		ImVec2 text_size = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
+		ImVec2 test = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
+		ImVec2 alt_text_size = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
 		ImVec2 act_text_size = {
 			std::max(text_size.x, alt_text_size.x),
 			std::max(text_size.y, alt_text_size.y)
@@ -1707,11 +1708,11 @@ namespace Tempest::UI
 			act_text_size.x + default_padding_x + padding.x,
 			act_text_size.y + default_padding_y + padding.y
 		};
-
+		ImVec2 ResetPos = ImGui::GetCursorPos();
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
 		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
 		ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
-
+		ImVec2 imgMax = new_pos + text_size;
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
 		ImGui::InvisibleButton("##NiceButton", button_size);
@@ -1720,7 +1721,7 @@ namespace Tempest::UI
 		ImGui::PopStyleVar(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool res = false;
-
+		
 		ImGui::SetCursorPos(new_pos);
 		if (id != UNDEFINED)
 		{
@@ -1745,6 +1746,7 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(2);
 
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), new_pos, imgMax);
 			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.3f - test.x * 0.5f, text_pos.y });
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0,0,0,1.f });
 			ImGui::PushFont(font);
@@ -1780,7 +1782,8 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
-
+			test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushStyleColor(ImGuiCol_Text, default_border_col);
 			ImGui::PushFont(font);
@@ -1801,6 +1804,8 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
+			test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushStyleColor(ImGuiCol_Text, hovered_border_col);
 			ImGui::PushFont(font);
@@ -1816,39 +1821,29 @@ namespace Tempest::UI
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 			}
 		}
-
-		if (id != UNDEFINED)
-		{
-			auto SearchIcon = tex_map["Assets/Search_Icon.dds"];
-			ImVec2 iconMin = { pos.x,  pos.y };
-			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
-			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.6f, new_pos.y});
-			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f });
-		}
+		ImGui::SetCursorPos(ResetPos);
 		return res;
 	}
 
 	// Beige Button for Select Sequence Btn
 	bool UIButton_Sequence(Instance& instance, Entity id, string unselected, string hover, ImVec2 pos, ImVec2 padding, ImFont* font, [[maybe_unused]] bool selected)
 	{
-		const float default_padding_x = 8.f;
-		const float default_padding_y = 8.f;
+		const float default_padding_x = 0.f;
+		const float default_padding_y = 0.f;
 		const float border_size = 1.5f;
 
 		const ImVec4 default_border_col = { 0.98f, 0.769f, 0.509f, 1.f };
 		const ImVec4 hovered_border_col = { 0.984f, 0.816f, 0.608f, 1.f };
 		const ImVec4 button_bg_col = { 0.062f, 0.062f, 0.062f, 1.f };
-		string str = "aaaaaaaaaaaaaaa000000";
+		auto tex = tex_map["Assets/SequenceBtn.dds"];
 		float rounding = 0.f;
-		//float center_x = ImGui::GetContentRegionAvailWidth() / 2.f;
-		padding.y += 10.f;
-
 		// button shit
 		ImGui::PushFont(font);
-		ImVec2 text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
-		ImVec2 test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
-		ImVec2 alt_text_size = ImGui::CalcTextSize(str.c_str(), nullptr, true);
+
+
+		ImVec2 text_size = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
+		ImVec2 test = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
+		ImVec2 alt_text_size = { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f };
 		ImVec2 act_text_size = {
 			std::max(text_size.x, alt_text_size.x),
 			std::max(text_size.y, alt_text_size.y)
@@ -1863,7 +1858,8 @@ namespace Tempest::UI
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
 		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
 		ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
-
+		ImVec2 imgMax = new_pos + text_size;
+		ImVec2 ResetPos = ImGui::GetCursorPos();
 
 		ImGui::SetCursorPos(new_pos);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, rounding);
@@ -1899,6 +1895,7 @@ namespace Tempest::UI
 			ImGui::Button("##NiceButton_Dummy", button_size);
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(2);
+			ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), new_pos, imgMax);
 
 			//Text
 			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.3f - test.x * 0.5f, text_pos.y });
@@ -1936,7 +1933,8 @@ namespace Tempest::UI
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
 
-
+			test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushStyleColor(ImGuiCol_Text, default_border_col);
 			ImGui::PushFont(font);
@@ -1956,7 +1954,8 @@ namespace Tempest::UI
 			ImGui::Button("##NiceButton_Dummy", button_size);
 			ImGui::PopStyleVar(2);
 			ImGui::PopStyleColor(4);
-
+			test = ImGui::CalcTextSize(unselected.c_str(), nullptr, true);
+			text_pos = { new_pos.x + button_size.x * 0.5f - test.x * 0.5f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 			ImGui::SetCursorPos(text_pos);
 			ImGui::PushStyleColor(ImGuiCol_Text, hovered_border_col);
 			ImGui::PushFont(font);
@@ -1972,17 +1971,7 @@ namespace Tempest::UI
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
 			}
 		}
-
-		if (id != UNDEFINED)
-		{
-			auto SearchIcon = tex_map["Assets/Search_Icon.dds"];
-			ImVec2 iconMin = { pos.x,  pos.y };
-			ImVec2 iconMax = { iconMin.x + SearchIcon->GetWidth(), iconMin.y + SearchIcon->GetHeight() };
-			//ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(SearchIcon->GetID()), iconMin, iconMax);
-			ImGui::SetCursorPos({ new_pos.x + button_size.x * 0.6f, new_pos.y - 1.f });
-			ImGui::Image((void*)static_cast<size_t>(SearchIcon->GetID()), { (float)SearchIcon->GetWidth() * 0.58f, (float)SearchIcon->GetHeight() * 0.58f });
-		}
-
+		ImGui::SetCursorPos(ResetPos);
 		return res;
 	}
 

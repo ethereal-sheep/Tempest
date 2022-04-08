@@ -447,6 +447,7 @@ namespace Tempest
 
 					if (ImGui::IsItemHovered())
 					{
+						ImGui::SetMouseCursor(7);
 						ImGui::BeginTooltip();
 						ImGui::Text("%s", cat_name.c_str());
 						ImGui::EndTooltip();
@@ -540,6 +541,7 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								ImGui::SetMouseCursor(7);
 								option_btns[0] = tex_map["Assets/MBOption_1_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_TRASH);
@@ -565,6 +567,7 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								ImGui::SetMouseCursor(7);
 								option_btns[1] = tex_map["Assets/MBOption_2_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_CHECK);
@@ -592,6 +595,7 @@ namespace Tempest
 
 							if (ImGui::IsItemHovered())
 							{
+								ImGui::SetMouseCursor(7);
 								option_btns[2] = tex_map["Assets/MBOption_3_Selected.dds"];
 								ImGui::BeginTooltip();
 								ImGui::Text("%s", ICON_FA_SYNC_ALT);
