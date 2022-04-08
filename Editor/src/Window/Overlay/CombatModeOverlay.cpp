@@ -2111,7 +2111,7 @@ namespace Tempest
 				curr_entity_result->second.successful_attacks += 1;
 
 			units_results.find(other_entity)->second.dmg_taken += damage;
-			if (temp_oc.get_stat(0) + temp_oc.get_statDelta(0) <= 0)
+			if (cs.get_stat(0) + cs.get_statDelta(0) <= 0)
 			{
 				// for dead
 				curr_entity_result->second.defeated += 1;
