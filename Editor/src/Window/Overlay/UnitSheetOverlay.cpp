@@ -874,7 +874,7 @@ namespace Tempest
 		{
 			if (auto weap = instance.ecs.get_if<tc::Weapon>(weap_id))
 			{
-				auto PairResult = UI::UIButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
+				auto PairResult = UI::UIWeapActionButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 0,0 }, FONT_BODY, false);
 				if (PairResult.first)
 				{
 					OverlayOpen = false;
@@ -941,7 +941,7 @@ namespace Tempest
 		{
 			if (auto action = instance.ecs.get_if<tc::Graph>(id))
 			{
-				auto PairResult = UI::UIButtonWithDelete(action->g.name.c_str(), string("##actionn" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 40,20 }, FONT_BODY, false);
+				auto PairResult = UI::UIWeapActionButtonWithDelete(action->g.name.c_str(), string("##actionn" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 0,0 }, FONT_BODY, false, false);
 				if (PairResult.first)
 				{
 					OverlayOpen = false;
