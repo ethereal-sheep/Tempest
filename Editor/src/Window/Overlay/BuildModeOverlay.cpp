@@ -409,9 +409,9 @@ namespace Tempest
 
 			{
 
-				float child3x = 50.f;
+				float child3x = 70.f;
 				ImGui::SetCursorPos(
-					{ ImGui::GetWindowWidth() - child2x - 100.f - child3x - inter_nest[0].get() * (-700.f), ImGui::GetWindowHeight() * 0.5f - child2y / 2.f });
+					{ ImGui::GetWindowWidth() - child2x - 100.f - child3x * 0.5f - inter_nest[0].get() * (-700.f), ImGui::GetWindowHeight() * 0.5f - child2y / 2.f });
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.980f, 0.768f, 0.509f, 1.f });
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.980f, 0.768f, 0.509f, 0.6f });
 				ImGui::BeginChild("menu_side_modal_child", ImVec2{ child3x, child2y }, false); 
@@ -435,7 +435,7 @@ namespace Tempest
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
 
-					ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i][i == selected_cat]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);// use for images
+					ImGui::ImageButton((void*)static_cast<size_t>(cat_btns[i][i == selected_cat]->GetID()), { 70, 70 }, ImVec2(0, 0), ImVec2(1, 1), 2);// use for images
 					//ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 					
 					if(ImGui::IsItemClicked())
@@ -498,7 +498,7 @@ namespace Tempest
 
 				auto temp_cursor = ImGui::GetCursorPos();
 
-				auto child4_box = ImVec2{ 150, 50 };
+				auto child4_box = ImVec2{ 200, 60 };
 				// Draw whatever thing on their head
 				{
 
@@ -510,14 +510,16 @@ namespace Tempest
 					{
 						ImGui::SetCursorPos(t_cursor_pos);
 
+						ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 						ImGui::BeginChild("some_child", child4_box, false);
 
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{-1,-1});
 
 						{
-							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[0]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[0]->GetID()), { 60, 60 }, ImVec2(0, 0), ImVec2(1, 1));
 						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
@@ -551,7 +553,7 @@ namespace Tempest
 
 						{
 
-							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[1]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[1]->GetID()), { 60, 60 }, ImVec2(0, 0), ImVec2(1, 1));
 						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
@@ -576,7 +578,7 @@ namespace Tempest
 
 						{
 
-							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[2]->GetID()), { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
+							ImGui::ImageButton((void*)static_cast<size_t>(option_btns[2]->GetID()), { 60, 60 }, ImVec2(0, 0), ImVec2(1, 1));
 						//	ImGui::ImageButton(0, { 40, 40 }, ImVec2(0, 0), ImVec2(1, 1), 2);
 
 							if (ImGui::IsItemClicked())
@@ -599,8 +601,10 @@ namespace Tempest
 								option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 						}
 
+						ImGui::PopStyleVar();
 						ImGui::PopStyleColor(3);
 						ImGui::EndChild();
+						ImGui::PopStyleVar();
 					}
 					
 					ImGui::PopFont();
