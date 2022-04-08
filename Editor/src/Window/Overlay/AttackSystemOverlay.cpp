@@ -455,6 +455,10 @@ namespace Tempest
 				{
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
+
+					AudioEngine ae;
+					ae.StopChannel(voice_line);
+					voice_line = 0;
 				}
 
 				// tutorial progrss

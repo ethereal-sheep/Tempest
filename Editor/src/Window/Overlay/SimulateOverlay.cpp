@@ -782,6 +782,10 @@ namespace Tempest
 				// exit tutorial
 				if (UI::ConfirmTutorialPopup("TutorialExitPopupConfirm", "Do you want to exit the tutorial?", true, [&]() {instance.tutorial_temp_exit = false; }))
 				{
+					AudioEngine ae;
+					ae.StopChannel(voice_line);
+					voice_line = 0;
+
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
 					
