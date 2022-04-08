@@ -15,7 +15,6 @@
 #include "Triggers/Triggers.h"
 #include "Instance/RuntimeInstance.h"
 #include "ECS/Prototypes/Prototype_Category.h"
-#include <Tempest/src/Audio/AudioEngine.h>
 
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
 
@@ -109,8 +108,11 @@ namespace Tempest
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
 		cam_ctrl.set_fixed_camera(cam, 90, 45);
 
-
-
+		AudioEngine ae;
+		ae.StopChannel(voice_line);
+		voice_line = 0;
+		for (int i = 0; i < 3; ++i)
+			voice_played[i] = false;
 
 	}
 	void PlaceUnitsOverlay::init(Instance&)
@@ -183,6 +185,24 @@ namespace Tempest
 						{
 						case 0:
 						{
+							if (!voice_played[0])
+							{
+								AudioEngine ae;
+								if (!ae.IsPlaying(voice_line))
+								{
+									voice_line = ae.Play("Sounds2D/C_UnitPlacement_1.wav", "VL", 1.0f);
+									voice_played[0] = true;
+								}
+							}
+							else if (!voice_played[1])
+							{
+								AudioEngine ae;
+								if (!ae.IsPlaying(voice_line))
+								{
+									voice_line = ae.Play("Sounds2D/C_UnitPlacement_2.wav", "VL", 1.0f);
+									voice_played[1] = true;
+								}
+							}
 							ImVec2 pos = { 0, viewport->Size.y * 0.19f };
 							ImVec2 size = { 380.f, 80.f };
 
@@ -197,6 +217,16 @@ namespace Tempest
 
 						case 1:
 						{
+							// catch
+							if (!voice_played[1])
+							{
+								AudioEngine ae;
+								if (!ae.IsPlaying(voice_line))
+								{
+									voice_line = ae.Play("Sounds2D/C_UnitPlacement_2.wav", "VL", 1.0f);
+									voice_played[1] = true;
+								}
+							}
 							ImVec2 pos = { 0, viewport->Size.y * 0.27f };
 							ImVec2 size = { 380.f, 80.f };
 
@@ -211,6 +241,17 @@ namespace Tempest
 
 						case 2:
 						{
+							if (!voice_played[2])
+							{
+								AudioEngine ae;
+								if (!ae.IsPlaying(voice_line))
+								{
+									voice_line = ae.Play("Sounds2D/C_UnitPlacement_3.wav", "VL", 1.0f);
+									voice_played[2] = true;
+								}
+								else
+									ae.StopChannel(voice_line);
+							}
 							ImVec2 pos = { viewport->Size.y * 0.18f, viewport->Size.y * 0.841f };
 							ImVec2 size = { 200.f, 70.f };
 							UI::TutArea(pos, size);
@@ -247,6 +288,9 @@ namespace Tempest
 				{
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
+					AudioEngine ae;
+					ae.StopChannel(voice_line);
+					voice_line = 0;
 				}
 
 				//bool selectable_hovered = false;
@@ -334,7 +378,12 @@ namespace Tempest
 
 						// go to combat mode
 						if (OpenCombat)
+						{
 							Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
+							AudioEngine ae;
+							ae.StopChannel(voice_line);
+						}
+							
 						else
 						{
 							Service<EventManager>::Get().instant_dispatch<ChangeTurnOrder>(chars);

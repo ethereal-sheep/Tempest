@@ -15,6 +15,7 @@
 #include <Editor/src/Triggers/Triggers.h>
 #include "../Viewport/CameraControls.h"
 #include "Util/interpolater.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 struct CharacterSpawnEmitter_3D;
 struct CharacterDespawnEmitter_3D;
@@ -42,7 +43,8 @@ namespace Tempest
         void DrawSideBar(Instance& instance, ImVec2 size);
 
         int tutorial_index{ 0 };
-
+        ChannelID voice_line{ 0 };
+        bool voice_played[3] = { false, false, false };
         std::weak_ptr<CharacterSpawnEmitter_3D> m_characterSpawnEmitter;
     };
 }

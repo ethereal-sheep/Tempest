@@ -13,6 +13,7 @@
 #include "Events/EventManager.h"
 #include <Editor/src/Triggers/Triggers.h>
 #include "Util/interpolater.h"
+#include <Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -62,6 +63,8 @@ namespace Tempest
         tsptr<Texture> character_icon;
         tvector<Entity> added_entities; // temp
 
+        ChannelID voice_line{ 0 };
+        bool voice_played[4] = { false, false, false, false };
         std::vector<interpolater<float>> inter_nest = std::vector<interpolater<float>>(10);
     };
 }

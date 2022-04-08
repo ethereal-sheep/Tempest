@@ -14,7 +14,6 @@
 #include "Triggers/Triggers.h"
 #include <Tempest/src/Instance/EditTimeInstance.h>
 #include <Editor/src/InstanceManager/InstanceConfig.h>
-#include <Tempest/src/Audio/AudioEngine.h>
 
 #include "Particles/Particles_2D/EmitterSystem_2D.h"
 
@@ -43,6 +42,12 @@ namespace Tempest
 			added_entities = a.entities;
 
 		tutorial_index = 0;
+
+		AudioEngine ae;
+		ae.StopChannel(voice_line);
+		voice_line = 0;
+		for (int i = 0; i < 4; ++i)
+			voice_played[i] = false;
 	}
 
 	void TurnOrderOverlay::change_state(TURN_ORDER_STATE state)
@@ -97,6 +102,24 @@ namespace Tempest
 					{
 					case 0:
 					{
+						if (!voice_played[0])
+						{
+							AudioEngine ae;
+							if (!ae.IsPlaying(voice_line))
+							{
+								voice_line = ae.Play("Sounds2D/C_SelectUnits_1.wav", "VL", 1.0f);
+								voice_played[0] = true;
+							}
+						}
+						else if (!voice_played[1])
+						{
+							AudioEngine ae;
+							if (!ae.IsPlaying(voice_line))
+							{
+								voice_line = ae.Play("Sounds2D/C_SelectUnits_2.wav", "VL", 1.0f);
+								voice_played[1] = true;
+							}
+						}
 						ImVec2 pos = { 0, viewport->Size.y * 0.275f };
 						ImVec2 size = { 640.f, 290.f };
 						UI::TutArea(pos, size);
@@ -107,6 +130,16 @@ namespace Tempest
 
 					case 1:
 					{
+						// catch it 
+						if (!voice_played[1])
+						{
+							AudioEngine ae;
+							if (!ae.IsPlaying(voice_line))
+							{
+								voice_line = ae.Play("Sounds2D/C_SelectUnits_2.wav", "VL", 1.0f);
+								voice_played[1] = true;
+							}
+						}
 						ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
 						ImVec2 size = { 180.f, 50.f };
 						UI::TutArea(pos, size);
@@ -117,6 +150,17 @@ namespace Tempest
 
 					case 2:
 					{
+						if (!voice_played[2])
+						{
+							AudioEngine ae;
+							if (!ae.IsPlaying(voice_line))
+							{
+								voice_line = ae.Play("Sounds2D/C_TurnOrder_1.wav", "VL", 1.0f);
+								voice_played[2] = true;
+							}
+							else
+								ae.StopChannel(voice_line);
+						}
 						ImVec2 pos = { viewport->Size.x * 0.221f, viewport->Size.y * 0.673f };
 						ImVec2 size = { 220.f, 140.f };
 						UI::TutArea(pos, size);
@@ -168,7 +212,15 @@ namespace Tempest
 					case 5:
 					{
 						// draw the other section
-
+						if (!voice_played[3])
+						{
+							AudioEngine ae;
+							if (!ae.IsPlaying(voice_line))
+							{
+								voice_line = ae.Play("Sounds2D/C_TurnOrder_2.wav", "VL", 1.0f);
+								voice_played[3] = true;
+							}
+						}
 
 						ImVec2 pos = { viewport->Size.x * 0.42f , viewport->Size.y * 0.15f };
 						ImVec2 pos2 = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
@@ -235,6 +287,9 @@ namespace Tempest
 				{
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
+					AudioEngine ae;
+					ae.StopChannel(voice_line);
+					voice_line = 0;
 				}
 
 				// background
