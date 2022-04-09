@@ -393,7 +393,7 @@ namespace Tempest
         materialF0 = glm::vec3(0.04f);
 
         //envMapHDR.setTextureHDR("textures/hdr/appart.hdr", "appartHDR", true);
-        envMapHDR.setTextureHDR("textures/hdr/lebombo_4k.hdr", "lebombo", true);
+        envMapHDR.setTextureHDR("textures/hdr/lebombo_blur.hdr", "lebombo", true);
         //envMapHDR.setTexture( "Assets/dds_test.dds" , "appartHDR", true);
 
         envMapCube.setTextureCube(512, GL_RGB, GL_RGB16F, GL_FLOAT, GL_LINEAR_MIPMAP_LINEAR);
