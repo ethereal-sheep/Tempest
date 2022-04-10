@@ -29,6 +29,7 @@ namespace Tempest
 
         void open_popup(const Event& e)
         {
+            (void)e;
             //auto a = event_cast<SettingsTrigger>(e);
             enable_popup = true;
         }

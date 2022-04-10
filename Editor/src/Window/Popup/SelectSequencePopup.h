@@ -33,6 +33,7 @@ namespace Tempest
 
         void show(Instance& instance) override
         {
+            (void)instance;
             if (enable_popup)
             {
                 ImGui::OpenPopup("Select Sequence");

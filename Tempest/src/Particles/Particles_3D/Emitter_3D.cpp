@@ -32,15 +32,15 @@ Emitter_3D::Emitter_3D()
 
 void Emitter_3D::UpdateMaxParticle(const int newMaxParticleCapacity)
 {
-	int endSlotNo = m_particles.size();
-	int newSlotAmount = newMaxParticleCapacity - m_particles.size();
+	int endSlotNo = static_cast<int>(m_particles.size());
+	int newSlotAmount = newMaxParticleCapacity - static_cast<int>(m_particles.size());
 
 	// Increase in particle slot management
 	if (newSlotAmount > 0)
 	{
 		m_particles.resize(newMaxParticleCapacity);
 
-		for (short i = endSlotNo; i < newMaxParticleCapacity; ++i)
+		for (short i = static_cast<short>(endSlotNo); i < newMaxParticleCapacity; ++i)
 			m_available_ParticleSlots.push(i);
 	}
 }
@@ -199,6 +199,7 @@ void Emitter_3D::ParticleUpdate(const float dt)
 
 void Emitter_3D::ParticleRender(glm::vec4 modelMatrix)
 {
+	(void)modelMatrix;
 	// Particle_3D Behaviour
 	for (short i = 0; i < m_particles.size(); ++i)
 	{

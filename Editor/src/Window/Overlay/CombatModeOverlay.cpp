@@ -2121,12 +2121,12 @@ namespace Tempest
 
 			// get the results
 			auto curr_entity_result = units_results.find(curr_entity);
-			curr_entity_result->second.dmg_done += damage;
+			curr_entity_result->second.dmg_done += static_cast<unsigned short>(damage);
 			curr_entity_result->second.total_attacks += 1;
 			if (damage > 0)
 				curr_entity_result->second.successful_attacks += 1;
 
-			units_results.find(other_entity)->second.dmg_taken += damage;
+			units_results.find(other_entity)->second.dmg_taken += static_cast<unsigned short>(damage);
 			if (temp_oc.get_stat(0) + temp_oc.get_statDelta(0) <= 0)
 			{
 				// for dead
