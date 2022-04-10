@@ -12,6 +12,7 @@
 #include "Instance/Instance.h"
 #include "Util/UIElements.h"
 #include "Events/EventManager.h"
+#include "Util/interpolater.h"
 #include <Editor/src/Triggers/Triggers.h>
 
 namespace Tempest
@@ -41,5 +42,6 @@ namespace Tempest
         ImGuiID HoveredID{ 0 };
         std::map<Entity, UnitResult> units_results;
         tsptr<Texture> character_icon;
+        interpolater<float> banner;
     };
 }

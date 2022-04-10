@@ -153,9 +153,12 @@ namespace Tempest
                                 j++;
                             }
                         }
-                        
+
                         // create units here
-                        if (UI::UIButton_1("+", "+", ImVec2{ cursor.x + 50.0f + i++ * 120, cursor.y + 50.0f + j * 140 }, { 55,30 }, FONT_HEAD))
+                        auto tex = tex_map["Assets/NewUnitIcon.dds"];
+                        ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 120, cursor.y + j * 140 });
+                        if (UI::UICharButton_NoDelete((void*)static_cast<size_t>(tex->GetID()), ImVec2{ 90, 90}, "New Unit", "##notselectable"))
+                      //  if (UI::UIButton_1("+", "+", ImVec2{ cursor.x + 50.0f + i++ * 120, cursor.y + 50.0f + j * 140 }, { 55,30 }, FONT_HEAD))
                         {
                             enable_popup = false;
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);

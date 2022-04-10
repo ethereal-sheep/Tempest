@@ -32,6 +32,10 @@ namespace Tempest
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 
+		banner.update(ImGui::GetIO().DeltaTime);
+		if (banner.is_finished())
+			banner.start(1, 0, 10);
+
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
 
@@ -41,11 +45,11 @@ namespace Tempest
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 			if (ImGui::Begin("CombatResults", nullptr, window_flags))
 			{
-				// render title
-				ImGui::SetCursorPos(ImVec2{ 0,0 });
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
-				UI::SubHeader("SUMMARY");
-				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+				auto bannerTex = tex_map["Assets/CombatResultBanner.dds"];
+				ImVec2 min_pos = { viewport->WorkPos.x, viewport->WorkPos.y + 30.0f };
+				ImVec2 max_pos = { viewport->WorkPos.x + bannerTex->GetWidth(),viewport->WorkPos.y + 30.0f + bannerTex->GetHeight() };
+
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(bannerTex->GetID()), min_pos, max_pos, { banner.get(), 0 }, { 1 + banner.get(), 1 });
 
 				// make a child!!
 				const ImVec2 tableSize{ viewport->Size.x * 0.8f, viewport->Size.y * 0.7f };
