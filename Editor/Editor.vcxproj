@@ -224,6 +224,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Extern\imgui\implot_demo.cpp" />
     <ClCompile Include="src\Extern\imgui\implot_items.cpp" />
     <ClCompile Include="src\Extern\imgui\widgets.cpp" />
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
     <ClCompile Include="src\Util\GuizmoController.cpp" />
     <ClCompile Include="src\Util\UIElements.cpp" />
@@ -238,6 +239,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\PauseOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\PlaceUnitCinematic.cpp" />
     <ClCompile Include="src\Window\Overlay\PlaceUnitsOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\RuntimeStartup.cpp" />
     <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp" />
@@ -284,6 +286,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Triggers\SimulationTriggers.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
     <ClInclude Include="src\Util\GuizmoController.h" />
+    <ClInclude Include="src\Util\InputBlocker.h" />
     <ClInclude Include="src\Util\Suppress.h" />
     <ClInclude Include="src\Util\UIElements.h" />
     <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h" />
@@ -305,6 +308,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\Overlay\LoadingOverlay.h" />
     <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />
     <ClInclude Include="src\Window\Overlay\PauseOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\PlaceUnitCinematic.h" />
     <ClInclude Include="src\Window\Overlay\PlaceUnitsOverlay.h" />
     <ClInclude Include="src\Window\Overlay\RuntimeStartup.h" />
     <ClInclude Include="src\Window\Overlay\SimulateOverlay.h" />

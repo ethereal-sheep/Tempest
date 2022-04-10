@@ -379,10 +379,11 @@ namespace Tempest
 						// go to combat mode
 						if (OpenCombat)
 						{
-							Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
+							Service<EventManager>::Get().instant_dispatch<PlayPlaceUnitCinematic>(instance, chars);
 							AudioEngine ae;
 							ae.StopChannel(voice_line);
 						}
+							
 							
 						else
 						{

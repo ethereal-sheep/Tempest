@@ -626,7 +626,7 @@ namespace Tempest
 				int p_x = (int)std::floor(position.x);
 				int p_y = (int)std::floor(position.z);
 
-				LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
+				//LOG_ASSERT(instance.character_map[p_x][p_y] == curr_entity);
 
 				// Turn on particle
 				if (!m_unitTileEmitter.expired() && !instance.ecs.get<tc::Unit>(curr_entity).is_moving() && !stopMoving)
@@ -673,7 +673,8 @@ namespace Tempest
 					if (battle_state == BATTLE_STATE::CURR_TURN && UI::UIButton_EndTurn({ viewport->Size.x * 0.9f, viewport->Size.y - action_background_size.y * 1.2f }, { 0,0 }, FONT_PARA, true))
 					{
 						// reset previous unit to default
-						instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+					//	instance.ecs.get_if<tc::Animation>(curr_entity)->stop(curr_entity);
+					//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 						curr_entity = increase_turn();
 
 						if (auto t = instance.ecs.get_if<tc::Transform>(curr_entity))
@@ -697,7 +698,7 @@ namespace Tempest
 							// make current unit idle (comment out first cuz can't switch fbx)
 						//	if (state != State::CINEMATIC)
 						//		instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Idle.fbx";
-
+							
 							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -1060,6 +1061,7 @@ namespace Tempest
 			ImGui::SetCursorPosY(0);
 			if (UI::UIButton_2("Delete", "Delete", { ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.495f, ImGui::GetCursorPosY() + ImGui::GetWindowHeight() * 0.8f }, { -30.f, 0.f }, FONT_PARA))
 			{
+				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_unit_Remove_VFX, instance.ecs.get<tc::Transform>(other_entity).position);
 				instance.ecs.destroy(other_entity);
 				other_entity = INVALID;
 				ImGui::CloseCurrentPopup();
@@ -1465,7 +1467,18 @@ namespace Tempest
 							// Attack
 							auto attacker = curr_entity;
 
+
+						//	if (other_entity != UNDEFINED)
+						//		instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+
 							other_entity = instance.character_map[w_x][w_y];
+
+						//	auto anim = instance.ecs.get_if<tc::Animation>(other_entity);
+						//	if (anim->if_end(other_entity))
+						//	{
+						//		anim->change_animation(other_entity, "../../../Resource/Animations/Unit_Idle.fbx");
+						//		anim->play(other_entity, true);
+						//	}
 
 							// PSEUDO (this does not work ? when it needs to be changed to block)
 						//	instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Idle.fbx";
@@ -2135,8 +2148,9 @@ namespace Tempest
 			//battle_state = BATTLE_STATE::SELECT_OTHER;
 			display_curr_stat = false;
 			display_other_stat = false;
-			if (other_entity != INVALID)
-				instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+		//	if (other_entity != INVALID)
+		//		instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
 			instance.selected = INVALID;
 			state = State::MENU;
 			battle_state = BATTLE_STATE::CURR_TURN; // temp testing
@@ -2222,10 +2236,11 @@ namespace Tempest
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
 
+			// Defender / Right hand side combat roll
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.63f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.636f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.383f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 
@@ -2292,10 +2307,11 @@ namespace Tempest
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, { 1,0,0,1 });
 
+			// Attacker / Left hand side combat roll
 			if (b_combatRoll_VFX_Ready)
 			{
 				b_combatRoll_VFX_Ready = false;
-				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.37f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+				ImVec2 spawnPos = ImVec2{ viewport->Size.x * 0.376f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.384f };
 				EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_combatRoll_VFX, spawnPos);
 			}
 
@@ -2337,7 +2353,7 @@ namespace Tempest
 		// reset the scale
 		FONT_HEAD->Scale = 1.0f;
 		
-		// VFX for combat roll
+		// VFX for combat roll done
 		if (inter1.is_finished() && inter2.is_finished())
 		{
 			if (b_playerOne_Rolled && b_playerTwo_Rolled)
@@ -2346,11 +2362,12 @@ namespace Tempest
 				ImVec2 endPos = ImVec2{ 0.f, 0.f };
 
 				if (win)
-					startPos = ImVec2{ viewport->Size.x * 0.36f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.365f };
+					startPos = ImVec2{ viewport->Size.x * 0.35f - ImGui::CalcTextSize(roll.c_str()).x * 0.45f, viewport->Size.y * 0.4f };
 				else
-					startPos = ImVec2{ viewport->Size.x * 0.62f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.363f };
+					startPos = ImVec2{ viewport->Size.x * 0.61f - ImGui::CalcTextSize(roll.c_str()).x * 0.1f, viewport->Size.y * 0.4f };
 
-				endPos = ImVec2{ startPos.x + 50.0f, startPos.y };
+				
+				endPos = ImVec2{ startPos.x + 100.0f, startPos.y };
 				EmitterSystem_2D::GetInstance().CreateLineEmitter(m_winningNumber_VFX, startPos, endPos);
 
 				b_playerOne_Rolled = false;
@@ -2533,19 +2550,28 @@ namespace Tempest
 			[[maybe_unused]]auto& cs = instance.ecs.get<tc::Character>(curr_entity);
 			[[maybe_unused]] auto& unit = instance.ecs.get<tc::Unit>(curr_entity);
 			[[maybe_unused]] auto& xform = instance.ecs.get<tc::Transform>(curr_entity);
+			[[maybe_unused]] auto canim = instance.ecs.get_if<tc::Animation>(curr_entity);
 
 			[[maybe_unused]] auto& ocs = instance.ecs.get<tc::Character>(other_entity);
 			[[maybe_unused]] auto& ounit = instance.ecs.get<tc::Unit>(other_entity);
 			[[maybe_unused]] auto& oxform = instance.ecs.get<tc::Transform>(other_entity);
+			[[maybe_unused]] auto oanim = instance.ecs.get_if<tc::Animation>(other_entity);
 
 			[[maybe_unused]] auto& cam = Service<RenderSystem>::Get().GetCamera();
 
 			auto back_to_main = [&]() {
 
 				// reset model
-				instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
-				if (other_entity != INVALID)
-					instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+				
+			//	auto anim = instance.ecs.get_if<tc::Animation>(curr_entity);
+			//	anim->stop(curr_entity);
+			//	anim->change_animation(curr_entity, "../../../Resource/Animations/Unit_Idle.fbx");
+			//	anim->play(curr_entity, true);
+
+			//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+			//	if (other_entity != INVALID)
+			//		instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+					//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
 
 				cam.SetPosition(cam_pos);
 				cam.SetRotation(cam_rot);
@@ -2554,6 +2580,13 @@ namespace Tempest
 				cam_ctrl.force_reset_rot(cam);
 
 				// clear
+
+				canim->change_animation(curr_entity, "Animations/Unit_Idle.fbx");
+				canim->play(curr_entity, true);
+				oanim->change_animation(other_entity, "Animations/Unit_Idle.fbx");
+				oanim->play(other_entity, true);
+
+
 				instance.selected = INVALID;
 				other_entity = INVALID;
 				battle_state = BATTLE_STATE::CURR_TURN; // temp testing
@@ -2632,7 +2665,11 @@ namespace Tempest
 
 				// PSEUDO 
 				// instead of jumping onto the enemy, wobble back-front
-				instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.fbx";
+				auto anim = instance.ecs.get_if<tc::Animation>(curr_entity);
+			//	anim->stop(curr_entity);
+				anim->change_animation(curr_entity, "Animations/Unit_Punch.fbx");
+				anim->play(curr_entity);
+			//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\Unit_Punch.fbx";
 			}
 
 
@@ -2696,7 +2733,11 @@ namespace Tempest
 
 				//PSEUDO
 				// make enemy wobble left-right
-				instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.fbx";
+				auto anim = instance.ecs.get_if<tc::Animation>(other_entity);
+			//	anim->stop(other_entity);
+				anim->change_animation(other_entity, "Animations/Unit_Block.fbx");
+				anim->play(other_entity);
+				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\Unit_Block.fbx";
 			}
 		}
 		break;
@@ -3120,8 +3161,10 @@ namespace Tempest
 
 			//PSEUDO
 			// change back the models
-			instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
-			instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
+		//	instance.ecs.get_if<tc::Animation>(other_entity)->stop(other_entity);
+		//	instance.ecs.get_if<tc::Animation>(curr_entity)->stop(curr_entity);
+		//	instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
+		//	instance.ecs.get<tc::Model>(curr_entity).path = "Models\\UnitBlack_CombatStance.a";
 		}
 
 	}
@@ -3419,7 +3462,10 @@ namespace Tempest
 		state = State::MENU;
 
 		auto& cam = Service<RenderSystem>::Get().GetCamera();
-		cam_ctrl.set_fixed_camera(cam, 0 , 70);
+		cam_ctrl.force_set_fixed_camera(cam, 0 , 70);
+
+
+		
 
 		selected_action = UNDEFINED;
 		other_selected_action = UNDEFINED;
@@ -3429,6 +3475,11 @@ namespace Tempest
 		curr_entity = units[curr_turn];
 
 		reset_menu();
+
+		if (auto t = a.instance.ecs.get_if<tc::Transform>(curr_entity))
+		{
+			cam_ctrl.move_look_at(cam, t->position);
+		}
 
 		units_results.clear();
 

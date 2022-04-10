@@ -22,11 +22,11 @@
 #include "Window/AssetManager/AssetManagerWindow.h"
 
 // test window
-#include "Window/Test/test_window.h"
-#include "Window/Test/test_window2.h"
-#include "Window/Test/test_window3.h"
-#include "Window/Test/test_window4.h"
-#include "Window/Test/Test_UIWindow.h"
+//#include "Window/Test/test_window.h"
+//#include "Window/Test/test_window2.h"
+//#include "Window/Test/test_window3.h"
+//#include "Window/Test/test_window4.h"
+//#include "Window/Test/Test_UIWindow.h"
 
 
 // filebrowsers (maybe dn)
@@ -76,6 +76,7 @@
 #include "Window/Overlay/CombatResultsOverlay.h"
 #include "Window/Overlay/RuntimeStartup.h"
 #include "Window/Overlay/Startup.h"
+#include "Window/Overlay/PlaceUnitCinematic.h"
 
 // show recent projects
 #include "Window/Util/ShowRecent.h"
@@ -138,9 +139,9 @@ namespace Tempest
 		instance->register_window<HierarchyWindow>()->visible = false;
 		instance->register_window<InspectorWindow>()->visible = false;
 
-		instance->register_window<test_window>()->visible = false;
-		//instance->register_window<test_window2>()->visible = false;
-		instance->register_window<Test_UIWindow>();
+		//instance->register_window<test_window>()->visible = false;
+		////instance->register_window<test_window2>()->visible = false;
+		//instance->register_window<Test_UIWindow>();
 		//instance->register_window<test_window3>()->visible = false;
 
 		instance->register_always<EditTimeMenuBar>();
@@ -216,6 +217,7 @@ namespace Tempest
 		instance->register_always<ParticleDraw>();
 		instance->register_always<LoadingOverlay>(true);
 		instance->register_always<RuntimeStartupOverlay>();
+		instance->register_always<PlaceUnitCinematic>();
 	}
 
 }

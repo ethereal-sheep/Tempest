@@ -58,6 +58,9 @@ static const float para_text_size = 18.f;
 static const float font_text_size = 24.f;
 static const float font_icon_size = 18.f;
 
+static bool block_mouse_down = false;
+static bool override_block_mouse_down = false;
+static bool non_imgui_mouse_click = false;
 
 inline auto font_para() { return ImGui::GetIO().Fonts->Fonts[0]; } // para
 inline auto font_body() { return ImGui::GetIO().Fonts->Fonts[1]; } // body
@@ -108,4 +111,20 @@ namespace Tempest
 		path /= "CoReSys";
 		return path;
 	}
+
+	void reset_blocking();
+	bool check_mouse_blocking();
+	bool check_if_mouse_within(const ImVec2 min, const ImVec2 max);
+
+
+	/* IMPT*/
+	// Blocks all imgui input if mouse is not in bounds
+	void block_input_if_mouse_not_in_bounds(ImVec2 pos, ImVec2 size);
+
+	// Override the mouse blocking if the mouse is in a certain bounds
+	void override_mouse_blocking(ImVec2 pos, ImVec2 size);
+
+	// Use when u still want mouse click when everything is blocked
+	// not affected by mouse blocking
+	bool NonImGuiMouseClick();
 }

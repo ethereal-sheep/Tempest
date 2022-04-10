@@ -4672,6 +4672,9 @@ namespace Tempest::UI
 		drawlist->AddRectFilled(LeftBox.Min, LeftBox.Max, ImGui::GetColorU32(col));
 		if(border)
 			drawlist->AddRect(min, max, ImGui::GetColorU32({ 1,1,1,1.f }));
+
+		/*block_input_if_mouse_not_in_bounds(pos, size);*/
+
 	}
 
 	void TutArea2(ImVec2 pos1, ImVec2 pos2, ImVec2 size1, ImVec2 size2, bool border)
@@ -4705,6 +4708,9 @@ namespace Tempest::UI
 			drawlist->AddRect(min1, max1, ImGui::GetColorU32({ 1,1,1,1.f }));
 			drawlist->AddRect(min2, max2, ImGui::GetColorU32({ 1,1,1,1.f }));
 		}
+
+		/*block_input_if_mouse_not_in_bounds(pos1, size1);
+		block_input_if_mouse_not_in_bounds(pos2, size2);*/
 			
 	}
 	void TutArea3(ImVec2 pos1, ImVec2 pos2, ImVec2 size1, ImVec2 size2, bool border)
@@ -4738,6 +4744,9 @@ namespace Tempest::UI
 			drawlist->AddRect(min1, max1, ImGui::GetColorU32({ 1,1,1,1.f }));
 			drawlist->AddRect(min2, max2, ImGui::GetColorU32({ 1,1,1,1.f }));
 		}
+
+		/*block_input_if_mouse_not_in_bounds(pos1, size1);
+		block_input_if_mouse_not_in_bounds(pos2, size2);*/
 
 	}
 	bool MouseIsWithin(const ImVec2 min, const ImVec2 max)

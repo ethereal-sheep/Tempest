@@ -3,11 +3,13 @@
 
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include <Util/shape_manip.h>
+#include "PlaceUnitCinematic.h"
 
 void Tempest::RuntimeStartupOverlay::init(Instance&)
 {
 	
 }
+
 
 void Tempest::RuntimeStartupOverlay::call_first(Instance& instance)
 {

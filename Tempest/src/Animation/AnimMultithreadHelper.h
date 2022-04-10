@@ -85,9 +85,30 @@ namespace Tempest
 					buffer.ChangeDuration(id, time);
 				}
 
+				for(auto& [id, anim] : force)
+				{
+					buffer.ForceChange(id, anim);
+				}
+
+				for (auto& [id, loop] : play)
+					buffer.PlayAnimation(id, loop);
+
+				for (auto& i : pause)
+					buffer.PauseAnimation(i);
+
+				for (auto& i : stop)
+					buffer.StopAnimation(i);
+
+				for (auto& [id, spd] : speed)
+					buffer.SetSpeed(id, spd);
+
 				store.clear();
 				chg_animation.clear();
 				chg_duration.clear();
+				play.clear();
+				pause.clear();
+				stop.clear();
+				speed.clear();
 
 				run_once = true;
 			}
@@ -105,13 +126,13 @@ namespace Tempest
 
 		void AddAnimator(uint32_t id, Animator anim)
 		{
-			if(!current.CheckAnimator(id) && !store.contains(id))
+			if(!current.CheckAnimator(id) && !store.count(id))
 				store.insert(std::make_pair(id, anim));
 		}
 
-		void ChangeAnimation(uint32_t id, Animation* animation)
+		void ChangeAnimation(uint32_t id, std::string anim)
 		{
-			chg_animation.insert(std::make_pair(id, animation));
+			chg_animation.insert(std::make_pair(id, anim));
 		}
 
 		bool CheckAnimator(uint32_t id)
@@ -123,13 +144,43 @@ namespace Tempest
 		{
 			chg_duration.insert(std::make_pair(id, duration));
 		}
+
+		void PlayAnimation(uint32_t id, bool loop)
+		{
+			play.insert(std::make_pair(id, loop));
+		}
+
+		void PauseAnimation(uint32_t id)
+		{	
+			pause.push_back(id);
+		}
+
+		void StopAnimation(uint32_t id)
+		{
+			stop.push_back(id);
+		}
 		
+		void SetSpeed(uint32_t id, float spd)
+		{
+			speed.insert(std::make_pair(id, spd));
+		}
+
+		void ForceChange(uint32_t id, std::string anim)
+		{
+			force.insert(std::make_pair(id, anim));
+		}
 
 		AnimationManager buffer;
 		AnimationManager current;
+
 		tmap<uint32_t, Animator> store;
-		tmap<uint32_t, Animation*> chg_animation;
+		tmap<uint32_t, std::string> chg_animation;
 		tmap<uint32_t, float> chg_duration;
+		tmap<uint32_t, float> speed;
+		tmap<uint32_t, bool> play;
+		tvector<uint32_t> pause;
+		tvector<uint32_t> stop;
+		tmap<uint32_t, std::string> force;
 
 		std::atomic_bool run_once;
 		std::atomic_bool dead;

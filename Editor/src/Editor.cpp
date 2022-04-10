@@ -28,6 +28,7 @@
 #include "ECS/Test/test_entity.h"
 #include "Scripting/Test/test_scripting.h"
 
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 std::string persistent_ini_filepath;
@@ -124,6 +125,7 @@ namespace Tempest
 
 		void OnUpdate() override
 		{
+			reset_blocking();
 			// need to use dt
 			// fps controller can be done in instance manager
 			auto& io = ImGui::GetIO();
@@ -131,6 +133,8 @@ namespace Tempest
 			Service<RenderSystem>::Get().UpdateAnimation(io.DeltaTime);
 			cam.SetMousePosition((int)io.MousePos.x, (int)io.MousePos.y);
 			instance_manager.update(io.DeltaTime);
+
+			non_imgui_mouse_click = false;
 		}
 
 		void OnRender() override
@@ -210,6 +214,19 @@ namespace Tempest
 
 		LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
+			switch (msg)
+			{
+				/*
+				*	Key Input
+				*/
+			case WM_LBUTTONDOWN:
+			{
+				non_imgui_mouse_click = true;
+				if (check_mouse_blocking())
+					return 0;
+			}
+			}
+
 			return ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
 		}
 	};

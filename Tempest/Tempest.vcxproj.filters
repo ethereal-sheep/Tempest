@@ -106,6 +106,7 @@
     <ClCompile Include="src\FrameRate\FrameRateManager.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MeshPrimitives.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\EmitterSystem_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.cpp" />
     <ClCompile Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="src\FrameRate\FrameRateManager.h" />
     <ClInclude Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Graphics\PBR\MeshPrimitives.h" />
     <ClInclude Include="src\Particles\Particles_3D\EmitterSystem_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.h" />
     <ClInclude Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.h" />

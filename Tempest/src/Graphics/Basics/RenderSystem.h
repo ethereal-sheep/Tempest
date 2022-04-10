@@ -66,6 +66,7 @@ namespace Tempest
         void InitMeshes();
         void InitShaders();
         void InitBuffers();
+        void InitAnimations();
 
     public:
         RenderPipeline m_Pipeline;
@@ -77,6 +78,7 @@ namespace Tempest
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
         void SubmitModel(const string& path, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
+        void SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id, glm::vec3 color);
         void SubmitModel(const Particle_3D& particle, const glm::mat4& model_matrix);
         void SubmitModel(const string& path, const Transform& transform, uint32_t id);
         void SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id);
