@@ -181,6 +181,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
 								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
@@ -227,6 +228,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.225f, viewport->Size.y * 0.085f };
 								ImVec2 size = { 340.f, 140.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access units page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
@@ -258,6 +260,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.446f, viewport->Size.y * 0.18f };
 								ImVec2 size = { 200.f, 150.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -274,6 +277,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.387f, viewport->Size.y * 0.275f };
 								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -293,6 +297,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.14f, viewport->Size.y * 0.41f };
 								ImVec2 size = { 150.f, 150.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -309,6 +314,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.305f };
 								ImVec2 size = { 150.f, 150.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -328,6 +334,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.555f };
 								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -344,6 +351,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
 								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -363,6 +371,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.615f };
 								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -379,6 +388,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
 								ImVec2 size = { 180.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -405,6 +415,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.3f, 0 };
 								ImVec2 size = { viewport->Size.x, viewport->Size.y };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								//Task List
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
@@ -514,6 +525,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.445f, viewport->Size.y * 0.63f };
 								ImVec2 size = { 220.f, 120.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to simulate the results.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PushFont(FONT_BTN);
@@ -536,7 +548,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.3655f, viewport->Size.y * 0.35f };
 								ImVec2 size = { 500.f, 280.f };
 								UI::TutArea(pos, size);
-
+								block_input_if_mouse_not_in_bounds(pos, size);
 								drawlist->AddLine({ pos.x + size.x, pos.y + size.y * 0.4f }, { viewport->Size.x * 0.8f, pos.y + size.y * 0.4f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								ImGui::PushFont(FONT_BTN);
 								string str = "Chance of Success";
