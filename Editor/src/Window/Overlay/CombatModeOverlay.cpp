@@ -2094,6 +2094,9 @@ namespace Tempest
 			try_build_all(instance);
 
 			// create temp entities so we can check whats the damage, if any
+			cloned_curr_entity = instance.ecs.clone(curr_entity);
+			cloned_other_entity = instance.ecs.clone(other_entity);
+
 			auto temp_cc = instance.ecs.get<tc::Character>(curr_entity);
 			auto temp_oc = instance.ecs.get<tc::Character>(other_entity);
 
@@ -2164,14 +2167,14 @@ namespace Tempest
 		// check if the other_entity has health (only other for now)
 		//auto& charac = instance.ecs.get<tc::Character>(other_entity);
 
-		if (UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, !atk_rolled))
+		if (UI::CharacterTurnData(instance, cloned_curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false, !atk_rolled))
 		{
 			// attacker roll
 			atk_rolled = true;
 			inter1.start(0, 1);
 		}
 
-		if (UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true, !def_rolled))
+		if (UI::CharacterTurnData(instance, cloned_other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true, !def_rolled))
 		{
 			// defender roll
 			def_rolled = true;
@@ -2397,6 +2400,13 @@ namespace Tempest
 				state = State::CINEMATIC;
 				start_inter_atk_roll = true;
 				start_inter_def_roll = true;
+
+				// destory clones
+				instance.ecs.destroy(cloned_curr_entity);
+				instance.ecs.destroy(cloned_other_entity);
+
+				cloned_curr_entity = INVALID;
+				cloned_other_entity = INVALID;
 			};
 
 			Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, fn));
@@ -3531,7 +3541,7 @@ namespace Tempest
 			for (auto& i : inter_nest)
 				i.update(dt);
 
-				banner.update(dt);
+			banner.update(dt);
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
 

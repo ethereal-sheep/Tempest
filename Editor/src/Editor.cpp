@@ -125,6 +125,7 @@ namespace Tempest
 
 		void OnUpdate() override
 		{
+
 			reset_blocking();
 			// need to use dt
 			// fps controller can be done in instance manager
@@ -132,7 +133,15 @@ namespace Tempest
 			auto& cam = Service<RenderSystem>::Get().GetCamera();
 			Service<RenderSystem>::Get().UpdateAnimation(io.DeltaTime);
 			cam.SetMousePosition((int)io.MousePos.x, (int)io.MousePos.y);
-			instance_manager.update(io.DeltaTime);
+
+			global_runtime_dt = 0.016f;
+			if (must_override_dt())
+				global_runtime_dt = get_overriden_dt();
+			else
+				global_runtime_dt = io.DeltaTime;
+			
+			reset_dt();
+			instance_manager.update(global_runtime_dt);
 
 			non_imgui_mouse_click = false;
 		}

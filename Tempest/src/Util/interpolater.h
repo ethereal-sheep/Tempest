@@ -22,7 +22,7 @@ namespace Tempest
 		float end_time = -1;
 		T start_v = T{};
 		T end_v = T{};
-		std::function<float(float)> fn = [](float x) { return x; };
+		std::function<float(float)> fn{ [](float x) { return x; } };
 
 	public:
 		void start(T start, T end, float duration_in_sec = 1, float delay_in_sec = 0, std::function<float(float)> interpolation = [](float x) { return x; })
