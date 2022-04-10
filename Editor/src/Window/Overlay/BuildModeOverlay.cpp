@@ -527,7 +527,7 @@ namespace Tempest
 							{
 								instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 								AudioEngine ae;
-								ae.Play("Sounds2D/DeleteObject.wav", "SFX");
+								ae.Play("Sounds2D/SFX_DeleteFurniture.wav", "SFX");
 								instance.selected = INVALID;
 								
 								EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, t_position);
@@ -1098,7 +1098,7 @@ namespace Tempest
 				}
 				instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 				AudioEngine ae;
-				ae.Play("Sounds2D/DeleteObject.wav", "SFX");
+				ae.Play("Sounds2D/SFX_DeleteFurniture.wav", "SFX");
 				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform.position);
 				instance.selected = INVALID;
 				return;

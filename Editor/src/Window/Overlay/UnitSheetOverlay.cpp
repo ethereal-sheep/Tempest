@@ -469,6 +469,9 @@ namespace Tempest
 
 									if (!b_unit_NAME_task_vfx)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_unit_NAME_task_vfx = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -494,6 +497,9 @@ namespace Tempest
 
 									if (!b_unit_ATK_task_vfx)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_unit_ATK_task_vfx = true;
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
 										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
@@ -516,6 +522,9 @@ namespace Tempest
 
 									if (!b_unit_HP_task_vfx)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_unit_HP_task_vfx = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };

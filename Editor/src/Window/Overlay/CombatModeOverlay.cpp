@@ -2184,6 +2184,8 @@ namespace Tempest
 			ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.37f - roll_size.x * 0.5f, viewport->Size.y * 0.27f + roll_size.y * 0.5f });
 			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), roll_size))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/SFX_Diceroll.wav", "SFX", 1.0f);
 				inter1.start(0, 1);
 				atk_rolled = true;
 			}
@@ -2195,6 +2197,8 @@ namespace Tempest
 			ImGui::PushID("second");
 			if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), roll_size))
 			{
+				AudioEngine ae;
+				ae.Play("Sounds2D/SFX_Diceroll.wav", "SFX", 1.0f);
 				inter2.start(0, 1);
 				def_rolled = true;
 			}
@@ -2661,6 +2665,7 @@ namespace Tempest
 				{
 					beginAttack = false;
 					EmitterSystem_3D::GetInstance().CreateChracterChargedAttackEmitter(m_characterAttackEmitter, xform.position);
+					ae.Play("Sounds2D/SFX_WindupAttack.wav", "SFX", 1.0f);
 				}
 
 				// PSEUDO 
@@ -3099,6 +3104,9 @@ namespace Tempest
 					other_entity = INVALID;
 					ImGui::CloseCurrentPopup();
 					Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, back_to_main));
+
+					AudioEngine ae;
+					ae.Play("Sounds2D/SFX_UnitRemoval.wav", "SFX", 1.0f);
 				}
 				ImGui::SetCursorPosX(0);
 				ImGui::SetCursorPosY(0);

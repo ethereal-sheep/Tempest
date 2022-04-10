@@ -354,6 +354,9 @@ namespace Tempest
 
 								if (!b_weapon_RENAME_task_vfx)
 								{
+									AudioEngine ae;
+									ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 									b_weapon_RENAME_task_vfx = true;
 
 									ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -379,6 +382,9 @@ namespace Tempest
 
 								if (!b_weapon_ATK_task_vfx)
 								{
+									AudioEngine ae;
+									ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 									b_weapon_ATK_task_vfx = true;
 
 									ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };

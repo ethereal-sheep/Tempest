@@ -552,6 +552,9 @@ namespace Tempest
 
 									if (!b_action_rename_task_VFX)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_action_rename_task_VFX = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -586,6 +589,9 @@ namespace Tempest
 
 									if (!b_attackNode_create_task_vfx)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_attackNode_create_task_vfx = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -631,6 +637,9 @@ namespace Tempest
 
 									if (!b_attakNode_connect_task_vfx)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_attakNode_connect_task_vfx = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -789,6 +798,9 @@ namespace Tempest
 
 									if (!b_sequence_rename_task_VFX)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_sequence_rename_task_VFX = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -820,6 +832,9 @@ namespace Tempest
 
 									if (!b_defendNode_create_task_VFX)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_defendNode_create_task_VFX = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -861,6 +876,9 @@ namespace Tempest
 
 									if (!b_defendNode_connect_attackNode_task_VFX)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_defendNode_connect_attackNode_task_VFX = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -902,6 +920,9 @@ namespace Tempest
 
 									if (!b_defendNode_connect_compareNode_task_VFX)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_defendNode_connect_compareNode_task_VFX = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
@@ -943,6 +964,9 @@ namespace Tempest
 
 									if (!b_defendNode_output_connect_task_VFX)
 									{
+										AudioEngine ae;
+										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
+
 										b_defendNode_output_connect_task_VFX = true;
 
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
