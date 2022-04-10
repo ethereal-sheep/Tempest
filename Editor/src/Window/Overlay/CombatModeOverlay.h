@@ -209,6 +209,10 @@ namespace Tempest
         Entity other_selected_action = UNDEFINED;
         Entity other_selected_weapon = UNDEFINED;
 
+
+        Entity cloned_curr_entity = UNDEFINED;
+        Entity cloned_other_entity = UNDEFINED;
+
         uint32_t freq = 10000u;
         std::atomic_uint32_t win;
         std::atomic_uint32_t lose;

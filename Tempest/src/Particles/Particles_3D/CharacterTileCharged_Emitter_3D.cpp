@@ -34,9 +34,10 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 1.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 6.0f, 0.0f };
 
-	m_PAM.m_scaleBegin = glm::vec3{ 0.01f, 0.01f, 0.01f };
+	m_PAM.m_scaleBegin = glm::vec3{ 0.001f, 0.001f, 0.001f };
 	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+	//m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 	// Note - Values to be divided by 255.0f - Forgot the reason
 	m_PAM.m_colourBegin = glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f };
@@ -45,7 +46,8 @@ CharacterTileCharged_Emitter_3D::CharacterTileCharged_Emitter_3D()
 	m_PAM.m_lifeTime = 0.5f;
 	m_PAM.m_rebirth = false;
 
-	m_RM.m_renderingPath = "Models/Cube.a";
+	//m_RM.m_renderingPath = "Models/Cube.a";
+	m_RM.m_renderingPath = "Models/Sphere.a";
 	m_RM.m_emissiveLighting = true;
 }
 

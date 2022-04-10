@@ -26,7 +26,9 @@ Smoke_Poof_Emitter_3D::Smoke_Poof_Emitter_3D()
 	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 3.0f, 1.0f, 3.0f };
 
-	m_PAM.m_scaleBegin = glm::vec3{ 0.3f, 0.3, 0.3f };
+	//m_PAM.m_scaleBegin = glm::vec3{ 0.3f, 0.3, 0.3f };
+	m_PAM.m_scaleBegin = glm::vec3{ 0.003f, 0.003f, 0.003f };
+	//m_PAM.m_scaleBegin = glm::vec3{ 0.3f, 0.3, 0.3f };
 	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	m_PAM.m_scaleVariation = glm::vec3{ 0.f, 0.f, 0.f };
 
@@ -34,7 +36,8 @@ Smoke_Poof_Emitter_3D::Smoke_Poof_Emitter_3D()
 	m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 0.2f };
 
 	m_PAM.m_lifeTime = 0.5f;
-	m_RM.m_renderingPath = "Models/Cube.a";
+	//m_RM.m_renderingPath = "Models/Cube.a";
+	m_RM.m_renderingPath = "Models/Sphere.a";
 }
 
 void Smoke_Poof_Emitter_3D::Emit(const int particleAmount)
