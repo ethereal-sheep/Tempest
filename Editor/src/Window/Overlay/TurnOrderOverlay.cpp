@@ -123,6 +123,7 @@ namespace Tempest
 						ImVec2 pos = { 0, viewport->Size.y * 0.275f };
 						ImVec2 size = { 640.f, 290.f };
 						UI::TutArea(pos, size);
+						block_input_if_mouse_not_in_bounds(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to add your units into the turn order";
 						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
@@ -143,6 +144,7 @@ namespace Tempest
 						ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
 						ImVec2 size = { 180.f, 50.f };
 						UI::TutArea(pos, size);
+						block_input_if_mouse_not_in_bounds(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to go to the next page";
 						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
@@ -164,6 +166,7 @@ namespace Tempest
 						ImVec2 pos = { viewport->Size.x * 0.221f, viewport->Size.y * 0.673f };
 						ImVec2 size = { 220.f, 140.f };
 						UI::TutArea(pos, size);
+						block_input_if_mouse_not_in_bounds(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to customize your turn order";
 						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
@@ -174,6 +177,7 @@ namespace Tempest
 						ImVec2 pos = { viewport->Size.x * 0.28f, viewport->Size.y * 0.475f };
 						ImVec2 size = { 105.f, 50.f };
 						UI::TutArea(pos, size);
+						block_input_if_mouse_not_in_bounds(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to set turn order according to Move";
 						drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
@@ -252,6 +256,7 @@ namespace Tempest
 						ImVec2 pos = { viewport->Size.x * 0.9f - 90.0f, viewport->Size.y * 0.9f - 24.0f };
 						ImVec2 size = { 180.f, 50.f };
 						UI::TutArea(pos, size);
+						block_input_if_mouse_not_in_bounds(pos, size);
 						string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to save the turn order and start the game";
 						drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 5.0f, pos.y + 25.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					}
