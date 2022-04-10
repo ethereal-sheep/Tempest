@@ -102,8 +102,8 @@ void Emitter_2D::ParticleUpdate()
 				particle.m_velocity.y = glm::mix(particle.m_velocityEnd.y, particle.m_velocityBegin.y, lifePercent);
 			}
 
-			particle.m_size = glm::mix(m_PAM.m_scaleEnd, m_PAM.m_scaleBegin, lifePercent);
-			particle.m_colour = glm::mix(m_PAM.m_colourEnd, m_PAM.m_colourBegin, lifePercent);
+			particle.m_size = glm::mix(particle.m_scaleEnd, particle.m_scaleBegin, lifePercent);
+			particle.m_colour = glm::mix(particle.m_colourEnd, particle.m_colourBegin, lifePercent);
 			particle.m_lifeRemaining -= m_MM.m_simulationSpeed;
 		}
 	}
@@ -121,21 +121,12 @@ void Emitter_2D::ParticleSetUp(Particle_2D& particle)
 	particle.m_gravity = m_PAM.m_gravity;
 
 	// Velocity Variation for the Individual Particle
-	if (m_PAM.m_velocityVariation.x)
-	{
-		auto rand_Vel_X = Random::Float() * m_PAM.m_velocityVariation.x;
+	glm::vec2 rand_Vel;
+	rand_Vel.x = Random::Float() * m_PAM.m_velocityVariation.x;
+	rand_Vel.y = Random::Float() * m_PAM.m_velocityVariation.y;
 
-		particle.m_velocityBegin.x += rand_Vel_X;
-		particle.m_velocityEnd.x += rand_Vel_X;
-	}
-
-	if (m_PAM.m_velocityVariation.y)
-	{
-		auto rand_Vel_Y = Random::Float() * m_PAM.m_velocityVariation.y;
-
-		particle.m_velocityBegin.y += rand_Vel_Y;
-		particle.m_velocityEnd.y += rand_Vel_Y;
-	}
+	particle.m_velocityBegin += rand_Vel;
+	particle.m_velocityEnd += rand_Vel;
 
 	// Color
 	particle.m_colourBegin = m_PAM.m_colourBegin;
@@ -146,13 +137,10 @@ void Emitter_2D::ParticleSetUp(Particle_2D& particle)
 	particle.m_lifeRemaining = m_PAM.m_lifeTime;
 
 	// Scale Variation
-	float scaleVariation = 0.0f;
-
-	if (m_PAM.m_scaleVariation >= 1)
-		scaleVariation = Random::Float() * m_PAM.m_scaleVariation;
+	float scaleVariation = Random::Float() * m_PAM.m_scaleVariation;
 
 	particle.m_scaleBegin = m_PAM.m_scaleBegin + scaleVariation;
-	particle.m_scaleEnd = m_PAM.m_scaleEnd;
+	particle.m_scaleEnd = m_PAM.m_scaleEnd + scaleVariation;
 
 	particle.m_type = m_RM.m_type;
 }
