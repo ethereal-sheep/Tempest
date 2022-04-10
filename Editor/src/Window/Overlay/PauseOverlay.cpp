@@ -33,7 +33,8 @@ namespace Tempest
 
 		if (OverlayOpen)
 		{
-			
+			override_dt(0.f);
+
 			if (EscDuringPause && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 			{
 				OverlayOpen = false;
