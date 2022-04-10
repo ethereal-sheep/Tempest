@@ -226,7 +226,6 @@ void EmitterSystem_2D::CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMoti
 
 	// Center position of the circle
 	emitter.lock()->m_centrePoint = centrePos;
-	//tempEmitter->m_GM.m_position = centrePos;
 	emitter.lock()->m_radius = radius;
 
 	// Emitter_2D values - Without consideration for default ctor values
