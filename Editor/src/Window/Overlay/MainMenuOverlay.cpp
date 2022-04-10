@@ -859,7 +859,7 @@ namespace Tempest
 			{
 				AudioEngine ae;
 				ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-				Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
+				Service<EventManager>::Get().instant_dispatch<CreditsTrigger>();
 			}
 			if (ImGui::IsItemHovered())
 				creditsIconBtn = "Assets/CreditsIconBtn_hover.dds";

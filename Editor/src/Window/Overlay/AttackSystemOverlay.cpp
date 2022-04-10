@@ -92,6 +92,7 @@ namespace Tempest
 		emitter_4 = false;
 
 		tut_openSlide = true;
+		edit_name = false;
 		ax::NodeEditor::NavigateToContent();
 		inter.start(-0.1f, 0.02f, .25f, 0, [](float x) { return glm::cubicEaseOut(x); }); // back
 		inter_nest[0].start(0.5f, .15f, .4f, 0, [](float x) { return glm::cubicEaseOut(x); }); // graphs 
@@ -173,19 +174,36 @@ namespace Tempest
 				{
 					ImGui::PushFont(FONT_HEAD);
 					ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.f,0.f,0.f, 0.f });
+					//ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.f,0.f,0.f, 0.f });
 					const ImVec2 text_size{ ImGui::CalcTextSize(temp_graph.name.c_str()) };
 					ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.8f - text_size.x * 0.5f, viewport->Size.y * 0.1f });
-					if (ImGui::BeginChild("Editing name", ImVec2{ text_size.x * 2.0f, text_size.y + 5.0f}, false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
+					if (ImGui::BeginChild("Editing name", ImVec2{ text_size.x * 2.0f, text_size.y + 5.0f}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar))
 					{
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
-						ImGui::PushItemWidth(text_size.x * 2.0f);
-						ImGui::InputText("##testing", &temp_graph.name);
-						ImGui::PopItemWidth();
-						ImGui::PopStyleColor();
+						auto edit_button = tex_map["Assets/EnterButton.dds"];
+					//	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0,0,0,0 });
+						
+						if (UI::UIImageButton((void*)static_cast<size_t>(edit_button->GetID()), ImVec2{ edit_button->GetWidth() * 1.0f, edit_button->GetHeight() * 1.0f }))
+						{
+							edit_name = true;
+						}
+
+						ImGui::SameLine();
+						if (edit_name)
+						{
+							ImGui::PushItemWidth(text_size.x * 2.0f);
+							ImGui::InputText("##testing", &temp_graph.name);
+							ImGui::PopItemWidth();
+
+							if (ImGui::IsItemDeactivated())
+								edit_name = false;
+						}
+							
+						else
+							ImGui::Text(temp_graph.name.c_str());
+					//	ImGui::PopStyleColor();
 					}
 					ImGui::EndChild();
-					ImGui::PopStyleColor();
+					//ImGui::PopStyleColor();
 					ImGui::PopStyleVar();
 					ImGui::PopFont();
 

@@ -105,6 +105,7 @@ namespace Tempest
         bool OverlayOpen = false;
         bool attack_action = false;
         bool defend_action = false;
+        bool edit_name = false;
         std::string overlay_title{ "" };
         std::string sidebar_title{ "" };
         OPEN_GRAPH_TYPE type{ OPEN_GRAPH_TYPE::GRAPH_ACTION };

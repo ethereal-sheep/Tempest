@@ -666,13 +666,15 @@ namespace Tempest
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_ADD_UNITS:
 						if (added_entities.size() > 1)
 						{
-							inter_nest[0].start(0.f, -1.f, both_time, 0.f, [](float x) { return easyInBack(x); });
+							if (!inter_nest[0].is_in_progress())
+							{
+								inter_nest[0].start(0.f, -1.f, both_time, 0.f, [](float x) { return easyInBack(x); });
 
-							auto fn = [&]() {
-								change_state(TURN_ORDER_STATE::ORDER_TURN_MAIN);
-							};
-							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(.6f, fn));
-
+								auto fn = [&]() {
+									change_state(TURN_ORDER_STATE::ORDER_TURN_MAIN);
+								};
+								Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(.6f, fn));
+							}
 						}
 						else
 							Service<EventManager>::Get().instant_dispatch<ErrorTrigger>("At least two units required!");
@@ -691,14 +693,16 @@ namespace Tempest
 						break;
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_SUB:
 					{
-						inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
+						if (!inter_nest[1].is_in_progress())
+						{
+							inter_nest[1].start(0.f, -1.f, left_time, 0.f, [](float x) { return easyInBack(x); });
 
-						auto fn = [&]() {
-							turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
-							inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
-						};
-						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
-
+							auto fn = [&]() {
+								turn_order_state = TURN_ORDER_STATE::ORDER_TURN_MAIN;
+								inter_nest[1].start(-1.f, 0.f, left_time, 0.f, [](float x) { return glm::cubicEaseOut(x); });
+							};
+							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(left_time, fn));
+						}
 					}
 						break;
 					default:
@@ -745,13 +749,15 @@ namespace Tempest
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_MAIN:
 					case Tempest::TurnOrderOverlay::TURN_ORDER_STATE::ORDER_TURN_SUB:
 					{
+						if (!inter_nest[0].is_in_progress())
+						{
+							inter_nest[0].start(0.f, -1.f, both_time, 0.f, [](float x) { return easyInBack(x); });
 
-						inter_nest[0].start(0.f, -1.f, both_time, 0.f, [](float x) { return easyInBack(x); });
-
-						auto fn = [&]() {
-							change_state(TURN_ORDER_STATE::ORDER_ADD_UNITS);
-						};
-						Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(.6f, fn));
+							auto fn = [&]() {
+								change_state(TURN_ORDER_STATE::ORDER_ADD_UNITS);
+							};
+							Service<EventManager>::Get().instant_dispatch<DelayTrigger>(DelayTrigger(.6f, fn));
+						}
 					}
 						break;
 					default:

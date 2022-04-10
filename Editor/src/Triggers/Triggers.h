@@ -291,6 +291,7 @@ namespace Tempest
 	};
 
 	struct CombatResultsTrigger : public Event {};
+	struct CreditsTrigger : public Event {};
 
 	struct SendCombatResults : public Event
 	{
