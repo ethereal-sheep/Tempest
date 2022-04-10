@@ -27,6 +27,7 @@ struct Unit_MovementTrailEmitter_3D;
 // Character Spawning VFX
 struct CharacterSpawnEmitter_3D;
 struct CharacterDespawnEmitter_3D;
+struct CharacterCutsceneSpawnEmitter_3D;
 
 // Character Actions VFX
 struct CharacterDamageEmitter_3D;
@@ -60,6 +61,7 @@ struct EmitterSystem_3D
 	void CreateSmokePoofEmitter(std::weak_ptr<Smoke_Poof_Emitter_3D>& wk_ptr, glm::vec3 spawnPos);
 
 	void CharacterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
+	void CharacterCutsceneSpawnEmitter(std::weak_ptr<CharacterCutsceneSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
 	void CreateChracterDespawnEmitter(std::weak_ptr<CharacterDespawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
 	void CreateChracterChargedAttackEmitter(std::weak_ptr<CharacterTileCharged_Emitter_3D>& wk_ptr, glm::vec3 spawnPos = { 0.f, 0.f, 0.f });
 	const std::weak_ptr<CharacterDamageEmitter_3D> CreateChracterDamageEmitter(glm::vec3 spawnPos, glm::vec4 colourBegin = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f }, glm::vec4 colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f });

@@ -16,6 +16,8 @@
 #include "../Viewport/CameraControls.h"
 #include "Util/interpolater.h"
 
+struct CharacterCutsceneSpawnEmitter_3D;
+
 namespace Tempest
 {
     class PlaceUnitCinematic : public Window
@@ -40,5 +42,7 @@ namespace Tempest
         quat start = glm::quat_identity<float, glm::highp>();
         CameraControls cam_ctrl;
         interpolater<float> inter;
+
+        std::vector<std::weak_ptr<CharacterCutsceneSpawnEmitter_3D>> m_characterSpawnEmitterVector;
     };
 }

@@ -23,6 +23,7 @@
 // Characters Spawning VFX
 #include "CharacterSpawnEmitter_3D.h"
 #include "CharacterDespawnEmitter_3D.h"
+#include "CharacterCutsceneSpawnEmitter_3D.h"
 
 // Character Actions VFX
 #include "CharacterDamageEmitter_3D.h"
@@ -263,6 +264,47 @@ void EmitterSystem_3D::CharacterSpawnEmitter(std::weak_ptr<CharacterSpawnEmitter
 	if (wk_ptr.expired())
 	{
 		auto sh_ptr = std::make_shared<CharacterSpawnEmitter_3D>();
+		wk_ptr = sh_ptr;
+		AddEmitter(sh_ptr);
+	}
+	else
+	{
+		wk_ptr.lock()->ClearAllParticles();
+	}
+
+	spawnPos.y += 2.0f;
+
+	// Emitter_3D values - Without consideration for default ctor values
+	wk_ptr.lock()->m_GM.m_position = spawnPos;
+	wk_ptr.lock()->m_MM.m_duration = 5.0f;
+	wk_ptr.lock()->m_GM.m_active = true;
+
+	wk_ptr.lock()->m_EM.m_burstInterval = 0.096f;
+	wk_ptr.lock()->m_EM.m_burstCount = 4;
+	wk_ptr.lock()->m_EM.m_burstCycle = 8;
+
+	// Assign waypoints
+	std::array<glm::vec3, 4> waypoints;
+
+	/*
+	* 0 - Left
+	* 1 - Right
+	* 2 - Top
+	* 3 - Btm
+	*/
+	waypoints[0] = glm::vec3{ spawnPos.x       ,  spawnPos.y, spawnPos.z - 0.1f };
+	waypoints[1] = glm::vec3{ spawnPos.x       ,  spawnPos.y, spawnPos.z + 0.1f };
+	waypoints[2] = glm::vec3{ spawnPos.x + 0.1f,  spawnPos.y, spawnPos.z };
+	waypoints[3] = glm::vec3{ spawnPos.x - 0.1f,  spawnPos.y, spawnPos.z };
+
+	wk_ptr.lock()->AssignWaypoint(waypoints);
+}
+
+void EmitterSystem_3D::CharacterCutsceneSpawnEmitter(std::weak_ptr<CharacterCutsceneSpawnEmitter_3D>& wk_ptr, glm::vec3 spawnPos)
+{
+	if (wk_ptr.expired())
+	{
+		auto sh_ptr = std::make_shared<CharacterCutsceneSpawnEmitter_3D>();
 		wk_ptr = sh_ptr;
 		AddEmitter(sh_ptr);
 	}

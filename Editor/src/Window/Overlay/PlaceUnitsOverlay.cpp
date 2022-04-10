@@ -18,6 +18,7 @@
 #include <Tempest/src/Audio/AudioEngine.h>
 
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "Particles/Particles_3D/CharacterSpawnEmitter_3D.h"
 
 namespace Tempest
 {
@@ -341,7 +342,7 @@ namespace Tempest
 							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);	
 						}
 							
-
+						m_characterSpawnEmitter.lock()->m_EM.m_burstCycle = 0;
 						OverlayOpen = false;
 					}
 				}
