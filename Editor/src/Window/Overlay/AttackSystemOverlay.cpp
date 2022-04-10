@@ -259,7 +259,7 @@ namespace Tempest
 							for (auto current_graph : instance.ecs.view<tc::ActionGraph>(exclude_t<tc::Destroyed>()))
 							{
 								auto& action = instance.ecs.get<tc::Graph>(current_graph);
-								auto PairResult = UI::UIButtonWithDelete(action.g.name, string("##Actiongraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 15, 20 }, FONT_PARA, id == current_graph);
+								auto PairResult = UI::UIWeapActionButtonWithDelete(action.g.name, string("##Actiongraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 0, 0 }, FONT_PARA, id == current_graph, false, 0.7f);
 								if (PairResult.first)
 								{
 									id = current_graph;
@@ -291,7 +291,7 @@ namespace Tempest
 							for (auto current_graph : instance.ecs.view<tc::ConflictGraph>(exclude_t<tc::Destroyed>()))
 							{
 								auto& sequence = instance.ecs.get<tc::Graph>(current_graph);
-								auto PairResult = UI::UIButtonWithDelete(sequence.g.name, string("##Sequencegraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 15, 20 }, FONT_PARA, id == current_graph);
+								auto PairResult = UI::UISeqButtonWithDelete(sequence.g.name, string("##Sequencegraph" + std::to_string(i)), { cursor.x, cursor.y + i * 80 }, { 0,0 }, FONT_PARA, id == current_graph, 0.7f);
 								if (PairResult.first)
 								{
 									id = current_graph;

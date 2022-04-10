@@ -173,7 +173,8 @@ namespace Tempest::UI
 
 	//return (IsButtonClick, IsDeleteClicked)
 	std::pair<bool, bool> UIButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected);
-	std::pair<bool, bool> UIWeapActionButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected, bool isWeapBtn = true);
+	std::pair<bool, bool> UIWeapActionButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected, bool isWeapBtn = true, float size = 0.9f);
+	std::pair<bool, bool> UISeqButtonWithDelete(string unselected, string id, ImVec2 pos, ImVec2 padding, ImFont* font, bool selected, float size = 0.9f);
 
 	void AddUnderline(ImU32 col, ImVec2 min = { 0, 0 }, ImVec2 max = { 0, 0 });
 	bool UISelectable(const char* label, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));

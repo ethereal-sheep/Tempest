@@ -130,7 +130,7 @@ namespace Tempest
 					for (auto id : view)
 					{
 						auto& weapon = instance.ecs.get<tc::Weapon>(id);
-						auto PairResult = UI::UIButtonWithDelete(weapon.name.c_str(), string("##"+std::to_string(i)), {cursor.x , cursor.y + i++ * 90}, {10,20}, FONT_PARA, SelectedID == id);
+						auto PairResult = UI::UIWeapActionButtonWithDelete(weapon.name.c_str(), string("##" + std::to_string(i)), { cursor.x , cursor.y + i++ * 90 }, { 0,0 }, FONT_PARA, SelectedID == id);
 						if (PairResult.first)
 						{
 							SelectedID = id;

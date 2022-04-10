@@ -172,7 +172,7 @@ namespace Tempest
                         {
                             auto& weapon = instance.ecs.get<tc::Weapon>(id);
                             auto tex = tex_map["Assets/WeaponBtn.dds"];
-                            ImGui::SetCursorPos({15.f + i++ * 200.f, 10.f + j * 100 });
+                            ImGui::SetCursorPos({35.f + i++ * 230.f, 20.f + j * 100 });
                             //if (UI::UIButton_2(weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             //if (UI::UIButton_Weapon(instance, id, weapon.name.c_str(), weapon.name.c_str(), { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0,0 }, FONT_PARA))
                             ImGui::PushID(i + weapon.name.c_str());
@@ -190,13 +190,23 @@ namespace Tempest
                             }
                         }
 
-                        if (UI::UIButton_2("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
+                        auto tex = tex_map["Assets/NewWeaponIcon.dds"];
+                        ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 230 - tex->GetWidth() * 0.5f * 0.7f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.7f });
+                        if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
                         {
                             enable_popup = false;
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
                         }
+
+                        /*if (UI::UIButton_2("+", "+", { cursor.x + i++ * 200, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
+                        {
+                            enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+                            Service<EventManager>::Get().instant_dispatch<OpenWeaponSheetTrigger>(false, instance);
+                        }*/
                     }
                         break;
                     case SIMULATE_POPUP_TYPE::ACTION:
@@ -207,7 +217,7 @@ namespace Tempest
 
                             //if (UI::UIButton_2(action.g.name, action.g.name, { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             auto tex = tex_map["Assets/ActionBtn.dds"];
-                            ImGui::SetCursorPos({ 15.f + i++ * 230.f, 10.f + j * 100 });
+                            ImGui::SetCursorPos({ 35.f + i++ * 230.f, 20.f + j * 100 });
                             ImGui::PushID(i + action.g.name.c_str());
                             if (UI::UIImgBtnWithText2((void*)static_cast<size_t>(tex->GetID()), { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f }, action.g.name))
                             {
@@ -224,13 +234,23 @@ namespace Tempest
                               
                         }
 
-                        if (UI::UIButton_2("+", "+", { cursor.x+ i++ * 230, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
+                        auto tex = tex_map["Assets/NewActionIcon.dds"];
+                        ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 230 - tex->GetWidth() * 0.5f * 0.7f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.7f });
+                        if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
                         {
                             enable_popup = false;
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
                             Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
                         }
+
+                       /* if (UI::UIButton_2("+", "+", { cursor.x+ i++ * 230, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
+                        {
+                            enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+                            Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
+                        }*/
                     }
                         break;
                     case SIMULATE_POPUP_TYPE::SEQUENCE:
@@ -239,7 +259,11 @@ namespace Tempest
                         {
                             auto& action = instance.ecs.get<tc::Graph>(id);
 
-                            if (UI::UIButton_2(action.g.name, action.g.name, { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
+                            auto tex = tex_map["Assets/SequenceBtn2.dds"];
+                            ImGui::SetCursorPos({ 35.f + i++ * 230.f, 20.f + j * 100 });
+                            ImGui::PushID(i + action.g.name.c_str());
+                            if (UI::UIImgBtnWithText2((void*)static_cast<size_t>(tex->GetID()), { (float)tex->GetWidth() * 0.7f, (float)tex->GetHeight() * 0.7f }, action.g.name))
+                         //   if (UI::UIButton_2(action.g.name, action.g.name, { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0, 5 }, FONT_PARA, data == id))
                             {
                                 data = data != id ? id : UNDEFINED;
                                 send_data();
@@ -254,12 +278,22 @@ namespace Tempest
 
                         }
 
-                        if (UI::UIButton_2("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
+                        auto tex = tex_map["Assets/NewSeqIcon.dds"];
+                        ImGui::SetCursorPos(ImVec2{ cursor.x + i++ * 230 - tex->GetWidth() * 0.5f * 0.7f, cursor.y + j * 100.0f - tex->GetHeight() * 0.5f * 0.7f });
+                        if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }))
                         {
                             enable_popup = false;
+                            Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::UNITS);
                             Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
-                            Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
+                            Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION);
                         }
+
+                        //if (UI::UIButton_2("+", "+", { cursor.x + i++ * 230, cursor.y + j * 100 }, { 0,5 }, FONT_PARA))
+                        //{
+                        //    enable_popup = false;
+                        //    Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
+                        //    Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE);
+                        //}
                     }
                         break;
                     case SIMULATE_POPUP_TYPE::EDIT_UNIT:
