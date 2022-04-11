@@ -625,7 +625,10 @@ namespace Tempest
 								instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 								instance.selected = INVALID;
 								AudioEngine ae;
-								ae.SetChannel3dPosition(ae.Play("Sounds3D/SFX_DeleteFurniture.wav", "SFX", 1.0f), t_position);
+								std::string sound_name = "Sounds3D/SFX_DeleteFurniture.wav";
+								/*if (is_metal_prototype(instance.ecs.get<tc::Meta>(current).name))
+									sound_name = "Sounds3D/SFX_MetallicDelete.wav";*/
+								ae.SetChannel3dPosition(ae.Play(sound_name, "SFX", 1.0f), t_position);
 								EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, t_position);
 
 								if (instance.tutorial_enable && tutorial_index == 7)
@@ -926,6 +929,9 @@ namespace Tempest
 									"Sounds3D/SFX_TileCreate" + std::to_string(rand() % 2 + 1) + ".wav"
 									: "Sounds3D/SFX_PropPlacement" + std::to_string(rand() % 2 + 1) + ".wav";
 
+								if (is_metal_prototype(proto_name))
+									sound_name = "Sounds3D/SFX_MetalPlacement";
+
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
 								{
@@ -1194,7 +1200,10 @@ namespace Tempest
 				}
 				instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 				AudioEngine ae;
-				ae.SetChannel3dPosition(ae.Play("Sounds3D/SFX_DeleteFurniture.wav", "SFX", 1.0f), transform.position);
+				std::string sound_name = "Sounds3D/SFX_DeleteFurniture.wav";
+				/*if (is_metal_prototype(instance.ecs.get<tc::Meta>(current).name))
+					sound_name = "Sounds3D/SFX_MetallicDelete.wav";*/
+				ae.SetChannel3dPosition(ae.Play(sound_name, "SFX", 1.0f), transform.position);
 				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform.position);
 				instance.selected = INVALID;
 				return;
@@ -1501,5 +1510,13 @@ namespace Tempest
 				instance.selected = id;
 			}
 		}
+	}
+
+	bool Tempest::BuildModeOverlay::is_metal_prototype(std::string name)
+	{
+		for (int i = 0; i < 6; ++i)
+			return name == metal_prototypes[i];
+
+		return false;
 	}
 }

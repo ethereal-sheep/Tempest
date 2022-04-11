@@ -55,9 +55,15 @@ namespace Tempest
 					UI::SubHeader("Paused");
 					ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
+					if (UI::UIButton_2("Resume Game", "Resume Game", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * (CanOpenGraph ? 0.25f : 0.35f) }, { 50,20 }, FONT_BTN))
+					{
+						OverlayOpen = false;
+						EscDuringPause = false;
+					}
+
 					if (CanOpenGraph)
 					{
-						if (UI::UIButton_2("Edit Action Graph", "Edit Action Graph", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.3f }, { 50,20 }, FONT_BTN))
+						if (UI::UIButton_2("Edit Action", "Edit Action", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.35f }, { 50,20 }, FONT_BTN))
 						{
 							OverlayOpen = false;
 							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
@@ -65,7 +71,7 @@ namespace Tempest
 							EscDuringPause = false;
 						}
 
-						if (UI::UIButton_2("Edit Sequence Graph", "Edit Sequence Graph", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.4f }, { 50,20 }, FONT_BTN))
+						if (UI::UIButton_2("Edit Sequence", "Edit Sequence", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.45f }, { 50,20 }, FONT_BTN))
 						{
 							OverlayOpen = false;
 							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
@@ -74,17 +80,18 @@ namespace Tempest
 						}
 					}
 
-					if (UI::UIButton_2("Return", "Return", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.5f }, { 50,20 }, FONT_BTN))
+					if (UI::UIButton_2("How To Play", "How To Play", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * (CanOpenGraph ? 0.55f : 0.45f) }, { 50,20 }, FONT_BTN))
 					{
-						OverlayOpen = false;
-						EscDuringPause = false;
+					}
+
+					if (UI::UIButton_2("Settings", "Settings", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * (CanOpenGraph ? 0.65f : 0.55f) }, { 50,20 }, FONT_BTN))
+					{
+						Service<EventManager>::Get().instant_dispatch<SettingsTrigger>();
 					}
 
 					// where does this go to?
-					if (UI::UIButton_2("Quit", "Quit", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.6f }, { 50,20 }, FONT_BTN))
+					if (UI::UIButton_2("Quit Game", "Quit Game", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * (CanOpenGraph ? 0.75f : 0.65f) }, { 50,20 }, FONT_BTN))
 					{
-
-
 						if (FromCombatMode)
 						{
 							OverlayOpen = false;
@@ -139,7 +146,6 @@ namespace Tempest
 
 							Service<EventManager>::Get().instant_dispatch<LoadTrigger>(t);
 						}
-					
 					}
 				}
 				ImGui::End();

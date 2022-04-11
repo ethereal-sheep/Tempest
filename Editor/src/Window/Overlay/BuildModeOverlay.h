@@ -48,6 +48,7 @@ namespace Tempest
         void renderBtm(Instance& instance);
         void draw_category(Instance& instance, const string& cat_name, prototype_container& proto_cat);
         void camEnable(Instance& instance);
+        bool is_metal_prototype(std::string name);
 
 
         bool OverlayOpen = false;
@@ -75,7 +76,7 @@ namespace Tempest
         bool voice_played[8] = { false, false, false, false,
                                 false, false, false, false };
         ImGuiTextFilter filter;
-
+        std::string metal_prototypes[6] = { "Cell Bench", "Metal Door", "Lab Machine", "Canteen Sink", "Canteen Tray Trolley", "Security Locker" };
         std::weak_ptr<Smoke_Poof_Emitter_3D> m_Prop_Placement_VFX;
     };
 }
