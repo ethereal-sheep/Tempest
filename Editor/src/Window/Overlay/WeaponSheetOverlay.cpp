@@ -130,7 +130,7 @@ namespace Tempest
 					for (auto id : view)
 					{
 						auto& weapon = instance.ecs.get<tc::Weapon>(id);
-						auto PairResult = UI::UIWeapActionButtonWithDelete(weapon.name.c_str(), string("##" + std::to_string(i)), { cursor.x , cursor.y + i++ * 90 }, { 0,0 }, FONT_PARA, SelectedID == id);
+						auto PairResult = UI::UIWeapActionButtonWithDelete(weapon.name.c_str(), string("##" + std::to_string(i)), { cursor.x , cursor.y + i++ * 90 }, { 0,0 }, FONT_PARA, SelectedID == id, true, 0.7f);
 						if (PairResult.first)
 						{
 							SelectedID = id;
@@ -186,12 +186,12 @@ namespace Tempest
 							emitter_0 = true;
 
 							glm::vec2 real_buttonSize;
-							real_buttonSize.x = pSize.x + 140 + 8;
-							real_buttonSize.y = pSize.y + 20.f;
+							real_buttonSize.x = 250.f;
+							real_buttonSize.y = 100.f;
 
 							glm::vec2 real_mousePosition;
-							real_mousePosition.x = ImGui::GetCursorPos().x + real_buttonSize.x*0.5f - 37.f;
-							real_mousePosition.y = ImGui::GetCursorPos().y + 80 + pSize.y * 0.45f;
+							real_mousePosition.x = viewport->Size.x * 0.01f;
+							real_mousePosition.y = viewport->Size.y * 0.19f;
 
 							EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 						}
@@ -310,9 +310,9 @@ namespace Tempest
 						{
 						case 0:
 						{
-							ImVec2 pos = { viewport->Size.x * 0.02f, viewport->Size.y * 0.19f };
-							ImVec2 size = { 200.f, 70.f };
-							UI::TutArea(pos, size, false);
+							ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.19f };
+							ImVec2 size = { 250.f, 100.f };
+							UI::TutArea(pos, size, true);
 							block_input_if_mouse_not_in_bounds(pos, size);
 							string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new weapon.";
 							drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
@@ -412,7 +412,7 @@ namespace Tempest
 								}
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+								override_mouse_blocking(tut_min, tut_max - tut_min);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
@@ -476,9 +476,10 @@ namespace Tempest
 					//Tutorial Exit Button
 					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 1.f, tut_min.y + exitBtn->GetHeight() * 1.f };
 					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
 
+					override_mouse_blocking(tut_min, tut_max - tut_min);
 					if (UI::MouseIsWithin(tut_min, tut_max))
 					{
 						ImGui::SetMouseCursor(7);

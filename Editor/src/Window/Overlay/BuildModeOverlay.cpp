@@ -94,7 +94,7 @@ namespace Tempest
 					ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.19f };
 					ImVec2 size = { 600.f, 650.f };
 					UI::TutArea(pos, size);
-
+					block_input_if_mouse_not_in_bounds({ 0,0 }, { 0,0 });
 					const float posY = viewport->Size.y * 0.2f + size.y * 0.5f;
 
 					// drawing the tips
@@ -116,7 +116,7 @@ namespace Tempest
 					drawlist->AddText({ viewport->Size.x * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, viewport->Size.y * 0.85f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 					ImGui::PopFont();
 
-					if (ImGui::IsMouseClicked(0))
+					if (NonImGuiMouseClick())
 					{
 						tutorial_index = 1;
 					}
@@ -125,8 +125,8 @@ namespace Tempest
 
 				case 1:
 				{
-					ImVec2 pos = { viewport->Size.x * 0.658f, viewport->Size.y * 0.21f };
-					ImVec2 size = { 55.f, 55.f };
+					ImVec2 pos = { viewport->Size.x * 0.67f, viewport->Size.y * 0.22f };
+					ImVec2 size = { 65.f, 68.f };
 					UI::TutArea(pos, size);
 					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a Furniture Category";
 					drawlist->AddText({ pos.x - ImGui::CalcTextSize(str.c_str()).x - 10.f, pos.y + size.y * 0.5f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
@@ -136,10 +136,10 @@ namespace Tempest
 				case 2:
 				{
 					ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.31f };
-					ImVec2 size = { 90.f, 90.f };
+					ImVec2 size = { 110.f, 110.f };
 
 					ImVec2 pos2 = { viewport->Size.x * 0.57f - 75.f, viewport->Size.y * 0.52f - 75.f };
-					ImVec2 size2 = { 150.f, 150.f };
+					ImVec2 size2 = { 200.f, 200.f };
 
 					UI::TutArea3(pos, pos2, size, size2);
 					//	UI::TutArea(pos, size);
@@ -150,11 +150,11 @@ namespace Tempest
 
 				case 3:
 				{
-					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
-					ImVec2 size = { 150.f, 150.f };
+					ImVec2 pos = { viewport->Size.x * 0.5f - 80.f, viewport->Size.y * 0.47f - 80.f };
+					ImVec2 size = { 170.f, 150.f };
 
-					ImVec2 pos2 = { viewport->Size.x * 0.5f + 25.0f, viewport->Size.y * 0.5f + 45.f };
-					ImVec2 size2 = { 50.f, 50.f };
+					ImVec2 pos2 = { viewport->Size.x * 0.5f + 28.0f, viewport->Size.y * 0.5f + 42.f };
+					ImVec2 size2 = { 60.f, 60.f };
 
 					UI::TutArea3(pos, pos2, size, size2);
 					//	UI::TutArea(pos, size);
@@ -178,8 +178,8 @@ namespace Tempest
 
 				case 4:
 				{
-					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.5f - 75.f };
-					ImVec2 size = { 300.f, 150.f };
+					ImVec2 pos = { viewport->Size.x * 0.4f, viewport->Size.y * 0.4f };
+					ImVec2 size = { 400.f, 300.f };
 
 					UI::TutArea(pos, size);
 
@@ -200,11 +200,11 @@ namespace Tempest
 
 				case 5:
 				{
-					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
-					ImVec2 size = { 150.f, 150.f };
+					ImVec2 pos = { viewport->Size.x * 0.5f - 80.f, viewport->Size.y * 0.47f - 80.f };
+					ImVec2 size = { 170.f, 150.f };
 
-					ImVec2 pos2 = { viewport->Size.x * 0.5f - 27.f, viewport->Size.y * 0.5f + 45.f };
-					ImVec2 size2 = { 50.f, 50.f };
+					ImVec2 pos2 = { viewport->Size.x * 0.5f - 40.f, viewport->Size.y * 0.5f + 42.f };
+					ImVec2 size2 = { 60.f, 60.f };
 
 					UI::TutArea3(pos, pos2, size, size2);
 					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to confirm furniture placement";
@@ -227,8 +227,8 @@ namespace Tempest
 					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
 					ImVec2 size = { 150.f, 150.f };
 
-					ImVec2 pos2 = { viewport->Size.x * 0.5f - 77.f, viewport->Size.y * 0.5f + 45.f };
-					ImVec2 size2 = { 50.f, 50.f };
+					ImVec2 pos2 = { viewport->Size.x * 0.5f - 100.f, viewport->Size.y * 0.5f + 42.f };
+					ImVec2 size2 = { 60.f, 60.f };
 
 					UI::TutArea3(pos, pos2, size, size2);
 					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to delete the furniture.";
@@ -244,7 +244,7 @@ namespace Tempest
 				{
 					auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 					ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+					ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 1.f, tut_min.y + exitBtn->GetHeight() * 1.f };
 					drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
 
 					if (UI::MouseIsWithin(tut_min, tut_max))

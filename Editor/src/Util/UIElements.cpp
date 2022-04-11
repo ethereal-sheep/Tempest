@@ -2566,7 +2566,7 @@ namespace Tempest::UI
 
 		const ImVec2 new_pos{ pos.x - button_size.x * 0.5f,  pos.y - button_size.y * 0.5f };
 		//const ImVec2 text_pos{ new_pos.x + button_size.x * 0.5f - text_size.x * 0.5f, new_pos.y + button_size.y * 0.5f - text_size.y * 0.5f };
-		const ImVec2 text_pos{ new_pos.x + button_size.y * 0.2f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
+		const ImVec2 text_pos{ new_pos.x + button_size.y * 0.3f, new_pos.y + button_size.y * 0.5f - test.y * 0.5f };
 
 
 		ImGui::SetCursorPos(new_pos);

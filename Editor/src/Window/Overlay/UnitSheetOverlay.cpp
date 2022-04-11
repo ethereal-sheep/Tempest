@@ -547,10 +547,10 @@ namespace Tempest
 											voice_played = true;
 										}
 									}
-									
+									override_mouse_blocking(tut_min, ImVec2{ (float)nextBtn->GetWidth() ,(float)nextBtn->GetHeight() });
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
-									if (UI::MouseIsWithin(tut_min, tut_max))
+									if (UI::MouseIsWithin(tut_min, tut_max) )
 									{
 										ImGui::SetMouseCursor(7);
 										if (ImGui::IsMouseClicked(0))
@@ -617,6 +617,7 @@ namespace Tempest
 						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth(), tut_min.y + exitBtn->GetHeight() };
 						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
 
+						override_mouse_blocking(tut_min, tut_max - tut_min);
 						if (UI::MouseIsWithin(tut_min, tut_max))
 						{
 							ImGui::SetMouseCursor(7);
@@ -877,7 +878,7 @@ namespace Tempest
 		{
 			if (auto weap = instance.ecs.get_if<tc::Weapon>(weap_id))
 			{
-				auto PairResult = UI::UIWeapActionButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 0,0 }, FONT_BODY, false);
+				auto PairResult = UI::UIWeapActionButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 0,0 }, FONT_BODY, false,true, 0.7f);
 				if (PairResult.first)
 				{
 					OverlayOpen = false;

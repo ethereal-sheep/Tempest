@@ -149,13 +149,33 @@ namespace Tempest
 
 			if (ImGui::Begin("Simulate Page Configure", nullptr, window_flags))
 			{
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
+				{
+					instance.tutorial_enable = true;
+					instance.tutorial_level = 1;
+					tutorial_index = 0;
+
+
+				}
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
+				{
+					tutorial_index++;
+				}
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_V)))
 				{
 					tutorial_p2 = true;
-				    //tutorial_index = 9;
-					tutorial_index = 11;
-					instance.tutorial_level = 1;
+					tutorial_index = 0;
+				}
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_C)))
+				{
+					instance.tutorial_enable = true;
+					if (++instance.tutorial_level > 3)
+						instance.tutorial_level = 1;
 
+					tutorial_index = 0;
 				}
 				/*if(instance.tutorial_enable)
 					ImGui::GetIO().MouseClicked[0] = false;
@@ -193,6 +213,7 @@ namespace Tempest
 								ImVec2 pos = { 0.f, 0.f };
 								ImVec2 size = { viewport->Size.x, viewport->Size.y * 0.25f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds({ 0,0 }, { 0,0 });
 								string str = "";
 								str = "Quick Menu";
 								ImGui::PushFont(FONT_BTN);
@@ -212,7 +233,7 @@ namespace Tempest
 								if (!m_waypointEmitter.expired())
 									m_waypointEmitter.lock()->m_GM.m_active = false;
 
-								if (ImGui::IsMouseClicked(0))
+								if (NonImGuiMouseClick())
 								{
 									tutorial_index = 2;
 
@@ -257,8 +278,8 @@ namespace Tempest
 							{
 							case 0:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.446f, viewport->Size.y * 0.18f };
-								ImVec2 size = { 200.f, 150.f };
+								ImVec2 pos = { viewport->Size.x * 0.44f, viewport->Size.y * 0.18f };
+								ImVec2 size = { 220.f, 150.f };
 								UI::TutArea(pos, size);
 								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
@@ -275,7 +296,7 @@ namespace Tempest
 							case 1:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.387f, viewport->Size.y * 0.275f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 80.f };
 								UI::TutArea(pos, size);
 								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
@@ -332,7 +353,7 @@ namespace Tempest
 							case 4:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.555f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size);
 								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
@@ -349,7 +370,7 @@ namespace Tempest
 							case 5:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 80.f };
 								UI::TutArea(pos, size);
 								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
@@ -369,7 +390,7 @@ namespace Tempest
 							case 6:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.615f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size);
 								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
@@ -386,7 +407,7 @@ namespace Tempest
 							case 7:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 80.f };
 								UI::TutArea(pos, size);
 								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
@@ -507,7 +528,7 @@ namespace Tempest
 								if (taskCompleted)
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+									override_mouse_blocking(tut_min, tut_max - tut_min);
 									if (UI::MouseIsWithin(tut_min, tut_max))
 									{
 										ImGui::SetMouseCursor(7);
@@ -567,7 +588,7 @@ namespace Tempest
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+								override_mouse_blocking(tut_min, tut_max - tut_min);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
@@ -608,6 +629,7 @@ namespace Tempest
 								ImGui::PopFont();
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+								override_mouse_blocking(tut_min, tut_max - tut_min);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
@@ -678,7 +700,7 @@ namespace Tempest
 								ImGui::PopFont();
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+								override_mouse_blocking(tut_min, tut_max - tut_min);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
@@ -742,7 +764,7 @@ namespace Tempest
 							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
 							drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+							override_mouse_blocking(tut_min, tut_max - tut_min);
 							if (UI::MouseIsWithin(tut_min, tut_max))
 							{
 								ImGui::SetMouseCursor(7);
@@ -778,10 +800,11 @@ namespace Tempest
 						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 1.f, tut_min.y + exitBtn->GetHeight() * 1.f };
 						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
 
+						override_mouse_blocking(tut_min, tut_max - tut_min);
 						if (UI::MouseIsWithin(tut_min, tut_max))
 						{
 							ImGui::SetMouseCursor(7);
-							if (NonImGuiMouseClick())
+							if (ImGui::IsMouseClicked(0))
 							{
 								instance.tutorial_temp_exit = true;
 								ImGui::OpenPopup("TutorialExitPopupConfirm");
