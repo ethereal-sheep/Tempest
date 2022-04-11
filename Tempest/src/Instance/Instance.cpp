@@ -13,6 +13,7 @@
 #include "Particles/Particles_2D/EmitterSystem_2D.h"
 #include "Particles/Particles_3D/EmitterSystem_3D.h"
 #include "FrameRate/FrameRateManager.h"
+#include <../../Tempest/src/Audio/AudioEngine.h>
 
 namespace Tempest
 {
@@ -35,6 +36,9 @@ namespace Tempest
 		}
 		
 		EmitterSystem_2D::GetInstance().Update();
+
+		AudioEngine ae;
+		ae.Set3DListener(cam.GetPosition(), cam.GetFront(), cam.GetUp());
 	}
 	void Instance::internal_render()
 	{

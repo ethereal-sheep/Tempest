@@ -71,6 +71,9 @@ namespace Tempest
         tsptr<Texture> option_btns[3];
 
         ChannelID MapBuilderBGM = 0;
+        ChannelID voice_line{ 0 };
+        bool voice_played[8] = { false, false, false, false,
+                                false, false, false, false };
         ImGuiTextFilter filter;
 
         std::weak_ptr<Smoke_Poof_Emitter_3D> m_Prop_Placement_VFX;

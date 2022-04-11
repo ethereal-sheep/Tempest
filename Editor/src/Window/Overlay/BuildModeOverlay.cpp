@@ -35,7 +35,16 @@ namespace Tempest
 		option_btns[2] = tex_map["Assets/MBOption_3_Unselected.dds"];
 
 		if (event_cast<OpenBuildModeOverlay>(e).instance.tutorial_enable)
+		{
 			Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(false);
+
+			AudioEngine ae;
+			ae.StopChannel(voice_line);
+			voice_line = 0;
+			for (int i = 0; i < 8; ++i)
+				voice_played[i] = false;
+		}
+			
 	}
 
 	void BuildModeOverlay::tutorial_index_trigger(const Event& e)
@@ -91,6 +100,25 @@ namespace Tempest
 				{
 				case 0:
 				{
+					if (!voice_played[0])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Welcome_1.wav", "VL", 1.0f);
+							voice_played[0] = true;
+						}
+					}
+					else if (!voice_played[1])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Introduction_1.wav", "VL", 1.0f);
+							voice_played[1] = true;
+						}
+					}
+
 					ImVec2 pos = { viewport->Size.x * 0.65f, viewport->Size.y * 0.19f };
 					ImVec2 size = { 600.f, 650.f };
 					UI::TutArea(pos, size);
@@ -118,6 +146,13 @@ namespace Tempest
 
 					if (ImGui::IsMouseClicked(0))
 					{
+						AudioEngine ae;
+						if (ae.IsPlaying(voice_line))
+						{
+							ae.StopChannel(voice_line);
+						}
+
+						voice_line = ae.Play("Sounds2D/MB_Searchbar_1.wav", "VL", 1.0f);
 						tutorial_index = 1;
 					}
 				}
@@ -135,6 +170,15 @@ namespace Tempest
 
 				case 2:
 				{
+					if (!voice_played[2])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Placing_1.wav", "VL", 1.0f);
+							voice_played[2] = true;
+						}
+					}
 					ImVec2 pos = { viewport->Size.x * 0.7f, viewport->Size.y * 0.31f };
 					ImVec2 size = { 90.f, 90.f };
 
@@ -178,6 +222,24 @@ namespace Tempest
 
 				case 4:
 				{
+					if (!voice_played[3])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Duplicate_1.wav", "VL", 1.0f);
+							voice_played[3] = true;
+						}
+					}
+					else if (!voice_played[4])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Duplicate_2.wav", "VL", 1.0f);
+							voice_played[4] = true;
+						}
+					}
 					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.5f - 75.f };
 					ImVec2 size = { 300.f, 150.f };
 
@@ -224,6 +286,15 @@ namespace Tempest
 				break;
 				case 7:
 				{
+					if (!voice_played[5])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Delete_1.wav", "VL", 1.0f);
+							voice_played[5] = true;
+						}
+					}
 					ImVec2 pos = { viewport->Size.x * 0.5f - 75.f, viewport->Size.y * 0.47f - 78.f };
 					ImVec2 size = { 150.f, 150.f };
 
@@ -233,6 +304,29 @@ namespace Tempest
 					UI::TutArea3(pos, pos2, size, size2);
 					string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to delete the furniture.";
 					drawlist->AddText({ pos2.x + size2.x + 10.f, pos2.y + 10.0f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+				}
+				break;
+
+				case 8:
+				{
+					if (!voice_played[6])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Welldone_1.wav", "VL", 1.0f);
+							voice_played[6] = true;
+						}
+					}
+					else if (!voice_played[7])
+					{
+						AudioEngine ae;
+						if (!ae.IsPlaying(voice_line))
+						{
+							voice_line = ae.Play("Sounds2D/MB_Welldone_2.wav", "VL", 1.0f);
+							voice_played[7] = true;
+						}
+					}
 				}
 				break;
 				default:
@@ -265,6 +359,9 @@ namespace Tempest
 				Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(true);
 				instance.tutorial_temp_exit = false;
 				instance.tutorial_enable = false;
+				AudioEngine ae;
+				ae.StopChannel(voice_line);
+				voice_line = 0;
 			}
 			
 			renderBtm(instance);
@@ -526,10 +623,9 @@ namespace Tempest
 							if (ImGui::IsItemClicked())
 							{
 								instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
-								AudioEngine ae;
-								ae.Play("Sounds2D/SFX_DeleteFurniture.wav", "SFX");
 								instance.selected = INVALID;
-								
+								AudioEngine ae;
+								ae.SetChannel3dPosition(ae.Play("Sounds3D/SFX_DeleteFurniture.wav", "SFX", 1.0f), t_position);
 								EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, t_position);
 
 								if (instance.tutorial_enable && tutorial_index == 7)
@@ -827,10 +923,9 @@ namespace Tempest
 								AudioEngine ae;
 
 								std::string sound_name = cat_name == "Tile" ?
-									"Sounds2D/SFX_TileCreate" + std::to_string(rand() % 2 + 1) + ".wav"
-									: "Sounds2D/SFX_PropPlacement" + std::to_string(rand() % 2 + 1) + ".wav";
+									"Sounds3D/SFX_TileCreate" + std::to_string(rand() % 2 + 1) + ".wav"
+									: "Sounds3D/SFX_PropPlacement" + std::to_string(rand() % 2 + 1) + ".wav";
 
-								ae.Play(sound_name.c_str(), "SFX");
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
 								{
@@ -849,6 +944,7 @@ namespace Tempest
 									}
 
 									transform->position = inter;
+									ae.SetChannel3dPosition(ae.Play(sound_name.c_str(), "SFX",1.0f), transform->position);
 									EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform->position);
 								}
 
@@ -1098,7 +1194,7 @@ namespace Tempest
 				}
 				instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
 				AudioEngine ae;
-				ae.Play("Sounds2D/SFX_DeleteFurniture.wav", "SFX");
+				ae.SetChannel3dPosition(ae.Play("Sounds3D/SFX_DeleteFurniture.wav", "SFX", 1.0f), transform.position);
 				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform.position);
 				instance.selected = INVALID;
 				return;
