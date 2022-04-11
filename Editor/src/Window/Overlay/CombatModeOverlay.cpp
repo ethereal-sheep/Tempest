@@ -1476,7 +1476,7 @@ namespace Tempest
 							auto anim = instance.ecs.get_if<tc::Animation>(other_entity);
 							if (!anim->if_end(other_entity))
 							{
-								anim->change_animation(other_entity, "../../../Resource/Animations/Unit_Idle.fbx");
+								anim->change_animation(other_entity, "Animations/Unit_Idle.fbx");
 								anim->play(other_entity, true);
 							}
 
@@ -2593,7 +2593,7 @@ namespace Tempest
 				if (other_entity != UNDEFINED)
 				{
 					oanim->change_animation(other_entity, "Animations/Unit_Idle.fbx");
-					oanim->play(curr_entity, true);
+					oanim->play(other_entity, true);
 					oanim->pause(other_entity);
 				}
 

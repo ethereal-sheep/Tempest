@@ -257,6 +257,8 @@ namespace Tempest
                     {
                         vol *= 0.01f;
                         ae.SetBusVolume("SFX", std::clamp(vol, 0.f, 1.f));
+                        AudioEngine ae;
+                        ae.Play("Sounds2D/Button_Highlight.wav", "SFX", 0.8f);
                     }
                     if (isSFXMute)
                     {
