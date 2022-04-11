@@ -36,7 +36,7 @@ namespace Tempest
 	//Popup Trigger
 	enum SIMULATE_POPUP_TYPE{UNIT,WEAPON,ACTION, SEQUENCE, EDIT_UNIT, EDIT_WEAPON};
 	enum QUICKMENU_POPUP_TYPE{SIMULATE,UNITS,ACTIONS,SEQUENCES,WEAPONS};
-	enum TUTORIAL_POPUP_TYPES{SIMULATE_TUT,UNITS_TUT,GRAPH_ACTION_TUT, GRAPH_SEQUENCE_TUT, TURN_TUT};
+	enum TUTORIAL_POPUP_TYPES{SIMULATE_TUT,UNITS_TUT,GRAPH_ACTION_TUT, GRAPH_SEQUENCE_TUT, TURN_TUT, COMBATMODE_TUT, MAP_TUT};
 	struct SimulateTutorialP2Trigger : public Event {};
 	struct DefineStatsTrigger : public Event {};
 	struct ConfirmationTrigger : public Event {};
@@ -86,10 +86,11 @@ namespace Tempest
 	// add another bool to check for results
 	struct PauseOverlayTrigger : public Event
 	{
-		PauseOverlayTrigger(bool canOpenGraph = false, bool fromCombatMode = false) :
-			canOpenGraph{ canOpenGraph }, fromCombatMode{ fromCombatMode } {}
+		PauseOverlayTrigger(bool canOpenGraph = false, bool fromCombatMode = false, bool fromPlaceUnit = false) :
+			canOpenGraph{ canOpenGraph }, fromCombatMode{ fromCombatMode }, fromPlaceUnit{ fromPlaceUnit }{}
 		bool canOpenGraph;
 		bool fromCombatMode;
+		bool fromPlaceUnit;
 	};
 
 	//Confirm Trigger

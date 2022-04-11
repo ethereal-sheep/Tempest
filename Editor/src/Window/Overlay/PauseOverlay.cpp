@@ -22,6 +22,7 @@ namespace Tempest
 		OverlayOpen = true;
 		CanOpenGraph = a.canOpenGraph;
 		FromCombatMode = a.fromCombatMode;
+		FromPlaceUnit = a.fromPlaceUnit;
 	}
 
 	void PauseOverlay::show(Instance& instance)
@@ -82,6 +83,15 @@ namespace Tempest
 
 					if (UI::UIButton_2("How To Play", "How To Play", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * (CanOpenGraph ? 0.55f : 0.45f) }, { 50,20 }, FONT_BTN))
 					{
+						if (!FromCombatMode && !CanOpenGraph && !FromPlaceUnit)
+						{
+							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::MAP_TUT);
+						}
+
+						else if (FromCombatMode && !CanOpenGraph || FromPlaceUnit)
+						{
+							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::COMBATMODE_TUT);
+						}
 					}
 
 					if (UI::UIButton_2("Settings", "Settings", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * (CanOpenGraph ? 0.65f : 0.55f) }, { 50,20 }, FONT_BTN))

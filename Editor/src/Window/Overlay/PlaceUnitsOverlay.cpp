@@ -156,7 +156,7 @@ namespace Tempest
 			{
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
-					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>();
+					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(false, false, true);
 				}
 
 				// just for testing
