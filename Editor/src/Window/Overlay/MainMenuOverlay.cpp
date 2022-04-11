@@ -1395,7 +1395,7 @@ namespace Tempest
 
 					AudioEngine ae;
 					ae.StopAllChannels();
-					ae.Play("Sounds2D/CoReSyS_BGM1_Old.wav", "BGM", 0.7f, true);
+					ae.Play("Sounds2D/CoReSyS_BGM_Combat.wav", "BGM", 0.7f, true);
 					OverlayOpen = false;
 					dynamic_cast<EditTimeInstance&>(instance).save();
 
