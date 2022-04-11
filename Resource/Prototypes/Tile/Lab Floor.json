@@ -70,7 +70,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Floor.a",
-                "TexturePath": "Assets\\Lab_floor.jpg"
+                "TexturePath": "Assets\\ThumbNail_Lab_floor.jpg"
             }
         },
         {

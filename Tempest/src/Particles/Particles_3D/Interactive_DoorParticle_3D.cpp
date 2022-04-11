@@ -29,9 +29,10 @@ Interactive_DoorParticle_3D::Interactive_DoorParticle_3D()
 	m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 0.0f, 3.0f, 0.0f };
 
-	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
+	m_PAM.m_scaleBegin = glm::vec3{ 0.0015f, 0.0015f, 0.0015f };
 	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+	//m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.f, 0.f, 0.f };
 
 	// Note - Values to be divided by 255.0f - Forgot the reason
 	m_PAM.m_colourBegin = glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f };
@@ -40,6 +41,7 @@ Interactive_DoorParticle_3D::Interactive_DoorParticle_3D()
 	m_PAM.m_lifeTime = 1.0f;
 	m_PAM.m_rebirth = false;
 
-	m_RM.m_renderingPath = "Models/Cube.a";
+	//m_RM.m_renderingPath = "Models/Cube.a";
+	m_RM.m_renderingPath = "Models/Sphere.a";
 	m_RM.m_emissiveLighting = true;
 }

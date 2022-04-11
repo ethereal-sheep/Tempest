@@ -141,7 +141,7 @@ namespace Tempest
 		{
 			auto unit = ecs.get_if<tc::Unit>(id);
 			auto transform = ecs.get_if<tc::Transform>(id);
-			auto anim = ecs.get_if<tc::Animation>(id);
+			//auto anim = ecs.get_if<tc::Animation>(id);
 
 			{
 				auto model = ecs.get_if<tc::Model>(id);

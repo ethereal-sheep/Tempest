@@ -1,0 +1,86 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Tile"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Tile"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    0.0,
+                    -8.740375534443956e-9,
+                    0.0
+                ],
+                "LocalRotation": [
+                    -1.0,
+                    -2.793966613623411e-9,
+                    2.4868948741274935e-15,
+                    9.099629210140847e-7
+                ],
+                "LocalScale": [
+                    1.0,
+                    0.9999998807907105,
+                    0.9999998807907105
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\MetalFloor2.a",
+                "TexturePath": "Assets\\ThumbNail_metalFloor.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 1
+            }
+        }
+    ]
+}

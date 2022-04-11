@@ -21,12 +21,13 @@ CharacterDeathEmitter_3D::CharacterDeathEmitter_3D()
 	m_PAM.m_velocityStart = glm::vec3{ 0.f, 0.f, 0.0f };
 	m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
-	m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
+	m_PAM.m_scaleBegin = glm::vec3{ 0.002f, 0.002f, 0.002f };
 	m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-	m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+	m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 	m_PAM.m_lifeTime = 0.3f;
-	m_RM.m_renderingPath = "Models/Cube.a";
+	m_RM.m_renderingPath = "Models/Sphere.a";
+
 }
 
 void CharacterDeathEmitter_3D::OnDeath()
@@ -108,11 +109,13 @@ void CharacterDeathEmitter_3D::OnDeath()
 		tempEmitter->m_PAM.m_velocityEnd = glm::vec3{ 0.f, 0.f, 0.0f };
 		tempEmitter->m_PAM.m_velocityVariation = glm::vec3{ 10.0f, 10.0f, 10.0f };
 
-		tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.03f, 0.03f, 0.03f };
+		tempEmitter->m_PAM.m_scaleBegin = glm::vec3{ 0.002f, 0.002f, 0.002f };
 		tempEmitter->m_PAM.m_scaleEnd = glm::vec3{ 0.0f, 0.0f, 0.0f };
-		tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.02f, 0.02f, 0.02f };
+		tempEmitter->m_PAM.m_scaleVariation = glm::vec3{ 0.0f, 0.0f, 0.0f };
 
 		tempEmitter->m_PAM.m_colourBegin = m_PAM.m_colourBegin;
 		tempEmitter->m_PAM.m_colourEnd = m_PAM.m_colourEnd;
+		
+		tempEmitter->m_RM.m_renderingPath = "Models/Sphere.a";
 	}
 }

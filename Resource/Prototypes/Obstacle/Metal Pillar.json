@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Tile"
+        "Category": "Obstacle"
     },
     "Components": [
         {
@@ -9,7 +9,7 @@
                 "Type": "Meta"
             },
             "Component": {
-                "Name": ""
+                "Name": "MetalPillar"
             }
         },
         {
@@ -37,9 +37,11 @@
         },
         {
             "Metadata": {
-                "Type": "Tile"
+                "Type": "Collision"
             },
-            "Component": {}
+            "Component": {
+                "Cover": 0
+            }
         },
         {
             "Metadata": {
@@ -47,9 +49,9 @@
             },
             "Component": {
                 "LocalPosition": [
+                    -4.400000095367432,
                     0.0,
-                    -0.019999999552965165,
-                    0.0
+                    -2.140000104904175
                 ],
                 "LocalRotation": [
                     0.0,
@@ -58,19 +60,25 @@
                     1.0
                 ],
                 "LocalScale": [
-                    1.0,
-                    1.0,
-                    1.0
+                    0.008999999612569809,
+                    0.009999999776482582,
+                    0.008999999612569809
                 ]
             }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
         },
         {
             "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\WoodenFloor.a",
-                "TexturePath": "Assets\\Tile.jpg"
+                "Path": "Models\\Lab_Pillar.a",
+                "TexturePath": "Assets\\ThumbNail_Metal_Pillar.jpg"
             }
         },
         {

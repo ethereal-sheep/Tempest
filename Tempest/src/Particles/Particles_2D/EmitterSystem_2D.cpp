@@ -226,7 +226,6 @@ void EmitterSystem_2D::CreateCircularMotionEmitter_2D(std::weak_ptr<CircularMoti
 
 	// Center position of the circle
 	emitter.lock()->m_centrePoint = centrePos;
-	//tempEmitter->m_GM.m_position = centrePos;
 	emitter.lock()->m_radius = radius;
 
 	// Emitter_2D values - Without consideration for default ctor values
@@ -297,15 +296,15 @@ void EmitterSystem_2D::CreateBackgroundEmitter(std::weak_ptr<RandomMinMaxSpawnPo
 	emitter.lock()->m_PAM.m_velocityEnd = glm::vec2{ 0.f, 0.f };
 	emitter.lock()->m_PAM.m_velocityVariation = glm::vec2{ 100.0f, 100.0f };
 
-	emitter.lock()->m_PAM.m_scaleBegin = 8.0f;
-	emitter.lock()->m_PAM.m_scaleEnd = 8.0f;
-	emitter.lock()->m_PAM.m_scaleVariation = 0.0f;
+	emitter.lock()->m_PAM.m_scaleBegin = 2.0f;
+	emitter.lock()->m_PAM.m_scaleEnd = 0.0f;
+	emitter.lock()->m_PAM.m_scaleVariation = 4.0f;
 
 	emitter.lock()->m_PAM.m_colourBegin = glm::vec4{ 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	emitter.lock()->m_PAM.m_colourEnd = glm::vec4{ 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 0.0f };
 
 	emitter.lock()->m_PAM.m_lifeTime = 1.0f;
-	emitter.lock()->m_RM.m_type = ParticleType::Square;
+	emitter.lock()->m_RM.m_type = ParticleType::Circle;
 }
 
 void EmitterSystem_2D::CreateLineEmitter(std::weak_ptr<LineEmitter_2D>& emitter, ImVec2 startPoint, ImVec2 endPoint)

@@ -81,6 +81,7 @@ void CircularMotionEmitter_2D::Emit(const int particleAmount)
 		{
 			// Initailisation of the particle
 			Particle_2D particle;
+			Emitter_2D::ParticleSetUp(particle);
 
 			// Position
 			particle.m_position = m_GM.m_position;

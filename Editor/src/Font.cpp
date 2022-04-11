@@ -14,6 +14,27 @@ namespace Tempest
 		return false;
 	}
 
+	void override_dt(float dt)
+	{
+		do_override_dt = true;
+		overriden_dt = dt;
+	}
+
+	float get_overriden_dt()
+	{
+		return overriden_dt;
+	}
+
+	bool must_override_dt()
+	{
+		return do_override_dt;
+	}
+
+	void reset_dt()
+	{
+		do_override_dt = false;
+	}
+
 	void block_input_if_mouse_not_in_bounds(ImVec2 pos, ImVec2 size)
 	{
 		auto max = pos;

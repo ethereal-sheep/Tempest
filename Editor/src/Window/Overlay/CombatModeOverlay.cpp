@@ -2094,6 +2094,9 @@ namespace Tempest
 			try_build_all(instance);
 
 			// create temp entities so we can check whats the damage, if any
+			cloned_curr_entity = instance.ecs.clone(curr_entity);
+			cloned_other_entity = instance.ecs.clone(other_entity);
+
 			auto temp_cc = instance.ecs.get<tc::Character>(curr_entity);
 			auto temp_oc = instance.ecs.get<tc::Character>(other_entity);
 
@@ -2118,12 +2121,12 @@ namespace Tempest
 
 			// get the results
 			auto curr_entity_result = units_results.find(curr_entity);
-			curr_entity_result->second.dmg_done += damage;
+			curr_entity_result->second.dmg_done += static_cast<unsigned short>(damage);
 			curr_entity_result->second.total_attacks += 1;
 			if (damage > 0)
 				curr_entity_result->second.successful_attacks += 1;
 
-			units_results.find(other_entity)->second.dmg_taken += damage;
+			units_results.find(other_entity)->second.dmg_taken += static_cast<unsigned short>(damage);
 			if (cs.get_stat(0) + cs.get_statDelta(0) <= 0)
 			{
 				// for dead
@@ -2164,8 +2167,8 @@ namespace Tempest
 		// check if the other_entity has health (only other for now)
 		//auto& charac = instance.ecs.get<tc::Character>(other_entity);
 
-		UI::CharacterTurnData(instance, curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false);
-		UI::CharacterTurnData(instance, other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true);
+		UI::CharacterTurnData(instance, cloned_curr_entity, { 0.f, viewport->Size.y - placeholder_height }, false);
+		UI::CharacterTurnData(instance, cloned_other_entity, { viewport->Size.x, viewport->Size.y - placeholder_height }, true);
 
 		// draw the combat roll
 		auto tex = tex_map["Assets/CombatRollBG.dds"];
@@ -2414,6 +2417,13 @@ namespace Tempest
 				state = State::CINEMATIC;
 				start_inter_atk_roll = true;
 				start_inter_def_roll = true;
+
+				// destory clones
+				instance.ecs.destroy(cloned_curr_entity);
+				instance.ecs.destroy(cloned_other_entity);
+
+				cloned_curr_entity = INVALID;
+				cloned_other_entity = INVALID;
 			};
 
 			Service<EventManager>::Get().instant_dispatch<WipeTrigger>(WipeTrigger(.15f, .15f, 0.f, fn));
@@ -3548,7 +3558,7 @@ namespace Tempest
 			for (auto& i : inter_nest)
 				i.update(dt);
 
-				banner.update(dt);
+			banner.update(dt);
 			if (banner.is_finished())
 				banner.start(1, 0, 10);
 

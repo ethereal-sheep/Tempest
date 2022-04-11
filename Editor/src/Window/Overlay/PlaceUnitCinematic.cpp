@@ -5,6 +5,9 @@
 #include <Util/shape_manip.h>
 #include "PlaceUnitCinematic.h"
 
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
+#include "Particles/Particles_3D/CharacterCutsceneSpawnEmitter_3D.h"
+
 void Tempest::PlaceUnitCinematic::init(Instance&)
 {
 	Service<EventManager>::Get().register_listener<PlayPlaceUnitCinematic>(&PlaceUnitCinematic::popup, this);
@@ -47,6 +50,12 @@ void Tempest::PlaceUnitCinematic::popup(const Event& e)
 		auto& unit = instance.ecs.get<tc::Unit>(id);
 		auto rand = els::random::uniform_rand(0.f, 1.f);
 		unit.drop(5.f + rand, 1.f + rand);
+
+		std::weak_ptr<CharacterCutsceneSpawnEmitter_3D> m_characterSpawnEmitter;
+		auto spawnPos = instance.ecs.get<tc::Transform>(id).position;
+		spawnPos.y += 1.f + rand;
+		EmitterSystem_3D::GetInstance().CharacterCutsceneSpawnEmitter(m_characterSpawnEmitter, spawnPos);
+		m_characterSpawnEmitterVector.push_back(m_characterSpawnEmitter);
 	}
 
 	auto reference_pt = instance.ecs.get<tc::Transform>(chars.front()).position;
@@ -59,6 +68,8 @@ void Tempest::PlaceUnitCinematic::popup(const Event& e)
 	start = cam.GetQuatRotation();
 
 	inter.start(0, 1.f, 1.f, 2.5f);
+
+	//EmitterSystem_3D::GetInstance().CharacterSpawnEmitter(m_characterSpawnEmitter, reference_pt);
 }
 
 
