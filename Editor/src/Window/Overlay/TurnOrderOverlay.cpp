@@ -76,21 +76,6 @@ namespace Tempest
 
 			if (ImGui::Begin("Turn Order Overlay", nullptr, window_flags))
 			{
-				// just for testing
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
-				{
-					instance.tutorial_enable = true;
-					instance.tutorial_level = 1;
-					tutorial_index = 0;
-
-				}
-
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
-				{
-					instance.tutorial_enable = true;
-					tutorial_index++;
-				}
-
 				// tutorial progress
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{

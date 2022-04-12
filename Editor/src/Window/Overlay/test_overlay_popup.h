@@ -1,6 +1,6 @@
 /**********************************************************************************
-* \author		Lim Ziyi Jean(ziyijean.lim@digipen.edu),
-*				Huang Xurong(h.xurong@digipen.edu)
+* \author		Huang Xurong(h.xurong@digipen.edu),
+                Lim Ziyi Jean(ziyijean.lim@digipen.edu)
 * \version		1.0
 * \date			2022
 * \note			Course: GAM350

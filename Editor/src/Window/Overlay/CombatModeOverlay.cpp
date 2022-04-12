@@ -3601,25 +3601,6 @@ namespace Tempest
 
 			if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 			{
-
-				// just for testing
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
-				{
-					instance.tutorial_enable = true;
-					instance.tutorial_level = 1;
-					tutorial_index = 0;
-
-				}
-
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
-				{
-					if (tutorial_index++ >= 3)
-					{
-						instance.tutorial_enable = false;
-						tutorial_index = 0;
-					}
-				}
-
 				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
 					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(battle_state == BATTLE_STATE::CURR_TURN, true);

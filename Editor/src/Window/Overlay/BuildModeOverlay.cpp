@@ -71,23 +71,6 @@ namespace Tempest
 		{
 			//renderTop();
 
-			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
-			{
-				instance.tutorial_enable = true;
-				instance.tutorial_level = 1;
-				tutorial_index = 0;
-				Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(false);
-			}
-
-			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
-			{
-				if (tutorial_index++ >= 7)
-				{
-					instance.tutorial_enable = false;
-					tutorial_index = 0;
-				}
-			}
-
 			// tutorial progress
 			if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 			{

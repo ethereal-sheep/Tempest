@@ -1,6 +1,6 @@
 /**********************************************************************************
-* \author		Lim Ziyi Jean(ziyijean.lim@digipen.edu),
-*				Huang Xurong(h.xurong@digipen.edu)
+* \author		Huang Xurong(h.xurong@digipen.edu),
+				Lim Ziyi Jean(ziyijean.lim@digipen.edu)
 * \version		1.0
 * \date			2022
 * \note			Course: GAM350
@@ -158,22 +158,6 @@ namespace Tempest
 				{
 					Service<EventManager>::Get().instant_dispatch<PauseOverlayTrigger>(false, false, true);
 				}
-
-				// just for testing
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
-				{
-					instance.tutorial_enable = true;
-					instance.tutorial_level = 1;
-					tutorial_index = 0;
-
-				}
-
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
-				{
-					instance.tutorial_enable = true;
-					tutorial_index++;
-				}
-
 
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{

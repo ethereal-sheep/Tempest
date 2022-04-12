@@ -149,21 +149,7 @@ namespace Tempest
 
 			if (ImGui::Begin("Simulate Page Configure", nullptr, window_flags))
 			{
-
-				/*if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
-				{
-					tutorial_p2 = true;
-					tutorial_index = 8;
-					instance.tutorial_level = 1;
-					instance.tutorial_enable = 1;
-
-				}*/
-				/*if(instance.tutorial_enable)
-					ImGui::GetIO().MouseClicked[0] = false;
-				else
-					ImGui::GetIO().MouseClicked[0] = true;*/
-
-					// tutorial progrss
+				// tutorial progrss
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
