@@ -11,7 +11,7 @@ Unit_MovementTrailEmitter_3D::Unit_MovementTrailEmitter_3D()
 	m_MM.m_duration = 1000.0f;
 	m_MM.m_preWarm = true;
 	m_MM.m_simulationSpeed = 0.016f;
-	Emitter_3D::UpdateMaxParticle(1);
+	Emitter_3D::UpdateMaxParticle(100);
 
 	m_EM.m_spawnTimeInterval = 0.08f;
 	m_EM.m_spawnCountTimer = m_EM.m_spawnTimeInterval;
