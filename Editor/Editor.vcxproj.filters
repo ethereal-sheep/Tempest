@@ -449,6 +449,9 @@
     <ClInclude Include="src\Window\Overlay\CreditsOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Window\Util\Cursor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Extern\imgui\imgui_bezier_math.inl">

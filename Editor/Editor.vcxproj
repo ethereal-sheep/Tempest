@@ -286,6 +286,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\RNG\resolution.h" />
     <ClInclude Include="src\Triggers\SimulationTriggers.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
+    <ClInclude Include="src\Window\Util\Cursor.h" />
     <ClInclude Include="src\Util\GuizmoController.h" />
     <ClInclude Include="src\Util\InputBlocker.h" />
     <ClInclude Include="src\Util\Suppress.h" />

@@ -20,6 +20,8 @@ namespace Tempest
 
 		for (int i = 0; i < 100; i++)
 			m_BoneMatrices.push_back(glm::mat4(1.0f));
+
+		CalculateBoneTransform(&m_Animation->GetRootNode(), glm::mat4(1.0f));
 	}
 
 	void Animator::UpdateAnimation(float dt)
@@ -67,9 +69,7 @@ namespace Tempest
 		m_DeltaTime = 0.f;
 		m_BoneMatrices.clear();
 
-		m_BoneMatrices.reserve(100);
-		for (int i = 0; i < 100; i++)
-			m_BoneMatrices.push_back(glm::mat4(1.0f));
+		CalculateBoneTransform(&m_Animation->GetRootNode(), glm::mat4(1.0f));
 	}
 
 	void Animator::PlayAnimation(Animation* pAnimation)
