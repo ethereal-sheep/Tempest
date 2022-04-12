@@ -28,6 +28,8 @@ namespace Tempest
 	}
 	void Instance::internal_update(float dt)
 	{
+
+
 		auto view = ecs.view<tc::Door>(exclude_t<tc::Destroyed>());
 		for (auto id : view)
 		{
@@ -45,6 +47,17 @@ namespace Tempest
 		window_manager.show(*this);
 
 		EmitterSystem_3D::GetInstance().Update(T_FrameRateManager.GetDT());
+
+
+		tc::Transform a;
+		a.position.y = 100.f;
+		a.scale.x = 0.01f;
+		a.scale.y = 0.01f;
+		a.scale.z = 0.01f;
+		auto c = glm::translate(a.position)
+			* glm::mat4(a.rotation)
+			* glm::scale(a.scale);
+		Service<RenderSystem>::Get().SubmitModel("Models/Cube.a", c);
 
 		// move this to instance call when test finish
 		auto view = ecs.view<tc::Mesh>(exclude_t<tc::Destroyed>());
@@ -144,7 +157,7 @@ namespace Tempest
 			//auto anim = ecs.get_if<tc::Animation>(id);
 
 			{
-				auto model = ecs.get_if<tc::Model>(id);
+				[[maybe_unused]]auto model = ecs.get_if<tc::Model>(id);
 				auto local = ecs.get_if<tc::Local>(id);
 				auto anim = ecs.get_if<tc::Animation>(id);
 

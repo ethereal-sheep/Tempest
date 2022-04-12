@@ -176,7 +176,8 @@ xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mt.dll" "$(TargetDir)" /q
 xcopy /y /d /s "..\Resource\Fonts" "$(TargetDir)Fonts\" /q
 xcopy /y /d /s "..\Resource\Shaders" "$(TargetDir)Shaders\" /q
-xcopy /y /d /s "..\Resource\textures" "$(TargetDir)textures\" /q</Command>
+xcopy /y /d /s "..\Resource\textures" "$(TargetDir)textures\" /q
+xcopy /y /d /s "..\Resource\Animations" "$(TargetDir)Animations\" /q</Command>
       <Outputs>output;%(Outputs)</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
