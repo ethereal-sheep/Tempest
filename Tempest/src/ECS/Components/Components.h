@@ -966,6 +966,36 @@ namespace Tempest
 				}
 			}
 
+			bool is_playing(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isPlaying(tid);
+				}
+
+				return false;
+			}
+
+			bool is_paused(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isPaused(tid);
+				}
+
+				return false;
+			}
+
+			bool is_stopped(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isStopped(tid);
+				}
+
+				return false;
+			}
+
 			uint32_t id;
 			std::string current_animation;
 		};
