@@ -51,7 +51,6 @@ namespace Tempest
 						m_CurrentTime = fmod(m_CurrentTime, m_Animation->GetDuration());
 						CalculateBoneTransform(&m_Animation->GetRootNode(), glm::mat4(1.0f));
 					}
-					
 					break;
 				}
 			}
@@ -67,7 +66,6 @@ namespace Tempest
 		m_Animation = animation;
 		m_CurrentTime = 0.f;
 		m_DeltaTime = 0.f;
-		m_BoneMatrices.clear();
 
 		CalculateBoneTransform(&m_Animation->GetRootNode(), glm::mat4(1.0f));
 	}

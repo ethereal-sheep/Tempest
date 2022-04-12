@@ -2587,12 +2587,12 @@ namespace Tempest
 				cam_ctrl.force_reset_rot(cam);
 
 				// clear
-				canim->change_animation(curr_entity, "Animations/Unit_Idle.fbx");
+				canim->force_change(curr_entity, "Animations/Unit_Idle.fbx");
 				canim->play(curr_entity, true);
 
 				if (other_entity != UNDEFINED)
 				{
-					oanim->change_animation(other_entity, "Animations/Unit_Idle.fbx");
+					oanim->force_change(other_entity, "Animations/Unit_Idle.fbx");
 					oanim->play(other_entity, true);
 					oanim->pause(other_entity);
 				}
