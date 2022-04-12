@@ -4859,5 +4859,56 @@ namespace Tempest::UI
 		ImVec2 diamond_max = { diamond_min.x + diamondImg->GetWidth() * 1.0f, diamond_min.y + diamondImg->GetHeight() * 1.0f };
 		drawlist->AddImage((void*)static_cast<size_t>(diamondImg->GetID()), diamond_min, diamond_max, ImVec2{ 0,0 }, ImVec2{ 1,1 }, step >= 1 ? IM_COL32(250, 196, 130, 255) : ImGui::GetColorU32({ 1,1,1,1 }));
 	}
+
+	void UIImageCombat(ImTextureID user_texture_id, Instance& instance,Entity id, const ImVec2& size, bool selected,const ImVec2& uv0, const ImVec2& uv1, const ImVec4& tint_col, const ImVec4& border_col)
+	{
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		if (window->SkipItems)
+			return;
+
+		ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size);
+		if (border_col.w > 0.0f)
+			bb.Max += ImVec2(2, 2);
+		ImGui::ItemSize(bb);
+		if (!ImGui::ItemAdd(bb, 0))
+			return;
+
+		auto character = instance.ecs.get_if<tc::Character>(id);
+		auto characterImg = tex_map["Assets/Unit_Black.dds"];
+		ImVec2 charMin = bb.Min + ImVec2(1, 1);
+		ImVec2 charMax = charMin + ImVec2{ (float)characterImg->GetWidth(), (float)characterImg->GetHeight() };
+		ImVec2 TextStartPos = { bb.Min.x + (bb.Max.x - window->DC.CursorPos.x) * 0.53f, (bb.Min.y) - (bb.Max.y - window->DC.CursorPos.y) * 2.5f };
+		if(selected)
+			TextStartPos = { bb.Min.x + (bb.Max.x - window->DC.CursorPos.x) * 0.53f, (bb.Min.y) - (bb.Max.y - window->DC.CursorPos.y) * 2.5f };
+		else
+			TextStartPos = { bb.Min.x + (bb.Max.x - window->DC.CursorPos.x) * 0.45f, (bb.Min.y) - (bb.Max.y - window->DC.CursorPos.y) * 2.5f };
+		if (border_col.w > 0.0f)
+		{
+			window->DrawList->AddRect(bb.Min, bb.Max, ImGui::GetColorU32(border_col), 0.0f);
+			window->DrawList->AddImage(user_texture_id, bb.Min + ImVec2(1, 1), bb.Max - ImVec2(1, 1), uv0, uv1, ImGui::GetColorU32(tint_col));
+			window->DrawList->AddImage((void*)static_cast<size_t>(characterImg->GetID()), charMin, charMax, uv0, uv1, ImGui::GetColorU32(tint_col));
+			
+			ImGui::PushFont(FONT_OPEN);
+
+			if (character)
+				window->DrawList->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
+			else
+				window->DrawList->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
+			ImGui::PopFont();
+		}
+		else
+		{
+			window->DrawList->AddImage(user_texture_id, bb.Min, bb.Max, uv0, uv1, ImGui::GetColorU32(tint_col));
+			window->DrawList->AddImage((void*)static_cast<size_t>(characterImg->GetID()), charMin, charMax, uv0, uv1, ImGui::GetColorU32(tint_col));
+			ImGui::PushFont(FONT_OPEN);
+
+			if (character)
+				window->DrawList->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), character->name.c_str());
+			else
+				window->DrawList->AddText(TextStartPos, ImGui::GetColorU32({ 0,0,0,1 }), "NAN");
+
+			ImGui::PopFont();
+		}
+	}
 }
 

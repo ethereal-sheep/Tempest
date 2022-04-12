@@ -240,6 +240,8 @@ namespace Tempest::UI
 	void TutProgressBar(ImDrawList* drawlist, const ImVec2 &viewport, int step);
 	void TutProgressBar2(ImDrawList* drawlist, const ImVec2& viewport, Instance& instance, bool isFullBar = false);
 	void TutProgressBar3(ImDrawList* drawlist, const ImVec2& viewport, int step);
+
+	void UIImageCombat(ImTextureID user_texture_id, Instance& instance, Entity id, const ImVec2& size,bool selected = false, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), const ImVec4& tint_col = ImVec4(1, 1, 1, 1), const ImVec4& border_col = ImVec4(0, 0, 0, 0));
 }
 
 namespace Tempest

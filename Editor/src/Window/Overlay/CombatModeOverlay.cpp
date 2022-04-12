@@ -3777,7 +3777,18 @@ namespace Tempest
 						for (auto id : units)
 						{
 							// check if turn is over
-							UI::CharacterTurn(instance, id, { 0.f + menu1.get() * (padding + 400.f) * 2.f, ImGui::GetCursorPosY() + padding }, curr_entity == id);
+							auto selectedImg = tex_map["Assets/TurnSelected.dds"];
+							auto unselectedImg = tex_map["Assets/TurnUnselected.dds"];
+							//UI::CharacterTurn(instance, id, { 0.f + menu1.get() * (padding + 400.f) * 2.f, ImGui::GetCursorPosY() + padding }, curr_entity == id);
+							if (curr_entity == id)
+							{
+								UI::UIImageCombat((void*)static_cast<size_t>(selectedImg->GetID()),instance, id, { (float)selectedImg->GetWidth(), (float)selectedImg->GetHeight() },true);
+							}
+							else
+							{
+								UI::UIImageCombat((void*)static_cast<size_t>(unselectedImg->GetID()), instance, id,{ (float)unselectedImg->GetWidth(), (float)unselectedImg->GetHeight() }, false);
+							}
+								
 							padding += 85.0f;
 							first = false;
 						}
