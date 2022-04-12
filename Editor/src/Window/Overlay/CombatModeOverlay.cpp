@@ -2564,12 +2564,10 @@ namespace Tempest
 			[[maybe_unused]]auto& cs = instance.ecs.get<tc::Character>(curr_entity);
 			[[maybe_unused]] auto& unit = instance.ecs.get<tc::Unit>(curr_entity);
 			[[maybe_unused]] auto& xform = instance.ecs.get<tc::Transform>(curr_entity);
-			[[maybe_unused]] auto canim = instance.ecs.get_if<tc::Animation>(curr_entity);
 
 			[[maybe_unused]] auto& ocs = instance.ecs.get<tc::Character>(other_entity);
 			[[maybe_unused]] auto& ounit = instance.ecs.get<tc::Unit>(other_entity);
 			[[maybe_unused]] auto& oxform = instance.ecs.get<tc::Transform>(other_entity);
-			[[maybe_unused]] auto oanim = instance.ecs.get_if<tc::Animation>(other_entity);
 
 			[[maybe_unused]] auto& cam = Service<RenderSystem>::Get().GetCamera();
 
@@ -2587,8 +2585,11 @@ namespace Tempest
 				cam_ctrl.force_reset_rot(cam);
 
 				// clear
+				auto canim = instance.ecs.get_if<tc::Animation>(curr_entity);
 				canim->change_animation(curr_entity, "Animations/Unit_Idle.fbx");
 				canim->play(curr_entity, true);
+
+				auto oanim = instance.ecs.get_if<tc::Animation>(other_entity);
 
 				if (other_entity != UNDEFINED && other_entity != INVALID)
 				{
