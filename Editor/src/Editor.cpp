@@ -206,6 +206,8 @@ namespace Tempest
 			//ImGui::UpdatePlatformWindows();
 			//ImGui::RenderPlatformWindowsDefault();
 			/*--------------------------------------------------------------------*/
+
+			reset_non_imgui_mouseclick(false);
 		}
 
 		void OnExit() override
@@ -230,7 +232,7 @@ namespace Tempest
 				*/
 			case WM_LBUTTONDOWN:
 			{
-				non_imgui_mouse_click = true;
+				reset_non_imgui_mouseclick(true);
 				if (check_mouse_blocking())
 					return 0;
 			}

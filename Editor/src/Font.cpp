@@ -67,6 +67,14 @@ namespace Tempest
 	{
 		return block_mouse_down && !override_block_mouse_down;
 	}
+
+	static bool non_imgui_mouse_click = false;
+
+	void reset_non_imgui_mouseclick(bool b)
+	{
+		non_imgui_mouse_click = b;
+	}
+
 	bool NonImGuiMouseClick()
 	{
 		return non_imgui_mouse_click;

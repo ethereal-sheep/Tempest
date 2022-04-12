@@ -115,6 +115,7 @@ namespace Tempest
 		return path;
 	}
 
+	void reset_non_imgui_mouseclick(bool b);
 	void reset_blocking();
 	bool check_mouse_blocking();
 	bool check_if_mouse_within(const ImVec2 min, const ImVec2 max);

@@ -226,12 +226,12 @@ namespace Tempest
 							emitter_0 = true;
 
 							glm::vec2 real_buttonSize;
-							real_buttonSize.x = pSize.x + 45+8;
-							real_buttonSize.y = pSize.y + 40;
+							real_buttonSize.x = 120.f;
+							real_buttonSize.y = 120.f;
 
 							glm::vec2 real_mousePosition;
-							real_mousePosition.x = ImGui::GetCursorPos().x + 80 ;
-							real_mousePosition.y = ImGui::GetCursorPos().y + 60 + real_buttonSize.y * 0.35f;
+							real_mousePosition.x = viewport->Size.x * 0.032f;
+							real_mousePosition.y = viewport->Size.y * 0.16f;
 							
 							EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, real_mousePosition, real_buttonSize);
 						}
@@ -427,9 +427,10 @@ namespace Tempest
 								// Click to quick menu
 							case 0:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.034f, viewport->Size.y * 0.16f };
-								ImVec2 size = { 105.f, 100.f };
-								UI::TutArea(pos, size, false);
+								ImVec2 pos = { viewport->Size.x * 0.032f, viewport->Size.y * 0.16f };
+								ImVec2 size = { 120.f, 120.f };
+								UI::TutArea(pos, size, true);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 30.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -447,7 +448,7 @@ namespace Tempest
 								auto unselected = tex_map["Assets/Unselected.dds"];
 								bool taskCompleted = true;
 								UI::TutArea(pos, size, false);
-
+								block_input_if_mouse_not_in_bounds(pos, size);
 								//Task List
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
@@ -555,10 +556,10 @@ namespace Tempest
 											voice_played = true;
 										}
 									}
-									
+									override_mouse_blocking(tut_min, ImVec2{ (float)nextBtn->GetWidth() ,(float)nextBtn->GetHeight() });
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
 
-									if (UI::MouseIsWithin(tut_min, tut_max))
+									if (UI::MouseIsWithin(tut_min, tut_max) )
 									{
 										ImGui::SetMouseCursor(7);
 										if (ImGui::IsMouseClicked(0))
@@ -577,6 +578,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
 								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size, false);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -588,6 +590,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.775f, viewport->Size.y * 0.085f };
 								ImVec2 size = { 300.f, 130.f };
 								UI::TutArea(pos, size, false);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access Weapon page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -623,6 +626,7 @@ namespace Tempest
 						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth(), tut_min.y + exitBtn->GetHeight() };
 						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
 
+						override_mouse_blocking(tut_min, tut_max - tut_min);
 						if (UI::MouseIsWithin(tut_min, tut_max))
 						{
 							ImGui::SetMouseCursor(7);
@@ -883,7 +887,7 @@ namespace Tempest
 		{
 			if (auto weap = instance.ecs.get_if<tc::Weapon>(weap_id))
 			{
-				auto PairResult = UI::UIWeapActionButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 0,0 }, FONT_BODY, false);
+				auto PairResult = UI::UIWeapActionButtonWithDelete(weap->name.c_str(), string("##weapweap" + std::to_string(i + j * 5)), { cursor.x + i++ * 300.0f, cursor.y + j * 100.0f }, { 0,0 }, FONT_BODY, false,true, 0.7f);
 				if (PairResult.first)
 				{
 					OverlayOpen = false;

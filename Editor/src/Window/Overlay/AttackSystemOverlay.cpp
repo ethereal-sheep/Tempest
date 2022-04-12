@@ -502,6 +502,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
 								ImVec2 size = { 200.f, 70.f };
 								UI::TutArea(pos, size, false);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -690,6 +691,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.102f, viewport->Size.y * 0.0261f };
 								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size, false);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -706,6 +708,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.59f, viewport->Size.y * 0.085f };
 								ImVec2 size = { 310.f, 140.f };
 								UI::TutArea(pos, size, false);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the sequence page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -748,6 +751,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.01f, viewport->Size.y * 0.165f };
 								ImVec2 size = { 200.f, 70.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to create a new sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								if (emitter_4 == false)
@@ -1042,7 +1046,7 @@ namespace Tempest
 					{
 						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 1.f, tut_min.y + exitBtn->GetHeight() * 1.f };
 						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
 
 						if (UI::MouseIsWithin(tut_min, tut_max))
