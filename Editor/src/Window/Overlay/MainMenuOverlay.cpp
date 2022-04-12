@@ -216,37 +216,11 @@ namespace Tempest
 
 				ImGui::PushFont(FONT_BTN);
 
-				string str = "Gurps";
+				//Blank Template
 				ImVec2 Pos = { ProjectBGMin.x + 70.f, ProjectBGMax.y * 0.25f };
 				ImVec2 strPos;
 
-				for (auto it : fs::directory_iterator("ConflictResolutions"))
-				{
-					str = it.path().stem().string();
-					ImGui::PushID((int)Pos.x);
-					ImGui::SetCursorPos(Pos);
-					if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
-					{
-						AudioEngine ae;
-						ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
-						NewProjectName = str;
-						auto fn = [&]()
-						{
-							//create_new_project(get_user_path() / "Projects", NewProjectName);
-							change_state(UI_SHOW::NEW_PROJECT);
-						};
-						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
-					}
-					strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
-					ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-					ImGui::PopID();
-
-					Pos.x += 150.f;
-				}
-
-
-				//Blank Template
-				str = "Blank";
+				string str = "Blank";
 				ImGui::SetCursorPos(Pos);
 				ImGui::PushID((int)Pos.x);
 				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
@@ -266,7 +240,40 @@ namespace Tempest
 				ImGui::PopID();
 				Pos.x += 150.f;
 
+
+				str = "Gurps";
+				
+				auto ind = 0;
+				for (auto it : fs::directory_iterator("ConflictResolutions"))
+				{
+					if(ind == 0)
+						img = tex_map["Assets/TemplateBtn.dds"];
+					else
+						img = tex_map["Assets/GurpsTemplateBtn.dds"];
+					str = it.path().stem().string();
+					ImGui::PushID((int)Pos.x);
+					ImGui::SetCursorPos(Pos);
+					if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
+					{
+						AudioEngine ae;
+						ae.Play("Sounds2D/Button_Click.wav", "SFX", 1.f);
+						NewProjectName = str;
+						auto fn = [&]()
+						{
+							//create_new_project(get_user_path() / "Projects", NewProjectName);
+							change_state(UI_SHOW::NEW_PROJECT);
+						};
+						Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
+					}
+					strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
+					ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+					ImGui::PopID();
+					ind++;
+					Pos.x += 150.f;
+				}
+
 				str = "Tutorial";
+				img = tex_map["Assets/TutorialTemplateBtn.dds"];
 				ImGui::SetCursorPos(Pos);
 				ImGui::PushID((int)Pos.x);
 				if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
@@ -365,28 +372,6 @@ namespace Tempest
 				ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 				ImGui::PopID();
 				Pos.x += 150.f; // for any following
-
-				////D&D Template
-				//str = "D&D";
-				//Pos.x += 150.f;
-				//ImGui::SetCursorPos(Pos);
-				//if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
-				//{
-				//	//TODO
-				//}
-				//strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
-				//ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-
-				////Tutorial Template
-				//str = "Tutorial";
-				//Pos.x += 150.f;
-				//ImGui::SetCursorPos(Pos);
-				//if (UI::UIImageButton((void*)static_cast<size_t>(img->GetID()), ImVec2{ (float)img->GetWidth(), (float)img->GetHeight() }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, tintHover, tintPressed))
-				//{
-				//	//TODO
-				//}
-				//strPos = { Pos.x + (float)img->GetWidth() * 0.5f - ImGui::CalcTextSize(str.c_str()).x * 0.5f, Pos.y + (float)img->GetHeight() };
-				//ImGui::GetWindowDrawList()->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
 				ImGui::PopFont();
 			}
