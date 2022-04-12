@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "Type": "Prototype",
-        "Category": "Obstacle"
+        "Category": "Decoration"
     },
     "Components": [
         {
@@ -37,21 +37,13 @@
         },
         {
             "Metadata": {
-                "Type": "Collision"
-            },
-            "Component": {
-                "Cover": 0
-            }
-        },
-        {
-            "Metadata": {
                 "Type": "Local"
             },
             "Component": {
                 "LocalPosition": [
-                    -3.200000047683716,
-                    0.0,
-                    -5.0
+                    1.3300000429153443,
+                    -0.5,
+                    -10.850000381469727
                 ],
                 "LocalRotation": [
                     0.0,
@@ -68,17 +60,11 @@
         },
         {
             "Metadata": {
-                "Type": "Obstacle"
-            },
-            "Component": {}
-        },
-        {
-            "Metadata": {
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Lab_Curtain.a",
-                "TexturePath": "Assets\\ThumbNail_Lab_curtain.jpg"
+                "Path": "Models\\MetalLamp.a",
+                "TexturePath": "Assets\\ThumbNail_Metal_Lamp.jpg"
             }
         },
         {
@@ -86,8 +72,8 @@
                 "Type": "Shape"
             },
             "Component": {
-                "X": 2,
-                "Y": 0
+                "X": 1,
+                "Y": 1
             }
         }
     ]

@@ -49,9 +49,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -3.200000047683716,
+                    6.300000190734863,
                     0.0,
-                    -5.0
+                    -8.800000190734864
                 ],
                 "LocalRotation": [
                     0.0,
@@ -77,8 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Lab_Curtain.a",
-                "TexturePath": "Assets\\ThumbNail_Lab_curtain.jpg"
+                "Path": "Models\\CoffeeTable_SciFi.a",
+                "TexturePath": "Assets\\ThumbNail_Coffee_Table_2.jpg"
             }
         },
         {
@@ -87,7 +87,7 @@
             },
             "Component": {
                 "X": 2,
-                "Y": 0
+                "Y": 1
             }
         }
     ]
