@@ -55,7 +55,7 @@ namespace Tempest
 				const ImVec2 tableSize{ viewport->Size.x * 0.8f, viewport->Size.y * 0.7f };
 
 				ImGui::SetCursorPos(ImVec2{viewport->Size.x * 0.5f - tableSize.x * 0.5f, viewport->Size.y * 0.55f - tableSize.y * 0.5f });
-				if (ImGui::BeginChild("TableParent", tableSize, true)) 
+				if (ImGui::BeginChild("TableParent", tableSize, false)) 
 				{
 					ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2{ 10.f, 10.f });
 					if (ImGui::BeginTable("TableResults", 6, ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingStretchSame))  //ImGuiTableFlags_BordersOuter
