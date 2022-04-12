@@ -79,11 +79,14 @@
 #include "Window/Overlay/Startup.h"
 #include "Window/Overlay/PlaceUnitCinematic.h"
 
+
+
 // show recent projects
 #include "Window/Util/ShowRecent.h"
 #include "Window/Util/Delay.h"
 
 #include "Window/Util/ParticleDraw.h"
+#include "Window/Util/Cursor.h"
 
 namespace Tempest
 {
@@ -110,6 +113,7 @@ namespace Tempest
 
 		instance->register_always<ParticleDraw>();
 		instance->register_always<Startup>();
+		instance->register_always<Cursor>();
 	}
 
 	void InstanceManager::register_physicstime_windows()
@@ -127,6 +131,7 @@ namespace Tempest
 		instance->register_always<SettingsPopup>();
 
 		instance->register_always<ShowRecent>();
+		instance->register_always<Cursor>();
 	}
 	void InstanceManager::register_edittime_windows()
 	{
@@ -187,6 +192,7 @@ namespace Tempest
 		instance->register_always<Delay>();
 
 		instance->register_always<ParticleDraw>();
+		instance->register_always<Cursor>();
 	}
 	void InstanceManager::register_runtime_windows()
 	{
@@ -220,6 +226,7 @@ namespace Tempest
 		instance->register_always<LoadingOverlay>(true);
 		instance->register_always<RuntimeStartupOverlay>();
 		instance->register_always<PlaceUnitCinematic>();
+		instance->register_always<Cursor>();
 	}
 
 }

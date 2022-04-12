@@ -26,14 +26,19 @@ namespace Tempest
         }
         void init(Instance&) override
         {
+
         }
 
 
 
         void show(Instance&) override
         {
-            
+            ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+            auto cursor_id = tex_map["Assets/Cursor.png"];
 
+            auto size = ImVec2{ (float)cursor_id->GetWidth(), (float)cursor_id->GetHeight() };
+            auto pos = ImGui::GetMousePos();
+            ImGui::GetForegroundDrawList()->AddImage((ImTextureID)cursor_id->GetID(), pos, pos + size);
         }
 
 
