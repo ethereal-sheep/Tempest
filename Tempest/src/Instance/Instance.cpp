@@ -161,10 +161,10 @@ namespace Tempest
 				auto local = ecs.get_if<tc::Local>(id);
 				auto anim = ecs.get_if<tc::Animation>(id);
 
-				glm::vec3 temp = { 1.f, 1.f, 1.f };
+				/*glm::vec3 temp = { 1.f, 1.f, 1.f };
 
 				if (anim->is_stopped(id))
-					temp = { 0.1f, 0.1f, 0.1f };
+					temp = { 0.1f, 0.1f, 0.1f };*/
 
 				auto test = glm::translate(transform->position)
 					* glm::mat4(transform->rotation)
@@ -174,8 +174,7 @@ namespace Tempest
 					* glm::mat4(local->local_rotation)
 					* glm::scale(local->local_scale)
 					* glm::scale(unit->get_current_local().local_scale)
-					* glm::scale(transform->scale)
-					* glm::scale(temp);
+					* glm::scale(transform->scale);
 
 				auto character = ecs.get_if<tc::Character>(id);
 				if (character != nullptr)

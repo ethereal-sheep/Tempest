@@ -2586,7 +2586,6 @@ namespace Tempest
 
 				// clear
 				auto canim = instance.ecs.get_if<tc::Animation>(curr_entity);
-				canim->change_animation(curr_entity, "Animations/Unit_Idle.fbx");
 				canim->force_change(curr_entity, "Animations/Unit_Idle.fbx");
 				canim->play(curr_entity, true);
 
