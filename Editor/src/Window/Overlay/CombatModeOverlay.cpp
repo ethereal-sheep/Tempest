@@ -1468,13 +1468,13 @@ namespace Tempest
 							auto attacker = curr_entity;
 
 
-							if (other_entity != UNDEFINED)
+							if (other_entity != UNDEFINED && other_entity != INVALID)
 								instance.ecs.get_if<tc::Animation>(other_entity)->pause(other_entity);
 
 							other_entity = instance.character_map[w_x][w_y];
 
 							auto anim = instance.ecs.get_if<tc::Animation>(other_entity);
-							if (!anim->if_end(other_entity))
+							if (anim && !anim->if_end(other_entity))
 							{
 								anim->change_animation(other_entity, "Animations/Unit_Idle.fbx");
 								anim->play(other_entity, true);
@@ -2151,7 +2151,7 @@ namespace Tempest
 			//battle_state = BATTLE_STATE::SELECT_OTHER;
 			display_curr_stat = false;
 			display_other_stat = false;
-			if (other_entity != INVALID)
+			if (other_entity != INVALID && other_entity != UNDEFINED)
 				instance.ecs.get_if<tc::Animation>(other_entity)->pause(other_entity);
 				//instance.ecs.get<tc::Model>(other_entity).path = "Models\\UnitBlack_CombatStance.a";
 			instance.selected = INVALID;
@@ -2564,12 +2564,10 @@ namespace Tempest
 			[[maybe_unused]]auto& cs = instance.ecs.get<tc::Character>(curr_entity);
 			[[maybe_unused]] auto& unit = instance.ecs.get<tc::Unit>(curr_entity);
 			[[maybe_unused]] auto& xform = instance.ecs.get<tc::Transform>(curr_entity);
-			[[maybe_unused]] auto canim = instance.ecs.get_if<tc::Animation>(curr_entity);
 
 			[[maybe_unused]] auto& ocs = instance.ecs.get<tc::Character>(other_entity);
 			[[maybe_unused]] auto& ounit = instance.ecs.get<tc::Unit>(other_entity);
 			[[maybe_unused]] auto& oxform = instance.ecs.get<tc::Transform>(other_entity);
-			[[maybe_unused]] auto oanim = instance.ecs.get_if<tc::Animation>(other_entity);
 
 			[[maybe_unused]] auto& cam = Service<RenderSystem>::Get().GetCamera();
 
@@ -2587,10 +2585,14 @@ namespace Tempest
 				cam_ctrl.force_reset_rot(cam);
 
 				// clear
+				auto canim = instance.ecs.get_if<tc::Animation>(curr_entity);
+				canim->change_animation(curr_entity, "Animations/Unit_Idle.fbx");
 				canim->force_change(curr_entity, "Animations/Unit_Idle.fbx");
 				canim->play(curr_entity, true);
 
-				if (other_entity != UNDEFINED)
+				auto oanim = instance.ecs.get_if<tc::Animation>(other_entity);
+
+				if (other_entity != UNDEFINED && other_entity != INVALID)
 				{
 					oanim->force_change(other_entity, "Animations/Unit_Idle.fbx");
 					oanim->play(other_entity, true);
