@@ -65,7 +65,7 @@ namespace Tempest
 						ImGui::PushFont(FONT_SHEAD);
 						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1.f,1.f,1.f,1.0f });
 
-						ImGui::TableSetupColumn("Unit", 1.f);
+						ImGui::TableSetupColumn("Unit");
 						ImGui::TableSetupColumn("Damage done");
 						ImGui::TableSetupColumn("Damage received");
 						ImGui::TableSetupColumn("Units defeated");

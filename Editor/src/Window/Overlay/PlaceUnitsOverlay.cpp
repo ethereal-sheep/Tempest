@@ -356,7 +356,7 @@ namespace Tempest
 				{
 
 				}
-				if (UI::UIButton_2("Next", "Next", { buttonPos.x + 200.f, buttonPos.y }, { -40.f,20.f }, FONT_BODY))
+				if (UI::UIButton_2("Play", "Play", { buttonPos.x + 200.f, buttonPos.y }, { -40.f,20.f }, FONT_BODY))
 				{
 					bool okay = true;
 					for (auto i : chars)

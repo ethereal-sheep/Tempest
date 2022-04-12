@@ -38,7 +38,6 @@ namespace Tempest
 		{
 			Service<EventManager>::Get().instant_dispatch<ViewportCameraMoveTrigger>(false);
 
-			AudioEngine ae;
 			ae.StopChannel(voice_line);
 			voice_line = 0;
 			for (int i = 0; i < 8; ++i)
@@ -628,7 +627,7 @@ namespace Tempest
 								std::string sound_name = "Sounds3D/SFX_DeleteFurniture.wav";
 								/*if (is_metal_prototype(instance.ecs.get<tc::Meta>(current).name))
 									sound_name = "Sounds3D/SFX_MetallicDelete.wav";*/
-								ae.SetChannel3dPosition(ae.Play(sound_name, "SFX", 1.0f), t_position);
+								ae.SetChannel3dPosition(ae.Play(sound_name, "SFX", 1.5f), t_position);
 								EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, t_position);
 
 								if (instance.tutorial_enable && tutorial_index == 7)
@@ -930,7 +929,7 @@ namespace Tempest
 									: "Sounds3D/SFX_PropPlacement" + std::to_string(rand() % 2 + 1) + ".wav";
 
 								if (is_metal_prototype(proto_name))
-									sound_name = "Sounds3D/SFX_MetalPlacement";
+									sound_name = "Sounds3D/SFX_MetalPlacement.wav";
 
 								instance.selected = it->first;
 								if (auto transform = it->second.force_if<tc::Transform>())
@@ -950,7 +949,7 @@ namespace Tempest
 									}
 
 									transform->position = inter;
-									ae.SetChannel3dPosition(ae.Play(sound_name.c_str(), "SFX",1.0f), transform->position);
+									ae.SetChannel3dPosition(ae.Play(sound_name.c_str(), "SFX", 1.5f), transform->position);
 									EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform->position);
 								}
 
@@ -1203,7 +1202,7 @@ namespace Tempest
 				std::string sound_name = "Sounds3D/SFX_DeleteFurniture.wav";
 				/*if (is_metal_prototype(instance.ecs.get<tc::Meta>(current).name))
 					sound_name = "Sounds3D/SFX_MetallicDelete.wav";*/
-				ae.SetChannel3dPosition(ae.Play(sound_name, "SFX", 1.0f), transform.position);
+				ae.SetChannel3dPosition(ae.Play(sound_name, "SFX", 1.5f), transform.position);
 				EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(m_Prop_Placement_VFX, transform.position);
 				instance.selected = INVALID;
 				return;
@@ -1515,7 +1514,10 @@ namespace Tempest
 	bool Tempest::BuildModeOverlay::is_metal_prototype(std::string name)
 	{
 		for (int i = 0; i < 6; ++i)
-			return name == metal_prototypes[i];
+		{
+			if (name == metal_prototypes[i])
+				return true;
+		}
 
 		return false;
 	}

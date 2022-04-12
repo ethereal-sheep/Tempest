@@ -24,7 +24,7 @@ namespace Tempest
 	}
 
 
-	void CreditsOverlay::show(Instance& instance)
+	void CreditsOverlay::show(Instance&)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 
@@ -38,6 +38,13 @@ namespace Tempest
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 			if (ImGui::Begin("CombatResults", nullptr, window_flags))
 			{
+				auto tex = tex_map["Assets/CreditsBG.dds"];
+				{
+					ImVec2 Min{ 0,0 };
+					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
+					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
+				}
+
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - credits->GetWidth() * 0.5f, viewport->Size.y -inter.get() });
 				ImGui::Image((void*)static_cast<size_t>(credits->GetID()), ImVec2{ credits->GetWidth() * 1.0f, credits->GetHeight() * 1.0f });
 
@@ -46,7 +53,7 @@ namespace Tempest
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
-				auto tex = tex_map["Assets/BackMenuBtn.dds"];
+				tex = tex_map["Assets/BackMenuBtn.dds"];
 
 				if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 				{
