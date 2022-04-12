@@ -3,8 +3,8 @@
 * \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
 * \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -135,19 +135,6 @@ namespace Tempest
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             LOG_CRITICAL("Framebuffer not complete !");
 
-/* 
-        // test
-        glGenFramebuffers(1, &gBuffer2);
-        glBindFramebuffer(GL_FRAMEBUFFER, gBuffer2);
-        glGenTextures(1, &gBuffer2t);
-        glBindTexture(GL_TEXTURE_2D, gBuffer2t);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gBuffer2t, 0);
-
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            std::cout << "SAO Framebuffer not complete !" << std::endl; */
     }
 
     void RenderSystem::saoSetup()
