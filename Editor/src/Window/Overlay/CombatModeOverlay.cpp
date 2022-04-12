@@ -1285,7 +1285,7 @@ namespace Tempest
 				auto& charac_icon = tex_map["Assets/CharacterIcon.dds"];
 				const ImVec2 child_size{ charac_icon->GetWidth() * units.size() * 1.1f + 20.0f * units.size() - 1, charac_icon->GetHeight() * 2.f };
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - child_size.x * 0.5f, viewport->Size.y * 0.2f - child_size.y * 0.5f});
-				if (ImGui::BeginChild("Select other entity attack", child_size, true))
+				if (ImGui::BeginChild("Select other entity attack", child_size, false))
 				{
 					unsigned i = 0;
 					for ([[maybe_unused]]auto id : units)
@@ -3750,7 +3750,7 @@ namespace Tempest
 					ImGui::Dummy(ImVec2{ 5.0f,40.f });
 
 					// halp (can't scroll)
-					if (ImGui::BeginChild("CombatCharTurnDisplay", { turn_tex_size.x, turn_tex_size.y * 3.f + 15.f * 2.0f }, true, ImGuiWindowFlags_NoScrollbar))
+					if (ImGui::BeginChild("CombatCharTurnDisplay", { turn_tex_size.x, turn_tex_size.y * 3.f + 15.f * 2.0f }, false, ImGuiWindowFlags_NoScrollbar))
 					{
 						bool first = true;
 						float padding = 0.0f;
@@ -3844,7 +3844,7 @@ namespace Tempest
 	void CombatModeOverlay::render_more_info([[maybe_unused]]Instance& instance, const ImGuiViewport& viewport, INFO_TYPE type, Entity entity)
 	{
 		const int identifier = static_cast<int>(type) + static_cast<int>(entity * 2.5f); // this is a scam
-		if (ImGui::BeginChild(std::string("Char more info" + std::to_string(identifier)).c_str(), ImVec2{ viewport.Size.x * 0.3f, viewport.Size.y * 0.8f / 3.0f }, true))
+		if (ImGui::BeginChild(std::string("Char more info" + std::to_string(identifier)).c_str(), ImVec2{ viewport.Size.x * 0.3f, viewport.Size.y * 0.8f / 3.0f }, false))
 		{
 			{
 				//auto& charac = instance.ecs.get<tc::Character>(entity);
