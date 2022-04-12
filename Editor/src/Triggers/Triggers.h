@@ -139,8 +139,9 @@ namespace Tempest
 	};
 	struct CombatModeVisibility : public Event
 	{
-		CombatModeVisibility(bool val) : isVisible{ val } {}
+		CombatModeVisibility(bool val, Instance& in) : isVisible{ val }, instance{ in } {}
 		bool isVisible = false;
+		Instance &instance;
 	};
 
 	struct OpenConflictResTrigger : public Event {};

@@ -90,7 +90,7 @@ namespace Tempest
 			if (std::find(entities.begin(), entities.end(), thisUnit) == entities.end())
 			{
 				a.instance.ecs.remove<tc::Unit>(thisUnit);
-				a.instance.ecs.emplace<tc::Destroyed>(thisUnit);
+				a.instance.ecs.destroy(thisUnit);
 			}
 		}
 
@@ -352,9 +352,13 @@ namespace Tempest
 				ImGui::SetCursorPosY(sideBgMin.y + ImGui::GetWindowHeight() * 0.2f);
 				DrawSideBar(instance, sideBarSize);
 				ImVec2 buttonPos = { sideBgMin.x + 100.f, sideBgMin.y + ImGui::GetWindowHeight() * 0.87f };
-				if (UI::UIButton_2("Turn Order", "Turn Order", buttonPos, { -40.f,20.f }, FONT_BODY))
+				
+				auto tex = tex_map["Assets/TurnOrderBtn.dds"];
+				ImGui::SetCursorPos(ImVec2{ buttonPos.x - tex->GetWidth() * 0.5f * 1.1f,  buttonPos.y - tex->GetHeight() * 0.5f * 1.1f });
+				if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 1.1f, tex->GetHeight() * 1.1f }))
 				{
-
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>(OpenCombat, chars);
 				}
 				if (UI::UIButton_2("Play", "Play", { buttonPos.x + 200.f, buttonPos.y }, { -40.f,20.f }, FONT_BODY))
 				{
@@ -389,7 +393,7 @@ namespace Tempest
 						else
 						{
 							Service<EventManager>::Get().instant_dispatch<ChangeTurnOrder>(chars);
-							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);	
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true, instance);
 						}
 							
 						m_characterSpawnEmitter.lock()->m_EM.m_burstCycle = 0;

@@ -429,7 +429,7 @@ namespace Tempest
 							if (!is_during_combat)
 								Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>(instance);
 							else
-								Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+								Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true, instance);
 						}
 
 						if (!is_during_combat)

@@ -67,7 +67,7 @@ namespace Tempest
 						if (UI::UIButton_2("Edit Action", "Edit Action", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.35f }, { 50,20 }, FONT_BTN))
 						{
 							OverlayOpen = false;
-							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false,instance);
 							Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_ACTION, true);
 							EscDuringPause = false;
 						}
@@ -75,7 +75,7 @@ namespace Tempest
 						if (UI::UIButton_2("Edit Sequence", "Edit Sequence", ImVec2{ viewport->Size.x * 0.5f, viewport->Size.y * 0.45f }, { 50,20 }, FONT_BTN))
 						{
 							OverlayOpen = false;
-							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+							Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false, instance);
 							Service<EventManager>::Get().instant_dispatch<OpenGraphTrigger>(UNDEFINED, instance, OPEN_GRAPH_TYPE::GRAPH_SEQUENCE, true);
 							EscDuringPause = false;
 						}

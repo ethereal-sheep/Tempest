@@ -3505,8 +3505,15 @@ namespace Tempest
 
 	void CombatModeOverlay::visibility(const Event& e)
 	{
-		OverlayOpen = event_cast<CombatModeVisibility>(e).isVisible;
+		auto a = event_cast<CombatModeVisibility>(e);
+		OverlayOpen = a.isVisible;
 		battle_state = BATTLE_STATE::CURR_TURN;
+
+		if (OverlayOpen)
+		{
+			m_unitTileEmitter.lock()->m_GM.m_active = true;
+			m_unitTileEmitter.lock()->UpdateWaypoints(a.instance.ecs.get_if<tc::Transform>(curr_entity)->position);
+		}
 	}
 
 	void CombatModeOverlay::change_turn_order(const Event& e)
@@ -3826,8 +3833,14 @@ namespace Tempest
 				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.9f - add_units->GetWidth() * 0.5f, viewport->Size.y * 0.06f });
 				if (ImGui::ImageButton((void*)static_cast<size_t>(add_units->GetID()), ImVec2{ add_units->GetWidth() * 0.9f, add_units->GetHeight() * 0.9f }))
 				{
+					if (!m_unitTileEmitter.expired())
+					{
+						m_unitTileEmitter.lock()->m_GM.m_active = false;
+						m_unitTileEmitter.lock()->ClearAllParticles();
+					}
+
 					Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>(false, units);
-					Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false);
+					Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(false, instance);
 				}
 			}
 

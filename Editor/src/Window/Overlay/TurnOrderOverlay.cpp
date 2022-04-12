@@ -832,7 +832,7 @@ namespace Tempest
 					else
 					{
 						OverlayOpen = false;
-						Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true);
+						Service<EventManager>::Get().instant_dispatch<CombatModeVisibility>(true, instance);
 					}
 					
 				}
