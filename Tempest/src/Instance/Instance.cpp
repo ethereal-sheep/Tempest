@@ -176,9 +176,9 @@ namespace Tempest
 				//		anim->force_change(id, "../../../Resource/Animations/Unit_TaiChi.fbx");
 
 					if(character->color == glm::vec3(0.f, 0.f, 0.f))
-						Service<RenderSystem>::Get().SubmitModel(model->path, test, id);
+						Service<RenderSystem>::Get().SubmitModel(anim->current_animation, test, id);
 					else
-						Service<RenderSystem>::Get().SubmitModel(model->path, test, id, character->color);
+						Service<RenderSystem>::Get().SubmitModel(anim->current_animation, test, id, character->color);
 				}
 				//Service<RenderSystem>::Get().SubmitModel(model->path, test);
 			}
