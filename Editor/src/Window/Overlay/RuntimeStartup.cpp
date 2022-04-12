@@ -56,7 +56,15 @@ void Tempest::RuntimeStartupOverlay::call_first(Instance& instance)
 		float height = 7.5f;
 
 		auto dist = height/glm::sin(angle);
+
 		auto v = glm::normalize(most_right - midpt);
+
+		if (glm::distance2(most_right, midpt) < 25.f)
+		{
+			most_right = midpt + vec3{ 5,0,0 };
+			v = vec3{ 1,0,0 };
+		}
+
 
 		auto new_pt = v * dist;
 		new_pt.y = height;
@@ -88,7 +96,6 @@ void Tempest::RuntimeStartupOverlay::call_first(Instance& instance)
 			float b = -200.f;
 
 			pos.y = ratio * (b-a) + a;
-
 		}
 	}
 	else

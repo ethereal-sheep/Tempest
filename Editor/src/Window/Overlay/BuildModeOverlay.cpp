@@ -43,6 +43,8 @@ namespace Tempest
 			for (int i = 0; i < 8; ++i)
 				voice_played[i] = false;
 		}
+
+		inter_nest[0].start(0, 0, .5f, 0, [](float x) { return glm::backEaseOut(x); });
 			
 	}
 
@@ -425,7 +427,8 @@ namespace Tempest
 			
 			//if (UI::UIImageButton((void*)static_cast<size_t>(combatBtn->GetID()), ImVec2{ combatBtn->GetWidth() * 0.7f, combatBtn->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 			if (UI::UIButton_2("Save & Return", "Save & Return", ImVec2{ childx/2.f, 25 }, { 0,0 }, FONT_BODY))
-			{
+			{	
+
 				// go ahead
 				auto fn = [&]()
 				{
@@ -438,6 +441,12 @@ namespace Tempest
 					ae.StopAllChannels();
 					ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
 					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>(3);
+
+
+					instance.selected = INVALID;
+					current = INVALID;
+
+					
 				};
 				// fade in, fade out, visible
 				Service<EventManager>::Get().instant_dispatch<WipeTrigger>(.15f, .15f, .0f, fn);
