@@ -150,32 +150,13 @@ namespace Tempest
 			if (ImGui::Begin("Simulate Page Configure", nullptr, window_flags))
 			{
 
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
-				{
-					instance.tutorial_enable = true;
-					instance.tutorial_level = 1;
-					tutorial_index = 0;
-
-
-				}
-
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
-				{
-					tutorial_index++;
-				}
-
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_V)))
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
 				{
 					tutorial_p2 = true;
-					tutorial_index = 0;
-				}
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_C)))
-				{
-					instance.tutorial_enable = true;
-					if (++instance.tutorial_level > 3)
-						instance.tutorial_level = 1;
+					tutorial_index = 8;
+					instance.tutorial_level = 1;
+					instance.tutorial_enable = 1;
 
-					tutorial_index = 0;
 				}
 				/*if(instance.tutorial_enable)
 					ImGui::GetIO().MouseClicked[0] = false;
@@ -522,7 +503,7 @@ namespace Tempest
 								ImGui::PopFont();
 
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
-								ImVec2 tut_min = { viewport->Size.x * 0.1f, min.y + unselected->GetWidth() * 0.9f };
+								ImVec2 tut_min = { viewport->Size.x * 0.1f, min.y + unselected->GetWidth() * 2.f };
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
 								if (taskCompleted)
