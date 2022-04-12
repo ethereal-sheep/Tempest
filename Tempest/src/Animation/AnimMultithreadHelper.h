@@ -170,6 +170,21 @@ namespace Tempest
 			force.insert(std::make_pair(id, anim));
 		}
 
+		bool isPaused(uint32_t id)
+		{
+			return current.isPaused(id);
+		}
+
+		bool isPlaying(uint32_t id)
+		{
+			return current.isPlaying(id);
+		}
+
+		bool isStopped(uint32_t id)
+		{
+			return current.isStopped(id);
+		}
+
 		AnimationManager buffer;
 		AnimationManager current;
 

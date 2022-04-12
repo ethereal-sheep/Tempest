@@ -899,7 +899,7 @@ namespace Tempest
 				return ar.EndObject();
 			}
 
-			Animation(uint32_t _id = 0, std::string _curr = "../../../Resource/Models/Unit_Punch.fbx") : id{_id}, current_animation{_curr}{}
+			Animation(uint32_t _id = 0, std::string _curr = "Animations/Unit_Idle.fbx") : id{_id}, current_animation{_curr}{}
 
 			// Plays the animation
 			void play(uint32_t tid, bool loop = false)
@@ -954,6 +954,7 @@ namespace Tempest
 				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
 				{
 					Service<AnimMultithreadHelper>::Get().ChangeAnimation(tid, anim);
+					current_animation = anim;
 				}
 			}
 
@@ -964,6 +965,36 @@ namespace Tempest
 				{
 					Service<AnimMultithreadHelper>::Get().ForceChange(tid, anim);
 				}
+			}
+
+			bool is_playing(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isPlaying(tid);
+				}
+
+				return false;
+			}
+
+			bool is_paused(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isPaused(tid);
+				}
+
+				return false;
+			}
+
+			bool is_stopped(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isStopped(tid);
+				}
+
+				return false;
 			}
 
 			uint32_t id;
