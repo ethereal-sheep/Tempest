@@ -150,7 +150,7 @@ namespace Tempest
 
 				glm::vec3 temp = { 1.f, 1.f, 1.f };
 
-				if (anim->is_paused(id))
+				if (anim->is_stopped(id))
 					temp = { 0.1f, 0.1f, 0.1f };
 
 				auto test = glm::translate(transform->position)

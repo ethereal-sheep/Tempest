@@ -735,7 +735,7 @@ namespace Tempest
             //glEnable( GL_BLEND );
             //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ); // = color * alpha + background * (1-alpha)
             //GetCamera().SetPosition(vec3(0.f, 2.f, -2.f));
-
+            AAgridShow = false;
             auto s = glm::scale(glm::vec3(0.02f));
             // auto t = glm::translate(glm::vec3(0.0f, 0.0f, -80.0f));
             auto t = glm::translate(glm::vec3(-0.30f, 0.0f, -1.6f));
@@ -760,6 +760,13 @@ namespace Tempest
             //}
             SubmitModel("Models/SquareHole.a", (r * s));
         }
+
+        auto s = glm::scale(glm::vec3(0.00022f));
+        // auto t = glm::translate(glm::vec3(0.0f, 0.0f, -80.0f));
+        auto t = glm::translate(glm::vec3(-9999.0f, 9999.0f, -9999.6f));
+        //auto r = 
+        //SubmitModel("Models/UnitBlack_Idle.a", (s*t));
+        SubmitModel("Models/cube.a", (t * s));
 
         calculateAllNorms();
         LoadTextures();

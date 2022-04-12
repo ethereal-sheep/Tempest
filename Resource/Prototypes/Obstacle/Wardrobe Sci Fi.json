@@ -49,9 +49,9 @@
             },
             "Component": {
                 "LocalPosition": [
-                    -3.200000047683716,
+                    1.899999976158142,
                     0.0,
-                    -5.0
+                    -10.029999732971192
                 ],
                 "LocalRotation": [
                     0.0,
@@ -77,8 +77,8 @@
                 "Type": "Model"
             },
             "Component": {
-                "Path": "Models\\Lab_Curtain.a",
-                "TexturePath": "Assets\\ThumbNail_Lab_curtain.jpg"
+                "Path": "Models\\Wardrobe_SciFi.a",
+                "TexturePath": "Assets\\ThumbNail_Wardrobe_sci_fi.jpg"
             }
         },
         {
@@ -87,7 +87,7 @@
             },
             "Component": {
                 "X": 2,
-                "Y": 0
+                "Y": 1
             }
         }
     ]

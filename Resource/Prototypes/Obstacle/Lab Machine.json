@@ -78,7 +78,7 @@
             },
             "Component": {
                 "Path": "Models\\Lab_Machine.a",
-                "TexturePath": "Assets\\Lab_machine.jpg"
+                "TexturePath": "Assets\\ThumbNail_Lab_machine.jpg"
             }
         },
         {
