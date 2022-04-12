@@ -32,7 +32,7 @@ namespace Tempest
 		defender.Reset(a.instance);
 
 		if (!a.instance.ecs.view<Components::Graph>(exclude_t<tc::Destroyed>()).contains(sequence))
-		sequence = UNDEFINED;
+			sequence = UNDEFINED;
 
 		padding = ImGui::GetMainViewport()->Size.y * 0.02f;
 		win = 0;
@@ -131,7 +131,7 @@ namespace Tempest
 	void SimulateOverlay::show(Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		
+
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
 
@@ -149,14 +149,40 @@ namespace Tempest
 
 			if (ImGui::Begin("Simulate Page Configure", nullptr, window_flags))
 			{
-				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Escape)))
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Z)))
 				{
-					tutorial_p2 = true;
-					tutorial_index = 8;
+					instance.tutorial_enable = true;
 					instance.tutorial_level = 1;
+					tutorial_index = 0;
+
 
 				}
-				// tutorial progrss
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
+				{
+					tutorial_index++;
+				}
+
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_V)))
+				{
+					tutorial_p2 = true;
+					tutorial_index = 0;
+				}
+				if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_C)))
+				{
+					instance.tutorial_enable = true;
+					if (++instance.tutorial_level > 3)
+						instance.tutorial_level = 1;
+
+					tutorial_index = 0;
+				}
+				/*if(instance.tutorial_enable)
+					ImGui::GetIO().MouseClicked[0] = false;
+				else
+					ImGui::GetIO().MouseClicked[0] = true;*/
+
+					// tutorial progrss
 				if (instance.tutorial_enable && !instance.tutorial_temp_exit)
 				{
 					auto drawlist = ImGui::GetForegroundDrawList();
@@ -175,6 +201,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.025f };
 								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access the quick menu.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
@@ -186,6 +213,7 @@ namespace Tempest
 								ImVec2 pos = { 0.f, 0.f };
 								ImVec2 size = { viewport->Size.x, viewport->Size.y * 0.25f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds({ 0,0 }, { 0,0 });
 								string str = "";
 								str = "Quick Menu";
 								ImGui::PushFont(FONT_BTN);
@@ -205,7 +233,7 @@ namespace Tempest
 								if (!m_waypointEmitter.expired())
 									m_waypointEmitter.lock()->m_GM.m_active = false;
 
-								if (ImGui::IsMouseClicked(0))
+								if (NonImGuiMouseClick())
 								{
 									tutorial_index = 2;
 
@@ -213,7 +241,7 @@ namespace Tempest
 									if (!ae.IsPlaying(voice_line))
 										voice_line = ae.Play("Sounds2D/Cr_Units_1.wav", "VL", 1.0f);
 								}
-									
+
 							}
 							break;
 							case 2:
@@ -221,6 +249,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.225f, viewport->Size.y * 0.085f };
 								ImVec2 size = { 340.f, 140.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to access units page.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								/*if (UI::MouseIsWithin(pos, { pos.x + size.x, pos.y + size.y }) && ImGui::IsMouseDown(0))
@@ -241,17 +270,18 @@ namespace Tempest
 						{
 							tut_openSlide = false;
 							Service<EventManager>::Get().instant_dispatch<TutorialPopupTrigger>(TUTORIAL_POPUP_TYPES::SIMULATE_TUT);
-						}					
-						else if(instance.tutorial_slide == false)// Tutorial 1 Part 2
+						}
+						else if (instance.tutorial_slide == false)// Tutorial 1 Part 2
 						{
-							
+
 							switch (tutorial_index)
 							{
 							case 0:
 							{
-								ImVec2 pos = { viewport->Size.x * 0.446f, viewport->Size.y * 0.18f };
-								ImVec2 size = { 200.f, 150.f };
+								ImVec2 pos = { viewport->Size.x * 0.44f, viewport->Size.y * 0.18f };
+								ImVec2 size = { 220.f, 150.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -259,15 +289,16 @@ namespace Tempest
 								{
 									EmitterSystem_2D::GetInstance().CreateButtonEmitter(m_waypointEmitter, pos, size);
 									emitter_2_0 = true;
-								}	
+								}
 							}
 							break;
 
 							case 1:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.387f, viewport->Size.y * 0.275f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 80.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select the sequence.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -287,6 +318,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.14f, viewport->Size.y * 0.41f };
 								ImVec2 size = { 150.f, 150.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -303,6 +335,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.1f, viewport->Size.y * 0.305f };
 								ImVec2 size = { 150.f, 150.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a unit.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -320,8 +353,9 @@ namespace Tempest
 							case 4:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.555f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -336,8 +370,9 @@ namespace Tempest
 							case 5:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 80.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select a weapon.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -355,8 +390,9 @@ namespace Tempest
 							case 6:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.133f, viewport->Size.y * 0.615f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 50.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -371,8 +407,9 @@ namespace Tempest
 							case 7:
 							{
 								ImVec2 pos = { viewport->Size.x * 0.085f, viewport->Size.y * 0.276f };
-								ImVec2 size = { 180.f, 50.f };
+								ImVec2 size = { 200.f, 80.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to select an action.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 
@@ -399,6 +436,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.3f, 0 };
 								ImVec2 size = { viewport->Size.x, viewport->Size.y };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								//Task List
 								string str = "";
 								str = string(ICON_FK_EXCLAMATION_CIRCLE);
@@ -422,9 +460,6 @@ namespace Tempest
 
 									if (!b_unit_select_defender_task_VFX)
 									{
-										AudioEngine ae;
-										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
-
 										b_unit_select_defender_task_VFX = true;
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
 										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
@@ -450,9 +485,6 @@ namespace Tempest
 
 									if (!b_unit_select_weapon_task_VFX)
 									{
-										AudioEngine ae;
-										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
-
 										b_unit_select_weapon_task_VFX = true;
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
 										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
@@ -476,9 +508,6 @@ namespace Tempest
 
 									if (!b_unit_select_action_task_VFX)
 									{
-										AudioEngine ae;
-										ae.Play("Sounds2D/SFX_TaskComplete.wav", "SFX", 1.0f);
-
 										b_unit_select_action_task_VFX = true;
 										ImVec2 max_VFX{ min.x + (float)selected->GetWidth() * 0.6f, min.y + (float)selected->GetHeight() * 0.6f };
 										EmitterSystem_2D::GetInstance().CreateExplosionEmitter(m_explosion_VFX, (min + max_VFX) * 0.5f);
@@ -499,7 +528,7 @@ namespace Tempest
 								if (taskCompleted)
 								{
 									drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+									override_mouse_blocking(tut_min, tut_max - tut_min);
 									if (UI::MouseIsWithin(tut_min, tut_max))
 									{
 										ImGui::SetMouseCursor(7);
@@ -517,15 +546,16 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.445f, viewport->Size.y * 0.63f };
 								ImVec2 size = { 220.f, 120.f };
 								UI::TutArea(pos, size);
+								block_input_if_mouse_not_in_bounds(pos, size);
 								string str = string(ICON_FK_EXCLAMATION_CIRCLE) + "Click here to simulate the results.";
 								drawlist->AddText({ pos.x + size.x + 10.f, pos.y + size.y - 10.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PushFont(FONT_BTN);
 								str = "Set Frequency";
 								drawlist->AddText({ viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, pos.y + size.y * 0.3f - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
 								ImGui::PopFont();
-								drawlist->AddLine({ pos.x + size.x, pos.y + size.y * 0.3f }, {viewport->Size.x * 0.8f, pos.y + size.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
+								drawlist->AddLine({ pos.x + size.x, pos.y + size.y * 0.3f }, { viewport->Size.x * 0.8f, pos.y + size.y * 0.3f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								str = "Set the frequency of the simulations here.";
-								ImVec2 strPos = { viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, pos.y + size.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f};
+								ImVec2 strPos = { viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x, pos.y + size.y * 0.3f + ImGui::CalcTextSize(str.c_str()).y - 10.f };
 								drawlist->AddText(strPos, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								str = "A higher number will give a more accurate result.";
 								strPos.x = viewport->Size.x * 0.8f - ImGui::CalcTextSize(str.c_str()).x;
@@ -539,7 +569,7 @@ namespace Tempest
 								ImVec2 pos = { viewport->Size.x * 0.3655f, viewport->Size.y * 0.35f };
 								ImVec2 size = { 500.f, 280.f };
 								UI::TutArea(pos, size);
-
+								block_input_if_mouse_not_in_bounds(pos, size);
 								drawlist->AddLine({ pos.x + size.x, pos.y + size.y * 0.4f }, { viewport->Size.x * 0.8f, pos.y + size.y * 0.4f }, ImGui::GetColorU32({ 1,1,1,1 }), 2.f);
 								ImGui::PushFont(FONT_BTN);
 								string str = "Chance of Success";
@@ -558,7 +588,7 @@ namespace Tempest
 								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+								override_mouse_blocking(tut_min, tut_max - tut_min);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
@@ -579,10 +609,10 @@ namespace Tempest
 								// render the complete level here
 								ImGui::PushFont(FONT_CONTAX_144);
 								string str = "Level 1";
-								drawlist->AddText({viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+								drawlist->AddText({ viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
 								drawlist->AddLine({ viewport->Size.x * 0.2f,viewport->Size.y * 0.42f }, { viewport->Size.x * 0.8f,viewport->Size.y * 0.42f }, ImGui::GetColorU32({ 1,1,1,1 }));
 								str = "COMPLETE!";
-								drawlist->AddText({viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+								drawlist->AddText({ viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
 								ImGui::PopFont();
 
 								auto nextBtn = tex_map["Assets/NextBtn.dds"];
@@ -599,6 +629,7 @@ namespace Tempest
 								ImGui::PopFont();
 
 								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+								override_mouse_blocking(tut_min, tut_max - tut_min);
 								if (UI::MouseIsWithin(tut_min, tut_max))
 								{
 									ImGui::SetMouseCursor(7);
@@ -638,60 +669,60 @@ namespace Tempest
 					{
 						switch (tutorial_index)
 						{
-							case 0:
-								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance);
-								break;
+						case 0:
+							UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance);
+							break;
 
-							case 1:
+						case 1:
+						{
+							UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance, true);
+							UI::TutArea({ 0,0 }, { 0,0 }, false);
+
+							// render the complete level here
+							ImGui::PushFont(FONT_CONTAX_144);
+							string str = "Level 2";
+							drawlist->AddText({ viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							drawlist->AddLine({ viewport->Size.x * 0.2f,viewport->Size.y * 0.42f }, { viewport->Size.x * 0.8f,viewport->Size.y * 0.42f }, ImGui::GetColorU32({ 1,1,1,1 }));
+							str = "COMPLETE!";
+							drawlist->AddText({ viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							ImGui::PopFont();
+
+							auto nextBtn = tex_map["Assets/NextBtn.dds"];
+							ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
+							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
+
+							ImGui::PushFont(FONT_BTN);
+							str = "Next up - ";
+							drawlist->AddText({ tut_min.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
+							auto strLen = ImGui::CalcTextSize(str.c_str());
+							str = "Level 3";
+							drawlist->AddText({ tut_min.x + strLen.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
+							ImGui::PopFont();
+
+							drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
+							override_mouse_blocking(tut_min, tut_max - tut_min);
+							if (UI::MouseIsWithin(tut_min, tut_max))
 							{
-								UI::TutProgressBar2(drawlist, ImVec2{ viewport->Size }, instance, true);
-								UI::TutArea({ 0,0 }, { 0,0 }, false);
-
-								// render the complete level here
-								ImGui::PushFont(FONT_CONTAX_144);
-								string str = "Level 2";
-								drawlist->AddText({ viewport->Size.x * 0.4f,viewport->Size.y * 0.3f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-								drawlist->AddLine({ viewport->Size.x * 0.2f,viewport->Size.y * 0.42f }, { viewport->Size.x * 0.8f,viewport->Size.y * 0.42f }, ImGui::GetColorU32({ 1,1,1,1 }));
-								str = "COMPLETE!";
-								drawlist->AddText({ viewport->Size.x * 0.34f,viewport->Size.y * 0.45f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-								ImGui::PopFont();
-
-								auto nextBtn = tex_map["Assets/NextBtn.dds"];
-								ImVec2 tut_min = { viewport->Size.x * 0.85f,viewport->Size.y * 0.85f };
-								ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
-
-								ImGui::PushFont(FONT_BTN);
-								str = "Next up - ";
-								drawlist->AddText({ tut_min.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 1,1,1,1 }), str.c_str());
-								auto strLen = ImGui::CalcTextSize(str.c_str());
-								str = "Level 3";
-								drawlist->AddText({ tut_min.x + strLen.x, tut_min.y - 20.f }, ImGui::GetColorU32({ 0.98f,0.768f,0.51f,1 }), str.c_str());
-								ImGui::PopFont();
-
-								drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
-								if (UI::MouseIsWithin(tut_min, tut_max))
+								ImGui::SetMouseCursor(7);
+								if (ImGui::IsMouseClicked(0))
 								{
-									ImGui::SetMouseCursor(7);
-									if (ImGui::IsMouseClicked(0))
-									{
-										tutorial_index = 0;
-										instance.tutorial_level = 3;
-										if (!m_circularMotionEmitter.expired())
-											m_circularMotionEmitter.lock()->m_GM.m_active = false;
-									}
-								}
-
-								if (emitter_C_0 == false)
-								{
-									emitter_C_0 = true;
-									EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.0f);
+									tutorial_index = 0;
+									instance.tutorial_level = 3;
+									if (!m_circularMotionEmitter.expired())
+										m_circularMotionEmitter.lock()->m_GM.m_active = false;
 								}
 							}
-								break;
 
-							default:
-								break;
+							if (emitter_C_0 == false)
+							{
+								emitter_C_0 = true;
+								EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(m_circularMotionEmitter, glm::vec2{ 980.0f, 450.0f }, 300.0f);
+							}
+						}
+						break;
+
+						default:
+							break;
 						}
 					}
 
@@ -733,15 +764,15 @@ namespace Tempest
 							ImVec2 tut_max = { tut_min.x + nextBtn->GetWidth() * 1.f, tut_min.y + nextBtn->GetHeight() * 1.f };
 
 							drawlist->AddImage((void*)static_cast<size_t>(nextBtn->GetID()), tut_min, tut_max);
-
+							override_mouse_blocking(tut_min, tut_max - tut_min);
 							if (UI::MouseIsWithin(tut_min, tut_max))
 							{
 								ImGui::SetMouseCursor(7);
 								if (ImGui::IsMouseClicked(0))
 								{
 									tutorial_index = 0;
-								//	instance.tutorial_level = 1;
-								//	instance.tutorial_enable = false;
+									//	instance.tutorial_level = 1;
+									//	instance.tutorial_enable = false;
 									instance.tutorial_level = 4;
 									if (!m_circularMotionEmitter.expired())
 										m_circularMotionEmitter.lock()->m_GM.m_active = false;
@@ -758,7 +789,7 @@ namespace Tempest
 						default:
 							break;
 						}
-						
+
 					}
 
 					//Tutorial Exit Button
@@ -766,20 +797,21 @@ namespace Tempest
 					{
 						auto exitBtn = tex_map["Assets/Tutorial_exit.dds"];
 						ImVec2 tut_min = { viewport->Size.x * 0.85f, viewport->Size.y * 0.05f };
-						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 0.7f, tut_min.y + exitBtn->GetHeight() * 0.7f };
+						ImVec2 tut_max = { tut_min.x + exitBtn->GetWidth() * 1.f, tut_min.y + exitBtn->GetHeight() * 1.f };
 						drawlist->AddImage((void*)static_cast<size_t>(exitBtn->GetID()), tut_min, tut_max);
 
+						override_mouse_blocking(tut_min, tut_max - tut_min);
 						if (UI::MouseIsWithin(tut_min, tut_max))
 						{
 							ImGui::SetMouseCursor(7);
-							if (NonImGuiMouseClick())
+							if (ImGui::IsMouseClicked(0))
 							{
 								instance.tutorial_temp_exit = true;
 								ImGui::OpenPopup("TutorialExitPopupConfirm");
 							}
 						}
 					}
-					
+
 				}
 
 				// exit tutorial
@@ -791,7 +823,7 @@ namespace Tempest
 
 					instance.tutorial_temp_exit = false;
 					instance.tutorial_enable = false;
-					
+
 					if (!m_circularMotionEmitter.expired())
 						m_circularMotionEmitter.lock()->m_GM.m_active = false;
 
@@ -801,7 +833,7 @@ namespace Tempest
 				auto tex = tex_map["Assets/SimulationBG.dds"];
 				{
 					ImVec2 Min{ 0,0 };
-					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y};
+					ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
 					ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(tex->GetID()), Min, Max);
 				}
 
@@ -814,7 +846,7 @@ namespace Tempest
 				// sequence display
 				ImGui::PushFont(FONT_SHEAD);
 				const std::string seq_title{ "Sequence" };
-				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - (ImGui::CalcTextSize(seq_title.c_str()).x  + ImGui::GetFontSize() * 0.5f) * 0.5f, viewport->Size.y * 0.2f });
+				ImGui::SetCursorPos({ viewport->Size.x * 0.5f - (ImGui::CalcTextSize(seq_title.c_str()).x + ImGui::GetFontSize() * 0.5f) * 0.5f, viewport->Size.y * 0.2f });
 				ImGui::Text(seq_title.c_str());
 				ImGui::PopFont();
 
@@ -835,7 +867,7 @@ namespace Tempest
 				ImGui::SameLine();
 				ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 115.f, ImGui::GetCursorPosY() - 25.0f });
 
-			//	ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.25f });
+				//	ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.55f, viewport->Size.y * 0.25f });
 				ImGui::PushID("seq");
 				if (sequence != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 				{
@@ -886,7 +918,7 @@ namespace Tempest
 				ImGui::InputScalar("", ImGuiDataType_U32, &freq, 0);
 				freq = std::clamp(freq, 100u, 50000u);
 				ImGui::PopItemWidth();
-				
+
 				// attack section
 				display_unit_section(instance, { viewport->Size.x * 0.18f,viewport->Size.y * 0.5f }, true);
 				display_unit_section(instance, { viewport->Size.x * (1.f - 0.18f),viewport->Size.y * 0.5f }, false);
@@ -913,7 +945,7 @@ namespace Tempest
 					}
 
 					Service<EventManager>::Get().instant_dispatch<SimulateConflict>(attacker.unit_id, defender.unit_id, attacker.action, defender.action, sequence, freq, win, lose, attack, defend, finish);
-					
+
 					if (instance.tutorial_enable && instance.tutorial_level == 2 &&
 						sequence != UNDEFINED && attacker.unit_id != UNDEFINED && defender.unit_id != UNDEFINED)
 					{
@@ -955,7 +987,7 @@ namespace Tempest
 				// display top buttons
 				{
 					ImGui::SetCursorPos(ImVec2{ viewport->Size.x * inter.get(),viewport->Size.y * 0.03f });
-					
+
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
@@ -991,11 +1023,11 @@ namespace Tempest
 					ImGui::SameLine();
 					auto quickMenuPos = ImGui::GetCursorPos();
 					tex = tex_map["Assets/QuickMenuBtn.dds"];
-					
+
 					if (UI::UIImageButton((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f }, { 0,0 }, { 1,1 }, 0, { 0,0,0,0 }, btnTintHover, btnTintPressed))
 					{
 						Service<EventManager>::Get().instant_dispatch<QuickMenuPopupTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
-						
+
 						//Tutorial progression
 						if (instance.tutorial_enable && instance.tutorial_level == 1 && !tutorial_p2 && tutorial_index == 0)
 						{
@@ -1005,10 +1037,10 @@ namespace Tempest
 							if (!ae.IsPlaying(voice_line))
 								voice_line = ae.Play("Sounds2D/Cr_QuickMenu_1.wav", "VL", 1.0f);
 						}
-							
+
 					}
 					if (instance.tutorial_enable && tutorial_index == 0 && inter.is_finished() && !tutorial_p2 && instance.tutorial_level == 1)
-					{ 
+					{
 						if (emitter_1_0 == false)
 						{
 							emitter_1_0 = true;
@@ -1029,7 +1061,7 @@ namespace Tempest
 								m_circularMotionEmitter = EmitterSystem_2D::GetInstance().CreateCircularMotionEmitter_2D(real_mousePosition, 100.0f);*/
 						}
 					}
-					
+
 					ImGui::SameLine();
 					ImGui::Dummy(ImVec2{ 10.0f, 0.0f });
 					ImGui::SameLine();
@@ -1047,7 +1079,6 @@ namespace Tempest
 					instance.ecs.view<tc::Unit>(exclude_t<tc::Destroyed>()).size_hint() <= 0 &&
 					instance.ecs.view<tc::Weapon>(exclude_t<tc::Destroyed>()).size_hint() <= 0)
 					ImGui::OpenPopup("TutorialPopupConfirm");
-
 				if (!instance.tutorial_enable && UI::ConfirmTutorialPopup("TutorialPopupConfirm", "Do you want a tutorial?", false, []() {}))
 				{
 					instance.tutorial_enable = true;
@@ -1073,7 +1104,7 @@ namespace Tempest
 				HoveredID = ImGui::GetHoveredID();
 			}
 		}
-		
+
 		if (!m_waypointEmitter.expired() && (!OverlayOpen || !instance.tutorial_enable))
 		{
 			m_waypointEmitter.lock()->m_GM.m_active = false;
@@ -1083,12 +1114,12 @@ namespace Tempest
 	{
 		Entity temp = is_attacker ? attacker.unit_id : defender.unit_id;
 		ImVec4 tint{ 1,1,1,1 };
-		
+
 		// character display
 		float offset1 = inter_nest[0].get();
 		if (!is_attacker) offset1 = -offset1;
 
-		ImGui::SetCursorPos(ImVec2{start_pos.x - 35.0f + offset1, start_pos.y - 60.0f });
+		ImGui::SetCursorPos(ImVec2{ start_pos.x - 35.0f + offset1, start_pos.y - 60.0f });
 		auto tex = tex_map["Assets/CharacterIcon.dds"];
 		std::string chara_name{ "CHARACTER" };
 		if (temp != UNDEFINED)
@@ -1097,8 +1128,8 @@ namespace Tempest
 			chara_name = charac.name;
 			tint = ImVec4{ charac.color.x, charac.color.y,charac.color.z,1 };
 		}
-			
-		
+
+
 		if (UI::UICharButton_Toggle((void*)static_cast<size_t>(tex->GetID()), ImVec2{ tex->GetWidth() * 0.7f, tex->GetHeight() * 0.7f },
 			chara_name, "##charaname" + is_attacker, temp != UNDEFINED, { 0, 0 }, { 1,1 }, 2, ImVec4{ 0,0,0,0 }, tint))
 		{
@@ -1110,10 +1141,10 @@ namespace Tempest
 
 
 		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() - 15.0f, ImGui::GetCursorPosY() + 15.0f});
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() - 15.0f, ImGui::GetCursorPosY() + 15.0f });
 		push_button_style();
 		ImGui::PushID("chara" + is_attacker);
-		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
+		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 		{
 			Service<EventManager>::Get().instant_dispatch<SimulatePopupTrigger>(
 				SIMULATE_POPUP_TYPE::EDIT_UNIT, is_attacker, temp);
@@ -1138,7 +1169,7 @@ namespace Tempest
 		/*ImGui::SameLine();
 		ImGui::Dummy({ 80.f,0.f });
 		ImGui::SameLine();*/
-		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 100.f, ImGui::GetCursorPosY() - 30.f});
+		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 100.f, ImGui::GetCursorPosY() - 30.f });
 		push_button_style();
 		ImGui::PushID("weapon" + is_attacker);
 		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
@@ -1159,7 +1190,7 @@ namespace Tempest
 		temp = is_attacker ? attacker.action : defender.action;
 		ImGui::SetCursorPos({ start_pos.x + offset3, start_pos.y + padding * 7.0f });
 		ImGui::PushID("action" + is_attacker);
-		if (UI::UIButton_Action(instance, temp,"NO ACTION", "NO ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
+		if (UI::UIButton_Action(instance, temp, "NO ACTION", "NO ACTION", ImGui::GetCursorPos(), { 0,0 }, FONT_PARA))
 		{
 			if (instance.tutorial_enable && tutorial_p2 && is_attacker)
 				tutorial_index = 7;
@@ -1169,7 +1200,7 @@ namespace Tempest
 		ImGui::PopID();
 		ImGui::SetCursorPos(ImVec2{ ImGui::GetCursorPosX() + 100.f, ImGui::GetCursorPosY() - 30.f });
 		push_button_style();
-		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button ->GetHeight() * 1.0f}))
+		if (temp != UNDEFINED && UI::UIImageButton((void*)static_cast<size_t>(enter_button->GetID()), ImVec2{ enter_button->GetWidth() * 1.0f, enter_button->GetHeight() * 1.0f }))
 		{
 			OverlayOpen = false;
 			Service<EventManager>::Get().instant_dispatch<CloseOverlayTrigger>(QUICKMENU_POPUP_TYPE::SIMULATE);
