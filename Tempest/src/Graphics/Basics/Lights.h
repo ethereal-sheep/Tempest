@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -18,7 +18,7 @@
 namespace Tempest
 {
 	// Shadow map buffer size width x height
-	const uint32_t SHADOW_MAP_SIZE = 2048;
+	const uint32_t SHADOW_MAP_SIZE = 2048*2;
 
 	enum struct LIGHTS
 	{
@@ -29,8 +29,8 @@ namespace Tempest
 
 	struct Directional_Light
 	{
-		glm::vec3 Color = glm::vec3(1.f, 1.f, 1.f);
-		glm::vec3 Direction = glm::vec3(0.f, 1.f, 0.0001f);
+		glm::vec4 Color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+		glm::vec3 Direction = glm::vec3(0.f, -1.f, 0.0001f);
 		float Intensity = 0.5f;
 		uint32_t m_dirFBO = 0;
 		uint32_t m_depthmap = 0;
@@ -45,11 +45,11 @@ namespace Tempest
 
 	struct Point_Light
 	{
-		glm::vec3 Position = glm::vec3(0.f, 0.f, 1.f);
+		glm::vec3 Position = glm::vec3(0.f, 1.5f, 1.f);
 		//float Radius = 0.5f;
 		float Intensity = 0.7f;
 		
-		glm::vec3 Color = glm::vec3(1.f, 1.f, 1.f);
+		glm::vec4 Color = glm::vec4(1.f, 1.f, 1.f, 1.f);
 
 		float pointLightConsts = 0.7f;
 		float pointLightLinears = 0.15f; // or   0.09f
@@ -60,8 +60,11 @@ namespace Tempest
 		uint32_t m_Width = SHADOW_MAP_SIZE;
 		uint32_t m_Height = SHADOW_MAP_SIZE;
 
+		float radius = 3;
+
 		bool hide = true;
 		Point_Light(); // Make Point Light FBO
+		Point_Light(glm::vec3 pos, glm::vec4 color);
 		void Bind();
 	};
 

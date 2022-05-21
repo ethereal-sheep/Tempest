@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -20,12 +21,6 @@ namespace Tempest
 {
 	class ShadowBuffer
 	{
-		
-
-	
-
-		
-
 	public:
 
 		uint32_t m_ID = 0;

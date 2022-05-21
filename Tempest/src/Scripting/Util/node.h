@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -55,7 +55,7 @@ namespace Tempest
 
 		node(const node&) = default;
 		node& operator=(const node&) = default;
-		node(node&&) = default;
+		node(node&&) noexcept = default;
 		node& operator=(node&&) = default;
 		virtual ~node() = 0 {}
 
@@ -150,7 +150,6 @@ namespace Tempest
 		void set_name(const string& _name) { name = _name; }
 
 		node_id_t id;
-		string name;
 		category_type category;
 
 		tvector<input_pin> inputs;
@@ -165,6 +164,7 @@ namespace Tempest
 		size_t non_flow_outputs = 0;
 
 	public:
+		string name;
 		vec2 size{ 1.f, 1.f};
 		vec2 position{ 0.f, 0.f };
 
@@ -233,8 +233,7 @@ case category_type::NodeCategory:											\
 
 	enum struct category_type
 	{
-		Cast, Variable, ActionGraph, Dice, Arithmetic, GetStat, SetStat, GetMainStat, Conflict, Action, Resolution,
-		System, Switch, Compare
+		Cast, Variable, ActionGraph, Dice, Arithmetic, GetStat, SetStat, GetMainStat, Conflict, Action, Sequence, Switch, Compare, Stat
 		
 		,Group, Trig,
 		Random, Numerical, Constants, Logic, Vector,
@@ -246,17 +245,17 @@ case category_type::NodeCategory:											\
 	DEFINE_NODE(test_node, test, testing1, testing2, all);
 	DEFINE_NODE(CastNode, Cast, _cannot_be_empty);
 	DEFINE_NODE(VariableNode, Variable, LocalGet, LocalSet, GlobalGet, GlobalSet);
-	START_NODE(ActionGraphNode, ActionGraph, _cannot_be_empty)
-		public:
-		Entity graph_entity = INVALID;	// inject Entity member
-	END_NODE
+	//START_NODE(ActionGraphNode, ActionGraph, _cannot_be_empty)
+	//	public:
+	//	Entity graph_entity = INVALID;	// inject Entity member
+	//END_NODE
 	DEFINE_NODE(DiceNode, Dice, D4, D6, D8, D10, D12, D20);
 	DEFINE_NODE(ArithmeticNode, Arithmetic, Plus, Minus, Multiply, Divide);
-	DEFINE_NODE(GetStatNode, GetStat, Attacker, Defender, _cannot_be_empty);
-	DEFINE_NODE(SetStatNode, SetStat, Attacker, Defender, _cannot_be_empty);
-	DEFINE_NODE(GetMainStatNode, GetMainStat, Attacker, Defender, _cannot_be_empty);
-	DEFINE_NODE(ConflictNode, Conflict, Start, Win, Lose);
-	DEFINE_NODE(ActionNode, Action, Input, Output);
+
+	DEFINE_NODE(StatNode, Stat, GetStat, SetStat, GetMain, SetMain, ReduceStat, RestoreStat, ResetStat);
+	DEFINE_NODE(GroupNode, Group, Default);
+	DEFINE_NODE(ConflictNode, Conflict, Start, Win, Lose, AttackRoll, DefendRoll, AttackResolve, DefendResolve);
+	DEFINE_NODE(ActionNode, Action, Input, Output, Roll, Resolve, Deal);
 	DEFINE_NODE(SwitchNode, Switch, TwoSwitch, ThreeSwitch, FiveSwitch, TenSwitch, TwentySwitch, ThirtySwitch);
 	DEFINE_NODE(CompareNode, Compare, CompareFlow);
 	DEFINE_NODE(UtilNode, util, Print, In);
@@ -267,12 +266,12 @@ case category_type::NodeCategory:											\
 
 		NODE_CASE(test_node, test);
 		NODE_CASE(VariableNode, Variable);
-		NODE_CASE(ActionGraphNode, ActionGraph);
 		NODE_CASE(DiceNode, Dice);
 		NODE_CASE(ArithmeticNode, Arithmetic);
-		NODE_CASE(GetStatNode, GetStat);
-		NODE_CASE(SetStatNode, SetStat);
-		NODE_CASE(GetMainStatNode, GetMainStat);
+
+		NODE_CASE(StatNode, Stat);
+		NODE_CASE(GroupNode, Group);
+
 		NODE_CASE(ConflictNode, Conflict);
 		NODE_CASE(ActionNode, Action);
 		NODE_CASE(SwitchNode, Switch);

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\Libraries\tracy\TracyClient.cpp" />
     <ClCompile Include="src\Actions\Action.cpp" />
     <ClCompile Include="src\Actions\ActionHistory.cpp" />
     <ClCompile Include="src\Asset\Asset.cpp" />
@@ -69,6 +68,54 @@
     <ClCompile Include="src\Graphics\Basics\Light.cpp" />
     <ClCompile Include="src\Graphics\Basics\FBO.cpp" />
     <ClCompile Include="src\Graphics\Basics\RenderBuffer.cpp" />
+    <ClCompile Include="src\ECS\Test\test_prototype.cpp" />
+    <ClCompile Include="src\ECS\Test\test_scene.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MaterialPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\TexturePBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\Skybox.cpp" />
+    <ClCompile Include="src\Graphics\PBR\ModelPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MeshPBR.cpp" />
+    <ClCompile Include="src\Graphics\PBR\ShapePBR.cpp" />
+    <ClCompile Include="src\ECS\Scene.cpp" />
+    <ClCompile Include="src\Scripting\Nodes\GroupNode.cpp" />
+    <ClCompile Include="src\Scripting\Test\test_compare_node.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\EmitterSystem_2D.cpp" />
+    <ClCompile Include="src\Particles\Random.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\Particle_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\Emitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\EmissionModules_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\WaypointEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\ExplosionEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\CircularMotionEmitter_2D.cpp" />
+    <ClCompile Include="src\PMG\ProceduralMapGeneration.cpp" />
+    <ClCompile Include="src\Animation\AnimationManager.cpp" />
+    <ClCompile Include="src\Animation\Animation.cpp" />
+    <ClCompile Include="src\Animation\Animator.cpp" />
+    <ClCompile Include="src\Animation\Bone.cpp" />
+    <ClCompile Include="src\Profiler\Profiler.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Particles_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\EmissionModules_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Emitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\ExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.cpp" />
+    <ClCompile Include="src\FrameRate\FrameRateManager.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.cpp" />
+    <ClCompile Include="src\Graphics\PBR\MeshPrimitives.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\EmitterSystem_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_2D\LineEmitter_2D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\Smoke_Poof_Emitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterDespawnEmitter_3D.cpp" />
+    <ClCompile Include="src\Particles\Particles_3D\CharacterCutsceneSpawnEmitter_3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Actions\Action.h" />
@@ -115,7 +162,6 @@
     <ClInclude Include="src\Graphics\Basics\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\OpenGL\Camera.h" />
     <ClInclude Include="src\Graphics\OpenGL\Renderer.h" />
-    <ClInclude Include="src\Graphics\Test\TestModel.h" />
     <ClInclude Include="src\Instance\EditTimeInstance.h" />
     <ClInclude Include="src\Instance\Instance.h" />
     <ClInclude Include="src\Instance\NullTimeInstance.h" />
@@ -138,11 +184,8 @@
     <ClInclude Include="src\Physics\Util\px_make.h" />
     <ClInclude Include="src\Physics\Util\px_malloc_allocator.h" />
     <ClInclude Include="src\Physics\Util\px_math.h" />
-    <ClInclude Include="src\Resolution\ResolutionManager.h" />
-    <ClInclude Include="src\Resolution\Statline.h" />
     <ClInclude Include="src\Scripting\GMS.h" />
     <ClInclude Include="src\Scripting\Graph\graph.h" />
-    <ClInclude Include="src\Scripting\resolution.h" />
     <ClInclude Include="src\Scripting\SRM.h" />
     <ClInclude Include="src\Scripting\Util\sparse_scripts.h" />
     <ClInclude Include="src\Scripting\Util\split_view.h" />
@@ -208,6 +251,66 @@
     <ClInclude Include="src\Util\view.h" />
     <ClInclude Include="src\Graphics\Basics\FBO.h" />
     <ClInclude Include="src\Graphics\Basics\RenderBuffer.h" />
+    <ClInclude Include="src\ECS\Util\coptional.h" />
+    <ClInclude Include="src\ECS\Util\prototype.h" />
+    <ClInclude Include="src\ECS\Util\prefab.h" />
+    <ClInclude Include="src\ECS\PPS.h" />
+    <ClInclude Include="src\ECS\Util\prototype_container.h" />
+    <ClInclude Include="src\ECS\Prototypes\Prototype_Category.h" />
+    <ClInclude Include="src\ECS\Scene.h" />
+    <ClInclude Include="src\ECS\Rttr_Register.h" />
+    <ClInclude Include="src\ECS\Rttr_reg.h" />
+    <ClInclude Include="src\Graphics\PBR\MaterialPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\TexturePBR.h" />
+    <ClInclude Include="src\Graphics\PBR\Skybox.h" />
+    <ClInclude Include="src\Graphics\PBR\ModelPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\MeshPBR.h" />
+    <ClInclude Include="src\Graphics\PBR\ShapePBR.h" />
+    <ClInclude Include="src\Util\shape_manip.h" />
+    <ClInclude Include="src\Util\pathfinding.h" />
+    <ClInclude Include="src\Util\quitter.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Particles\Particles_2D\EmitterSystem_2D.h" />
+    <ClInclude Include="src\Particles\Random.h" />
+    <ClInclude Include="src\Util\interpolater.h" />
+    <ClInclude Include="src\Particles\Particles_2D\Particle_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\Emitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\EmissionModules_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\WaypointEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\ExplosionEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\CircularMotionEmitter_2D.h" />
+    <ClInclude Include="src\PMG\ProceduralMapGeneration.h" />
+    <ClInclude Include="src\Animation\AnimationManager.h" />
+    <ClInclude Include="src\Animation\Animation.h" />
+    <ClInclude Include="src\Animation\Animator.h" />
+    <ClInclude Include="src\Animation\Bone.h" />
+    <ClInclude Include="src\Animation\AssimpHelper.h" />
+    <ClInclude Include="src\Profiler\Profiler.h" />
+    <ClInclude Include="src\Profiler\ProfilerColor.h" />
+    <ClInclude Include="src\Animation\AnimMultithreadHelper.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Particles_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Emitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\EmissionModules_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\ExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\MultipleExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Interactive_DoorParticle_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Unit_Turn_IndicatorEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Unit_MovementTrailEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterDamageEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterDeathEmitter_3D.h" />
+    <ClInclude Include="src\FrameRate\FrameRateManager.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Rotation_ExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Multiple_Rotation_ExplosionEmitter_3D.h" />
+    <ClInclude Include="src\Graphics\PBR\MeshPrimitives.h" />
+    <ClInclude Include="src\Particles\Particles_3D\EmitterSystem_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Weather_Rain_Emitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterSpawnEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterTileCharged_Emitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\RandomMinMaxSpawnPointEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_2D\LineEmitter_2D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\Smoke_Poof_Emitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterDespawnEmitter_3D.h" />
+    <ClInclude Include="src\Particles\Particles_3D\CharacterCutsceneSpawnEmitter_3D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Shaders\Quad_Frag.glsl" />
@@ -217,5 +320,12 @@
     <None Include="src\Util\Serializer\Private\Writer.inl" />
     <None Include="src\Serializer\Reader.inl" />
     <None Include="src\Serializer\Writer.inl" />
+    <None Include="Tempest.aps" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tempest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="CoReSys.ico" />
   </ItemGroup>
 </Project>

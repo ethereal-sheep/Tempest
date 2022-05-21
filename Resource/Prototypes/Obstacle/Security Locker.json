@@ -1,0 +1,94 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Obstacle"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    -5.7295637130737309,
+                    0.0,
+                    4.511485576629639
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    0.009999999776482582,
+                    0.009999999776482582,
+                    0.009999999776482582
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\Security_Locker.a",
+                "TexturePath": "Assets\\ThumbNail_Security_Locker.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 1
+            }
+        }
+    ]
+}

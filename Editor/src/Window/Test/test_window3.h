@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -10,17 +10,19 @@
 
 #pragma once
 #include "Instance/Instance.h"
-#include "Graphics/OpenGL/RenderSystem.h"
 #include "Util/UIElements.h"
+#include "ECS/Prototypes/Prototype_Category.h"
+#include "../Viewport/CameraControls.h"
 
 namespace Tempest
 {
 	class test_window3 : public Window
 	{
-		unsigned tab = 0;
-		const unsigned numOfButtons = 10;
-		const float padding = 50.0f;
-		const float halfPadding = padding * 0.5f;
+		bool OverlayOpen = true;
+		CameraControls cam_ctrl;
+		int selected = -1;
+		tvector<Entity> chars;
+		tvector<Entity> sheets;
 
 		const char* window_name() override
 		{
@@ -29,152 +31,257 @@ namespace Tempest
 
 		void init(Instance&) override
 		{
-			ImGuiStyle* style = &ImGui::GetStyle();
+			//ImGuiStyle* style = &ImGui::GetStyle();
 
-			style->FramePadding = ImVec2(8, 6);
-			style->Colors[ImGuiCol_Button] = ImColor(40, 40, 40, 255);
-			style->Colors[ImGuiCol_ButtonActive] = ImColor(40, 40, 40, 255);
-			style->Colors[ImGuiCol_ButtonHovered] = ImColor(30, 30, 30, 255);
+			//style->FramePadding = ImVec2(8, 6);
+			//style->Colors[ImGuiCol_Button] = ImColor(40, 40, 40, 255);
+			//style->Colors[ImGuiCol_ButtonActive] = ImColor(40, 40, 40, 255);
+			//style->Colors[ImGuiCol_ButtonHovered] = ImColor(30, 30, 30, 255);
+
+			//// remember to do this
+			//window_flags |= ImGuiWindowFlags_NoTitleBar;
+
+			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			cam_ctrl.set_fixed_camera(cam, 90, 45);
+
+			chars.assign(4, INVALID);
 		}
 
 		void show(Instance& instance [[maybe_unused]] ) override
 		{
-			/*if (ImGui::Begin(window_name(), &visible, window_flags))
+			if (!dynamic_cast<RuntimeInstance*>(&instance))
+				return;
+
+			auto& runtime = dynamic_cast<RuntimeInstance&>(instance);
+
+			if (OverlayOpen)
 			{
-				static ImVec4 active{ 0.2f, 0.2f, 0.2f, 1.f };
-				static ImVec4 inactive{ 0.062f, 0.062f, 0.062f, 1.f };
-				static const ImVec2 buttonSize{ 70, 7.5 };
+				const ImGuiViewport* viewport = ImGui::GetMainViewport();
+				ImGui::SetNextWindowPos(viewport->WorkPos);
+				ImGui::SetNextWindowSize(viewport->WorkSize);
+				ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+				ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.f });
 
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding);
-				Tempest::UI::SubHeader({ ImGui::GetWindowWidth() / 3.f , padding }, "Conflict Resolutions");
-
-				ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoScrollbar;
-				windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-
-				ImGui::BeginChild("##ContentSection", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoScrollWithMouse);
-
-				const auto regoinAvailWidth = ImGui::GetContentRegionAvailWidth() / 3.0f - padding;
-				const auto regoinAvailHeight = ImGui::GetContentRegionAvail().y;
-
-				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (ImGui::GetContentRegionAvailWidth() - regoinAvailWidth * 3 - padding) * 0.25f);
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + halfPadding);
-
+				if (ImGui::Begin("Combat Mode Screen", nullptr, window_flags))
 				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##LeftSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), true, windowFlags);
-					if (!ImGui::IsWindowHovered())
-						bgColor = IM_COL32(0, 0, 0, 100);
-					else
-						bgColor = IM_COL32(20, 20, 20, 100);
+
+					bool selectable_hovered = false;
+					auto& cam = Service<RenderSystem>::Get().GetCamera();
+
+					cam_ctrl.controls(cam);
+					cam_ctrl.update(cam);
+
+					// character list
 					{
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
-						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
-
-						ImGui::BeginChild("ChildUnit", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
-						auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
-
-						unsigned i = 0;
-						for (auto id : view)
+						for (int i = 0; i < (int)chars.size(); ++i)
 						{
-							auto& Charac = instance.ecs.get<tc::Character>(id);
-							if (UI::UIButton_1(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y + i++ * 80 }, { 140, 15 }, FONT_PARA))
+							string name = "Character_";
+							name += std::to_string(i);
+
+							if (ImGui::Selectable(name.c_str(), chars[i] != INVALID))
 							{
-								tab = i;
+								selected = i;
+							}
+
+							if(ImGui::IsItemHovered())
+								selectable_hovered = true;
+
+							if (i == selected)
+							{
+								ImGui::SameLine();
+								ImGui::Text(ICON_FA_CIRCLE);
 							}
 						}
-
-						ImGui::EndChild();
 					}
 
-					if (UI::UIButton_1("Add Units", "Add Units", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA))
+					if (ImGui::Button("Fight!"))
 					{
-						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true);
-					}
-
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-				
-				}
-				
-				ImGui::SameLine();
-				ImGui::Dummy({ halfPadding, 0 });
-				ImGui::SameLine();
-
-				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##MiddleSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), true, windowFlags);
-					if (!ImGui::IsWindowHovered())
-						bgColor = IM_COL32(0, 0, 0, 100);
-					else
-						bgColor = IM_COL32(20, 20, 20, 100);
-					{
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
-						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
-
-						ImGui::BeginChild("ChildAction", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-						
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30};
-						for (unsigned i = 0; i < numOfButtons; i++)
+						bool okay = true;
+						for (auto i : chars)
+							if (i == INVALID) okay = false;
+						if (okay)
 						{
-							if (UI::UIButton_1("Test Action" + std::to_string(i), "Test Action" + std::to_string(i), { cursor.x , cursor.y + i * 80}, { 140, 15 }, FONT_PARA))
-								tab = i + numOfButtons;
+							Service<EventManager>::Get().instant_dispatch<OpenCombatModeTrigger>(chars);
+							OverlayOpen = false;
+						}
+					}
+
+					// highlight stuff on viewport
+					{
+						auto ray = cam.GetMouseRay();
+						auto start = cam.GetPosition();
+						float dist = 0;
+						if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+						{
+							auto inter = cam.GetPosition() + ray * dist;
+
+							int w_x = (int)std::round(inter.x - .5f);
+							int w_y = (int)std::round(inter.z - .5f);
+
+							id_t id = INVALID;
+							if (runtime.collision_map.count(w_x) && runtime.collision_map[w_x].count(w_y))
+								id = runtime.collision_map[w_x][w_y];
+
+							if (id && instance.ecs.valid(id) && instance.ecs.has<tc::Shape>(id) && instance.ecs.has<tc::Transform>(id))
+							{
+								// draw existing collider
+								{
+									auto shape = instance.ecs.get_if<tc::Shape>(id);
+									auto& transform = instance.ecs.get<tc::Transform>(id);
+
+									const int& x = shape->x;
+									const int& y = shape->y;
+									const int one = 1;
+
+									AABB box;
+
+									int a_x = x, a_y = y, e_x = 0, e_y = 0;
+									if (a_x % 2 != a_y % 2)
+									{
+										a_x = a_y = std::min(x, y);
+										e_x = x - a_x;
+										e_y = y - a_y;
+
+									}
+
+									box.min.x = -.5f - (a_x - 1) / 2.f;
+									box.min.z = -.5f - (a_y - 1) / 2.f;
+
+									box.max.x = +.5f + (a_x - 1) / 2.f + e_x;
+									box.max.z = +.5f + (a_y - 1) / 2.f + e_y;
+
+									auto rot = transform.rotation;
+									box.min = rot * box.min;
+									box.max = rot * box.max;
+
+									box.min.x += transform.position.x;
+									box.min.z += transform.position.z;
+									box.min.y = 0;
+
+									box.max.x += transform.position.x;
+									box.max.z += transform.position.z;
+									box.max.y = 0;
+
+									Service<RenderSystem>::Get().DrawLine(box, { 1,0,0,1 });
+								}
+							}
+							else if (selected >= 0 && selected < (int)chars.size())
+							{
+							// draw one box collider
+								{
+									AABB box;
+
+									int a_x = 1, a_y = 1, e_x = 0, e_y = 0;
+									if (a_x % 2 != a_y % 2)
+									{
+										a_x = a_y = std::min(1, 1);
+										e_x = 1 - a_x;
+										e_y = 1 - a_y;
+									}
+
+									inter.x = a_x % 2 ? std::floor(inter.x) + .5f : std::round(inter.x);
+									inter.y = 0;
+									inter.z = a_y % 2 ? std::floor(inter.z) + .5f : std::round(inter.z);
+
+									box.min.x = inter.x - .5f - (a_x - 1) / 2.f;
+									box.min.z = inter.z - .5f - (a_y - 1) / 2.f;
+									box.min.y = 0;
+
+									box.max.x = inter.x + .5f + (a_x - 1) / 2.f + e_x;
+									box.max.z = inter.z + .5f + (a_y - 1) / 2.f + e_y;
+									box.max.y = 0;
+
+									Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+								}
+
+								auto& io = ImGui::GetIO();
+								if (io.MouseClicked[0] && !ImGui::IsAnyItemHovered())
+								{
+									// create or move
+									if (chars[selected])
+									{
+										// move existing
+										auto& transform = instance.ecs.get<tc::Transform>(chars[selected]);
+										// take note that inter has already been processed
+										transform.position = inter;
+									}
+									else
+									{
+										// create proto
+										// create prefab
+										// then throw it into ecs
+										
+										auto random_char_id = instance.ecs.view_first<tc::Character>();
+										auto proto_p = instance.scene.get_prototype_if("Unit", "Unit");
+										auto prefab = proto_p ? proto_p->instance() : create_new_prototype("Unit").instance();
+										auto entity = instance.ecs.create(prefab);
+
+										chars[selected] = entity;
+										LOG_ASSERT(instance.ecs.has<tc::Character>(entity));
+										LOG_ASSERT(instance.ecs.has<tc::Transform>(entity));
+										LOG_ASSERT(instance.ecs.has<tc::Model>(entity));
+
+										auto& transform = instance.ecs.get<tc::Transform>(entity);
+										//auto& model = instance.ecs.get<tc::Model>(entity);
+
+										/* ===========================================
+										* NOTE TO UI!!!!
+										* ADD CHARACTER SHEET HERE TO THE CHARACTER!!
+										* JUST ASSIGN THE COMPONENT
+										* instance.ecs.get<tc::Character>(entity) = instance.ecs.get<tc::Character>(char_sheet_id)
+										* ============================================
+										*/
+										if(random_char_id)
+											instance.ecs.get<tc::Character>(entity) = instance.ecs.get<tc::Character>(random_char_id);
+
+										transform.position = inter;
+									}
+								}
+							}
+						}
+					}
+					// highlight stuff on viewport
+
+					// draw stuff on units
+					{
+						auto view = instance.ecs.view<tc::Unit, tc::Transform>();
+						for (auto id : view)
+						{
+							auto position = instance.ecs.get<tc::Transform>(id).position;
+							position.y += 2;
+							auto ss = cam.WorldspaceToScreenspace(position);
+							auto vp = cam.GetViewport();
+							ss.x = (1 + ss.x) / 2 * vp.z;
+							ss.y = vp.w - ((1 + ss.y) / 2 * vp.w);
+							auto temp = ImGui::GetCursorPos();
+
+							// Draw whatever thing on their head
+							{
+
+								ImGui::PushFont(FONT_BOLD);
+								auto text_size = ImGui::CalcTextSize(ICON_FA_ICE_CREAM);
+								auto cursor_pos = ImVec2{ ss.x - text_size.x / 2.f, ss.y - text_size.y / 2 };
+								if (cursor_pos.x < viewport->WorkSize.x && ss.y + text_size.y/2 < viewport->WorkSize.y) {
+									ImGui::SetCursorPos(cursor_pos);
+									ImGui::Text(ICON_FA_ICE_CREAM);
+								}
+								ImGui::PopFont();
+							}
+
+
+							ImGui::SetCursorPos(temp);
 						}
 
-						ImGui::EndChild();
 					}
-
-					if (UI::UIButton_1("Add Actions", "Add Actions", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
-					
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-					
+					// draw stuff on unit heads
 				}
-				
 
-				ImGui::SameLine();
-				ImGui::Dummy({ halfPadding, 0 });
-				ImGui::SameLine();
+				ImGui::End();
 
-				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##RightSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), true, windowFlags);
-					if (!ImGui::IsWindowHovered())
-						bgColor = IM_COL32(0, 0, 0, 100);
-					else
-						bgColor = IM_COL32(20, 20, 20, 100);
-					{
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
-						ImGui::SetCursorPosY(ImGui::GetCursorPosY() + regoinAvailHeight / 3.0f);
-
-						ImGui::BeginChild("ChildLink", ImVec2(ImGui::GetContentRegionAvailWidth() - padding, ImGui::GetContentRegionAvail().y / 1.2f), true, ImGuiWindowFlags_HorizontalScrollbar);
-
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 120, ImGui::GetCursorPosY() + 30 };
-						for (unsigned i = 0; i < numOfButtons; i++)
-						{
-							if (UI::UIButton_1("Test Link" + std::to_string(i), "Test Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, { 140, 15 }, FONT_PARA))
-								tab = i + numOfButtons * 2;
-						}
-
-						ImGui::EndChild();
-					}
-
-					if (UI::UIButton_1("Add Link", "Add Links", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + halfPadding }, buttonSize, FONT_PARA)) {}
-					
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-				}
-				
-
-				ImGui::EndChild();
+				ImGui::PopStyleVar();
+				ImGui::PopStyleColor(2);
 			}
-
-			ImGui::End();*/
-	
 		}
 	};
 }

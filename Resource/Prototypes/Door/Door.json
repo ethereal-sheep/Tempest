@@ -1,0 +1,155 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Door"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    0.37400001287460329,
+                    0.000005839574896526756,
+                    -3.869999885559082
+                ],
+                "LocalRotation": [
+                    -9.099629210140847e-7,
+                    1.0,
+                    -9.099629210140847e-7,
+                    8.564542304523304e-13
+                ],
+                "LocalScale": [
+                    0.009999998845160008,
+                    0.009999995119869709,
+                    0.009999998845160008
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\Door_Bars.a",
+                "TexturePath": "Assets\\ThumbNail_Door.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Door"
+            },
+            "Component": {
+                "States": [
+                    {
+                        "LocalPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            4.371153039528508e-8,
+                            1.910697958900677e-15,
+                            4.371153039528508e-8,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "LocalPosition": [
+                            0.30000001192092898,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            3.410977100770651e-8,
+                            0.9798881411552429,
+                            3.410977100770651e-8,
+                            0.19954749941825868
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ],
+                "Frame": {
+                    "Path": "Models\\Wall_Door_Frame.a",
+                    "TexturePath": ""
+                },
+                "Frame_Local": {
+                    "LocalPosition": [
+                        0.42500001192092898,
+                        0.0,
+                        0.8104400634765625
+                    ],
+                    "LocalRotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            }
+        }
+    ]
+}

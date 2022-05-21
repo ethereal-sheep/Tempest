@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -376,11 +376,12 @@ namespace Tempest
 	 * @brief Branch Script. Branches flows based on input type. Underlying
 	 * script returns a integer value that specifies the next flow to call.
 	 */
-	template<typename Func, size_t NOutputs, typename TInputBinder, typename TInputScripts>
+	template<typename Func, typename Ret, size_t NOutputs, typename TInputBinder, typename TInputScripts>
 	class branch_script : public script
 	{
 		Func func;
 		int choice;
+		script_output<Ret> outputs;
 		TInputBinder binder;
 		TInputScripts inputs;
 		std::array<script*, NOutputs> arr = { 0 };
@@ -391,10 +392,13 @@ namespace Tempest
 
 		void operator()() override
 		{
+			static_assert(!std::is_same_v<Ret, void>);
+
 			if (callback)
 				callback();
 
-			choice = std::get<0>(binder(func, inputs));
+			outputs = binder(func, inputs);
+			choice = std::any_cast<int>(outputs[0]);
 
 			// if out of range, return last
 			if (choice < 0 || choice >= NOutputs)
@@ -408,7 +412,7 @@ namespace Tempest
 
 		std::any operator[](size_t index [[maybe_unused]] ) override
 		{
-			return choice;
+			return outputs[index];
 		}
 
 		script* set_input(size_t index, script* input, size_t node_index) override
@@ -580,8 +584,10 @@ namespace Tempest
 	template<typename FuncType, size_t NOutputs, typename Func, typename... Args>
 	[[nodiscard]] auto CreateBranchScript(Func f, Args&&... args)
 	{
+		using ret_type = typename input_values<FuncType>::ret_type;
+
 		return make_uptr<branch_script<
-			Func, NOutputs, input_binder<Args...>, input_values<FuncType>>>
+			Func, ret_type, NOutputs, input_binder<Args...>, input_values<FuncType>>>
 			(f, input_binder<Args...>{ std::forward<Args>(args)...}
 		);
 	}

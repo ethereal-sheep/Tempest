@@ -1,0 +1,94 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Obstacle"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    1.899999976158142,
+                    0.0,
+                    -10.029999732971192
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    0.009999999776482582,
+                    0.009999999776482582,
+                    0.009999999776482582
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\Wardrobe_SciFi.a",
+                "TexturePath": "Assets\\ThumbNail_Wardrobe_sci_fi.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 2,
+                "Y": 1
+            }
+        }
+    ]
+}

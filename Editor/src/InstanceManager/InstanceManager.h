@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -72,7 +72,7 @@ namespace Tempest
 				{
 					// assign new pointer to instance
 					instance = create_new_instance();
-					
+					instance->tutorial_enable = next_config.enable_tutorial;
 				}
 				catch (const std::exception& a)
 				{
@@ -111,42 +111,7 @@ namespace Tempest
 	{
 		if (instance)
 		{
-			// for debugging only (remove on release)
-			if (demo_visible)
-				ImGui::ShowDemoWindow();
-			if (implot_demo_visible)
-			{
-				ImPlot::ShowDemoWindow();
-				ImPlot::ShowStyleEditor();
-			}
-
 			instance->OnRender();
-		}
-	}
-	// global menu bar
-	void menubar()
-	{
-		if (instance)
-		{
-			if (ImGui::BeginMainMenuBar())
-			{
-				if (ImGui::BeginMenu("Windows"))
-				{
-					for (auto& window : instance->window_manager.get_windows())
-					{
-						ImGui::MenuItem(window->window_name(), nullptr, &window->visible);
-					}
-					ImGui::EndMenu();
-				}
-				// for debugging only (remove on release)
-				if (ImGui::BeginMenu("Demo"))
-				{
-					ImGui::MenuItem("ImGui Demo", nullptr, &demo_visible);
-					ImGui::MenuItem("imPlot Demo", nullptr, &implot_demo_visible);
-					ImGui::EndMenu();
-				}
-			}
-			ImGui::EndMainMenuBar();
 		}
 	}
 
@@ -180,8 +145,21 @@ private:
 			return make_uptr<EditTimeInstance>(next_config.project_path, next_config.memory_strategy);
 			break;
 		case Tempest::InstanceType::RUN_TIME:
-			return make_uptr<RuntimeInstance>(next_config.project_path, next_config.memory_strategy);
+		{
+			// we try to load instance with map, con res, and seq
+			auto ptr = make_uptr<RuntimeInstance>(next_config.project_path, next_config.memory_strategy);
+
+			if (!ptr->load_new_conflict_resolution_by_int(next_config.conflict_resolution))
+				throw std::exception("Bad Conflict Resolution!");
+			if (!ptr->load_new_scene_by_name(next_config.map_name))
+				throw std::exception("Bad Map Name!");
+			if (next_config.sequences.empty())
+				throw std::exception("Bad Sequences!");
+			ptr->sequences = next_config.sequences;
+
+			return ptr;
 			break;
+		}
 		case Tempest::InstanceType::PHYSICS_TIME:
 			return make_uptr<PhysicsInstance>(next_config.project_path, next_config.memory_strategy);
 			break;
@@ -222,8 +200,5 @@ private:
 
 	tuptr<Instance> instance = nullptr;
 
-	// for debugging only (remove on release)
-	bool demo_visible = false;
-	bool implot_demo_visible = false;
 };
 }

@@ -16,12 +16,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{DD6A
 		Resource\Shaders\Basic_vertex.glsl = Resource\Shaders\Basic_vertex.glsl
 		Resource\Shaders\DirShadowMap_fragment.glsl = Resource\Shaders\DirShadowMap_fragment.glsl
 		Resource\Shaders\DirShadowMap_vertex.glsl = Resource\Shaders\DirShadowMap_vertex.glsl
+		Resource\Shaders\firstpass.frag = Resource\Shaders\firstpass.frag
 		Resource\Shaders\FrameBuffer_fragment.glsl = Resource\Shaders\FrameBuffer_fragment.glsl
 		Resource\Shaders\FrameBuffer_vertex.glsl = Resource\Shaders\FrameBuffer_vertex.glsl
+		Resource\Shaders\gBuffer.frag = Resource\Shaders\gBuffer.frag
+		Resource\Shaders\gBuffer.vert = Resource\Shaders\gBuffer.vert
 		Resource\Shaders\GroundPlane_fragment.glsl = Resource\Shaders\GroundPlane_fragment.glsl
 		Resource\Shaders\GroundPlane_vertex.glsl = Resource\Shaders\GroundPlane_vertex.glsl
+		Resource\Shaders\integrateIBL.frag = Resource\Shaders\integrateIBL.frag
+		Resource\Shaders\integrateIBL.vert = Resource\Shaders\integrateIBL.vert
+		Resource\Shaders\irradianceIBL.frag = Resource\Shaders\irradianceIBL.frag
+		Resource\Shaders\irradianceIBL.vert = Resource\Shaders\irradianceIBL.vert
+		Resource\Shaders\latlongToCube.frag = Resource\Shaders\latlongToCube.frag
+		Resource\Shaders\latlongToCube.vert = Resource\Shaders\latlongToCube.vert
 		Resource\Shaders\Lighting_fragment.glsl = Resource\Shaders\Lighting_fragment.glsl
 		Resource\Shaders\Lighting_vertex.glsl = Resource\Shaders\Lighting_vertex.glsl
+		Resource\Shaders\lightingBRDF.frag = Resource\Shaders\lightingBRDF.frag
+		Resource\Shaders\lightingBRDF.vert = Resource\Shaders\lightingBRDF.vert
 		Resource\Shaders\Line_fragment.glsl = Resource\Shaders\Line_fragment.glsl
 		Resource\Shaders\Line_vertex.glsl = Resource\Shaders\Line_vertex.glsl
 		Resource\Shaders\Model2_fragment.glsl = Resource\Shaders\Model2_fragment.glsl
@@ -33,13 +44,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{DD6A
 		Resource\Shaders\point_shadows_depth_fragment.glsl = Resource\Shaders\point_shadows_depth_fragment.glsl
 		Resource\Shaders\point_shadows_depth_geom.glsl = Resource\Shaders\point_shadows_depth_geom.glsl
 		Resource\Shaders\point_shadows_depth_vertex.glsl = Resource\Shaders\point_shadows_depth_vertex.glsl
+		Resource\Shaders\point_shadows_fragment.glsl = Resource\Shaders\point_shadows_fragment.glsl
+		Resource\Shaders\point_shadows_vertex.glsl = Resource\Shaders\point_shadows_vertex.glsl
+		Resource\Shaders\postprocess.vert = Resource\Shaders\postprocess.vert
+		Resource\Shaders\prefilterIBL.frag = Resource\Shaders\prefilterIBL.frag
+		Resource\Shaders\prefilterIBL.vert = Resource\Shaders\prefilterIBL.vert
+		Resource\Shaders\sao.frag = Resource\Shaders\sao.frag
+		Resource\Shaders\sao.vert = Resource\Shaders\sao.vert
+		Resource\Shaders\saoBlur.frag = Resource\Shaders\saoBlur.frag
+		Resource\Shaders\ShadowDepth_fragment.glsl = Resource\Shaders\ShadowDepth_fragment.glsl
+		Resource\Shaders\ShadowDepth_vertex.glsl = Resource\Shaders\ShadowDepth_vertex.glsl
+		Resource\Shaders\simple.frag = Resource\Shaders\simple.frag
+		Resource\Shaders\simple.vert = Resource\Shaders\simple.vert
 		Resource\Shaders\Texture_fragment.glsl = Resource\Shaders\Texture_fragment.glsl
 		Resource\Shaders\Texture_vertex.glsl = Resource\Shaders\Texture_vertex.glsl
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asset-Compiler", "Asset-Compiler\Asset-Compiler.vcxproj", "{937F1BAD-CD47-4148-B993-6934A4CD3598}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prefab-Creator", "Prefab-Creator\Prefab-Creator.vcxproj", "{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3DFCC228-6442-4ECF-A665-CAF9E34053A9} = {3DFCC228-6442-4ECF-A665-CAF9E34053A9}
+		{937F1BAD-CD47-4148-B993-6934A4CD3598} = {937F1BAD-CD47-4148-B993-6934A4CD3598}
 	EndProjectSection
 EndProject
 Global
@@ -74,6 +100,14 @@ Global
 		{937F1BAD-CD47-4148-B993-6934A4CD3598}.Release|x64.Build.0 = Release|x64
 		{937F1BAD-CD47-4148-B993-6934A4CD3598}.Release|x86.ActiveCfg = Release|Win32
 		{937F1BAD-CD47-4148-B993-6934A4CD3598}.Release|x86.Build.0 = Release|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x64.ActiveCfg = Debug|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x64.Build.0 = Debug|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x86.ActiveCfg = Debug|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Debug|x86.Build.0 = Debug|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x64.ActiveCfg = Release|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x64.Build.0 = Release|x64
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x86.ActiveCfg = Release|Win32
+		{2519A3CF-FB70-445E-9CFD-61BD5D4DB75B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

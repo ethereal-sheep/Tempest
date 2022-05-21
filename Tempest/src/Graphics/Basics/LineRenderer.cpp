@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -126,7 +126,7 @@ namespace Tempest
 	{
 		shader->Bind();
 		shader->SetMat4fv(vpm, "viewProjMatrix");
-		glLineWidth(2.f);
+		glLineWidth(2.5f);
 		if (m_Indirect.GetSize() != 0)
 		{
 			m_VAO.Bind();

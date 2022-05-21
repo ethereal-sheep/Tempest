@@ -1,0 +1,86 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Tile"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Tile"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "LocalRotation": [
+                    -1.0,
+                    -0.0,
+                    0.0,
+                    9.099629210140847e-7
+                ],
+                "LocalScale": [
+                    1.0,
+                    0.9999998807907105,
+                    0.9999998807907105
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\WoodenFloor.a",
+                "TexturePath": "Assets\\ThumbNail_woodenfloor.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 1
+            }
+        }
+    ]
+}

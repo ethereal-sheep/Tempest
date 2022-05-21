@@ -1,0 +1,6367 @@
+{
+    "Metadata": {
+        "Type": "Map",
+        "MapPos": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "Prefabs": [
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Lab Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -5.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -7.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -8.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -9.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Crates"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -5.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -7.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -8.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -9.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -11.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -12.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -11.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -12.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Pillar"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Pillar"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Lab Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Crates"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Bed"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.0,
+                            0.0,
+                            -17.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Trolley"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Curtain"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -16.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -15.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Machine"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Small Machine"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -18.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            13.0,
+                            0.0,
+                            -15.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            13.0,
+                            0.0,
+                            -16.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            13.0,
+                            0.0,
+                            -17.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            13.0,
+                            0.0,
+                            -18.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            13.0,
+                            0.0,
+                            -19.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -16.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -17.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -18.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -19.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -20.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Crates"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -14.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -21.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Lab Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            13.0,
+                            0.0,
+                            -20.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            13.0,
+                            0.0,
+                            -21.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            7.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            8.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            11.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Lab Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.0,
+                            0.0,
+                            -22.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Crates"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Desk"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            10.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Chair"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            9.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Stool"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Trolley"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Crates"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -21.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Crates"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -20.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Cell Sink"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            12.5,
+                            0.0,
+                            -17.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Machine"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -19.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

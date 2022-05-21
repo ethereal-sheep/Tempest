@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -38,7 +38,7 @@ namespace Tempest
                 ifd::FileDialog::Instance().Open(
                     "TextureOpenDialog",
                     "Open a texture",
-                    "Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*");
+                    "Image file (*.png;*.dds;*.jpg;*.jpeg;*.bmp;*.tga){.png,.dds,.jpg,.jpeg,.bmp,.tga},.*");
                 enable_popup = false;
             }
             if (ifd::FileDialog::Instance().IsDone("TextureOpenDialog")) {

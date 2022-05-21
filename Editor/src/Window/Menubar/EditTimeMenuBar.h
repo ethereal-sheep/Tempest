@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -22,11 +22,23 @@ namespace Tempest
 		{
 			return "EditTimeMenuBar";
 		}
+
+		void init(Instance&) override
+		{
+			Service<EventManager>::Get().register_listener<ToggleMenuBar>(&EditTimeMenuBar::toggle_menu, this);
+		}
+
+		void toggle_menu(const Event&)
+		{
+			toggle = !toggle;
+		}
+
 		void show(Instance& instance) override
 		{
+			//toggle = true;
             auto& edit = dynamic_cast<EditTimeInstance&>(instance);
 
-			if(ImGui::BeginMainMenuBar())
+			if(toggle && ImGui::BeginMainMenuBar())
 			{
 				
 				if (ImGui::Button(ICON_FA_PLAY, {25.f, 25.f}))
@@ -132,10 +144,34 @@ namespace Tempest
 					ImGui::EndMenu();
 				}
 
+				if (ImGui::BeginMenu("Windows"))
+				{
+					for (auto& window : instance.window_manager.get_windows())
+					{
+						ImGui::MenuItem(window->window_name(), nullptr, &window->visible);
+					}
+					ImGui::EndMenu();
+				}
 
+				// for debugging only (remove on release)
+				if (ImGui::BeginMenu("Demo"))
+				{
+					ImGui::MenuItem("ImGui Demo", nullptr, &demo_visible);
+					ImGui::MenuItem("imPlot Demo", nullptr, &implot_demo_visible);
+					ImGui::EndMenu();
+				}
+				
 				ImGui::EndMainMenuBar();
-			}
-		}
 
+			}
+			if (demo_visible)
+				ImGui::ShowDemoWindow();
+			if (implot_demo_visible)
+				ImPlot::ShowDemoWindow();
+		}
+		
+		bool toggle = false;
+		bool demo_visible = false;
+		bool implot_demo_visible = false;
 	};
 }

@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -47,6 +47,7 @@ namespace Tempest
 
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+            ImGui::SetNextWindowSize(ImVec2(0.f, 0.0f), ImGuiCond_Appearing);
             if (ImGui::BeginPopupModal("Error has occured!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
             {
                 ImGui::Text(ICON_FA_EXCLAMATION_CIRCLE);

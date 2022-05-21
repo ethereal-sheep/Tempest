@@ -1,4 +1,15 @@
 #version 460
+/**********************************************************************************
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \version		1.0
+* \date			2022
+* \note			Course: GAM350
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
+				or disclosure of this file or its contents without the prior
+				written consent of DigiPen Institute of Technology is prohibited.
+**********************************************************************************/
 // Model2_fragment
 in vec3 vs_color;
 in vec3 vs_normal;
@@ -187,10 +198,11 @@ void main()
 
 
 	vec3 color = min((ambient + diffuse) + specular, 1.0f);
-		color *= DiffuseColour;
+		//color *= DiffuseColour;
 	// gamma correction
 	if (GammaCorrection > 0)
 		color = pow(color, vec3(1.0 / 2.2));
 
 	fs_color = vec4(color * vec3(texture(diffuseTexture, vs_tex)), 1.0f);
+	//fs_color = texture(diffuseTexture, vs_tex);
 }

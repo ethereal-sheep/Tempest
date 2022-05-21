@@ -1,0 +1,94 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Obstacle"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 1
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    0.5864017009735107,
+                    0.0,
+                    0.4870995581150055
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    0.754599928855896,
+                    0.754599928855896,
+                    0.6169734597206116
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\Table.a",
+                "TexturePath": "Assets\\ThumbNail_Table..jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 2,
+                "Y": 1
+            }
+        }
+    ]
+}

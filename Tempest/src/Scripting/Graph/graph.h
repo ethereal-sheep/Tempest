@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -377,6 +377,17 @@ namespace Tempest
 
 
         mutable string name;
+
+        /**
+         * @brief Serialize to new path with current name
+         */
+        void serialize(const tpath& new_folder) const;
+
+        /**
+         * @brief Serialize to current path with new name
+         */
+        void serialize(const tpath& new_folder, const string& new_name) const;
+
     private:
 
         /**
@@ -389,15 +400,6 @@ namespace Tempest
          */
         void serialize(const string& new_name) const;
 
-        /**
-         * @brief Serialize to new path with current name
-         */
-        void serialize(const tpath& new_folder) const;
-
-        /**
-         * @brief Serialize to current path with new name
-         */
-        void serialize(const tpath& new_folder, const string& new_name) const;
 
 
 

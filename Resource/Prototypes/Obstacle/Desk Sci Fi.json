@@ -1,0 +1,94 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Obstacle"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 1
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    0.5078310966491699,
+                    0.0,
+                    0.0
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Obstacle"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\Desk_Sci-Fi.a",
+                "TexturePath": "Assets\\ThumbNail_Desk.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 2,
+                "Y": 1
+            }
+        }
+    ]
+}

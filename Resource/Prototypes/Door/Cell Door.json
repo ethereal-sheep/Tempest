@@ -1,0 +1,147 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Door"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    -2.943056106567383,
+                    0.0,
+                    -2.229990005493164
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    0.009999999776482582,
+                    0.009999999776482582,
+                    0.009999999776482582
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\Cell_Door.a",
+                "TexturePath": "Assets\\ThumbNail_Cell_Door.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Door"
+            },
+            "Component": {
+                "States": [
+                    {
+                        "LocalPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "LocalPosition": [
+                            -0.8999999761581421,
+                            0.0,
+                            -0.05000000074505806
+                        ],
+                        "LocalRotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ],
+                "Frame": {
+                    "Path": "Models\\Cell_Door_Frame.a",
+                    "TexturePath": ""
+                },
+                "Frame_Local": {
+                    "LocalPosition": [
+                        -2.947999954223633,
+                        0.0,
+                        -2.189427137374878
+                    ],
+                    "LocalRotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "LocalScale": [
+                        0.009999999776482582,
+                        0.009999999776482582,
+                        0.009999999776482582
+                    ]
+                }
+            }
+        }
+    ]
+}

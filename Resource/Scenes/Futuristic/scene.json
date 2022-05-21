@@ -1,0 +1,6491 @@
+{
+    "Metadata": {
+        "Type": "Map",
+        "MapPos": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "Prefabs": [
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Vending Machine"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Crate Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Crate Stacked Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Desk Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Decoration",
+                "Proto": "Chair Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Coffee Table Sci Fi 2"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Wardrobe Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -3.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -5.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Coffee Table Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Sofa Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Bed"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -3.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -4.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -8.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Metal Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -5.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Metal Pillar"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -1.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -2.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -3.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -4.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -5.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -6.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -7.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -8.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -9.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -7.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -8.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -9.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            -0.9999998807907105,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Metal Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Decoration",
+                "Proto": "Television Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -5.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Crate Stacked Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -1.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Crate Stacked Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -9.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -11.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -12.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Metal Pillar"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -10.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -12.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Vending Machine"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Lab Chair"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -2.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.9999999403953552,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Crate Stacked Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -12.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -0.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Tile",
+                "Proto": "Metal Floor"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -13.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -2.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            1.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            2.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            3.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            4.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.0,
+                            0.0,
+                            -14.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            -0.9999998807907105
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Wall",
+                "Proto": "Metal Wall"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Crate Stacked Sci Fi"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -1.5,
+                            0.0,
+                            -11.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Metal Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            6.0,
+                            0.0,
+                            -11.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Door",
+                "Proto": "Metal Door"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -4.0,
+                            0.0,
+                            -13.0
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067094802856,
+                            0.0,
+                            -0.7071067094802856
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Metal Shelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -6.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Metal Shelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            5.5,
+                            0.0,
+                            -7.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Metal Shelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            -3.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.7071067690849304,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Metadata": {
+                "Cat": "Obstacle",
+                "Proto": "Metal Shelf"
+            },
+            "Components": [
+                {
+                    "Metadata": {
+                        "Type": "Transform"
+                    },
+                    "Component": {
+                        "Position": [
+                            0.5,
+                            0.0,
+                            -10.5
+                        ],
+                        "Rotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

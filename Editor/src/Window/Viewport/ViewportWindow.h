@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -12,11 +12,24 @@
 #include "Instance/Instance.h"
 #include "Graphics/Basics/RenderSystem.h"
 #include "Util/GuizmoController.h"
+#include "CameraControls.h"
+#include "Actions/EditorAction.h"
+#include "Util/shape_manip.h"
+#include "stb_image_write.h"
+
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#include "stb_image_write.h"
+
+#include "Particles/Particles_3D/EmitterSystem_3D.h"
 
 namespace Tempest
 {
 	class ViewportWindow : public Window
 	{
+		CameraControls cam_ctrl;
+		id_t current = INVALID;
+		bool camera_update{ true };
+
 		const char* window_name() override
 		{
 			return "Viewport";
@@ -36,6 +49,14 @@ namespace Tempest
 				;
 
 			Service<GuizmoController>::Register();
+			Service<EventManager>::Get().register_listener<ViewportCameraMoveTrigger>(&ViewportWindow::camera_move, this);
+			cam_ctrl.reset(Service<RenderSystem>::Get().GetCamera());
+		}
+
+		void camera_move(const Event& e)
+		{
+			auto a = event_cast<ViewportCameraMoveTrigger>(e);
+			camera_update = a.canMove;
 		}
 
 		void show(Instance& instance) override
@@ -63,133 +84,558 @@ namespace Tempest
 						ImGuiDockNodeFlags_NoDockingInCentralNode);
 				}
 
-				auto& cam = Service<RenderSystem>::Get().GetCamera();
-				if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !io.WantCaptureMouse)
-				{
-					auto direction = els::to_vec2(io.MouseDelta);
-					auto yaw_speed = 1.f / 4.f;
-					auto pitch_speed = 1.f / 4.f;
-					auto pan_speed = 1.f / 4.f;
-					auto forward_speed = 1.f / 4.f;
-					auto scroll_speed = forward_speed * 2.f;
-
-					if (io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])
-					{
-						//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
-						//(m_SavedMousePos.x, m_SavedMousePos.y);
-					}
-
-					if (io.MouseDown[0] && io.MouseDown[1])
-					{
-						// Do Nothing UwU
-					}
-					else if (io.MouseDown[0]) // rotate translate
-					{
-						if (!els::is_zero(direction))
-						{
-							auto rot = cam.GetQuatRotation();
-							auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-							rot = rot * yaw;
-							cam.SetRotation(rot);
-
-							auto currentPos = cam.GetPosition();
-							auto forward = glm::normalize(glm::cross(glm::vec3{ 0, 1, 0 }, cam.GetLeft())) * io.MouseDelta.y;
-							auto newPos = currentPos + forward * forward_speed;
-							cam.SetPosition(newPos);
-						}
-
-
-
-					}
-					else if (io.MouseDown[1]) // rotate
-					{
-						if (!els::is_zero(direction))
-						{
-							auto rot = cam.GetQuatRotation();
-
-							auto yaw = glm::angleAxis(to_rad(yaw_speed * io.MouseDelta.x), glm::vec3{ 0, 1, 0 });
-							rot = rot * yaw;
-							cam.SetRotation(rot);
-							auto pitch = glm::angleAxis(to_rad(pitch_speed * -io.MouseDelta.y), cam.GetLeft());
-							rot = rot * pitch;
-							cam.SetRotation(rot);
-						}
-
-					}
-					else if (io.MouseDown[2]) // Pan
-					{
-						if (!els::is_zero(direction))
-						{
-
-							auto up = glm::vec3{ 0, 1, 0 };
-							auto right = cam.GetLeft();
-
-							auto currentPos = cam.GetPosition();
-							auto worldSpaceDirection = glm::normalize(up * direction.y + right * direction.x);
-							auto newPos = currentPos - worldSpaceDirection * pan_speed;
-
-							cam.SetPosition(newPos);
-						}
-					}
-
-					cam.SetPosition(cam.GetPosition() + cam.GetFront() * (io.MouseWheel * scroll_speed));
-				}
-
 
 
 			}
 			ImGui::End();
 			ImGui::PopStyleVar(3);
 
+			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			cam_ctrl.controls(cam);
+			if (camera_update)
+				cam_ctrl.update(cam);
 
-			if (instance.selected != INVALID && 
-				instance.ecs.has<tc::Transform>(instance.selected))
+
+			if (io.KeyCtrl)
+			{
+				for (auto c : io.InputQueueCharacters)
+				{
+					c += 'a' - 1;
+					switch (c)
+					{
+					case 'h':
+					{
+						Service<EventManager>::Get().instant_dispatch<ToggleMenuBar>();
+					}
+					break;
+					case 'z':
+					{
+						instance.action_history.Undo(instance);
+					}
+					break;
+					case 'y':
+					{
+						instance.action_history.Redo(instance);
+					}
+					break;
+					case 's':
+					{
+						if (auto edit_instance = dynamic_cast<EditTimeInstance*>(&instance))
+						{
+							Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+							Service<EventManager>::Get().instant_dispatch<SaveProjectTrigger>(); 
+							edit_instance->save();
+						}
+					}
+					break;
+					case 'd':
+					{
+						// deselect
+						current = INVALID;
+					}
+					break;
+					case 'l':
+					{
+						//EmitterSystem_3D::GetInstance().CreateTestModelShapeEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
+						
+						//EmitterSystem_3D::GetInstance().CreateExplosionEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+						//EmitterSystem_3D::GetInstance().CreateRotationExplosionEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+						//EmitterSystem_3D::GetInstance().CreateMultipleExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
+						//EmitterSystem_3D::GetInstance().CreateMultipleRotationExplosionEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
+						
+						auto emitter = EmitterSystem_3D::GetInstance().CreateUnitTrailEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
+						std::weak_ptr<Smoke_Poof_Emitter_3D> testEmitter;
+						EmitterSystem_3D::GetInstance().CreateSmokePoofEmitter(testEmitter, glm::vec3{ 0.0f, 0.0f, 0.0f });
+						//EmitterSystem_3D::GetInstance().CreateTileWaypointEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f });
+						//auto& temp = EmitterSystem_3D::GetInstance().CreateInteractiveParticle(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 5.0f, 5.0f, 0.0f });
+						
+						//EmitterSystem_3D::GetInstance().CreateChracterChargedAttackEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+
+						//auto& temp = EmitterSystem_3D::GetInstance().CreateWeatherRainEmitter(glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ -30.0f, 20.0f, -10.0f }, glm::vec3{ -10.0f, 40.0f, 10.0f });
+					}
+					break;
+					case 'e':
+					{
+						//std::weak_ptr<CharacterSpawnEmitter_3D> testEmitter;
+						//EmitterSystem_3D::GetInstance().CreateChracterSpawnEmitter(testEmitter, glm::vec3{ 5.0f, 0.0f, 5.0f });
+						//EmitterSystem_3D::GetInstance().CreateChracterDamageEmitter(glm::vec3{ 5.0f, 0.0f, 5.0f });
+						EmitterSystem_3D::GetInstance().CreateChracterDeathEmitter(glm::vec3{ 2.0f, 0.0f, 2.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 2.0f, 2.0f, 2.0f }, 3);
+					}
+					break;
+					break;
+					case 'o':
+					{
+						auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
+						AAgridShow = !AAgridShow;
+						auto& saoMode = Service<RenderSystem>::Get().saoMode;
+						saoMode = !saoMode;
+						for (auto& window : instance.window_manager.get_windows())
+						{
+							window->visible = !window->visible;
+						}
+					}
+					break;
+					case 'p':
+					{						
+						vec2 size = vec2(viewport->Size.x, viewport->Size.y);
+						//auto& AAgridShow = Service<RenderSystem>::Get().AAgridShow;
+						unsigned char* buffer = new unsigned char[static_cast<size_t>(size.x * size.y * 3)];
+						glReadPixels(0, 0, (GLsizei)size.x, (GLsizei)size.y, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+						stbi_flip_vertically_on_write(1);
+						//stbi_write_jpg("test.jpg", size.y, size.y, 3, buffer, size.y * 3);
+						stbi_write_jpg("testtests.jpg", (int)size.x, (int)size.y, 3, buffer, (int)size.x * 3);
+					}
+					break;
+					default:
+						break;
+					}
+				}
+			}
+
+
+			// if there is transform
+			if (current != instance.selected)
+			{
+				if (instance.scene.get_map().exist(instance.selected) && instance.scene.get_map().get(instance.selected).has<tc::Transform>())
+				{
+					auto& pf = instance.scene.get_map().get(instance.selected);
+					auto& transform = pf.force<tc::Transform>();
+					cam_ctrl.set_world_camera(cam);
+					cam_ctrl.set_orbit_camera(cam, transform.position);
+				}
+				else
+				{
+					cam_ctrl.set_world_camera(cam);
+				}
+				current = instance.selected;
+			}
+
+			auto have_selected = instance.scene.get_map().exist(current) && instance.scene.get_map().get(current).has<tc::Transform>();
+			if (instance.scene.get_map().exist(current) && instance.scene.get_map().get(current).has<tc::Transform>())
 			{
 
+				auto& pf = instance.scene.get_map().get(instance.selected);
 				ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
 				auto& GC = Service<GuizmoController>::Get();
-				auto& cam = Service<RenderSystem>::Get().GetCamera();
-				auto& transform = instance.ecs.get<tc::Transform>(instance.selected);
+				auto& transform = pf.force<tc::Transform>();
 
-				static ImVec2 Min = { 0, 0 };
-				static ImVec2 Max = { 1600, 900 };
 
-				GC.SetViewportBounds(els::to_vec2(Min), els::vec2{ Max.x - Min.x, Max.y - Min.y });
-
+				cam_ctrl.set_orbit_axis(transform.position);
+				
+				
+				GC.SetRotateSnapping(90.f);
+				GC.SetTranslateSnapping(1.f);
+				GC.Draw(cam, transform);
 
 				vec3 tDelta;
 				vec3 rDelta;
 				vec3 sDelta;
 
-				auto mat = 
-					glm::translate(glm::make_vec3(value_ptr(transform.position)))
-					* glm::mat4(transform.rotation)
-					* glm::scale(glm::make_vec3(value_ptr(transform.scale)));
-
-				//GC.SetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
-				GC.SetTransformMatrix(glm::value_ptr(mat));
-				GC.SetViewMatrix(glm::value_ptr(cam.GetViewMatrix()));
-				GC.SetProjMatrix(glm::value_ptr(cam.GetProjectionMatrix()));
-
-
-
-				GC.Draw();
-
-				//GC.GetTranslateRotationScale(transform->translation, eulerDeg, transform->scale);
-
 				GC.GetDelta(tDelta, rDelta, sDelta);
 
-				if (tDelta.length2() > els::epsilon<float> ||
-					rDelta.length2() > els::epsilon<float>)
+				tDelta.x = std::round(tDelta.x);
+				tDelta.y = 0;
+				tDelta.z = std::round(tDelta.z);
+
+
+				if (GC.IsEnd())
 				{
-					//transform
-					transform.position += tDelta;
-					//transform->scale += sDelta;
+					if (GC.GetInitial() != transform)
+					{
+						instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
+					}
+				}
+
+				/*if (io.KeysDown[io.KeyMap[ImGuiKey_Delete]])
+				{
+					if (GC.GetInitial() != transform)
+					{
+						instance.action_history.Commit<TransformPrefab>(current, GC.GetInitial());
+					}
+					instance.action_history.Commit<DeletePrefab>(instance.scene.get_map().extract(current));
+					instance.selected = INVALID;
+					return;
+				}*/
+
+				/*for (auto c : io.InputQueueCharacters)
+				{
+					switch (c)
+					{
+					case 'w':
+					{
+						GC.SetOperation(GuizmoController::Operation::TRANSLATE);
+						
+					}
+					break;
+					case 'r':
+					{
+						GC.SetOperation(GuizmoController::Operation::ROTATE);
+					}
+					break;
+					case 'q':
+					{
+
+					}
+					break;
+					default:
+						break;
+					}
+				}*/
+
+
+				switch (GC.GetOperation())
+				{
+				case Tempest::GuizmoController::Operation::TRANSLATE:
+				{
+					if (glm::length2(tDelta) > els::epsilon<float>)
+					{
+						if (io.KeyAlt)
+						{
+							auto [it, b] = instance.scene.get_map().create(pf);
+							instance.selected = it->first;
+						//	current = instance.selected; // maybe try getting rid of this one
+							if (auto new_transform = it->second.force_if<tc::Transform>())
+								new_transform->position = transform.position + tDelta;
+							instance.action_history.Commit<CreatePrefab>(it->first);
+							GC.ForceEnd();
+
+							if (instance.tutorial_enable)
+								Service<EventManager>::Get().instant_dispatch<BuildModeTutorialIndexTrigger>(4);
+						}
+						else
+						{
+							transform.position += tDelta;
+						}
+						//cam_ctrl.look_at(cam, to_glvec3(transform.position));
+						//transform->scale += sDelta;
+					}
+				}
+					break;
+				case Tempest::GuizmoController::Operation::ROTATE:
+				{
+
+					if (glm::length2(rDelta) > els::epsilon<float>)
+					{
+						//transform
+						transform.rotation *= glm::angleAxis(glm::radians(rDelta.y), glm::vec3{ 0, 1, 0 });
+						// check if it is still on the correct boundary
+
+
+						//cam_ctrl.look_at(cam, to_glvec3(transform.position));
+						//transform->scale += sDelta;
+					}
+				}
+					break;
+				case Tempest::GuizmoController::Operation::SCALE:
+				{
+
+				}
+					break;
+				default:
+					break;
+				}
+
+				
+
+				if (auto shape = pf.get_if<tc::Shape>())
+				{
+					const int& x = shape->x;
+					const int& y = shape->y;
+
+					AABB box;
+
+					auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
+
+					box.min.x = a_x;
+					box.min.z = a_y;
+
+					box.max.x = b_x;
+					box.max.z = b_y;
+
+					auto rot = transform.rotation;
+					box.min = rot * box.min;
+					box.max = rot * box.max;
+
+					box.min.x += transform.position.x;
+					box.min.z += transform.position.z;
+					box.min.y = 0;
+
+					box.max.x += transform.position.x;
+					box.max.z += transform.position.z;
+					box.max.y = 0;
+
+
+					/*Line l;
+					l.p0 = glm::vec3(-.1, 0, -.1);
+					l.p1 = glm::vec3(.1, 0, .1);
+
+					Line r;
+					r.p0 = glm::vec3(-.1, 0, .1);
+					r.p1 = glm::vec3(.1, 0, -.1);*/
+
+
+
+					auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+					{
+						tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+						tvector<ImVec2> ss_pts;
+						auto vp = cam.GetViewport();
+						for (auto pt : ws_pts)
+						{
+							auto t_ss = cam.WorldspaceToScreenspace(pt);
+							t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+							t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+							ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+						}
+
+						return ss_pts;
+					};
+
+
+					auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+					auto drawlist = ImGui::GetBackgroundDrawList();
+
+					drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x40, 0xAF, 0x40, 0x80));
+					Service<RenderSystem>::Get().DrawLine(box, { 0.1,1,0.1,1 });
+
+
+					//Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+					//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+				}
+				//if (auto wall = pf.get_if<tc::Wall>())
+				//{
+				//	auto shape = pf.get_if<tc::Shape>();
+				//	const int& x = shape->x;
+				//	const int& y = shape->y;
+
+				//	vec3 s, e;
+
+				//	e.x = .5f;
+				//	e.z = .5f;
+
+				//	s.x = y ? -.5f : .5f;
+				//	s.z = x ? -.5f : .5f;
+
+
+				//	auto rot = transform.rotation;
+				//	//s = glm::rotateY(s, glm::pi<float>()/2.f);
+				//	//e = glm::rotateY(e, glm::pi<float>()/2.f);
+
+				//	s = rot * s;
+				//	e = rot * e;
+
+				//	s.x += transform.position.x;
+				//	s.z += transform.position.z;
+				//	s.y = 0;
+
+				//	e.x += transform.position.x;
+				//	e.z += transform.position.z;
+				//	e.y = 0;
+
+
+				//	Line l;
+				//	l.p0 = s;
+				//	l.p1 = e;
+
+				//	/*Line r;
+				//	r.p0 = glm::vec3(-.1, 0, .1);
+				//	r.p1 = glm::vec3(.1, 0, -.1);*/
+
+				//	//Service<RenderSystem>::Get().DrawLine(box, { 0.1,0.1,0.1,1 });
+				//	Service<RenderSystem>::Get().DrawLine(l, { 0,1,0,1 });
+				//	//Service<RenderSystem>::Get().DrawLine(r, { 0,1,0,1 });
+				//}
+			}
+			
+			// highlights
+			if(!io.MouseDown[0])
+			{
+				if (have_selected)
+					return;
+
+				if (io.WantCaptureMouse)
+					return;
+
+				auto ray = cam.GetMouseRay();
+				auto start = cam.GetPosition();
+				float dist = 0;
+				if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+				{
+					auto inter = cam.GetPosition() + ray * dist;
+					id_t id = instance.scene.get_map().find((int)std::round(inter.x - .5f), (int)std::round(inter.z - .5f));
+
+					float r_x = std::round(inter.x) - inter.x;
+					float r_y = std::round(inter.z) - inter.z;
+
+					if (abs(r_x) < 0.1f)
+					{
+						auto c_y = (int)std::round(inter.z - .5f);
+						auto a_x = (int)std::round(inter.x);
+						auto b_x = (int)std::round(inter.x) - 1;
+						if(auto check = instance.scene.get_map().find_edge(a_x, c_y, b_x, c_y))
+							id = check;
+						
+					}
+					else if (abs(r_y) < 0.1f)
+					{
+						auto c_x = (int)std::round(inter.x - .5f);
+						auto a_y = (int)std::round(inter.z);
+						auto b_y = (int)std::round(inter.z) - 1;
+						if(auto check = instance.scene.get_map().find_edge(c_x, a_y, c_x, b_y))
+							id = check;
+					}
+
+					//instance.scene.get_map().find_edge();
+
+					if (id && instance.scene.get_map().exist(id))
+					{
+						auto& pf = instance.scene.get_map().get(id);
+						
+						if (pf.has<tc::Shape>() && pf.has<tc::Transform>())
+						{
+							auto shape = pf.get_if<tc::Shape>();
+							auto& transform = pf.get<tc::Transform>();
+
+							const int& x = shape->x;
+							const int& y = shape->y;
+
+							AABB box;
+
+							auto [a_x, a_y, b_x, b_y] = shape_bounding_for_rotation(x, y);
+
+							box.min.x = a_x;
+							box.min.z = a_y;
+
+							box.max.x = b_x;
+							box.max.z = b_y;
+
+							auto rot = transform.rotation;
+							box.min = rot * box.min;
+							box.max = rot * box.max;
+
+							box.min.x += transform.position.x;
+							box.min.z += transform.position.z;
+							box.min.y = 0;
+
+							box.max.x += transform.position.x;
+							box.max.z += transform.position.z;
+							box.max.y = 0;
+
+
+
+							auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+							{
+								tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+								tvector<ImVec2> ss_pts;
+								auto vp = cam.GetViewport();
+								for (auto pt : ws_pts)
+								{
+									auto t_ss = cam.WorldspaceToScreenspace(pt);
+									t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+									t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+									ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+								}
+
+								return ss_pts;
+							};
+
+
+							auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+							auto drawlist = ImGui::GetBackgroundDrawList();
+
+							drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x20, 0xAF, 0x20, 0x80));
+							Service<RenderSystem>::Get().DrawLine(box, { 0,1,0,1 });
+						}
+					}
+					else
+					{
+						AABB box;
+
+						auto [a_x, a_y, b_x, b_y] = shape_bounding_with_position(1, 1, inter.x, inter.z);
+
+						box.min.x = a_x;
+						box.min.z = a_y;
+						box.min.y = 0;
+
+						box.max.x = b_x;
+						box.max.z = b_y;
+						box.max.y = 0;
+
+
+						auto WorldSpaceAABBtoSSVecOfPts = [](Camera& cam, AABB aabb)
+						{
+							tvector<vec3> ws_pts{ aabb.min, vec3{aabb.min.x, 0.f, aabb.max.z}, aabb.max, vec3{aabb.max.x, 0.f, aabb.min.z} };
+							tvector<ImVec2> ss_pts;
+							auto vp = cam.GetViewport();
+							for (auto pt : ws_pts)
+							{
+								auto t_ss = cam.WorldspaceToScreenspace(pt);
+								t_ss.x = (1 + t_ss.x) / 2 * vp.z;
+								t_ss.y = vp.w - ((1 + t_ss.y) / 2 * vp.w);
+
+								ss_pts.push_back(ImVec2{ t_ss.x, t_ss.y });
+							}
+
+							return ss_pts;
+						};
+
+
+						auto pts = WorldSpaceAABBtoSSVecOfPts(cam, box);
+
+						auto drawlist = ImGui::GetBackgroundDrawList();
+						drawlist->AddConvexPolyFilled(pts.data(), 4, IM_COL32(0x60, 0x60, 0x60, 0x60));
+
+					}
+
+
 				}
 			}
+			
+			// click
+			if (io.MouseClicked[0])
+			{
+				if (io.WantCaptureMouse)
+					return;
 
+				if (current != INVALID)
+					return;
 
+				auto ray = cam.GetMouseRay();
+				auto start = cam.GetPosition();
+				float dist = 0;
+				if (glm::intersectRayPlane(start, ray, glm::vec3{}, glm::vec3{ 0,1,0 }, dist))
+				{
+					auto inter = cam.GetPosition() + ray * dist;
+					id_t id = instance.scene.get_map().find((int)std::round(inter.x - .5f), (int)std::round(inter.z - .5f));
 
+					float r_x = std::round(inter.x) - inter.x;
+					float r_y = std::round(inter.z) - inter.z;
+
+					if (abs(r_x) < 0.1f)
+					{
+						auto c_y = (int)std::round(inter.z - .5f);
+						auto a_x = (int)std::round(inter.x);
+						auto b_x = (int)std::round(inter.x) - 1;
+						if (auto check = instance.scene.get_map().find_edge(a_x, c_y, b_x, c_y))
+							id = check;
+
+					}
+					else if (abs(r_y) < 0.1f)
+					{
+						auto c_x = (int)std::round(inter.x - .5f);
+						auto a_y = (int)std::round(inter.z);
+						auto b_y = (int)std::round(inter.z) - 1;
+						if (auto check = instance.scene.get_map().find_edge(c_x, a_y, c_x, b_y))
+							id = check;
+					}
+
+					instance.selected = id;
+				}
+			}
 
 			// change this to instance cam
 
@@ -253,6 +699,12 @@ namespace Tempest
 
 
 
+		}
+
+		void exit(Instance&) override 
+		{
+			// Clean up the emitters
+			EmitterSystem_3D::GetInstance().ClearEmitters();
 		}
 	};
 }

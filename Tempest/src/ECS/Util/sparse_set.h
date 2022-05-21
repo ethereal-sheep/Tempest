@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -85,6 +85,7 @@ namespace Tempest
 		 * @param new_e An entity identifier to clone to
 		 */
 		virtual void clone(Entity old_e, Entity new_e) = 0;
+
 
 		/**
 		 * @brief Clears all entities in the sparse set
@@ -232,6 +233,8 @@ namespace Tempest
 				componentList.push_back(componentList[sparse[old_e]]);
 			}
 		}
+
+
 
 		/**
 		 * @brief Clears all entities in the sparse set

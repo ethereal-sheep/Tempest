@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Huang Xurong(h.xurong@digipen.edu),
+				Lim Ziyi Jean(ziyijean.lim@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -10,16 +11,19 @@
 
 #include "CombatModeOverlay.h"
 #include "Tempest/src/Graphics/OpenGL/Texture.h"
-#include "Tempest/src/Graphics/OpenGL/RenderSystem.h"
 #include "ConflictResOverlay.h"
+#include <Editor/src/InstanceManager/InstanceConfig.h>
+#include <Tempest/src/Instance/EditTimeInstance.h>
 
 namespace Tempest
 {
 	void ConflictResOverlay::open_popup(const Event&)
 	{
 		OverlayOpen = true;
+		SelectedConflictRes = 0;
+		SelectedSequences.clear();
 	}
-	void ConflictResOverlay::show(Instance& instance)
+	void ConflictResOverlay::show([[maybe_unused]]Instance& instance)
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 
@@ -29,230 +33,113 @@ namespace Tempest
 		{
 			window_flags |= ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
-			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.3f));
-			if (ImGui::Begin("Conflict Resolution", &visible, window_flags))
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.8f));
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
+			if (ImGui::Begin("ConflictResolution", nullptr, window_flags))
 			{
-				static ImVec4 active{ 0.2f, 0.2f, 0.2f, 1.f };
-				static ImVec4 inactive{ 0.062f, 0.062f, 0.062f, 1.f };
-				static const ImVec2 buttonSize{ 70, 7.5 };
-				const ImVec2 button2Size{ 70.f, 20.0f };
-				bool border = false;
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding);
-				Tempest::UI::SubHeader("Conflict Resolutions");
+				// render the select map image
+				auto image = tex_map["Assets/SelectCR_BG.dds"];
+				ImVec2 point = ImGui::GetCursorScreenPos();
+				ImVec2 Min{ point.x, point.y };
+				ImVec2 Max{ Min.x + viewport->Size.x, Min.y + viewport->Size.y };
+				ImGui::GetWindowDrawList()->AddImage((void*)static_cast<size_t>(image->GetID()), Min, Max);
 
-				ImGui::BeginChild("##ContentSection", ImVec2(ImGui::GetContentRegionAvailWidth() * 0.85f, ImGui::GetContentRegionAvail().y), border, ImGuiWindowFlags_NoScrollWithMouse);
+				// render title
+				ImGui::SetCursorPos(ImVec2{ 0,0 });
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
+				UI::SubHeader("Select Conflict Resolution");
+				ImGui::Dummy(ImVec2{ 0.f, ImGui::GetContentRegionAvail().y * 0.05f });
 
-				const auto regoinAvailWidth = ImGui::GetContentRegionAvailWidth() / 3.0f - padding;
-				const auto regoinAvailHeight = ImGui::GetContentRegionAvail().y;
 
-				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (ImGui::GetContentRegionAvailWidth() - regoinAvailWidth * 3 - padding) * 0.25f);
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + halfPadding);
+				// render back button
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.02f,viewport->Size.y * 0.03f });
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0,0,0,0 });
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0,0,0,0 });
+				image = tex_map["Assets/BackMenuBtn.dds"];
 
+				if (ImGui::ImageButton((void*)static_cast<size_t>(image->GetID()), ImVec2{ (float)image->GetWidth(), (float)image->GetHeight() }))
 				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##LeftSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), border);
-					if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
-					{
-						bgColor = IM_COL32(0, 0, 0, 100);
-						AddUnitTex = tex_map["Assets/EditUnitsUnlit.png"];
-					}	
-					else
-					{
-						bgColor = IM_COL32(20, 20, 20, 100);
-						AddUnitTex = tex_map["Assets/EditUnitsLit.png"];
-					}
-
-					ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 5);
-					ImGui::Image((void*)static_cast<size_t>(AddUnitTex->GetID()), ImVec2(static_cast<float>(AddUnitTex->GetWidth()), static_cast<float>(AddUnitTex->GetHeight())));
-
-					{
-						ImGui::BeginChild("ChildUnit", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);
-
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 180, ImGui::GetCursorPosY() + 30 };
-						auto view = instance.ecs.view<Components::Character>(exclude_t<tc::Destroyed>());
-
-						unsigned i = 0;
-						for (auto id : view)
-						{
-							auto& Charac = instance.ecs.get<tc::Character>(id);
-							if (UI::UIButton_2(Charac.name.c_str(), Charac.name.c_str(), { cursor.x , cursor.y + i++ * 80 }, button2Size, FONT_PARA))
-							{
-								Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(false, id);								
-							}
-						}
-
-						ImGui::EndChild();
-					}
-
-					if (UI::UIButton_1("Add Units", "Add Units", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, buttonSize, FONT_PARA))
-					{
-						Service<EventManager>::Get().instant_dispatch<OpenUnitSheetTrigger>(true);
-					}
-
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-
+					OverlayOpen = false;
+					Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+						instance.get_full_path(),
+						MemoryStrategy{},
+						InstanceType::EDIT_TIME);
 				}
+				ImGui::PopStyleColor(3);
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4{ 0,0,0,0 });
 
-				ImGui::SameLine();
-				ImGui::Dummy({ halfPadding, 0 });
-				ImGui::SameLine();
-
+				// draw the child
+				const ImVec2 child_size{ viewport->Size.x * 0.25f, viewport->Size.y * 0.55f };
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.5f - child_size.x * 0.5f, viewport->Size.y * 0.55f - child_size.y * 0.5f });
+				if (ImGui::BeginChild("##LoadConflictRes", child_size, true))
 				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##MiddleSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), border);
+					const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+					// TODO: load the conflict stuff here
 
-					if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+					//for (int i = 0; i < SelectedConflictRes; i++)
 					{
-						bgColor = IM_COL32(0, 0, 0, 100);
-						AddActionTex = tex_map["Assets/EditActionsUnlit.png"];
-					}	
-					else
-					{
-						bgColor = IM_COL32(20, 20, 20, 100);
-						AddActionTex = tex_map["Assets/EditActionsLit.png"];
-					}
-
-					ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 5);
-					ImGui::Image((void*)static_cast<size_t>(AddActionTex->GetID()), ImVec2(static_cast<float>(AddActionTex->GetWidth()), static_cast<float>(AddActionTex->GetHeight())));
-
-					{
-						ImGui::BeginChild("ChildAction", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);
-
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 180, ImGui::GetCursorPosY() + 30 };
-						
-
-						unsigned i = 0;
-						for (auto id : instance.ecs.view<tc::ActionGraph>())
+						ImGui::PushID(std::string{ "Conflict Res " + std::to_string(0) }.c_str());
+						if (UI::UIButton_2("Sample_Conflict", "Sample_Conflict", ImVec2{ cusor.x, cusor.y + 0 * 90.0f }, { 50,20 }, FONT_BTN, SelectedConflictRes == 0))
 						{
-							ImGui::PushID(id);
-							//ImGui::BeginGroup();
-							const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
-
-							auto& action = instance.ecs.get<tc::Graph>(id);
-
-							if (UI::UIButton_2(action.g.name + ": " + std::to_string(i), action.g.name + ": " + std::to_string(i), pos, button2Size, FONT_PARA))
-							{
-								OverlayOpen = false;
-								Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
-							}
-							ImGui::PopID();
+							SelectedConflictRes = 0;
 						}
-
-						ImGui::EndChild();
+						ImGui::PopID();
 					}
-
-					if (UI::UIButton_1("Add Actions", "Add Actions", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, buttonSize, FONT_PARA)) 
-					{
-						auto i = instance.ecs.create();
-						instance.ecs.emplace<tc::ActionGraph>(i);
-						instance.ecs.emplace<tc::Graph>(i, "Action", graph_type::action);
-					}
-
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-
 				}
-
-
-				ImGui::SameLine();
-				ImGui::Dummy({ halfPadding, 0 });
-				ImGui::SameLine();
-
-				{
-					static auto bgColor = IM_COL32(0, 0, 0, 100);
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, bgColor);
-					ImGui::BeginChild("##RightSide", ImVec2(regoinAvailWidth, regoinAvailHeight - padding), border);
-					if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
-					{
-						bgColor = IM_COL32(0, 0, 0, 100);
-						AddLinkTex = tex_map["Assets/EditLinksUnlit.png"];
-					}
-					else
-					{
-						bgColor = IM_COL32(20, 20, 20, 100);
-						AddLinkTex = tex_map["Assets/EditLinksLit.png"];
-					}
-
-					ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 5);
-					ImGui::Image((void*)static_cast<size_t>(AddLinkTex->GetID()), ImVec2(static_cast<float>(AddLinkTex->GetWidth()), static_cast<float>(AddLinkTex->GetHeight())));
-
-					{
-						ImGui::BeginChild("ChildLink", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y / 1.2f), border);
-
-						const ImVec2 cursor{ ImGui::GetCursorPosX() + 180, ImGui::GetCursorPosY() + 30 };
-
-						unsigned i = 0;
-						for (auto id : instance.ecs.view<tc::ConflictGraph>())
-						{
-							ImGui::PushID(id);
-							//ImGui::BeginGroup();
-							const ImVec2 pos{ cursor.x , cursor.y + i++ * 80 };
-
-							auto& conflict = instance.ecs.get<tc::Graph>(id);
-
-							if (UI::UIButton_2(conflict.g.name + ": " + std::to_string(i), conflict.g.name + ": " + std::to_string(i), pos, button2Size, FONT_PARA))
-							{
-								OverlayOpen = false;
-								Service<EventManager>::Get().instant_dispatch<OpenActionGraphTrigger>(id, instance);
-							}
-							ImGui::PopID();
-						}
-
-						//ImGui::EndChild();
-
-
-						//for (unsigned i = 0; i < numOfButtons; i++)
-						//{
-						//	if (UI::UIButton_2("Test Link" + std::to_string(i), "Test Link" + std::to_string(i), { cursor.x , cursor.y + i * 80 }, button2Size, FONT_PARA)) {}
-						//}
-
-						ImGui::EndChild();
-					}
-
-					if (UI::UIButton_1("Add Sequence", "Add Sequence", { ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f, ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5f }, buttonSize, FONT_PARA)) 
-					{
-						auto i = instance.ecs.create();
-						instance.ecs.emplace<tc::ConflictGraph>(i);
-						instance.ecs.emplace<tc::Graph>(i, "Sequence", graph_type::conflict);
-					}
-
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-				}
-
 
 				ImGui::EndChild();
 
-				ImGui::SameLine();
+				ImGui::SetCursorPos(ImVec2{ viewport->Size.x * 0.8f - child_size.x * 0.5f, viewport->Size.y * 0.55f - child_size.y * 0.5f });
 
-				const ImVec2 buttonPos{ ImGui::GetCursorPosX() + ImGui::GetContentRegionAvailWidth() * 0.5f,  ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.75f };
-				
-				//// other buttons 
-				const ImVec2 button3Size{ 0.f, 8.0f };
-				if (UI::UIButton_2("Define stats", "Define stats", buttonPos, button3Size, FONT_BODY))
+				if (ImGui::BeginChild("##LoadSequenceConflictRes", child_size, true))
 				{
-					Service<EventManager>::Get().instant_dispatch<DefineStatsTrigger>();
+					const ImVec2 cusor{ ImGui::GetCursorPosX() + 200.0f, ImGui::GetCursorPosY() + 40.0f };
+
+					// TODO: render all the sequences from selected conflict
+					// TODO: make a popup menu
+
+					int i = 0;
+					std::string seq_name = "Unit vs Unit";
+					ImGui::PushID(seq_name.c_str());
+					//bool selected = SelectedSequences.size();
+					if (UI::UIButton_2(seq_name.c_str(), seq_name.c_str(), ImVec2{ cusor.x, cusor.y + i * 90.0f }, { 50, 20 }, FONT_BTN, false))
+					{
+						Service<EventManager>::Get().instant_dispatch<MainMenuSequencePopupTrigger>(SelectedSequences);
+					}
+					ImGui::PopID();
+
+					++i;
 				}
 
-				if (UI::UIButton_2("Simulate", "Simulate", { buttonPos.x,buttonPos.y + padding * 1.5f }, button3Size, FONT_BODY))
-				{
-					Service<EventManager>::Get().instant_dispatch<OpenSimulateTrigger>();
-				}
+				ImGui::EndChild();
+				ImGui::PopStyleColor(1);
 
-				if (UI::UIButton_2("Cancel", "Cancel", { buttonPos.x,buttonPos.y + padding * 3.0f}, button3Size, FONT_BODY))
+				ImGui::PushID("conflictresnext");
+				if (UI::UIButton_2("Next", "Next", ImVec2{ viewport->Size.x * 0.9f, viewport->Size.y * 0.95f }, { -20,20 }, FONT_BTN))
 				{
 					OverlayOpen = false;
-					Service<EventManager>::Get().instant_dispatch<OpenMainMenuTrigger>();
+					//Service<EventManager>::Get().instant_dispatch<BottomRightOverlayTrigger>("Saving...");
+					if (dynamic_cast<RuntimeInstance*>(&instance))
+					{
+						Service<EventManager>::Get().instant_dispatch<OpenTurnOrderOverlay>();
+					}
+					else
+					{
+						dynamic_cast<EditTimeInstance&>(instance).save();
+						Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(
+							dynamic_cast<EditTimeInstance&>(instance).get_full_path(),
+							MemoryStrategy{},
+							InstanceType::RUN_TIME);
+					}
+					
 				}
-
-
+				ImGui::PopID();
 			}
-
 			ImGui::End();
+			ImGui::PopStyleVar();
 			ImGui::PopStyleColor();
+			
 		}
 	}
 }

@@ -80,18 +80,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build-int\$(Configuration)\</IntDir>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <OutDir>$(SolutionDir)Build\Editor\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build-int\Editor\$(Configuration)\</IntDir>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\Editor\$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <TargetName>CoReSys</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build-int\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Build\Editor\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build-int\Editor\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)Build\Editor\$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <TargetName>CoReSys</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,18 +128,19 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\rttr\src;%(AdditionalIncludeDirectories);$(SolutionDir)Libraries\glfw</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\fmod\fmod_vc.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mtd.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\fmod\fmod_vc.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mtd.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;$(SolutionDir)Dep\rttr\$(Configuration)\rttr_core_s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -150,8 +153,12 @@
     <CustomBuildStep>
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
-xcopy /y /d /s "..\Resource" "$(TargetDir)" /q
-xcopy /y /d "..\Dep\assimp\Debug\assimp-vc142-mtd.dll" "$(TargetDir)" /q</Command>
+xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mtd.dll" "$(TargetDir)" /q
+
+rmdir /q /s "$(TargetDir)Prototypes"
+rmdir /q /s "$(TargetDir)ConflictResolutions"
+rmdir /q /s "$(TargetDir)Scenes"
+xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>output;%(Outputs)</Outputs>
@@ -163,11 +170,13 @@ xcopy /y /d "..\Dep\assimp\Debug\assimp-vc142-mtd.dll" "$(TargetDir)" /q</Comman
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\tracy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\tinyddsloader;$(SolutionDir)Libraries\rapidjson\include;$(SolutionDir)Libraries\glew;$(SolutionDir)Libraries\glm\glm;$(SolutionDir)Tempest\src;$(SolutionDir)Libraries\fmod\inc;$(SolutionDir)Libraries\spdlog\include;$(SolutionDir)Editor\src;$(SolutionDir)Libraries\PhysX\pxshared\include;$(SolutionDir)Libraries\PhysX\physx\include;$(SolutionDir)Libraries\stb\;$(SolutionDir)Libraries\assimp\include;$(SolutionDir)Libraries\extn\inc;$(SolutionDir)Libraries\tracy;$(SolutionDir)Libraries\rttr\src;%(AdditionalIncludeDirectories);$(SolutionDir)Libraries\glfw</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,7 +184,7 @@ xcopy /y /d "..\Dep\assimp\Debug\assimp-vc142-mtd.dll" "$(TargetDir)" /q</Comman
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dep\Tempest;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\fmod\fmod_vc.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mt.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Dep\Tempest\$(Configuration)\Tempest.lib;$(SolutionDir)Dep\spdlog\spdlog.lib;$(SolutionDir)Dep\fmod\fmod_vc.lib;$(SolutionDir)Dep\glew\glew32.lib;$(SolutionDir)Dep\assimp\$(Configuration)\assimp-vc142-mt.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysX_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCommon_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCooking_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXFoundation_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXExtensions_static_64.lib;$(SolutionDir)Dep\PhysX\$(Configuration)\PhysXPvdSDK_static_64.lib;$(SolutionDir)Dep\rttr\$(Configuration)\rttr_core_s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -185,6 +194,9 @@ xcopy /y /d "..\Dep\assimp\Debug\assimp-vc142-mtd.dll" "$(TargetDir)" /q</Comman
       <Command>xcopy /y /d "..\Dep\glew\glew32.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\fmod\fmod.dll" "$(TargetDir)" /q
 xcopy /y /d "..\Dep\assimp\$(Configuration)\assimp-vc142-mt.dll" "$(TargetDir)" /q
+rmdir /q /s "$(TargetDir)Prototypes"
+rmdir /q /s "$(TargetDir)ConflictResolutions"
+rmdir /q /s "$(TargetDir)Scenes"
 xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </CustomBuildStep>
     <CustomBuildStep>
@@ -192,7 +204,6 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Actions\Action.cpp" />
     <ClCompile Include="src\Editor.cpp" />
     <ClCompile Include="src\Extern\imgui\crude_json.cpp" />
     <ClCompile Include="src\Extern\imgui\drawing.cpp" />
@@ -213,6 +224,7 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Extern\imgui\implot_demo.cpp" />
     <ClCompile Include="src\Extern\imgui\implot_items.cpp" />
     <ClCompile Include="src\Extern\imgui\widgets.cpp" />
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\InstanceManager\InstanceManager.cpp" />
     <ClCompile Include="src\Util\GuizmoController.cpp" />
     <ClCompile Include="src\Util\UIElements.cpp" />
@@ -221,14 +233,24 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClCompile Include="src\Window\Hierarchy\HierarchyWindow.cpp" />
     <ClCompile Include="src\Window\Inspector\InspectorWindow.cpp" />
     <ClCompile Include="src\Window\Overlay\AttackSystemOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\BuildModeOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\CombatModeOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\CombatResultsOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\ConflictResOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\CreditsOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\MainMenuOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\PauseOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\PlaceUnitCinematic.cpp" />
+    <ClCompile Include="src\Window\Overlay\PlaceUnitsOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\RuntimeStartup.cpp" />
     <ClCompile Include="src\Window\Overlay\SimulateOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\TurnOrderOverlay.cpp" />
     <ClCompile Include="src\Window\Overlay\UnitSheetOverlay.cpp" />
+    <ClCompile Include="src\Window\Overlay\WeaponSheetOverlay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Actions\Action.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Actions\EditorAction.h" />
     <ClInclude Include="src\Extern\imgui\crude_json.h" />
     <ClInclude Include="src\Extern\imgui\drawing.h" />
     <ClInclude Include="src\Extern\imgui\imconfig.h" />
@@ -264,7 +286,9 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\RNG\resolution.h" />
     <ClInclude Include="src\Triggers\SimulationTriggers.h" />
     <ClInclude Include="src\Triggers\Triggers.h" />
+    <ClInclude Include="src\Window\Util\Cursor.h" />
     <ClInclude Include="src\Util\GuizmoController.h" />
+    <ClInclude Include="src\Util\InputBlocker.h" />
     <ClInclude Include="src\Util\Suppress.h" />
     <ClInclude Include="src\Util\UIElements.h" />
     <ClInclude Include="src\Window\AssetManager\AssetManagerWindow.h" />
@@ -272,40 +296,73 @@ xcopy /y /d /s "..\Resource" "$(TargetDir)" /q</Command>
     <ClInclude Include="src\Window\FileBrowser\FileBrowser.h" />
     <ClInclude Include="src\Window\FileBrowser\NewBrowser.h" />
     <ClInclude Include="src\Window\FileBrowser\SaveBrowser.h" />
+    <ClInclude Include="src\Window\Hierarchy\PrefabList.h" />
     <ClInclude Include="src\Window\MainMenu\MainMenu.h" />
     <ClInclude Include="src\Window\Menubar\EditTimeMenuBar.h" />
     <ClInclude Include="src\Window\Hierarchy\HierarchyWindow.h" />
     <ClInclude Include="src\Window\Inspector\InspectorWindow.h" />
     <ClInclude Include="src\Window\Menubar\RunTimeMenuBar.h" />
     <ClInclude Include="src\Window\Overlay\AttackSystemOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\BuildModeOverlay.h" />
     <ClInclude Include="src\Window\Overlay\CombatModeOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\CombatResultsOverlay.h" />
     <ClInclude Include="src\Window\Overlay\ConflictResOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\CreditsOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\LoadingOverlay.h" />
     <ClInclude Include="src\Window\Overlay\MainMenuOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\PauseOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\PlaceUnitCinematic.h" />
+    <ClInclude Include="src\Window\Overlay\PlaceUnitsOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\RuntimeStartup.h" />
     <ClInclude Include="src\Window\Overlay\SimulateOverlay.h" />
     <ClInclude Include="src\Window\Overlay\SimulateResultOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\Startup.h" />
+    <ClInclude Include="src\Window\Overlay\TurnOrderOverlay.h" />
     <ClInclude Include="src\Window\Overlay\UnitSheetOverlay.h" />
+    <ClInclude Include="src\Window\Overlay\WeaponSheetOverlay.h" />
     <ClInclude Include="src\Window\Popup\BottomRightOverlayPopup.h" />
     <ClInclude Include="src\Window\Popup\CloseProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\ConfirmationPopup.h" />
     <ClInclude Include="src\Window\Popup\DefineStatsPopup.h" />
     <ClInclude Include="src\Window\Popup\ErrorMsgPopup.h" />
     <ClInclude Include="src\Window\Popup\ExportProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\MainMenuSequencePopup.h" />
     <ClInclude Include="src\Window\Popup\NewProjectPopup.h" />
     <ClInclude Include="src\Window\Popup\OpenProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\QuickMenuPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveCurrentBeforeOpenPopup.h" />
     <ClInclude Include="src\Window\Popup\SaveProjectPopup.h" />
+    <ClInclude Include="src\Window\Popup\SettingsPopup.h" />
+    <ClInclude Include="src\Window\Popup\SimulateSelectionPopup.h" />
+    <ClInclude Include="src\Window\Popup\TutorialPopup.h" />
+    <ClInclude Include="src\Window\Popup\WipeColourPopup.h" />
+    <ClInclude Include="src\Window\Popup\WipePopup.h" />
+    <ClInclude Include="src\Window\Test\Test_UIWindow.h" />
     <ClInclude Include="src\Window\Test\test_window.h" />
     <ClInclude Include="src\Window\Test\test_window2.h" />
     <ClInclude Include="src\Window\Test\test_window3.h" />
+    <ClInclude Include="src\Window\Test\test_window4.h" />
     <ClInclude Include="src\Window\Util\AudioPlayer.h" />
+    <ClInclude Include="src\Window\Util\Delay.h" />
+    <ClInclude Include="src\Window\Util\LineDrawing.h" />
+    <ClInclude Include="src\Window\Util\ParticleDraw.h" />
     <ClInclude Include="src\Window\Util\ShowRecent.h" />
     <ClInclude Include="src\Window\Util\SimulationBuilder.h" />
+    <ClInclude Include="src\Window\Util\SimulationStart.h" />
+    <ClInclude Include="src\Window\Viewport\CameraControls.h" />
     <ClInclude Include="src\Window\Viewport\ViewportWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Editor.aps" />
     <None Include="src\Extern\imgui\imgui_bezier_math.inl" />
     <None Include="src\Extern\imgui\imgui_extra_math.inl" />
     <None Include="src\Extern\imgui\imgui_node_editor_internal.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Editor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="CoReSys.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

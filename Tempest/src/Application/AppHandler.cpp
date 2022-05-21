@@ -1,9 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
-* \copyright	Copyright (c) 2021 DigiPen Institute of Technology. Reproduction
+* \date			2022
+* \note			Course: GAM350
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
@@ -11,13 +11,15 @@
 #include "AppHandler.h"
 #include "Application.h"
 #include "Logger/Log.h"
+#include "Util/quitter.h"
+#include "../resource.h"
 
 namespace Tempest
 {
 	int AppHandler::Run(std::unique_ptr<Application>&& pApp, HINSTANCE hInstance, [[maybe_unused]] LPWSTR lpCmdList, int nCmdShow)
 	{
 		s_pApp = std::move(pApp);
-
+		//ToggleFullscreen();
 #ifdef _DEBUG
 		// enable console
 		AllocConsole();
@@ -34,7 +36,7 @@ namespace Tempest
 		MSG msg = {};
 		bool running = true;
 
-		try
+		
 		{
 			while (running)
 			{
@@ -53,16 +55,12 @@ namespace Tempest
 					s_pApp->OnEngineRender();
 					s_pContext->SwapBuffer();
 				}
+
+				if (get_quitter().quit == true)
+					running = false;
 			}
 		}
-		catch (const std::exception& a)
-		{
-			LOG(a.what());
-		}
-		catch (...)
-		{
-			__debugbreak();
-		}
+		
 		
 
 		s_pApp->OnEngineExit();
@@ -86,7 +84,6 @@ namespace Tempest
 		if (val)
 		{
 			s_IsFullscreen = true;
-
 			GetWindowPlacement(s_pContext->GetHWND(), &s_WPC);
 			if (s_HWNDStyle == 0)
 				s_HWNDStyle = GetWindowLong(s_pContext->GetHWND(), GWL_STYLE);
@@ -155,7 +152,13 @@ namespace Tempest
 				if (s_pApp)
 				{
 					if (wParam == VK_RETURN && !((lParam >> 30) & 1))
+					{
 						ToggleFullscreen();
+						const uint32_t width = ((uint32_t)(short)LOWORD(lParam));
+						const uint32_t height = ((uint32_t)(short)HIWORD(lParam));
+						if (wParam != SIZE_MINIMIZED)
+							s_pApp->Resize(width, height);
+					}
 				}
 				return 0;
 			}
@@ -183,6 +186,7 @@ namespace Tempest
 					return 0;
 				}
 			}
+
 		}
 
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -197,12 +201,12 @@ namespace Tempest
 		wcex.cbClsExtra = 0;
 		wcex.cbWndExtra = 0;
 		wcex.hInstance = hInstance;
-		wcex.hIcon = nullptr; // icon LoadIcon(hInstance, MAKEINTRESOURCE(IDI_WIN32DEMO));
+		wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 		wcex.hCursor = LoadCursor(hInstance, IDC_ARROW);
 		wcex.hbrBackground = (HBRUSH)COLOR_BACKGROUND;
 		wcex.lpszMenuName = nullptr;
 		wcex.lpszClassName = L"Tempest";
-		wcex.hIconSm = nullptr; // smol icon LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+		wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
 		return RegisterClassExW(&wcex);
 	}
@@ -210,7 +214,7 @@ namespace Tempest
 	bool AppHandler::InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		s_pContext = Context::Create();
-
+		ToggleFullscreen();
 		if (!s_pContext->OnInit(hInstance, nCmdShow, s_pApp))
 			return false;
 

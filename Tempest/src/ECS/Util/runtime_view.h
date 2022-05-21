@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -59,10 +59,17 @@ namespace Tempest
 		{
 			// preprocessing
 			auto lambda = [&](auto i) {
-				return !pools.count(i);
+				return !pools.count(i) || pools.at(i) == nullptr;
 			};
 
-			include.erase(std::remove_if(include.begin(), include.end(), lambda), include.end());
+			for (auto i : include)
+				if (lambda(i))
+				{
+					include.clear();
+					return;
+				}
+
+			//include.erase(std::remove_if(include.begin(), include.end(), lambda), include.end());
 			exclude.erase(std::remove_if(exclude.begin(), exclude.end(), lambda), exclude.end());
 
 			// guaranteed all hash exist
@@ -367,8 +374,8 @@ namespace Tempest
 		 */
 		[[nodiscard]] bool contains(Entity entity)
 		{
-			for (auto i : exclude) if (pools.at(i)->contains(entity)) return false;
-			for (auto i : include) if (!pools.at(i)->contains(entity)) return false;
+			for (auto i : exclude) if (!pools.count(i) || pools.at(i)->contains(entity)) return false;
+			for (auto i : include) if (!pools.count(i) || !pools.at(i)->contains(entity)) return false;
 			return true;
 		}
 

@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -14,11 +14,13 @@
 #include "Events/EventManager.h"
 #include "Triggers/Triggers.h"
 #include "InstanceManager/InstanceConfig.h"
+#include "Util/interpolater.h"
 
 namespace Tempest
 {
 	class MainMenuWindow : public Window
 	{
+		
 
 		const char* window_name() override
 		{
@@ -37,6 +39,7 @@ namespace Tempest
 
 		void show(Instance& ) override
 		{
+
 			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 			ImVec2 size = ImGui::GetMainViewport()->Size;
 			ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));

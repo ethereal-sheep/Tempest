@@ -1,8 +1,10 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
+* \author		Tiong Jun Ming, Jerome (j.tiong@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -23,6 +25,17 @@
 #include "Graphics/OpenGL/Texture.h"
 #include "Graphics/Basics/ShadowBuffer.h"
 
+#include "Graphics/PBR/ShapePBR.h"
+
+#include "Graphics/PBR/TexturePBR.h"
+
+#include "Graphics/PBR/MaterialPBR.h"
+
+#include "Graphics/PBR/ModelPBR.h"
+#include "gtc/matrix_inverse.hpp"
+
+#include "Particles/Particles_3D/Particles_3D.h"
+#include "Animation/AnimationManager.h"
 /**
  * @brief 
  * @param RenderSystem Umbrella interface  
@@ -39,11 +52,13 @@ namespace Tempest
 
         //FontRenderer m_FontR;
         LineRenderer m_LineRenderer;
-        RenderPipeline m_Pipeline;
+        //RenderPipeline m_Pipeline;
         ShadowBuffer m_ShadowBuffer;
         //ShadowMap m_ShadowMap;
         Renderer m_Renderer;
         FBO m_FrameBuffer{ 1600, 900 };
+
+        AnimationManager m_Animation;
 
         int  GammaCorrection = 1;
         bool GridActive = false;
@@ -51,17 +66,25 @@ namespace Tempest
         void InitMeshes();
         void InitShaders();
         void InitBuffers();
+        void InitAnimations();
 
     public:
-
+        RenderPipeline m_Pipeline;
         RenderSystem(uint32_t width, uint32_t height);
         ~RenderSystem() = default;
         // submit api
         void Submit(MeshCode code, const Transform& transform);                             // Submitting Primitives
+        void LoadModel(const string& path);
         void SubmitModel(const string& path, const Transform& transform);                   // Submitting Models via file path
+        void SubmitModel(const string& path, const glm::mat4& model_matrix);
+        void SubmitModel(const string& path, const glm::mat4& model_matrix, vec3 color);
+        void SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id, glm::vec3 color);
+        void SubmitModel(const Particle_3D& particle, const glm::mat4& model_matrix);
+        void SubmitModel(const string& path, const Transform& transform, uint32_t id);
+        void SubmitModel(const string& path, const glm::mat4& model_matrix, uint32_t id);
         void SubmitCamera(const Camera& camera);                                            // Submitting Cameras
         void SubmitLights(const Directional_Light& dilight, const Transform& transform);    // Submitting Directional Light {Transform to be used for pos}
-        void SubmitLights(const Point_Light& plight, const Transform& transform);           // Submitting Point Light {Transform to be used for pos}
+        void SubmitLights(const Point_Light& plight);                                       // Submitting Point Light {Transform to be used for pos}
         void SubmitLights(const SpotLight& slight, const Transform& transform);             // Submitting SpotLight {Transform to be used for pos}
 
         void DrawLine(const Line& line, const glm::vec4& color);                            // Drawing Lines
@@ -73,6 +96,8 @@ namespace Tempest
         void BeginFrame();
         void Render();
         void EndFrame();
+
+        void UpdateAnimation(float dt);
 
         void Resize(uint32_t width, uint32_t height);
         void RenderGrid(bool state);
@@ -88,20 +113,144 @@ namespace Tempest
         glm::mat4 lightSpaceMatrix;
 
         uint32_t MAX_POINT_LIGHT = 10;
+        uint32_t NumPLight = 0;
 
         // To be changed to objects instead of global values
         float shininess = 32.f;
-        float ambientStrength = 0.05f;
+        float ambientStrength = 0.5f;
         float specularStrength = 0.5f;
-        const GLfloat near_plane = 1.0f, far_plane = 25.0f;
+        const GLfloat near_plane = 1.0f, far_plane = 20.0f;//25.0f;
+        float originalGV = 0.558f; 
+        float gammaValue = originalGV; 
+
+        //Testing
+        GLuint gBuffer, zBuffer, gPosition, gNormal, gAlbedo, gEffects, gBloom;
+        GLuint saoFBO, saoBlurFBO, saoBuffer, saoBlurBuffer;
+        GLuint postprocessFBO, postprocessBuffer;
+        GLuint envToCubeFBO, irradianceFBO, prefilterFBO, brdfLUTFBO, envToCubeRBO, irradianceRBO, prefilterRBO, brdfLUTRBO;
+        GLuint gBuffer2, gBuffer2t;
+
+        // ping-pong-framebuffer for blurring
+        GLuint pingpongFBO[2];
+        GLuint pingpongColorbuffers[2];
+        bool horizontal = true;
+
+        GLint gBufferView = 1;     // To see the different buffers
+        GLint tonemappingMode = 2; // Tonemapping types 
+        GLint attenuationMode = 2; // Attenuation type
+
+        // Motion Blur settings
+        GLint motionBlurMaxSamples = 32;
+
+        // Just literally only used for auto rotation ( can be removed - remove in rendersystem.cpp too)
+        GLfloat deltaTime = 0.0f;
+
+        // SAO
+        GLfloat saoRadius = 0.762f;
+        GLfloat saoBias = 0.001f;
+        GLfloat saoScale = 0.713f;
+        GLfloat saoContrast = 0.836f;
+        GLint saoSamples = 42;
+        GLint saoTurns = 6;
+        GLint saoBlurSize = 6;
+
+        // Additonal Camera things
+        GLfloat cameraAperture = 16.0f;
+        GLfloat cameraShutterSpeed = 0.5f;
+        GLfloat cameraISO = 1000.0f;
+
+        GLfloat modelRotationSpeed = 1.0f;
+        GLfloat fps = 60.f;
+
+        // Mode toggles
+        bool pointMode = true;         // Point light 
+        bool directionalMode = true;  // Directional Light
+        bool iblMode = true;          // Image based lighting 
+        bool saoMode = true;          // SAO 
+        bool fxaaMode = true;         // FXAA
+        bool motionBlurMode = false;   // Motion Blur
+        bool dirShadowBool = true;    // Direcitonal shadows toggle
+        bool pointShadowBool = true;   // Point light shadows toggle
+        bool pbrMode = true;
+        bool envMapShow = true;        // Envmap toggle
+        bool tiltShiftMode = false;
+
+        bool AAgridShow = false;
+        bool TestPBR = false;
+        bool USO = false;
+
+        glm::vec4 USOcolor{ 0.0f };
+        //bool captured = false;
+        //vec2 vp_size = vec2(0.f);
+        glm::vec4 clearColor{0.0f, 0.0f, 0.0f, 1.0f};
+
+
+        glm::vec3 materialF0 = glm::vec3(0.04f);  // UE4 dielectric
+
+        // 1 fixed model first
+        glm::vec3 modelPosition = glm::vec3(0.0f);      
+        glm::vec3 modelRotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 modelScale = glm::vec3(0.1f);
+
+
+        // Model 1
+        ModelPBR objectModel;
+
+        TexturePBR objectAlbedo;
+        TexturePBR objectNormal;
+        TexturePBR objectRoughness;
+        TexturePBR objectMetalness;
+        TexturePBR objectAO;
+        glm::mat4 model1;
+        
+        glm::mat4 projViewModel;
+        glm::mat4 prevProjViewModel = projViewModel;
+
+        GLfloat materialRoughness = 0.877f;   // Global for now (but should be per object/material).
+        GLfloat materialMetallicity = 0.02f; // Global for now (but should be per object/material).
+        GLfloat ambientIntensity = 0.005f;   // Global for now (but should be per object/material).
+
+        ShapePBR quadRender; // FBO to draw the scene
+
+        // Enviroment Map 
+        ShapePBR envCubeRender; // FBO to draw env
+        TexturePBR envMapHDR;
+        TexturePBR envMapCube;
+        TexturePBR envMapIrradiance;
+        TexturePBR envMapPrefilter;
+        TexturePBR envMapLUT;
+        glm::mat4 envMapProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+        
+        // Particle Debugging
+        bool p_testing = false;
+        vec3 p_angles = vec3(0.f);
+        vec3 p_scalings = vec3(1.f);
+        //
+
+        void iblSetup();
+
+        uint32_t getHeight();
+        uint32_t getWidth();
+
+
+        void LoadTextures();
+        void calculateAllNorms();
+        bool PREFABMODE = false;
+
+        // ANIMATION TESTING
+        //ModelPBR model;
 
     private:        
        
         glm::mat4 to_Model_Matrix(const Transform& transform);
-
+        void ChangeAnimationDuration(uint32_t id, float duration);
         void Clear();                                                                                        // Clear Pipeline
         void DrawSprites(MeshCode code, ShaderCode shaderType, int pt_light_num = -1);                                        // Render Sprites of different meshes
         void DrawSprites(const tuptr<Shader>& shader, const tvector<SpriteObj>& sprites, MeshCode code, ShaderCode shaderType, int pt_light_num = -1);     // Render Sprites of different meshes
         void RenderAAGrid();                                                                                 // Render Anti-Aliased Grid
+
+        void gBufferSetup();
+        void saoSetup();
+        void postprocessSetup();
     };
 }

@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -45,6 +46,8 @@ namespace Tempest
 		void SetMat3fv(glm::mat3 value, const GLchar* name, GLboolean transpose = GL_FALSE);
 		void SetMat4fv(glm::mat4 value, const GLchar* name, GLboolean transpose = GL_FALSE);
 		void SetIntArray(int* values, GLuint count, const std::string& name);
+
+		GLint GetUniformLoc(const std::string& name);
 	};
 }
 

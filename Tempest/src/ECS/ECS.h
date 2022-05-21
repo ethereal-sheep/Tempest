@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -17,12 +17,13 @@
 
 #include "Components/Components.h"
 #include "Entity.h"
+#include "Util/prefab.h"
 
 #include "Util.h"
 
 namespace Tempest
 {
-	static const char* components_folder = "Components";
+	static const char* default_folder = "Components";
 
 
 	class ECS_exception : public std::exception
@@ -81,12 +82,15 @@ namespace Tempest
 		}
 
 	public:
+		static const bool is_entity_keyed = true;
+
 		/**
 		 * @brief Constructs an ECS object
 		 * @param mem Pointer to a polymorphic memory resource; default gets
 		 * the default memory resource
 		 */
-		ECS(m_resource* mem = std::pmr::get_default_resource()) : 
+		ECS(m_resource* mem = std::pmr::get_default_resource(),
+			string components_folder = default_folder) :
 			memory_resource(mem),
 			entity_registry(mem),
 			component_pools(mem) {}
@@ -298,6 +302,33 @@ namespace Tempest
 			return runtime_view(std::move(inc), std::move(exc), component_pools);
 		}
 
+		template<typename... Components, typename... Exclude>
+		[[nodiscard]] Entity view_first(exclude_t<Exclude...> = {})
+		{
+			// check if types are unique
+			//[[maybe_unused]] unique_types<> useless;
+
+			static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
+			static_assert(type_list<Components...>::size != 0, "No empty set");
+
+			tvector<size_t> inc, exc;
+			package<Components...>(inc);
+			package<Exclude...>(exc);
+
+			auto view = runtime_view(std::move(inc), std::move(exc), component_pools);
+
+			if (view.begin() == view.end())
+				return INVALID;
+			return *view.begin();
+		}
+
+		template<typename... Components, typename... Exclude>
+		[[nodiscard]] Entity view_first_or(exclude_t<Exclude...> = {}, Entity id = INVALID)
+		{
+			auto first = view_first<Components..., Exclude...>();
+			return first ? first : id;
+		}
+
 		/**
 		 * @brief Checks if entity is valid or not
 		 * @param entity An entity identifier, either valid or not
@@ -334,6 +365,23 @@ namespace Tempest
 		}
 
 		/**
+		 * @brief Creates a new entity from prefab
+		 * @return New entity identifier
+		 */
+		[[nodiscard]] Entity create(const prefab& p)
+		{
+			auto e = create();
+			for (auto& [hash, compo] : p.components)
+			{
+				if (!compo)
+					continue;
+
+				compo->create(e, component_pools[hash], memory_resource);
+			}
+			return e;
+		}
+
+		/**
 		 * @brief Clones a new entity given an existing entity, with some 
 		 * exclusion if needed
 		 * @warning USE SPARINGLY IF YOU HAVE A LOT OF COMPONENT TYPES
@@ -346,7 +394,7 @@ namespace Tempest
 		[[nodiscard]] Entity clone(Entity entity, exclude_t<Exclude...> = {})
 		{
 			// make sure unique
-			static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
+			//static_assert(!is_any<Components..., Exclude...>(), "Components must be unique");
 			// create new entity
 			Entity new_e = entity_registry.create();
 			// package exclude components
@@ -432,13 +480,13 @@ namespace Tempest
 		 * If folder doesn't exist, a folder is created. 
 		 * If it exists, the folder's contents will be overwritten.
 		 */
-		void save(const tpath& root_filepath) const
+		void save(const tpath& root_filepath, const string& save_folder = default_folder) const
 		{
-			tpath folder = root_filepath / components_folder;
+			tpath folder = root_filepath / save_folder;
 
 			// if directory doesn't exist, create new_directory
 			if(!std::filesystem::exists(folder))
-				std::filesystem::create_directory(folder);
+				std::filesystem::create_directories(folder);
 			
 			// delete everything in components
 			for(auto file : std::filesystem::directory_iterator(folder))
@@ -456,9 +504,9 @@ namespace Tempest
 		 * If folder doesn't exist, a folder is created.
 		 * If it exists, the folder's contents will be overwritten.
 		 */
-		void load(const tpath& root_filepath)
+		void load(const tpath& root_filepath, const string& load_folder = default_folder)
 		{
-			tpath folder = root_filepath / components_folder;
+			tpath folder = root_filepath / load_folder;
 
 			// check if file path exists
 			if (!std::filesystem::exists(folder))
@@ -482,6 +530,7 @@ namespace Tempest
 		m_resource* memory_resource;
 		registry entity_registry;
 		tmap<size_t, tuptr<sparse_set>> component_pools;
+		string components_folder;
 	};
 
 

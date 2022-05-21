@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -14,6 +14,7 @@
 #include "Scripting/GMS.h"
 #include "Physics/Physics.h"
 
+struct Unit_MovementTrailEmitter_3D;
 
 namespace Tempest
 {
@@ -35,7 +36,6 @@ namespace Tempest
 			Instance(project_path, strategy)
 		{
 
-			build_scripts(root);
 		}
 
 		void _init() override;
@@ -45,9 +45,15 @@ namespace Tempest
 
 		
 	private:
-		void build_scripts(const tpath& root_directory);
+		// Not suppose to be here.... @Jun Hao
+		std::weak_ptr<Unit_MovementTrailEmitter_3D> m_Unit_MovementTrailEmitter_3D;
 
 	public:
+		std::vector<Entity> sequences;
+		tmap<int, tmap<int, id_t>> collision_map;
+		tmap<int, tmap<int, id_t>> character_map;
+		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> wall_map;
+		tmap<int, tmap<int, tmap<int, tmap<int, id_t>>>> door_map;
 	};
 }
 

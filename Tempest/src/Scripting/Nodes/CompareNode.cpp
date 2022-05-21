@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -39,12 +39,19 @@ namespace Tempest
         {
         case Tempest::CompareNode::inner_type::CompareFlow:
             node.set_name("Compare Flow");
+            
             node.add_input(pin_type::Flow, "");
-            node.add_input(pin_type::Int, "lhs");
-            node.add_input(pin_type::Int, "rhs");
-            node.add_output(pin_type::Flow, u8"\uf531");
-            node.add_output(pin_type::Flow, u8"\uf52c");
-            node.add_output(pin_type::Flow, u8"\uf536");
+            node.add_input(pin_type::Int, "lhs ");
+            node.add_input(pin_type::Int, "rhs ");
+            
+            node.add_output(pin_type::Flow, (const char*)u8"\uf531");
+            node.add_output(pin_type::Flow, (const char*)u8"\uf52c");
+            node.add_output(pin_type::Flow, (const char*)u8"\uf536");
+
+            node.add_output(pin_type::Int, "result ");
+            node.add_output(pin_type::Int, "lhs_out ");
+            node.add_output(pin_type::Int, "rhs_out ");
+
             break;
         default:
             break;
@@ -59,13 +66,26 @@ namespace Tempest
         {
         case Tempest::CompareNode::inner_type::CompareFlow:
             return instance.srm.add_script(
-                CreateBranchScript<std::tuple<int>(int, int), 3>(
-                    [](int lhs, int rhs) { 
+                CreateBranchScript<std::tuple<int, int, int>(int, int), 3>(
+                    [&instance, entity](int lhs, int rhs) {
+
+                        if (auto var = instance.srm.get_variable_to_id(entity, "AttackRollOutput"))
+                        {
+                            LOG_ASSERT(var->get_type() == pin_type::Int);
+                            var->get<int>() = lhs;
+                        } // attack output
+                        if (auto var = instance.srm.get_variable_to_id(entity, "DefendRollOutput"))
+                        {
+                            LOG_ASSERT(var->get_type() == pin_type::Int);
+                            var->get<int>() = rhs;
+                        } // defend output
+
+
                         if (lhs > rhs)
-                            return std::make_tuple(0);
+                            return std::make_tuple(0, lhs, rhs);
                         if (lhs == rhs)
-                            return std::make_tuple(1);
-                        return std::make_tuple(2);
+                            return std::make_tuple(1, lhs, rhs);
+                        return std::make_tuple(2, lhs, rhs);
                     },
                     std::placeholders::_1, std::placeholders::_2));
         default:

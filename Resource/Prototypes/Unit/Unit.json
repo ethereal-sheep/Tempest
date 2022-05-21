@@ -1,0 +1,133 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Unit"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Unit"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "LocalRotation": [
+                    9.099629210140847e-7,
+                    1.0,
+                    9.099629210140847e-7,
+                    8.280325210219264e-13
+                ],
+                "LocalScale": [
+                    0.5100008249282837,
+                    0.5,
+                    0.4999978542327881
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Character"
+            },
+            "Component": {
+                "Charater_Name": "Char",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [],
+                "Charater_Stats": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": []
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Animations\\Unit_Idle.fbx",
+                "TexturePath": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 1
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Animation"
+            },
+            "Component": {
+                "id": 0
+            }
+        }
+    ]
+}

@@ -1,0 +1,122 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Unit"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Unit"
+            },
+            "Component": {}
+        },
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    0.022290512919425966,
+                    -0.009999999776482582,
+                    0.24334916472434998
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    0.009999999776482582,
+                    0.009999999776482582,
+                    0.009999999776482582
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Character"
+            },
+            "Component": {
+                "Charater_Name": "Combatant",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [],
+                "Charater_Stats": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": []
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\SquareHole.a",
+                "TexturePath": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 1
+            }
+        }
+    ]
+}

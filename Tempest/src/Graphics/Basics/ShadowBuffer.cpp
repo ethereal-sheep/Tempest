@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -16,54 +17,7 @@ namespace Tempest
 	{
         glEnable(GL_DEPTH_TEST);
         m_Width = width;
-        m_Height = height;
-        //constexpr float quadVertices[] =
-        //{
-        //    // positions  
-        //    -1.0f, -1.0f, 
-        //     1.0f, -1.0f, 
-        //     1.0f,  1.0f, 
-        //    -1.0f,  1.0f 
-        //};
-
-        //GLuint indices[6];
-        //GLuint offset = 0;
-
-        //for (int i = 0; i < 6; i += 6)
-        //{
-        //    indices[i + 0] = 0 + offset;
-        //    indices[i + 1] = 1 + offset;
-        //    indices[i + 2] = 2 + offset;
-
-        //    indices[i + 3] = 2 + offset;
-        //    indices[i + 4] = 3 + offset;
-        //    indices[i + 5] = 0 + offset;
-
-        //    offset += 4;
-        //    m_Count += 6;
-        //}
-
-        //glGenVertexArrays(1, &m_vao);
-        //glGenBuffers(1, &m_vbo);
-        //glBindVertexArray(m_vao);
-        //glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        //glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        //glEnableVertexAttribArray(0);
-        //glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-
-        //glCreateBuffers(1, &m_ibo);
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        //glBindVertexArray(0);
-
-        //glGenFramebuffers(1, &m_ID);
-        //glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
-
-        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-        
+        m_Height = height;      
 	}
 
 	void ShadowBuffer::AttachDepthAttachment(const ShadowMap& sm) const

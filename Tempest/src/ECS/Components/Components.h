@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <bitset>
 #include "Util.h"
 #include "TMath.h"
 #include "ECS\Entity.h"
@@ -18,6 +19,9 @@
 #include "Util/range.h"
 #include "Scripting/Graph/graph.h"
 #include "Graphics/Basics/Model.h"
+#include "Graphics/Basics/Lights.h"
+#include "Animation/AnimMultithreadHelper.h"
+//#include "Util/Service.h"
 
 /**
 * @brief 
@@ -109,8 +113,9 @@ namespace Tempest
 {
 	enum struct ComponentType
 	{
-		Example, Destroyed, Transform, Meta, Script, Rigidbody, Mesh, Model,
-		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph
+		Example, Destroyed, Transform, Local, Meta, Script, Rigidbody, Mesh, Model,
+		Character, Weapon, Statline, ConflictGraph, ActionGraph, ResolutionGraph, Graph, 
+		Tile, Wall, Shape, Door, Obstacle, Unit, Collision, PointLight, Animation
 		,END
 	};
 
@@ -123,6 +128,244 @@ namespace Tempest
 		*		ALL COMPONENTS MUST BE DEFAULT, COPY, AND MOVE CONSTRUCTABLE
 		*		(therefore please use ids instead of pointers)
 		*/
+		struct Tile
+		{
+			static const char* get_type() { return "Tile"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Tile&) { ar.StartObject(); return ar.EndObject(); }
+		};
+
+
+		struct Transform
+		{
+			static const char* get_type() { return "Transform"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Transform& component)
+			{
+				ar.StartObject();
+				ar.Member("Position", component.position);
+				ar.Member("Rotation", component.rotation);
+				ar.Member("Scale", component.scale);
+				return ar.EndObject();
+			}
+
+			vec3 position;
+			quat rotation = { 1.f, 0.f, 0.f, 0.f };
+			vec3 scale = { 1.f, 1.f, 1.f };
+
+			friend bool operator==(const Transform& lhs, const Transform& rhs) {
+				return
+					glm::all(glm::epsilonEqual(lhs.position, rhs.position, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.rotation, rhs.rotation, glm::epsilon<float>())) &&
+					glm::all(glm::epsilonEqual(lhs.scale, rhs.scale, glm::epsilon<float>()));
+			}
+			friend bool operator!=(const Transform& lhs, const Transform& rhs) {
+				return !(lhs == rhs);
+			}
+
+		};
+
+		struct Local
+		{
+			static const char* get_type() { return "Local"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Local& component)
+			{
+				ar.StartObject();
+				ar.Member("LocalPosition", component.local_position);
+				ar.Member("LocalRotation", component.local_rotation);
+				ar.Member("LocalScale", component.local_scale);
+				return ar.EndObject();
+			}
+
+			vec3 local_position;
+			quat local_rotation = { 1.f, 0.f, 0.f, 0.f };
+			vec3 local_scale = { 1.f, 1.f, 1.f };
+		};
+
+		struct Mesh
+		{
+			static const char* get_type() { return "Mesh"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Mesh& component)
+			{
+				ar.StartObject();
+				ar.Member("Code", component.code);
+				return ar.EndObject();
+			}
+
+			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
+
+			MeshCode code;
+		};
+		struct Model
+		{
+			static const char* get_type() { return "Model"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Model& component)
+			{
+				ar.StartObject();
+				ar.Member("Path", component.path);
+				ar.Member("TexturePath", component.texPath);
+				return ar.EndObject();
+			}
+			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
+			string path;
+			string texPath;
+		};
+
+		struct Door
+		{
+			static const char* get_type() { return "Door"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Door& component) 
+			{
+				ar.StartObject();
+				ar.Vector("States", component.states);
+				ar.Member("Frame", component.frame);
+				ar.Member("Frame_Local", component.frame_local);
+				component.states.resize((int)State::End);
+				return ar.EndObject(); 
+			}
+
+			enum struct State {
+				CLOSE,
+				OPEN,
+				End
+			};
+
+			void update(float dt);
+
+			auto get_current_state() const { return next; }
+			auto get_current_local() const { return current_local; }
+
+			bool change_state(State new_state);
+
+			Components::Model frame;
+			Components::Local frame_local;
+			tvector<Local> states = tvector<Local>((int)State::End);
+			State curr = State::CLOSE;
+		private:
+			float interpolation_time = 1.f;
+			float current_time = 0.f;
+			Local current_local;
+
+			State next = State::CLOSE;
+			State prev = State::CLOSE;
+		};
+
+		struct Obstacle
+		{
+			static const char* get_type() { return "Obstacle"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Obstacle&) { 
+				ar.StartObject(); 
+				return ar.EndObject(); 
+			}
+		};
+
+		struct Unit
+		{
+			static const char* get_type() { return "Unit"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Unit& ) 
+			{ 
+				ar.StartObject(); 
+				return ar.EndObject(); 
+			}
+
+			void update(float dt);
+			bool set_path(const tvector<glm::ivec2>& path, const Transform& curr);
+			bool is_moving() { return moving; }
+			bool is_attacking() { return attacking; }
+			bool is_end_frame() { return end_frame; }
+			bool is_dead() { return dead; }
+			bool is_dying() { return dying; }
+			bool is_dropping() { return dropping; }
+			Transform get_current_transform() const { return curr_xform; };
+			Local get_current_local() const { return curr_local; };
+
+			bool attack();
+			bool get_hit(float str, float time);
+			bool drop(float height, float time);
+			bool die();
+			bool revive();
+
+			Local attack_test;
+
+		private:
+			Transform prev_xform;
+			Transform curr_xform;
+			Transform next_xform;
+
+			Local curr_local;
+			int attack_state = 0;
+
+			tvector<glm::ivec2> path;
+
+			float interpolation_time = 1.f;
+			float current_time = 0.f;
+			float hit_str = 1.f;
+			float height = 0.f;
+
+			bool end_frame = false;
+			bool moving = false;
+			bool attacking = false;
+			bool getting_hit = false;
+			bool dying = false;
+			bool dead = false;
+			bool dropping = false;
+		};
+
+		struct Wall
+		{
+			static const char* get_type() { return "Wall"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Wall& component) {
+				ar.StartObject();
+				ar.Member("Cover", component.cover);
+				return ar.EndObject();
+			}
+
+			enum struct Cover
+			{
+				FULL,
+				HALF,
+				End
+			};
+			Cover cover = Cover::FULL;
+		};
+
+		struct Collision
+		{
+			static const char* get_type() { return "Collision"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Collision& component) {
+				ar.StartObject();
+				ar.Member("Cover", component.cover);
+				return ar.EndObject();
+			}
+
+			enum struct Cover
+			{
+				FULL,
+				HALF,
+				End
+			};
+			Cover cover = Cover::FULL;
+		};
+
+
 		struct Example
 		{
 			static const char* get_type() { return "Example"; }
@@ -144,23 +387,23 @@ namespace Tempest
 			int member4;
 		};
 
-		struct Transform
+
+
+		struct Shape
 		{
-			static const char* get_type() { return "Transform"; }
+			static const char* get_type() { return "Shape"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Transform& component)
+			friend Archiver& operator&(Archiver& ar, Shape& component)
 			{
 				ar.StartObject();
-				ar.Member("Position", component.position);
-				ar.Member("Rotation", component.rotation);
-				ar.Member("Scale", component.scale);
+				ar.Member("X", component.x);
+				ar.Member("Y", component.y);
 				return ar.EndObject();
 			}
 
-			vec3 position;
-			quat rotation = {1.f, 0.f, 0.f, 0.f};
-			vec3 scale = {1.f, 1.f, 1.f};
+			int x = 1;
+			int y = 1;
 		};
 
 		struct Meta
@@ -214,36 +457,6 @@ namespace Tempest
 			}
 		};
 
-		struct Mesh
-		{
-			static const char* get_type() { return "Mesh"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Mesh& component)
-			{
-				ar.StartObject();
-				ar.Member("Code", component.code);
-				return ar.EndObject();
-			}
-
-			Mesh(MeshCode _code = MeshCode::SPHERE) : code(_code) {}
-
-			MeshCode code;
-		};
-		struct Model
-		{
-			static const char* get_type() { return "Model"; }
-
-			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, Model& component)
-			{
-				ar.StartObject();
-				ar.Member("Path", component.path);
-				return ar.EndObject();
-			}
-			Model(string _path = "Models/Chair.fbx") : path{ _path } {}
-			string path;
-		};
 
 
 		struct Destroyed 
@@ -258,7 +471,7 @@ namespace Tempest
 			}
 		};
 
-		static const size_t STAT_TOTAL = 13;
+		static const size_t STAT_TOTAL = 10;
 
 		struct Character
 		{
@@ -270,12 +483,17 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Member("Charater_Name", component.name);
-				ar.Member("Weapon_Id", component.weapon);
+				ar.Member("Color", component.color);
+				ar.Member("IsInCombat", component.isInCombat);
+				ar.Vector("Weapon_Ids", component.weapons);
 				ar.Vector("Charater_Stats", component.stats);
+				//ar.Vector("Charater_DeltaStats", component.StatsDelta);
+				ar.Vector("Actions", component.actions);
+
 				return ar.EndObject();
 			}
 
-			Character() : stats(STAT_TOTAL,0)
+			Character() : stats(STAT_TOTAL, 0), StatsDelta(STAT_TOTAL, 0)
 			{
 
 			}
@@ -297,15 +515,32 @@ namespace Tempest
 
 				stats[index] = val;
 			}
-
-			[[nodiscard]] int& operator[](size_t index)
+			void set_statDelta(size_t index, int val)
 			{
-				return stats[index];
+				if (index >= STAT_TOTAL)
+					return;
+
+				StatsDelta[index] = val;
 			}
+
+			// If pair.second is true return stats
+			// else return statsDelta
+			[[nodiscard]] int& operator[](std::pair<size_t,bool> index)
+			{
+				if (index.second)
+					return stats[index.first];
+				else
+					return StatsDelta[index.first];
+			}
+
 
 			[[nodiscard]] int& get_stat(size_t index)
 			{
 				return stats[index];
+			}
+			[[nodiscard]] int& get_statDelta(size_t index)
+			{
+				return StatsDelta[index];
 			}
 
 			[[deprecated("Iterate statline and get stat via []")]]
@@ -320,13 +555,15 @@ namespace Tempest
 				return make_range(stats);
 			}
 
-
-			string name = "Char";
-			Entity weapon = UNDEFINED;
-			Entity system = UNDEFINED;
+			bool isInCombat = false;
+			string name = "Combatant";
+			Entity chosen_weapon = UNDEFINED; // no need to serialize this
+			tvector<Entity> weapons;
+			tvector<Entity> actions;
+			vec3 color = { 1.f, 0.f, 0.f };
 		private:
 			tvector<int> stats;
-
+			tvector<int> StatsDelta;
 		};
 
 		struct Weapon
@@ -418,10 +655,25 @@ namespace Tempest
 			{
 				ar.StartObject();
 				ar.Vector("Statline_Data", component.stat_list);
+
+				// first 5 always true and correct name
+				component.stat_list[0] = tpair<bool, string>(true, "HP");
+				component.stat_list[1] = tpair<bool, string>(true, "ATK");
+				component.stat_list[2] = tpair<bool, string>(true, "DEF");
+				component.stat_list[3] = tpair<bool, string>(true, "Range");
+				component.stat_list[4] = tpair<bool, string>(true, "Move");
+
+				ar.Vector("Stats_Description", component.stats_desc);
+				component.stats_desc[0] = "Health Point";
+				component.stats_desc[1] = "Attack";
+				component.stats_desc[2] = "Defence Point";
+				component.stats_desc[3] = "Attack Range";
+				component.stats_desc[4] = "Movement Point";
+
 				return ar.EndObject();
 			}
 
-			Statline() : stat_list(STAT_TOTAL)
+			Statline() : stat_list(STAT_TOTAL), stats_desc(STAT_TOTAL)
 			{
 				/*stats.push_back("HP");
 				stats.push_back("ATK");
@@ -430,17 +682,27 @@ namespace Tempest
 				stat_list[0] = tpair<bool, string>(true, "HP");
 				stat_list[1] = tpair<bool, string>(true, "ATK");
 				stat_list[2] = tpair<bool, string>(true, "DEF");
+				stat_list[3] = tpair<bool, string>(true, "Range");
+				stat_list[4] = tpair<bool, string>(true, "Move");
 
-				stat_list[3] = tpair<bool, string>(false, "Stat1");
-				stat_list[4] = tpair<bool, string>(false, "Stat2");
-				stat_list[5] = tpair<bool, string>(false, "Stat3");
-				stat_list[6] = tpair<bool, string>(false, "Stat4");
-				stat_list[7] = tpair<bool, string>(false, "Stat5");
-				stat_list[8] = tpair<bool, string>(false, "Stat6");
-				stat_list[9] = tpair<bool, string>(false, "Stat7");
-				stat_list[10] = tpair<bool, string>(false, "Stat8");
-				stat_list[11] = tpair<bool, string>(false, "Stat9");
-				stat_list[12] = tpair<bool, string>(false, "Stat10");
+				stat_list[5] = tpair<bool, string>(false, "Stat1");
+				stat_list[6] = tpair<bool, string>(false, "Stat2");
+				stat_list[7] = tpair<bool, string>(false, "Stat3");
+				stat_list[8] = tpair<bool, string>(false, "Stat4");
+				stat_list[9] = tpair<bool, string>(false, "Stat5");
+
+				stats_desc[0] = "Health Point";
+				stats_desc[1] = "Attack";
+				stats_desc[2] = "Defence Point";
+				stats_desc[3] = "Attack Range";
+				stats_desc[4] = "Movement Point";
+
+				stats_desc[5] = "~ No Description ~";
+				stats_desc[6] = "~ No Description ~";
+				stats_desc[7] = "~ No Description ~";
+				stats_desc[8] = "~ No Description ~";
+				stats_desc[9] = "~ No Description ~";
+
 			}
 
 			[[deprecated("No more removal of stat")]] 
@@ -488,6 +750,11 @@ namespace Tempest
 				return stat_list[index].second;
 			}
 
+			[[nodiscard]] string& get_statsDesription(size_t index)
+			{
+				return stats_desc[index];
+			}
+
 			[[nodiscard]] bool& operator()(size_t index)
 			{
 				return stat_list[index].first;
@@ -532,7 +799,7 @@ namespace Tempest
 		private:
 
 			tvector<string> stats;
-
+			tvector<string> stats_desc;
 			tvector<tpair<bool, string>> stat_list;
 		};
 
@@ -553,11 +820,21 @@ namespace Tempest
 			static const char* get_type() { return "ActionGraph"; }
 
 			template <typename Archiver>
-			friend Archiver& operator&(Archiver& ar, ActionGraph& )
+			friend Archiver& operator&(Archiver& ar, ActionGraph& component)
 			{
 				ar.StartObject();
+				ar.Member("Action_Category", component.category);
 				return ar.EndObject();
 			}
+
+			enum ACTION_CAT : int
+			{
+				AC_NONE = 0,
+				AC_ATTK = 1,
+				AC_DEF  = 2,
+				AC_ATTK_DEF = AC_ATTK | AC_DEF
+			};
+			ACTION_CAT category{ AC_ATTK_DEF }; // set to attack + defend by default
 		};
 
 		struct ResolutionGraph
@@ -591,7 +868,138 @@ namespace Tempest
 			graph g;
 		};
 
+		struct PointLight
+		{
+			static const char* get_type() { return "PointLight"; }
 
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, PointLight& component)
+			{
+				ar.StartObject();
+				ar.Member("Position", component.pos);
+				ar.Member("Colour", component.color);
+				return ar.EndObject();
+			}
+
+			PointLight(glm::vec3 _pos = glm::vec3(0.f, 1.f, 0.f), glm::vec4 _color = glm::vec4(1.f, 1.f, 1.f, 0.f)) : pos{ _pos }, color{ _color } {}
+
+			glm::vec3 pos;
+			glm::vec4 color;
+		};
+
+		struct Animation
+		{
+			static const char* get_type() { return "Animation"; }
+
+			template <typename Archiver>
+			friend Archiver& operator&(Archiver& ar, Animation& component)
+			{
+				ar.StartObject();
+				ar.Member("id", component.id);
+				return ar.EndObject();
+			}
+
+			Animation(uint32_t _id = 0, std::string _curr = "Animations/Unit_Idle.fbx") : id{_id}, current_animation{_curr}{}
+
+			// Plays the animation
+			void play(uint32_t tid, bool loop = false)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().PlayAnimation(tid, loop);
+				}
+			}
+
+			// Pauses the current animation, setting it to play will resume it
+			void pause(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().PauseAnimation(tid);
+				}
+			}
+
+			// Stops the current animation and resets it
+			void stop(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().StopAnimation(tid);
+				}
+			}
+
+			// Changes the speed of the animation
+			void set_speed(uint32_t tid,float spd = 1.f)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().SetSpeed(tid, spd);
+				}
+			}
+
+			// Checks if the current animation has reached the end
+			bool if_end(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().get().hasEnded(tid);
+				}
+
+				return false;
+			}
+
+			// Changes the animation after the current one ends
+			void change_animation(uint32_t tid, const std::string& anim)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().ChangeAnimation(tid, anim);
+					current_animation = anim;
+				}
+			}
+
+			// Instantly changes the animation
+			void force_change(uint32_t tid, const std::string& anim)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					Service<AnimMultithreadHelper>::Get().ForceChange(tid, anim);
+				}
+			}
+
+			bool is_playing(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isPlaying(tid);
+				}
+
+				return false;
+			}
+
+			bool is_paused(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isPaused(tid);
+				}
+
+				return false;
+			}
+
+			bool is_stopped(uint32_t tid)
+			{
+				if (Service<AnimMultithreadHelper>::Get().CheckAnimator(tid))
+				{
+					return Service<AnimMultithreadHelper>::Get().isStopped(tid);
+				}
+
+				return false;
+			}
+
+			uint32_t id;
+			std::string current_animation;
+		};
 	}
 	namespace tc = Tempest::Components;
 
@@ -599,12 +1007,18 @@ namespace Tempest
 #define COMPONENT_CASE(ComponentName)								\
 	case ComponentType::ComponentName:								\
 	{																\
-		Entity entity;												\
-		tc::ComponentName c;										\
-		reader.Member("Entity", entity);							\
-		reader.Member("Component", c);								\
-		ecs.force_create(entity);									\
-		ecs.emplace<tc::ComponentName>(entity, std::move(c));		\
+		if constexpr (ECS::is_entity_keyed) {						\
+			Entity entity;											\
+			tc::ComponentName c;									\
+			reader.Member("Entity", entity);						\
+			reader.Member("Component", c);							\
+			ecs.force_create(entity);								\
+			ecs.emplace<tc::ComponentName>(entity, std::move(c));	\
+		}				\
+		else {														\
+			auto c = ecs.try_emplace<tc::ComponentName>();			\
+			if(c) reader.Member("Component", *c);					\
+		}															\
 	}																\
 		break														\
 
@@ -620,6 +1034,7 @@ namespace Tempest
 			COMPONENT_CASE(Example);
 			COMPONENT_CASE(Destroyed);
 			COMPONENT_CASE(Transform);
+			COMPONENT_CASE(Local);
 			COMPONENT_CASE(Meta);
 			COMPONENT_CASE(Script);
 			COMPONENT_CASE(Rigidbody);
@@ -629,10 +1044,20 @@ namespace Tempest
 			COMPONENT_CASE(Weapon);
 			COMPONENT_CASE(Statline);
 
+			COMPONENT_CASE(Unit);
+			COMPONENT_CASE(Obstacle);
+			COMPONENT_CASE(Door);
+			COMPONENT_CASE(Tile);
+			COMPONENT_CASE(Wall);
+			COMPONENT_CASE(Collision);
+			COMPONENT_CASE(Shape);
+
 			COMPONENT_CASE(ConflictGraph);
 			COMPONENT_CASE(ActionGraph);
 			COMPONENT_CASE(ResolutionGraph);
 			COMPONENT_CASE(Graph);
+			COMPONENT_CASE(PointLight);
+			COMPONENT_CASE(Animation);
 
 		/* ABOVE THIS PLEASE */
 
@@ -641,7 +1066,6 @@ namespace Tempest
 			break;
 		}									
 	}
-
 
 	template <typename ECS>
 	void deserialize_component(const tentry& component_file, ECS& ecs)
@@ -652,7 +1076,6 @@ namespace Tempest
 		Reader reader(json.c_str());
 		if (reader.HasError())
 			return; // warn here
-
 
 		reader.StartObject();
 

@@ -1,14 +1,12 @@
-
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
-
 #include "Core.h"
 #include "Util.h"
 #include "Util/Suppress.h"
@@ -27,11 +25,20 @@
 #include "Util/GuizmoController.h"
 
 #include "Audio/AudioEngine.h"
+#include "ECS/Test/test_entity.h"
+#include "Scripting/Test/test_scripting.h"
+
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+std::string persistent_ini_filepath;
+
+
+
 namespace Tempest
 {
+	future_bool test_future;
+
 	void init_font();
 	void init_style();
 	void init_file_dialog();
@@ -49,10 +56,14 @@ namespace Tempest
 		
 	public:
 		Editor()
-			: Application(1600, 900, L"Editor") {}
+			: Application(1600, 900, L"CoReSys") {}
 		
 		void OnInit() override
 		{
+			Tempest::AppHandler::ToggleFullscreen();
+			ShowWindow(AppHandler::GetContext()->GetHWND(), SW_SHOWMAXIMIZED);
+
+
 			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
 			ImGui::StyleColorsDark();
@@ -62,21 +73,77 @@ namespace Tempest
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
+
+			char* pValue;
+			size_t len;
+			[[maybe_unused]] errno_t err = _dupenv_s(&pValue, &len, "USERPROFILE");
+			if (pValue)
+			{
+				tpath path{ pValue };
+				free(pValue); // It's OK to call free with NULL
+				path /= "Documents";
+				path /= "CoReSys";
+				path /= "ImGui";
+
+				persistent_ini_filepath = path.string();
+
+				io.IniFilename = persistent_ini_filepath.c_str();
+			}
+			else
+				io.IniFilename = nullptr;
+
 			ImGui_ImplWin32_Init(AppHandler::GetContext()->GetHWND());
 			ImGui_ImplOpenGL3_Init("#version 460");
+
+
+			//testing_scene();
+
+			//TestCompareNode();
 
 			init_font();
 			init_style();
 			init_file_dialog();
 			init_sounds();
 			init_ui_textures();
+
+			// can be defered
+
+
+			auto init = [&]() {
+
+
+
+			};
+
+			test_future = Service<thread_pool>::Get().submit_task(init);
+			
+	/*		AudioEngine ae;
+			ae.Play("Sounds2D/CoReSyS_BGM1.wav", "BGM", 0.7f, true);
+			ae.SetMasterVolume(1.f);*/
+
 		}
 
 		void OnUpdate() override
 		{
+
+			reset_blocking();
 			// need to use dt
 			// fps controller can be done in instance manager
-			instance_manager.update(1.f);
+			auto& io = ImGui::GetIO();
+			auto& cam = Service<RenderSystem>::Get().GetCamera();
+			Service<RenderSystem>::Get().UpdateAnimation(io.DeltaTime);
+			cam.SetMousePosition((int)io.MousePos.x, (int)io.MousePos.y);
+
+			global_runtime_dt = 0.016f;
+			if (must_override_dt())
+				global_runtime_dt = get_overriden_dt();
+			else
+				global_runtime_dt = io.DeltaTime;
+			
+			reset_dt();
+			instance_manager.update(global_runtime_dt);
+
+			non_imgui_mouse_click = false;
 		}
 
 		void OnRender() override
@@ -124,9 +191,10 @@ namespace Tempest
 			//}
 			//ImGui::End();
 
-
-			instance_manager.render();
-			instance_manager.menubar();
+			if (test_future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+			{
+				instance_manager.render();
+			}
 
 			/*! MUST BE AT THE END -----------------------------------------------*/
 			ImGui::Render();
@@ -138,6 +206,8 @@ namespace Tempest
 			//ImGui::UpdatePlatformWindows();
 			//ImGui::RenderPlatformWindowsDefault();
 			/*--------------------------------------------------------------------*/
+
+			reset_non_imgui_mouseclick(false);
 		}
 
 		void OnExit() override
@@ -155,6 +225,19 @@ namespace Tempest
 
 		LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
+			switch (msg)
+			{
+				/*
+				*	Key Input
+				*/
+			case WM_LBUTTONDOWN:
+			{
+				reset_non_imgui_mouseclick(true);
+				if (check_mouse_blocking())
+					return 0;
+			}
+			}
+
 			return ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
 		}
 	};
@@ -297,6 +380,20 @@ namespace Tempest
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", open_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", open_text_size * global_font_scale * global_icon_scale, &config, fa_range);
 
+		// 7 Sub button
+		io.Fonts->AddFontFromFileTTF(open_f.string().c_str(), open_text_turn_size * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", open_text_turn_size * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", open_text_turn_size * global_font_scale * global_icon_scale, &config, fa_range);
+
+		// 8 Sub button
+		io.Fonts->AddFontFromFileTTF(open_f.string().c_str(), open_text_size30 * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", open_text_size30 * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", open_text_size30 * global_font_scale * global_icon_scale, &config, fa_range);
+
+		// 9 Contax Pro Font 144
+		io.Fonts->AddFontFromFileTTF(heavy_f.string().c_str(), contaxPro_size144 * global_font_scale);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-solid-900.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
+		io.Fonts->AddFontFromFileTTF("Fonts/fa-regular-400.ttf", contaxPro_size144 * global_font_scale * global_icon_scale, &config, fa_range);
 
 		//// 6 fk 
 		//static const ImWchar fk_range[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
@@ -353,6 +450,7 @@ namespace Tempest
 	}
 	void init_ui_textures()
 	{
+
 		for (auto entry : fs::directory_iterator(R"(Assets/)"))
 		{
 			try

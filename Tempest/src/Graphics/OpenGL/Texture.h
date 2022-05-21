@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -14,7 +15,6 @@
 #include <stb_image.h>
 #include "Logger/Log.h"
 #include "TMath.h"
-#include "tinyddsloader.h"
 
 namespace Tempest
 {
@@ -105,6 +105,7 @@ namespace Tempest
 		explicit Texture(uint32_t width, uint32_t height, Texture_Format format, Texture_Type type);
 		~Texture();
 
+		void LoadDDS(const std::string& file);
 		Texture(const Texture&) = delete;
 		Texture& operator=(const Texture&) = delete;
 	

@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -24,7 +24,7 @@ namespace Tempest
 
 		auto test3 = CreateDataScript<string>("string");
 
-		auto test4 = CreateBranchScript<int(int), 2 + 1>(
+		auto test4 = CreateBranchScript<std::tuple<int>(int), 2 + 1>(
 			[](const auto& x) { return std::make_tuple(x); },
 			std::placeholders::_1);
 

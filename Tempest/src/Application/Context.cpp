@@ -1,9 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
-* \copyright	Copyright (c) 2021 DigiPen Institute of Technology. Reproduction
+* \date			2022
+* \note			Course: GAM350
+* \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
 **********************************************************************************/
@@ -108,7 +108,8 @@ namespace Tempest
 
 		if (wglChoosePixelFormatARB && wglCreateContextAttribsARB)
 		{
-			m_WND = CreateWindowW(L"Tempest",
+			m_WND = CreateWindowEx( WS_EX_ACCEPTFILES,
+									L"Tempest",
 									pApp->GetTitle(),
 									WS_OVERLAPPEDWINDOW,
 									CW_USEDEFAULT,

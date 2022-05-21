@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -15,6 +15,7 @@
 #include "WindowManager.h"
 #include "Actions/ActionHistory.h"
 #include "Scripting/SRM.h"
+#include "ECS/Scene.h"
 
 namespace Tempest
 {
@@ -70,7 +71,8 @@ namespace Tempest
 			root{ path },
 			memory_object(strategy),
 
-			po(memory_object.get()),
+			//po(memory_object.get()),
+			scene(),
 			ecs(memory_object.get()),
 			srm(memory_object.get()),
 
@@ -89,7 +91,8 @@ namespace Tempest
 				strategy
 			)
 		{
-			ecs.load(root);
+			//scene.load(root);
+			//ecs.load(root);
 		}
 
 		[[nodiscard]] const debug_mr* get_debug() const
@@ -132,7 +135,7 @@ namespace Tempest
 		 */
 		virtual void OnUpdate(float dt)
 		{
-			internal_update();
+			internal_update(dt);
 			_update(dt);
 		}
 
@@ -162,10 +165,33 @@ namespace Tempest
 		const tpath& get_path() const { return root; }
 		const tpath& get_full_path() const { return full_path; }
 
+		bool load_new_scene_by_path(const tpath& path);
+		bool load_new_scene_by_name(const string& name);
+		bool load_new_conflict_resolution_by_path(const tpath& path);
+		bool load_new_conflict_resolution_by_int(int i);
+
+		bool unload_current_conflict_resolution();
+		bool unload_current_scene();
+
+		tvector<tpair<int, tpath>> get_scene_paths();
+		tvector<tpair<bool, tpath>> get_conflict_resolution_paths();
+
+
+		const string& get_current_scene_name() const {
+			return current_scene_name;
+		}
+		const string& get_current_res_name() const {
+			return current_res_name;
+		}
+
+		auto get_current_res_index() const {
+			return current_res_index;
+		}
+
 	private:
 
 		void internal_init();
-		void internal_update();
+		void internal_update(float dt);
 		void internal_render();
 		void internal_exit();
 
@@ -180,9 +206,14 @@ namespace Tempest
 		tpath root;
 
 		MemoryObject memory_object;
+
+		int current_res_index = 0;
+		string current_scene_name = "";
+		string current_res_name = "";
 		
 	public:
-		PhysicsObject po;
+		//PhysicsObject po;
+		Scene scene;
 		ECS ecs;
 		SRM srm;
 		Camera cam;
@@ -190,7 +221,11 @@ namespace Tempest
 		ActionHistory action_history;
 		WindowManager window_manager;
 
-		
+		bool tutorial_enable = false;
+		bool tutorial_slide = false;
+		bool tutorial_temp_enable = true;
+		bool tutorial_temp_exit = false;
+		short tutorial_level = 1;
 		Entity selected = INVALID;
 	};
 }

@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -53,9 +53,9 @@ namespace Tempest
 			Service<EventManager>::Get().register_listener<SimulateConflict>(&SimulationBuilder::start_simulation, this);
 		}
 
-		void start_simulation(const Event& e)
+		void start_simulation(const Event& )
 		{
-			if (state == State::DONE)
+			/*if (state == State::DONE)
 			{
 				auto& a = event_cast<SimulateConflict>(e);
 				state = State::LOAD;
@@ -68,7 +68,7 @@ namespace Tempest
 
 				num_win = 0;
 				num_lose = 0;
-			}
+			}*/
 		}
 
 
@@ -93,7 +93,6 @@ namespace Tempest
 				ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 				if (ImGui::BeginPopupModal("Simulating Conflict", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 				{
-
 					ImVec2 pos = ImGui::GetCursorScreenPos();
 					ImVec2 marker_min = ImVec2(pos.x + wrap_width, pos.y);
 					ImVec2 marker_max = ImVec2(pos.x + wrap_width + 10, pos.y + ImGui::GetTextLineHeight());
@@ -139,7 +138,7 @@ namespace Tempest
 			auto running = [&, var]() {
 				for (unsigned i = 0; i < frequency; ++i)
 				{
-					instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending);
+					//instance.srm.instant_dispatch_to_id<Simulate>(conflict, attacking, defending);
 					var->get<int>() ? ++num_win : ++num_lose;
 				}
 			};

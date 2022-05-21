@@ -1,0 +1,155 @@
+{
+    "Metadata": {
+        "Type": "Prototype",
+        "Category": "Door"
+    },
+    "Components": [
+        {
+            "Metadata": {
+                "Type": "Meta"
+            },
+            "Component": {
+                "Name": ""
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Transform"
+            },
+            "Component": {
+                "Position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Collision"
+            },
+            "Component": {
+                "Cover": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Local"
+            },
+            "Component": {
+                "LocalPosition": [
+                    8.645000457763672,
+                    0.0,
+                    -11.484999656677246
+                ],
+                "LocalRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "LocalScale": [
+                    0.009999999776482582,
+                    0.009999999776482582,
+                    0.009999999776482582
+                ]
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Model"
+            },
+            "Component": {
+                "Path": "Models\\MetalDoor.a",
+                "TexturePath": "Assets\\ThumbNail_Metal_Door.jpg"
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Shape"
+            },
+            "Component": {
+                "X": 1,
+                "Y": 0
+            }
+        },
+        {
+            "Metadata": {
+                "Type": "Door"
+            },
+            "Component": {
+                "States": [
+                    {
+                        "LocalPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "LocalPosition": [
+                            -0.800000011920929,
+                            0.0,
+                            0.0
+                        ],
+                        "LocalRotation": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "LocalScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ],
+                "Frame": {
+                    "Path": "Models\\MetalDoorFrame.a",
+                    "TexturePath": ""
+                },
+                "Frame_Local": {
+                    "LocalPosition": [
+                        7.565000057220459,
+                        0.0,
+                        -11.5
+                    ],
+                    "LocalRotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "LocalScale": [
+                        0.009999999776482582,
+                        0.009999999776482582,
+                        0.009999999776482582
+                    ]
+                }
+            }
+        }
+    ]
+}

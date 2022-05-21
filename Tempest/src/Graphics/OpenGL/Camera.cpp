@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -23,8 +24,8 @@ namespace Tempest
 		{
 		case CameraType::CAMERA_PERSPECTIVE:
 		{
-			const float f = 1.0f / tan(to_rad(fov) / 2.0f);
-			const float r = to_rad(fov);
+			const float f = 1.0f / tan(glm::radians(fov) / 2.0f);
+			const float r = glm::radians(fov);
 			projection = glm::perspective(r, aspect_ratio, near_clip_distance, far_clip_distance);
 			reverseDepthProjection = {
 				f / aspect_ratio,	0.0f,		0.0f,					0.0f,
@@ -32,6 +33,8 @@ namespace Tempest
 				0.0f,				0.0f,		0.0f,					-1.0f,
 				0.0f,				0.0f,		near_clip_distance,		0.0f
 			};
+
+			front_ray = MousePositionToWorldRay(window_width / 2, window_height / 2);
 			break;
 		}
 		case CameraType::CAMERA_ORTHOGRAPHIC:
@@ -42,6 +45,8 @@ namespace Tempest
 				camera_position.z * 1.0f,
 				static_cast<float>(far_clip_distance),
 				static_cast<float>(near_clip_distance));
+
+			front_ray = MousePositionToWorldRay(window_width / 2, window_height / 2);
 			break;
 		}
 		}
@@ -51,6 +56,7 @@ namespace Tempest
 		view = glm::translate(view, -camera_position);
 		viewProjection = projection * view;
 		viewReverseDepthProjection = reverseDepthProjection * view;
+
 	}
 
 	void Camera::Pitch(float radians)
@@ -142,12 +148,18 @@ namespace Tempest
 		window_width = width;
 		window_height = height;
 		aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
+
 	}
 
 	void Camera::SetClipping(float near_clip, float far_clip)
 	{
 		near_clip_distance = near_clip;
 		far_clip_distance = far_clip;
+	}
+
+	void Camera::SetMousePosition(int x, int y)
+	{
+		mouse_ray = MousePositionToWorldRay(x,y);
 	}
 
 	CameraType Camera::GetType() const
@@ -178,6 +190,15 @@ namespace Tempest
 	glm::vec3 Camera::GetPosition() const
 	{
 		return camera_position;
+	}
+
+	glm::vec3 Camera::GetMouseRay() const
+	{
+		return mouse_ray;
+	}
+	glm::vec3 Camera::GetFrontRay() const
+	{
+		return front_ray;
 	}
 
 	glm::vec3 Camera::GetFront() const
@@ -259,6 +280,32 @@ namespace Tempest
 		vector.z /= vector.w;
 
 		return glm::vec3{ vector };
+	}
+
+	glm::vec3 Camera::MousePositionToWorldRay(int x, int y) const
+	{
+		auto vp = GetViewport();
+		auto width = vp.z;
+		auto height = vp.w;
+
+		glm::vec4 lRayStart_NDC(
+			((float)x / (float)width - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
+			((float)y / (float)height - 0.5f) * -2.0f, // [0, 768] -> [-1,1]
+			-1.0, // The near plane maps to Z=-1 in Normalized Device Coordinates
+			1.0f
+		);
+		glm::vec4 lRayEnd_NDC(
+			((float)x / (float)width - 0.5f) * 2.0f,
+			((float)y / (float)height - 0.5f) * -2.0f,
+			0.0,
+			1.0f
+		);
+
+		glm::mat4 M = glm::inverse(GetViewProjectionMatrix());
+		glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world /= lRayStart_world.w;
+		glm::vec4 lRayEnd_world = M * lRayEnd_NDC; lRayEnd_world /= lRayEnd_world.w;
+		glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
+		return glm::normalize(lRayDir_world);
 	}
 
 	glm::vec2 Camera::WorldspaceToScreenspace(const glm::vec3& test) const

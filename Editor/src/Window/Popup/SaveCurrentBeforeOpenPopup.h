@@ -1,8 +1,8 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
                 or disclosure of this file or its contents without the prior
                 written consent of DigiPen Institute of Technology is prohibited.
@@ -49,7 +49,7 @@ namespace Tempest
                 }
                 else
                 {
-                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{ }, InstanceType::EDIT_TIME);
                 }
 
                 enable_popup = false;
@@ -67,14 +67,14 @@ namespace Tempest
                 if (ImGui::Button("Save"))
                 {
                     edit->save();
-                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{ }, InstanceType::EDIT_TIME);
                     ImGui::CloseCurrentPopup();
                 }
 
                 ImGui::SameLine();
                 if (ImGui::Button("Discard Changes"))
                 {
-                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{}, InstanceType::EDIT_TIME);
+                    Service<EventManager>::Get().instant_dispatch<LoadNewInstance>(path, MemoryStrategy{ }, InstanceType::EDIT_TIME);
                     ImGui::CloseCurrentPopup();
                 }
 

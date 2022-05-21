@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
+* \author		Lim Yong Kiang, Darren (lim.y@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -31,6 +32,7 @@ namespace Tempest
 		else
 		{
 			LOG("Failed to open shader file");
+			LOG(fileName.c_str());
 		}
 
 		in_file.close();
@@ -214,5 +216,10 @@ namespace Tempest
 	void Shader::SetIntArray(int* values, GLuint count, const std::string& name)
 	{
 		glUniform1iv(glGetUniformLocation(id, name.c_str()), count, values);
+	}
+
+	GLint Shader::GetUniformLoc(const std::string& name)
+	{
+		return glGetUniformLocation(id, name.c_str());
 	}
 }

@@ -1,8 +1,9 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu)
+* \author		Linus Ng Hao Xuan (haoxuanlinus.ng@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -45,14 +46,16 @@ namespace Tempest
 		float near_clip_distance = .1f;
 		float far_clip_distance = 1000.f;
 
-		glm::vec3 camera_position = { 0.f, 0.f, 1.f };
-		glm::quat orientation = { 1.f, 0.f, 0.f, 0.f };
-		glm::mat4 projection = { };
-		glm::mat4 reverseDepthProjection = { };
-		glm::mat4 view = { };
-		glm::mat4 viewProjection = { };
-		glm::mat4 viewReverseDepthProjection = { };
-		glm::mat4 ortho = { };
+		vec3 camera_position = { 0.f, 0.f, 1.f };
+		vec3 mouse_ray = { 0.f, 0.f, 0.f };
+		vec3 front_ray = { 0.f, 0.f, 0.f };
+		quat orientation = { 1.f, 0.f, 0.f, 0.f };
+		mat4 projection = { };
+		mat4 reverseDepthProjection = { };
+		mat4 view = { };
+		mat4 viewProjection = { };
+		mat4 viewReverseDepthProjection = { };
+		mat4 ortho = { };
 
 	public:
 
@@ -76,6 +79,8 @@ namespace Tempest
 		void SetViewport(int x, int y, int width, int height);
 		void SetClipping(float near_clip, float far_clip);
 		
+		void SetMousePosition(int x, int y);
+
 		CameraType GetType() const;
 		glm::vec4 GetViewport() const;
 
@@ -84,7 +89,9 @@ namespace Tempest
 		float GetFarClipDist() const;
 
 		glm::vec3 GetPosition() const;
+		glm::vec3 GetMouseRay() const;
 		glm::vec3 GetFront() const;
+		glm::vec3 GetFrontRay() const;
 		glm::vec3 GetUp() const;
 		glm::vec3 GetLeft() const;
 		glm::quat GetQuatRotation() const;
@@ -100,6 +107,7 @@ namespace Tempest
 		glm::vec2 GetResolution() const;
 
 		glm::vec3 ScreenspaceToWorldspace(const glm::vec2&) const;
+		glm::vec3 MousePositionToWorldRay(int x, int y) const;
 		glm::vec2 WorldspaceToScreenspace(const glm::vec3&) const;
 
 		void OnKeyPress(uint8_t key);

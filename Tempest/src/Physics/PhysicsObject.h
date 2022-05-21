@@ -1,8 +1,10 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu),
+				Lim Ziyi Jean(ziyijean.lim@digipen.edu),
+*				Huang Xurong(h.xurong@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -78,7 +80,7 @@ namespace Tempest
 		float density = 1.f;				// Only for dynamic
 		float linear_damping = 0.5f;		// Rate of decay overtime for linear velocty
 		float angular_damping = 0.5f;		// Rate of decay overtime for angular velocty
-		bool is_static;				// Static or Dynamic rigidbody
+		bool is_static = false;				// Static or Dynamic rigidbody
 		bool gravity = false;				// explicit or implicit with the static/dynamic type
 
 		vec3 linear_velocity = { 0.f, 0.f, 0.f };		// Velocity in a straight line

@@ -1,0 +1,234 @@
+{
+    "Metadata": {
+        "Type": "Character"
+    },
+    "Components": [
+        {
+            "Entity": 5,
+            "Component": {
+                "Charater_Name": "Prisoner 1",
+                "Color": [
+                    0.9246575236320496,
+                    0.542665421962738,
+                    0.104498952627182
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    10,
+                    9
+                ],
+                "Charater_Stats": [
+                    30,
+                    3,
+                    5,
+                    5,
+                    5,
+                    8,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    3,
+                    7
+                ]
+            }
+        },
+        {
+            "Entity": 6,
+            "Component": {
+                "Charater_Name": "Prisoner 2",
+                "Color": [
+                    0.9254902005195618,
+                    0.5411764979362488,
+                    0.10588235408067703
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    56,
+                    9
+                ],
+                "Charater_Stats": [
+                    30,
+                    9,
+                    5,
+                    3,
+                    5,
+                    3,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    3
+                ]
+            }
+        },
+        {
+            "Entity": 60,
+            "Component": {
+                "Charater_Name": "Guard 1",
+                "Color": [
+                    0.5571444034576416,
+                    0.5362638831138611,
+                    0.9726027250289917
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    58,
+                    11
+                ],
+                "Charater_Stats": [
+                    10,
+                    3,
+                    6,
+                    3,
+                    4,
+                    3,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    3
+                ]
+            }
+        },
+        {
+            "Entity": 57,
+            "Component": {
+                "Charater_Name": "Guard 2",
+                "Color": [
+                    0.6315463781356812,
+                    0.6130136847496033,
+                    1.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    58,
+                    11
+                ],
+                "Charater_Stats": [
+                    10,
+                    3,
+                    6,
+                    3,
+                    4,
+                    3,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    3
+                ]
+            }
+        },
+        {
+            "Entity": 51,
+            "Component": {
+                "Charater_Name": "Guard 3",
+                "Color": [
+                    0.3189505338668823,
+                    0.7428707480430603,
+                    0.8390411138534546
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    58,
+                    11
+                ],
+                "Charater_Stats": [
+                    10,
+                    6,
+                    8,
+                    3,
+                    4,
+                    3,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    7,
+                    3
+                ]
+            }
+        },
+        {
+            "Entity": 53,
+            "Component": {
+                "Charater_Name": "Guard 4",
+                "Color": [
+                    0.40041911602020266,
+                    0.21427564322948457,
+                    0.8938356041908264
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    61,
+                    11
+                ],
+                "Charater_Stats": [
+                    7,
+                    3,
+                    3,
+                    5,
+                    2,
+                    7,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    7,
+                    3
+                ]
+            }
+        },
+        {
+            "Entity": 62,
+            "Component": {
+                "Charater_Name": "Warden",
+                "Color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "IsInCombat": false,
+                "Weapon_Ids": [
+                    58,
+                    61,
+                    11
+                ],
+                "Charater_Stats": [
+                    30,
+                    7,
+                    8,
+                    7,
+                    6,
+                    7,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Actions": [
+                    2,
+                    3,
+                    7
+                ]
+            }
+        }
+    ]
+}

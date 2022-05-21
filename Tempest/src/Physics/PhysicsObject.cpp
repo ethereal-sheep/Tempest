@@ -1,8 +1,10 @@
 /**********************************************************************************
-* \author		_ (_@digipen.edu)
+* \author		Cantius Chew (c.chew@digipen.edu),
+				Lim Ziyi Jean(ziyijean.lim@digipen.edu),
+*				Huang Xurong(h.xurong@digipen.edu)
 * \version		1.0
-* \date			2021
-* \note			Course: GAM300
+* \date			2022
+* \note			Course: GAM350
 * \copyright	Copyright (c) 2020 DigiPen Institute of Technology. Reproduction
 				or disclosure of this file or its contents without the prior
 				written consent of DigiPen Institute of Technology is prohibited.
@@ -50,75 +52,75 @@ namespace Tempest
 	PhysicsObject::PhysicsObject(m_resource* mem_res)
 		: allocator{ mem_res }, pcd{ Service<thread_pool>::Get() }
 	{
-		// init foundation
-		{
-			//foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
-			foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
-			LOG_ASSERT_V(foundation, "PxCreateFoundation failed!");
-		}
+		//// init foundation
+		//{
+		//	//foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
+		//	foundation = px_make(PxCreateFoundation(PX_PHYSICS_VERSION, allocator, px_err_callback()));
+		//	LOG_ASSERT_V(foundation, "PxCreateFoundation failed!");
+		//}
 
-		// init pvd (OPTIONAL)
-		{
-			pvd = px_make(PxCreatePvd(*foundation));
-			if (!pvd)
-				LOG_CRITICAL("PxCreatePvd failed!");
-			transport = px_make(physx::PxDefaultPvdSocketTransportCreate(pvd_host_ip, port, timeout));
-			LOG_ASSERT_V(transport, "PxPvdTransport failed!");
-			pvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
-		}
+		//// init pvd (OPTIONAL)
+		//{
+		//	pvd = px_make(PxCreatePvd(*foundation));
+		//	if (!pvd)
+		//		LOG_CRITICAL("PxCreatePvd failed!");
+		//	transport = px_make(physx::PxDefaultPvdSocketTransportCreate(pvd_host_ip, port, timeout));
+		//	LOG_ASSERT_V(transport, "PxPvdTransport failed!");
+		//	pvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
+		//}
 
-		// init physics (SEE ME FOR GRAVITY SHIT)
-		{
-			physx::PxTolerancesScale scale;
+		//// init physics (SEE ME FOR GRAVITY SHIT)
+		//{
+		//	physx::PxTolerancesScale scale;
 
 
-			bool recordMemoryAllocations = true;
-			physics = px_make(PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
-				scale, recordMemoryAllocations));
-			LOG_ASSERT_V(physics, "PxCreatePhysics failed!");
-		}
+		//	bool recordMemoryAllocations = true;
+		//	physics = px_make(PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
+		//		scale, recordMemoryAllocations));
+		//	LOG_ASSERT_V(physics, "PxCreatePhysics failed!");
+		//}
 
-		// init cooking
-		{
-			cooking = px_make(PxCreateCooking(PX_PHYSICS_VERSION, *foundation, physx::PxCookingParams(physics->getTolerancesScale())));
-			LOG_ASSERT_V(cooking, "PxCreateCooking failed!");
-		}
+		//// init cooking
+		//{
+		//	cooking = px_make(PxCreateCooking(PX_PHYSICS_VERSION, *foundation, physx::PxCookingParams(physics->getTolerancesScale())));
+		//	LOG_ASSERT_V(cooking, "PxCreateCooking failed!");
+		//}
 
-		// init scene
-		{
-			physx::PxSceneDesc sceneDesc(physics->getTolerancesScale());
-			sceneDesc.cpuDispatcher = &pcd;
-			sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.f);
-			//sceneDesc.filterShader = contactReportFilterShader;
-			sceneDesc.filterShader = PxDefaultSimulationFilterShader;
-			//sceneDesc.simulationEventCallback = &gContactReportCallback;
+		//// init scene
+		//{
+		//	physx::PxSceneDesc sceneDesc(physics->getTolerancesScale());
+		//	sceneDesc.cpuDispatcher = &pcd;
+		//	sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.f);
+		//	//sceneDesc.filterShader = contactReportFilterShader;
+		//	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+		//	//sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-			scene = px_make(physics->createScene(sceneDesc));
-			LOG_ASSERT_V(scene, "createScene failed!");
-		}
+		//	scene = px_make(physics->createScene(sceneDesc));
+		//	LOG_ASSERT_V(scene, "createScene failed!");
+		//}
 
-		// create ground plane
-		{
-			PxMaterial* material = physics->createMaterial(0.5f, 0.5f, 0.5f);
-			ground_plane = PxCreatePlane(*physics, PxPlane(0,1,0,0), *material);
-			scene->addActor(*ground_plane);
-		}
+		//// create ground plane
+		//{
+		//	PxMaterial* material = physics->createMaterial(0.5f, 0.5f, 0.5f);
+		//	ground_plane = PxCreatePlane(*physics, PxPlane(0,1,0,0), *material);
+		//	scene->addActor(*ground_plane);
+		//}
 
-		// creates an aggregate with no collision, obviously
-		//auto agg = px_make(physics->createAggregate(128, false));
+		//// creates an aggregate with no collision, obviously
+		////auto agg = px_make(physics->createAggregate(128, false));
 
 	}
 
-	bool PhysicsObject::advance(float dt)
+	bool PhysicsObject::advance(float )
 	{
-		accumulator += dt;
-		if (accumulator < step_size)
-			return false;
+		//accumulator += dt;
+		//if (accumulator < step_size)
+		//	return false;
 
-		accumulator -= step_size;
-		//	LOG("DT: {0}", accumulator);
-			// this is threaded
-		scene->simulate(step_size);
+		//accumulator -= step_size;
+		////	LOG("DT: {0}", accumulator);
+		//	// this is threaded
+		//scene->simulate(step_size);
 
 
 		// no writes to scene after this
@@ -167,18 +169,18 @@ namespace Tempest
 
 		if (rb_config.is_static)
 		{
-			actor = px_make(physx::PxCreateStatic(*physics, PxTransform(PxVec3{ pos }), *newShape));
-			actor->setGlobalPose(PxTransform(PxVec3{ pos }, math_cast(rot)));
+			actor = px_make(physx::PxCreateStatic(*physics, PxTransform(math_cast( pos )), *newShape));
+			actor->setGlobalPose(PxTransform(math_cast(pos), math_cast(rot)));
 		}
 		else
 		{
 			tsptr<PxRigidBody> dynamicBody;
-			dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(PxVec3{ pos }), *newShape, rb_config.density));
-			dynamicBody->setGlobalPose(PxTransform(PxVec3{ pos }, math_cast(rot)));
+			dynamicBody = px_make(physx::PxCreateDynamic(*physics, PxTransform(math_cast(pos)), *newShape, rb_config.density));
+			dynamicBody->setGlobalPose(PxTransform(math_cast(pos), math_cast(rot)));
 			dynamicBody->setLinearDamping(rb_config.linear_damping);
 			dynamicBody->setAngularDamping(rb_config.angular_damping);
-			dynamicBody->setLinearVelocity(PxVec3{ rb_config.linear_velocity });
-			dynamicBody->setAngularVelocity(PxVec3{ rb_config.angular_velocity });
+			dynamicBody->setLinearVelocity(math_cast( rb_config.linear_velocity ));
+			dynamicBody->setAngularVelocity(math_cast( rb_config.angular_velocity ));
 			dynamicBody->setMass(rb_config.mass);
 			dynamicBody->attachShape(*newShape);
 			physx::PxRigidBodyExt::updateMassAndInertia(*dynamicBody, rb_config.density);
@@ -202,16 +204,16 @@ namespace Tempest
 		return actor;
 	}
 
-	tpair<id_t, bool> PhysicsObject::raycast(vec3 origin, vec3 dir)
+	tpair<id_t, bool> PhysicsObject::raycast(vec3 , vec3 )
 	{
-		PxRaycastBuffer result;
-		auto max_dist = 100.f;
-		if (scene->raycast(PxVec3{ origin }, PxVec3{ dir }, max_dist, result))
-		{
-			auto* actor = result.getAnyHit(0).actor;
-			if (actor != static_cast<PxRigidActor*>(ground_plane))
-				return make_tpair(PtrToUint(actor->getName()), true);
-		}
+		//PxRaycastBuffer result;
+		//auto max_dist = 100.f;
+		//if (scene->raycast(math_cast( origin ), math_cast( dir ), max_dist, result))
+		//{
+		//	auto* actor = result.getAnyHit(0).actor;
+		//	if (actor != static_cast<PxRigidActor*>(ground_plane))
+		//		return make_tpair(PtrToUint(actor->getName()), true);
+		//}
 		return make_tpair(0, false);
 	}
 
